@@ -8,6 +8,12 @@ interactive map of search areas.
 It is a **zero-build static web app** (plain HTML/CSS/JS, libraries via CDN) that stores content as
 editable JSON in the repo. Designed so a future login + web-server backend is a swap, not a rewrite.
 
+## ✨ View live site
+
+**Live:** https://lukeclifforduk.github.io/rec/
+
+The site auto-deploys from `main` via GitHub Actions.
+
 ## Run it locally
 
 The app loads shared headers and JSON via `fetch()`, so it must be served over **HTTP** (opening the HTML
@@ -17,15 +23,6 @@ file directly won't work). From the repo root:
 python3 -m http.server 8000
 # then open http://localhost:8000/
 ```
-
-## Live site (GitHub Pages)
-
-The site auto-deploys from `main` via `.github/workflows/pages.yml`.
-
-**One-time setup (you must do this once):** in the GitHub repo go to
-**Settings → Pages → Build and deployment → Source: GitHub Actions**.
-
-Live URL: `https://lukeclifforduk.github.io/rec/`
 
 ## Tests
 
