@@ -95,12 +95,13 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
       Chart.js line graph, 5 breakdown tables — one-time costs, bills, expenses, shopping, gift cards —
       with totals; 4 live calculators — SDLT, mortgage, LTV, LISA — driving off the pure functions)
 - [x] Tests: 15 calculator benchmarks in `tests/tests.html` (all known-input → known-output cases pass)
-- [ ] Commit + push
+- [x] Commit + push → `d4821a6`
 
-## Phase 4.5 — Journey / checklists (NEW, pending IA confirmation)
+## Phase 4.5 — Journey / checklists
 - [x] `data/checklists.json` captured (viewing, buying process, moving/packing)
-- [ ] Surface as a "Journey" tab or fold into Finances (confirming with user)
-- [ ] Interactive checkable lists persisted to storage
+- [x] Surfaced as a new "Journey" tab (added between House Types and Finances in `components/nav.html`)
+- [x] Interactive checkable lists persisted to storage (`rec:journey-checks`, three sections,
+      progress bars per section, "Clear all checks" action)
 
 ## Phase 6 — Interactive map
 - [ ] `assets/js/map.js` (Leaflet + Geoman, OSM tiles)
