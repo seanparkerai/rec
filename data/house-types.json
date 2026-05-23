@@ -58,5 +58,25 @@
     "features": ["Energy efficient", "Modern layouts", "Allocated parking", "Build warranty (e.g. NHBC)"],
     "images": [],
     "status": "seed"
+  },
+  {
+    "id": "new-forest-cottage",
+    "name": "New Forest cottage",
+    "era": "17th–19th century",
+    "description": "Regional vernacular cottage built within or on the edge of the New Forest, often timber-framed or brick with characteristic cottage gardens.",
+    "regionsCommon": ["New Forest", "Lyndhurst", "Brockenhurst", "Sway", "Beaulieu", "Milford-on-Sea"],
+    "features": ["Cottage proportions", "Timber or brick construction", "Cottage gardens", "Often in conservation area"],
+    "images": [],
+    "status": "seed"
+  },
+  {
+    "id": "garrison-sfa",
+    "name": "Garrison / Service Family Accommodation",
+    "era": "20th century",
+    "description": "Purpose-built military family housing in and around garrison towns; mostly leased by the MoD but a portion released for civilian sale.",
+    "regionsCommon": ["Tidworth", "Bulford", "Ludgershall", "Larkhill"],
+    "features": ["Estate layout", "Functional design", "Allocated parking", "Often near military infrastructure"],
+    "images": [],
+    "status": "seed"
   }
 ]

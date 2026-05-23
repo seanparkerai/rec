@@ -82,9 +82,13 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
 - [ ] Area content batches for priority villages first (research → temp file → splice → licence-safe images → tests → commit per batch)
 
 ## Phase 4 — House-types gallery (batched)
-- [ ] `data/house-types.json` seeded
-- [ ] `pages/house-types.html` gallery + cross-links to areas
-- [ ] House-type content + imagery batches (tests → commit per batch)
+- [x] `data/house-types.json` seeded with 8 types (thatched cob, flint-and-brick, Georgian townhouse,
+      Victorian terrace, 1930s semi, new-build estate, New Forest cottage, garrison/SFA)
+- [x] `pages/house-types.html` gallery (auto-fill 320 px card grid; description + features + region
+      badges; image-or-monogram placeholder; cross-links to area-detail.html via houseTypeIds reverse
+      lookup)
+- [ ] House-type content + imagery batches (research → temp file → splice → licence-safe images →
+      sources → tests → commit per batch). Deferred: requires per-type web research per CLAUDE.md §7.
 
 ## Phase 5 — Finances & budget dashboard
 - [x] `data/finances.json` (full real data: income, goal, savings, mortgage, one-time costs, bills, expenses, shopping list, gift cards)

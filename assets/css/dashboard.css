@@ -163,3 +163,27 @@
 .check-meta { margin: 0.35rem 0 0; font-size: var(--text-xs); display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
 .meta-chip { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--pico-secondary-background); font-size: var(--text-xs); }
 .meta-timing { background: var(--accent); color: var(--accent-contrast); }
+
+/* ---- House types gallery ---- */
+.ht-grid {
+  display: grid; gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+.ht-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+.ht-image { margin: 0; }
+.ht-image img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.ht-image figcaption { padding: 0.4rem var(--space-4); font-size: var(--text-xs); color: var(--pico-muted-color); }
+.ht-image-placeholder {
+  height: 180px; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--pico-secondary-background), var(--pico-card-sectioning-background-color));
+  color: var(--accent); font-size: 4rem; font-weight: 700;
+}
+.ht-body { padding: var(--space-3) var(--space-4) var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+.ht-body header { margin: 0; }
+.ht-title { margin: 0; font-size: var(--text-lg); }
+.ht-era { margin: 0; font-size: var(--text-sm); }
+.ht-body h4 { margin: var(--space-2) 0 var(--space-1); font-size: var(--text-sm); }
+.ht-regions { margin: 0; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.ht-areas { margin: var(--space-2) 0 0; font-size: var(--text-sm); }
+.ht-areas a { color: var(--accent); text-decoration: none; }
+.ht-areas a:hover { text-decoration: underline; }
