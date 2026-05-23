@@ -15,15 +15,50 @@
 
   <main id="main" class="container">
     <div class="page-head">
-      <h1>Areas <span class="badge">Phase 3</span></h1>
-      <p>Towns and villages across Hampshire &amp; Wiltshire, with research-backed profiles.</p>
+      <h1>Areas</h1>
+      <p>Towns and villages across Hampshire &amp; Wiltshire — <strong id="total-count">191</strong> in the directory, <strong id="shortlist-count">0</strong> shortlisted.</p>
     </div>
-    <section class="card">
-      <p class="placeholder-note">The areas directory (search, filter, county tabs, profile cards) is built in <strong>Phase 3</strong>, beginning with your own list of target areas. The master list is in <code>docs/AREAS.md</code>.</p>
+
+    <section class="card filter-bar" aria-label="Filter areas">
+      <div class="filter-row">
+        <label class="filter-field">
+          <span>Search</span>
+          <input type="search" id="search" placeholder="Name, town, postcode…" />
+        </label>
+        <label class="filter-field">
+          <span>County</span>
+          <select id="filter-county"></select>
+        </label>
+        <label class="filter-field">
+          <span>Sub-region</span>
+          <select id="filter-subregion"></select>
+        </label>
+        <label class="filter-field">
+          <span>Sort by</span>
+          <select id="sort">
+            <option value="name">Name</option>
+            <option value="town">Town</option>
+            <option value="postcode">Postcode</option>
+            <option value="status">Profile status</option>
+          </select>
+        </label>
+      </div>
+      <div class="filter-row filter-row-end">
+        <label class="check-row">
+          <input type="checkbox" id="only-shortlisted" />
+          <span>Show shortlisted only</span>
+        </label>
+        <button type="button" id="btn-clear" class="outline secondary">Clear filters</button>
+      </div>
     </section>
+
+    <p class="result-summary"><strong id="result-count">0</strong> areas shown</p>
+
+    <section id="areas-grid" class="area-grid" aria-live="polite"></section>
   </main>
 
   <div data-include="components/footer.html"></div>
   <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-areas.js"></script>
 </body>
 </html>
