@@ -14,16 +14,59 @@
   <div data-include="components/nav.html"></div>
 
   <main id="main" class="container">
-    <div class="page-head">
-      <h1>Search criteria <span class="badge">Phase 2</span></h1>
-      <p>Must-haves vs nice-to-haves, property types, sizes and budget.</p>
+    <div class="page-head row" style="justify-content: space-between; align-items: flex-start;">
+      <div>
+        <h1>Search criteria <span class="badge" id="overlay-badge" hidden>Local edits</span></h1>
+        <p>Must-haves vs nice-to-haves, property types, budget, and search signals.</p>
+      </div>
+      <div class="row page-actions">
+        <button id="btn-edit">Edit</button>
+        <button id="btn-save" hidden>Save</button>
+        <button id="btn-cancel" class="secondary" hidden>Cancel</button>
+        <button id="btn-reset" class="outline secondary" hidden>Reset to defaults</button>
+      </div>
     </div>
-    <section class="card">
-      <p class="placeholder-note">An editable criteria form (saved in your browser) is built in <strong>Phase 2</strong>: budget, deposit target, beds/baths, tenure, must-haves and nice-to-haves.</p>
+    <p class="muted status-line" id="status" aria-live="polite"></p>
+
+    <section class="tiles" aria-label="Key figures">
+      <div class="tile">
+        <p class="tile-label">Max property price</p>
+        <p class="tile-value accent" id="tile-max-price">—</p>
+        <p class="tile-sub">budget</p>
+      </div>
+      <div class="tile">
+        <p class="tile-label">Min bedrooms</p>
+        <p class="tile-value" id="tile-min-beds">—</p>
+        <p class="tile-sub">requirement</p>
+      </div>
+      <div class="tile">
+        <p class="tile-label">Must-haves</p>
+        <p class="tile-value" id="tile-must-count">0</p>
+        <p class="tile-sub">priorities</p>
+      </div>
+      <div class="tile">
+        <p class="tile-label">Nice-to-haves</p>
+        <p class="tile-value" id="tile-nice-count">0</p>
+        <p class="tile-sub">weighted</p>
+      </div>
     </section>
+
+    <div class="dash-grid">
+      <section class="card span-6" id="card-budget"></section>
+      <section class="card span-6" id="card-size"></section>
+      <section class="card span-6" id="card-types"></section>
+      <section class="card span-6" id="card-tenure"></section>
+      <section class="card span-6" id="card-features"></section>
+      <section class="card span-6" id="card-condition"></section>
+      <section class="card span-6" id="card-freshness"></section>
+      <section class="card span-6" id="card-keywords"></section>
+      <section class="card span-6" id="card-mortgage"></section>
+      <section class="card span-12" id="card-priorities"></section>
+    </div>
   </main>
 
   <div data-include="components/footer.html"></div>
   <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-criteria.js"></script>
 </body>
 </html>

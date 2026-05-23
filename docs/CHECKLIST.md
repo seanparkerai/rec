@@ -64,8 +64,9 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
 - [x] `docs/USER_PROFILE.md` filled from user input (incl. portal-ready filter summary)
 - [x] `pages/profile.html` (renders tiles + cards from `data/profile.json`; edit/save/cancel/reset
       with localStorage overlay via `assets/js/page-profile.js`)
-- [ ] `pages/criteria.html` (must-haves vs nice-to-haves, editable)
-- [ ] Tests: schemas + persistence round-trip
+- [x] `pages/criteria.html` (renders 10-card form from `data/criteria.json` with edit/save/cancel/reset;
+      all nested structures + arrays editable; full localStorage persistence via `assets/js/page-criteria.js`)
+- [x] Tests: schemas valid (all six data files + persistence round-trip via Edit/Save flow)
 - [ ] Commit + push (pages)
 
 ## Phase 3 — Areas directory & profiles (batched) *(priority pillar)*
