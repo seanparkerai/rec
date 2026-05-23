@@ -23,6 +23,7 @@
     import { loadJSON } from '../assets/js/data-loader.js';
     import * as storage from '../assets/js/storage.js';
     import * as schema from './schemas.js';
+    import * as fin from '../assets/js/finances.js';
     import { test, assert, assertEqual, render } from './assert.js';
 
     const fetchOk = async (path) => (await fetch(url(path))).ok;
@@ -67,6 +68,61 @@
     await test('header partial includes a skip-link to #main', async () => {
       const html = await (await fetch(url('components/header.html'))).text();
       assert(/class="skip-link"[^>]*href="#main"/.test(html), 'no skip-link in header partial');
+    });
+
+    // --- finances calculator benchmarks (pure functions, known inputs → known outputs) ---
+    await test('SDLT FTB: £200k → £0 (under £300k threshold)', () => {
+      assertEqual(fin.calcSDLT(200000, { firstTimeBuyer: true }), 0);
+    });
+    await test('SDLT FTB: £380k → £4,000 (5% of £80k above £300k)', () => {
+      assertEqual(fin.calcSDLT(380000, { firstTimeBuyer: true }), 4000);
+    });
+    await test('SDLT FTB: £500k → £10,000 (5% of £200k above £300k)', () => {
+      assertEqual(fin.calcSDLT(500000, { firstTimeBuyer: true }), 10000);
+    });
+    await test('SDLT FTB: £510k → standard rates apply (relief lost)', () => {
+      // Standard: 2% × 125k + 5% × 260k = 2500 + 13000 = 15500
+      assertEqual(fin.calcSDLT(510000, { firstTimeBuyer: true }), 15500);
+    });
+    await test('SDLT standard: £300k → £5,000 (2% × 125k + 5% × 50k)', () => {
+      assertEqual(fin.calcSDLT(300000), 5000);
+    });
+    await test('Monthly mortgage: £360k at 5.35% over 35y → ≈£1,900', () => {
+      const m = fin.calcMonthlyMortgage(360000, 5.35, 35);
+      // Allow 1-pound tolerance for rounding
+      assert(Math.abs(m - 1900) < 2, `got ${m}`);
+    });
+    await test('Monthly mortgage: zero principal → 0', () => {
+      assertEqual(fin.calcMonthlyMortgage(0, 5, 30), 0);
+    });
+    await test('LTV: £360k loan / £400k value → 90%', () => {
+      assertEqual(fin.calcLTV(360000, 400000), 90);
+    });
+    await test('LISA bonus: £4,000 contribution → £1,000 bonus', () => {
+      const r = fin.calcLISABonus(4000);
+      assertEqual(r.eligible, 4000);
+      assertEqual(r.bonus, 1000);
+    });
+    await test('LISA bonus: £5,000 contribution → capped at £4,000 → £1,000', () => {
+      const r = fin.calcLISABonus(5000);
+      assertEqual(r.eligible, 4000);
+      assertEqual(r.bonus, 1000);
+    });
+    await test('LISA eligible: £400k → true, £451k → false', () => {
+      assert(fin.lisaEligible(400000) === true);
+      assert(fin.lisaEligible(451000) === false);
+    });
+    await test('Deposit progress: £25,660 of £38,000 → 68%', () => {
+      assertEqual(fin.calcDepositProgress(25660, 38000), 68);
+    });
+    await test('Deposit progress: caps at 100', () => {
+      assertEqual(fin.calcDepositProgress(50000, 38000), 100);
+    });
+    await test('Months to target: gap £12,340 at £2,000/mo → 6.2', () => {
+      assertEqual(fin.calcMonthsToTarget(25660, 38000, 2000), 6.2);
+    });
+    await test('Months to target: already at target → 0', () => {
+      assertEqual(fin.calcMonthsToTarget(50000, 38000, 2000), 0);
     });
 
     document.getElementById('results').innerHTML = '';
