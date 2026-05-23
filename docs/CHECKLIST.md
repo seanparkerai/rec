@@ -162,6 +162,9 @@ Each item below is one commit + push milestone. Anchor in commit message (Stripe
       `npm run verify` after `npx playwright install chromium`. axe/Lighthouse layered on later.
 
 ### 8B · Map (anchor: Linear-dense; biggest single perceptual upgrade)
+- [x] Apple-Maps-style 3-detent bottom sheet on mobile (peek 6rem / mid 46svh / full 92svh).
+      Tap handle or sheet head to cycle; map.invalidateSize() after 320ms transition. Desktop
+      keeps the side-by-side grid. Sheet body is the editorial .area-list shortlist.
 - [~] Interim: CartoDB Positron / Dark Matter basemap + themed Leaflet popups + accent-soft
       markers. Cleaner than raw OSM for now; full MapLibre + PMTiles swap below.
 - [ ] Swap Leaflet + Geoman → MapLibre GL JS v5 + maplibre-gl-draw
@@ -174,21 +177,25 @@ Each item below is one commit + push milestone. Anchor in commit message (Stripe
 ### 8C · Per-page redesigns (in plan order)
 - [x] `index.html` — bento dashboard, SVG progress ring with Fraunces centre, themed chart, journey step strip
 - [x] `pages/profile.html` — editorial article layout, native `<dialog>` edit panel, chip-grid priorities
-- [x] `pages/criteria.html` — page-head editorial; dense form + sticky save bar deferred
+- [x] `pages/criteria.html` — page-head editorial + sticky bottom save bar while editing
 - [x] `pages/areas.html` — editorial list view; URL-driven filters + dialog filter sheet deferred
 - [x] `pages/area-detail.html` — article with hairline-divided sections; sticky TOC + mini-map deferred to 8B
 - [x] `pages/house-types.html` — two-up editorial gallery, 4:3 image wells, accent-soft placeholders
 - [x] `pages/journey.html` — editorial head, article column layout
-- [x] `pages/finances.html` — themed chart matching dashboard; hero Fraunces stat tiles deferred
-- [x] Shared shell — circular ink brand mark in Fraunces, pill theme toggle, refined nav
-      (scroll-shrink header + animated active-link indicator deferred)
+- [x] `pages/finances.html` — themed chart + hero Fraunces percentage block with stat cells
+- [x] Shared shell — circular ink brand mark in Fraunces, pill theme toggle, scroll-shrink header
+      with backdrop-blur (`[data-scrolled]` toggle in components.js), refined nav
+- [x] Named cross-document View Transition: areas row title ↔ area detail h1 morph
+      (animated active-link indicator on nav: deferred)
 
-### 8D · Imagery
-- [ ] `tools/fetch-images.mjs` (CSV → assets/img + JSON credit/licence write-back)
+### 8D · Imagery — blocked in this sandbox (allowlist excludes Wikimedia / Unsplash / Geograph)
+- [ ] `tools/fetch-images.mjs` (CSV → assets/img + JSON credit/licence write-back) — must run
+      in a host session with outbound HTTPS to commons.wikimedia.org / geograph.org.uk / unsplash.com
 - [ ] 4 drafted villages (Stockbridge, Broughton, Wherwell, Hambledon) imaged
 - [ ] 8 house-types imaged with type-locked CC sources
 
-### 8E · Final sweep
-- [ ] All pages clean axe + Lighthouse ≥ thresholds in `CLAUDE.md` §13
-- [ ] Screenshot grid (320/375/768/1280, light+dark, reduced-motion) visibly reads as the named anchor
+### 8E · Final sweep — needs host session (chromium download blocked here)
+- [ ] `npm install && npx playwright install chromium` once, then `npm run verify` to capture the
+      full 36-shot baseline grid; review under `artifacts/screenshots/baseline/`
+- [ ] Layer axe-core CLI + lighthouse-ci on top of verify-ui.mjs (thresholds per CLAUDE.md §13)
 - [ ] Update `docs/PLAN.md` to mark Phase 8 complete
