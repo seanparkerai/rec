@@ -48,6 +48,7 @@ function init() {
   loadAreaMarkers();
   loadShortlistPanel();
   attachActions();
+  attachSheet();
 }
 
 function setupGeoman() {
@@ -149,17 +150,48 @@ async function loadShortlistPanel() {
     const areas = await getAreas();
     const list = areas.filter((a) => ids.has(a.id));
     const panel = $('shortlist-panel');
+    const countEl = $('sheet-count');
+    if (countEl) countEl.textContent = `${list.length} ${list.length === 1 ? 'area' : 'areas'}`;
     if (!list.length) {
-      panel.innerHTML = `<p class="muted">No shortlisted areas yet. Star areas in the <a href="${url('pages/areas.html')}">directory</a>.</p>`;
+      panel.innerHTML = `<p style="color:var(--ink-muted);font-size:var(--text-sm);">No shortlisted areas yet. Star areas in the <a href="${url('pages/areas.html')}" style="color:var(--accent-ink);">directory</a>.</p>`;
       return;
     }
-    panel.innerHTML = `<ul class="mini-list">${list.map((a) => `
-      <li>
-        <strong><a href="${url('pages/area-detail.html')}?id=${encodeURIComponent(a.id)}">${esc(a.name)}</a></strong>
-        <span class="muted">· ${esc(a.town)} · ${esc(a.postcode)}</span>
+    panel.innerHTML = `<ol class="area-list" style="border-top:0;">${list.map((a, i) => `
+      <li class="area-row" style="padding:var(--space-3) 0;grid-template-columns:2rem 1fr auto;">
+        <span class="area-index">${String(i + 1).padStart(2, '0')}</span>
+        <div>
+          <p class="area-name" style="font-size:var(--text-base);">
+            <a href="${url('pages/area-detail.html')}?id=${encodeURIComponent(a.id)}">${esc(a.name)}</a>
+          </p>
+          <p class="area-place">
+            <span>${esc(a.town)}</span><span class="sep">·</span><span class="num">${esc(a.postcode)}</span>
+          </p>
+        </div>
       </li>
-    `).join('')}</ul>`;
+    `).join('')}</ol>`;
   } catch (e) { console.error('shortlist panel error', e); }
+}
+
+// ---- Bottom-sheet handle: cycle peek → mid → full on tap ----------
+function attachSheet() {
+  const sheet = $('map-side');
+  const handle = $('sheet-handle');
+  if (!sheet || !handle) return;
+  const order = ['peek', 'mid', 'full'];
+  const cycle = () => {
+    const cur = sheet.dataset.detent || 'peek';
+    const next = order[(order.indexOf(cur) + 1) % order.length];
+    sheet.dataset.detent = next;
+    handle.setAttribute('aria-expanded', String(next !== 'peek'));
+    // Let Leaflet redraw after the CSS transition settles.
+    setTimeout(() => { if (map) map.invalidateSize(); }, 360);
+  };
+  handle.addEventListener('click', cycle);
+  // Tap on header (h2) also cycles for a generous touch target.
+  sheet.querySelector('.sheet-head')?.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) return;
+    cycle();
+  });
 }
 
 function attachActions() {

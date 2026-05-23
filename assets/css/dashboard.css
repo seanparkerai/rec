@@ -317,7 +317,53 @@
 
 #btn-star.is-starred { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
 
-/* ---- Finances page ---- */
+/* ---- Finances hero (Linear-dense, Fraunces showcase) -------------- */
+.finance-hero {
+  display: grid; gap: var(--space-6);
+  grid-template-columns: 1fr;
+  align-items: center;
+  margin: var(--space-6) 0;
+  padding: var(--space-6);
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius);
+  background:
+    radial-gradient(120% 100% at 0% 0%,
+      color-mix(in oklch, var(--accent) 10%, transparent) 0%,
+      transparent 60%),
+    var(--paper);
+}
+@media (min-width: 720px) { .finance-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: var(--space-12); } }
+.finance-hero-num {
+  margin: var(--space-2) 0 var(--space-3);
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: var(--text-4xl); font-weight: 500;
+  letter-spacing: -0.04em; line-height: 0.95;
+  font-feature-settings: "tnum"; font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.finance-hero-num small { font-size: 0.4em; color: var(--ink-muted); margin-left: 0.15em; font-weight: 400; vertical-align: 0.6em; }
+.finance-hero-pct .progress { height: 6px; margin-top: var(--space-3); }
+.finance-hero-stats {
+  margin: 0; display: grid; gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 480px) { .finance-hero-stats { grid-template-columns: 1fr 1fr 1fr; } }
+.finance-hero-stats > div {
+  display: grid; gap: var(--space-1);
+  padding: var(--space-3); border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper);
+}
+.finance-hero-stats dt {
+  margin: 0; font-size: var(--text-xs); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.finance-hero-stats dd {
+  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
+  font-feature-settings: "tnum"; font-variant-numeric: tabular-nums;
+  font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+/* ---- Finances tables / calculators -------------------------------- */
 .chart-tall { height: 320px; }
 .chart-tall canvas { max-height: 320px; }
 
@@ -408,7 +454,16 @@
 .ht-areas a { color: var(--accent-ink); text-decoration: none; }
 .ht-areas a:hover { text-decoration: underline; }
 
-/* ---- Map page ---- */
+/* ---- Map page (Linear-dense + Apple-Maps sheet on mobile) --------- */
+.map-layout {
+  display: grid; gap: var(--space-4);
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+}
+@media (max-width: 800px) {
+  .map-layout { display: block; }
+  .map-card { height: calc(100svh - 12rem); }
+}
+
 .map-card { padding: 0; overflow: hidden; gap: 0; }
 .map-canvas {
   height: 65dvh; min-height: 400px; width: 100%;
@@ -434,7 +489,52 @@
 .leaflet-bar a:hover { background: var(--paper-2) !important; }
 
 @media (max-width: 800px) {
-  .map-canvas { height: 60dvh; min-height: 360px; }
+  .map-canvas { height: 100%; min-height: 0; border-radius: 0; }
+}
+
+/* ---- Bottom sheet (mobile only) ----------------------------------- */
+.map-side {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  min-height: 0;
+}
+.map-side .sheet-handle { display: none; }
+.map-side .sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); margin: 0; }
+.map-side .sheet-head h2 { margin: 0; font-size: var(--text-lg); }
+.map-side .sheet-head .num { color: var(--ink-muted); font-size: var(--text-sm); }
+.map-side .sheet-body { overflow-y: auto; flex: 1; min-height: 0; }
+
+@media (max-width: 800px) {
+  .map-side {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    height: 92svh;
+    border-radius: var(--rec-radius-lg) var(--rec-radius-lg) 0 0;
+    border: 1px solid var(--hairline);
+    border-bottom: 0;
+    background: var(--paper);
+    box-shadow: var(--rec-shadow-lg);
+    padding: 0 var(--space-4) max(var(--space-4), env(safe-area-inset-bottom));
+    transform: translateY(calc(100% - 6rem));
+    transition: transform 320ms var(--ease-out);
+    will-change: transform;
+  }
+  .map-side[data-detent="mid"]  { transform: translateY(calc(100% - 46svh)); }
+  .map-side[data-detent="full"] { transform: translateY(0); }
+  .map-side .sheet-handle {
+    display: block; width: 36px; height: 4px;
+    border: 0; padding: 0; margin: var(--space-3) auto var(--space-3);
+    border-radius: 999px; background: var(--hairline-strong);
+    cursor: pointer; flex-shrink: 0;
+  }
+  .map-side .sheet-handle:hover { background: var(--ink-subtle); }
+  .map-side .sheet-head {
+    padding-bottom: var(--space-3); margin-bottom: var(--space-3);
+    border-bottom: 1px solid var(--hairline);
+    flex-shrink: 0;
+  }
+  /* Hide the desktop top-of-card stat tiles strip on mobile so the map can breathe */
+  .map-page-tiles { display: none; }
 }
 
 /* ---- Home dashboard: journey progress widget ---- */

@@ -64,12 +64,22 @@ function initTheme() {
   });
 }
 
+/* ---------- Scroll-shrink header ---------- */
+function initScrollShrink() {
+  const set = () => {
+    document.documentElement.toggleAttribute('data-scrolled', window.scrollY > 4);
+  };
+  set();
+  window.addEventListener('scroll', set, { passive: true });
+}
+
 /* Apply saved theme ASAP to reduce flash (before includes resolve). */
 applyTheme(localStorage.getItem(THEME_KEY));
 
 injectIncludes().then(() => {
   setActiveNav();
   initTheme();
+  initScrollShrink();
   document.dispatchEvent(new CustomEvent('shell:ready'));
 });
 
