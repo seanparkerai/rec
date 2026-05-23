@@ -11,6 +11,15 @@ build the Profile, Criteria, Areas directory and Finances pages from this data.
 → Finances page expands to a budget dashboard; and viewing/moving **checklists** (`data/checklists.json`)
 → likely a new "Journey" tab (confirming with user).
 
+**Design-quality baseline (sideline pass, May 2026):** appended §9–§13 to `CLAUDE.md` (design quality,
+mobile-first, WCAG 2.2 AA, Pico conventions, verification rules — sourced from Anthropic frontend-design
+skill, web.dev, Polypane, WCAG 2.2, Pico v2 docs). Introduced `--space-*` / `--text-*` / `--focus-ring`
+tokens; added global `prefers-reduced-motion` + `:focus-visible` rules; bumped nav/button touch targets
+to ≥44 px; added skip-link, `id="main"` on every page, safe-area-inset on the sticky header, mobile
+fade hint + scroll-snap on the nav; added no-horizontal-scroll + skip-link smoke tests. Remaining items
+for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialog>` replacing
+`window.confirm`, Lighthouse CI thresholds.
+
 ---
 
 ## Phase 0 — Foundation & governance

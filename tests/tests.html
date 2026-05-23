@@ -56,6 +56,19 @@
       assert(readLocal('__selftest__') === null, 'cleanup failed');
     });
 
+    // --- responsive smoke: no horizontal scroll at current viewport (acts as a 320px proxy when resized) ---
+    await test('no horizontal scroll on this page', () => {
+      const d = document.documentElement;
+      // allow 1px sub-pixel tolerance
+      assert(d.scrollWidth <= d.clientWidth + 1, `scrollWidth ${d.scrollWidth} > clientWidth ${d.clientWidth}`);
+    });
+
+    // --- a11y smoke: skip-link is fetchable from the header partial ---
+    await test('header partial includes a skip-link to #main', async () => {
+      const html = await (await fetch(url('components/header.html'))).text();
+      assert(/class="skip-link"[^>]*href="#main"/.test(html), 'no skip-link in header partial');
+    });
+
     document.getElementById('results').innerHTML = '';
     render(document.getElementById('results'));
   </script>

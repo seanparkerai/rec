@@ -1,14 +1,46 @@
 /* base.css — global layout: header, top nav, container, cards, footer.
    Loaded after Pico + tokens. */
 
-body { min-height: 100vh; display: flex; flex-direction: column; }
+/* ---- Global a11y: reduced motion (WCAG 2.3.3) ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Global focus: visible ring on keyboard navigation only ---- */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--rec-radius-sm);
+  box-shadow: var(--focus-ring);
+}
+
+/* ---- Skip-to-content link (visually hidden until focused) ---- */
+.skip-link {
+  position: absolute;
+  left: 0.5rem; top: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--accent); color: var(--accent-contrast);
+  border-radius: var(--rec-radius-sm);
+  font-weight: 600; text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform 120ms ease;
+  z-index: 100;
+}
+.skip-link:focus-visible { transform: translateY(0); }
+
+body { min-height: 100dvh; display: flex; flex-direction: column; }
 
 /* ---- Header ---- */
 .site-header {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--rec-gap);
-  padding: 0.6rem clamp(0.75rem, 3vw, 2rem);
+  padding: max(0.6rem, env(safe-area-inset-top)) max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-right)) 0.6rem max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-left));
   background: var(--pico-background-color);
   border-bottom: 1px solid var(--pico-muted-border-color);
 }
@@ -25,9 +57,11 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 .brand small { font-weight: 400; color: var(--pico-muted-color); font-size: 0.7rem; }
 
 #theme-toggle {
-  width: auto; padding: 0.4rem 0.7rem; margin: 0;
+  width: auto; min-height: 44px; min-width: 44px;
+  padding: 0.5rem 0.85rem; margin: 0;
   background: transparent; color: var(--pico-color);
   border: 1px solid var(--pico-muted-border-color);
+  font-size: var(--text-sm);
 }
 #theme-toggle:hover { background: var(--pico-secondary-background); }
 
@@ -42,17 +76,32 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
   padding: 0 clamp(0.75rem, 3vw, 2rem);
   list-style: none; max-width: var(--rec-maxw); margin-inline: auto;
   overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
 }
+.site-nav ul::-webkit-scrollbar { display: none; }
+.site-nav li { scroll-snap-align: start; }
 .site-nav a {
-  display: inline-block; white-space: nowrap;
-  padding: 0.7rem 0.9rem; text-decoration: none;
-  color: var(--pico-muted-color); font-size: 0.95rem;
+  display: inline-flex; align-items: center;
+  min-height: 44px; white-space: nowrap;
+  padding: 0.6rem 0.9rem; text-decoration: none;
+  color: var(--pico-muted-color); font-size: var(--text-sm);
   border-bottom: 2px solid transparent;
 }
 .site-nav a:hover { color: var(--pico-color); }
 .site-nav a[aria-current="page"] {
   color: var(--pico-color); font-weight: 600;
   border-bottom-color: var(--accent);
+}
+
+/* Mobile-only fade hint on the scrollable nav */
+@media (max-width: 480px) {
+  .site-nav { position: relative; }
+  .site-nav::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 0;
+    width: 2.5rem; pointer-events: none;
+    background: linear-gradient(to right, transparent, var(--pico-background-color) 85%);
+  }
 }
 
 /* ---- Layout ---- */
@@ -103,8 +152,11 @@ main.container { width: 100%; max-width: var(--rec-maxw); margin-inline: auto; f
 .row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
 .mt-0 { margin-top: 0; } .mb-0 { margin-bottom: 0; }
 
+/* Keep focused elements clear of the sticky header + nav (SC 2.4.11 Focus Not Obscured) */
+:focus-visible { scroll-margin-top: 6rem; }
+
 /* ---- Profile page: field lists, edit rows, action bar ---- */
-.page-actions button { margin: 0; padding: 0.45rem 0.9rem; }
+.page-actions button { margin: 0; min-height: 44px; padding: 0.5rem 0.95rem; font-size: var(--text-sm); }
 
 .status-line { min-height: 1.25rem; margin: 0 0 1rem; font-size: 0.9rem; }
 .status-line[data-kind="ok"]  { color: var(--accent); }
