@@ -77,15 +77,25 @@ small, .small { font-size: var(--text-sm); color: var(--ink-muted); }
 
 body { min-height: 100dvh; display: flex; flex-direction: column; }
 
-/* ---- Header ---- */
+/* ---- Header (scroll-shrinks via [data-scrolled] on <html>) ---- */
 .site-header {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--rec-gap);
-  padding: max(0.6rem, env(safe-area-inset-top)) max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-right)) 0.6rem max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-left));
-  background: var(--pico-background-color);
-  border-bottom: 1px solid var(--pico-muted-border-color);
+  padding-block: var(--space-3);
+  padding-inline: max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-left)) max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-right));
+  padding-top: max(var(--space-3), env(safe-area-inset-top));
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+          backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: padding 200ms var(--ease-out), border-color 200ms var(--ease-out);
 }
+[data-scrolled] .site-header {
+  padding-block: var(--space-2);
+  border-bottom-color: var(--hairline);
+}
+[data-scrolled] .brand small { opacity: 0; height: 0; overflow: hidden; transition: opacity 160ms; }
 .brand {
   display: inline-flex; align-items: center; gap: var(--space-2);
   font-family: var(--font-display); font-optical-sizing: auto;
@@ -120,8 +130,10 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
 /* ---- Top nav ---- */
 .site-nav {
   position: sticky; top: 0; z-index: 19;
-  background: var(--pico-background-color);
-  border-bottom: 1px solid var(--pico-muted-border-color);
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+          backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--hairline);
 }
 .site-nav ul {
   display: flex; gap: 0.25rem; margin: 0;

@@ -28,6 +28,28 @@
         <button id="btn-reset" class="outline secondary" hidden>Reset to defaults</button>
       </div>
     </header>
+
+    <style>
+      /* Sticky save bar appears below the form only while editing on mobile */
+      [data-editing-criteria] body { padding-bottom: 6rem; }
+      .criteria-save-bar {
+        display: none;
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+        padding: var(--space-3) max(var(--space-4), env(safe-area-inset-left)) max(var(--space-3), env(safe-area-inset-bottom)) max(var(--space-4), env(safe-area-inset-right));
+        background: color-mix(in oklch, var(--paper) 94%, transparent);
+        -webkit-backdrop-filter: saturate(160%) blur(12px); backdrop-filter: saturate(160%) blur(12px);
+        border-top: 1px solid var(--hairline);
+      }
+      [data-editing-criteria] .criteria-save-bar { display: flex; gap: var(--space-3); justify-content: flex-end; align-items: center; }
+      .criteria-save-bar .criteria-save-status { margin: 0 auto 0 0; color: var(--ink-muted); font-size: var(--text-sm); }
+      .criteria-save-bar button { margin: 0; min-height: 44px; }
+    </style>
+
+    <div class="criteria-save-bar" aria-hidden="false">
+      <span class="criteria-save-status">Editing — unsaved changes are kept locally on Save.</span>
+      <button type="button" class="secondary" onclick="document.getElementById('btn-cancel').click()">Cancel</button>
+      <button type="button" onclick="document.getElementById('btn-save').click()">Save</button>
+    </div>
     <p class="muted status-line" id="status" aria-live="polite"></p>
 
     <section class="tiles" aria-label="Key figures">

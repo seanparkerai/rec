@@ -22,27 +22,17 @@
       <p class="lead">Deposit progress, full budget breakdown, and live calculators tuned to UK rules (Apr 2025+).</p>
     </header>
 
-    <section class="tiles" aria-label="Headline figures">
-      <div class="tile">
-        <p class="tile-label">Deposit progress</p>
-        <p class="tile-value accent" id="tile-progress">0%</p>
+    <section class="finance-hero" aria-label="Headline figures">
+      <div class="finance-hero-pct">
+        <p class="eyebrow">Deposit progress</p>
+        <p class="finance-hero-num"><span class="num" id="tile-progress">0</span><small>%</small></p>
         <div class="progress"><span id="progress-bar"></span></div>
       </div>
-      <div class="tile">
-        <p class="tile-label">Total savings</p>
-        <p class="tile-value" id="tile-saved">—</p>
-        <p class="tile-sub">incl. gift cards</p>
-      </div>
-      <div class="tile">
-        <p class="tile-label">Monthly contribution</p>
-        <p class="tile-value" id="tile-monthly">—</p>
-        <p class="tile-sub">deposit pot</p>
-      </div>
-      <div class="tile">
-        <p class="tile-label">Months to target</p>
-        <p class="tile-value" id="tile-months">—</p>
-        <p class="tile-sub" id="tile-months-sub">at current pace</p>
-      </div>
+      <dl class="finance-hero-stats">
+        <div><dt>Total savings</dt>     <dd class="num" id="tile-saved">—</dd></div>
+        <div><dt>Per month</dt>          <dd class="num" id="tile-monthly">—</dd></div>
+        <div><dt>Months to target</dt>  <dd class="num" id="tile-months">—</dd></div>
+      </dl>
     </section>
 
     <section class="card">

@@ -255,6 +255,7 @@ function refreshActionButtons() {
   $('btn-edit').hidden = editing;
   $('btn-save').hidden = !editing;
   $('btn-cancel').hidden = !editing;
+  document.documentElement.toggleAttribute('data-editing-criteria', editing);
 }
 
 function refreshOverlayBadge() {

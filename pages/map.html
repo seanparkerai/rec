@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Map · rec</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
   <link rel="stylesheet" href="../assets/css/fonts.css" />
@@ -31,7 +31,7 @@
       </div>
     </header>
 
-    <section class="tiles" aria-label="Map summary">
+    <section class="tiles map-page-tiles" aria-label="Map summary">
       <div class="tile">
         <p class="tile-label">Areas in directory</p>
         <p class="tile-value" id="area-total">—</p>
@@ -50,14 +50,18 @@
 
     <p class="muted status-line" id="map-status" aria-live="polite">Loading map…</p>
 
-    <div class="dash-grid">
-      <section class="card span-8 map-card">
+    <div class="map-layout">
+      <section class="card map-card">
         <div id="map" class="map-canvas"></div>
       </section>
-      <section class="card span-4">
-        <h2>Shortlisted areas</h2>
-        <div id="shortlist-panel"></div>
-      </section>
+      <aside class="card map-side" id="map-side" data-detent="peek" aria-label="Shortlisted areas">
+        <button class="sheet-handle" type="button" id="sheet-handle" aria-label="Expand sheet" aria-expanded="false"></button>
+        <header class="sheet-head">
+          <h2>Shortlisted areas</h2>
+          <span class="num" id="sheet-count">0</span>
+        </header>
+        <div id="shortlist-panel" class="sheet-body"></div>
+      </aside>
     </div>
   </main>
 

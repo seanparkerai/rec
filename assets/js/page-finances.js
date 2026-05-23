@@ -26,12 +26,11 @@ function renderTiles() {
   const pct = fin.calcDepositProgress(saved, target);
   const months = fin.calcMonthsToTarget(saved, target, data.savings?.monthlyContribution || 0);
 
-  $('tile-progress').textContent = `${pct}%`;
+  $('tile-progress').textContent = String(pct);
   $('progress-bar').style.width = `${pct}%`;
   $('tile-saved').textContent = gbp(saved);
-  $('tile-monthly').textContent = gbp(data.savings?.monthlyContribution || 0);
-  $('tile-months').textContent = months === Infinity ? '—' : `${months}`;
-  $('tile-months-sub').textContent = months === Infinity ? 'no contribution' : 'at current pace';
+  $('tile-monthly').textContent = gbp(data.savings?.monthlyContribution || 0) + '/mo';
+  $('tile-months').textContent = months === Infinity ? '—' : `${months} mo`;
 }
 
 function renderSummaries() {
