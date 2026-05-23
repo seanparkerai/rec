@@ -17,3 +17,7 @@ npm-debug.log*
 
 # Local server / misc
 .cache/
+
+# Verify-UI harness output (regenerated on each run)
+/artifacts/screenshots/*/
+/artifacts/verify-*.json

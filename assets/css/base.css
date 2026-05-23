@@ -42,6 +42,15 @@ small, .small { font-size: var(--text-sm); color: var(--ink-muted); }
   animation-duration: 280ms;
   animation-timing-function: var(--ease-out);
 }
+/* Named transition: area row title ↔ area detail h1. Both elements
+   carry `style.viewTransitionName = "area-title"` so the title morphs
+   across the navigation. Only one named target per page (the visible
+   row that was clicked) — set in page-areas.js click handler. */
+::view-transition-old(area-title),
+::view-transition-new(area-title) {
+  animation-duration: 400ms;
+  animation-timing-function: var(--ease-out);
+}
 
 /* ---- Global a11y: reduced motion (WCAG 2.3.3) ---- */
 @media (prefers-reduced-motion: reduce) {
