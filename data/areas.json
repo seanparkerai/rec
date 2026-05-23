@@ -10,7 +10,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Alton",
-    "coords": null,
+    "coords": {
+      "lat": 51.15928,
+      "lng": -0.9786
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -40,7 +44,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Alton",
-    "coords": null,
+    "coords": {
+      "lat": 51.13024,
+      "lng": -0.97844
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -70,7 +78,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Alton",
-    "coords": null,
+    "coords": {
+      "lat": 51.14248,
+      "lng": -0.98044
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -100,7 +112,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Alton",
-    "coords": null,
+    "coords": {
+      "lat": 51.13144,
+      "lng": -0.99276
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -130,7 +146,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Alton",
-    "coords": null,
+    "coords": {
+      "lat": 51.13612,
+      "lng": -0.98344
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -160,7 +180,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Alton",
-    "coords": null,
+    "coords": {
+      "lat": 51.15116,
+      "lng": -0.98648
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -190,7 +214,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Alton",
-    "coords": null,
+    "coords": {
+      "lat": 51.16748,
+      "lng": -0.9892
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -220,7 +248,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Andover",
-    "coords": null,
+    "coords": {
+      "lat": 51.1324,
+      "lng": -1.48372
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -250,7 +282,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Andover",
-    "coords": null,
+    "coords": {
+      "lat": 51.13464,
+      "lng": -1.48516
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -280,7 +316,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Andover",
-    "coords": null,
+    "coords": {
+      "lat": 51.10068,
+      "lng": -1.50248
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -310,7 +350,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Andover",
-    "coords": null,
+    "coords": {
+      "lat": 51.13144,
+      "lng": -1.47436
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -340,7 +384,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Andover",
-    "coords": null,
+    "coords": {
+      "lat": 51.127,
+      "lng": -1.50896
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -370,7 +418,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Andover",
-    "coords": null,
+    "coords": {
+      "lat": 51.18764,
+      "lng": -1.50756
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -400,24 +452,62 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Andover",
-    "coords": null,
-    "overview": "",
-    "character": "",
-    "amenities": [],
+    "coords": {
+      "lat": 51.19876,
+      "lng": -1.50188
+    },
+    "coordsSource": "postcode-outward-approx",
+    "overview": "A picturesque Test Valley village of around 500 residents on the banks of the River Test, three miles south of Andover. Wherwell shows some of the finest straw-thatching in England: black-and-white timber-framed cottages whose thatch sweeps almost to the ground and curls over the windows.",
+    "character": "Chocolate-box thatched village; estate-managed countryside; quiet, with strong fishing-tourism economy.",
+    "amenities": [
+      "The White Lion Inn (oak-beamed coaching inn, 1611)",
+      "Parish church (St Peter and Holy Cross, rebuilt 1856)",
+      "Village hall"
+    ],
     "schools": [],
     "transport": {
       "commutes": []
     },
     "prices": {},
-    "thingsToDo": [],
-    "placesToEat": [],
-    "pros": [],
-    "cons": [],
-    "whoItSuits": [],
+    "thingsToDo": [
+      "Wherwell–Chilbolton riverside trail",
+      "Wherwell–Harewood Forest walk (largest woodland in Hampshire)",
+      "Trout/grayling fishing on Wherwell Estate beats"
+    ],
+    "placesToEat": [
+      "The White Lion"
+    ],
+    "pros": [
+      "Outstanding visual character",
+      "Walking + fishing on the doorstep",
+      "Andover station (~3 mi) for London commute"
+    ],
+    "cons": [
+      "Tiny — no shop, no school in the village (Chilbolton or Andover for both)",
+      "House prices reflect the postcard appeal",
+      "Tourist traffic in summer"
+    ],
+    "whoItSuits": [
+      "Buyers willing to pay for a heritage thatched cottage and accept the maintenance",
+      "Anglers, walkers, weekending households"
+    ],
     "houseTypeIds": [],
     "images": [],
-    "sources": [],
-    "status": "directory"
+    "sources": [
+      {
+        "label": "Wikipedia — Wherwell",
+        "url": "https://en.wikipedia.org/wiki/Wherwell"
+      },
+      {
+        "label": "Wherwell Estate (fishing)",
+        "url": "https://www.wherwellestate.co.uk/fishing"
+      },
+      {
+        "label": "Hampshire CC — Wherwell/Chilbolton trail",
+        "url": "https://www.hants.gov.uk/thingstodo/countryside/walking/wherwellchilbolton"
+      }
+    ],
+    "status": "drafted"
   },
   {
     "id": "wield-gu35",
@@ -430,7 +520,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Basingstoke",
-    "coords": null,
+    "coords": {
+      "lat": 51.09988,
+      "lng": -0.85
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -460,7 +554,11 @@
     "regionDir": "South",
     "settlementType": "Outlier",
     "subRegion": "Basingstoke",
-    "coords": null,
+    "coords": {
+      "lat": 51.24028,
+      "lng": -1.272
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -490,7 +588,11 @@
     "regionDir": "South",
     "settlementType": "Outlier",
     "subRegion": "Basingstoke",
-    "coords": null,
+    "coords": {
+      "lat": 51.24068,
+      "lng": -1.26248
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -520,7 +622,11 @@
     "regionDir": "South",
     "settlementType": "Outlier",
     "subRegion": "Basingstoke",
-    "coords": null,
+    "coords": {
+      "lat": 51.24304,
+      "lng": -1.25364
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -550,7 +656,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Farnham",
-    "coords": null,
+    "coords": {
+      "lat": 51.10716,
+      "lng": -0.87768
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -580,7 +690,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 50.99784,
+      "lng": -0.9408
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -610,7 +724,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 50.98764,
+      "lng": -0.94316
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -640,7 +758,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.0228,
+      "lng": -0.9456
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -670,7 +792,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 50.99292,
+      "lng": -0.93676
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -700,7 +826,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.00216,
+      "lng": -0.93096
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -730,7 +860,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 50.9928,
+      "lng": -0.93576
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -760,7 +894,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.02172,
+      "lng": -0.92236
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -790,7 +928,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.15008,
+      "lng": -0.96788
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -820,7 +962,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.14232,
+      "lng": -0.98196
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -850,7 +996,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.16424,
+      "lng": -0.9622
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -880,7 +1030,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.15752,
+      "lng": -0.99708
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -910,7 +1064,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.13288,
+      "lng": -0.96476
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -940,7 +1098,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.1326,
+      "lng": -0.97056
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -970,7 +1132,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.16208,
+      "lng": -0.97556
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1000,7 +1166,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.08048,
+      "lng": -1.15888
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1030,7 +1200,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.0886,
+      "lng": -1.17684
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1060,7 +1234,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
-    "coords": null,
+    "coords": {
+      "lat": 51.08088,
+      "lng": -1.17008
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1090,7 +1268,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Portsmouth",
-    "coords": null,
+    "coords": {
+      "lat": 50.90572,
+      "lng": -1.19008
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1120,7 +1302,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Romsey",
-    "coords": null,
+    "coords": {
+      "lat": 51.0004,
+      "lng": -1.51596
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1150,7 +1336,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Romsey",
-    "coords": null,
+    "coords": {
+      "lat": 50.99392,
+      "lng": -1.50228
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1180,7 +1370,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Romsey",
-    "coords": null,
+    "coords": {
+      "lat": 50.99864,
+      "lng": -1.507
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1210,7 +1404,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Romsey",
-    "coords": null,
+    "coords": {
+      "lat": 50.98572,
+      "lng": -1.50544
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1240,7 +1438,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.86808,
+      "lng": -1.57228
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1270,7 +1472,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.94804,
+      "lng": -1.46788
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1300,7 +1506,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.95332,
+      "lng": -1.19484
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1330,7 +1540,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.94192,
+      "lng": -1.21376
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1360,7 +1574,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.94648,
+      "lng": -1.20888
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1390,7 +1608,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.9386,
+      "lng": -1.19796
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1420,7 +1642,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.9548,
+      "lng": -1.2036
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1450,7 +1676,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.97112,
+      "lng": -1.20864
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1480,7 +1710,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.96844,
+      "lng": -1.213
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1510,7 +1744,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.95488,
+      "lng": -1.22176
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1540,7 +1778,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.96704,
+      "lng": -1.20528
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1570,7 +1812,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.86092,
+      "lng": -1.58872
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1600,7 +1846,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Southampton",
-    "coords": null,
+    "coords": {
+      "lat": 50.97596,
+      "lng": -1.50248
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1630,7 +1880,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Stockbridge",
-    "coords": null,
+    "coords": {
+      "lat": 51.10256,
+      "lng": -1.4854
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1660,24 +1914,65 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Stockbridge",
-    "coords": null,
-    "overview": "",
-    "character": "",
-    "amenities": [],
+    "coords": {
+      "lat": 51.12636,
+      "lng": -1.48816
+    },
+    "coordsSource": "postcode-outward-approx",
+    "overview": "A small Test Valley village about four miles west of Stockbridge, organised around its High Street and village hall. The community lost its private store in 2018 but reopened it as a volunteer-run community shop + post office + café, which remains the social anchor.",
+    "character": "Working village rather than show village; chalk downland setting, active parish life, primary-school catchment families.",
+    "amenities": [
+      "Broughton Community Shop (post office + café)",
+      "Two pubs/restaurants + Thai restaurant",
+      "Doctor's surgery",
+      "Village hall",
+      "Parish church",
+      "Broughton Primary School"
+    ],
     "schools": [],
     "transport": {
       "commutes": []
     },
     "prices": {},
-    "thingsToDo": [],
-    "placesToEat": [],
-    "pros": [],
-    "cons": [],
-    "whoItSuits": [],
+    "thingsToDo": [
+      "Clarendon Way walking",
+      "Houghton Down nature reserve",
+      "Mottisfont (NT) within 10 min drive"
+    ],
+    "placesToEat": [
+      "The Greyhound (Broughton)",
+      "The Tally Ho!"
+    ],
+    "pros": [
+      "Full village amenity set retained via community ownership",
+      "Cheaper than Stockbridge proper",
+      "Primary school in the village"
+    ],
+    "cons": [
+      "No station; Salisbury or Andover for trains (~15–20 min drive)",
+      "Limited evening transport"
+    ],
+    "whoItSuits": [
+      "Young families wanting village school + community shop",
+      "Downsizers who still want a working village, not a chocolate-box one"
+    ],
     "houseTypeIds": [],
     "images": [],
-    "sources": [],
-    "status": "directory"
+    "sources": [
+      {
+        "label": "Broughton Community Shop",
+        "url": "https://broughton.shop/"
+      },
+      {
+        "label": "Broughton Village (facilities)",
+        "url": "https://www.broughtonvillage.net/facilities"
+      },
+      {
+        "label": "Wikipedia — Broughton, Hampshire",
+        "url": "https://en.wikipedia.org/wiki/Broughton,_Hampshire"
+      }
+    ],
+    "status": "drafted"
   },
   {
     "id": "nether-wallop-so20",
@@ -1690,7 +1985,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Stockbridge",
-    "coords": null,
+    "coords": {
+      "lat": 51.137,
+      "lng": -1.47992
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1720,24 +2019,66 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Waterlooville",
-    "coords": null,
-    "overview": "",
-    "character": "",
-    "amenities": [],
+    "coords": {
+      "lat": 50.86996,
+      "lng": -1.03648
+    },
+    "coordsSource": "postcode-outward-approx",
+    "overview": "A village of ~1,000 residents in the Winchester district, set on chalk downland inside the South Downs National Park at the southern end of the Meon Valley. Famed as the \"cradle of cricket\" — the Hambledon Club at nearby Broadhalfpenny Down was central to the sport's 18th-century development.",
+    "character": "Linear downland village, 69 listed buildings, Saxon-origin Grade I church; quietly affluent, history-conscious, families and downsizers.",
+    "amenities": [
+      "Two village shops",
+      "Pub (the Bat and Ball Inn at Broadhalfpenny Down acts as a cricket museum)",
+      "Parish church",
+      "Hambledon Primary (Ofsted Outstanding)",
+      "Active cricket club at Ridge Meadow"
+    ],
     "schools": [],
     "transport": {
       "commutes": []
     },
     "prices": {},
-    "thingsToDo": [],
-    "placesToEat": [],
-    "pros": [],
-    "cons": [],
-    "whoItSuits": [],
+    "thingsToDo": [
+      "South Downs Way walking",
+      "Broadhalfpenny Down cricket heritage trail",
+      "Meon Valley cycling/walking"
+    ],
+    "placesToEat": [
+      "The Bat and Ball Inn",
+      "The Vine at Hambledon"
+    ],
+    "pros": [
+      "Outstanding primary school",
+      "Inside the National Park (planning protections)",
+      "Strong community + sporting fabric",
+      "Denmead nearby for full supermarket shop"
+    ],
+    "cons": [
+      "No station — Petersfield or Rowlands Castle for trains",
+      "Tight planning regime limits extensions/alterations",
+      "Premium for SDNP postcodes"
+    ],
+    "whoItSuits": [
+      "Families chasing the primary school and the National Park setting",
+      "Cricket-loving second-homers and retirees"
+    ],
     "houseTypeIds": [],
     "images": [],
-    "sources": [],
-    "status": "directory"
+    "sources": [
+      {
+        "label": "Wikipedia — Hambledon, Hampshire",
+        "url": "https://en.wikipedia.org/wiki/Hambledon,_Hampshire"
+      },
+      {
+        "label": "Hambledon Parish Council — Cricket Club",
+        "url": "https://www.hambledon-pc.gov.uk/Cricket/Cricket_Club.aspx"
+      },
+      {
+        "label": "Visit South East England — Hambledon",
+        "url": "https://www.visitsoutheastengland.com/places-to-visit/hambledon-p1272711"
+      }
+    ],
+    "status": "drafted"
   },
   {
     "id": "east-meon-gu32",
@@ -1750,7 +2091,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.01656,
+      "lng": -0.93936
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1780,7 +2125,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.01784,
+      "lng": -0.9512
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1810,7 +2159,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.15176,
+      "lng": -0.96956
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1840,7 +2193,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.1128,
+      "lng": -0.881
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1870,7 +2227,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.1336,
+      "lng": -1.48812
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1900,7 +2261,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.10232,
+      "lng": -1.47756
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1930,7 +2295,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.12632,
+      "lng": -1.47692
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1960,7 +2329,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.12536,
+      "lng": -1.49428
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -1990,7 +2363,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.12984,
+      "lng": -1.48044
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2020,7 +2397,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.101,
+      "lng": -1.47248
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2050,7 +2431,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.13164,
+      "lng": -1.48216
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2080,24 +2465,68 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
-    "overview": "",
-    "character": "",
-    "amenities": [],
+    "coords": {
+      "lat": 51.12808,
+      "lng": -1.50172
+    },
+    "coordsSource": "postcode-outward-approx",
+    "overview": "A handsome single-street town midway between Andover and Romsey, set in the Test Valley. Its wide High Street — a legacy of the drovers' route from Wales — is now lined with tea rooms, gastropubs and independent specialist shops, with a deliberate scarcity of chain stores.",
+    "character": "Genteel, free-thinking, well-heeled rural; chalk-stream country with a strong fly-fishing identity (Houghton Fishing Club is the oldest in England, based at the Grosvenor Hotel).",
+    "amenities": [
+      "Independent High Street shops",
+      "Tea rooms, pubs and restaurants",
+      "Orvis flagship fly-fishing store",
+      "Robjent's shooting/fishing outfitter",
+      "Single supermarket",
+      "Doctor's surgery",
+      "Stockbridge Primary"
+    ],
     "schools": [],
     "transport": {
       "commutes": []
     },
     "prices": {},
-    "thingsToDo": [],
-    "placesToEat": [],
-    "pros": [],
-    "cons": [],
-    "whoItSuits": [],
+    "thingsToDo": [
+      "Fly-fishing on the upper River Test",
+      "Walking the Test Way",
+      "Houghton Down / Danebury Hill Fort"
+    ],
+    "placesToEat": [
+      "The Greyhound on the Test",
+      "The Three Cups Inn",
+      "The Grosvenor Hotel"
+    ],
+    "pros": [
+      "Chalk-stream walks on the doorstep",
+      "Strong independent retail",
+      "Equidistant Andover ↔ Romsey ↔ Winchester"
+    ],
+    "cons": [
+      "No railway station (nearest: Andover or Winchester)",
+      "Premium prices — a destination town, not a commuter dorm",
+      "A30 traffic through the High Street at peak times"
+    ],
+    "whoItSuits": [
+      "Anglers and slow-food households",
+      "Buyers prioritising market-town amenities over commuter speed"
+    ],
     "houseTypeIds": [],
     "images": [],
-    "sources": [],
-    "status": "directory"
+    "sources": [
+      {
+        "label": "Visit Hampshire — Stockbridge",
+        "url": "https://www.visit-hampshire.co.uk/explore/stockbridge-p524261"
+      },
+      {
+        "label": "Orvis UK — Stockbridge store",
+        "url": "https://www.orvis.co.uk/pages/stockbridge-store"
+      },
+      {
+        "label": "Robjent's",
+        "url": "http://www.robjents.co.uk/"
+      }
+    ],
+    "status": "drafted"
   },
   {
     "id": "totford-so20",
@@ -2110,7 +2539,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.10908,
+      "lng": -1.49104
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2140,7 +2573,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.1064,
+      "lng": -1.4834
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2170,7 +2607,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.07796,
+      "lng": -1.30688
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2200,7 +2641,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06408,
+      "lng": -1.28156
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2230,7 +2675,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06508,
+      "lng": -1.3
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2260,7 +2709,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06448,
+      "lng": -1.28884
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2290,7 +2743,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.07676,
+      "lng": -1.2876
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2320,7 +2777,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.07208,
+      "lng": -1.28468
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2350,7 +2811,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.07756,
+      "lng": -1.31664
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2380,7 +2845,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.05552,
+      "lng": -1.29972
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2410,7 +2879,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.056,
+      "lng": -1.29092
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2440,7 +2913,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08688,
+      "lng": -1.31852
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2470,7 +2947,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06308,
+      "lng": -1.29704
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2500,7 +2981,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.05668,
+      "lng": -1.31552
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2530,7 +3015,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.09496,
+      "lng": -1.29068
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2560,7 +3049,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08288,
+      "lng": -1.29756
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2590,7 +3083,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06068,
+      "lng": -1.29512
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2620,7 +3117,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08228,
+      "lng": -1.29608
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2650,7 +3151,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.05968,
+      "lng": -1.29364
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2680,7 +3185,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08284,
+      "lng": -1.31848
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2710,7 +3219,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.0938,
+      "lng": -1.3076
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2740,7 +3253,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06436,
+      "lng": -1.28888
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2770,7 +3287,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.09484,
+      "lng": -1.30864
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2800,7 +3321,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.05832,
+      "lng": -1.29844
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2830,7 +3355,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08572,
+      "lng": -1.30472
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2860,7 +3389,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.07544,
+      "lng": -1.31964
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2890,7 +3423,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06888,
+      "lng": -1.3038
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2920,7 +3457,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06372,
+      "lng": -1.30792
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2950,7 +3491,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08268,
+      "lng": -1.28688
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -2980,7 +3525,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.05788,
+      "lng": -1.32468
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3010,7 +3559,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.06576,
+      "lng": -1.30504
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3040,7 +3593,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.09024,
+      "lng": -1.17016
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3070,7 +3627,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08136,
+      "lng": -1.14016
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3100,7 +3661,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.10328,
+      "lng": -1.15248
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3130,7 +3695,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.10936,
+      "lng": -1.17008
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3160,7 +3729,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.0956,
+      "lng": -1.16504
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3190,7 +3763,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08068,
+      "lng": -1.16892
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3220,7 +3797,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.10828,
+      "lng": -1.17764
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3250,7 +3831,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.07556,
+      "lng": -1.15364
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3280,7 +3865,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08052,
+      "lng": -1.15124
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3310,7 +3899,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08712,
+      "lng": -1.17352
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3340,7 +3933,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.09332,
+      "lng": -1.16996
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3370,7 +3967,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.09316,
+      "lng": -1.14236
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3400,7 +4001,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.10384,
+      "lng": -1.15304
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3430,7 +4035,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.08116,
+      "lng": -1.17996
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3460,7 +4069,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 51.1036,
+      "lng": -1.1656
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3490,7 +4103,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 50.93916,
+      "lng": -1.20764
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3520,7 +4137,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 50.958,
+      "lng": -1.19712
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3550,7 +4171,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 50.99684,
+      "lng": -1.50936
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3580,7 +4205,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 50.9978,
+      "lng": -1.48832
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3610,7 +4239,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 50.99352,
+      "lng": -1.50188
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3640,7 +4273,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 50.97212,
+      "lng": -1.50032
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3670,7 +4307,11 @@
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
-    "coords": null,
+    "coords": {
+      "lat": 50.99968,
+      "lng": -1.51668
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3700,7 +4341,11 @@
     "regionDir": "East",
     "settlementType": "Outlier",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.22484,
+      "lng": -2.17936
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3730,7 +4375,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.07108,
+      "lng": -1.77688
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3760,7 +4409,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.06612,
+      "lng": -1.7844
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3790,7 +4443,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.04664,
+      "lng": -1.83456
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3820,7 +4477,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.07324,
+      "lng": -1.83044
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3850,7 +4511,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.06176,
+      "lng": -1.858
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3880,7 +4545,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.04576,
+      "lng": -1.8408
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3910,7 +4579,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.07336,
+      "lng": -1.85416
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3940,7 +4613,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.0578,
+      "lng": -1.825
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -3970,7 +4647,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.05432,
+      "lng": -1.82112
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4000,7 +4681,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.04384,
+      "lng": -1.84336
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4030,7 +4715,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.04396,
+      "lng": -1.85108
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4060,7 +4749,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.08368,
+      "lng": -1.92588
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4090,7 +4783,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.07308,
+      "lng": -1.94304
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4120,7 +4817,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.0972,
+      "lng": -1.94612
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4150,7 +4851,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.064,
+      "lng": -1.95668
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4180,7 +4885,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.06244,
+      "lng": -1.96392
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4210,7 +4919,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.07888,
+      "lng": -1.9634
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4240,7 +4953,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.1652,
+      "lng": -1.77744
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4270,7 +4987,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.1888,
+      "lng": -1.778
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4300,7 +5021,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.1642,
+      "lng": -1.78692
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4330,7 +5055,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.18984,
+      "lng": -1.7776
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4360,7 +5089,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.16624,
+      "lng": -1.77032
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4390,7 +5123,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.15444,
+      "lng": -1.78276
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4420,7 +5157,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.16316,
+      "lng": -1.78372
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4450,7 +5191,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.17472,
+      "lng": -1.78376
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4480,7 +5225,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.16648,
+      "lng": -1.79472
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4510,7 +5259,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.1574,
+      "lng": -1.77156
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4540,7 +5293,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.16336,
+      "lng": -1.78104
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4570,7 +5327,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.00768,
+      "lng": -1.84168
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4600,7 +5361,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.9888,
+      "lng": -1.84152
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4630,7 +5395,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01536,
+      "lng": -1.8452
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4660,7 +5429,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01404,
+      "lng": -1.85236
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4690,7 +5463,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99312,
+      "lng": -1.84608
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4720,7 +5497,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.994,
+      "lng": -1.8736
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4750,7 +5531,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01108,
+      "lng": -1.86716
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4780,7 +5565,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.00664,
+      "lng": -1.87728
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4810,7 +5599,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01732,
+      "lng": -1.84396
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4840,7 +5633,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.00024,
+      "lng": -1.87776
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4870,7 +5667,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.0198,
+      "lng": -1.84972
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4900,7 +5701,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99476,
+      "lng": -1.847
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4930,7 +5735,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01456,
+      "lng": -1.84512
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4960,7 +5769,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.982,
+      "lng": -1.86048
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -4990,7 +5803,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99424,
+      "lng": -1.85488
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5020,7 +5837,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99692,
+      "lng": -1.86588
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5050,7 +5871,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01576,
+      "lng": -1.85488
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5080,7 +5905,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01508,
+      "lng": -1.87428
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5110,7 +5939,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99892,
+      "lng": -1.84188
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5140,7 +5973,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01108,
+      "lng": -1.86972
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5170,7 +6007,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.00288,
+      "lng": -1.87256
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5200,7 +6041,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.00032,
+      "lng": -1.87952
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5230,7 +6075,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.98792,
+      "lng": -1.86176
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5260,7 +6109,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.98808,
+      "lng": -1.8696
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5290,7 +6143,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.0158,
+      "lng": -1.85508
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5320,7 +6177,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01668,
+      "lng": -1.86484
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5350,7 +6211,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01668,
+      "lng": -1.87244
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5380,7 +6245,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.983,
+      "lng": -1.85844
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5410,7 +6279,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99248,
+      "lng": -1.84832
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5440,7 +6313,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.003,
+      "lng": -1.86668
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5470,7 +6347,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.00208,
+      "lng": -1.8796
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5500,7 +6381,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01916,
+      "lng": -1.8626
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5530,7 +6415,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.98188,
+      "lng": -1.85988
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5560,7 +6449,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.01008,
+      "lng": -1.84552
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5590,7 +6483,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99416,
+      "lng": -1.864
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5620,7 +6517,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 51.0018,
+      "lng": -1.87076
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5650,7 +6551,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.99116,
+      "lng": -1.87996
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5680,7 +6585,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.92608,
+      "lng": -1.79904
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],
@@ -5710,7 +6619,11 @@
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
-    "coords": null,
+    "coords": {
+      "lat": 50.91196,
+      "lng": -1.7994
+    },
+    "coordsSource": "postcode-outward-approx",
     "overview": "",
     "character": "",
     "amenities": [],

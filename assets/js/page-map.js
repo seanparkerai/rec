@@ -114,8 +114,9 @@ async function loadAreaMarkers() {
         weight: 1.5,
       });
       const detailUrl = url('pages/area-detail.html') + `?id=${encodeURIComponent(a.id)}`;
+      const approx = a.coordsSource === 'postcode-outward-approx';
       marker.bindPopup(`
-        <strong>${esc(a.name)}</strong><br />
+        <strong>${esc(a.name)}</strong>${approx ? ' <span style="color:#6b7280;font-size:0.85em;">(approx.)</span>' : ''}<br />
         <span style="color: #6b7280;">${esc(a.town)} · ${esc(a.postcode)}</span><br />
         <a href="${detailUrl}">View profile →</a>
       `);
@@ -123,7 +124,9 @@ async function loadAreaMarkers() {
     });
     cluster.addTo(map);
     if (withCoords.length >= 3) map.fitBounds(cluster.getBounds(), { padding: [40, 40] });
-    $('map-status').innerHTML = `Showing <strong>${withCoords.length}</strong> of <strong>${areas.length}</strong> areas; ${shortlist.size} shortlisted.`;
+    const approxCount = withCoords.filter((a) => a.coordsSource === 'postcode-outward-approx').length;
+    const approxNote = approxCount ? ` <span class="muted">(${approxCount} at approximate postcode-area centroid; run <code>node tools/geocode-areas.mjs</code> for precise village locations.)</span>` : '';
+    $('map-status').innerHTML = `Showing <strong>${withCoords.length}</strong> of <strong>${areas.length}</strong> areas; ${shortlist.size} shortlisted.${approxNote}`;
   } catch (e) {
     console.error('marker load error', e);
   }

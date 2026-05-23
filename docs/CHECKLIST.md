@@ -81,8 +81,16 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
 - [x] `pages/area-detail.html` (renders by `?id=`, 9-category framework: Overview · Amenities · Schools ·
       Transport · Prices · Things to do · Places to eat · Pros/Cons · Who it suits; tiles + image gallery
       + sources; shortlist toggle; not-found fallback)
-- [ ] Geocode coords (for the map) — currently null
-- [ ] Area content batches for priority villages first (research → temp file → splice → licence-safe images → tests → commit per batch)
+- [~] Geocode coords (for the map): every area now has a `coords` value, but 191/191 are at the
+      `postcode-outward-approx` centroid (±~1 km jitter so villages don't stack). Precise per-village
+      geocoding ships as `tools/geocode-areas.mjs` (Nominatim, polite-UA, 1 req/s, cached + resumable,
+      `--provider postcodesio` fallback). Must be run from a host with outbound access — the managed
+      cloud sandbox blocks Nominatim/postcodes.io. Cache lands at `data/source/geocode-cache.json`.
+- [~] Area content batches: first batch (4 villages — `stockbridge-so20`, `broughton-so20`,
+      `wherwell-sp11`, `hambledon-po7`) drafted with web-cited `overview`/`character`/`amenities`/
+      `pros`/`cons`/`whoItSuits`/`sources` per CLAUDE.md §7. Imagery still pending — sandbox network
+      policy blocks downloads from commons.wikimedia.org / geograph.org.uk; do this in a session with
+      outbound access. Remaining: 187 villages. Pattern is `tools/enrich-batch-NN.mjs`.
 
 ## Phase 4 — House-types gallery (batched)
 - [x] `data/house-types.json` seeded with 8 types (thatched cob, flint-and-brick, Georgian townhouse,
@@ -117,8 +125,9 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
       directory areas; popups link to area-detail.html)
 - [x] `pages/map.html` (12-col grid: 8/4 map+shortlist panel; tiles for total/mapped/zones; Recentre +
       Clear-zones actions; live status line)
-- [ ] Markers depend on geocoded coords (currently 0/191) — pending geocoding pass (Nominatim or
-      Ordnance Survey Open Names). Draw + persistence loop is fully functional and tested by hand.
+- [~] Markers: 191/191 now render at the postcode-outward centroid (clearly flagged "(approx.)" in
+      popups and counted in the map-status line). Precise per-village positions will overwrite via
+      `tools/geocode-areas.mjs` (Nominatim) — see Phase 3 note. Draw + persistence loop unchanged.
 - [x] Commit + push
 
 ## Phase 7 — Dashboard polish & future-proofing

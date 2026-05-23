@@ -2,7 +2,10 @@
 // build-areas.mjs — generate data/areas.json from the source CSVs.
 // Source of truth: data/source/villages.csv + data/source/postcode-regions.csv
 // Re-run whenever the source lists change:  node tools/build-areas.mjs
-import { readFileSync, writeFileSync } from 'node:fs';
+//
+// Enriched fields (coords, overview, character, amenities, sources, images, …)
+// are PRESERVED across rebuilds — we only fill defaults for new ids.
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url)); // repo root, ends with /
@@ -10,12 +13,32 @@ const read = (p) => readFileSync(ROOT + p, 'utf8');
 const parseCSV = (txt) => txt.trim().split(/\r?\n/).map((l) => l.split(','));
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-// postcode -> region info
+// postcode -> region info (incl. an approximate outward-code centroid used as
+// a placeholder coord so map markers render before per-village geocoding lands).
 const pcRows = parseCSV(read('data/source/postcode-regions.csv')).slice(1);
 const pc = new Map();
-for (const [, postcode, city, region, type] of pcRows) {
-  pc.set(postcode, { city: city || '', region: region || '', type: type || '' });
+for (const [, postcode, city, region, type, lat, lng] of pcRows) {
+  pc.set(postcode, {
+    city: city || '',
+    region: region || '',
+    type: type || '',
+    lat: lat ? Number(lat) : null,
+    lng: lng ? Number(lng) : null,
+  });
 }
+
+// Deterministic ±~3 km offset keyed off the id, so villages sharing one
+// outward code don't all stack on the same pin pre-geocoding.
+const jitter = (id, salt) => {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i) + salt) | 0;
+  return ((Math.abs(h) % 1000) / 1000 - 0.5) * 0.04; // ±~1 km
+};
+
+// Preserve enriched content from any prior run.
+const prior = existsSync(`${ROOT}data/areas.json`)
+  ? Object.fromEntries(JSON.parse(readFileSync(`${ROOT}data/areas.json`, 'utf8')).map((a) => [a.id, a]))
+  : {};
 
 const vRows = parseCSV(read('data/source/villages.csv')).slice(1);
 const seen = new Set();
@@ -25,7 +48,11 @@ const areas = vRows
     let id = `${slug(village)}-${slug(postcode)}`;
     if (seen.has(id)) { let i = 2; while (seen.has(`${id}-${i}`)) i++; id = `${id}-${i}`; }
     seen.add(id);
-    const r = pc.get(postcode) || { city: '', region: '', type: '' };
+    const r = pc.get(postcode) || { city: '', region: '', type: '', lat: null, lng: null };
+    const fallbackCoords = r.lat != null && r.lng != null
+      ? { lat: +(r.lat + jitter(id, 1)).toFixed(5), lng: +(r.lng + jitter(id, 7)).toFixed(5) }
+      : null;
+    const p = prior[id] || {};
     return {
       id,
       name: village,
@@ -37,22 +64,29 @@ const areas = vRows
       regionDir: r.region,
       settlementType: r.type,
       subRegion: town,
-      coords: null,
-      overview: '',
-      character: '',
-      amenities: [],
-      schools: [],
-      transport: { commutes: [] },
-      prices: {},
-      thingsToDo: [],
-      placesToEat: [],
-      pros: [],
-      cons: [],
-      whoItSuits: [],
-      houseTypeIds: [],
-      images: [],
-      sources: [],
-      status: 'directory',
+      // Keep precise coords from earlier geocoding; otherwise seed with the
+      // postcode-outward centroid (+ jitter) so markers render immediately.
+      // Recompute the postcode-outward fallback every run (cheap, deterministic);
+      // only PRESERVE precise coords from a proper geocoder.
+      coords: p.coords && p.coordsSource && p.coordsSource !== 'postcode-outward-approx'
+        ? p.coords : fallbackCoords,
+      coordsSource: p.coords && p.coordsSource && p.coordsSource !== 'postcode-outward-approx'
+        ? p.coordsSource : (fallbackCoords ? 'postcode-outward-approx' : null),
+      overview: p.overview ?? '',
+      character: p.character ?? '',
+      amenities: p.amenities ?? [],
+      schools: p.schools ?? [],
+      transport: p.transport ?? { commutes: [] },
+      prices: p.prices ?? {},
+      thingsToDo: p.thingsToDo ?? [],
+      placesToEat: p.placesToEat ?? [],
+      pros: p.pros ?? [],
+      cons: p.cons ?? [],
+      whoItSuits: p.whoItSuits ?? [],
+      houseTypeIds: p.houseTypeIds ?? [],
+      images: p.images ?? [],
+      sources: p.sources ?? [],
+      status: p.status ?? 'directory',
     };
   });
 
@@ -81,4 +115,6 @@ for (const county of Object.keys(groups).sort()) {
 writeFileSync(`${ROOT}docs/AREAS.md`, md);
 
 const byCounty = areas.reduce((m, a) => ((m[a.county] = (m[a.county] || 0) + 1), m), {});
+const withCoords = areas.filter((a) => a.coords).length;
 console.log(`Wrote ${areas.length} areas to data/areas.json and docs/AREAS.md`, byCounty);
+console.log(`  coords: ${withCoords}/${areas.length} (${areas.length - withCoords} still null)`);
