@@ -16,7 +16,7 @@ function renderCard(type, areasForType) {
     : `<div class="ht-image ht-image-placeholder" aria-hidden="true">${esc(type.name.charAt(0))}</div>`;
 
   const features = (type.features || []).map((f) => `<li>${esc(f)}</li>`).join('');
-  const regions = (type.regionsCommon || []).map((r) => `<span class="badge">${esc(r)}</span>`).join(' ');
+  const regions = (type.regionsCommon || []).map((r) => `<li class="chip">${esc(r)}</li>`).join('');
 
   const linkedAreas = areasForType.slice(0, 6);
   const moreCount = areasForType.length - linkedAreas.length;
@@ -34,7 +34,7 @@ function renderCard(type, areasForType) {
         </header>
         <p>${esc(type.description) || '<span class="muted">Description being researched.</span>'}</p>
         ${features ? `<h4>Features</h4><ul class="mini-list">${features}</ul>` : ''}
-        ${regions ? `<h4>Common in</h4><p class="ht-regions">${regions}</p>` : ''}
+        ${regions ? `<h4>Common in</h4><ul class="ht-regions">${regions}</ul>` : ''}
         ${linksHtml}
       </div>
     </article>

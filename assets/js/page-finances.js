@@ -163,24 +163,33 @@ function renderSavingsChart() {
   const balances = projection.map((p) => p.balance);
   const targetLine = projection.map(() => target);
 
+  const accent = getCSSVar('--accent');
+  const ink = getCSSVar('--ink');
+  const muted = getCSSVar('--ink-muted');
+  const hairline = getCSSVar('--hairline');
+  const dataFont = getCSSVar('--font-data');
+
   if (chartInstance) chartInstance.destroy();
   chartInstance = new Chart(canvas, {
     type: 'line',
     data: {
       labels,
       datasets: [
-        { label: 'Projected savings', data: balances, borderColor: getCSSVar('--accent'), backgroundColor: getCSSVar('--accent') + '20', tension: 0.2, fill: true, pointRadius: 2 },
-        { label: 'Deposit target', data: targetLine, borderColor: getCSSVar('--pico-muted-color'), borderDash: [6, 6], pointRadius: 0, fill: false },
+        { label: 'Projected savings', data: balances, borderColor: accent, backgroundColor: `color-mix(in oklch, ${accent} 14%, transparent)`, borderWidth: 2, tension: 0.25, fill: true, pointRadius: 0, pointHoverRadius: 4 },
+        { label: 'Deposit target', data: targetLine, borderColor: muted, borderDash: [4, 6], borderWidth: 1.5, pointRadius: 0, fill: false },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      animation: prefersReducedMotion() ? false : { duration: 400 },
-      plugins: { legend: { labels: { color: getCSSVar('--pico-color') } } },
+      animation: prefersReducedMotion() ? false : { duration: 450, easing: 'easeOutCubic' },
+      plugins: {
+        legend: { labels: { color: ink, font: { family: dataFont, size: 11 }, boxWidth: 10, boxHeight: 10 } },
+        tooltip: { backgroundColor: ink, titleColor: getCSSVar('--paper'), bodyColor: getCSSVar('--paper'), padding: 8, displayColors: false, callbacks: { label: (ctx) => gbp(ctx.parsed.y) } },
+      },
       scales: {
-        x: { ticks: { color: getCSSVar('--pico-muted-color'), maxTicksLimit: 12 }, grid: { color: getCSSVar('--pico-muted-border-color') } },
-        y: { ticks: { color: getCSSVar('--pico-muted-color'), callback: (v) => '£' + (v / 1000).toFixed(0) + 'k' }, grid: { color: getCSSVar('--pico-muted-border-color') } },
+        x: { ticks: { color: muted, maxTicksLimit: 10, font: { family: dataFont, size: 11 } }, grid: { display: false }, border: { color: hairline } },
+        y: { ticks: { color: muted, callback: (v) => '£' + (v / 1000).toFixed(0) + 'k', font: { family: dataFont, size: 11 } }, grid: { color: hairline, drawTicks: false }, border: { display: false } },
       },
     },
   });

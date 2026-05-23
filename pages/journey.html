@@ -15,18 +15,19 @@
   <div data-include="components/nav.html"></div>
 
   <main id="main" class="container">
-    <div class="page-head row" style="justify-content: space-between; align-items: flex-start;">
+    <header class="page-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-4);flex-wrap:wrap;">
       <div>
+        <p class="eyebrow">End to end</p>
         <h1>Journey</h1>
-        <p>Three checklists to track the buying journey end-to-end — your tick state persists locally.</p>
+        <p class="lead">Three checklists — viewing, buying, moving — to track every step. Your tick state persists locally.</p>
       </div>
-      <div class="row page-actions">
+      <div class="page-actions">
         <button id="btn-reset-all" class="outline secondary">Clear all checks</button>
       </div>
-    </div>
+    </header>
 
-    <div class="dash-grid">
-      <section class="card span-12">
+    <div class="article">
+      <section class="card">
         <header class="check-section-head">
           <h2>Viewing checklist</h2>
           <div class="check-progress">
@@ -37,7 +38,7 @@
         <ul class="check-list" id="list-viewing"></ul>
       </section>
 
-      <section class="card span-12">
+      <section class="card">
         <header class="check-section-head">
           <h2>Buying process</h2>
           <div class="check-progress">
@@ -48,7 +49,7 @@
         <ul class="check-list" id="list-process"></ul>
       </section>
 
-      <section class="card span-12">
+      <section class="card">
         <header class="check-section-head">
           <h2>Moving &amp; packing</h2>
           <div class="check-progress">
@@ -59,6 +60,14 @@
         <ul class="check-list" id="list-moving"></ul>
       </section>
     </div>
+
+    <style>
+      .article > .card { display: block; }
+      .article > .card + .card { margin-top: var(--space-4); }
+      .check-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-4); flex-wrap: wrap; }
+      .check-section-head h2 { margin: 0; }
+      .check-progress { display: flex; flex-direction: column; gap: var(--space-1); min-width: 12rem; }
+    </style>
   </main>
 
   <div data-include="components/footer.html"></div>

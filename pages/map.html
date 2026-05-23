@@ -19,16 +19,17 @@
   <div data-include="components/nav.html"></div>
 
   <main id="main" class="container">
-    <div class="page-head row" style="justify-content: space-between; align-items: flex-start;">
+    <header class="page-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-4);flex-wrap:wrap;">
       <div>
+        <p class="eyebrow">Search zones</p>
         <h1>Map</h1>
-        <p>Area markers and hand-drawn search zones over Hampshire &amp; Wiltshire.</p>
+        <p class="lead">Area markers and hand-drawn search zones over Hampshire &amp; Wiltshire.</p>
       </div>
-      <div class="row page-actions">
+      <div class="page-actions" style="display:flex;gap:var(--space-2);">
         <button id="btn-recentre" class="outline secondary">Recentre</button>
         <button id="btn-clear-zones" class="outline secondary">Clear zones</button>
       </div>
-    </div>
+    </header>
 
     <section class="tiles" aria-label="Map summary">
       <div class="tile">

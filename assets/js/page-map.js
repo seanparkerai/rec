@@ -25,10 +25,21 @@ function init() {
 
   map = L.map('map', { preferCanvas: true, zoomControl: true }).setView(HAMPS_WILTS_CENTRE, DEFAULT_ZOOM);
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // Editorial basemap: CartoDB Positron (light) / Dark Matter (dark). Theme-aware.
+  const dark = document.documentElement.dataset.theme === 'dark' ||
+    (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+  const tileUrl = dark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png';
+  const labelUrl = dark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png';
+  L.tileLayer(tileUrl, {
     maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    subdomains: 'abcd',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
   }).addTo(map);
+  L.tileLayer(labelUrl, { maxZoom: 19, subdomains: 'abcd', pane: 'overlayPane' }).addTo(map);
 
   drawLayer = L.featureGroup().addTo(map);
 
@@ -107,17 +118,17 @@ async function loadAreaMarkers() {
     withCoords.forEach((a) => {
       const isShort = shortlist.has(a.id);
       const marker = L.circleMarker([a.coords.lat, a.coords.lng], {
-        radius: isShort ? 8 : 5,
-        color: isShort ? getCSSVar('--accent') : getCSSVar('--pico-muted-color'),
-        fillColor: isShort ? getCSSVar('--accent') : '#ffffff',
-        fillOpacity: 0.85,
-        weight: 1.5,
+        radius: isShort ? 7 : 4,
+        color: isShort ? getCSSVar('--accent') : getCSSVar('--ink'),
+        fillColor: isShort ? getCSSVar('--accent') : getCSSVar('--paper'),
+        fillOpacity: isShort ? 0.9 : 0.95,
+        weight: isShort ? 2 : 1.25,
       });
       const detailUrl = url('pages/area-detail.html') + `?id=${encodeURIComponent(a.id)}`;
       const approx = a.coordsSource === 'postcode-outward-approx';
       marker.bindPopup(`
-        <strong>${esc(a.name)}</strong>${approx ? ' <span style="color:#6b7280;font-size:0.85em;">(approx.)</span>' : ''}<br />
-        <span style="color: #6b7280;">${esc(a.town)} · ${esc(a.postcode)}</span><br />
+        <strong>${esc(a.name)}</strong>${approx ? ' <span style="color:var(--ink-subtle);font-size:0.8em;">approx.</span>' : ''}<br />
+        <span style="color:var(--ink-muted);font-size:var(--text-xs);">${esc(a.town)} · ${esc(a.postcode)}</span><br />
         <a href="${detailUrl}">View profile →</a>
       `);
       cluster.addLayer(marker);

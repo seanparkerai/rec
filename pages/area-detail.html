@@ -17,76 +17,63 @@
   <main id="main" class="container">
     <p class="back-link"><a href="areas.html">← Back to areas</a></p>
 
-    <div class="page-head row" style="justify-content: space-between; align-items: flex-start;">
+    <header class="page-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-4);flex-wrap:wrap;">
       <div>
+        <p class="eyebrow" id="area-village">Area profile</p>
         <h1 id="area-title">Area</h1>
-        <p class="area-detail-village muted" id="area-village"></p>
-        <p class="area-card-meta" id="area-meta"></p>
+        <p class="lead" id="area-meta"></p>
       </div>
-      <div class="row page-actions">
+      <div class="page-actions">
         <button id="btn-star" aria-pressed="false">☆ Add to shortlist</button>
       </div>
-    </div>
+    </header>
 
-    <section class="tiles" aria-label="Key facts">
-      <div class="tile">
-        <p class="tile-label">Status</p>
-        <p class="tile-value" id="tile-status">—</p>
-      </div>
-      <div class="tile">
-        <p class="tile-label">Sub-region</p>
-        <p class="tile-value" id="tile-subregion">—</p>
-      </div>
-      <div class="tile">
-        <p class="tile-label">Postcode</p>
-        <p class="tile-value" id="tile-postcode">—</p>
-      </div>
-      <div class="tile">
-        <p class="tile-label">County</p>
-        <p class="tile-value" id="tile-county">—</p>
-      </div>
-    </section>
+    <dl class="stat-strip" aria-label="Key facts">
+      <div><dt>Status</dt>     <dd class="is-text" id="tile-status">—</dd></div>
+      <div><dt>Sub-region</dt> <dd class="is-text" id="tile-subregion">—</dd></div>
+      <div><dt>Postcode</dt>   <dd class="num" id="tile-postcode">—</dd></div>
+      <div><dt>County</dt>     <dd class="is-text" id="tile-county">—</dd></div>
+    </dl>
 
-    <div class="dash-grid">
-      <section class="card span-12">
+    <article class="article">
+      <section class="article-section" id="sec-overview-wrap">
         <h2>Overview</h2>
-        <div id="sec-overview"></div>
+        <div class="prose" id="sec-overview"></div>
       </section>
-      <section class="card span-6">
+      <section class="article-section">
         <h2>Amenities</h2>
         <div id="sec-amenities"></div>
       </section>
-      <section class="card span-6">
+      <section class="article-section">
         <h2>Schools</h2>
         <div id="sec-schools"></div>
       </section>
-      <section class="card span-6">
+      <section class="article-section">
         <h2>Transport &amp; commutes</h2>
         <div id="sec-transport"></div>
       </section>
-      <section class="card span-6">
+      <section class="article-section">
         <h2>Prices</h2>
         <div id="sec-prices"></div>
       </section>
-      <section class="card span-6">
+      <section class="article-section">
         <h2>Things to do</h2>
         <div id="sec-things"></div>
       </section>
-      <section class="card span-6">
+      <section class="article-section">
         <h2>Places to eat</h2>
         <div id="sec-eat"></div>
       </section>
-      <section class="card span-12">
+      <section class="article-section">
         <h2>Pros &amp; cons</h2>
         <div id="sec-proscons"></div>
       </section>
-      <section class="card span-12">
+      <section class="article-section">
         <h2>Who it suits</h2>
         <div id="sec-suits"></div>
       </section>
-    </div>
-
-    <div id="extras"></div>
+      <div id="extras"></div>
+    </article>
   </main>
 
   <div data-include="components/footer.html"></div>
