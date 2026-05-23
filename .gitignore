@@ -1,0 +1,19 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Temp content files used by tools/insert-content.mjs (splice then delete)
+*.tmp.md
+*.tmp.html
+*.tmp.json
+/tmp-content/
+
+# Node (only if tooling is added later; no build step today)
+node_modules/
+npm-debug.log*
+
+# Local server / misc
+.cache/
