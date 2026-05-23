@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Journey · rec</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <div class="page-head row" style="justify-content: space-between; align-items: flex-start;">
+      <div>
+        <h1>Journey</h1>
+        <p>Three checklists to track the buying journey end-to-end — your tick state persists locally.</p>
+      </div>
+      <div class="row page-actions">
+        <button id="btn-reset-all" class="outline secondary">Clear all checks</button>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <section class="card span-12">
+        <header class="check-section-head">
+          <h2>Viewing checklist</h2>
+          <div class="check-progress">
+            <span class="muted" id="progress-viewing">0 / 0 done</span>
+            <div class="progress small"><span id="bar-viewing"></span></div>
+          </div>
+        </header>
+        <ul class="check-list" id="list-viewing"></ul>
+      </section>
+
+      <section class="card span-12">
+        <header class="check-section-head">
+          <h2>Buying process</h2>
+          <div class="check-progress">
+            <span class="muted" id="progress-process">0 / 0 done</span>
+            <div class="progress small"><span id="bar-process"></span></div>
+          </div>
+        </header>
+        <ul class="check-list" id="list-process"></ul>
+      </section>
+
+      <section class="card span-12">
+        <header class="check-section-head">
+          <h2>Moving &amp; packing</h2>
+          <div class="check-progress">
+            <span class="muted" id="progress-moving">0 / 0 done</span>
+            <div class="progress small"><span id="bar-moving"></span></div>
+          </div>
+        </header>
+        <ul class="check-list" id="list-moving"></ul>
+      </section>
+    </div>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-journey.js"></script>
+</body>
+</html>

@@ -145,3 +145,21 @@
 @media (max-width: 768px) {
   .calc-grid { grid-template-columns: 1fr; }
 }
+
+/* ---- Journey page (interactive checklists) ---- */
+.check-section-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); flex-wrap: wrap; }
+.check-section-head h2 { margin: 0; }
+.check-progress { display: flex; flex-direction: column; gap: 0.35rem; min-width: 12rem; }
+.progress.small { height: 6px; }
+
+.check-list { list-style: none; margin: 0; padding: 0; }
+.check-row-item { padding: var(--space-2) 0; border-top: 1px solid var(--pico-muted-border-color); }
+.check-row-item:first-child { border-top: 0; }
+.check-row-item.is-done .check-title { text-decoration: line-through; color: var(--pico-muted-color); }
+.check-row-item .check-row { display: flex; align-items: flex-start; gap: var(--space-3); margin: 0; min-height: auto; cursor: pointer; }
+.check-row-item input[type="checkbox"] { margin-top: 0.2rem; width: 1.15rem; height: 1.15rem; flex-shrink: 0; }
+.check-label { flex: 1; }
+.check-title { display: block; font-weight: 500; line-height: 1.4; }
+.check-meta { margin: 0.35rem 0 0; font-size: var(--text-xs); display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.meta-chip { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--pico-secondary-background); font-size: var(--text-xs); }
+.meta-timing { background: var(--accent); color: var(--accent-contrast); }
