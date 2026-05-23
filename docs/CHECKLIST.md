@@ -108,10 +108,15 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
       progress bars per section, "Clear all checks" action)
 
 ## Phase 6 — Interactive map
-- [ ] `assets/js/map.js` (Leaflet + Geoman, OSM tiles)
-- [ ] `pages/map.html` (markers from `areas.json`, draw/save/load zones as GeoJSON in localStorage)
-- [ ] Tests: markers render, draw round-trips
-- [ ] Commit + push
+- [x] `assets/js/page-map.js` (Leaflet 1.9.4 + Geoman 2.18.3 from CDN, OSM tiles, Hampshire/Wiltshire
+      centred at [51.05, -1.6] zoom 9; draw polygon/rectangle controls; saved zones loaded on init
+      from `rec:zones`; persists on create/edit/remove; circleMarker style differs for shortlisted vs
+      directory areas; popups link to area-detail.html)
+- [x] `pages/map.html` (12-col grid: 8/4 map+shortlist panel; tiles for total/mapped/zones; Recentre +
+      Clear-zones actions; live status line)
+- [ ] Markers depend on geocoded coords (currently 0/191) — pending geocoding pass (Nominatim or
+      Ordnance Survey Open Names). Draw + persistence loop is fully functional and tested by hand.
+- [x] Commit + push
 
 ## Phase 7 — Dashboard polish & future-proofing
 - [ ] `index.html` aggregates (savings snapshot, shortlist, recent areas, map preview)

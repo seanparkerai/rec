@@ -187,3 +187,13 @@
 .ht-areas { margin: var(--space-2) 0 0; font-size: var(--text-sm); }
 .ht-areas a { color: var(--accent); text-decoration: none; }
 .ht-areas a:hover { text-decoration: underline; }
+
+/* ---- Map page ---- */
+.map-card { padding: 0; overflow: hidden; }
+.map-canvas { height: 60dvh; min-height: 360px; width: 100%; border-radius: var(--rec-radius); }
+.leaflet-popup-content { font-size: var(--text-sm); }
+.leaflet-popup-content a { color: var(--accent); }
+
+@media (max-width: 800px) {
+  .map-canvas { height: 50dvh; min-height: 320px; }
+}
