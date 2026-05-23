@@ -133,6 +133,8 @@ function renderArea(a) {
 
   // Header
   $('area-title').textContent = a.name;
+  // Pair with the named transition set in page-areas.js so the title morphs in.
+  $('area-title').style.viewTransitionName = 'area-title';
   $('area-village').textContent = a.village && a.village !== a.name ? a.village : '';
   $('area-meta').innerHTML = `
     <span>${esc(a.town)}</span><span aria-hidden="true">·</span>

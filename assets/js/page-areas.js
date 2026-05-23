@@ -97,6 +97,15 @@ function renderCards(list) {
   grid.querySelectorAll('.star-btn').forEach((btn) => {
     btn.addEventListener('click', () => toggleShortlist(btn.dataset.id));
   });
+
+  // Named view transition: tag the title of the row being navigated to so
+  // it morphs into the area-detail h1 in the next document.
+  grid.querySelectorAll('.area-name a').forEach((a) => {
+    a.addEventListener('click', () => {
+      const el = a.closest('.area-name');
+      if (el && 'startViewTransition' in document) el.style.viewTransitionName = 'area-title';
+    });
+  });
 }
 
 function toggleShortlist(id) {

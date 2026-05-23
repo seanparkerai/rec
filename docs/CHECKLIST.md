@@ -157,8 +157,9 @@ Each item below is one commit + push milestone. Anchor in commit message (Stripe
       cross-document View Transitions opt-in
 - [ ] Split `base.css` into `assets/css/components/{card,tile,sheet,chip,segmented,table,field,dialog}.css`
       and add container queries on cards / sidebar
-- [ ] `tools/verify-ui.mjs` (Playwright + axe + Lighthouse) producing `artifacts/screenshots/<task>/`;
-      `.mcp.json` with Playwright MCP entry; baseline screenshots of current state
+- [x] `tools/verify-ui.mjs` (Playwright screenshots, 9 pages × 4 widths × light/dark + reduced-motion
+      one-up) writing to `artifacts/screenshots/<tag>/` and `artifacts/verify-<tag>.json`. Run with
+      `npm run verify` after `npx playwright install chromium`. axe/Lighthouse layered on later.
 
 ### 8B · Map (anchor: Linear-dense; biggest single perceptual upgrade)
 - [~] Interim: CartoDB Positron / Dark Matter basemap + themed Leaflet popups + accent-soft
