@@ -59,8 +59,9 @@ session**. These rules exist to keep work safe, resumable, and high quality.
 
 This project commits to a single visual direction: **"calm precise editorial"** — restrained palette,
 generous whitespace, deliberate typography, no AI-generic patterns. Every UI change must reinforce that
-direction; if it doesn't, refactor before commit. Reference style anchors when designing a new view
-(e.g. *Linear-dense*, *Stripe-docs*, *Notion-soft*) and name the anchor in the commit message.
+direction; if it doesn't, refactor before commit. The full visual contract — anchors, tokens, fonts,
+bans, verification — lives in **`DESIGN.md`** at the repo root. Read it before any UI change and name
+the relevant anchor (*Stripe-docs* or *Linear-dense*) in the commit message.
 
 - **Banned patterns (do not ship)** — purple gradients on white, uniform shadow-floated SaaS cards in a
   uniform grid, centred hero with a single drop-shadowed CTA, emoji used as icons, generic stock-photo
