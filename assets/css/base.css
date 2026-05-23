@@ -1,6 +1,48 @@
 /* base.css — global layout: header, top nav, container, cards, footer.
    Loaded after Pico + tokens. */
 
+/* ---- Typography root: body sans, display serif, mono numerals -------- */
+html { color-scheme: light dark; }
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv11", "kern";
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01", "ss02", "kern", "liga";
+  font-optical-sizing: auto;
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+h1 { font-size: var(--text-3xl); font-weight: 600; letter-spacing: -0.02em; }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); font-weight: 600; }
+h4 { font-size: var(--text-lg); font-weight: 600; }
+small, .small { font-size: var(--text-sm); color: var(--ink-muted); }
+
+/* Tabular figures live in mono. Use class="num" for prices, dates, etc. */
+.num, code, kbd, samp, pre, tt {
+  font-family: var(--font-data);
+  font-feature-settings: "tnum", "zero";
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- View Transitions: cross-document, opt-in per page --------------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: var(--ease-out);
+}
+
 /* ---- Global a11y: reduced motion (WCAG 2.3.3) ---- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
