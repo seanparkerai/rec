@@ -67,7 +67,7 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
 - [x] `pages/criteria.html` (renders 10-card form from `data/criteria.json` with edit/save/cancel/reset;
       all nested structures + arrays editable; full localStorage persistence via `assets/js/page-criteria.js`)
 - [x] Tests: schemas valid (all six data files + persistence round-trip via Edit/Save flow)
-- [ ] Commit + push (pages)
+- [x] Commit + push (pages) → `6e8ef8d`
 
 ## Phase 3 — Areas directory & profiles (batched) *(priority pillar)*
 - [x] Request user's area list + resources (191 villages received)
