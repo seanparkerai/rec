@@ -15,10 +15,11 @@
   <div data-include="components/nav.html"></div>
 
   <main id="main" class="container">
-    <div class="page-head">
+    <header class="page-head">
+      <p class="eyebrow">Directory</p>
       <h1>Areas</h1>
-      <p>Towns and villages across Hampshire &amp; Wiltshire — <strong id="total-count">191</strong> in the directory, <strong id="shortlist-count">0</strong> shortlisted.</p>
-    </div>
+      <p class="lead">Towns and villages across Hampshire &amp; Wiltshire — <strong class="num" id="total-count">191</strong> in the directory, <strong class="num" id="shortlist-count">0</strong> shortlisted.</p>
+    </header>
 
     <section class="card filter-bar" aria-label="Filter areas">
       <div class="filter-row">
@@ -55,7 +56,7 @@
 
     <p class="result-summary"><strong id="result-count">0</strong> areas shown</p>
 
-    <section id="areas-grid" class="area-grid" aria-live="polite"></section>
+    <ol id="areas-grid" class="area-list" aria-live="polite"></ol>
   </main>
 
   <div data-include="components/footer.html"></div>

@@ -61,40 +61,36 @@ function applyFilters() {
 function renderCards(list) {
   const grid = $('areas-grid');
   if (!list.length) {
-    grid.innerHTML = `<p class="muted">No areas match those filters.</p>`;
+    grid.innerHTML = `<li style="padding:var(--space-6) 0;color:var(--ink-muted);text-align:center;">No areas match those filters.</li>`;
     return;
   }
-  grid.innerHTML = list.map((a) => {
+  grid.innerHTML = list.map((a, i) => {
     const starred = shortlist.has(a.id);
     const detailUrl = url('pages/area-detail.html') + `?id=${encodeURIComponent(a.id)}`;
     const statusBadge = a.status && a.status !== 'directory'
-      ? `<span class="badge badge-status">${esc(a.status)}</span>`
+      ? `<span class="badge-status">${esc(a.status)}</span>`
       : '';
     return `
-      <article class="card area-card">
-        <header class="area-card-head">
-          <div>
-            <h3 class="area-card-title"><a href="${detailUrl}">${esc(a.name)}</a></h3>
-            <p class="area-card-meta">
-              <span>${esc(a.town)}</span>
-              <span aria-hidden="true">·</span>
-              <span>${esc(a.county)}</span>
-              <span aria-hidden="true">·</span>
-              <span>${esc(a.postcode)}</span>
-            </p>
-          </div>
-          <button type="button" class="star-btn ${starred ? 'is-starred' : ''}"
-                  data-id="${esc(a.id)}"
-                  aria-pressed="${starred}"
-                  aria-label="${starred ? 'Remove from shortlist' : 'Add to shortlist'}">
-            ${starred ? '★' : '☆'}
-          </button>
-        </header>
-        <p class="area-card-sub">
-          <span class="muted">Sub-region:</span> ${esc(a.subRegion || '—')}
-          ${statusBadge}
-        </p>
-      </article>
+      <li class="area-row">
+        <span class="area-index">${String(i + 1).padStart(3, '0')}</span>
+        <div>
+          <p class="area-name"><a href="${detailUrl}">${esc(a.name)}</a>${statusBadge}</p>
+          <p class="area-place">
+            <span>${esc(a.town)}</span>
+            <span class="sep">·</span>
+            <span>${esc(a.subRegion || a.county)}</span>
+            <span class="sep">·</span>
+            <span class="num">${esc(a.postcode)}</span>
+          </p>
+        </div>
+        <span class="area-meta">${esc(a.county || '')}</span>
+        <button type="button" class="star-btn ${starred ? 'is-starred' : ''}"
+                data-id="${esc(a.id)}"
+                aria-pressed="${starred}"
+                aria-label="${starred ? 'Remove from shortlist' : 'Add to shortlist'}">
+          ${starred ? '★' : '☆'}
+        </button>
+      </li>
     `;
   }).join('');
 

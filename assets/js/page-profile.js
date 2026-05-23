@@ -1,58 +1,37 @@
-// page-profile.js — render the buyer profile, with an edit/save flow
-// that overlays user edits into localStorage via storage.js.
+// page-profile.js — anchor: Stripe-docs editorial article.
+// Read view = article sections with field lists + chip grids.
+// Edit = native <dialog> with all fields, save persists via storage.js.
 import { getProfile, saveProfile, getCriteria, getFinances, _internal } from './storage.js';
 import { loadJSON } from './data-loader.js';
 
 const gbp = (n) => new Intl.NumberFormat('en-GB', {
   style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
 }).format(n || 0);
-
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
 ));
-
 const $ = (id) => document.getElementById(id);
 
-// --- state ---
-let current = null;     // currently-rendered profile object
-let baseline = null;    // last-saved snapshot (for Cancel)
-let editing = false;
+let current = null;
+const dlg = () => $('edit-dialog');
 
-// --- helpers ---
-function listView(arr) {
-  if (!arr?.length) return '<p class="muted mb-0">None added.</p>';
-  return `<ul class="mini-list">${arr.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
-}
+const TEXT_FIELDS = [
+  { key: 'headline',        label: 'Headline (one-line summary)',    type: 'textarea' },
+  { key: 'buyers',          label: 'Who is buying',                  type: 'text' },
+  { key: 'household',       label: 'Household',                      type: 'text' },
+  { key: 'employment',      label: 'Employment',                     type: 'text' },
+  { key: 'creditProfile',   label: 'Credit profile',                 type: 'text' },
+  { key: 'lifestyle',       label: 'Lifestyle',                      type: 'textarea' },
+  { key: 'locationFocus',   label: 'Location focus',                 type: 'text' },
+  { key: 'movingTimeline',  label: 'Moving timeline / window',       type: 'text' },
+  { key: 'notes',           label: 'Notes',                          type: 'textarea' },
+];
+const ARRAY_FIELDS = [
+  { key: 'priorities',   label: 'Priorities' },
+  { key: 'dealBreakers', label: 'Deal-breakers' },
+];
 
-function listEdit(arr, fieldId) {
-  const items = (arr || []).map((x, i) => `
-    <li class="edit-row">
-      <span>${esc(x)}</span>
-      <button type="button" class="outline secondary chip-x" data-remove="${fieldId}" data-index="${i}" aria-label="Remove">×</button>
-    </li>
-  `).join('');
-  return `
-    <ul class="edit-list" id="list-${fieldId}">${items}</ul>
-    <div class="row add-row">
-      <input type="text" id="add-${fieldId}" placeholder="Add…" />
-      <button type="button" data-add="${fieldId}">Add</button>
-    </div>
-  `;
-}
-
-function fieldView(label, value) {
-  return `<div class="field-view"><dt>${esc(label)}</dt><dd>${value ? esc(value) : '<span class="muted">—</span>'}</dd></div>`;
-}
-
-function fieldEdit(label, name, value, type = 'text') {
-  const id = `f-${name}`;
-  const input = type === 'textarea'
-    ? `<textarea id="${id}" name="${name}" rows="4">${esc(value)}</textarea>`
-    : `<input type="text" id="${id}" name="${name}" value="${esc(value)}" />`;
-  return `<div class="field-edit"><label for="${id}">${esc(label)}</label>${input}</div>`;
-}
-
-// --- rendering ---
+// ---- view rendering -------------------------------------------------
 function renderTiles(criteria, finances) {
   const max = criteria?.budget?.max || 0;
   const dep = criteria?.budget?.targetDeposit || 0;
@@ -63,178 +42,136 @@ function renderTiles(criteria, finances) {
   $('tile-window').textContent = current?.movingTimeline || '—';
 }
 
-function renderHeadline() {
-  const el = $('card-headline');
-  if (editing) {
-    el.innerHTML = `
-      <h2>Headline</h2>
-      ${fieldEdit('One-line summary of what you\'re looking for', 'headline', current.headline, 'textarea')}
-    `;
-  } else {
-    el.innerHTML = `
-      <h2>Headline</h2>
-      <p class="lead">${esc(current.headline) || '<span class="muted">—</span>'}</p>
-    `;
-  }
+function renderFieldList(container, rows) {
+  container.innerHTML = rows.map(([label, value]) => `
+    <div class="field-view">
+      <dt>${esc(label)}</dt>
+      <dd>${value ? esc(value) : '<span class="muted">—</span>'}</dd>
+    </div>
+  `).join('');
 }
 
-function renderBuyer() {
-  const el = $('card-buyer');
-  const items = [
-    ['Buyers', 'buyers', current.buyers],
-    ['Household', 'household', current.household],
-    ['Employment', 'employment', current.employment],
-    ['Credit profile', 'creditProfile', current.creditProfile],
-  ];
-  if (editing) {
-    el.innerHTML = `<h2>Who's buying</h2>${items.map(([l, n, v]) => fieldEdit(l, n, v)).join('')}`;
-  } else {
-    el.innerHTML = `<h2>Who's buying</h2><dl class="field-list">${items.map(([l, , v]) => fieldView(l, v)).join('')}</dl>`;
+function renderChips(container, arr, opts = {}) {
+  if (!arr || !arr.length) {
+    container.innerHTML = '<li class="chip" style="color:var(--ink-muted);">None added.</li>';
+    return;
   }
-}
-
-function renderLifestyle() {
-  const el = $('card-lifestyle');
-  const items = [
-    ['Lifestyle', 'lifestyle', current.lifestyle],
-    ['Location focus', 'locationFocus', current.locationFocus],
-    ['Moving timeline', 'movingTimeline', current.movingTimeline],
-  ];
-  if (editing) {
-    el.innerHTML = `<h2>How we want to live</h2>${items.map(([l, n, v]) => fieldEdit(l, n, v)).join('')}`;
-  } else {
-    el.innerHTML = `<h2>How we want to live</h2><dl class="field-list">${items.map(([l, , v]) => fieldView(l, v)).join('')}</dl>`;
-  }
-}
-
-function renderArrayCard(cardId, title, fieldKey) {
-  const el = $(cardId);
-  const arr = current[fieldKey] || [];
-  if (editing) {
-    el.innerHTML = `<h2>${esc(title)}</h2>${listEdit(arr, fieldKey)}`;
-  } else {
-    el.innerHTML = `<h2>${esc(title)}</h2>${listView(arr)}`;
-  }
-}
-
-function renderNotes() {
-  const el = $('card-notes');
-  if (editing) {
-    el.innerHTML = `<h2>Notes</h2>${fieldEdit('Free-form notes', 'notes', current.notes, 'textarea')}`;
-  } else {
-    el.innerHTML = `<h2>Notes</h2><p class="mb-0">${esc(current.notes) || '<span class="muted">—</span>'}</p>`;
-  }
+  const cls = opts.warn ? 'chip is-warn' : 'chip';
+  container.innerHTML = arr.map((x) => `<li class="${cls}">${esc(x)}</li>`).join('');
 }
 
 function renderAll() {
-  renderHeadline();
-  renderBuyer();
-  renderLifestyle();
-  renderArrayCard('card-priorities', 'Priorities', 'priorities');
-  renderArrayCard('card-dealbreakers', 'Deal-breakers', 'dealBreakers');
-  renderNotes();
-  refreshActionButtons();
+  $('headline-lead').textContent = current.headline || 'Who you are, how you want to live, what you\'re looking for.';
+  renderFieldList($('dl-buyer'), [
+    ['Buyers', current.buyers],
+    ['Household', current.household],
+    ['Employment', current.employment],
+    ['Credit profile', current.creditProfile],
+  ]);
+  renderFieldList($('dl-lifestyle'), [
+    ['Lifestyle', current.lifestyle],
+    ['Location focus', current.locationFocus],
+    ['Moving timeline', current.movingTimeline],
+  ]);
+  renderChips($('chips-priorities'), current.priorities, { accent: true });
+  renderChips($('chips-dealbreakers'), current.dealBreakers, { warn: true });
+  $('p-notes').textContent = current.notes || '—';
   refreshOverlayBadge();
-  if (editing) attachEditHandlers();
-}
-
-function refreshActionButtons() {
-  $('btn-edit').hidden = editing;
-  $('btn-save').hidden = !editing;
-  $('btn-cancel').hidden = !editing;
 }
 
 function refreshOverlayBadge() {
-  const overlay = _internal.readLocal('profile');
-  const badge = $('overlay-badge');
-  const reset = $('btn-reset');
-  const has = !!overlay;
-  badge.hidden = !has;
-  reset.hidden = !has || editing;
+  const has = !!_internal.readLocal('profile');
+  $('overlay-badge').hidden = !has;
 }
 
-// --- edit handlers ---
-function attachEditHandlers() {
-  // Text/textarea fields are read on Save (collectForm), no per-keystroke handler.
+// ---- edit dialog ----------------------------------------------------
+function buildDialogFields() {
+  const html = [];
+  for (const f of TEXT_FIELDS) {
+    const id = `f-${f.key}`;
+    const value = esc(current[f.key] ?? '');
+    const input = f.type === 'textarea'
+      ? `<textarea id="${id}" name="${f.key}" rows="3">${value}</textarea>`
+      : `<input type="text" id="${id}" name="${f.key}" value="${value}" />`;
+    html.push(`<label for="${id}" style="font-size:var(--text-xs);color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:var(--space-3);display:block;">${esc(f.label)}</label>${input}`);
+  }
+  for (const f of ARRAY_FIELDS) {
+    const items = (current[f.key] || []).map((x, i) => `
+      <li class="edit-row">
+        <span>${esc(x)}</span>
+        <button type="button" class="outline secondary chip-x" data-remove="${f.key}" data-index="${i}" aria-label="Remove">×</button>
+      </li>
+    `).join('');
+    html.push(`
+      <label style="font-size:var(--text-xs);color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:var(--space-4);display:block;">${esc(f.label)}</label>
+      <ul class="edit-list" id="list-${f.key}">${items}</ul>
+      <div class="row add-row">
+        <input type="text" id="add-${f.key}" placeholder="Add…" />
+        <button type="button" data-add="${f.key}">Add</button>
+      </div>
+    `);
+  }
+  $('edit-fields').innerHTML = html.join('');
+  attachArrayHandlers();
+}
 
-  // Array field × buttons:
+function attachArrayHandlers() {
   document.querySelectorAll('[data-remove]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const field = btn.dataset.remove;
-      const i = Number(btn.dataset.index);
-      current[field].splice(i, 1);
-      renderArrayCard(cardIdFor(field), titleFor(field), field);
-      attachEditHandlers();
+      const f = btn.dataset.remove;
+      current[f].splice(Number(btn.dataset.index), 1);
+      buildDialogFields();
     });
   });
-
-  // Array field Add inputs/buttons:
   document.querySelectorAll('[data-add]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const field = btn.dataset.add;
-      const input = $(`add-${field}`);
+      const f = btn.dataset.add;
+      const input = $(`add-${f}`);
       const v = input.value.trim();
       if (!v) return;
-      current[field] = current[field] || [];
-      current[field].push(v);
-      input.value = '';
-      renderArrayCard(cardIdFor(field), titleFor(field), field);
-      attachEditHandlers();
+      current[f] = current[f] || [];
+      current[f].push(v);
+      buildDialogFields();
     });
   });
-
-  // Enter on Add input fires Add.
   document.querySelectorAll('input[id^="add-"]').forEach((input) => {
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        const field = input.id.replace(/^add-/, '');
-        document.querySelector(`[data-add="${field}"]`)?.click();
+        document.querySelector(`[data-add="${input.id.replace(/^add-/, '')}"]`)?.click();
       }
     });
   });
 }
 
-function cardIdFor(field) {
-  return field === 'priorities' ? 'card-priorities' : 'card-dealbreakers';
-}
-function titleFor(field) {
-  return field === 'priorities' ? 'Priorities' : 'Deal-breakers';
-}
-
-function collectForm() {
+function collectDialog() {
   const next = { ...current };
-  ['headline', 'buyers', 'household', 'employment', 'creditProfile',
-   'lifestyle', 'locationFocus', 'movingTimeline', 'notes'].forEach((name) => {
-    const el = document.querySelector(`[name="${name}"]`);
-    if (el) next[name] = el.value.trim();
-  });
+  for (const f of TEXT_FIELDS) {
+    const el = $(`f-${f.key}`);
+    if (el) next[f.key] = el.value.trim();
+  }
+  // Array fields already mutated in `current` by add/remove handlers.
   next.priorities = current.priorities ? [...current.priorities] : [];
   next.dealBreakers = current.dealBreakers ? [...current.dealBreakers] : [];
   return next;
 }
 
-// --- mode transitions ---
-function enterEdit() {
-  baseline = JSON.parse(JSON.stringify(current));
-  editing = true;
-  renderAll();
-  setStatus('Editing — Save to persist locally.');
+function openEdit() {
+  buildDialogFields();
+  dlg().showModal();
+}
+function closeEdit() {
+  dlg().close();
 }
 
-function cancelEdit() {
-  current = JSON.parse(JSON.stringify(baseline));
-  editing = false;
-  renderAll();
-  setStatus('Edit cancelled.');
-}
-
-function saveEdit() {
-  const next = collectForm();
-  current = next;
+async function saveEdit() {
+  current = collectDialog();
   saveProfile(current);
-  editing = false;
+  closeEdit();
   renderAll();
+  const fin = await getFinances();
+  const crit = await getCriteria();
+  renderTiles(crit, fin);
   setStatus('Saved locally.', 'ok');
 }
 
@@ -242,6 +179,7 @@ async function resetToDefaults() {
   if (!confirm('Reset profile to the repo defaults? Your local edits will be cleared.')) return;
   localStorage.removeItem('rec:profile');
   current = await loadJSON('profile');
+  closeEdit();
   renderAll();
   const fin = await getFinances();
   const crit = await getCriteria();
@@ -255,7 +193,7 @@ function setStatus(msg, kind = '') {
   el.dataset.kind = kind;
 }
 
-// --- init ---
+// ---- init -----------------------------------------------------------
 async function init() {
   try {
     current = await getProfile();
@@ -268,9 +206,8 @@ async function init() {
     setStatus('Failed to load profile data.', 'err');
     return;
   }
-
-  $('btn-edit').addEventListener('click', enterEdit);
-  $('btn-cancel').addEventListener('click', cancelEdit);
+  $('btn-edit').addEventListener('click', openEdit);
+  $('dlg-close').addEventListener('click', closeEdit);
   $('btn-save').addEventListener('click', saveEdit);
   $('btn-reset').addEventListener('click', resetToDefaults);
 }
