@@ -45,3 +45,29 @@ and shows pass/fail. Run it before each commit.
 
 Pico CSS + design tokens · vanilla-JS fetch-injected partials · Chart.js · Leaflet + Leaflet-Geoman ·
 JSON + `localStorage` behind a storage abstraction. No build step.
+
+## Storage abstraction → backend migration path
+
+Every page reads and writes user state through one module: `assets/js/storage.js`. The current
+implementation overlays user edits from `localStorage` on top of the JSON shipped in `data/`. The
+public API is intentionally async even when it doesn't need to be, so the swap to a real backend is
+mechanical:
+
+```js
+// today
+export async function getProfile()    { return readLocal('profile')   ?? await loadJSON('profile'); }
+export function       saveProfile(d)  { return writeLocal('profile', d); }
+
+// tomorrow (one-module swap; no page changes)
+export async function getProfile()    { return await fetch('/api/profile').then((r) => r.json()); }
+export async function saveProfile(d)  { return await fetch('/api/profile', { method: 'PUT', body: JSON.stringify(d) }); }
+```
+
+For multi-user: namespace endpoints by user id (`/api/users/:id/profile`). For optimistic UI: keep
+the localStorage layer as a write-through cache — `getProfile()` returns the cached value
+immediately, then revalidates from the server in the background. Pages remain untouched; only
+`storage.js` and `data-loader.js` change.
+
+`localStorage` namespace is `rec:*` (see `STORAGE_NS` in `assets/js/config.js`). Keys currently used:
+`rec:profile`, `rec:criteria`, `rec:finances`, `rec:shortlist`, `rec:zones`, `rec:journey-checks`,
+`rec:theme`.

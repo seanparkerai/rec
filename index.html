@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="assets/css/tokens.css" />
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
 </head>
 <body>
   <div data-include="components/header.html"></div>
@@ -45,33 +46,37 @@
 
     <div class="dash-grid">
       <section class="card span-8">
-        <h2>Savings progress</h2>
-        <div class="chart-wrap">
-          <p class="placeholder-note">The savings-progress chart is wired up in <strong>Phase 5 (Finances)</strong>. The figures above already read from your data.</p>
-        </div>
+        <h2>Savings projection</h2>
+        <div class="chart-wrap"><canvas id="home-savings-chart"></canvas></div>
+        <p class="muted mb-0" id="home-savings-sub"></p>
       </section>
 
       <section class="card span-4">
-        <h2>Your areas</h2>
+        <h2>Shortlisted areas</h2>
         <ul class="mini-list" id="home-areas">
           <li class="muted">Loading…</li>
         </ul>
-        <p><a data-nav="pages/areas.html">Browse all areas →</a></p>
+        <p class="row" style="justify-content: space-between; margin-top: var(--space-3);">
+          <a data-nav="pages/areas.html">Browse directory →</a>
+          <a data-nav="pages/map.html">See on map →</a>
+        </p>
       </section>
 
       <section class="card span-6">
-        <h2>Map</h2>
-        <p class="placeholder-note">An interactive map with your search zones arrives in <strong>Phase 6</strong>.</p>
-        <p><a data-nav="pages/map.html">Open map →</a></p>
+        <h2>Journey progress</h2>
+        <div id="home-journey"></div>
+        <p><a data-nav="pages/journey.html">Open journey →</a></p>
       </section>
 
       <section class="card span-6">
         <h2>Quick links</h2>
         <ul class="mini-list">
-          <li><a data-nav="pages/profile.html">Profile — about us</a></li>
-          <li><a data-nav="pages/criteria.html">Search criteria</a></li>
+          <li><a data-nav="pages/profile.html">Profile — about you</a></li>
+          <li><a data-nav="pages/criteria.html">Search criteria &amp; filters</a></li>
+          <li><a data-nav="pages/areas.html">Areas directory (191)</a></li>
           <li><a data-nav="pages/house-types.html">House types</a></li>
-          <li><a data-nav="pages/finances.html">Finances &amp; savings</a></li>
+          <li><a data-nav="pages/finances.html">Finances &amp; calculators</a></li>
+          <li><a data-nav="pages/map.html">Interactive map</a></li>
         </ul>
       </section>
     </div>

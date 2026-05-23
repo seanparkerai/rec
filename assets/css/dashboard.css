@@ -197,3 +197,7 @@
 @media (max-width: 800px) {
   .map-canvas { height: 50dvh; min-height: 320px; }
 }
+
+/* ---- Home dashboard: journey progress widget ---- */
+.journey-row + .journey-row { margin-top: var(--space-3); }
+.journey-row-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem; font-size: var(--text-sm); }

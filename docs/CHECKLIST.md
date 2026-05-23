@@ -3,9 +3,12 @@
 Tick items as completed and **commit**. To resume in a fresh chat: read this file, then `docs/PLAN.md` +
 `docs/CONTEXT.md`, run a Haiku scan, run tests, continue at the first unchecked box.
 
-**Status:** Phases 0–1 complete (shell live). **Intake data captured** from user (profile, criteria
-including full filter table, full finances/budget, three checklists, 191-village master directory). Next:
-build the Profile, Criteria, Areas directory and Finances pages from this data.
+**Status:** Phases 0–7 functionally complete. All eight pages live (Home dashboard with sparkline +
+journey widget, Profile + Criteria editable forms, Areas directory + detail, Journey checklists,
+Finances with calculators, House types gallery, Map with draw tools). Two follow-up tracks remain:
+**(1) per-village geocoding** to populate map markers (currently 0/191 with coords) and
+**(2) per-village + per-house-type research/imagery batches** (CLAUDE.md §7 mandates web-cited
+content + licence-safe images before publishing rich profiles).
 
 **New since plan:** user supplied a full budget (one-time costs, bills, expenses, shopping list, gift cards)
 → Finances page expands to a budget dashboard; and viewing/moving **checklists** (`data/checklists.json`)
@@ -119,8 +122,14 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
 - [x] Commit + push
 
 ## Phase 7 — Dashboard polish & future-proofing
-- [ ] `index.html` aggregates (savings snapshot, shortlist, recent areas, map preview)
-- [ ] Responsive + accessibility + dark-mode pass
-- [ ] Document storage → backend/login migration path
-- [ ] Full regression run of `tests.html`
-- [ ] Commit + push
+- [x] `index.html` aggregates (4 headline tiles, savings projection Chart.js sparkline with live
+      "X now · +Y/mo · target in N months" sub-line, shortlist snippet showing first 6 or starred,
+      journey progress widget showing % done per checklist, expanded quick-links list)
+- [x] Responsive + accessibility + dark-mode pass (addressed in design-quality baseline `1508e9b`:
+      `prefers-reduced-motion`, `:focus-visible`, skip-link, safe-area-inset, ≥44 px touch targets,
+      mobile nav fade, `--space-*` / `--text-*` / `--focus-ring` tokens; dark mode auto + manual)
+- [x] Document storage → backend/login migration path (added to `README.md` with example diff and
+      full list of `rec:*` localStorage keys)
+- [x] Full regression run of `tests.html` (all 6 JSON schemas pass, all 10 page routes return 200,
+      skip-link + no-horizontal-scroll smoke tests, 15 calculator benchmarks, storage round-trip)
+- [x] Commit + push
