@@ -1,0 +1,8 @@
+/* components/sheet.css — bottom-sheet primitives.
+   Loaded via @import from base.css.
+
+   Current sheet rules live in dashboard.css §"Map bottom sheet" (Apple-Maps
+   3-detent sheet for pages/map.html) and inline on pages/areas.html
+   (.filter-sheet) and pages/about-search.html (.criteria-save-bar). Future
+   work will consolidate them here as a single .sheet primitive with
+   variants for filter / save-bar / map detents. */

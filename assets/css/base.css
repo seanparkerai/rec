@@ -1,0 +1,353 @@
+/* base.css — global layout: header, top nav, container, footer.
+   Loaded after Pico + tokens. Component primitives (card, tile, sheet,
+   chip, segmented, table, field, dialog) live under ./components/ and
+   are pulled in here so a single <link rel="stylesheet" href="base.css">
+   continues to be the only stylesheet a page needs to load. */
+
+@import url("components/card.css");
+@import url("components/tile.css");
+@import url("components/sheet.css");
+@import url("components/chip.css");
+@import url("components/segmented.css");
+@import url("components/table.css");
+@import url("components/field.css");
+@import url("components/dialog.css");
+
+/* ---- Typography root: body sans, display serif, mono numerals -------- */
+html { color-scheme: light dark; }
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv11", "kern";
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01", "ss02", "kern", "liga";
+  font-optical-sizing: auto;
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+h1 { font-size: var(--text-3xl); font-weight: 600; letter-spacing: -0.02em; }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); font-weight: 600; }
+h4 { font-size: var(--text-lg); font-weight: 600; }
+small, .small { font-size: var(--text-sm); color: var(--ink-muted); }
+
+/* Tabular figures live in mono. Use class="num" for prices, dates, etc. */
+.num, code, kbd, samp, pre, tt {
+  font-family: var(--font-data);
+  font-feature-settings: "tnum", "zero";
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- View Transitions: cross-document, opt-in per page --------------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: var(--ease-out);
+}
+/* Named transition: area row title ↔ area detail h1. Both elements
+   carry `style.viewTransitionName = "area-title"` so the title morphs
+   across the navigation. Only one named target per page (the visible
+   row that was clicked) — set in page-areas.js click handler. */
+::view-transition-old(area-title),
+::view-transition-new(area-title) {
+  animation-duration: 400ms;
+  animation-timing-function: var(--ease-out);
+}
+
+/* ---- Global a11y: reduced motion (WCAG 2.3.3) ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Global focus: visible ring on keyboard navigation only ---- */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--rec-radius-sm);
+  box-shadow: var(--focus-ring);
+}
+
+/* ---- Skip-to-content link (visually hidden until focused) ---- */
+.skip-link {
+  position: absolute;
+  left: 0.5rem; top: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--accent); color: var(--accent-contrast);
+  border-radius: var(--rec-radius-sm);
+  font-weight: 600; text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform 120ms ease;
+  z-index: 100;
+}
+.skip-link:focus-visible { transform: translateY(0); }
+
+body { min-height: 100dvh; display: flex; flex-direction: column; }
+
+/* ---- Header (scroll-shrinks via [data-scrolled] on <html>) ---- */
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--rec-gap);
+  padding-block: var(--space-3);
+  padding-inline: max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-left)) max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-right));
+  padding-top: max(var(--space-3), env(safe-area-inset-top));
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+          backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: padding 200ms var(--ease-out), border-color 200ms var(--ease-out);
+}
+[data-scrolled] .site-header {
+  padding-block: var(--space-2);
+  border-bottom-color: var(--hairline);
+}
+[data-scrolled] .brand small { opacity: 0; height: 0; overflow: hidden; transition: opacity 160ms; }
+.brand {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-weight: 500; font-size: var(--text-lg); letter-spacing: -0.015em;
+  color: var(--ink); text-decoration: none;
+}
+.brand .brand-mark {
+  display: inline-grid; place-items: center;
+  width: 1.75rem; height: 1.75rem; border-radius: 999px;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--font-display); font-weight: 500; font-size: 0.95rem;
+  letter-spacing: 0;
+}
+.brand small {
+  font-family: var(--font-body); font-weight: 400; color: var(--ink-muted);
+  font-size: var(--text-xs); letter-spacing: 0.04em;
+  display: block; line-height: 1;
+}
+.brand > span:last-child { display: inline-flex; flex-direction: column; gap: 2px; line-height: 1; min-width: 0; }
+/* Drop the caption on very narrow screens so the header doesn't crowd the toggle. */
+@media (max-width: 380px) { .brand small { display: none; } }
+
+#theme-toggle {
+  width: auto; min-height: 44px; min-width: 44px;
+  padding: 0 var(--space-3); margin: 0;
+  background: transparent; color: var(--ink-muted);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  font-size: var(--text-sm); font-weight: 500;
+  transition: color 120ms var(--ease-out), border-color 120ms var(--ease-out), background 120ms var(--ease-out);
+}
+#theme-toggle:hover { color: var(--ink); border-color: var(--hairline-strong); background: var(--paper-2); }
+
+/* ---- Top nav ---- */
+.site-nav {
+  position: sticky; top: 0; z-index: 19;
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+          backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--hairline);
+}
+.site-nav ul {
+  display: flex; gap: 0.25rem; margin: 0;
+  padding: 0 clamp(0.75rem, 3vw, 2rem);
+  list-style: none; max-width: var(--rec-maxw); margin-inline: auto;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.site-nav ul::-webkit-scrollbar { display: none; }
+.site-nav li { scroll-snap-align: start; }
+.site-nav a {
+  position: relative;
+  display: inline-flex; align-items: center;
+  min-height: 44px; white-space: nowrap;
+  padding: 0.6rem 0.9rem; text-decoration: none;
+  color: var(--pico-muted-color); font-size: var(--text-sm);
+}
+.site-nav a:hover { color: var(--pico-color); }
+.site-nav a[aria-current="page"] {
+  color: var(--pico-color); font-weight: 600;
+}
+/* Animated active-link indicator. The bar lives on the active link's
+   ::after and carries a named view-transition so cross-document
+   navigations morph the indicator from old → new link smoothly. */
+.site-nav a[aria-current="page"]::after {
+  content: ""; position: absolute;
+  left: var(--space-3); right: var(--space-3); bottom: 0;
+  height: 2px; background: var(--accent); border-radius: 1px;
+  view-transition-name: nav-indicator;
+}
+::view-transition-old(nav-indicator),
+::view-transition-new(nav-indicator) {
+  animation-duration: 280ms;
+  animation-timing-function: var(--ease-out);
+}
+
+/* Mobile-only fade hint on the scrollable nav */
+@media (max-width: 480px) {
+  .site-nav { position: relative; }
+  .site-nav::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 0;
+    width: 2.5rem; pointer-events: none;
+    background: linear-gradient(to right, transparent, var(--pico-background-color) 85%);
+  }
+}
+
+/* ---- Layout ---- */
+main.container {
+  width: 100%; max-width: var(--rec-maxw); margin-inline: auto; flex: 1 0 auto;
+  padding-block: var(--space-6);
+  padding-inline: max(clamp(0.75rem, 4vw, 2rem), env(safe-area-inset-left)) max(clamp(0.75rem, 4vw, 2rem), env(safe-area-inset-right));
+}
+.page-head { margin-bottom: var(--space-6); }
+.page-head h1 { margin: var(--space-1) 0 var(--space-2); }
+.page-head p { color: var(--ink-muted); margin: 0; }
+
+/* Page-head with right-aligned actions. Stacks on mobile, side-by-side ≥640px. */
+.page-head.has-actions {
+  display: flex; flex-direction: column; gap: var(--space-4);
+  align-items: stretch;
+}
+@media (min-width: 640px) {
+  .page-head.has-actions {
+    flex-direction: row; justify-content: space-between; align-items: flex-start;
+    gap: var(--space-6);
+  }
+}
+.page-head.has-actions > div:first-child { min-width: 0; flex: 1 1 auto; }
+.page-actions {
+  display: flex; flex-wrap: wrap; gap: var(--space-2);
+  align-items: center;
+}
+.page-actions button {
+  margin: 0; min-height: 44px; padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm); white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .page-head .page-actions { width: 100%; }
+  .page-head .page-actions button { flex: 1 1 auto; }
+  .page-head .page-actions button:only-child { flex: 0 0 auto; }
+}
+
+/* Card, chip, dialog, field, tile primitives migrated to ./components/*. */
+
+/* ---- Generic grid ---- */
+.grid { display: grid; gap: var(--rec-gap); }
+.grid.cols-auto { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+/* ---- Badges / placeholder ---- */
+.badge {
+  display: inline-block; font-size: 0.72rem; font-weight: 600;
+  padding: 0.15rem 0.5rem; border-radius: 999px;
+  background: var(--pico-secondary-background); color: var(--pico-secondary-inverse);
+}
+.placeholder-note {
+  border: 1px dashed var(--pico-muted-border-color);
+  border-radius: var(--rec-radius); padding: 1rem 1.2rem;
+  color: var(--pico-muted-color); background: var(--pico-card-sectioning-background-color);
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  flex-shrink: 0; margin-top: 2rem;
+  border-top: 1px solid var(--pico-muted-border-color);
+  padding: 1.25rem clamp(0.75rem, 3vw, 2rem);
+  color: var(--pico-muted-color); font-size: 0.85rem;
+}
+.site-footer .container { max-width: var(--rec-maxw); margin-inline: auto; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+
+/* ---- Editorial article shell (Stripe-docs anchor) ------------------ */
+.article {
+  display: grid; gap: var(--space-6);
+  grid-template-columns: 1fr;
+  max-width: 70ch;
+  margin-inline: auto;
+}
+@media (min-width: 960px) {
+  .article.has-rail {
+    max-width: none;
+    grid-template-columns: minmax(0, 70ch) 18rem;
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .article-rail { position: sticky; top: 6.5rem; }
+}
+.article-section { display: grid; gap: var(--space-3); }
+.article-section + .article-section { padding-top: var(--space-6); border-top: 1px solid var(--hairline); }
+.article-section h2 { margin: 0; font-size: var(--text-xl); }
+.article-section h3 { margin: 0; font-size: var(--text-base); font-weight: 600; color: var(--ink-muted); letter-spacing: 0.04em; text-transform: uppercase; }
+.article-section p { margin: 0; }
+
+/* ---- Stat strip (hairline-divided, mono numerals) ------------------ */
+.stat-strip {
+  display: grid; gap: 0;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  margin: var(--space-6) 0;
+}
+.stat-strip > div {
+  padding: var(--space-4);
+  border-left: 1px solid var(--hairline);
+  display: grid; gap: var(--space-1);
+  min-width: 0;
+}
+.stat-strip > div:first-child { border-left: 0; }
+.stat-strip dt {
+  font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-muted); margin: 0;
+}
+.stat-strip dd {
+  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
+  font-feature-settings: "tnum"; font-variant-numeric: tabular-nums;
+  font-size: var(--text-2xl); font-weight: 500; line-height: 1.05; letter-spacing: -0.02em;
+  color: var(--ink); word-break: break-word;
+}
+.stat-strip dd.is-text {
+  font-family: var(--font-body); font-size: var(--text-base); font-weight: 500;
+  letter-spacing: 0; line-height: 1.3;
+}
+/* 2-col on phones; reset left-border on odd cells and add top-border from row 2. */
+@media (max-width: 540px) {
+  .stat-strip { grid-template-columns: 1fr 1fr; }
+  .stat-strip > div { padding: var(--space-3); }
+  .stat-strip > div:nth-child(odd) { border-left: 0; }
+  .stat-strip > div:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
+  .stat-strip dd { font-size: var(--text-xl); }
+}
+
+/* ---- Reading prose (long-form within article-section) -------------- */
+.prose { color: var(--ink); }
+.prose p { margin: 0 0 var(--space-3); line-height: var(--leading-body); }
+.prose p:last-child { margin-bottom: 0; }
+.prose a { color: var(--accent-ink); text-underline-offset: 3px; }
+
+/* Utilities */
+.muted { color: var(--ink-muted); }
+.row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.mt-0 { margin-top: 0; } .mb-0 { margin-bottom: 0; }
+
+/* Keep focused elements clear of the sticky header + nav (SC 2.4.11 Focus Not Obscured) */
+:focus-visible { scroll-margin-top: 6rem; }
+
+/* ---- Profile page: field lists, edit rows, action bar ---- */
+.page-actions button { margin: 0; min-height: 44px; padding: 0.5rem 0.95rem; font-size: var(--text-sm); }
+
+.status-line { min-height: 1.25rem; margin: 0 0 1rem; font-size: 0.9rem; }
+.status-line[data-kind="ok"]  { color: var(--accent); }
+.status-line[data-kind="err"] { color: #c53030; }
+
+.lead { font-size: 1.05rem; line-height: 1.5; margin: 0; }
+
+/* .field-*, .edit-*, .add-row, .chip-x migrated to components/field.css + chip.css. */
