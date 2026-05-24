@@ -228,7 +228,7 @@ sources, so 9F items are queued behind tools to be run from a connected host.
 - [ ] Journey checklists global (no per-area state) + "what unlocks next" hint per section.
 
 ### 9B · Areas page improvements (on-sandbox)
-- [ ] URL-driven filter state on `pages/areas.html` (`q`/`county`/`sub`/`sort`/`starred` params).
+- [x] URL-driven filter state on `pages/areas.html` (`q`/`county`/`sub`/`sort`/`starred` params).
 - [ ] `<dialog>` full-filter sheet on mobile.
 - [ ] Sticky anchored TOC on `area-detail.html` (left rail desktop / chip row mobile).
 - [ ] Animated active-link nav indicator (View Transitions cross-document).

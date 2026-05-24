@@ -19,22 +19,50 @@ const state = {
   onlyShortlisted: false,
 };
 
+// ---- URL <-> state sync (shareable filter links) -------------------
+// Round-trips ?q=&county=&sub=&sort=&starred=1 with history.replaceState
+// so each filter combination has a stable URL without polluting history.
+const URL_KEYS = { search: 'q', county: 'county', subRegion: 'sub', sort: 'sort', onlyShortlisted: 'starred' };
+const URL_DEFAULTS = { search: '', county: 'all', subRegion: 'all', sort: 'name', onlyShortlisted: false };
+
+function readStateFromURL() {
+  const p = new URLSearchParams(location.search);
+  if (p.has('q')) state.search = p.get('q') || '';
+  if (p.has('county')) state.county = p.get('county') || 'all';
+  if (p.has('sub')) state.subRegion = p.get('sub') || 'all';
+  if (p.has('sort')) state.sort = p.get('sort') || 'name';
+  if (p.has('starred')) state.onlyShortlisted = p.get('starred') === '1';
+}
+
+function writeStateToURL() {
+  const p = new URLSearchParams();
+  for (const [k, urlKey] of Object.entries(URL_KEYS)) {
+    const v = state[k];
+    if (v === URL_DEFAULTS[k]) continue;                 // omit defaults
+    if (k === 'onlyShortlisted') { if (v) p.set(urlKey, '1'); continue; }
+    if (v) p.set(urlKey, v);
+  }
+  const qs = p.toString();
+  const url = location.pathname + (qs ? `?${qs}` : '') + location.hash;
+  history.replaceState(null, '', url);
+}
+
 function uniq(arr) { return [...new Set(arr.filter(Boolean))].sort(); }
 
 function populateFilters() {
   const counties = uniq(areas.map((a) => a.county));
   $('filter-county').innerHTML = `<option value="all">All counties</option>` +
     counties.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
-
-  updateSubRegions();
 }
 
-function updateSubRegions() {
+function updateSubRegions({ preserve = false } = {}) {
   const filtered = state.county === 'all' ? areas : areas.filter((a) => a.county === state.county);
   const subs = uniq(filtered.map((a) => a.subRegion));
   $('filter-subregion').innerHTML = `<option value="all">All sub-regions</option>` +
     subs.map((s) => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
-  state.subRegion = 'all';
+  // Reset unless the caller is restoring from URL state and the current
+  // sub-region is still valid for the active county.
+  if (!preserve || !subs.includes(state.subRegion)) state.subRegion = 'all';
 }
 
 function applyFilters() {
@@ -123,6 +151,15 @@ function rerender() {
   const list = applyFilters();
   $('result-count').textContent = list.length;
   renderCards(list);
+  writeStateToURL();
+}
+
+function applyStateToControls() {
+  if ($('search')) $('search').value = state.search;
+  if ($('filter-county')) $('filter-county').value = state.county;
+  if ($('filter-subregion')) $('filter-subregion').value = state.subRegion;
+  if ($('sort')) $('sort').value = state.sort;
+  if ($('only-shortlisted')) $('only-shortlisted').checked = state.onlyShortlisted;
 }
 
 function attachControls() {
@@ -136,10 +173,15 @@ function attachControls() {
   $('sort').addEventListener('change', (e) => { state.sort = e.target.value; rerender(); });
   $('only-shortlisted').addEventListener('change', (e) => { state.onlyShortlisted = e.target.checked; rerender(); });
   $('btn-clear').addEventListener('click', () => {
-    state.search = ''; state.county = 'all'; state.subRegion = 'all'; state.sort = 'name'; state.onlyShortlisted = false;
-    $('search').value = ''; $('filter-county').value = 'all'; $('sort').value = 'name';
-    $('only-shortlisted').checked = false;
+    Object.assign(state, URL_DEFAULTS);
     updateSubRegions();
+    applyStateToControls();
+    rerender();
+  });
+  window.addEventListener('popstate', () => {
+    readStateFromURL();
+    updateSubRegions();
+    applyStateToControls();
     rerender();
   });
 }
@@ -149,7 +191,10 @@ async function init() {
     areas = await getAreas();
     shortlist = new Set(getShortlist());
     $('total-count').textContent = areas.length;
-    populateFilters();
+    readStateFromURL();
+    populateFilters();                  // builds the dropdowns
+    updateSubRegions({ preserve: true });// re-narrow subs to chosen county, keep state.subRegion if valid
+    applyStateToControls();
     updateCounts();
     attachControls();
     rerender();
