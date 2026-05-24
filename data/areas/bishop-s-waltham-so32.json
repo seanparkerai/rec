@@ -15,20 +15,96 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "directory",
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "status": "researched",
+  "overview": "Bishop’s Waltham is a historic small town in Hampshire’s SO32 area, known for Bishop’s Waltham Palace ruins and a traditional high street. It grew around medieval ecclesiastical estates and remains a significant service centre for surrounding villages. Today it blends heritage architecture, independent shops and practical commuter access toward Winchester, Southampton and Portsmouth corridors.",
+  "character": "Historic market-town feel with active high street, mixed-period housing and strong community life.",
+  "amenities": [
+    "Broad high-street offer including cafés, small retailers and everyday services.",
+    "Local supermarkets, healthcare facilities, sports clubs and community venues.",
+    "Nearby countryside access via Meon Valley and South Downs edge routes."
+  ],
+  "schools": [
+    {
+      "name": "Bishop’s Waltham Infant School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In town",
+      "url": "https://www.bwschool.org.uk/"
+    },
+    {
+      "name": "Bishop’s Waltham Junior School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In town",
+      "url": "https://www.bws-jun.hants.sch.uk/"
+    },
+    {
+      "name": "Swanmore College",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~3-5 miles",
+      "url": "https://www.swanmore-school.co.uk/"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~25-35 min",
+        "notes": "Via A333/A34 connections"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~30-40 min",
+        "notes": "Via Botley/M27 corridors"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "summary": "SO32 transaction patterns generally show sustained demand for period cottages and family homes, with prices supported by school catchments and town amenities.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Visit Bishop’s Waltham Palace (English Heritage)",
+    "Enjoy local independent shops, cafés and town events",
+    "Explore nearby Meon Valley and South Downs walking routes"
+  ],
+  "placesToEat": [
+    "Pubs, tea rooms and restaurants on/near the high street",
+    "Additional dining choices in Wickham and Fareham corridor"
+  ],
+  "pros": [
+    "Strong amenity base compared with many nearby villages",
+    "Historic character with active community life"
+  ],
+  "cons": [
+    "Traffic/parking pressure at peak times in town centre",
+    "Rail access requires travel to nearby stations"
+  ],
+  "whoItSuits": "Very suitable for families and professionals seeking a characterful small-town base with useful daily amenities, good school options and reasonable road links to larger employment centres.",
   "images": [],
-  "sources": []
+  "sources": [
+    {
+      "label": "Wikipedia — Bishop’s Waltham",
+      "url": "https://en.wikipedia.org/wiki/Bishop%27s_Waltham"
+    },
+    {
+      "label": "English Heritage — Bishop’s Waltham Palace",
+      "url": "https://www.english-heritage.org.uk/visit/places/bishops-waltham-palace/"
+    },
+    {
+      "label": "Rightmove House Prices SO32",
+      "url": "https://www.rightmove.co.uk/house-prices/SO32.html"
+    },
+    {
+      "label": "Bishop’s Waltham Infant School",
+      "url": "https://www.bwschool.org.uk/"
+    }
+  ]
 }

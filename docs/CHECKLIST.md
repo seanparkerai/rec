@@ -88,9 +88,7 @@ for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialo
       cloud sandbox blocks Nominatim/postcodes.io. Cache lands at `data/source/geocode-cache.json`.
 - [~] Area content batches: first batch (4 villages — `stockbridge-so20`, `broughton-so20`,
       `wherwell-sp11`, `hambledon-po7`) drafted with web-cited `overview`/`character`/`amenities`/
-      `pros`/`cons`/`whoItSuits`/`sources` per CLAUDE.md §7. Imagery still pending — sandbox network
-      policy blocks downloads from commons.wikimedia.org / geograph.org.uk; do this in a session with
-      outbound access. Remaining: 187 villages. Pattern is `tools/enrich-batch-NN.mjs`.
+      `pros`/`cons`/`whoItSuits`/`sources` per CLAUDE.md §7. Batch update completed: `stockbridge-so20`, `broughton-so20`, and `hambledon-po7` promoted to `researched` with schools/transport/prices added; `farley-mount-rg25` remains the only `partial` record pending data-source correction. Imagery still pending. Remaining: 153 directory villages. Pattern is `tools/enrich-batch-NN.mjs`.
 
 ## Phase 4 — House-types gallery (batched)
 - [x] `data/house-types.json` seeded with 8 types (thatched cob, flint-and-brick, Georgian townhouse,

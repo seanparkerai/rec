@@ -15,20 +15,80 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "directory",
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "status": "researched",
+  "overview": "Baybridge is a very small locality in the SO21 countryside around Winchester district, with a predominantly rural and low-density setting. It functions more as a hamlet/place-name cluster than a full-service village. Residents typically rely on nearby larger settlements for day-to-day services while benefiting from quiet surroundings.",
+  "character": "Tiny rural hamlet character with scattered dwellings and farmland context.",
+  "amenities": [
+    "No substantial in-hamlet retail core.",
+    "Access to nearby village facilities in surrounding SO21 communities.",
+    "Countryside lanes and footpaths are the main local asset."
+  ],
+  "schools": [
+    {
+      "name": "South Wonston Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~5-7 miles",
+      "url": "https://www.southwonston.hants.sch.uk/"
+    },
+    {
+      "name": "Henry Beaufort School, Winchester",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~7-9 miles",
+      "url": "https://www.henrybeaufortschool.org.uk/"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~20-30 min",
+        "notes": "Dependent on exact lane location and A-road access"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "summary": "SO21 stock around Baybridge is thinly traded; values tend to track Winchester-rural premiums where detached homes and land are involved.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walk local bridleways and downland routes",
+    "Access Winchester leisure/cultural venues within a short drive"
+  ],
+  "placesToEat": [
+    "Country pubs in South Wonston, Sutton Scotney and wider SO21 area"
+  ],
+  "pros": [
+    "Quiet setting with countryside access",
+    "Close enough to Winchester for work/services"
+  ],
+  "cons": [
+    "Very limited local walkable facilities",
+    "Car dependency for most daily trips"
+  ],
+  "whoItSuits": "Best for buyers prioritising seclusion and countryside setting over walkable services, and who are comfortable relying on nearby villages/towns for schools, shopping and stations.",
   "images": [],
-  "sources": []
+  "sources": [
+    {
+      "label": "Rightmove House Prices SO21",
+      "url": "https://www.rightmove.co.uk/house-prices/SO21.html"
+    },
+    {
+      "label": "Winchester City Council local information",
+      "url": "https://www.winchester.gov.uk/"
+    },
+    {
+      "label": "Ordnance Survey map reference (SO21 area)",
+      "url": "https://osmaps.com/"
+    },
+    {
+      "label": "Wikipedia — Winchester District",
+      "url": "https://en.wikipedia.org/wiki/City_of_Winchester"
+    }
+  ]
 }
