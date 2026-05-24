@@ -63,12 +63,41 @@ function progress(section) {
   return { done, total, pct: total ? Math.round((done / total) * 100) : 0 };
 }
 
+function nextItem(section) {
+  const items = data[section] || [];
+  const checks = state[section] || {};
+  for (let i = 0; i < items.length; i++) {
+    if (!checks[i]) return { item: items[i], index: i };
+  }
+  return null;
+}
+
+function renderNextHint(section) {
+  const el = $(`next-${section}`);
+  if (!el) return;
+  const total = (data[section] || []).length;
+  if (!total) { el.hidden = true; return; }
+  const next = nextItem(section);
+  if (!next) {
+    el.hidden = false;
+    el.classList.add('is-done');
+    el.innerHTML = `<span class="next-key">All done</span>Nothing left in this section — well played.`;
+    return;
+  }
+  el.hidden = false;
+  el.classList.remove('is-done');
+  const label = labelFor(section, next.item);
+  const timing = next.item.timing ? ` <span class="muted">· ${esc(next.item.timing)}</span>` : '';
+  el.innerHTML = `<span class="next-key">Unlocks next</span>${esc(label)}${timing}`;
+}
+
 function renderAll() {
   ['viewing', 'process', 'moving'].forEach((section) => {
     $(`list-${section}`).innerHTML = renderSection(section);
     const p = progress(section);
     $(`progress-${section}`).textContent = `${p.done} / ${p.total} done`;
     $(`bar-${section}`).style.width = `${p.pct}%`;
+    renderNextHint(section);
   });
 
   document.querySelectorAll('input[type="checkbox"][data-section]').forEach((box) => {

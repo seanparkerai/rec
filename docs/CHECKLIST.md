@@ -229,7 +229,10 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       the bento; new `.bento-about` and `.bento-filters` cells pull priorities / property
       types / must-haves / tenure / EPC from About + Criteria storage.
 - [ ] Finances kept as one page, restructured into "Now vs Later" sections.
-- [ ] Journey checklists global (no per-area state) + "what unlocks next" hint per section.
+- [x] Journey checklists global (no per-area state) + "what unlocks next" hint per section.
+      State already global (`rec:journey-checks`); each section now renders an accent-soft
+      `.next-hint` panel showing the next unchecked item (with timing) or an "All done"
+      end-state.
 
 ### 9B · Areas page improvements (on-sandbox)
 - [x] URL-driven filter state on `pages/areas.html` (`q`/`county`/`sub`/`sort`/`starred` params).
