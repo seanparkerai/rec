@@ -68,6 +68,15 @@ export function validateAreas(arr) {
       `areas[${i}].coords must be null or have numeric lat/lng`);
     check(e, typeOf(a.images) === 'array', `areas[${i}].images must be an array`);
     check(e, typeOf(a.houseTypeIds) === 'array', `areas[${i}].houseTypeIds must be an array`);
+    // Phase 9C optional fields — type-checked only when present.
+    if ('councilTaxBand' in a && a.councilTaxBand != null)
+      check(e, typeOf(a.councilTaxBand) === 'string', `areas[${i}].councilTaxBand must be a string`);
+    if ('broadbandMedianMbps' in a && a.broadbandMedianMbps != null)
+      check(e, typeOf(a.broadbandMedianMbps) === 'number', `areas[${i}].broadbandMedianMbps must be a number`);
+    if ('nearestStation' in a && a.nearestStation != null)
+      check(e, typeOf(a.nearestStation) === 'string', `areas[${i}].nearestStation must be a string`);
+    if ('primarySupermarket' in a && a.primarySupermarket != null)
+      check(e, typeOf(a.primarySupermarket) === 'string', `areas[${i}].primarySupermarket must be a string`);
   });
   return e;
 }
@@ -81,6 +90,9 @@ export function validateHouseTypes(arr) {
     check(e, typeOf(h.name) === 'string', `house-types[${i}].name must be a string`);
     check(e, typeOf(h.description) === 'string', `house-types[${i}].description must be a string`);
     check(e, typeOf(h.images) === 'array', `house-types[${i}].images must be an array`);
+    // Phase 9C — optional status flag.
+    if ('status' in h && h.status != null)
+      check(e, typeOf(h.status) === 'string', `house-types[${i}].status must be a string`);
   });
   return e;
 }

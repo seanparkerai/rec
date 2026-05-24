@@ -336,6 +336,12 @@ main.container {
   border: 1px solid var(--hairline);
 }
 .chip.is-accent { background: var(--accent-soft); border-color: color-mix(in oklch, var(--accent) 30%, var(--paper)); color: var(--accent-ink); }
+.chip.is-draft {
+  font-size: var(--text-xs); padding: 0.1rem 0.5rem; margin-left: 0.5rem;
+  color: var(--ink-muted); background: color-mix(in oklch, var(--ink-subtle) 12%, var(--paper));
+  border-color: var(--hairline); font-weight: 500; letter-spacing: 0.04em;
+  text-transform: uppercase; vertical-align: 0.15em;
+}
 .chip.is-warn   { background: color-mix(in oklch, oklch(60% 0.18 30) 14%, var(--paper)); border-color: color-mix(in oklch, oklch(60% 0.18 30) 30%, var(--paper)); color: oklch(40% 0.16 30); }
 [data-theme="dark"] .chip.is-warn { color: oklch(80% 0.16 30); }
 @media (prefers-color-scheme: dark) {
