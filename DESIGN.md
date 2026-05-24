@@ -72,6 +72,9 @@ Do not ship any of these:
 - Seven-pastel palettes.
 - Hover micro-interactions on every element.
 - Drop-shadow-as-decoration.
+- Hero KPI cards on a personal dashboard.
+- Coloured left-border "pill" row indicators (use a background tint instead).
+- Inline styles (always CSS classes).
 
 If any of these appears in a screenshot, refactor before commit.
 
@@ -86,3 +89,15 @@ Before merging any UI change:
 3. Lighthouse: Perf ≥90, A11y ≥95, BP ≥95, SEO ≥90.
 4. `tests/tests.html`: all green.
 5. Eyeball the screenshot grid: each page reads as **Stripe-docs** or **Linear-dense** per its anchor. If it could be mistaken for generic SaaS, redo it.
+
+---
+
+## 5. Five rules of the overhaul
+
+Adopted at v2 plan adoption. Every page and component in the v2 overhaul must reinforce these:
+
+1. **At-a-glance precedence** — every page answers its core question in the first 600 px of viewport. No scroll for the lead verdict.
+2. **No isolated calculators** — every calculator on a page shares inputs from `data/finances.json` + `data/criteria.json` and updates together. The four siloed widgets on the current finances page are the anti-pattern.
+3. **Always show, then explain** — numbers in mono come first; prose lives in `<details>` or a right-rail caption. Verdicts over essays.
+4. **No graphic without a verdict** — every chart annotates an answer (e.g. *"you hit target in March 2027"*). No decoration. If a chart has no caption-as-answer, replace it with a number or remove it.
+5. **Visual cues replace text** — banding (comfortable / stretch / tight / out-of-reach), coloured fit dots, money-flow bars instead of category lists. Existing accent / ink / paper palette only; derive shades via `color-mix`. Never a seven-pastel palette to differentiate categories.

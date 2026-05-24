@@ -160,3 +160,37 @@ Before declaring a UI change complete:
 - **Axe** — zero serious/critical violations on the changed page (DevTools axe panel or `@axe-core/cli`).
 - **Test harness** — `tests/tests.html` all-green before commit.
 - **Lighthouse (when CI lands)** — target Performance ≥90, Accessibility ≥95, Best Practices ≥95, SEO ≥90.
+
+## 14. Plan Mode contract
+
+Every plan — phase, sub-task, or any significant edit — must enumerate, in order:
+
+1. **Files to edit, with the specific sections inside each.** Naming a file is not enough — name the section, function, fieldset, component, or insertion point.
+2. **Order of operations** — the literal sequence of edits and supporting commands.
+3. **Test impact** — which existing tests are affected, which new tests are added, how the harness is run, and whether it ran green.
+4. **Explicit out-of-scope list** — files and concerns this phase will *not* touch.
+
+If scope changes mid-execution — a new file is needed, a §16 file is touched, a refactor surfaces — **stop, surface the divergence, and re-plan**. Do not power through.
+
+## 15. Subagent contract
+
+Subagents are tools, not autonomous workers. The contract:
+
+- **One level of delegation.** A subagent may not spawn further subagents. The main thread orchestrates.
+- **No headed browsers.** Playwright runs headless via `tools/verify-ui.mjs`; subagents must not launch headed instances.
+- **No long-running processes.** No dev servers, watchers, or background jobs that outlive the agent's reply.
+- **Reports, then exits.** Every subagent returns a single summary to the main thread; it does not commit, push, or hand off to another subagent.
+
+## 16. Out-of-scope guard rails
+
+The following files are **never touched** by feature work. Modifying any of them is its own phase, named and approved separately:
+
+- `assets/css/tokens.css` — colour, type, spacing tokens.
+- `assets/js/storage.js` — localStorage layer (migration target).
+- `assets/js/config.js` — base-URL + `url()` helpers.
+- `assets/js/data-loader.js` — JSON loader.
+- `assets/js/finances.js` — finance calculators. **Extend, do not rewrite.**
+- `data/schema/area.schema.json` — per-area schema.
+- `.github/workflows/*` — CI / deploy pipelines.
+
+If a phase appears to require a change to any of these, stop and re-plan as a separate, named phase.
