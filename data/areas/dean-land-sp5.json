@@ -1,0 +1,34 @@
+{
+  "id": "dean-land-sp5",
+  "name": "Dean Land",
+  "village": "Dean Land",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP5",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.00664,
+    "lng": -1.87728
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

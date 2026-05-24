@@ -1,0 +1,34 @@
+{
+  "id": "privett-gu34",
+  "name": "Privett",
+  "village": "Privett",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.1326,
+    "lng": -0.97056
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

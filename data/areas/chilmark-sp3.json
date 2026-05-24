@@ -1,0 +1,34 @@
+{
+  "id": "chilmark-sp3",
+  "name": "Chilmark",
+  "village": "Chilmark",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP3",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.08368,
+    "lng": -1.92588
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

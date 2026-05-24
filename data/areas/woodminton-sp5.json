@@ -1,0 +1,34 @@
+{
+  "id": "woodminton-sp5",
+  "name": "Woodminton",
+  "village": "Woodminton",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP5",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 50.99116,
+    "lng": -1.87996
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

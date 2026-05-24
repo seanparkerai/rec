@@ -1,0 +1,34 @@
+{
+  "id": "lower-bullington-so21",
+  "name": "Lower Bullington",
+  "village": "Lower Bullington",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.08288,
+    "lng": -1.29756
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

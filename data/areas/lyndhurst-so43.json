@@ -1,0 +1,34 @@
+{
+  "id": "lyndhurst-so43",
+  "name": "Lyndhurst",
+  "village": "Lyndhurst",
+  "town": "Southampton",
+  "county": "Hampshire",
+  "postcode": "SO43",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Southampton",
+  "coords": {
+    "lat": 50.86092,
+    "lng": -1.58872
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

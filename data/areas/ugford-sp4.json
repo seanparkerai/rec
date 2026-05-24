@@ -1,0 +1,34 @@
+{
+  "id": "ugford-sp4",
+  "name": "Ugford",
+  "village": "Ugford",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP4",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.17472,
+    "lng": -1.78376
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

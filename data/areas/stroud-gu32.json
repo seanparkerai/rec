@@ -1,0 +1,142 @@
+{
+  "id": "stroud-gu32",
+  "name": "Stroud",
+  "village": "Stroud",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.02172,
+    "lng": -0.92236
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "A village and civil parish in the East Hampshire district, 1.4 miles west of Petersfield, strung along the A272 (Winchester–Midhurst road). Population at the 2011 census was 360. Stroud parish sits immediately east of Langrish parish and just outside the western edge of the South Downs National Park. The village has no medieval parish church of its own (Stroud Mission Church serves the village within the Steep and Froxfield with Privett benefice), but it has Langrish Primary School (Outstanding at last inspection, 2019) at Ramsdean Road on the parish boundary, and the Seven Stars at the eastern end of the village — a Hall & Woodhouse country pub since 1996, extended into a converted barn in 2003. The A272 corridor location means easy road access to Petersfield (5 min) and the A3 (3 mi), and Petersfield station for direct London Waterloo trains is within 1.5 miles.",
+  "character": "Linear roadside village with a working farm character; mix of period brick-and-flint cottages, post-war and modern infill detached, and a few larger farmhouses. Mixed demographic: commuters, working farms, retirees. Less polished than Steep or East Tisted.",
+  "amenities": [
+    "The Seven Stars (Hall & Woodhouse country pub)",
+    "Stroud Mission Church",
+    "Langrish Primary School (just over the parish boundary)",
+    "Petrol station, M&S convenience and Wild Bean Café on Winchester Road",
+    "Footpaths north to Stoner Hill and the Hangers"
+  ],
+  "schools": [
+    {
+      "name": "Langrish Primary School",
+      "phase": "Primary",
+      "ofsted": "Outstanding (Oct 2019)",
+      "distance": "0.3 mi",
+      "url": "https://www.langrish.hants.sch.uk/"
+    },
+    {
+      "name": "The Petersfield School",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "2.5 mi",
+      "url": "https://www.tps.hants.sch.uk/"
+    },
+    {
+      "name": "Churcher's College",
+      "phase": "Independent (3–18)",
+      "ofsted": null,
+      "distance": "1.7 mi",
+      "url": "https://www.churcherscollege.com/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 2m – 1h 17m direct",
+        "mode": "drive/walk to Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+      },
+      {
+        "to": "Portsmouth Harbour",
+        "time": "~30m",
+        "mode": "Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield"
+      }
+    ],
+    "nearestStation": "Petersfield (1.4 mi)",
+    "roads": "A272 runs the length of the village; A3 (London–Portsmouth) ~3 mi east at Petersfield"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32-3pg.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "South Downs Way walking from Old Winchester Hill / Butser",
+    "Hangers Way to Shoulder of Mutton Hill and the Poet's Stone",
+    "Petersfield Heath and lake",
+    "Queen Elizabeth Country Park (~5 mi south)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Seven Stars",
+      "type": "Country pub and restaurant",
+      "notes": "Hall & Woodhouse-owned; Badger Ales; converted barn dining room, large garden",
+      "url": "https://www.sevenstarsstroud.co.uk/"
+    },
+    {
+      "name": "Langrish House",
+      "type": "Country house hotel and restaurant",
+      "notes": "17th-century manor hotel in Langrish, 1 mi west",
+      "url": "https://www.langrishhouse.co.uk/"
+    }
+  ],
+  "pros": [
+    "Petersfield station within 1.5 miles for direct London Waterloo trains",
+    "Catchment Langrish Primary School rated Outstanding (2019)",
+    "Pub, primary school and a small forecourt convenience store on the A272 — a more functional offer than most hamlets in this area",
+    "Easy A272/A3 road access without being inside Petersfield itself",
+    "Less expensive than equivalent stock in Steep or Sheet"
+  ],
+  "cons": [
+    "Linear A272 layout means many properties have road noise",
+    "No conservation area or SDNP designation — fewer planning protections than neighbouring parishes",
+    "No medieval church (Mission Church only)",
+    "Limited pavement and no rural buses to count on at night",
+    "Some new-build infill of varied quality has gone in along the spine road"
+  ],
+  "whoItSuits": "Practical buyers who want most of the village amenity set (school, pub, shop, station) at a discount to Steep or High Cross, and who can live with an A272 frontage. Strong fit for working families targeting Langrish Primary and Churcher's or The Petersfield School. Less suited to buyers seeking a postcard South Downs village — Stroud is a workmanlike spine village, not a quiet downland nucleus.",
+  "nearestStation": "Petersfield (1.4 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (~2 mi); Tesco Petersfield, Bedford Road (~2.5 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Stroud, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Stroud,_Hampshire"
+    },
+    {
+      "label": "The Seven Stars (Hall & Woodhouse)",
+      "url": "https://www.hall-woodhouse.co.uk/pub/the-seven-stars/"
+    },
+    {
+      "label": "Langrish Primary School",
+      "url": "https://www.langrish.hants.sch.uk/"
+    },
+    {
+      "label": "South Western Railway — Petersfield to London Waterloo",
+      "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+    },
+    {
+      "label": "Wikipedia — Langrish parish",
+      "url": "https://en.wikipedia.org/wiki/Langrish"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (Stroud parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ]
+}

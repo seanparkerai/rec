@@ -1,0 +1,34 @@
+{
+  "id": "west-tisted-so24",
+  "name": "West Tisted",
+  "village": "West Tisted",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.1036,
+    "lng": -1.1656
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

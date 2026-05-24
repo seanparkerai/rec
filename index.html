@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dashboard · rec</title>
+  <meta name="description" content="First-time buyer dashboard for Hampshire & Wiltshire." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Hampshire &amp; Wiltshire · First-time buyer</p>
+      <h1>Where you&rsquo;re at</h1>
+      <p class="lead" id="page-lead">A snapshot of your search — progress, shortlist, journey.</p>
+    </header>
+
+    <section class="page-lede" id="home-lede" aria-label="Search summary">
+      <p class="lede-prose" id="lede-prose">Loading your search snapshot…</p>
+      <ul class="lede-meta">
+        <li><span class="lede-key">Budget</span><span class="lede-val num" id="lede-budget">—</span></li>
+        <li><span class="lede-key">Deposit</span><span class="lede-val num" id="lede-deposit">—</span></li>
+        <li><span class="lede-key">Beds</span><span class="lede-val num" id="lede-beds">—</span></li>
+        <li><span class="lede-key">Window</span><span class="lede-val" id="lede-window">—</span></li>
+      </ul>
+    </section>
+
+    <div class="bento" aria-label="Dashboard">
+      <section class="bento-cell bento-hero" aria-labelledby="hero-label">
+        <p class="eyebrow" id="hero-label">Deposit progress</p>
+        <div class="hero-ring">
+          <div class="ring" role="img" aria-label="Deposit progress">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-track" cx="60" cy="60" r="52"/>
+              <circle class="ring-bar" id="ring-bar" cx="60" cy="60" r="52"
+                      pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100"/>
+            </svg>
+            <div class="ring-value"><span class="num" id="ring-pct">0</span><small>%</small></div>
+          </div>
+          <dl class="hero-stats">
+            <div><dt>Saved</dt>      <dd class="num" id="hero-saved">£0</dd></div>
+            <div><dt>Target</dt>     <dd class="num" id="hero-target">£0</dd></div>
+            <div><dt>Per month</dt>  <dd class="num" id="hero-monthly">£0</dd></div>
+          </dl>
+        </div>
+        <p class="hero-eta" id="hero-eta">Calculating…</p>
+      </section>
+
+      <section class="bento-cell bento-shortlist" aria-labelledby="sl-label">
+        <header class="cell-head">
+          <h2 id="sl-label">Shortlist</h2>
+          <span class="cell-count num" id="sl-count">0 areas</span>
+        </header>
+        <ul class="shortlist-list" id="home-areas">
+          <li class="empty-note">Loading…</li>
+        </ul>
+        <footer class="cell-foot">
+          <a data-nav="pages/areas.html">Browse directory →</a>
+          <a data-nav="pages/map.html">See on map →</a>
+        </footer>
+      </section>
+
+      <section class="bento-cell bento-chart" aria-labelledby="ch-label">
+        <header class="cell-head">
+          <h2 id="ch-label">Savings projection</h2>
+          <p class="muted" id="home-savings-sub" style="margin:0;font-size:var(--text-sm);"></p>
+        </header>
+        <div class="chart-wrap"><canvas id="home-savings-chart"></canvas></div>
+      </section>
+
+      <section class="bento-cell bento-about" aria-labelledby="ab-label">
+        <header class="cell-head">
+          <h2 id="ab-label">About you</h2>
+          <a data-nav="pages/about-search.html#about" style="font-size:var(--text-sm);color:var(--ink);text-decoration:none;font-weight:500;">Edit profile →</a>
+        </header>
+        <ul class="chip-grid" id="home-priorities"><li class="empty-note">Loading…</li></ul>
+        <footer class="cell-foot">
+          <span class="muted" id="home-buyers">—</span>
+        </footer>
+      </section>
+
+      <section class="bento-cell bento-filters" aria-labelledby="fl-label">
+        <header class="cell-head">
+          <h2 id="fl-label">Search filters</h2>
+          <a data-nav="pages/about-search.html#search" style="font-size:var(--text-sm);color:var(--ink);text-decoration:none;font-weight:500;">Edit criteria →</a>
+        </header>
+        <dl class="filters-grid" id="home-filters">
+          <div><dt>Property types</dt><dd id="hf-types">—</dd></div>
+          <div><dt>Must-haves</dt><dd id="hf-must">—</dd></div>
+          <div><dt>Tenure</dt><dd id="hf-tenure">—</dd></div>
+          <div><dt>EPC min</dt><dd class="num" id="hf-epc">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="bento-cell bento-journey" aria-labelledby="jr-label">
+        <header class="cell-head">
+          <h2 id="jr-label">Journey</h2>
+          <a data-nav="pages/journey.html" style="font-size:var(--text-sm);color:var(--ink);text-decoration:none;font-weight:500;">Open journey →</a>
+        </header>
+        <div class="step-strip" id="home-journey"></div>
+      </section>
+    </div>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+
+  <script type="module" src="assets/js/components.js"></script>
+  <script type="module" src="assets/js/page-home.js"></script>
+</body>
+</html>

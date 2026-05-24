@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rec.local/schema/area.schema.json",
+  "title": "Area",
+  "description": "Canonical shape for an area record. The directory index (data/areas.json) carries only the INDEX_FIELDS subset; the full record lives at data/areas/<id>.json.",
+  "type": "object",
+  "required": ["id", "name", "town", "county", "postcode", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "name": { "type": "string" },
+    "village": { "type": "string" },
+    "town": { "type": "string" },
+    "county": { "type": "string" },
+    "postcode": { "type": "string" },
+    "hubCity": { "type": "string" },
+    "regionDir": { "type": "string" },
+    "settlementType": { "type": "string" },
+    "subRegion": { "type": "string" },
+    "coords": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["lat", "lng"],
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "coordsSource": { "type": "string" },
+    "houseTypeIds": { "type": "array", "items": { "type": "string" } },
+    "status": {
+      "type": "string",
+      "enum": ["directory", "stub", "drafted", "partial", "researched"]
+    },
+    "overview": { "type": "string" },
+    "character": { "type": "string" },
+    "amenities": { "type": "array", "items": { "type": "string" } },
+    "schools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "phase": { "type": "string" },
+          "type": { "type": "string" },
+          "ofsted": { "type": ["string", "null"] },
+          "distance": { "type": "string" },
+          "url": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "transport": {
+      "type": "object",
+      "properties": {
+        "nearestStation": { "type": "string" },
+        "roads": { "type": "string" },
+        "commutes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "to": { "type": "string" },
+              "destination": { "type": "string" },
+              "time": { "type": "string" },
+              "mode": { "type": "string" },
+              "source": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "prices": {
+      "type": "object",
+      "properties": {
+        "avgSold12Mo": { "type": ["number", "null"] },
+        "avgDetached": { "type": ["number", "null"] },
+        "avgSemi": { "type": ["number", "null"] },
+        "avgTerraced": { "type": ["number", "null"] },
+        "avgBungalow": { "type": ["number", "null"] },
+        "avgFlat": { "type": ["number", "null"] },
+        "source": { "type": "string" },
+        "asOf": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "thingsToDo": { "type": "array", "items": { "type": "string" } },
+    "placesToEat": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "notes": { "type": "string" },
+              "url": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "pros": { "type": "array", "items": { "type": "string" } },
+    "cons": { "type": "array", "items": { "type": "string" } },
+    "whoItSuits": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "councilTaxBand": { "type": ["string", "null"] },
+    "broadbandMedianMbps": { "type": ["number", "null"] },
+    "nearestStation": { "type": ["string", "null"] },
+    "primarySupermarket": { "type": ["string", "null"] },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "src": { "type": "string" },
+          "alt": { "type": "string" },
+          "credit": { "type": "string" },
+          "licence": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "url": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        ]
+      }
+    }
+  }
+}

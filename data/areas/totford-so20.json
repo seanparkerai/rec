@@ -1,0 +1,34 @@
+{
+  "id": "totford-so20",
+  "name": "Totford",
+  "village": "Totford",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO20",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.10908,
+    "lng": -1.49104
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

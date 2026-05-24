@@ -1,0 +1,34 @@
+{
+  "id": "ropley-so24",
+  "name": "Ropley",
+  "village": "Ropley",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.09332,
+    "lng": -1.16996
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

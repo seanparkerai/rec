@@ -1,0 +1,100 @@
+{
+  "id": "cheriton-so24",
+  "name": "Cheriton",
+  "village": "Cheriton",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.0956,
+    "lng": -1.16504
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Cheriton is a Hampshire village/locality in the SO24 area with a long rural settlement history and close links to nearby market towns. Its setting combines historic parish character with day-to-day access patterns focused on nearby service centres. Today it is typically chosen for countryside living with practical road connections into surrounding employment hubs.",
+  "character": "Established Hampshire village character with mixed-period homes, lanes and surrounding farmland/green space.",
+  "amenities": [
+    "Core parish/community amenities in Cheriton and nearby villages.",
+    "Local walking routes, churches/halls and countryside recreation.",
+    "Broader retail, healthcare and rail services in nearby towns."
+  ],
+  "schools": [
+    {
+      "name": "Cheriton area primary option",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~1-5 miles",
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+    },
+    {
+      "name": "Winchester catchment secondary option",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~4-10 miles",
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~15-35 min",
+        "notes": "Depends on exact address and route"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~30-55 min",
+        "notes": "Via major A-road/M27 corridors where relevant"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO24 pricing reflects wider Hampshire demand patterns, with village stock often commanding premiums when supply is limited.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Countryside walking/cycling on local rights of way",
+    "Visit nearby market-town amenities, pubs and heritage attractions"
+  ],
+  "placesToEat": [
+    "Country pubs and caf\u00e9s in the surrounding village/town catchment"
+  ],
+  "pros": [
+    "Attractive rural setting with community identity",
+    "Access to larger towns without living in dense urban areas"
+  ],
+  "cons": [
+    "Amenity choice is smaller than in major towns",
+    "Most households rely on car travel for many trips"
+  ],
+  "whoItSuits": "Well suited to buyers seeking rural or semi-rural Hampshire living with realistic expectations about car dependency and travel to larger service centres.",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia \u2014 Cheriton",
+      "url": "https://en.wikipedia.org/wiki/Cheriton"
+    },
+    {
+      "label": "Hampshire County Council \u2014 Find a school",
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+    },
+    {
+      "label": "Rightmove House Prices SO24",
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+    },
+    {
+      "label": "National Rail stations and journey info",
+      "url": "https://www.nationalrail.co.uk/"
+    }
+  ]
+}

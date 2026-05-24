@@ -1,0 +1,34 @@
+{
+  "id": "soberton-heath-so32",
+  "name": "Soberton Heath",
+  "village": "Soberton Heath",
+  "town": "Southampton",
+  "county": "Hampshire",
+  "postcode": "SO32",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Southampton",
+  "coords": {
+    "lat": 50.96844,
+    "lng": -1.213
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

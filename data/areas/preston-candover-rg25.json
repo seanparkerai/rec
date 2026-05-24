@@ -1,0 +1,136 @@
+{
+  "id": "preston-candover-rg25",
+  "name": "Preston Candover",
+  "village": "Preston Candover",
+  "town": "Basingstoke",
+  "county": "Hampshire",
+  "postcode": "RG25",
+  "hubCity": "Reading",
+  "regionDir": "South",
+  "settlementType": "Outlier",
+  "subRegion": "Basingstoke",
+  "coords": {
+    "lat": 51.24304,
+    "lng": -1.25364
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Preston Candover is a village in the now-merged Preston Candover, Nutley and Axford civil parish, in the Basingstoke and Deane district, four and a half miles south of Basingstoke and five miles north of New Alresford on the B3046 chalk-valley road. The 2011 census recorded a parish population of 357 (510 including Bradley and Moundsmere). The village pump in the centre of the village is a Grade II-listed structure; one of the village's two churches (St Mary the Virgin) remains in active use, while the other is redundant. Preston Candover is home to Lord Sainsbury of Preston Candover (the supermarket family) and to the Purefoy Arms — a Grade II-listed Modern British / French gastropub which previously held a Michelin Guide listing and 2 AA Rosettes until early 2024, and which secured planning approval in October 2024 for refurbishment including guest accommodation and a deli/café (reopening date not yet confirmed). The village retains a working village store, village hall, tennis club, pre-school kindergarten and Preston Candover Church of England Primary School (Good, Ofsted January 2023).",
+  "character": "Working chalk-valley village with intact 19th-century B3046 frontage of brick-and-flint cottages, Victorian estate housing, and 20th-century additions on the village fringes. Two churches, a working primary school, a village hall and a Grade II village pump anchor the centre. Tight Basingstoke and Deane planning regime; conservation-area sensibility without formal designation.",
+  "amenities": [
+    "Preston Candover Church of England Primary School",
+    "Preston Candover Pre-school Kindergarten",
+    "Village shop and post office",
+    "Village hall",
+    "Tennis club",
+    "Church of St Mary the Virgin",
+    "Redundant second church (open by appointment)",
+    "Grade II-listed village pump",
+    "Active Candover Valley community network"
+  ],
+  "schools": [
+    {
+      "name": "Preston Candover Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "0.2 mi",
+      "url": "https://files.ofsted.gov.uk/v1/file/50209502"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "5.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Cranbourne Business and Enterprise College, Basingstoke",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "5.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo (via Basingstoke, fastest)",
+        "time": "42m + drive",
+        "mode": "drive ~7 mi + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo"
+      },
+      {
+        "to": "London Waterloo (typical)",
+        "time": "54m + drive",
+        "mode": "drive + train",
+        "source": "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~25m",
+        "mode": "drive (B3046 / A33)",
+        "source": "https://www.nationalrail.co.uk/"
+      }
+    ],
+    "nearestStation": "Basingstoke (6.5 mi)",
+    "roads": "B3046 (through village); A339 ~3 mi; A31 (Alresford) ~5 mi; M3 J7 (Basingstoke) ~7 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/rg25.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking the chalk-stream Candover Brook footpaths",
+    "Candover Cricket Club home matches at Brown Candover (1.5 mi)",
+    "Hattingley Valley Wines tour and tasting (~3 mi)",
+    "The Grange, Northington estate (~4 mi)",
+    "Watercress Line heritage railway from Alresford (5 mi)",
+    "Annual Preston Candover horticultural show"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Purefoy Arms",
+      "type": "Gastropub",
+      "notes": "Grade II-listed; previously Michelin Guide-listed and 2 AA Rosettes; closed for refurbishment from 2024 — reopening date not yet confirmed; planning approval October 2024 includes guest accommodation and deli/café",
+      "url": "https://www.purefoyarms.co.uk/"
+    },
+    {
+      "name": "The Woolpack Inn, Chilton Candover",
+      "type": "Country pub",
+      "notes": "Nearest alternative pub (~1.5 mi south)",
+      "url": "https://www.useyourlocal.com/"
+    }
+  ],
+  "pros": [
+    "Working Ofsted Good primary school in the village",
+    "Basingstoke station 6.5 mi for the fastest direct Waterloo trains in this batch (42m)",
+    "Full village amenity set (shop, post office, hall, two churches, tennis)",
+    "Lord Sainsbury connection has historically attracted careful stewardship of the area"
+  ],
+  "cons": [
+    "Purefoy Arms (the village's destination gastropub) closed for refurbishment from 2024",
+    "B3046 traffic through the village can be heavy at peak times",
+    "Limited choice of pubs while Purefoy reopening pending",
+    "No mainline station within the parish (Basingstoke is 6.5 mi by road)"
+  ],
+  "whoItSuits": "Buyers wanting a working village with a Good Ofsted primary, an intact retail and community offering, and the fastest direct-Waterloo commute in this batch (42 minutes from Basingstoke, 7 miles away). Particularly suited to families with primary-age children, Basingstoke-bound commuters who want a village setting, and downsizers from busier south-east towns. The current Purefoy Arms closure removes the destination dining option for the time being; buyers attracted by gastronomy should weigh this against the village's other strengths until the reopening date is confirmed.",
+  "councilTaxBand": "D",
+  "nearestStation": "Basingstoke (6.5 mi)",
+  "primarySupermarket": "Sainsbury's, Basingstoke (7.5 mi); Waitrose, Alresford (5.5 mi); village shop in Preston Candover for daily basics",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Preston_Candover",
+    "http://candovervalley.org/about/",
+    "https://files.ofsted.gov.uk/v1/file/50209502",
+    "https://www.themobilefoodguide.com/restaurants/preston-candover/purefoy-arms",
+    "https://camra.org.uk/pubs/purefoy-arms-preston-candover-179309",
+    "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo",
+    "https://en.wikipedia.org/wiki/Brown_Candover"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "beauworth-so24",
+  "name": "Beauworth",
+  "village": "Beauworth",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.08136,
+    "lng": -1.14016
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Beauworth is a small Hampshire hamlet south-east of Winchester, historically associated with agricultural land and estate holdings in the Cheriton–Kilmeston area. It remains lightly populated and strongly rural, with most practical services reached in Alresford, Winchester or nearby larger villages.",
+  "character": "Low-density rural hamlet with scenic downland surroundings.",
+  "amenities": [
+    "Local amenity base is minimal within the hamlet itself.",
+    "Nearby pubs, schools and shops in Cheriton/Alresford catchment.",
+    "Strong access to countryside walks and cycling routes."
+  ],
+  "schools": [
+    {
+      "name": "Cheriton Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~2-4 miles",
+      "url": "https://www.cheriton.hants.sch.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~6-8 miles",
+      "url": "https://www.perins.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~20-30 min",
+        "notes": "Via rural roads to A31/A272 links"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO24 values are supported by Alresford demand and rural lifestyle appeal; transactions in tiny hamlets are infrequent and property-specific.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Explore footpaths toward Cheriton and Kilmeston",
+    "Visit Alresford shops and Watercress Line attractions nearby"
+  ],
+  "placesToEat": [
+    "Country inns in Cheriton/Alresford catchment"
+  ],
+  "pros": [
+    "Scenic and peaceful downland setting",
+    "Good access to Alresford/Winchester by road"
+  ],
+  "cons": [
+    "Few immediate amenities",
+    "Public transport options are limited"
+  ],
+  "whoItSuits": "Appeals to households seeking a very quiet rural address and willing to drive for almost all services.",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Cheriton, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Cheriton,_Hampshire"
+    },
+    {
+      "label": "Rightmove House Prices SO24",
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+    },
+    {
+      "label": "Winchester district planning map",
+      "url": "https://www.winchester.gov.uk/planning"
+    },
+    {
+      "label": "OpenStreetMap SO24 area",
+      "url": "https://www.openstreetmap.org/"
+    }
+  ]
+}

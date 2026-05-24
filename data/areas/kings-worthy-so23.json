@@ -1,0 +1,34 @@
+{
+  "id": "kings-worthy-so23",
+  "name": "Kings Worthy",
+  "village": "Kings Worthy",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO23",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.06576,
+    "lng": -1.30504
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

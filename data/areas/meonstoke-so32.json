@@ -1,0 +1,34 @@
+{
+  "id": "meonstoke-so32",
+  "name": "Meonstoke",
+  "village": "Meonstoke",
+  "town": "Southampton",
+  "county": "Hampshire",
+  "postcode": "SO32",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Southampton",
+  "coords": {
+    "lat": 50.9548,
+    "lng": -1.2036
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

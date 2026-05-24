@@ -1,0 +1,164 @@
+{
+  "id": "bordon-gu35",
+  "name": "Bordon",
+  "village": "Bordon",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU35",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Farnham",
+  "coords": {
+    "lat": 51.10716,
+    "lng": -0.87768
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "A town of around 16,000 residents in the East Hampshire district, set in the royal Woolmer Forest some five miles south-east of Alton. Bordon is unlike its nearest peers (Petersfield, Farnham, Alton) in that it never grew as a market town: the camp was laid out by the Royal Engineers in 1899 and from 1903 the town developed around the Army, latterly as a base for the Royal Electrical and Mechanical Engineers. The MoD withdrew in 2015 and a 15-year, circa £1bn regeneration partnership (Defence Infrastructure Organisation, Dorchester Regeneration, Taylor Wimpey, East Hants and Hampshire County Councils) is rebuilding the former Prince Philip Barracks site as a 'Green Town' delivering up to 3,350 new homes, a new town centre, schools, a health hub and the 54-hectare Hogmoor Inclosure SANGS. The Sainsbury's that anchors the emerging town centre broke ground in 2025 with first customers due summer 2026. Bordon shares a civil parish (Whitehill) with the contiguous village of Lindford.",
+  "character": "A working town in the middle of a long, public-led rebuild. Older Edwardian and post-war military housing on the A325 spine sits alongside new-build Quebec Park and Prince Philip Park phases (Taylor Wimpey, Bovis and others). Heathland, woodland and the Woolmer Forest SSSI are immediately to the south; the new walking and cycling 'Green Loop' threads the town. Mixed demographic — ex-service families, commuters using Liphook for the Portsmouth Direct line, and first-time buyers priced out of Farnham or Haslemere.",
+  "amenities": [
+    "Phoenix Theatre and Arts Centre",
+    "Mill Chase Leisure Centre",
+    "Hogmoor Inclosure (54 ha SANGS, café, skate park)",
+    "Bordon and Oakhanger Sports Pavilion",
+    "The Shed (dining and events venue, town centre)",
+    "Tesco Superstore (Chalet Hill)",
+    "Sainsbury's (16,000 sq ft, opening summer 2026)",
+    "Bordon Health Centre",
+    "St Mark's Church, Whitehill",
+    "Bordon Library"
+  ],
+  "schools": [
+    {
+      "name": "Bordon Infant School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "town centre",
+      "url": "https://reports.ofsted.gov.uk/provider/21/150418"
+    },
+    {
+      "name": "Bordon Junior School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "town centre",
+      "url": "https://reports.ofsted.gov.uk/provider/21/146002"
+    },
+    {
+      "name": "Weyford Nursery and Primary Academy",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "0.4 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/148215"
+    },
+    {
+      "name": "Oakmoor School",
+      "phase": "Secondary",
+      "ofsted": "Good (2021); 2026 inspection under new report-card framework, no single overall grade",
+      "distance": "town centre",
+      "url": "https://reports.ofsted.gov.uk/provider/23/140182"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 1m – 1h 21m",
+        "mode": "drive to Liphook + direct South Western Railway",
+        "source": "https://www.thetrainline.com/train-times/liphook-to-london-waterloo"
+      },
+      {
+        "to": "Portsmouth & Southsea",
+        "time": "~45m",
+        "mode": "drive to Liphook + direct South Western Railway",
+        "source": "https://www.thetrainline.com/stations/liphook"
+      }
+    ],
+    "nearestStation": "Liphook (3.7 mi)",
+    "roads": "A325 runs through the town; A3 (London–Portsmouth) ~2 mi east at Liphook/Hindhead; Hindhead Tunnel since 2011 has cut A3 journey times north"
+  },
+  "prices": {
+    "avgSold12Mo": 420411,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu35.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hogmoor Inclosure walking, cycling, skate park",
+    "Deadwater Valley Local Nature Reserve",
+    "Shipwrights Way long-distance trail",
+    "Woolmer Forest SSSI heathland walks",
+    "Phoenix Theatre programme",
+    "Alice Holt Forest (Go Ape, ~6 mi north)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Shed",
+      "type": "Bar and dining",
+      "notes": "Town-centre venue, recently refurbished as part of the regeneration",
+      "url": "https://www.princephilippark.co.uk/"
+    },
+    {
+      "name": "The Royal Exchange",
+      "type": "Pub",
+      "notes": "Long-standing town pub on Lindford Road",
+      "url": "https://www.useyourlocal.com/"
+    }
+  ],
+  "pros": [
+    "Among the cheapest stock in the GU postcode commuter belt (GU35 avg £420k vs neighbouring GU30 Liphook well above £500k)",
+    "Substantial new build supply with developer warranties via Quebec Park / Prince Philip Park",
+    "Hogmoor Inclosure and Woolmer Forest deliver real countryside on the doorstep",
+    "Liphook station (3.7 mi) gives direct ~1-hour London Waterloo trains",
+    "Town centre, Sainsbury's, health hub and second primary still being delivered — capital values likely to follow infrastructure"
+  ],
+  "cons": [
+    "No railway station of its own (line lifted in 1957); car or bus needed for the train",
+    "Town centre still half-built — the new Sainsbury's only opens summer 2026, new primary not due until 2028",
+    "Secondary catchment Oakmoor (rated Good in 2021) is the only mainstream secondary in town; sixth-form provision is limited locally",
+    "Heavy through-traffic on the A325 spine",
+    "Older estate stock (ex-MoD married quarters) varies sharply in condition"
+  ],
+  "whoItSuits": "First-time buyers and young families priced out of Farnham, Liphook or Haslemere but who want the same Portsmouth Direct line and South Downs/National Park access. Buyers who are comfortable being in a town mid-regeneration rather than a finished one — there is upside if you take the long view, but the town centre, second primary and health hub are still being built out into 2028+. Ex-service households retain a strong presence. Less suited to buyers wanting an immediate, mature market-town feel: for that, Alton or Petersfield are better.",
+  "nearestStation": "Liphook (3.7 mi)",
+  "primarySupermarket": "Tesco Superstore, Chalet Hill, Bordon (in town); Sainsbury's opening summer 2026",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Bordon",
+      "url": "https://en.wikipedia.org/wiki/Bordon"
+    },
+    {
+      "label": "Visit Hampshire — Bordon and Whitehill",
+      "url": "https://www.visit-hampshire.co.uk/explore/bordon-and-whitehill-p477591"
+    },
+    {
+      "label": "Whitehill & Bordon Regeneration",
+      "url": "http://whitehillbordon.com/about/"
+    },
+    {
+      "label": "East Hants DC — Sainsbury's groundbreaking 2025",
+      "url": "https://www.easthants.gov.uk/news/2025/spades-ground-new-whitehill-bordon-sainsburys-store"
+    },
+    {
+      "label": "Whitehill Town Council — regeneration update Jan 2026",
+      "url": "https://www.whitehilltowncouncil.gov.uk/regeneration-of-the-town"
+    },
+    {
+      "label": "Ofsted — Oakmoor School",
+      "url": "https://reports.ofsted.gov.uk/provider/23/140182"
+    },
+    {
+      "label": "East Hants DC — Council Tax bands 2026/27",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    },
+    {
+      "label": "Rightmove — GU35 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/gu35.html"
+    }
+  ]
+}

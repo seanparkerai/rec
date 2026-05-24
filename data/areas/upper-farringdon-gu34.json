@@ -1,0 +1,130 @@
+{
+  "id": "upper-farringdon-gu34",
+  "name": "Upper Farringdon",
+  "village": "Upper Farringdon",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Alton",
+  "coords": {
+    "lat": 51.16748,
+    "lng": -0.9892
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Upper Farringdon is the larger of the two settlements in the civil parish of Farringdon (the other being Lower Farringdon), in the East Hampshire district, four miles south of Alton and just inside the South Downs National Park. The parish church of All Saints retains the pulpit from which the naturalist Gilbert White preached as curate between 1761 and 1785; Jane Austen, who lived a mile north at Chawton, also visited regularly. The village's most striking building is Massey's Folly, a 17-bedroom, terra-cotta-faced Grade II-listed structure with two towers, built single-handedly by the local rector Thomas Hacket Massey across thirty years until 1919 — its intended purpose was never disclosed, and from 1925 to 1987 it served as the village primary school, then as the village hall until 2015. The Folly featured in the BBC's 2006 Restoration Village programme and was sold for residential conversion in 2015. The village has two pubs (The Rose & Crown and The Royal Oak), an active parish council, and shares amenities with Alton four miles north.",
+  "character": "Compact, conservation-influenced village strung along Church Road and Crows Lane, with the listed Folly and the medieval All Saints Church as its visual anchors. Building stock is mixed brick, flint, render and timber-framed cottages, much of it Grade II-listed within the SDNP. East Hampshire 2026/27 Council Tax Band D for the parish was £2,277.91.",
+  "amenities": [
+    "The Rose & Crown (village pub)",
+    "The Royal Oak (village pub)",
+    "All Saints Church (Gilbert White's pulpit)",
+    "Massey's Folly (Grade II-listed)",
+    "Farringdon Village Hall Charitable Trust",
+    "Active parish council and village news",
+    "Jane Austen's House Museum, Chawton (1 mi)",
+    "Within South Downs National Park"
+  ],
+  "schools": [
+    {
+      "name": "Andrews' Endowed Church of England Primary School (Holybourne)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "3.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Amery Hill School, Alton",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "4.0 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Eggar's School, Holybourne",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "3.0 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 13m",
+        "mode": "drive + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/stations/alton"
+      },
+      {
+        "to": "London Waterloo (fastest)",
+        "time": "1h 6m",
+        "mode": "drive + train",
+        "source": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+      }
+    ],
+    "nearestStation": "Alton (4.0 mi)",
+    "roads": "A32 ~0.5 mi; A31 ~3 mi; A3 (Petersfield) ~10 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 534986,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu34.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Visit All Saints Church and Gilbert White's pulpit",
+    "Inspect Massey's Folly façade (private; exterior viewing only)",
+    "Walk the SDNP footpaths via Selborne Hanger (3 mi)",
+    "Gilbert White's House and Field Studies Museum, Selborne (3 mi)",
+    "Jane Austen's House Museum, Chawton (1 mi)",
+    "Watercress Line heritage railway from Alton (4 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Rose & Crown",
+      "type": "Village pub",
+      "notes": "Traditional Hampshire freehouse in Upper Farringdon",
+      "url": "https://www.farringdon-pc.gov.uk/community/farringdon-parish-council-hampshire-20026/the-rose-crown/"
+    },
+    {
+      "name": "The Royal Oak",
+      "type": "Village pub",
+      "notes": "Second village pub, food served",
+      "url": "https://www.farringdon-pc.gov.uk/community/farringdon-parish-council-hampshire-20026/the-royal-oak/"
+    }
+  ],
+  "pros": [
+    "Inside the South Downs National Park (planning protection)",
+    "Two village pubs — rare for a parish this size",
+    "Direct Waterloo trains from Alton in just over an hour",
+    "Strong historical ties to Gilbert White and Jane Austen"
+  ],
+  "cons": [
+    "No shop, post office or school within the village itself",
+    "A32 runs through the parish with some peak-time traffic",
+    "Recent housing development at Brightstone Copse has been contested locally",
+    "Limited public transport beyond the Alton-bound bus"
+  ],
+  "whoItSuits": "Buyers who want a quiet conservation-led village within a four-mile drive of Alton's amenities and direct Waterloo trains, and who value living next door to two of Hampshire's most-cited cultural sites — Gilbert White's Selborne and Jane Austen's Chawton. Families with primary-age children will need to commit to driving to Holybourne or Alton for school. The two pubs and active parish council suggest a more sociable village than its size would imply, but the absence of a shop or school makes it a poor fit for first-time buyers needing in-village amenities.",
+  "councilTaxBand": "D",
+  "nearestStation": "Alton (4.0 mi)",
+  "primarySupermarket": "Waitrose, Alton (4.5 mi); Sainsbury's, Alton (4.0 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Upper_Farringdon",
+    "https://en.wikipedia.org/wiki/Massey%27s_Folly",
+    "https://www.farringdon-pc.gov.uk/community/farringdon-parish-council-hampshire-20026/masseys-folly/",
+    "https://britishlistedbuildings.co.uk/101339004-farringdon-church-of-england-primary-school-and-village-hall-farringdon",
+    "https://farringdonpc.org/our-village",
+    "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf",
+    "https://www.thetrainline.com/stations/alton",
+    "https://www.rightmove.co.uk/house-prices/gu34.html"
+  ]
+}

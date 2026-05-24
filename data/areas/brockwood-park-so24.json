@@ -1,0 +1,100 @@
+{
+  "id": "brockwood-park-so24",
+  "name": "Brockwood Park",
+  "village": "Brockwood Park",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.0886,
+    "lng": -1.17684
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Brockwood Park is a small locality in the SO24 countryside, best known for the historic estate and its educational campus setting. It sits within a wider rural belt between Alresford and Petersfield routes, characterised by farmland and woodland edges. Residentially, it behaves as a niche low-density area where amenities are mostly accessed in neighbouring settlements.",
+  "character": "Estate/hamlet-style setting with open countryside and very limited standalone service core.",
+  "amenities": [
+    "Estate grounds/educational presence as a local landmark",
+    "Countryside routes and quiet lanes",
+    "Most daily services sourced from Alresford/Petersfield area"
+  ],
+  "schools": [
+    {
+      "name": "Brockwood Park School (independent)",
+      "phase": "All-through",
+      "type": "Independent",
+      "ofsted": null,
+      "distance": "On site",
+      "url": "https://brockwood.org.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~8-12 miles",
+      "url": "https://www.perins.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~30-40 min",
+        "notes": "Via A31 from Alresford side"
+      },
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "typical": "~20-30 min",
+        "notes": "Via rural cross-country routes"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO24 values in estate-adjacent rural pockets are highly property-specific and typically reflect scarcity, land and setting quality.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Walk and cycle surrounding downland and woodland routes",
+    "Visit Alresford, Petersfield and South Downs attractions"
+  ],
+  "placesToEat": [
+    "Country pubs in Cheriton/Alresford/Petersfield belt"
+  ],
+  "pros": [
+    "Distinctive rural setting with low-density character",
+    "Good access to South Downs recreation"
+  ],
+  "cons": [
+    "Very limited immediate services",
+    "Transport and amenities generally require driving"
+  ],
+  "whoItSuits": "Suitable for buyers prioritising privacy and countryside context over walkable facilities, especially those comfortable with car-based living.",
+  "images": [],
+  "sources": [
+    {
+      "label": "Brockwood Park School",
+      "url": "https://brockwood.org.uk/"
+    },
+    {
+      "label": "Rightmove House Prices SO24",
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+    },
+    {
+      "label": "Winchester City Council",
+      "url": "https://www.winchester.gov.uk/"
+    },
+    {
+      "label": "OpenStreetMap SO24 area",
+      "url": "https://www.openstreetmap.org/"
+    }
+  ]
+}

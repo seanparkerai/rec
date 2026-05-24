@@ -1,0 +1,34 @@
+{
+  "id": "west-meon-gu32",
+  "name": "West Meon",
+  "village": "West Meon",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.01784,
+    "lng": -0.9512
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

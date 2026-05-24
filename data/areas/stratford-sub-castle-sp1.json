@@ -1,0 +1,34 @@
+{
+  "id": "stratford-sub-castle-sp1",
+  "name": "Stratford-sub-Castle",
+  "village": "Stratford-sub-Castle",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP1",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.06612,
+    "lng": -1.7844
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

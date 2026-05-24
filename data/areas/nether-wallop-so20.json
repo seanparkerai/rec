@@ -1,0 +1,34 @@
+{
+  "id": "nether-wallop-so20",
+  "name": "Nether Wallop",
+  "village": "Nether Wallop",
+  "town": "Stockbridge",
+  "county": "Hampshire",
+  "postcode": "SO20",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Stockbridge",
+  "coords": {
+    "lat": 51.137,
+    "lng": -1.47992
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

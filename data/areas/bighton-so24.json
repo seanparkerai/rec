@@ -1,0 +1,94 @@
+{
+  "id": "bighton-so24",
+  "name": "Bighton",
+  "village": "Bighton",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.10328,
+    "lng": -1.15248
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Bighton is a small parish and village locality in the Alresford area of Hampshire, with roots in farming and downland estates. It remains lightly populated and rural, with a close relationship to nearby market-town services in New Alresford.",
+  "character": "Quiet rural parish character with scattered homes and open farmland.",
+  "amenities": [
+    "Very limited in-village retail and service provision.",
+    "Nearby amenities concentrated in New Alresford.",
+    "Countryside walking and local lane network are key lifestyle features."
+  ],
+  "schools": [
+    {
+      "name": "Bighton Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In village area",
+      "url": "https://www.bighton.hants.sch.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~3-5 miles",
+      "url": "https://www.perins.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~20-25 min",
+        "notes": "Via A31 from Alresford area"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO24 pricing around Bighton reflects wider Alresford-rural demand, with larger detached homes and period stock often attracting premiums.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Local walks across farmland and downland",
+    "Easy access to New Alresford amenities and events"
+  ],
+  "placesToEat": [
+    "Pubs and cafés in New Alresford"
+  ],
+  "pros": [
+    "Strong rural character close to Alresford",
+    "Attractive countryside setting"
+  ],
+  "cons": [
+    "Limited services within the hamlet itself",
+    "Most errands require a car"
+  ],
+  "whoItSuits": "Well suited to households prioritising rural peace and scenery over walkable day-to-day services.",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Bighton",
+      "url": "https://en.wikipedia.org/wiki/Bighton"
+    },
+    {
+      "label": "Rightmove House Prices SO24",
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+    },
+    {
+      "label": "Winchester City Council",
+      "url": "https://www.winchester.gov.uk/"
+    },
+    {
+      "label": "OpenStreetMap Bighton area",
+      "url": "https://www.openstreetmap.org/"
+    }
+  ]
+}

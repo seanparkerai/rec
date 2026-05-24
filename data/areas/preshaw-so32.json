@@ -1,0 +1,34 @@
+{
+  "id": "preshaw-so32",
+  "name": "Preshaw",
+  "village": "Preshaw",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO32",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 50.93916,
+    "lng": -1.20764
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

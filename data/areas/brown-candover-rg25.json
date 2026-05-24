@@ -1,0 +1,131 @@
+{
+  "id": "brown-candover-rg25",
+  "name": "Brown Candover",
+  "village": "Brown Candover",
+  "town": "Basingstoke",
+  "county": "Hampshire",
+  "postcode": "RG25",
+  "hubCity": "Reading",
+  "regionDir": "South",
+  "settlementType": "Outlier",
+  "subRegion": "Basingstoke",
+  "coords": {
+    "lat": 51.24028,
+    "lng": -1.272
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Brown Candover is a small village in the Candovers civil parish, in the Basingstoke and Deane district, set on chalk downland at the head of the Candover Brook (a tributary of the River Itchen) about five miles north of New Alresford. The village population was 236 at the 2011 census. It is the southernmost of three former Candover parishes — Chilton, Brown and Preston — strung along the B3046 between Alresford and Basingstoke; Chilton Candover and Brown Candover were merged into a single Candovers civil parish in 1932. The parish church of St Peter, built in 1845 chiefly at the expense of Lord Ashburton, is a Tudor-style structure that replaced an earlier medieval church; the nearby Grange at Northington, a 19th-century country house and English landscape park owned by the Baring family, is two miles south-west. Brown Candover is home to Candover Cricket Club, who play home matches with the 19th-century St Peter's church as backdrop. The seed CSV records this as RG25 but Wikipedia gives the post town as Alresford and postcode district as SO24; some properties straddle both designations.",
+  "character": "Small estate-influenced linear village strung along the B3046 with brick-and-flint cottages, period farmhouses and 20th-century additions. Open arable downland on three sides. No conservation area but tight planning regime in line with the wider Candover Valley character.",
+  "amenities": [
+    "Church of St Peter (1845 Tudor-style rebuild)",
+    "Candover Valley Club (community centre)",
+    "Candover Cricket Club (idyllic St Peter's backdrop)",
+    "The Grange, Northington (English landscape park, 2 mi)",
+    "Nearest shop and post office: Preston Candover (1.5 mi)",
+    "Preston Candover village hall (1.5 mi)"
+  ],
+  "schools": [
+    {
+      "name": "Preston Candover Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "1.5 mi",
+      "url": "https://files.ofsted.gov.uk/v1/file/50209502"
+    },
+    {
+      "name": "Preston Candover Pre-school Kindergarten",
+      "phase": "Pre-school",
+      "ofsted": null,
+      "distance": "1.5 mi",
+      "url": "http://candovervalley.org/about/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "5.0 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo (via Basingstoke, fastest)",
+        "time": "42m + drive",
+        "mode": "drive ~8 mi + direct train (SWR)",
+        "source": "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo"
+      },
+      {
+        "to": "London Waterloo (via Alton)",
+        "time": "1h 13m + drive",
+        "mode": "drive ~8 mi + direct train (SWR)",
+        "source": "https://www.thetrainline.com/stations/alton"
+      },
+      {
+        "to": "London Waterloo (via Winchester)",
+        "time": "55m + drive",
+        "mode": "drive ~10 mi + direct train (SWR)",
+        "source": "https://www.nationalrail.co.uk/"
+      }
+    ],
+    "nearestStation": "Basingstoke (8.0 mi)",
+    "roads": "B3046 (through village); A339 ~5 mi; A31 (Alresford) ~5 mi; M3 J7 (Basingstoke) ~9 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so24.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Watching Candover Cricket Club with St Peter's church as backdrop",
+    "Walking the chalk-stream Candover Brook footpaths",
+    "The Grange, Northington (English landscape park, NT-managed events)",
+    "Hattingley Valley Wines tour and tasting (~3 mi)",
+    "Watercress Line heritage railway from Alresford (5 mi)",
+    "Jane Austen's House Museum, Chawton (10 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Purefoy Arms, Preston Candover",
+      "type": "Gastropub",
+      "notes": "Closed long-term as of late 2024 for refurbishment; planning approvals October 2024 for reopening with guest accommodation and deli/café — reopening date not confirmed",
+      "url": "https://www.purefoyarms.co.uk/"
+    },
+    {
+      "name": "The Woolpack Inn, Chilton Candover",
+      "type": "Country pub",
+      "notes": "Nearest alternative pub (~1 mi north)",
+      "url": "https://www.useyourlocal.com/"
+    }
+  ],
+  "pros": [
+    "Basingstoke station 8 mi for fastest direct Waterloo trains (42m)",
+    "Good Ofsted primary 1.5 mi away at Preston Candover",
+    "St Peter's church and Candover Valley Club provide social anchors",
+    "Equidistant from Alresford, Basingstoke and Winchester"
+  ],
+  "cons": [
+    "Seed CSV records this as RG25 but Wikipedia gives postal district as SO24",
+    "No shop, school, station or post office within the village itself",
+    "Purefoy Arms (the nearest gastropub) closed long-term as of 2024",
+    "Mobile signal patchy on chalk downland sections"
+  ],
+  "whoItSuits": "Buyers wanting estate-village quiet with three-way commuter optionality (Basingstoke for speed, Alton/Winchester for direct alternatives), and accepting that day-to-day amenities live at Preston Candover, Alresford or Basingstoke. Particularly suited to families willing to make the short drive to a Good Ofsted primary, downsizers from Basingstoke and London-commuting households who value the unusually fast Waterloo time from Basingstoke. Less suited to first-time buyers (limited stock) or buyers needing a working village shop and pub within walking distance.",
+  "nearestStation": "Basingstoke (8.0 mi)",
+  "primarySupermarket": "Waitrose, Alresford (5.5 mi); Sainsbury's, Basingstoke (8.5 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Brown_Candover",
+    "https://www.genuki.org.uk/big/eng/HAM/BrownCandover",
+    "http://candovervalley.org/about/",
+    "https://files.ofsted.gov.uk/v1/file/50209502",
+    "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo",
+    "https://wikishire.co.uk/wiki/Brown_Candover"
+  ]
+}

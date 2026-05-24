@@ -1,0 +1,34 @@
+{
+  "id": "sherrington-ba12",
+  "name": "Sherrington",
+  "village": "Sherrington",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "BA12",
+  "hubCity": "Bath",
+  "regionDir": "East",
+  "settlementType": "Outlier",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.22484,
+    "lng": -2.17936
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

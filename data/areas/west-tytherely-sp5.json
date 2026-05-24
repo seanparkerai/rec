@@ -1,0 +1,34 @@
+{
+  "id": "west-tytherely-sp5",
+  "name": "West Tytherely",
+  "village": "West Tytherely",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP5",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 50.98188,
+    "lng": -1.85988
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

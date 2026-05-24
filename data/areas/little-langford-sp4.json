@@ -1,0 +1,34 @@
+{
+  "id": "little-langford-sp4",
+  "name": "Little Langford",
+  "village": "Little Langford",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP4",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.18984,
+    "lng": -1.7776
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "images": [],
+  "sources": []
+}

@@ -1,0 +1,101 @@
+{
+  "id": "chidden-gu34",
+  "name": "Chidden",
+  "village": "Chidden",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Alton",
+  "coords": {
+    "lat": 51.14248,
+    "lng": -0.98044
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "Chidden is a tiny hamlet in the parish of Hambledon, in the City of Winchester district. Despite the seed-data id tagging it as GU34, the real Chidden sits in the PO7 postal area (post town Waterlooville), two miles north of Hambledon village in the chalk valleys between the South Downs and the Meon Valley; properties carry PO7 4TE and PO8 0SD postcodes. The hamlet's name first appears in a tenth-century charter as 'æt cittandene' — the second element is the Old English denu meaning valley. Chidden was historically a tithing of Hambledon and has no church, shop, school or pub of its own; everything is sourced from Hambledon, two miles south, or Petersfield, around six miles north. The hamlet lies within the South Downs National Park, on the police-defined West Meon and Hambledon neighbourhood.",
+  "character": "A handful of detached farmhouses and converted agricultural buildings on a single lane through chalk pasture; no village core, no street pattern. Building stock includes brick-and-flint farmhouses and 20th-century additions on dispersed plots. Effectively an outer fragment of the Hambledon parish, governed by SDNP planning constraints.",
+  "amenities": [
+    "Within parish of Hambledon (two miles south for shop, pub, school)",
+    "South Downs National Park designation",
+    "Quiet single-track lane access only"
+  ],
+  "schools": [
+    {
+      "name": "Hambledon Primary School",
+      "phase": "Primary",
+      "ofsted": "Outstanding",
+      "distance": "2.2 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo (via Petersfield)",
+        "time": "~1h 10m + drive",
+        "mode": "drive + train (South Western Railway)",
+        "source": "https://www.nationalrail.co.uk/"
+      }
+    ],
+    "nearestStation": "Petersfield (~6.3 mi)",
+    "roads": "B2150 ~2 mi; A3 (Petersfield) ~6 mi; A32 (Droxford) ~4 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 736541,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://checkmypostcode.uk/po74te",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking the South Downs Way (parish boundary)",
+    "Broadhalfpenny Down cricket heritage trail (Hambledon, 2 mi)",
+    "Meon Valley Trail (former railway, cycling/walking)",
+    "Old Winchester Hill nature reserve",
+    "Hambledon Vineyard (~3 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Bat and Ball Inn, Broadhalfpenny Down",
+      "type": "Country pub / cricket museum",
+      "notes": "On the site of the 18th-century Hambledon Club",
+      "url": "https://www.batandball.co.uk/"
+    },
+    {
+      "name": "The Vine at Hambledon",
+      "type": "Village pub",
+      "notes": "Two miles south in Hambledon",
+      "url": "https://thevineathambledon.co.uk/"
+    }
+  ],
+  "pros": [
+    "Inside the South Downs National Park (planning protection)",
+    "Two miles from Hambledon Primary (Ofsted Outstanding)",
+    "Meon Valley walking and cycling on the doorstep",
+    "Strong house-price premium for the seclusion"
+  ],
+  "cons": [
+    "Seed data postcode (GU34) does not match reality (PO7); verify before searching",
+    "No shop, school, pub or station within the hamlet",
+    "Car-dependent for every daily need",
+    "Limited stock turnover; few sales per decade"
+  ],
+  "whoItSuits": "Buyers chasing seclusion inside a National Park, who accept that every shop, station and surgery is a drive away and who can absorb the price premium that SDNP planning imposes. The hamlet's effective population is so small that it functions as an outer extension of Hambledon, so household life will be oriented south to that village. Not appropriate for first-time buyers on a tight budget or anyone needing daily public transport. Note: this record's id retains 'chidden-gu34' per the seed CSV but the actual postal district is PO7.",
+  "nearestStation": "Petersfield (~6.3 mi)",
+  "primarySupermarket": "Waitrose, Petersfield (~6.5 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Chidden",
+    "https://checkmypostcode.uk/po74te",
+    "https://www.streetcheck.co.uk/postcode/po74te",
+    "https://findthatpostcode.uk/places/IPN0014489.html",
+    "https://en.wikipedia.org/wiki/Hambledon,_Hampshire",
+    "https://reports.ofsted.gov.uk/"
+  ]
+}
