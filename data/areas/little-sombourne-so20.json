@@ -15,20 +15,139 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "directory",
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "status": "researched",
+  "overview": "Little Sombourne (also spelled Little Somborne) is a dispersed hamlet and civil parish of 94 residents at the 2021 Census — the thirty-fourth largest parish in Test Valley borough — set on the chalk above the Somborne Stream, a tributary of the River Test, about four miles south-east of Stockbridge and seven miles north-west of Winchester. The B3049 Stockbridge–Winchester road cuts the parish in two: until the late nineteenth century almost all settlement was in the southern half near the church, while the northern Sandydown section was only sheep farms. The hamlet is now best known for All Saints' Church, a Grade II*-listed Anglo-Saxon and Norman flint chapel made redundant in the 1970s and conserved by the Churches Conservation Trust; it holds two services a year. Day-to-day life is shared with King's Somborne, the larger village a mile down the lane.",
+  "character": "Open downland hamlet rather than nucleated village: a thin scatter of large farmhouses, cottages and one or two more modern properties (mostly large detached) along Sandydown Lane and the road to Up Somborne. Plenty of arable and grazing land, big views and no through traffic away from the B3049. Inside the Test Valley Special Landscape Area but outside any National Park or AONB.",
+  "amenities": [
+    "All Saints' Church (Grade II* Saxon-Norman, redundant, conserved)",
+    "Nearest pub, primary school and shop: King's Somborne (1 mi south)",
+    "King's Somborne Village Stores and Post Office",
+    "Crown Inn, King's Somborne",
+    "Test Valley footpaths and the Monarch's Way long-distance path",
+    "Full Stockbridge market town (4 mi north) — independents, two delis, butcher",
+    "Sparsholt College Hampshire (3 mi east) — land-based further education"
+  ],
+  "schools": [
+    {
+      "name": "King's Somborne Church of England Primary School",
+      "phase": "Primary",
+      "type": "State (Voluntary Aided)",
+      "ofsted": "Good (2022)",
+      "distance": "1.2 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115921"
+    },
+    {
+      "name": "Sparsholt Church of England Primary School",
+      "phase": "Primary",
+      "type": "State (Voluntary Controlled)",
+      "ofsted": "Good (2023)",
+      "distance": "3.0 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116309"
+    },
+    {
+      "name": "Test Valley School (Stockbridge)",
+      "phase": "Secondary",
+      "type": "State (Comprehensive)",
+      "ofsted": "Good (2022)",
+      "distance": "4.0 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116440"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 23m",
+        "mode": "drive to Winchester (8 mi) + direct train (SWR)",
+        "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      },
+      {
+        "to": "Salisbury",
+        "time": "~30m",
+        "mode": "drive (A30 via Stockbridge)",
+        "source": "https://www.google.com/maps"
+      },
+      {
+        "to": "Southampton",
+        "time": "~25m",
+        "mode": "drive (A3057 then M27)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Winchester (7.9 mi)",
+    "roads": "B3049 (parish edge); A30 ~3 mi; A3057 ~2 mi; M3 J9 ~10 mi"
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "avgSold12Mo": 743688,
+    "avgDetached": 950371,
+    "avgSemi": 472304,
+    "avgTerraced": 403667,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so20.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "All Saints' Church, Little Somborne (Grade II* Saxon-Norman)",
+    "Test Way footpath along the chalk stream south to Romsey",
+    "Houghton Lodge Gardens and gardens (5 mi)",
+    "Mottisfont Abbey rose gardens (7 mi)",
+    "Stockbridge high street antique shops and Thursday market"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Crown Inn, King's Somborne",
+      "type": "Village pub with rooms",
+      "notes": "1 mile away in King's Somborne; the local",
+      "url": "https://www.thecrowninnkingssomborne.co.uk/"
+    },
+    {
+      "name": "The Greyhound on the Test, Stockbridge",
+      "type": "Inn and restaurant",
+      "notes": "Award-winning chalk-stream pub (4 mi north)",
+      "url": "https://www.thegreyhoundonthetest.co.uk/"
+    }
+  ],
+  "pros": [
+    "Genuinely rural and uncrowded — fewer than 100 residents in the parish",
+    "Two Good primaries within four miles plus a Good catchment secondary",
+    "Easy A30/A3057 access to both Winchester and Stockbridge market town",
+    "Test Way and chalk-stream walking from the door",
+    "Sombornes have a tight benefice sharing the active King's Somborne community"
+  ],
+  "cons": [
+    "Almost nothing in the hamlet itself — pub, shop and school are all a mile in King's Somborne",
+    "No mainline station; the nearest is Winchester at 8 miles — train commuters drive",
+    "SO20 detached prices average £950k — most listings here are well over budget",
+    "Limited bus service, especially evenings; full car dependency",
+    "Patchy mobile coverage on the higher ground"
+  ],
+  "whoItSuits": "A romantic chalk-down hideaway for buyers who prize quiet over walkability and don't need a shop on the doorstep. For a solo £64k first-time buyer at £400k, freehold listings in Little Somborne are scarce and almost always above the ceiling; King's Somborne itself (1 mi, same SO20) has a more varied housing stock including some terraces that come into range, while Houghton or Stockbridge (4 mi) trade pricier still. For better value with a similar Test Valley feel, look at Broughton (SO20) or Sherfield English (SO51) further south-west.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (7.9 mi)",
+  "primarySupermarket": "Co-op, High Street, Stockbridge (4.0 mi)",
   "images": [],
-  "sources": []
+  "sources": [
+    {
+      "title": "Test Valley BC — King's Somborne, Little Somborne and Ashley Parish Profile 2021",
+      "url": "https://www.testvalley.gov.uk/assets/attach/15335/kings-somborne-little-somborne-and-ashley-parish-profile-2021.pdf"
+    },
+    {
+      "title": "Wikipedia — All Saints Church, Little Somborne",
+      "url": "https://en.wikipedia.org/wiki/All_Saints_Church,_Little_Somborne"
+    },
+    {
+      "title": "King's Somborne Parish Council — About",
+      "url": "https://kingssomborne-pc.gov.uk/about-2/"
+    },
+    {
+      "title": "Rightmove — SO20 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/so20.html"
+    },
+    {
+      "title": "Trainline — Winchester to London Waterloo",
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+    }
+  ]
 }

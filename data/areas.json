@@ -1289,7 +1289,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched"
   },
   {
     "id": "shootash-so20",
@@ -1612,7 +1612,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "partial"
   },
   {
     "id": "lower-bullington-so21",
@@ -1631,7 +1631,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched"
   },
   {
     "id": "micheldever-so21",
@@ -1650,7 +1650,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched"
   },
   {
     "id": "morestead-so21",
@@ -1669,7 +1669,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched"
   },
   {
     "id": "otterbourne-so21",
@@ -1897,7 +1897,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched"
   },
   {
     "id": "kings-worthy-so23",
@@ -1916,7 +1916,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched"
   },
   {
     "id": "avington-park-so24",
@@ -2315,7 +2315,7 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched"
   },
   {
     "id": "timsbury-so51",
