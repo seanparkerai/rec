@@ -157,16 +157,29 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
 .site-nav ul::-webkit-scrollbar { display: none; }
 .site-nav li { scroll-snap-align: start; }
 .site-nav a {
+  position: relative;
   display: inline-flex; align-items: center;
   min-height: 44px; white-space: nowrap;
   padding: 0.6rem 0.9rem; text-decoration: none;
   color: var(--pico-muted-color); font-size: var(--text-sm);
-  border-bottom: 2px solid transparent;
 }
 .site-nav a:hover { color: var(--pico-color); }
 .site-nav a[aria-current="page"] {
   color: var(--pico-color); font-weight: 600;
-  border-bottom-color: var(--accent);
+}
+/* Animated active-link indicator. The bar lives on the active link's
+   ::after and carries a named view-transition so cross-document
+   navigations morph the indicator from old → new link smoothly. */
+.site-nav a[aria-current="page"]::after {
+  content: ""; position: absolute;
+  left: var(--space-3); right: var(--space-3); bottom: 0;
+  height: 2px; background: var(--accent); border-radius: 1px;
+  view-transition-name: nav-indicator;
+}
+::view-transition-old(nav-indicator),
+::view-transition-new(nav-indicator) {
+  animation-duration: 280ms;
+  animation-timing-function: var(--ease-out);
 }
 
 /* Mobile-only fade hint on the scrollable nav */

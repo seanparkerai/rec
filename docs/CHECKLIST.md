@@ -248,7 +248,10 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       ≥1024px a 12rem hairline-rail TOC, below that a sticky pill row with
       `scroll-snap-type: x proximity`. IntersectionObserver sets `aria-current` and
       auto-scrolls the active pill into view on mobile.
-- [ ] Animated active-link nav indicator (View Transitions cross-document).
+- [x] Animated active-link nav indicator (View Transitions cross-document). The active
+      link's `::after` underline bar carries `view-transition-name: nav-indicator`; with
+      `@view-transition { navigation: auto }` already in place, the bar morphs between
+      old and new active links on navigation (280ms, `--ease-out`).
 
 ### 9C · Schema additions (on-sandbox)
 - [ ] `areas.json` schema: `councilTaxBand`, `broadbandMedianMbps`, `nearestStation`,
