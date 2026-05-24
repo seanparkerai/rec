@@ -2457,3 +2457,90 @@
 5. **Two redundant churches in this batch**: Colemore's St Peter ad Vincula (Churches Conservation Trust) and Privett's Holy Trinity (Grade II* listed, CCT). Both heritage assets but not active places of worship.
 6. **The Pub With No Name (White Horse, Priors Dean)** reopened in 2023 under new operators and is trading as of 2025/2026 — confirmed via the pub's own website with current opening hours.
 
+{
+  "id": "bramshaw-so43",
+  "name": "Bramshaw",
+  "county": "Hampshire",
+  "town": "Lyndhurst (post town); Salisbury (nearest cathedral city)",
+  "postcode": "SO43",
+  "coords": { "lat": 50.9437, "lng": -1.6178 },
+  "overview": "A small village and civil parish on the Hampshire–Wiltshire border, just inside the New Forest National Park. The name means 'Bramble Wood'. Bramshaw was divided between Wiltshire and Hampshire until 1895 — the county border ran through St Peter's churchyard. The village of Bramshaw is stretched out for several miles along the B3079 road, with the 13th-century church of St Peter to the north, the hamlet of Brook to the south, and Stock's Cross at the centre. The parish — which also contains the hamlets of Brook, Fritham, Furzley, Canterton, Dazel and Penn — had a population of 684 at the 2011 Census (677 with Fritham). The parish lies entirely within the New Forest National Park and includes large tracts of land owned by the National Trust (Bramshaw Commons: around 1,420 acres of manorial wastes and commons, some of the best surviving lowland heath in Europe, still grazed by ponies, pigs, donkeys, cattle and sheep) and Crown Land administered by the Forestry Commission. Pipers Wait, in the parish, is the highest point in the New Forest at 129 metres (420 feet) above sea level. The Rufus Stone at Upper Canterton commemorates the supposed killing of King William II ('William Rufus') by an arrow fired by Walter Tyrrell on 2 August 1100. Bramshaw village school was founded in 1812 and closed in July 1977.",
+  "character": "Linear forest village with widely spaced cottages, working farms and historic inns. Free-roaming New Forest commoners' ponies, cattle, pigs and donkeys are regular visitors to gardens and verges. Strict New Forest National Park planning regime; landscape protection is total.",
+  "amenities": [
+    "St Peter's Church, Bramshaw (13th century)",
+    "Bramshaw Commons (1,420 acres National Trust lowland heath)",
+    "Pipers Wait (highest point in the New Forest, 129m)",
+    "Bramshaw Golf Club (two 18-hole courses)",
+    "The Rufus Stone (memorial to King William II, Upper Canterton)",
+    "The Bell Inn (Brook hamlet, country pub with rooms)",
+    "Sir Walter Tyrrell pub (Canterton)",
+    "Bramshaw Cricket Club (founded 1887, plays at Roundhill)"
+  ],
+  "schools": [
+    { "name": "Copythorne Church of England Infant School", "phase": "Infant (4–7)", "ofsted": "Good", "distance": "3.0 mi", "url": "https://www.copythorne.hants.sch.uk/" },
+    { "name": "Hythe Primary School", "phase": "Primary", "ofsted": "Good", "distance": "8.0 mi", "url": "https://www.hytheprimary.com/" },
+    { "name": "Hounsdown School (Totton)", "phase": "Secondary", "ofsted": "Good", "distance": "8.0 mi", "url": "https://www.hounsdown.hants.sch.uk/" }
+  ],
+  "transport": {
+    "nearestStation": "Ashurst New Forest (~5 mi) or Brockenhurst (~7 mi)",
+    "commutes": [
+      { "to": "London Waterloo", "time": "~1h 28m – 1h 38m direct", "mode": "drive to Brockenhurst + direct South Western Railway", "source": "https://www.southwesternrailway.com/" },
+      { "to": "London Waterloo (alt.)", "time": "~1h 35m – 1h 45m direct", "mode": "drive to Ashurst New Forest + direct South Western Railway", "source": "https://www.southwesternrailway.com/" },
+      { "to": "Southampton Central", "time": "~25m", "mode": "drive via M27 / A35", "source": "https://www.southwesternrailway.com/" }
+    ],
+    "roads": "B3079 (Cadnam–Brook–Fordingbridge); M27 J1 (Cadnam) ~2 mi south-east; A36 (Salisbury–Southampton) ~3 mi west; A337 (Lyndhurst) ~5 mi south"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so43.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Bramshaw Commons walking and pony-spotting (National Trust)",
+    "Pipers Wait viewpoint — highest point in the New Forest",
+    "The Rufus Stone heritage site at Upper Canterton",
+    "Bramshaw Golf Club (two 18-hole heathland courses, since 1880)",
+    "Walking and cycling in Bramshaw Wood, Furzley Common and Stagbury Hill",
+    "Salisbury cathedral city (~12 mi north-west)"
+  ],
+  "placesToEat": [
+    { "name": "The Bell Inn", "type": "Country pub with rooms", "notes": "Historic inn at Brook hamlet, owned by the Eyre family (Bramshaw Golf Club proprietors); restaurant and bedrooms", "url": "https://www.bellinn-newforest.co.uk/" },
+    { "name": "Sir Walter Tyrrell", "type": "Country pub", "notes": "Pub at Upper Canterton near the Rufus Stone", "url": "https://www.thesirwaltertyrrell.co.uk/" },
+    { "name": "The Royal Oak, Fritham", "type": "Forest pub", "notes": "Multi-award-winning forest pub in Fritham hamlet, ~3 mi west", "url": "https://royaloakfritham.co.uk/" }
+  ],
+  "pros": [
+    "Inside the New Forest National Park with total landscape protection",
+    "1,420 acres of National Trust commons grazed by commoners' ponies and pigs — free roaming",
+    "Three high-quality country pubs in the parish (Bell, Sir Walter Tyrrell, Royal Oak Fritham)",
+    "Bramshaw Golf Club (two 18-hole heathland courses) within the parish",
+    "M27 J1 within 2 miles for fast access to Southampton, Salisbury and Bournemouth",
+    "Bramshaw parish 2026/27 Band D £2,317.95 (verified from NFDC 26 February 2026 Council Tax report)"
+  ],
+  "cons": [
+    "No mainline station within walking distance — Brockenhurst (~7 mi) or Ashurst (~5 mi) by car",
+    "No primary school within the parish (Bramshaw village school closed 1977) — closest is Copythorne CofE Infant (3 mi)",
+    "Linear B3079 layout means many properties have road noise from forest traffic",
+    "Free-roaming New Forest livestock create real road-safety hazards; strict speed limits apply",
+    "New Forest National Park + commoning rights + extensive listed building stock = tight planning regime",
+    "Stock dominated by country houses and forest cottages; very limited starter / family-home supply"
+  ],
+  "whoItSuits": "Buyers wanting a New Forest National Park village with extraordinary free-roaming commoner livestock landscape and three heritage pubs within walking range. Strong fit for retirees, golf players (two 18-hole courses on the doorstep), and country buyers attracted to the William Rufus heritage and Salisbury (12 mi) for cathedral-city amenities. Not for first-time buyers — Bramshaw stock trades well above the Test Valley village average, and the absence of a primary school within the parish is a practical limit for young families.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Ashurst New Forest (~5 mi); Brockenhurst (~7 mi)",
+  "primarySupermarket": "Waitrose Lyndhurst, High Street (~5 mi); Sainsbury's Totton (~6 mi)",
+  "images": [],
+  "sources": [
+    { "label": "Wikipedia — Bramshaw", "url": "https://en.wikipedia.org/wiki/Bramshaw" },
+    { "label": "Wikipedia — Brook, New Forest", "url": "https://en.wikipedia.org/wiki/Brook,_New_Forest" },
+    { "label": "Bramshaw Parish Council", "url": "https://www.bramshaw-pc.gov.uk/community/bramshaw-parish-council-7687/home" },
+    { "label": "Visit New Forest — Bramshaw Village", "url": "https://www.thenewforest.co.uk/explore/towns-and-villages/bramshaw/" },
+    { "label": "New Forest Online — Bramshaw, Brook, Fritham and Furzley", "url": "https://www.newforest-online.co.uk/town-and-village/bramshaw/" },
+    { "label": "New Forest DC — The 2026/27 Council Tax Report (Bramshaw parish Band D £2,317.95)", "url": "https://democracy.newforest.gov.uk/documents/s47619/Council%20Tax%20Report.pdf" }
+  ],
+  "status": "researched"
+}
