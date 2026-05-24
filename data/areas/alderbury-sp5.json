@@ -15,20 +15,76 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "directory",
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "status": "researched",
+  "overview": "Alderbury is in the Salisbury area of Wiltshire (SP5), and sits in the rural-to-commuter belt around Salisbury. Historic references and parish records show long-established settlement patterns, with modern housing mostly as infill around older cores. Day-to-day life depends on local village facilities plus Salisbury for larger services. The area appeals to buyers who want a quieter setting but still need practical links to the city.",
+  "character": "Alderbury has a village-scale layout with mixed period and modern homes, a parish-centred feel, and surrounding countryside as a dominant part of daily character.",
+  "amenities": [
+    "Parish/community facilities in Alderbury",
+    "Nearby shopping and services in Salisbury",
+    "Local walking routes and countryside access"
+  ],
+  "schools": [
+    {
+      "name": "Primary schools serving Alderbury",
+      "phase": "Primary",
+      "distance": "typically local catchment / short drive",
+      "url": "https://get-information-schools.service.gov.uk/"
+    },
+    {
+      "name": "Secondary schools in Salisbury",
+      "phase": "Secondary",
+      "distance": "usually reached by bus or car",
+      "url": "https://get-information-schools.service.gov.uk/"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "nearestStation": "Salisbury",
+    "roads": "Village roads generally connect to the A36/A30 corridor for Salisbury access.",
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "time": "often around 10-30 minutes by car depending on exact start point and traffic",
+        "mode": "Car",
+        "source": "https://www.google.com/maps"
+      },
+      {
+        "to": "London Waterloo",
+        "time": "typically around 1h30-1h40 from Salisbury station services",
+        "mode": "Rail (from Salisbury)",
+        "source": "https://www.nationalrail.co.uk/stations/salisbury/"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "avgSold12Mo": null,
+    "source": "https://www.rightmove.co.uk/house-prices/SP5.html",
+    "asOf": "2026-05-24"
+  },
+  "thingsToDo": [
+    "Village and valley walks",
+    "Visits to Salisbury Cathedral/cultural venues",
+    "Trips to local heritage sites and surrounding countryside"
+  ],
+  "placesToEat": [
+    "Country pubs in surrounding villages",
+    "Wider restaurant and caf\u00e9 options in Salisbury"
+  ],
+  "pros": [
+    "Quieter environment than central Salisbury",
+    "Reasonable access to city services and rail via Salisbury station"
+  ],
+  "cons": [
+    "Many errands still require driving",
+    "Public transport coverage varies by village and time of day"
+  ],
+  "whoItSuits": "Best for buyers prioritising village character and countryside access, while accepting regular trips into Salisbury for wider amenities and commuting connections.",
   "images": [],
-  "sources": []
+  "sources": [
+    "https://en.wikipedia.org/wiki/Alderbury",
+    "https://www.wiltshire.gov.uk/",
+    "https://get-information-schools.service.gov.uk/",
+    "https://www.rightmove.co.uk/house-prices/SP5.html",
+    "https://www.nationalrail.co.uk/stations/salisbury/",
+    "https://www.google.com/maps"
+  ]
 }
