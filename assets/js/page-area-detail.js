@@ -49,9 +49,10 @@ function renderTransport(a) {
   return `<ul class="mini-list">${commutes.map((c) => {
     if (typeof c === 'string') return `<li>${esc(c)}</li>`;
     const dest = esc(c.to || c.destination || '');
-    const time = c.time ? ` — ${esc(c.time)}` : '';
+    const time = c.time || c.typical;
+    const timeStr = time ? ` — ${esc(time)}` : '';
     const mode = c.mode ? ` <span class="muted">(${esc(c.mode)})</span>` : '';
-    return `<li><strong>${dest}</strong>${time}${mode}</li>`;
+    return `<li><strong>${dest}</strong>${timeStr}${mode}</li>`;
   }).join('')}</ul>`;
 }
 
@@ -67,10 +68,16 @@ function renderPrices(a) {
     ['Flat', p.avgFlat, true],
     ['Source', p.source, false],
   ].filter(([, v]) => v != null);
-  if (!rows.length) return PLACEHOLDER;
-  return `<dl class="field-list">${rows.map(([l, v, isCurrency]) =>
+  const summary = p.summary
+    ? `<p class="mb-0">${esc(p.summary)}</p>`
+    : '';
+  const sourceLink = !p.source && p.sourceUrl
+    ? `<p class="muted mb-0"><a href="${esc(p.sourceUrl)}" rel="noopener" target="_blank">Price source</a>${p.asOf ? ` · ${esc(p.asOf)}` : ''}</p>`
+    : (p.asOf && !rows.length ? `<p class="muted mb-0">As of ${esc(p.asOf)}</p>` : '');
+  if (!rows.length) return summary + sourceLink || PLACEHOLDER;
+  return summary + `<dl class="field-list">${rows.map(([l, v, isCurrency]) =>
     `<div class="field-view"><dt>${esc(l)}</dt><dd>${isCurrency && typeof v === 'number' ? esc(gbp(v)) : esc(v)}</dd></div>`
-  ).join('')}</dl>`;
+  ).join('')}</dl>` + sourceLink;
 }
 
 function renderProsCons(a) {
@@ -121,7 +128,7 @@ function renderSources(a) {
             const isUrl = /^https?:\/\//.test(s);
             return `<li>${isUrl ? `<a href="${esc(s)}" rel="noopener" target="_blank">${esc(s)}</a>` : esc(s)}</li>`;
           }
-          return `<li><a href="${esc(s.url)}" rel="noopener" target="_blank">${esc(s.title || s.url)}</a></li>`;
+          return `<li><a href="${esc(s.url)}" rel="noopener" target="_blank">${esc(s.title || s.label || s.url)}</a></li>`;
         }).join('')}
       </ul>
     </section>
@@ -173,9 +180,17 @@ function renderArea(a) {
   $('sec-transport').innerHTML = renderTransport(a);
   $('sec-prices').innerHTML = renderPrices(a);
   $('sec-things').innerHTML = listOrPlaceholder(a.thingsToDo);
-  $('sec-eat').innerHTML = listOrPlaceholder(a.placesToEat);
+  $('sec-eat').innerHTML = listOrPlaceholder(
+    a.placesToEat,
+    (x) => typeof x === 'string' ? esc(x) : [
+      x.url ? `<a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name || x.url)}</a>` : `<strong>${esc(x.name || '')}</strong>`,
+      x.type ? ` <span class="muted">· ${esc(x.type)}</span>` : '',
+      x.notes ? ` — ${esc(x.notes)}` : '',
+    ].join(''),
+  );
   $('sec-proscons').innerHTML = renderProsCons(a);
-  $('sec-suits').innerHTML = listOrPlaceholder(a.whoItSuits);
+  const suits = Array.isArray(a.whoItSuits) ? a.whoItSuits : (a.whoItSuits ? [a.whoItSuits] : null);
+  $('sec-suits').innerHTML = listOrPlaceholder(suits);
 
   // Images + sources appended (if any)
   $('extras').innerHTML = renderImages(a) + renderSources(a);
