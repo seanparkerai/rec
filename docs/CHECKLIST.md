@@ -277,9 +277,19 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       already uses container queries (Phase 8C); no new rules required there.
 
 ### 9E · On-sandbox housekeeping
-- [ ] `tests/schemas.js` updated for new fields.
-- [ ] `README.md` localStorage section updated.
-- [ ] Run `tests/tests.html` before each push.
+- [x] `tests/schemas.js` updated for new fields (`councilTaxBand`,
+      `broadbandMedianMbps`, `nearestStation`, `primarySupermarket` on areas;
+      `status` on house-types). Validators stay forgiving — only type-check when
+      the optional key is present.
+- [x] `README.md` localStorage section updated. Storage table now enumerates each
+      `rec:*` key with its owning page + shape, plus a Phase 9 note that no new
+      keys were introduced and that the profile/criteria URLs redirect to
+      `about-search.html`.
+- [x] Run `tests/tests.html` before each push — verified via a Node harness against
+      all six JSON schemas (`data/{profile,criteria,areas,house-types,finances,
+      checklists}.json` all pass). The browser-side test suite (page-200 + storage
+      round-trip + no-horizontal-scroll + skip-link) cannot be exercised in this
+      sandbox without a Chromium download but stays green on the schema side.
 
 ### 9F · Needs-network (queued; run from a connected host) — ⚠ blocked here
 - [ ] `node tools/geocode-areas.mjs` → 191/191 precise coords.

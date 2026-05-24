@@ -66,5 +66,18 @@ immediately, then revalidates from the server in the background. Pages remain un
 `storage.js` and `data-loader.js` change.
 
 `localStorage` namespace is `rec:*` (see `STORAGE_NS` in `assets/js/config.js`). Keys currently used:
-`rec:profile`, `rec:criteria`, `rec:finances`, `rec:shortlist`, `rec:zones`, `rec:journey-checks`,
-`rec:theme`.
+
+| Key                  | Owner                                  | Shape                                  |
+| -------------------- | -------------------------------------- | -------------------------------------- |
+| `rec:profile`        | `pages/about-search.html` (§#about)    | Profile object overlay                 |
+| `rec:criteria`       | `pages/about-search.html` (§#search)   | Criteria object overlay                |
+| `rec:finances`       | `pages/finances.html`                  | Finances object overlay                |
+| `rec:shortlist`      | `pages/areas.html` + map               | Array of area ids                      |
+| `rec:zones`          | `pages/map.html`                       | GeoJSON FeatureCollection (drawn zones)|
+| `rec:journey-checks` | `pages/journey.html`                   | `{ viewing:{}, process:{}, moving:{} }`|
+| `rec:theme`          | global (header toggle)                 | `"light" \| "dark"` (override)         |
+
+Phase 9 didn't add any new keys — the about-search.html merge (Phase 9A) preserved
+`rec:profile` and `rec:criteria` verbatim, and old `pages/profile.html` /
+`pages/criteria.html` URLs continue to resolve as `<meta refresh>` redirects to the
+relevant `#about` / `#search` anchor on the merged page.
