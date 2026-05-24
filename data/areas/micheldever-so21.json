@@ -15,20 +15,145 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "directory",
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "status": "researched",
+  "overview": "Micheldever is a picture-postcard chalk village and civil parish of around 1,387 residents at the 2011 Census, set on the small River Dever six miles north of Winchester in the City of Winchester district. The parish is one of the most northerly in the district and includes the separate village of Micheldever Station (around 2.4 miles north of the village proper), East and West Stratton, Weston Colley and the hamlet of Woodmancott. The village core, around Duke Street, Church Street and the small green known as The Crease, is famous for its black-and-white half-timbered cottages and the Norman St Mary the Virgin church; the oldest house, Shillingbury, dates to circa 1453. The Half Moon and Spread Eagle pub, originally a drovers' inn at the edge of the village, has been a fixture since the eighteenth century. Micheldever station, opened in 1840 as 'Andover Road', sits two miles up the lane and gives direct South Western Railway trains to London Waterloo.",
+  "character": "Genuine timber-framed conservation-area village — one of the prettiest in the Itchen catchment — with a tight nucleated core around the church, the green and the pub. Building stock is mostly Tudor and Georgian thatched cottages, a few Victorian additions and very limited modern infill; planning is tightly constrained inside the conservation area.",
+  "amenities": [
+    "Half Moon and Spread Eagle pub (Duke Street)",
+    "St Mary the Virgin Church (Church of England, Norman)",
+    "Micheldever CofE Primary School (within village)",
+    "Northbrook village hall",
+    "The Crease — small green at the centre of the village",
+    "Micheldever telephone exchange",
+    "Micheldever railway station (2.4 mi — Andover-line direct service)",
+    "Micheldever Tyre Services (commercial site at the station)",
+    "Nearest supermarket and full retail: Winchester (6 mi)"
+  ],
+  "schools": [
+    {
+      "name": "Micheldever CofE Primary School",
+      "phase": "Primary",
+      "type": "State (Voluntary Controlled, Dever Valley Federation)",
+      "ofsted": "Good (2022)",
+      "distance": "in village",
+      "url": "https://reports.ofsted.gov.uk/provider/21/133292"
+    },
+    {
+      "name": "Henry Beaufort School (catchment)",
+      "phase": "Secondary",
+      "type": "State (Comprehensive)",
+      "ofsted": "Good (2023)",
+      "distance": "5.0 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+    },
+    {
+      "name": "Peter Symonds College (16-18)",
+      "phase": "Sixth Form",
+      "type": "State (Sixth-form college)",
+      "ofsted": "Outstanding (2019)",
+      "distance": "5.5 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/22/130688"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 13m (direct, 1 train/hour)",
+        "mode": "drive 2.4 mi to Micheldever station + direct train (SWR)",
+        "source": "https://en.wikipedia.org/wiki/Micheldever_railway_station"
+      },
+      {
+        "to": "Winchester",
+        "time": "12m",
+        "mode": "direct train from Micheldever (SWR)",
+        "source": "https://www.thetrainline.com/stations/micheldever"
+      },
+      {
+        "to": "Basingstoke",
+        "time": "~20m",
+        "mode": "drive (A33/M3)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Micheldever (2.4 mi)",
+    "roads": "A33 (parish edge); A303 ~5 mi; M3 J9 (Winchester) ~7 mi"
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "avgSold12Mo": 712724,
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so21.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Micheldever Wood bluebell walk (William Cobbett's 'one of the finest oak woods in England')",
+    "Walking the River Dever and the Test Way",
+    "The Crease and Norman St Mary's church",
+    "Bombay Sapphire Distillery, Laverstoke Mill (5 mi)",
+    "Watercress Line steam railway from Alresford (8 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "Half Moon and Spread Eagle",
+      "type": "Village pub",
+      "notes": "Eighteenth-century drovers' inn; food and ales",
+      "url": "https://www.facebook.com/halfmoonmicheldever/"
+    },
+    {
+      "name": "The Dove Inn, Micheldever Station",
+      "type": "Village pub",
+      "notes": "2 miles north at the station village",
+      "url": "https://whatpub.com/pubs/HAS/00111/dove-inn-micheldever-station"
+    }
+  ],
+  "pros": [
+    "Direct Waterloo trains in just over an hour from Micheldever station",
+    "Genuine conservation-area chalk-village character — Tudor and Georgian cottages",
+    "Good village primary inside walking distance and Good catchment secondary",
+    "A33 and A303 give very fast access to Winchester, Andover and Basingstoke",
+    "Active village hall, church and pub on the same street"
+  ],
+  "cons": [
+    "Detached stock averages over £1m in SO21 — a £400k budget will buy a small terrace or semi at best, when they list",
+    "No shop or GP in the village itself — Winchester or Sutton Scotney for both",
+    "South West Main Line cuts the parish; freight trains audible on calmer evenings",
+    "Single-track lanes into the village are slow and easily blocked",
+    "Conservation-area status restricts extensions and outbuildings"
+  ],
+  "whoItSuits": "A strong candidate for a buyer who wants the storybook Hampshire village look with a direct Waterloo train just up the lane. For a solo £64k first-time buyer at £400k, listings here are rare and small — typically a one- or two-bedroom semi or end-terrace when they appear. If timber-framed character matters most, Easton and Itchen Abbas are similar but pricier; if the same Waterloo connection at a much lower entry price matters most, look at the more workaday Micheldever Station hamlet 2 miles north (same line, same district) or Sutton Scotney.",
+  "councilTaxBand": "D",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Micheldever (2.4 mi)",
+  "primarySupermarket": "Co-op, Sutton Scotney (4.5 mi); Sainsbury's, Middle Brook Street, Winchester (6.0 mi)",
   "images": [],
-  "sources": []
+  "sources": [
+    {
+      "title": "Wikipedia — Micheldever",
+      "url": "https://en.wikipedia.org/wiki/Micheldever"
+    },
+    {
+      "title": "Wikipedia — Micheldever railway station",
+      "url": "https://en.wikipedia.org/wiki/Micheldever_railway_station"
+    },
+    {
+      "title": "Micheldever Villages — village history",
+      "url": "https://www.micheldevervillages.org/micheldever-village"
+    },
+    {
+      "title": "Ofsted — Micheldever CofE Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/133292"
+    },
+    {
+      "title": "Ofsted — Henry Beaufort School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+    },
+    {
+      "title": "Rightmove — SO21 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/so21.html"
+    }
+  ]
 }
