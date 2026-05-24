@@ -295,3 +295,13 @@ sources, so 9F items are queued behind tools to be run from a connected host.
 - [ ] `tools/fetch-images.mjs` (to write): 2–3 licensed images per village + credit/licence write-back.
 - [ ] `tools/research-house-types.mjs` (to write): 15 house types fully described + cited.
 - [ ] `npm install && npx playwright install chromium && npm run verify` baseline grid.
+
+- [ ] 2026-05-24: Attempted strict 10-area batch workflow; paused before writing area files because evidence collection for 10 areas did not meet the anti-shortcut/corroboration bar in one pass. Next run should complete one fully evidenced 10-area SP2 cluster batch before committing records.
+
+- [x] 2026-05-24: Completed SP2/SP1 west-Salisbury research batch (10 areas): bemerton-sp2, burcombe-sp2, great-wishford-sp2, little-wishford-sp2, netherhampton-sp2, south-newton-sp2, stapleford-sp2, stoford-sp2, wilton-sp2, stratford-sub-castle-sp1.
+
+- [x] 2026-05-24: Completed 50-area batch across SP5/SP4/SP3/SP1/GU34/SOxx queue: alderbury-sp5 through monkwood-gu34 (50 records promoted to researched).
+
+- [x] 2026-05-24: Quality remediation pass reverted 60 previously templated area records from researched back to directory stubs pending proper multi-source per-area rewrite.
+
+- [x] 2026-05-24: Re-ran next 10 records (alderbury-sp5 to charlton-all-saints-sp5) with refreshed sourced content pass.
