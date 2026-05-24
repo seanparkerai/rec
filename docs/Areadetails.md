@@ -1369,3 +1369,547 @@
   "status": "researched"
 }
 ```
+
+
+# Area Batch 04 — East Hampshire (GU32, GU33, GU35)
+
+**Batch flags before records:**
+
+1. **District mismatch**: The batch brief lists these as "Basingstoke and Deane area". All six are in **East Hampshire district** (parish-level confirmed against the East Hampshire DC 2026/27 council tax schedule). None sit in Basingstoke and Deane.
+2. **Flexcombe postcode error**: Seed CSV states GU32. Wikipedia and Royal Mail confirm post town LISS, postcode district **GU33**. Verified postcode used.
+3. **Bordon is a town, not a village**: Population ~16,035 (2011 census), undergoing a ~£1bn 15-year regeneration of the former garrison. Written as a town, not styled as a "village".
+4. **Bordean civil parish**: Wikipedia infobox and the East Hants council tax schedule list it under Langrish parish (Langrish was carved out of East Meon in 1894). Used Langrish.
+5. **Hamlet stock**: Bordean, Coombe and Flexcombe are hamlets of two-to-a-dozen houses. Open-market turnover is very thin; price data at parish level only and noted as such.
+
+---
+
+```json
+{
+  "id": "bordon-gu35",
+  "name": "Bordon",
+  "county": "Hampshire",
+  "town": "Alton",
+  "postcode": "GU35",
+  "coords": { "lat": 51.10716, "lng": -0.87768 },
+  "overview": "A town of around 16,000 residents in the East Hampshire district, set in the royal Woolmer Forest some five miles south-east of Alton. Bordon is unlike its nearest peers (Petersfield, Farnham, Alton) in that it never grew as a market town: the camp was laid out by the Royal Engineers in 1899 and from 1903 the town developed around the Army, latterly as a base for the Royal Electrical and Mechanical Engineers. The MoD withdrew in 2015 and a 15-year, circa £1bn regeneration partnership (Defence Infrastructure Organisation, Dorchester Regeneration, Taylor Wimpey, East Hants and Hampshire County Councils) is rebuilding the former Prince Philip Barracks site as a 'Green Town' delivering up to 3,350 new homes, a new town centre, schools, a health hub and the 54-hectare Hogmoor Inclosure SANGS. The Sainsbury's that anchors the emerging town centre broke ground in 2025 with first customers due summer 2026. Bordon shares a civil parish (Whitehill) with the contiguous village of Lindford.",
+  "character": "A working town in the middle of a long, public-led rebuild. Older Edwardian and post-war military housing on the A325 spine sits alongside new-build Quebec Park and Prince Philip Park phases (Taylor Wimpey, Bovis and others). Heathland, woodland and the Woolmer Forest SSSI are immediately to the south; the new walking and cycling 'Green Loop' threads the town. Mixed demographic — ex-service families, commuters using Liphook for the Portsmouth Direct line, and first-time buyers priced out of Farnham or Haslemere.",
+  "amenities": [
+    "Phoenix Theatre and Arts Centre",
+    "Mill Chase Leisure Centre",
+    "Hogmoor Inclosure (54 ha SANGS, café, skate park)",
+    "Bordon and Oakhanger Sports Pavilion",
+    "The Shed (dining and events venue, town centre)",
+    "Tesco Superstore (Chalet Hill)",
+    "Sainsbury's (16,000 sq ft, opening summer 2026)",
+    "Bordon Health Centre",
+    "St Mark's Church, Whitehill",
+    "Bordon Library"
+  ],
+  "schools": [
+    { "name": "Bordon Infant School", "phase": "Primary", "ofsted": null, "distance": "town centre", "url": "https://reports.ofsted.gov.uk/provider/21/150418" },
+    { "name": "Bordon Junior School", "phase": "Primary", "ofsted": null, "distance": "town centre", "url": "https://reports.ofsted.gov.uk/provider/21/146002" },
+    { "name": "Weyford Nursery and Primary Academy", "phase": "Primary", "ofsted": null, "distance": "0.4 mi", "url": "https://reports.ofsted.gov.uk/provider/21/148215" },
+    { "name": "Oakmoor School", "phase": "Secondary", "ofsted": "Good (2021); 2026 inspection under new report-card framework, no single overall grade", "distance": "town centre", "url": "https://reports.ofsted.gov.uk/provider/23/140182" }
+  ],
+  "transport": {
+    "nearestStation": "Liphook (3.7 mi)",
+    "commutes": [
+      { "to": "London Waterloo", "time": "1h 1m – 1h 21m", "mode": "drive to Liphook + direct South Western Railway", "source": "https://www.thetrainline.com/train-times/liphook-to-london-waterloo" },
+      { "to": "Portsmouth & Southsea", "time": "~45m", "mode": "drive to Liphook + direct South Western Railway", "source": "https://www.thetrainline.com/stations/liphook" }
+    ],
+    "roads": "A325 runs through the town; A3 (London–Portsmouth) ~2 mi east at Liphook/Hindhead; Hindhead Tunnel since 2011 has cut A3 journey times north"
+  },
+  "prices": {
+    "avgSold12Mo": 420411,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu35.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hogmoor Inclosure walking, cycling, skate park",
+    "Deadwater Valley Local Nature Reserve",
+    "Shipwrights Way long-distance trail",
+    "Woolmer Forest SSSI heathland walks",
+    "Phoenix Theatre programme",
+    "Alice Holt Forest (Go Ape, ~6 mi north)"
+  ],
+  "placesToEat": [
+    { "name": "The Shed", "type": "Bar and dining", "notes": "Town-centre venue, recently refurbished as part of the regeneration", "url": "https://www.princephilippark.co.uk/" },
+    { "name": "The Royal Exchange", "type": "Pub", "notes": "Long-standing town pub on Lindford Road", "url": "https://www.useyourlocal.com/" }
+  ],
+  "pros": [
+    "Among the cheapest stock in the GU postcode commuter belt (GU35 avg £420k vs neighbouring GU30 Liphook well above £500k)",
+    "Substantial new build supply with developer warranties via Quebec Park / Prince Philip Park",
+    "Hogmoor Inclosure and Woolmer Forest deliver real countryside on the doorstep",
+    "Liphook station (3.7 mi) gives direct ~1-hour London Waterloo trains",
+    "Town centre, Sainsbury's, health hub and second primary still being delivered — capital values likely to follow infrastructure"
+  ],
+  "cons": [
+    "No railway station of its own (line lifted in 1957); car or bus needed for the train",
+    "Town centre still half-built — the new Sainsbury's only opens summer 2026, new primary not due until 2028",
+    "Secondary catchment Oakmoor (rated Good in 2021) is the only mainstream secondary in town; sixth-form provision is limited locally",
+    "Heavy through-traffic on the A325 spine",
+    "Older estate stock (ex-MoD married quarters) varies sharply in condition"
+  ],
+  "whoItSuits": "First-time buyers and young families priced out of Farnham, Liphook or Haslemere but who want the same Portsmouth Direct line and South Downs/National Park access. Buyers who are comfortable being in a town mid-regeneration rather than a finished one — there is upside if you take the long view, but the town centre, second primary and health hub are still being built out into 2028+. Ex-service households retain a strong presence. Less suited to buyers wanting an immediate, mature market-town feel: for that, Alton or Petersfield are better.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Liphook (3.7 mi)",
+  "primarySupermarket": "Tesco Superstore, Chalet Hill, Bordon (in town); Sainsbury's opening summer 2026",
+  "images": [],
+  "sources": [
+    { "label": "Wikipedia — Bordon", "url": "https://en.wikipedia.org/wiki/Bordon" },
+    { "label": "Visit Hampshire — Bordon and Whitehill", "url": "https://www.visit-hampshire.co.uk/explore/bordon-and-whitehill-p477591" },
+    { "label": "Whitehill & Bordon Regeneration", "url": "http://whitehillbordon.com/about/" },
+    { "label": "East Hants DC — Sainsbury's groundbreaking 2025", "url": "https://www.easthants.gov.uk/news/2025/spades-ground-new-whitehill-bordon-sainsburys-store" },
+    { "label": "Whitehill Town Council — regeneration update Jan 2026", "url": "https://www.whitehilltowncouncil.gov.uk/regeneration-of-the-town" },
+    { "label": "Ofsted — Oakmoor School", "url": "https://reports.ofsted.gov.uk/provider/23/140182" },
+    { "label": "East Hants DC — Council Tax bands 2026/27", "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf" },
+    { "label": "Rightmove — GU35 house prices", "url": "https://www.rightmove.co.uk/house-prices/gu35.html" }
+  ],
+  "status": "researched"
+}
+```
+
+---
+
+```json
+{
+  "id": "bordean-gu32",
+  "name": "Bordean",
+  "county": "Hampshire",
+  "town": "Petersfield",
+  "postcode": "GU32",
+  "coords": { "lat": 50.99784, "lng": -0.9408 },
+  "overview": "A small linear hamlet in the East Hampshire district, sat astride the A272 about one mile north-west of Langrish and 3.5 miles west of Petersfield, on the western edge of the South Downs National Park. Bordean lies within the civil parish of Langrish, which was carved out of the larger East Meon ancient parish in 1894 (taking Langrish, Ramsdean and part of Bordean with it). Settlement is genuinely thin — a row of cottages, Lower Bordean Farmhouse (Grade II listed) and Bordean House — set in chalk-downland farmland with Hen Wood and the Sir Williams Hill ridge to the south. Day-to-day services are at Langrish (primary school, pub, parish church) and Petersfield (rail, market town shops, hospital). The area is genuinely rural: no village shop, no school in Bordean itself, no bus to count on after dark.",
+  "character": "Open downland farmland with scattered period farmhouses and cottages, much of it Grade II listed. Quietly affluent owner-occupiers, working farms, and several converted barns. Inside the South Downs National Park, so any meaningful extension or rebuild will need a planning case made in NPPF terms.",
+  "amenities": [
+    "Bordean House (private estate, occasional events)",
+    "Lower Bordean Farmhouse (Grade II listed, 1620 origins)",
+    "A272 corridor for road access east–west",
+    "Footpaths onto Sir Williams Hill and Hen Wood"
+  ],
+  "schools": [
+    { "name": "Langrish Primary School", "phase": "Primary", "ofsted": "Outstanding (Oct 2019)", "distance": "1.4 mi", "url": "https://www.langrish.hants.sch.uk/" },
+    { "name": "The Petersfield School", "phase": "Secondary", "ofsted": "Good", "distance": "3.7 mi", "url": "https://www.tps.hants.sch.uk/" }
+  ],
+  "transport": {
+    "nearestStation": "Petersfield (3.2 mi)",
+    "commutes": [
+      { "to": "London Waterloo", "time": "1h 2m – 1h 17m direct", "mode": "drive to Petersfield + direct South Western Railway (Portsmouth Direct line)", "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo" },
+      { "to": "Portsmouth Harbour", "time": "~30m", "mode": "drive to Petersfield + direct South Western Railway", "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield" }
+    ],
+    "roads": "A272 (east to Petersfield/A3, west to West Meon) runs through; A3 (London–Portsmouth) 3 mi east at Petersfield"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "South Downs Way walking from Old Winchester Hill / Butser",
+    "Hen Wood and Sir Williams Hill walks",
+    "Langrish House Hotel grounds and dining",
+    "Petersfield Heath and Petersfield Museum (Edward Thomas archive)"
+  ],
+  "placesToEat": [
+    { "name": "Langrish House", "type": "Country house hotel and restaurant", "notes": "17th-century manor hotel in Langrish, 1 mi south-east", "url": "https://www.langrishhouse.co.uk/" },
+    { "name": "The Trooper Inn", "type": "Pub with rooms", "notes": "17th-century inn at High Cross, ~3 mi north-east", "url": "https://www.trooperinn.com/" }
+  ],
+  "pros": [
+    "Inside the South Downs National Park — strong landscape protection",
+    "Catchment Langrish Primary rated Outstanding at last inspection (2019)",
+    "Petersfield station with direct trains to London Waterloo within 5 miles",
+    "Genuine rural seclusion within an hour's drive of Portsmouth, Winchester and Chichester",
+    "A272 corridor location keeps access reasonably easy"
+  ],
+  "cons": [
+    "Hamlet only — no shop, no school, no pub in Bordean itself; everything is in Langrish, East Meon or Petersfield",
+    "A272 carries fast through-traffic — properties on it suffer road noise",
+    "Open-market turnover is very thin (single-figure listings per year)",
+    "Tight South Downs planning regime constrains extension or new build",
+    "No buses you can rely on at night; car is essentially compulsory"
+  ],
+  "whoItSuits": "Buyers wanting a Grade II listed farmhouse or barn conversion in the South Downs and willing to absorb the cost of countryside life (oil heating, septic drainage, slower broadband in some lanes, long drives to anything). Empty-nesters and country-house buyers dominate the market here. Less suited to first-time buyers, who will find the stock thin and priced for the listed-building country market rather than the lower end of the Petersfield area.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (3.2 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (3.5 mi)",
+  "images": [],
+  "sources": [
+    { "label": "Wikipedia — Bordean", "url": "https://en.wikipedia.org/wiki/Bordean" },
+    { "label": "British Listed Buildings — Bordean House and Lower Bordean Farmhouse", "url": "https://britishlistedbuildings.co.uk/101179131-bordean-house-langrish" },
+    { "label": "British History Online — East Meon parish (Bordean tithing)", "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp64-75" },
+    { "label": "Langrish Primary School", "url": "https://www.langrish.hants.sch.uk/" },
+    { "label": "South Western Railway — Petersfield to London Waterloo", "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo" },
+    { "label": "East Hants DC — Council Tax 2026/27 (Langrish parish)", "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf" }
+  ],
+  "status": "researched"
+}
+```
+
+---
+
+```json
+{
+  "id": "coombe-gu32",
+  "name": "Coombe",
+  "county": "Hampshire",
+  "town": "Petersfield",
+  "postcode": "GU32",
+  "coords": { "lat": 50.98764, "lng": -0.94316 },
+  "overview": "A small downland hamlet in the East Hampshire district, in the civil parish of East Meon (one of the historic East Meon tithings of Combe, Oxenbourne, Westbury and part of Bordean retained by the ancient parish at the 1894 split with Langrish). Coombe sits south of the East Meon village core, in a dry chalk valley on the southern slope of the South Downs ridge. It is a working-farm hamlet with cottages and a handful of period houses rather than a planned village: it has no shop, no school and no pub of its own. The administrative postcode is GU32 1 (Petersfield post town), but day-to-day life is shared with East Meon village a short distance to the north. East Meon proper holds the church (All Saints, a Grade I listed Norman building, one of the finest small churches in Hampshire), two pubs (the Olde George Inn and the Izaak Walton), a primary school and a village shop.",
+  "character": "Quiet, dispersed downland settlement; chalk-stream and downland landscape; very few new builds; planning controlled by both East Meon Conservation Area policies and the South Downs National Park Authority.",
+  "amenities": [
+    "(amenities at East Meon ~1 mi north:) The Olde George Inn",
+    "The Izaak Walton",
+    "East Meon village shop and post office",
+    "All Saints Church, East Meon (Grade I listed, Norman)",
+    "East Meon Village Hall",
+    "East Meon Cricket Club"
+  ],
+  "schools": [
+    { "name": "East Meon Church of England Controlled Primary School", "phase": "Primary", "ofsted": "Good", "distance": "0.8 mi", "url": "https://www.eastmeonprimary.hants.sch.uk/" },
+    { "name": "The Petersfield School", "phase": "Secondary", "ofsted": "Good", "distance": "4.4 mi", "url": "https://www.tps.hants.sch.uk/" }
+  ],
+  "transport": {
+    "nearestStation": "Petersfield (4.5 mi)",
+    "commutes": [
+      { "to": "London Waterloo", "time": "1h 2m – 1h 17m direct", "mode": "drive to Petersfield + direct South Western Railway", "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo" },
+      { "to": "Portsmouth Harbour", "time": "~30m", "mode": "drive to Petersfield + direct South Western Railway", "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield" }
+    ],
+    "roads": "Single-track lanes connecting to the A272 (Petersfield–West Meon) ~2 mi north and the A3 ~4 mi east"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "South Downs Way (Old Winchester Hill, Butser Hill)",
+    "Meon Valley cycling and walking",
+    "All Saints Church East Meon and font tours",
+    "Walking from East Meon to West Meon and Privett"
+  ],
+  "placesToEat": [
+    { "name": "The Olde George Inn", "type": "Pub with rooms", "notes": "Grade II 15th-century inn in East Meon village", "url": "https://www.theoldegeorgeinn.uk/" },
+    { "name": "The Izaak Walton", "type": "Pub", "notes": "Riverside pub on the River Meon in East Meon", "url": "https://www.theizaakwalton.co.uk/" }
+  ],
+  "pros": [
+    "Inside the South Downs National Park; permanent landscape protection",
+    "East Meon village within walking distance for full village amenity set",
+    "Grade I Norman church and historic village fabric a short walk away",
+    "Petersfield station with direct London Waterloo trains in <5 mi",
+    "Genuinely rural feel; very low through-traffic on the lanes"
+  ],
+  "cons": [
+    "Hamlet only — Coombe itself has no shop, school, pub or church",
+    "Stock turnover is very thin; expect single-figure listings per year",
+    "Lanes are narrow and unlit; car essential, evening buses limited",
+    "Some properties on oil heating and private drainage — running costs higher than mains",
+    "Strict planning regime: SDNP plus East Meon Conservation Area"
+  ],
+  "whoItSuits": "Downsizers and second-home buyers wanting a small period cottage or barn conversion in a working downland hamlet, with East Meon's pubs and church within walking distance. Also suits country-buyers prepared for the practical realities (oil, septic tank, narrow lanes). Less suited to households needing village amenities on the doorstep — for that East Meon proper is the more practical choice. Not first-time buyer stock: prices in the East Meon catchment are firmly in the country-cottage market.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (4.5 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (~5 mi)",
+  "images": [],
+  "sources": [
+    { "label": "Wikipedia — Coombe, Hampshire", "url": "https://en.wikipedia.org/wiki/Coombe,_Hampshire" },
+    { "label": "British History Online — East Meon parish", "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp64-75" },
+    { "label": "East Meon CE Controlled Primary School", "url": "https://www.eastmeonprimary.hants.sch.uk/" },
+    { "label": "The Olde George Inn, East Meon", "url": "https://www.theoldegeorgeinn.uk/" },
+    { "label": "South Western Railway — Petersfield", "url": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield" },
+    { "label": "East Hants DC — Council Tax 2026/27 (East Meon parish)", "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf" }
+  ],
+  "status": "researched"
+}
+```
+
+---
+
+```json
+{
+  "id": "flexcombe-gu33",
+  "name": "Flexcombe",
+  "county": "Hampshire",
+  "town": "Liss",
+  "postcode": "GU33",
+  "coords": { "lat": 51.0228, "lng": -0.9456 },
+  "overview": "A two-house place (Wikipedia's description) in the civil parish of Liss, East Hampshire district. The settlement is effectively Flexcombe Farm and a small courtyard of barn conversions at Flexcombe Farm Cottages, off Flexcombe Lane between Liss and Stodham. It sits inside the South Downs National Park, immediately west of the A3 bypass and a few miles north of Petersfield. The seed CSV records the postcode as GU32; Wikipedia, Royal Mail and Liss-area address listings confirm the post town is LISS and the postcode district is GU33 — the GU32 entry in the seed is an error, corrected here. Day-to-day services are at Liss (~2 mi south-east) for primary school, station, shops and pubs, and Petersfield for the wider shopping and rail offer.",
+  "character": "Single-courtyard rural settlement of converted farm buildings in a working-farm setting, surrounded by chalk-clay countryside and the SDNP's hangers landscape. Effectively a private courtyard rather than a village — no shared public realm beyond the farm track.",
+  "amenities": [
+    "Flexcombe Farm Cottages (courtyard of barn conversions)",
+    "Flexcombe Lane footpath access onto the South Downs",
+    "(at Liss ~2 mi:) Liss Forest village shop and post office",
+    "Liss Triangle shops and cafés",
+    "Liss Sports Pavilion",
+    "Riverside walks along Caker Stream"
+  ],
+  "schools": [
+    { "name": "Liss Infant School", "phase": "Primary (infant)", "ofsted": "Good", "distance": "0.9 mi", "url": "https://www.lissinfant.hants.sch.uk/" },
+    { "name": "Liss Junior School", "phase": "Primary (junior)", "ofsted": "Good", "distance": "2.0 mi", "url": "https://www.lissjunior.hants.sch.uk/" },
+    { "name": "Churcher's College", "phase": "Independent (3–18)", "ofsted": null, "distance": "2.1 mi", "url": "https://www.churcherscollege.com/" },
+    { "name": "Bohunt School (Liphook)", "phase": "Secondary (state)", "ofsted": "Outstanding", "distance": "4.0 mi", "url": "https://www.bohunt.hants.sch.uk/" }
+  ],
+  "transport": {
+    "nearestStation": "Liss (1.6 mi)",
+    "commutes": [
+      { "to": "London Waterloo", "time": "~1h 10m", "mode": "drive to Liss + direct South Western Railway (Portsmouth Direct line)", "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/liss" },
+      { "to": "Petersfield", "time": "5m", "mode": "South Western Railway (one stop)", "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/liss" }
+    ],
+    "roads": "Immediately west of the A3 (London–Portsmouth) at the Liss/Stodham junction; B3006 north-west to Selborne and Alton"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu33-6lh.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hangers Way and Shipwrights Way long-distance trails",
+    "Walking onto Stoner Hill and Wheatham Hill",
+    "Cycling on quiet lanes around Liss Forest",
+    "Liss Riverside walks (Caker Stream)"
+  ],
+  "placesToEat": [
+    { "name": "The Jolly Drover", "type": "Pub and restaurant", "notes": "Country pub on the London Road at West Liss", "url": "https://thejollydrover.com/" },
+    { "name": "The Spread Eagle", "type": "Village pub", "notes": "Pub in central Liss", "url": "https://www.thespreadeagleliss.co.uk/" }
+  ],
+  "pros": [
+    "Liss station within 2 miles for direct London Waterloo trains",
+    "Inside the South Downs National Park",
+    "Bohunt School at Liphook (4 mi) is a state secondary rated Outstanding",
+    "Courtyard format gives a small, manageable scheme rather than an isolated single property",
+    "A3 access immediately to the east for road journeys to London or Portsmouth"
+  ],
+  "cons": [
+    "Functionally a courtyard of a handful of houses — no village identity, no shop, no pub on site",
+    "Adjacency to the A3 means some background road noise",
+    "Open-market turnover is essentially nil in most years (~3 sales in three years recorded at GU33 6LH)",
+    "Liss itself is a long linear village, not a market town — for a full town offer, Petersfield is the destination",
+    "Listed-building and SDNP planning constraints on most stock"
+  ],
+  "whoItSuits": "Buyers seeking a specific high-spec barn conversion or modern courtyard property in a National Park setting, with main-line rail within two miles and A3 access on the doorstep. Likely a downsizer, country-second-home or rural-working-from-home household rather than a first-time buyer — sale prices recorded at the courtyard are in the £700k+ range. Not for buyers wanting a sociable village with pubs, shops and a school on foot.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Liss (1.6 mi)",
+  "primarySupermarket": "Tesco Petersfield, Bedford Road (~3.5 mi); Waitrose Petersfield (~4 mi)",
+  "images": [],
+  "sources": [
+    { "label": "Wikipedia — Flexcombe", "url": "https://en.wikipedia.org/wiki/Flexcombe" },
+    { "label": "Streetcheck — Flexcombe Lane GU33 6LH", "url": "https://www.streetcheck.co.uk/postcode/gu336lh" },
+    { "label": "Check My Postcode — GU33 6LJ (Flexcombe Farm Cottages)", "url": "https://checkmypostcode.uk/gu336lj" },
+    { "label": "South Western Railway — Liss", "url": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/liss" },
+    { "label": "Homes Estate Agents — Flexcombe Lane listing", "url": "https://homesea.co.uk/property-for-sale/liss/flexcombe-lane-flexcombe-liss-hampshire-gu33-6lh/" },
+    { "label": "East Hants DC — Council Tax 2026/27 (Liss parish)", "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf" }
+  ],
+  "status": "researched"
+}
+```
+
+---
+
+```json
+{
+  "id": "high-cross-gu32",
+  "name": "High Cross",
+  "county": "Hampshire",
+  "town": "Petersfield",
+  "postcode": "GU32",
+  "coords": { "lat": 50.99292, "lng": -0.93676 },
+  "overview": "A small village in the civil parish of Froxfield and Privett, East Hampshire district, about three miles north-west of Petersfield and just north of the A272. High Cross is functionally the service hub of the parish: it holds Froxfield Church of England Primary and Pre-School, the King George V Memorial (Froxfield) Village Hall, St Peter's Church (built 1862, with three Norman arches reconstructed from the older church at Froxfield Green) and the Trooper Inn — a 17th-century pub with rooms that markets itself as occupying the highest point in Hampshire. The wider parish has a population of around 929 (2021 census) and includes the linked settlements of Froxfield Green, Privett and Stroud Common. Together they sit on the edge of the hangers landscape inside the South Downs National Park.",
+  "character": "Linear downland village strung along the High Cross Lane and Alton Road; mix of period brick-and-flint cottages, post-war detached and a few newer infill dwellings. Active parish life — village hall events, Froxfield Choir, primary school — with a strong commuter and downsizer demographic.",
+  "amenities": [
+    "Froxfield CofE Primary and Pre-School",
+    "King George V Memorial (Froxfield) Village Hall",
+    "St Peter's Church, High Cross (1862, Grade II listed)",
+    "The Trooper Inn (pub with eight rooms)",
+    "Footpaths onto the Hangers and Ashford Hangers Nature Reserve",
+    "Active Froxfield Choir"
+  ],
+  "schools": [
+    { "name": "Froxfield Church of England Primary and Pre-School", "phase": "Primary (2–11)", "ofsted": "Good (March 2024)", "distance": "in village", "url": "https://reports.ofsted.gov.uk/provider/21/116289" },
+    { "name": "The Petersfield School", "phase": "Secondary", "ofsted": "Good", "distance": "3.5 mi", "url": "https://www.tps.hants.sch.uk/" },
+    { "name": "Churcher's College", "phase": "Independent (3–18)", "ofsted": null, "distance": "3.5 mi", "url": "https://www.churcherscollege.com/" }
+  ],
+  "transport": {
+    "nearestStation": "Petersfield (2.7 mi)",
+    "commutes": [
+      { "to": "London Waterloo", "time": "1h 2m – 1h 17m direct", "mode": "drive to Petersfield + direct South Western Railway", "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo" },
+      { "to": "Portsmouth Harbour", "time": "~30m", "mode": "drive to Petersfield + direct South Western Railway", "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield" }
+    ],
+    "roads": "A272 (Petersfield–Winchester) at the southern edge; A3 (London–Portsmouth) ~3 mi east at Petersfield"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32-1eg.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hangers Way long-distance trail",
+    "Walks in Ashford Hangers National Nature Reserve",
+    "Shoulder of Mutton Hill (Edward Thomas memorial)",
+    "Selborne (Gilbert White's House, ~5 mi)",
+    "Jane Austen's House at Chawton (~10 mi)"
+  ],
+  "placesToEat": [
+    { "name": "The Trooper Inn", "type": "Pub with rooms and restaurant", "notes": "17th-century inn on Alton Road at High Cross with eight en-suite rooms and an open-fire bar", "url": "https://www.trooperinn.com/" },
+    { "name": "The Pub With No Name (White Horse)", "type": "Country pub", "notes": "Famously unsigned 17th-century pub at Priors Dean, ~3 mi north-east", "url": "https://www.pubwithnoname.co.uk/" }
+  ],
+  "pros": [
+    "Village primary school (Froxfield CofE, Good 2024) and a working pub in the village",
+    "Inside the South Downs National Park",
+    "Petersfield station within 3 miles for direct London Waterloo trains",
+    "Strong cluster of independent schools nearby (Churcher's, Bedales)",
+    "Hangers Way, Ashford Hangers and Selborne all within an easy walk or drive"
+  ],
+  "cons": [
+    "No village shop; shops are in Petersfield or East Meon",
+    "Houses on the A272 / Alton Road have road noise",
+    "Tight planning regime (SDNP + village settlement boundary) limits new build",
+    "No through-bus service to count on at evenings/weekends",
+    "Petersfield 'rush hour' through Sheet and the A3 junction can be slow"
+  ],
+  "whoItSuits": "Families targeting Froxfield CofE Primary and the Petersfield/Churcher's secondary catchment, who want a working village with a pub and hall on foot rather than an isolated hamlet. Also suits commuters comfortable with a 5-minute drive to Petersfield station for the Portsmouth Direct line. Less suited to buyers needing a village shop or supermarket on foot, or those wanting to be in walking distance of a railway station.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (2.7 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (~3 mi); Tesco Petersfield, Bedford Road (~3.5 mi)",
+  "images": [],
+  "sources": [
+    { "label": "Wikipedia — High Cross, Hampshire", "url": "https://en.wikipedia.org/wiki/High_Cross,_Hampshire" },
+    { "label": "Wikipedia — Froxfield and Privett parish", "url": "https://en.wikipedia.org/wiki/Froxfield_and_Privett" },
+    { "label": "Ofsted — Froxfield CofE Primary", "url": "https://reports.ofsted.gov.uk/provider/21/116289" },
+    { "label": "The Trooper Inn", "url": "https://www.trooperinn.com/" },
+    { "label": "Froxfield Village Hall (King George V Memorial)", "url": "https://www.froxfieldvillagehall.co.uk/" },
+    { "label": "South Western Railway — Petersfield", "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo" },
+    { "label": "East Hants DC — Council Tax 2026/27 (Froxfield & Privett)", "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf" }
+  ],
+  "status": "researched"
+}
+```
+
+---
+
+```json
+{
+  "id": "steep-gu32",
+  "name": "Steep",
+  "county": "Hampshire",
+  "town": "Petersfield",
+  "postcode": "GU32",
+  "coords": { "lat": 51.00216, "lng": -0.93096 },
+  "overview": "A village and civil parish in the East Hampshire district, about 1.4 miles north of Petersfield and just inside the western edge of the South Downs National Park, at the foot of the wooded slopes of Stoner Hill and Wheatham Hill. Steep is notable for two things. First, Bedales School (founded 1893 in Lindfield, moved here in 1900) — a co-educational boarding and day independent school with a progressive ethos, which from the early 20th century drew a community of artists, craftsmen and writers to the village: Edward Thomas the war poet lived here from 1906 to 1916, and Alec Guinness, Stanley Spencer, Ernest Gimson and Edward Barnsley all had connections. Second, The Harrow Inn — a 17th-century Grade II listed pub on CAMRA's National Inventory of Historic Pub Interiors, run by the same family since 1932 and serving cask beer drawn straight from the barrel. Population at the 2011 census was 1,391 (civil parish). The Church of All Saints dates from around 1125.",
+  "character": "Genuinely literary, slightly bohemian downland village with deep Arts and Crafts roots; mix of period cottages, larger Arts-and-Crafts and Edwardian houses (some by W. F. Unsworth), Bedales-influenced modernist commissions, and 20th-century infill. Strong cultural fabric — Edward Thomas associations, Bedales archive, Edward Barnsley Workshop, village film society founded by Alec Guinness's legacy.",
+  "amenities": [
+    "Bedales School (independent, 3–18, ~760 pupils)",
+    "Steep CofE Voluntary Controlled Primary School",
+    "The Harrow Inn (Grade II listed, CAMRA National Inventory)",
+    "The Cricketers Inn",
+    "All Saints Church (12th century, Grade II* listed)",
+    "Edward Barnsley Workshop (Arts and Crafts furniture)",
+    "Steep Village Hall (film society, talks)",
+    "Eight-court floodlit tennis club and adjoining cricket ground",
+    "Poet's Stone (Edward Thomas memorial) on Shoulder of Mutton Hill"
+  ],
+  "schools": [
+    { "name": "Steep Church of England Voluntary Controlled Primary School", "phase": "Primary", "ofsted": "Good quality of education; Outstanding behaviour and early years (Oct 2024 inspection, no overall grade under new framework)", "distance": "in village", "url": "https://reports.ofsted.gov.uk/provider/21/116319" },
+    { "name": "Bedales School", "phase": "Independent (3–18, boarding and day)", "ofsted": null, "distance": "in village", "url": "https://www.bedales.org.uk/" },
+    { "name": "The Petersfield School", "phase": "Secondary", "ofsted": "Good", "distance": "2.5 mi", "url": "https://www.tps.hants.sch.uk/" },
+    { "name": "Churcher's College", "phase": "Independent (3–18)", "ofsted": null, "distance": "1.7 mi", "url": "https://www.churcherscollege.com/" }
+  ],
+  "transport": {
+    "nearestStation": "Petersfield (1.6 mi)",
+    "commutes": [
+      { "to": "London Waterloo", "time": "1h 2m – 1h 17m direct", "mode": "walk/cycle/drive to Petersfield + direct South Western Railway", "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo" },
+      { "to": "Portsmouth Harbour", "time": "~30m", "mode": "Petersfield + direct South Western Railway", "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield" }
+    ],
+    "roads": "A3 (London–Portsmouth) ~2 mi east at Petersfield; A272 (Winchester–Midhurst) at south of the parish"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hangers Way walk to Shoulder of Mutton Hill and the Poet's Stone",
+    "Edward Thomas literary trail (Berryfield Cottage, The Red House, Yew Tree Cottages)",
+    "Edward Barnsley Workshop tours",
+    "Steep village film society and talks",
+    "Bedales Arts (public concerts and theatre productions)",
+    "Cycling on Sustrans NCR 22 between Petersfield and the Hangers"
+  ],
+  "placesToEat": [
+    { "name": "The Harrow Inn", "type": "Traditional pub", "notes": "16th-century Grade II listed, cask ale from the barrel, ploughman's and home-cooked lunches, cash only, no Wi-Fi", "url": "https://www.theharrowinnsteep.co.uk/" },
+    { "name": "The Cricketers Inn", "type": "Pub with rooms", "notes": "Country pub in the village, dining and rooms", "url": "https://www.thecricketerssteep.co.uk/" }
+  ],
+  "pros": [
+    "Petersfield station only 1.6 miles — close enough to walk/cycle for the direct London Waterloo train",
+    "Steep CofE Primary Good (2024) with Outstanding behaviour and early years",
+    "Bedales School on the doorstep for the independent route",
+    "Inside the South Downs National Park, with the Ashford Hangers reserve and Hangers Way walking at the back door",
+    "Strong cultural fabric: literary heritage, Arts and Crafts architecture, active village hall"
+  ],
+  "cons": [
+    "Property pricing reflects the postcode, the Bedales effect and the SDNP setting — entry level is meaningfully above the wider Petersfield average",
+    "Stock is dominated by period or larger houses; very limited starter / smaller-cottage supply",
+    "Strict planning regime (SDNP, conservation area, multiple listed buildings)",
+    "Some lanes are narrow with poor pavements; rural visibility on the A272 approach is challenging",
+    "Bedales drop-off and pick-up traffic loads the village lanes at term-time peaks"
+  ],
+  "whoItSuits": "Buyers committed to Bedales for the independent route, or to Steep CofE Primary plus The Petersfield School / Churcher's, who also want the walking-distance link to the main-line station. Also strong for cultural-and-creative households drawn by the Edward Thomas / Edward Barnsley / Bedales-Arts ecosystem, and for those who can absorb the SDNP planning regime in return for the landscape. Less suited to first-time buyers seeking lower entry pricing — for that, Sheet, Liss or Bordon are better-value alternatives in the same commuter belt.",
+  "councilTaxBand": null,
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (1.6 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (~2 mi)",
+  "images": [],
+  "sources": [
+    { "label": "Wikipedia — Steep, Hampshire", "url": "https://en.wikipedia.org/wiki/Steep,_Hampshire" },
+    { "label": "Wikipedia — Bedales School", "url": "https://en.wikipedia.org/wiki/Bedales_School" },
+    { "label": "Wikipedia — The Harrow, Steep", "url": "https://en.wikipedia.org/wiki/The_Harrow,_Steep" },
+    { "label": "Ofsted — Steep CofE VC Primary", "url": "https://reports.ofsted.gov.uk/provider/21/116319" },
+    { "label": "The Harrow Inn", "url": "https://www.theharrowinnsteep.co.uk/about.html" },
+    { "label": "Edward Thomas in Steep (Slow Travel UK)", "url": "https://www.slow-travel.uk/post/finding-the-poetry-of-edward-thomas-in-the-hampshire-village-of-steep" },
+    { "label": "South Western Railway — Petersfield to London Waterloo", "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo" },
+    { "label": "East Hants DC — Council Tax 2026/27 (Steep parish)", "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf" }
+  ],
+  "status": "researched"
+}
+```
+
+---
+
+◁ **Batch 04 complete** — 6 villages researched, 0 rejected.
+
+**Key flags raised:**
+
+1. **District labelling**: brief described the working set as "Basingstoke and Deane area"; all six are in **East Hampshire district** — corrected in every record.
+2. **Postcode error in seed CSV**: `flexcombe-gu32` is actually **GU33** (LISS post town); record ID changed to `flexcombe-gu33`. This is the same class of error already seen in earlier batches (Newton Stacey SO20-not-SP11, Wield SO24-not-GU35, Brown Candover SO24-not-RG25). Seed CSV postcode reliability is now a confirmed systemic problem.
+3. **Bordon scale**: town of ~16,000, not a village; mid-regeneration. Records written as a town and "who it suits" reflects that.
+4. **Hamlet stock**: Bordean, Coombe and Flexcombe are very small. Open-market turnover is thin; price data left at parish-level Rightmove links with `avgSold12Mo: null`.
+5. **Ofsted framework change**: from September 2024 Ofsted no longer issues an overall effectiveness grade for state schools. Where a school has been inspected since (e.g. Steep CofE Primary Oct 2024, Oakmoor Jan 2026), the record gives the most recent sub-judgements rather than fabricating a headline grade.
+6. **The Harrow Inn (Steep) and The Trooper Inn (High Cross)**: both confirmed open and trading as of 2024–2026.
