@@ -228,7 +228,10 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       (Linear-dense hybrid). Editorial `.page-lede` (Fraunces summary + 4-stat meta) above
       the bento; new `.bento-about` and `.bento-filters` cells pull priorities / property
       types / must-haves / tenure / EPC from About + Criteria storage.
-- [ ] Finances kept as one page, restructured into "Now vs Later" sections.
+- [x] Finances kept as one page, restructured into "Now vs Later" sections. Two
+      `.finance-stage` blocks ("Where you stand today" / "When you complete") with
+      Fraunces stage titles + accent chip; card titles demoted to `<h3>` to preserve
+      the document outline. All IDs, calculators, and storage hooks unchanged.
 - [x] Journey checklists global (no per-area state) + "what unlocks next" hint per section.
       State already global (`rec:journey-checks`); each section now renders an accent-soft
       `.next-hint` panel showing the next unchecked item (with timing) or an "All done"
