@@ -23,6 +23,16 @@
       <p class="lead" id="page-lead">A snapshot of your search — progress, shortlist, journey.</p>
     </header>
 
+    <section class="page-lede" id="home-lede" aria-label="Search summary">
+      <p class="lede-prose" id="lede-prose">Loading your search snapshot…</p>
+      <ul class="lede-meta">
+        <li><span class="lede-key">Budget</span><span class="lede-val num" id="lede-budget">—</span></li>
+        <li><span class="lede-key">Deposit</span><span class="lede-val num" id="lede-deposit">—</span></li>
+        <li><span class="lede-key">Beds</span><span class="lede-val num" id="lede-beds">—</span></li>
+        <li><span class="lede-key">Window</span><span class="lede-val" id="lede-window">—</span></li>
+      </ul>
+    </section>
+
     <div class="bento" aria-label="Dashboard">
       <section class="bento-cell bento-hero" aria-labelledby="hero-label">
         <p class="eyebrow" id="hero-label">Deposit progress</p>
@@ -64,6 +74,30 @@
           <p class="muted" id="home-savings-sub" style="margin:0;font-size:var(--text-sm);"></p>
         </header>
         <div class="chart-wrap"><canvas id="home-savings-chart"></canvas></div>
+      </section>
+
+      <section class="bento-cell bento-about" aria-labelledby="ab-label">
+        <header class="cell-head">
+          <h2 id="ab-label">About you</h2>
+          <a data-nav="pages/about-search.html#about" style="font-size:var(--text-sm);color:var(--ink);text-decoration:none;font-weight:500;">Edit profile →</a>
+        </header>
+        <ul class="chip-grid" id="home-priorities"><li class="empty-note">Loading…</li></ul>
+        <footer class="cell-foot">
+          <span class="muted" id="home-buyers">—</span>
+        </footer>
+      </section>
+
+      <section class="bento-cell bento-filters" aria-labelledby="fl-label">
+        <header class="cell-head">
+          <h2 id="fl-label">Search filters</h2>
+          <a data-nav="pages/about-search.html#search" style="font-size:var(--text-sm);color:var(--ink);text-decoration:none;font-weight:500;">Edit criteria →</a>
+        </header>
+        <dl class="filters-grid" id="home-filters">
+          <div><dt>Property types</dt><dd id="hf-types">—</dd></div>
+          <div><dt>Must-haves</dt><dd id="hf-must">—</dd></div>
+          <div><dt>Tenure</dt><dd id="hf-tenure">—</dd></div>
+          <div><dt>EPC min</dt><dd class="num" id="hf-epc">—</dd></div>
+        </dl>
       </section>
 
       <section class="bento-cell bento-journey" aria-labelledby="jr-label">

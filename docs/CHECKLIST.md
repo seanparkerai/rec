@@ -224,8 +224,10 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       Old URLs redirect via `<meta refresh>`. Nav updated: `Profile · Criteria` → `About`.
       Both page scripts scoped to `[data-page]` section roots; profile-side collision IDs prefixed
       `p-*`; localStorage keys (`rec:profile`, `rec:criteria`) preserved verbatim.
-- [ ] Dashboard reorganisation: magazine lead-in + bento that aggregates from every page
-      (Linear-dense hybrid).
+- [x] Dashboard reorganisation: magazine lead-in + bento that aggregates from every page
+      (Linear-dense hybrid). Editorial `.page-lede` (Fraunces summary + 4-stat meta) above
+      the bento; new `.bento-about` and `.bento-filters` cells pull priorities / property
+      types / must-haves / tenure / EPC from About + Criteria storage.
 - [ ] Finances kept as one page, restructured into "Now vs Later" sections.
 - [ ] Journey checklists global (no per-area state) + "what unlocks next" hint per section.
 

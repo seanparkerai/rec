@@ -1,6 +1,6 @@
 // page-home.js — dashboard (anchor: Linear-dense, bento layout).
 // Hero progress ring + savings projection chart + shortlist preview + journey step strip.
-import { getFinances, getShortlist, getAreas, _internal } from './storage.js';
+import { getFinances, getShortlist, getAreas, getProfile, getCriteria, _internal } from './storage.js';
 import { loadJSON } from './data-loader.js';
 import * as fin from './finances.js';
 
@@ -167,12 +167,77 @@ async function renderJourney() {
   }
 }
 
+function renderLede(profile, criteria, financesData) {
+  const max = criteria?.budget?.max || 0;
+  const dep = criteria?.budget?.targetDeposit || 0;
+  const beds = criteria?.size?.minBeds;
+  const ideal = criteria?.size?.idealBeds;
+  const win = financesData?.goal?.movingWindow || profile?.movingTimeline;
+  setText('lede-budget', max ? gbp(max) : '—');
+  setText('lede-deposit', dep ? gbp(dep) : '—');
+  setText('lede-beds', beds ? (ideal && ideal > beds ? `${beds}–${ideal}` : String(beds)) : '—');
+  setText('lede-window', win || '—');
+
+  const lede = $('lede-prose');
+  if (!lede) return;
+  if (profile?.headline) {
+    lede.textContent = profile.headline;
+    return;
+  }
+  const pref = criteria?.propertyTypePrefs?.preferred?.slice(0, 2).join(' or ');
+  const loc = profile?.locationFocus || 'Hampshire & Wiltshire';
+  const parts = [];
+  parts.push(`Looking for ${pref ? `a ${pref}` : 'a home'} in ${loc}`);
+  if (beds) parts.push(`${ideal && ideal > beds ? `${beds}–${ideal}` : beds}-bed`);
+  if (max) parts.push(`around ${gbp(max)}`);
+  if (dep) parts.push(`with a ${gbp(dep)} deposit target`);
+  lede.textContent = parts.join(' · ') + '.';
+}
+
+async function renderAboutCell(profile) {
+  const chips = $('home-priorities');
+  if (chips) {
+    const prio = (profile?.priorities || []).slice(0, 5);
+    chips.innerHTML = prio.length
+      ? prio.map((p) => `<li class="chip">${esc(p)}</li>`).join('')
+      : '<li class="empty-note">No priorities yet — open About to add some.</li>';
+  }
+  setText('home-buyers', profile?.buyers || profile?.household || '');
+}
+
+function joinList(arr, n = 3) {
+  if (!arr || !arr.length) return '—';
+  const head = arr.slice(0, n).join(', ');
+  return arr.length > n ? `${head} +${arr.length - n}` : head;
+}
+
+function renderFiltersCell(criteria) {
+  const types = criteria?.propertyTypePrefs?.preferred;
+  const must = criteria?.features?.mustHave?.length
+    ? criteria.features.mustHave
+    : (criteria?.mustHaves || []);
+  const tenure = criteria?.tenure?.preferred;
+  const epc = criteria?.epcMin;
+  setText('hf-types', joinList(types));
+  setText('hf-must', joinList(must, 4));
+  setText('hf-tenure', joinList(tenure, 2));
+  setText('hf-epc', epc || '—');
+}
+
 async function init() {
-  try {
-    const financesData = await getFinances();
+  let financesData = null;
+  let profile = null;
+  let criteria = null;
+  try { financesData = await getFinances(); } catch (e) { console.error('finances error', e); }
+  try { profile = await getProfile(); } catch (e) { console.error('profile error', e); }
+  try { criteria = await getCriteria(); } catch (e) { console.error('criteria error', e); }
+  if (financesData) {
     renderHero(financesData);
     renderSavingsChart(financesData);
-  } catch (e) { console.error('finances error', e); }
+  }
+  renderLede(profile, criteria, financesData);
+  await renderAboutCell(profile);
+  renderFiltersCell(criteria);
   await renderShortlist();
   await renderJourney();
 }
