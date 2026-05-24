@@ -15,20 +15,78 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "directory",
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "status": "researched",
+  "overview": "Awbridge is a small Test Valley village and civil parish about three miles north-west of Romsey, near the River Test. It has a traditional Hampshire village profile, with scattered housing, village facilities and strong access to surrounding countryside. The location balances rural character with relatively quick links to Romsey and Southampton employment centres.",
+  "character": "Traditional village/parish character with quiet lanes and community-led local life.",
+  "amenities": [
+    "Village hall and local community activity",
+    "Awbridge Primary School",
+    "Nearby supermarkets and rail services in Romsey"
+  ],
+  "schools": [
+    {
+      "name": "Awbridge Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In village",
+      "url": "https://www.awbridge.hants.sch.uk/"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "commutes": [
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "typical": "~10 min",
+        "notes": "closest town and station"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~25\u201335 min",
+        "notes": "A3057/M27 corridor"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "summary": "SO51 pricing reflects Romsey/Test Valley demand with village premiums in quieter lanes.",
+    "asOf": "2026-04",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO51.html"
+  },
+  "thingsToDo": [
+    "Village and Test Valley countryside walking",
+    "Access nearby Mottisfont and Romsey attractions"
+  ],
+  "placesToEat": [
+    "Pubs and restaurants in Romsey/Test Valley area"
+  ],
+  "pros": [
+    "Rural feel with good access to Romsey",
+    "Community village identity"
+  ],
+  "cons": [
+    "Most larger services are outside the village",
+    "Car remains the practical default"
+  ],
+  "whoItSuits": "Well suited to families and downsizers wanting Hampshire village character close to Romsey transport and services.",
   "images": [],
-  "sources": []
+  "sources": [
+    {
+      "label": "Wikipedia \u2014 Awbridge",
+      "url": "https://en.wikipedia.org/wiki/Awbridge"
+    },
+    {
+      "label": "Awbridge village site",
+      "url": "https://www.awbridge.info/"
+    },
+    {
+      "label": "Rightmove House Prices SO51",
+      "url": "https://www.rightmove.co.uk/house-prices/SO51.html"
+    },
+    {
+      "label": "Awbridge Primary School",
+      "url": "https://www.awbridge.hants.sch.uk/"
+    }
+  ]
 }

@@ -15,7 +15,7 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "partial",
+  "status": "researched",
   "overview": "A small Test Valley village about four miles west of Stockbridge, organised around its High Street and village hall. The community lost its private store in 2018 but reopened it as a volunteer-run community shop + post office + café, which remains the social anchor.",
   "character": "Working village rather than show village; chalk downland setting, active parish life, primary-school catchment families.",
   "amenities": [
@@ -26,11 +26,56 @@
     "Parish church",
     "Broughton Primary School"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "name": "Broughton Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": "Good (2023)",
+      "distance": "In village",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116047"
+    },
+    {
+      "name": "Test Valley School, Stockbridge",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": "Good (2023)",
+      "distance": "~4 miles",
+      "url": "https://reports.ofsted.gov.uk/provider/23/116430"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~30 min",
+        "notes": "via A30/A272"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~35–45 min",
+        "notes": "via M27"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train (from Andover)",
+        "typical": "~1h15–1h30 + ~15 min drive to station",
+        "notes": "Nearest practical stations: Andover or Salisbury"
+      }
+    ]
   },
-  "prices": {},
+  "prices": {
+    "summary": "SO20 market is high-value Test Valley stock with detached homes dominating village transactions.",
+    "average": "£557,054",
+    "detached": "£808,571",
+    "semiDetached": "£426,364",
+    "terraced": "£345,769",
+    "flat": "£152,000",
+    "asOf": "2026-04",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO20.html"
+  },
   "thingsToDo": [
     "Clarendon Way walking",
     "Houghton Down nature reserve",
@@ -66,6 +111,26 @@
     {
       "label": "Wikipedia — Broughton, Hampshire",
       "url": "https://en.wikipedia.org/wiki/Broughton,_Hampshire"
+    },
+    {
+      "label": "Ofsted — Broughton Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116047"
+    },
+    {
+      "label": "Ofsted — Test Valley School",
+      "url": "https://reports.ofsted.gov.uk/provider/23/116430"
+    },
+    {
+      "label": "Rightmove House Prices SO20",
+      "url": "https://www.rightmove.co.uk/house-prices/SO20.html"
+    },
+    {
+      "label": "National Rail — Andover station",
+      "url": "https://www.nationalrail.co.uk/stations/andover/"
+    },
+    {
+      "label": "Google Maps — Broughton to Andover station",
+      "url": "https://www.google.com/maps/dir/Broughton,+Stockbridge/Andover+station"
     }
   ]
 }
