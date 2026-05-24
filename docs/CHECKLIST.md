@@ -254,9 +254,15 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       old and new active links on navigation (280ms, `--ease-out`).
 
 ### 9C · Schema additions (on-sandbox)
-- [ ] `areas.json` schema: `councilTaxBand`, `broadbandMedianMbps`, `nearestStation`,
-      `primarySupermarket`. Schema validator updated. UI hides empty rows.
-- [ ] House types expanded 8 → 15 with `status: "draft-no-sources"`.
+- [x] `areas.json` schema: `councilTaxBand`, `broadbandMedianMbps`, `nearestStation`,
+      `primarySupermarket`. Schema validator updated. UI hides empty rows. A new
+      `.essentials` card on `area-detail.html` renders only the populated rows; if all
+      four are unset the entire card stays `hidden`.
+- [x] House types expanded 8 → 15 with `status: "draft-no-sources"`. New entries:
+      Edwardian villa, inter-war bay-fronted semi, post-war local-authority semi,
+      converted barn, dormer bungalow, coastal Solent flat, park home. Each gets a
+      "Draft" chip on the gallery card and an explicit placeholder body until
+      type-specific research + licensed imagery land (CLAUDE.md §7).
 
 ### 9D · CSS component split & polish (on-sandbox)
 - [ ] Extract `assets/css/components/{card,tile,sheet,chip,segmented,table,field,dialog}.css`.

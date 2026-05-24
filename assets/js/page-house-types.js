@@ -29,10 +29,12 @@ function renderCard(type, areasForType) {
       ${imgHtml}
       <div class="ht-body">
         <header>
-          <h3 class="ht-title">${esc(type.name)}</h3>
+          <h3 class="ht-title">${esc(type.name)}${type.status === 'draft-no-sources' ? ' <span class="chip is-draft">Draft</span>' : ''}</h3>
           <p class="ht-era muted">${esc(type.era || '')}</p>
         </header>
-        <p>${esc(type.description) || '<span class="muted">Description being researched.</span>'}</p>
+        <p>${type.status === 'draft-no-sources'
+          ? '<span class="muted">Awaiting type-specific research and licensed imagery per CLAUDE.md §7.</span>'
+          : (esc(type.description) || '<span class="muted">Description being researched.</span>')}</p>
         ${features ? `<h4>Features</h4><ul class="mini-list">${features}</ul>` : ''}
         ${regions ? `<h4>Common in</h4><ul class="ht-regions">${regions}</ul>` : ''}
         ${linksHtml}

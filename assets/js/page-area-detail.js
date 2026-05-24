@@ -128,6 +128,22 @@ function renderSources(a) {
   `;
 }
 
+function renderEssentials(a) {
+  const rows = [
+    ['Council tax band', a.councilTaxBand],
+    ['Broadband (median)', a.broadbandMedianMbps ? `${a.broadbandMedianMbps} Mbps` : null],
+    ['Nearest station', a.nearestStation],
+    ['Primary supermarket', a.primarySupermarket],
+  ].filter(([, v]) => v != null && v !== '');
+  const card = $('sec-essentials');
+  const list = $('essentials-list');
+  if (!rows.length) { if (card) card.hidden = true; return; }
+  if (card) card.hidden = false;
+  if (list) list.innerHTML = rows.map(([l, v]) =>
+    `<div class="field-view"><dt>${esc(l)}</dt><dd>${esc(String(v))}</dd></div>`
+  ).join('');
+}
+
 function renderArea(a) {
   document.title = `${a.name} · rec`;
 
@@ -150,6 +166,7 @@ function renderArea(a) {
   $('tile-county').textContent = a.county || '—';
 
   // Sections
+  renderEssentials(a);
   $('sec-overview').innerHTML = renderOverview(a);
   $('sec-amenities').innerHTML = renderAmenities(a);
   $('sec-schools').innerHTML = renderSchools(a);
