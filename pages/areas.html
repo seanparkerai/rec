@@ -2,13 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Areas · rec</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
   <link rel="stylesheet" href="../assets/css/fonts.css" />
   <link rel="stylesheet" href="../assets/css/tokens.css" />
   <link rel="stylesheet" href="../assets/css/base.css" />
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <style>
+    /* Filter sheet: inline card on desktop, modal bottom-sheet on mobile. */
+    .filter-trigger-row {
+      display: none;
+      align-items: center; gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+    .filter-trigger-row .active-filters {
+      flex: 1; display: flex; gap: var(--space-2); flex-wrap: wrap;
+      color: var(--ink-muted); font-size: var(--text-sm);
+    }
+    .filter-trigger-row .filter-pill {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.2rem 0.55rem; border: 1px solid var(--hairline);
+      border-radius: 99px; color: var(--ink); font-weight: 500; font-size: var(--text-xs);
+    }
+    .filter-trigger-row button { margin: 0; min-height: 44px; }
+
+    /* Dialog defaults already styled in base.css. Add filter-sheet header/footer. */
+    dialog.filter-sheet > article > header {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+    }
+    dialog.filter-sheet > article > header h2 { margin: 0; font-size: var(--text-xl); }
+    dialog.filter-sheet > article > form > .filter-row + .filter-row { margin-top: var(--space-3); }
+
+    @media (max-width: 767.98px) {
+      .filter-trigger-row { display: flex; }
+    }
+    @media (min-width: 768px) {
+      /* Show the dialog inline as a card. */
+      dialog.filter-sheet[open] {
+        display: block; position: static;
+        max-width: none; width: 100%; max-height: none; height: auto;
+        margin: 0 0 var(--space-4); padding: 0;
+        background: var(--paper); border: 1px solid var(--hairline);
+        border-radius: var(--rec-radius); box-shadow: none;
+      }
+      dialog.filter-sheet[open]::backdrop { display: none; background: transparent; }
+      dialog.filter-sheet > article { padding: var(--space-5); max-height: none; gap: var(--space-3); }
+      dialog.filter-sheet > article > header { display: none; }
+      dialog.filter-sheet > article > footer { display: none; }
+    }
+  </style>
 </head>
 <body>
   <div data-include="components/header.html"></div>
@@ -21,38 +64,54 @@
       <p class="lead">Towns and villages across Hampshire &amp; Wiltshire — <strong class="num" id="total-count">191</strong> in the directory, <strong class="num" id="shortlist-count">0</strong> shortlisted.</p>
     </header>
 
-    <section class="card filter-bar" aria-label="Filter areas">
-      <div class="filter-row">
-        <label class="filter-field">
-          <span>Search</span>
-          <input type="search" id="search" placeholder="Name, town, postcode…" />
-        </label>
-        <label class="filter-field">
-          <span>County</span>
-          <select id="filter-county"></select>
-        </label>
-        <label class="filter-field">
-          <span>Sub-region</span>
-          <select id="filter-subregion"></select>
-        </label>
-        <label class="filter-field">
-          <span>Sort by</span>
-          <select id="sort">
-            <option value="name">Name</option>
-            <option value="town">Town</option>
-            <option value="postcode">Postcode</option>
-            <option value="status">Profile status</option>
-          </select>
-        </label>
-      </div>
-      <div class="filter-row filter-row-end">
-        <label class="check-row">
-          <input type="checkbox" id="only-shortlisted" />
-          <span>Show shortlisted only</span>
-        </label>
-        <button type="button" id="btn-clear" class="outline secondary">Clear filters</button>
-      </div>
-    </section>
+    <div class="filter-trigger-row">
+      <div class="active-filters" id="active-filters" aria-live="polite">No filters set.</div>
+      <button type="button" id="open-filters" aria-haspopup="dialog" aria-controls="filter-sheet">Filters</button>
+    </div>
+
+    <dialog class="filter-sheet" id="filter-sheet" aria-labelledby="filter-sheet-title" open>
+      <article>
+        <header>
+          <h2 id="filter-sheet-title">Filters</h2>
+          <button type="button" class="outline secondary" id="filter-sheet-close" aria-label="Close" style="min-height:44px;">Done</button>
+        </header>
+        <form method="dialog" id="filter-form">
+          <div class="filter-row">
+            <label class="filter-field">
+              <span>Search</span>
+              <input type="search" id="search" placeholder="Name, town, postcode…" />
+            </label>
+            <label class="filter-field">
+              <span>County</span>
+              <select id="filter-county"></select>
+            </label>
+            <label class="filter-field">
+              <span>Sub-region</span>
+              <select id="filter-subregion"></select>
+            </label>
+            <label class="filter-field">
+              <span>Sort by</span>
+              <select id="sort">
+                <option value="name">Name</option>
+                <option value="town">Town</option>
+                <option value="postcode">Postcode</option>
+                <option value="status">Profile status</option>
+              </select>
+            </label>
+          </div>
+          <div class="filter-row filter-row-end">
+            <label class="check-row">
+              <input type="checkbox" id="only-shortlisted" />
+              <span>Show shortlisted only</span>
+            </label>
+            <button type="button" id="btn-clear" class="outline secondary">Clear filters</button>
+          </div>
+        </form>
+        <footer>
+          <p class="muted" style="margin:0;font-size:var(--text-sm);"><strong class="num" id="filter-sheet-count">0</strong> areas match.</p>
+        </footer>
+      </article>
+    </dialog>
 
     <p class="result-summary"><strong id="result-count">0</strong> areas shown</p>
 
@@ -62,5 +121,58 @@
   <div data-include="components/footer.html"></div>
   <script type="module" src="../assets/js/components.js"></script>
   <script type="module" src="../assets/js/page-areas.js"></script>
+  <script>
+    // Filter sheet: inline card on desktop, modal bottom-sheet on mobile.
+    (() => {
+      const dlg = document.getElementById('filter-sheet');
+      const openBtn = document.getElementById('open-filters');
+      const closeBtn = document.getElementById('filter-sheet-close');
+      const mq = matchMedia('(max-width: 767.98px)');
+
+      function syncMode() {
+        if (mq.matches) {
+          if (dlg.hasAttribute('open') && !dlg.matches(':modal')) dlg.removeAttribute('open');
+        } else {
+          if (!dlg.hasAttribute('open')) dlg.setAttribute('open', '');
+        }
+      }
+      openBtn?.addEventListener('click', () => {
+        if (dlg.hasAttribute('open')) dlg.close();
+        dlg.showModal();
+      });
+      closeBtn?.addEventListener('click', () => dlg.close());
+      mq.addEventListener?.('change', syncMode);
+      syncMode();
+
+      // Mirror "x active filters" summary on the trigger row.
+      const active = document.getElementById('active-filters');
+      const sheetCount = document.getElementById('filter-sheet-count');
+      const resultCount = document.getElementById('result-count');
+      function refreshSummary() {
+        const parts = [];
+        const q = document.getElementById('search')?.value?.trim();
+        const c = document.getElementById('filter-county')?.value;
+        const s = document.getElementById('filter-subregion')?.value;
+        const sl = document.getElementById('only-shortlisted')?.checked;
+        if (q) parts.push(`<span class="filter-pill">“${q}”</span>`);
+        if (c && c !== 'all') parts.push(`<span class="filter-pill">${c}</span>`);
+        if (s && s !== 'all') parts.push(`<span class="filter-pill">${s}</span>`);
+        if (sl) parts.push(`<span class="filter-pill">★ shortlisted</span>`);
+        active.innerHTML = parts.length ? parts.join('') : 'No filters set.';
+        if (sheetCount && resultCount) sheetCount.textContent = resultCount.textContent || '0';
+      }
+      document.addEventListener('input', (e) => {
+        if (e.target?.closest('#filter-sheet')) refreshSummary();
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target?.closest('#filter-sheet')) refreshSummary();
+      });
+      // Also refresh after the page script renders results (areas list changes).
+      const ol = document.getElementById('areas-grid');
+      if (ol) new MutationObserver(refreshSummary).observe(ol, { childList: true });
+      document.addEventListener('shell:ready', refreshSummary);
+      refreshSummary();
+    })();
+  </script>
 </body>
 </html>

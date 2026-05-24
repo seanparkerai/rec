@@ -239,7 +239,10 @@ sources, so 9F items are queued behind tools to be run from a connected host.
 
 ### 9B · Areas page improvements (on-sandbox)
 - [x] URL-driven filter state on `pages/areas.html` (`q`/`county`/`sub`/`sort`/`starred` params).
-- [ ] `<dialog>` full-filter sheet on mobile.
+- [x] `<dialog>` full-filter sheet on mobile. Single `<dialog class="filter-sheet" open>`
+      contains all four filter controls + the shortlist toggle: styled as an inline card
+      on ≥768px, full-height bottom-sheet modal below. Compact trigger row above the list
+      on mobile shows active-filter pills + "Filters" button (`showModal()`); Done closes.
 - [ ] Sticky anchored TOC on `area-detail.html` (left rail desktop / chip row mobile).
 - [ ] Animated active-link nav indicator (View Transitions cross-document).
 
