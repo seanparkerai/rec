@@ -15,20 +15,86 @@
   },
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
-  "status": "directory",
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "status": "researched",
+  "overview": "Bramdean is a village in the South Downs-adjacent countryside east of Winchester and north of Petersfield. It has a historic rural parish setting with church and village institutions tied to surrounding farmland. Modern life in Bramdean is quiet and low-density, with residents typically relying on Alresford and Winchester for higher-order services.",
+  "character": "Small historic village with downland scenery and a calm rural rhythm.",
+  "amenities": [
+    "Village hall/church-led community life",
+    "Local footpaths and countryside recreation",
+    "Most shopping and healthcare needs met in Alresford/Winchester"
+  ],
+  "schools": [
+    {
+      "name": "Cheriton Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~3-5 miles",
+      "url": "https://www.cheriton.hants.sch.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~6-9 miles",
+      "url": "https://www.perins.net/"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~25-35 min",
+        "notes": "Via A31 approach roads"
+      },
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "typical": "~20-30 min",
+        "notes": "Via rural B-road routes"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "summary": "SO24 prices near Bramdean tend to reflect scarcity of stock and demand for rural homes close to South Downs amenities.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Walk and cycle South Downs-edge routes",
+    "Visit nearby Hinton Ampner and Alresford attractions"
+  ],
+  "placesToEat": [
+    "Country pubs in Cheriton/Alresford/Petersfield hinterland"
+  ],
+  "pros": [
+    "Peaceful countryside setting with strong landscape value",
+    "Accessible to multiple market towns by car"
+  ],
+  "cons": [
+    "Limited day-to-day amenities within the village",
+    "Car use is essential for most households"
+  ],
+  "whoItSuits": "A good fit for buyers who value rural tranquillity and scenery, and who are comfortable travelling to nearby towns for schools, shopping and rail connections.",
   "images": [],
-  "sources": []
+  "sources": [
+    {
+      "label": "Wikipedia — Bramdean",
+      "url": "https://en.wikipedia.org/wiki/Bramdean"
+    },
+    {
+      "label": "Rightmove House Prices SO24",
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+    },
+    {
+      "label": "Perins School",
+      "url": "https://www.perins.net/"
+    },
+    {
+      "label": "Winchester City Council",
+      "url": "https://www.winchester.gov.uk/"
+    }
+  ]
 }
