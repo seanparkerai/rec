@@ -1,0 +1,28 @@
+/* components/card.css — Linear-dense hairline card primitive.
+   Loaded via @import from base.css. Cards opt into container queries:
+   `container-type: inline-size` lets child layout react to the card's
+   own width via `@container card (...)`. */
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--rec-radius);
+  padding: var(--space-4) var(--space-6);
+  display: flex; flex-direction: column; gap: var(--space-3);
+  container-type: inline-size;
+  container-name: card;
+}
+.card h2, .card h3 {
+  margin: 0; font-size: var(--text-lg); font-weight: 600;
+  font-family: var(--font-body); letter-spacing: -0.005em;
+}
+.card h3 { font-size: var(--text-base); color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.card-link { text-decoration: none; color: inherit; display: block; }
+.card-link:hover { border-color: var(--accent); }
+
+/* Narrow-card adaptations: collapse decorative padding when the card itself
+   is squeezed (e.g. half-width in a 12-col grid on a narrow viewport). */
+@container card (max-width: 360px) {
+  .card { padding: var(--space-3) var(--space-4); gap: var(--space-2); }
+  .card h2, .card h3 { font-size: var(--text-base); }
+}

@@ -1,5 +1,17 @@
-/* base.css — global layout: header, top nav, container, cards, footer.
-   Loaded after Pico + tokens. */
+/* base.css — global layout: header, top nav, container, footer.
+   Loaded after Pico + tokens. Component primitives (card, tile, sheet,
+   chip, segmented, table, field, dialog) live under ./components/ and
+   are pulled in here so a single <link rel="stylesheet" href="base.css">
+   continues to be the only stylesheet a page needs to load. */
+
+@import url("components/card.css");
+@import url("components/tile.css");
+@import url("components/sheet.css");
+@import url("components/chip.css");
+@import url("components/segmented.css");
+@import url("components/table.css");
+@import url("components/field.css");
+@import url("components/dialog.css");
 
 /* ---- Typography root: body sans, display serif, mono numerals -------- */
 html { color-scheme: light dark; }
@@ -228,18 +240,7 @@ main.container {
   .page-head .page-actions button:only-child { flex: 0 0 auto; }
 }
 
-/* ---- Card (Linear-dense: hairline, no shadow) ---- */
-.card {
-  background: var(--paper);
-  border: 1px solid var(--hairline);
-  border-radius: var(--rec-radius);
-  padding: var(--space-4) var(--space-6);
-  display: flex; flex-direction: column; gap: var(--space-3);
-}
-.card h2, .card h3 { margin: 0; font-size: var(--text-lg); font-weight: 600; font-family: var(--font-body); letter-spacing: -0.005em; }
-.card h3 { font-size: var(--text-base); color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-.card-link { text-decoration: none; color: inherit; display: block; }
-.card-link:hover { border-color: var(--accent); }
+/* Card, chip, dialog, field, tile primitives migrated to ./components/*. */
 
 /* ---- Generic grid ---- */
 .grid { display: grid; gap: var(--rec-gap); }
@@ -326,66 +327,11 @@ main.container {
   .stat-strip dd { font-size: var(--text-xl); }
 }
 
-/* ---- Chip grid (priorities, deal-breakers, tags) ------------------- */
-.chip-grid { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
-.chip {
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  padding: var(--space-1) var(--space-3); border-radius: 999px;
-  font-size: var(--text-sm); line-height: 1.4;
-  background: var(--paper-2); color: var(--ink);
-  border: 1px solid var(--hairline);
-}
-.chip.is-accent { background: var(--accent-soft); border-color: color-mix(in oklch, var(--accent) 30%, var(--paper)); color: var(--accent-ink); }
-.chip.is-draft {
-  font-size: var(--text-xs); padding: 0.1rem 0.5rem; margin-left: 0.5rem;
-  color: var(--ink-muted); background: color-mix(in oklch, var(--ink-subtle) 12%, var(--paper));
-  border-color: var(--hairline); font-weight: 500; letter-spacing: 0.04em;
-  text-transform: uppercase; vertical-align: 0.15em;
-}
-.chip.is-warn   { background: color-mix(in oklch, oklch(60% 0.18 30) 14%, var(--paper)); border-color: color-mix(in oklch, oklch(60% 0.18 30) 30%, var(--paper)); color: oklch(40% 0.16 30); }
-[data-theme="dark"] .chip.is-warn { color: oklch(80% 0.16 30); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .chip.is-warn { color: oklch(80% 0.16 30); }
-}
-
 /* ---- Reading prose (long-form within article-section) -------------- */
 .prose { color: var(--ink); }
 .prose p { margin: 0 0 var(--space-3); line-height: var(--leading-body); }
 .prose p:last-child { margin-bottom: 0; }
 .prose a { color: var(--accent-ink); text-underline-offset: 3px; }
-
-/* ---- Dialog (Pico-themed, mobile-fullscreen) ---------------------- */
-dialog {
-  max-width: min(560px, calc(100vw - var(--space-6)));
-  width: 100%;
-  border: 1px solid var(--hairline); border-radius: var(--rec-radius-lg);
-  background: var(--paper); color: var(--ink);
-  padding: 0;
-  box-shadow: var(--rec-shadow-lg);
-}
-dialog::backdrop {
-  background: color-mix(in oklch, var(--ink) 35%, transparent);
-  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
-}
-dialog > article { margin: 0; padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); max-height: 80svh; }
-dialog > article > header { flex-shrink: 0; }
-dialog > article > footer { flex-shrink: 0; padding-top: var(--space-4); border-top: 1px solid var(--hairline); margin-top: var(--space-2); }
-dialog > article > form { overflow-y: auto; flex: 1; min-height: 0; margin: 0; }
-@media (max-width: 640px) {
-  dialog {
-    max-width: 100vw; width: 100vw;
-    max-height: 100svh; height: 100svh;
-    border-radius: 0; border: 0;
-    margin: 0;
-  }
-  dialog > article {
-    max-height: none; height: 100%;
-    padding: max(var(--space-4), env(safe-area-inset-top))
-             max(var(--space-4), env(safe-area-inset-right))
-             max(var(--space-4), env(safe-area-inset-bottom))
-             max(var(--space-4), env(safe-area-inset-left));
-  }
-}
 
 /* Utilities */
 .muted { color: var(--ink-muted); }
@@ -404,28 +350,4 @@ dialog > article > form { overflow-y: auto; flex: 1; min-height: 0; margin: 0; }
 
 .lead { font-size: 1.05rem; line-height: 1.5; margin: 0; }
 
-.field-list { margin: 0; }
-.field-list .field-view { display: grid; grid-template-columns: 9rem 1fr; gap: 0.5rem 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--pico-muted-border-color); }
-.field-list .field-view:last-child { border-bottom: 0; }
-.field-list dt { color: var(--pico-muted-color); font-size: 0.85rem; margin: 0; }
-.field-list dd { margin: 0; }
-
-.field-edit { margin-bottom: 0.85rem; }
-.field-edit label { display: block; font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 0.25rem; }
-.field-edit input,
-.field-edit textarea { margin: 0; }
-
-.edit-list { list-style: none; margin: 0 0 0.6rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.edit-list .edit-row {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  background: var(--pico-secondary-background);
-  border-radius: 999px; padding: 0.25rem 0.35rem 0.25rem 0.75rem;
-  font-size: 0.9rem;
-}
-.chip-x {
-  width: 1.5rem; height: 1.5rem; padding: 0; line-height: 1;
-  border-radius: 999px; margin: 0; font-size: 1rem;
-}
-.add-row { gap: 0.5rem; }
-.add-row input { flex: 1 1 12rem; margin: 0; }
-.add-row button { margin: 0; }
+/* .field-*, .edit-*, .add-row, .chip-x migrated to components/field.css + chip.css. */

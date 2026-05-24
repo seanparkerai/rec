@@ -1,0 +1,7 @@
+/* components/table.css — finance/breakdown table primitive.
+   Loaded via @import from base.css.
+
+   Current table rules live in dashboard.css §"Finance tables" (.table-wrap,
+   #tbl-* cards). Reserved for the consolidated .table primitive — sticky
+   header on long tables, hairline rows, right-aligned numerics, mobile
+   horizontal scroll. */

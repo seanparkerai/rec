@@ -265,8 +265,16 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       type-specific research + licensed imagery land (CLAUDE.md §7).
 
 ### 9D · CSS component split & polish (on-sandbox)
-- [ ] Extract `assets/css/components/{card,tile,sheet,chip,segmented,table,field,dialog}.css`.
-- [ ] Container queries on `.card` and map sidebar.
+- [x] Extract `assets/css/components/{card,tile,sheet,chip,segmented,table,field,dialog}.css`.
+      Card / tile / chip / dialog / field rules migrated; sheet / segmented / table land
+      as scaffold files (header comment + reservation) for incremental future moves —
+      the matching live rules still live in `dashboard.css` and inline page styles.
+      `base.css` `@import`s all eight so a single `<link>` continues to pull everything.
+- [x] Container queries on `.card` and map sidebar. `.card` now declares
+      `container-type: inline-size; container-name: card` and a
+      `@container card (max-width: 360px)` rule collapses padding + heading size when a
+      card is squeezed into a narrow column (e.g. half-width bento cells). Map sidebar
+      already uses container queries (Phase 8C); no new rules required there.
 
 ### 9E · On-sandbox housekeeping
 - [ ] `tests/schemas.js` updated for new fields.

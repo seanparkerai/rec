@@ -197,40 +197,7 @@
 .step-bar { height: 3px; border-radius: 999px; background: var(--hairline); overflow: hidden; }
 .step-bar > span { display: block; height: 100%; background: var(--accent); transition: width 500ms var(--ease-out); }
 
-/* ---- Compat: .tiles / .tile (used by criteria, finances) ----------
-   Restyled as a hairline-divided stat row to match .stat-strip. */
-.tiles {
-  display: grid; gap: 0;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
-  margin: var(--space-6) 0;
-}
-.tile {
-  padding: var(--space-4);
-  border-left: 1px solid var(--hairline);
-  display: grid; gap: var(--space-1);
-  background: var(--paper);
-}
-.tile:first-child { border-left: 0; }
-.tile .tile-label {
-  font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink-muted); margin: 0;
-}
-.tile .tile-value {
-  margin: 0;
-  font-family: var(--font-display); font-optical-sizing: auto;
-  font-feature-settings: "tnum"; font-variant-numeric: tabular-nums;
-  font-size: var(--text-2xl); font-weight: 500; line-height: 1.05; letter-spacing: -0.02em;
-  color: var(--ink);
-}
-.tile .tile-value.accent { color: var(--accent-ink); }
-.tile .tile-sub { font-size: var(--text-xs); color: var(--ink-subtle); margin: 0; }
-@media (max-width: 480px) {
-  .tiles { grid-template-columns: 1fr 1fr; }
-  .tile:nth-child(odd) { border-left: 0; }
-  .tile:nth-child(n+3) { border-top: 1px solid var(--hairline); }
-}
+/* .tiles / .tile primitive migrated to components/tile.css (Phase 9D). */
 
 /* ---- Legacy progress bar (kept for journey page until 8C.7) -------- */
 .progress { height: 8px; border-radius: 999px; background: var(--hairline); overflow: hidden; margin-top: 0.6rem; }
