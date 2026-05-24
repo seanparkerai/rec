@@ -243,7 +243,11 @@ sources, so 9F items are queued behind tools to be run from a connected host.
       contains all four filter controls + the shortlist toggle: styled as an inline card
       on ≥768px, full-height bottom-sheet modal below. Compact trigger row above the list
       on mobile shows active-filter pills + "Filters" button (`showModal()`); Done closes.
-- [ ] Sticky anchored TOC on `area-detail.html` (left rail desktop / chip row mobile).
+- [x] Sticky anchored TOC on `area-detail.html` (left rail desktop / chip row mobile).
+      `<nav class="area-toc">` with 9 entries; container-query-style media split: at
+      ≥1024px a 12rem hairline-rail TOC, below that a sticky pill row with
+      `scroll-snap-type: x proximity`. IntersectionObserver sets `aria-current` and
+      auto-scrolls the active pill into view on mobile.
 - [ ] Animated active-link nav indicator (View Transitions cross-document).
 
 ### 9C · Schema additions (on-sandbox)
