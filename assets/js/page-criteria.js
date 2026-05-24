@@ -10,7 +10,9 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
 ));
 
-const $ = (id) => document.getElementById(id);
+const ROOT = document.querySelector('[data-page="criteria"]') || document;
+const $ = (id) => ROOT.querySelector('#' + id);
+const $$ = (sel) => ROOT.querySelectorAll(sel);
 
 let current = null;
 let baseline = null;
@@ -268,7 +270,7 @@ function refreshOverlayBadge() {
 }
 
 function attachEditHandlers() {
-  document.querySelectorAll('[data-remove]').forEach((btn) => {
+  $$('[data-remove]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const field = btn.dataset.remove;
       const i = Number(btn.dataset.index);
@@ -280,7 +282,7 @@ function attachEditHandlers() {
     });
   });
 
-  document.querySelectorAll('[data-add]').forEach((btn) => {
+  $$('[data-add]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const field = btn.dataset.add;
       const input = $(`add-${field}`);
@@ -296,12 +298,12 @@ function attachEditHandlers() {
     });
   });
 
-  document.querySelectorAll('input[id^="add-"]').forEach((input) => {
+  $$('input[id^="add-"]').forEach((input) => {
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         const field = input.id.replace(/^add-/, '');
-        document.querySelector(`[data-add="${field}"]`)?.click();
+        ROOT.querySelector(`[data-add="${field}"]`)?.click();
       }
     });
   });
@@ -348,7 +350,7 @@ function collectForm() {
     ['mortgage.fixedRatePref', 'f-mortgage.fixedRatePref'],
   ];
   flatFields.forEach(([path, id]) => {
-    const el = document.querySelector(`[name="${path}"]`);
+    const el = ROOT.querySelector(`[name="${path}"]`);
     if (el) {
       const val = el.value.trim();
       setNestedValue(next, path, val === '' ? null : (path.includes('Pct') || path.includes('Beds') || path.includes('Baths') || path.includes('Hours') || path.includes('Years') ? Number(val) || null : val));
@@ -405,6 +407,7 @@ function setStatus(msg, kind = '') {
 }
 
 async function init() {
+  if (!$('btn-edit')) return;
   try {
     current = await getCriteria();
     renderAll();

@@ -29,8 +29,7 @@ const OUT_DIR = join(__root, "artifacts", "screenshots", TAG);
 
 const PAGES = [
   ["index",        "/"],
-  ["profile",      "/pages/profile.html"],
-  ["criteria",     "/pages/criteria.html"],
+  ["about-search", "/pages/about-search.html"],
   ["areas",        "/pages/areas.html"],
   ["area-detail",  "/pages/area-detail.html?id=stockbridge-so20"],
   ["house-types",  "/pages/house-types.html"],

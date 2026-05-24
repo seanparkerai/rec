@@ -220,8 +220,10 @@ for the full spec. Network policy of the current sandbox blocks all research / i
 sources, so 9F items are queued behind tools to be run from a connected host.
 
 ### 9A · Information architecture (on-sandbox)
-- [ ] Merge `pages/profile.html` + `pages/criteria.html` → `pages/about-search.html` (Stripe-docs).
+- [x] Merge `pages/profile.html` + `pages/criteria.html` → `pages/about-search.html` (Stripe-docs).
       Old URLs redirect via `<meta refresh>`. Nav updated: `Profile · Criteria` → `About`.
+      Both page scripts scoped to `[data-page]` section roots; profile-side collision IDs prefixed
+      `p-*`; localStorage keys (`rec:profile`, `rec:criteria`) preserved verbatim.
 - [ ] Dashboard reorganisation: magazine lead-in + bento that aggregates from every page
       (Linear-dense hybrid).
 - [ ] Finances kept as one page, restructured into "Now vs Later" sections.

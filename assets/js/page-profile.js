@@ -10,7 +10,9 @@ const gbp = (n) => new Intl.NumberFormat('en-GB', {
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
 ));
-const $ = (id) => document.getElementById(id);
+const ROOT = document.querySelector('[data-page="profile"]') || document;
+const $ = (id) => ROOT.querySelector('#' + id);
+const $$ = (sel) => ROOT.querySelectorAll(sel);
 
 let current = null;
 const dlg = () => $('edit-dialog');
@@ -36,10 +38,10 @@ function renderTiles(criteria, finances) {
   const max = criteria?.budget?.max || 0;
   const dep = criteria?.budget?.targetDeposit || 0;
   const saved = finances?.savings?.totalSavings ?? finances?.savings?.current ?? 0;
-  $('tile-budget').textContent = gbp(max);
-  $('tile-deposit').textContent = gbp(dep);
-  $('tile-saved').textContent = gbp(saved);
-  $('tile-window').textContent = current?.movingTimeline || '—';
+  const tb = $('tile-budget'); if (tb) tb.textContent = gbp(max);
+  const td = $('tile-deposit'); if (td) td.textContent = gbp(dep);
+  const ts = $('tile-saved'); if (ts) ts.textContent = gbp(saved);
+  const tw = $('tile-window'); if (tw) tw.textContent = current?.movingTimeline || '—';
 }
 
 function renderFieldList(container, rows) {
@@ -61,7 +63,8 @@ function renderChips(container, arr, opts = {}) {
 }
 
 function renderAll() {
-  $('headline-lead').textContent = current.headline || 'Who you are, how you want to live, what you\'re looking for.';
+  const lead = $('headline-lead');
+  if (lead) lead.textContent = current.headline || 'Who you are, how you want to live, what you\'re looking for.';
   renderFieldList($('dl-buyer'), [
     ['Buyers', current.buyers],
     ['Household', current.household],
@@ -81,7 +84,8 @@ function renderAll() {
 
 function refreshOverlayBadge() {
   const has = !!_internal.readLocal('profile');
-  $('overlay-badge').hidden = !has;
+  const badge = $('p-overlay-badge');
+  if (badge) badge.hidden = !has;
 }
 
 // ---- edit dialog ----------------------------------------------------
@@ -116,14 +120,14 @@ function buildDialogFields() {
 }
 
 function attachArrayHandlers() {
-  document.querySelectorAll('[data-remove]').forEach((btn) => {
+  $$('[data-remove]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const f = btn.dataset.remove;
       current[f].splice(Number(btn.dataset.index), 1);
       buildDialogFields();
     });
   });
-  document.querySelectorAll('[data-add]').forEach((btn) => {
+  $$('[data-add]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const f = btn.dataset.add;
       const input = $(`add-${f}`);
@@ -134,11 +138,11 @@ function attachArrayHandlers() {
       buildDialogFields();
     });
   });
-  document.querySelectorAll('input[id^="add-"]').forEach((input) => {
+  $$('input[id^="add-"]').forEach((input) => {
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        document.querySelector(`[data-add="${input.id.replace(/^add-/, '')}"]`)?.click();
+        ROOT.querySelector(`[data-add="${input.id.replace(/^add-/, '')}"]`)?.click();
       }
     });
   });
@@ -188,13 +192,15 @@ async function resetToDefaults() {
 }
 
 function setStatus(msg, kind = '') {
-  const el = $('status');
+  const el = $('p-status');
+  if (!el) return;
   el.textContent = msg;
   el.dataset.kind = kind;
 }
 
 // ---- init -----------------------------------------------------------
 async function init() {
+  if (!$('p-btn-edit')) return;
   try {
     current = await getProfile();
     const fin = await getFinances();
@@ -206,10 +212,10 @@ async function init() {
     setStatus('Failed to load profile data.', 'err');
     return;
   }
-  $('btn-edit').addEventListener('click', openEdit);
-  $('dlg-close').addEventListener('click', closeEdit);
-  $('btn-save').addEventListener('click', saveEdit);
-  $('btn-reset').addEventListener('click', resetToDefaults);
+  $('p-btn-edit')?.addEventListener('click', openEdit);
+  $('dlg-close')?.addEventListener('click', closeEdit);
+  $('p-btn-save')?.addEventListener('click', saveEdit);
+  $('p-btn-reset')?.addEventListener('click', resetToDefaults);
 }
 
 init();
