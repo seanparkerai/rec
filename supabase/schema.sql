@@ -7,23 +7,6 @@
 BEGIN;
 
 -- -----------------------------------------------------------------------
--- Helper function: returns true if the current authenticated user belongs
--- to a given household. Used by every RLS policy below.
--- -----------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION is_household_member(p_household_id uuid)
-RETURNS boolean
-LANGUAGE sql
-SECURITY DEFINER
-STABLE
-AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM household_members
-    WHERE household_id = p_household_id
-      AND user_id = auth.uid()
-  );
-$$;
-
--- -----------------------------------------------------------------------
 -- households — one row per household (single-household model).
 -- The app auto-inserts this row during setup; you never need to touch it.
 -- -----------------------------------------------------------------------
@@ -34,11 +17,6 @@ CREATE TABLE IF NOT EXISTS households (
 );
 
 ALTER TABLE households ENABLE ROW LEVEL SECURITY;
-
--- A household is readable only by its members (checked via the junction table).
-CREATE POLICY "household members can read their household"
-  ON households FOR SELECT
-  USING (is_household_member(id));
 
 -- -----------------------------------------------------------------------
 -- household_members — links Supabase auth users to a household.
@@ -54,13 +32,40 @@ CREATE TABLE IF NOT EXISTS household_members (
 
 ALTER TABLE household_members ENABLE ROW LEVEL SECURITY;
 
--- Users can see who else is in their household.
+-- -----------------------------------------------------------------------
+-- Helper function: returns true if the current authenticated user belongs
+-- to a given household. Defined after both tables so PostgreSQL can
+-- validate the function body at creation time.
+-- -----------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION is_household_member(p_household_id uuid)
+RETURNS boolean
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM household_members
+    WHERE household_id = p_household_id
+      AND user_id = auth.uid()
+  );
+$$;
+
+-- -----------------------------------------------------------------------
+-- RLS policies for households and household_members
+-- (defined here because they reference is_household_member)
+-- -----------------------------------------------------------------------
+
+-- A household is readable only by its members.
+CREATE POLICY "household members can read their household"
+  ON households FOR SELECT
+  USING (is_household_member(id));
+
+-- Users can see membership rows for their household.
 CREATE POLICY "household members can read membership"
   ON household_members FOR SELECT
   USING (user_id = auth.uid() OR is_household_member(household_id));
 
--- Only the user themselves can add/remove their own membership
--- (admin operations are done via the Supabase dashboard or service role).
+-- Only the user themselves can insert their own membership.
 CREATE POLICY "users can insert their own membership"
   ON household_members FOR INSERT
   WITH CHECK (user_id = auth.uid());
