@@ -612,6 +612,10 @@
         <span class="sync-status-tile-val none" id="status-shortlist">—</span>
       </div>
       <div class="sync-status-tile">
+        <span class="sync-status-tile-name">zones</span>
+        <span class="sync-status-tile-val none" id="status-zones">—</span>
+      </div>
+      <div class="sync-status-tile">
         <span class="sync-status-tile-name">journey_checks</span>
         <span class="sync-status-tile-val none" id="status-journey_checks">—</span>
       </div>
@@ -844,7 +848,7 @@
 
   <script type="module" src="../assets/js/components.js"></script>
   <script type="module">
-    import { url } from '../assets/js/config.js';
+    import { url, STORAGE_NS } from '../assets/js/config.js';
 
     // ── Supabase bootstrap ─────────────────────────────────────────────
     let supabase = null;
@@ -897,6 +901,12 @@
     }
     function clearLog(el) { el.innerHTML = ''; el.classList.remove('visible'); }
 
+    // ── localStorage reader (mirrors storage.js key scheme) ───────────
+    function readLocal(lsKey) {
+      try { const v = localStorage.getItem(`${STORAGE_NS}:${lsKey}`); return v ? JSON.parse(v) : null; }
+      catch { return null; }
+    }
+
     // ── Deep equality (key-order-insensitive) ─────────────────────────
     function sortJson(v) {
       if (Array.isArray(v)) return v.map(sortJson);
@@ -920,7 +930,7 @@
     }
 
     // ── Status tiles ───────────────────────────────────────────────────
-    const ALL_TABLES = ['profile', 'criteria', 'finances', 'shortlist', 'journey_checks', 'contacts', 'outreach'];
+    const ALL_TABLES = ['profile', 'criteria', 'finances', 'shortlist', 'zones', 'journey_checks', 'contacts', 'outreach'];
 
     async function refreshStatus() {
       const sb = await initSupabase();
@@ -965,6 +975,20 @@
       { key: 'finances', table: 'finances', file: 'data/finances.json' },
     ];
 
+    // localStorage-backed tables — compared against Supabase to detect cache/cloud drift.
+    const VALIDATE_LOCAL = [
+      { key: 'shortlist',      table: 'shortlist',     lsKey: 'shortlist'      },
+      { key: 'zones',          table: 'zones',          lsKey: 'zones'          },
+      { key: 'journey_checks', table: 'journey_checks', lsKey: 'journey-checks' },
+      { key: 'contacts',       table: 'contacts',       lsKey: 'contacts'       },
+      { key: 'outreach',       table: 'outreach',       lsKey: 'outreach'       },
+    ];
+
+    const VALIDATE_ALL = [
+      ...SYNC_TABLES.map(t => ({ ...t, src: 'file' })),
+      ...VALIDATE_LOCAL.map(t => ({ ...t, src: 'local' })),
+    ];
+
     document.getElementById('btn-validate')?.addEventListener('click', async () => {
       if (!await requireAuth()) return;
 
@@ -985,14 +1009,20 @@
       const hid = await getHouseholdId();
       const results = [];
 
-      for (const { key, table, file } of SYNC_TABLES) {
-        let repoData = null, sbData = null, repoErr = null, sbErr = null;
+      for (const entry of VALIDATE_ALL) {
+        const { key, table, src } = entry;
+        let localData = null, sbData = null, localErr = null, sbErr = null;
 
-        try {
-          const res = await fetch(url(file) + '?_=' + Date.now());
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          repoData = await res.json();
-        } catch (e) { repoErr = e.message; }
+        if (src === 'file') {
+          try {
+            const res = await fetch(url(entry.file) + '?_=' + Date.now());
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            localData = await res.json();
+          } catch (e) { localErr = e.message; }
+        } else {
+          try { localData = readLocal(entry.lsKey); }
+          catch (e) { localErr = e.message; }
+        }
 
         try {
           const { data, error } = await supabase
@@ -1004,31 +1034,39 @@
           sbData = data?.[0]?.data ?? null;
         } catch (e) { sbErr = e.message; }
 
+        const srcLabel = src === 'file' ? `data/${key}.json` : 'browser cache';
         let status, detail;
-        if (repoErr) { status = 'err'; detail = `Repo read error: ${repoErr}`; }
+        if (localErr) { status = 'err'; detail = `${src === 'file' ? 'Repo' : 'Browser'} read error: ${localErr}`; }
         else if (sbErr) { status = 'err'; detail = `Supabase error: ${sbErr}`; }
-        else if (sbData === null) { status = 'warn'; detail = 'Not yet in Supabase — push to initialise.'; }
-        else if (jsonEq(repoData, sbData)) { status = 'ok'; detail = 'In sync.'; }
-        else {
-          const repoKeys = new Set(Object.keys(repoData || {}));
-          const sbKeys   = new Set(Object.keys(sbData || {}));
-          const onlyRepo = [...repoKeys].filter(k => !sbKeys.has(k));
-          const onlySb   = [...sbKeys].filter(k => !repoKeys.has(k));
+        else if (localData === null && sbData === null) { status = 'warn'; detail = src === 'file' ? 'Repo file missing and not in Supabase.' : 'No data in browser cache or Supabase.'; }
+        else if (sbData === null) { status = 'warn'; detail = src === 'file' ? 'Not yet in Supabase — push to initialise.' : 'Browser cache only — not yet pushed to Supabase.'; }
+        else if (localData === null) { status = 'warn'; detail = src === 'file' ? 'Repo file missing but Supabase has data.' : 'In Supabase but not in browser cache — open the app to populate cache.'; }
+        else if (jsonEq(localData, sbData)) { status = 'ok'; detail = 'In sync.'; }
+        else if (Array.isArray(localData) || Array.isArray(sbData)) {
+          const lLen = Array.isArray(localData) ? localData.length : '?';
+          const sLen = Array.isArray(sbData) ? sbData.length : '?';
+          status = 'warn';
+          detail = `Out of sync — ${srcLabel} has ${lLen} item${lLen !== 1 ? 's' : ''}, Supabase has ${sLen}.`;
+        } else {
+          const localKeys = new Set(Object.keys(localData || {}));
+          const sbKeys    = new Set(Object.keys(sbData || {}));
+          const onlyLocal = [...localKeys].filter(k => !sbKeys.has(k));
+          const onlySb    = [...sbKeys].filter(k => !localKeys.has(k));
           const diffParts = [];
-          if (onlyRepo.length) diffParts.push(`repo only: ${onlyRepo.join(', ')}`);
-          if (onlySb.length)   diffParts.push(`Supabase only: ${onlySb.join(', ')}`);
+          if (onlyLocal.length) diffParts.push(`${srcLabel} only: ${onlyLocal.join(', ')}`);
+          if (onlySb.length)    diffParts.push(`Supabase only: ${onlySb.join(', ')}`);
           if (!diffParts.length) diffParts.push('values differ (same keys)');
           status = 'warn';
           detail = `Out of sync — ${diffParts.join('; ')}.`;
         }
 
-        results.push({ key, table, file, status, detail, repoData, sbData });
+        results.push({ key, table, status, detail, localData, sbData, src, srcLabel });
 
         const li = document.createElement('li');
         li.className = 'align-row';
-        const nameSpan   = Object.assign(document.createElement('span'), { className: 'align-row-name',              textContent: table });
-        const detailSpan = Object.assign(document.createElement('span'), { className: 'align-row-detail',            textContent: detail });
-        const statusSpan = Object.assign(document.createElement('span'), { className: `align-row-status ${status}`,  textContent: status === 'ok' ? '✓ in sync' : status === 'warn' ? '⚠ differs' : '✗ error' });
+        const nameSpan   = Object.assign(document.createElement('span'), { className: 'align-row-name',             textContent: table });
+        const detailSpan = Object.assign(document.createElement('span'), { className: 'align-row-detail',           textContent: detail });
+        const statusSpan = Object.assign(document.createElement('span'), { className: `align-row-status ${status}`, textContent: status === 'ok' ? '✓ in sync' : status === 'warn' ? '⚠ differs' : '✗ error' });
         li.append(nameSpan, detailSpan, statusSpan);
         rowsEl.appendChild(li);
       }
@@ -1040,7 +1078,7 @@
       if (allOk) {
         badgeEl.className = 'align-badge ok';
         badgeEl.textContent = 'IN SYNC';
-        msgEl.textContent = 'All repo JSON files match Supabase data.';
+        msgEl.textContent = 'All tables are in sync — repo files, browser caches, and Supabase all match.';
       } else if (anyErr) {
         badgeEl.className = 'align-badge err';
         badgeEl.textContent = 'ERROR';
@@ -1048,7 +1086,7 @@
       } else {
         badgeEl.className = 'align-badge warn';
         badgeEl.textContent = 'OUT OF SYNC';
-        msgEl.textContent = 'Differences found. Push to overwrite Supabase, or Pull to update repo files.';
+        msgEl.textContent = 'Differences found — see details below.';
       }
 
       if (!allOk) {
@@ -1057,19 +1095,24 @@
           .filter(r => r.status !== 'ok')
           .map(r => {
             if (r.status === 'err') return `• ${r.table}: ${r.detail}`;
-            if (r.sbData === null) return `• ${r.table}: not in Supabase — needs push.\n  Repo data:\n${JSON.stringify(r.repoData, null, 2)}`;
-            return `• ${r.table}: ${r.detail}\n  Repo:\n${JSON.stringify(r.repoData, null, 2)}\n  Supabase:\n${JSON.stringify(r.sbData, null, 2)}`;
+            if (r.localData === null && r.sbData !== null)
+              return `• ${r.table}: ${r.detail}\n  Supabase:\n${JSON.stringify(r.sbData, null, 2)}`;
+            if (r.localData !== null && r.sbData === null)
+              return `• ${r.table}: ${r.detail}\n  ${r.src === 'file' ? 'Repo' : 'Browser cache'}:\n${JSON.stringify(r.localData, null, 2)}`;
+            if (r.localData === null && r.sbData === null)
+              return `• ${r.table}: ${r.detail}`;
+            return `• ${r.table}: ${r.detail}\n  ${r.src === 'file' ? 'Repo' : 'Browser cache'}:\n${JSON.stringify(r.localData, null, 2)}\n  Supabase:\n${JSON.stringify(r.sbData, null, 2)}`;
           });
 
         promptPre.textContent = `Data alignment check — ${today}
 
-The following tables are out of sync between the repo JSON files and Supabase:
+The following tables are out of sync:
 
 ${parts.join('\n\n')}
 
 To resolve, decide which version is the source of truth:
-  • Repo is correct → use the Push button on the Data Sync page (pages/data-sync.html).
-  • Supabase is correct → use the Pull button to generate a commit prompt.
+  • Repo files (profile/criteria/finances): use the Push button on the Data Sync page.
+  • App-state tables (shortlist/zones/journey_checks/contacts/outreach): open the relevant app page — the browser cache auto-syncs to Supabase on next save. Or pull from Supabase via the Pull button.
   • Need manual edits → describe the desired state and I will update the relevant data/*.json file.`;
 
         promptWrap.classList.add('visible');
