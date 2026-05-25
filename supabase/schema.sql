@@ -202,6 +202,54 @@ CREATE POLICY "household members can update journey_checks"
   ON journey_checks FOR UPDATE USING (is_household_member(household_id));
 
 -- -----------------------------------------------------------------------
+-- contacts — user's directory of agents, brokers, solicitors, surveyors.
+-- Shape: { agents: [], brokers: [], solicitors: [], surveyors: [] }
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS contacts (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  data         jsonb NOT NULL DEFAULT '{}'::jsonb,
+  updated_at   timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (household_id)
+);
+
+ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "household members can read contacts"
+  ON contacts FOR SELECT USING (is_household_member(household_id));
+
+CREATE POLICY "household members can insert contacts"
+  ON contacts FOR INSERT WITH CHECK (is_household_member(household_id));
+
+CREATE POLICY "household members can update contacts"
+  ON contacts FOR UPDATE USING (is_household_member(household_id));
+
+-- -----------------------------------------------------------------------
+-- outreach — log of all drafted / sent / replied outreach emails.
+-- Shape: array of { id, templateId, recipientRole, contactName,
+--                   propertyAddress, subject, body, status, sentAt,
+--                   repliedAt, notes }
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS outreach (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  data         jsonb NOT NULL DEFAULT '[]'::jsonb,
+  updated_at   timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (household_id)
+);
+
+ALTER TABLE outreach ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "household members can read outreach"
+  ON outreach FOR SELECT USING (is_household_member(household_id));
+
+CREATE POLICY "household members can insert outreach"
+  ON outreach FOR INSERT WITH CHECK (is_household_member(household_id));
+
+CREATE POLICY "household members can update outreach"
+  ON outreach FOR UPDATE USING (is_household_member(household_id));
+
+-- -----------------------------------------------------------------------
 -- Trigger: auto-update updated_at on every table that has it
 -- -----------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION touch_updated_at()
@@ -212,7 +260,7 @@ $$;
 DO $$
 DECLARE tbl text;
 BEGIN
-  FOREACH tbl IN ARRAY ARRAY['profile','criteria','finances','shortlist','zones','journey_checks']
+  FOREACH tbl IN ARRAY ARRAY['profile','criteria','finances','shortlist','zones','journey_checks','contacts','outreach']
   LOOP
     EXECUTE format(
       'DROP TRIGGER IF EXISTS trg_touch_%I ON %I;

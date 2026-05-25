@@ -193,6 +193,12 @@ export async function signOut() {
   await sb.auth.signOut();
 }
 
+// ── Outreach + Contacts (Phase 3 — approved extension) ────────────────
+export async function getContacts()        { return _get('contacts',  'contacts',  null, null) ?? { agents: [], brokers: [], solicitors: [], surveyors: [] }; }
+export async function saveContacts(d)      { return _save('contacts', 'contacts',  d); }
+export async function getOutreachLog()     { return _get('outreach',  'outreach',  null, null) ?? []; }
+export async function saveOutreachLog(d)   { return _save('outreach', 'outreach',  d); }
+
 // ── _internal — preserved for page-journey.js compatibility ──────────
 // writeLocal is enhanced: for 'journey-checks', also syncs to Supabase.
 const _writeLocalEnhanced = (k, v) => {
