@@ -66,8 +66,30 @@
       await test(`partial ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
 
     // --- pages reachable ---
-    for (const p of ['index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html', 'pages/areas.html', 'pages/area-detail.html', 'pages/house-types.html', 'pages/journey.html', 'pages/finances.html', 'pages/map.html', 'pages/listings.html', 'pages/outreach.html', 'pages/ask.html'])
+    const ALL_PAGES = ['index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html', 'pages/areas.html', 'pages/area-detail.html', 'pages/house-types.html', 'pages/journey.html', 'pages/finances.html', 'pages/map.html', 'pages/listings.html', 'pages/outreach.html', 'pages/ask.html'];
+    for (const p of ALL_PAGES)
       await test(`page ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
+
+    // --- §9: no inline style="" attributes shipped in any page ---
+    await test('no inline style="" attributes in any page', async () => {
+      const offenders = [];
+      for (const p of ALL_PAGES) {
+        const html = await (await fetch(url(p))).text();
+        const stripped = html.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<!--[\s\S]*?-->/g, '');
+        if (/\sstyle="/.test(stripped)) offenders.push(p);
+      }
+      assert(offenders.length === 0, `inline style="" in: ${offenders.join(', ')}`);
+    });
+
+    // --- §9: no inline <style> blocks in any page (CSS belongs in components/) ---
+    await test('no inline <style> blocks in any page', async () => {
+      const offenders = [];
+      for (const p of ALL_PAGES) {
+        const html = await (await fetch(url(p))).text();
+        if (/<style[\s>]/.test(html)) offenders.push(p);
+      }
+      assert(offenders.length === 0, `inline <style> in: ${offenders.join(', ')}`);
+    });
 
     // --- storage round-trip (throwaway key, no real data touched) ---
     await test('storage round-trips values', () => {

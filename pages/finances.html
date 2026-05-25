@@ -10,27 +10,6 @@
   <link rel="stylesheet" href="../assets/css/base.css" />
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
-  <style>
-    .finance-stage { margin-top: var(--space-8); }
-    .finance-stage + .finance-stage { padding-top: var(--space-6); border-top: 1px solid var(--hairline); }
-    .finance-stage > .stage-head { margin-bottom: var(--space-5); display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
-    .finance-stage > .stage-head .stage-title { display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
-    .finance-stage > .stage-head h2 {
-      margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
-      font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem); letter-spacing: -0.015em;
-    }
-    .finance-stage > .stage-head .stage-lead { margin: 0; color: var(--ink-muted); font-size: var(--text-base); max-width: 56ch; }
-    .stage-chip {
-      font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--accent-ink); background: color-mix(in oklch, var(--accent) 12%, transparent);
-      padding: 0.25rem 0.5rem; border-radius: 99px; font-weight: 500;
-    }
-    .finance-stage .card h3 {
-      margin: 0 0 var(--space-3); font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.005em;
-    }
-    .finance-stage > .card,
-    .finance-stage > .dash-grid { margin-top: var(--space-4); }
-  </style>
 </head>
 <body>
   <div data-include="components/header.html"></div>
@@ -99,7 +78,7 @@
     <section class="finance-stage" id="finance-later" aria-labelledby="stage-later-h">
       <header class="stage-head">
         <div class="stage-title">
-          <span class="stage-chip" style="color:var(--ink-muted);background:color-mix(in oklch, var(--ink-subtle) 14%, transparent);">Later</span>
+          <span class="stage-chip stage-chip--later">Later</span>
           <h2 id="stage-later-h">When you complete</h2>
         </div>
         <p class="stage-lead">Side-by-side outgoings before and after the move, the unified affordability widget, and the "what if" projections.</p>
@@ -151,7 +130,7 @@
 
       <section class="card">
         <h3>What if&hellip;</h3>
-        <p class="muted" style="font-size: var(--text-sm); margin: 0 0 var(--space-2);">Baseline savings projection plus ghosted scenarios. Hover a series for amounts.</p>
+        <p class="muted is-card-intro">Baseline savings projection plus ghosted scenarios. Hover a series for amounts.</p>
         <div class="what-if-chart"><canvas id="what-if-canvas"></canvas></div>
       </section>
 

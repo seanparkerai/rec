@@ -1,0 +1,27 @@
+/* components/finance-stage.css — staged finance sections (Now / Later).
+   Linear-dense anchor. Used by pages/finances.html.
+   Class names preserved from the original page <style> block. */
+.finance-stage { margin-top: var(--space-8); }
+.finance-stage + .finance-stage { padding-top: var(--space-6); border-top: 1px solid var(--hairline); }
+.finance-stage > .stage-head { margin-bottom: var(--space-5); display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+.finance-stage > .stage-head .stage-title { display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
+.finance-stage > .stage-head h2 {
+  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem); letter-spacing: -0.015em;
+}
+.finance-stage > .stage-head .stage-lead { margin: 0; color: var(--ink-muted); font-size: var(--text-base); max-width: 56ch; }
+.stage-chip {
+  font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent-ink); background: color-mix(in oklch, var(--accent) 12%, transparent);
+  padding: 0.25rem 0.5rem; border-radius: 99px; font-weight: 500;
+}
+.stage-chip--later {
+  color: var(--ink-muted);
+  background: color-mix(in oklch, var(--ink-subtle) 14%, transparent);
+}
+.finance-stage .card h3 {
+  margin: 0 0 var(--space-3); font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.005em;
+}
+.finance-stage > .card,
+.finance-stage > .dash-grid { margin-top: var(--space-4); }
+.muted.is-card-intro { font-size: var(--text-sm); margin: 0 0 var(--space-2); }
