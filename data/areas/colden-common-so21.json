@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Colden Common is a Hampshire village/locality in the SO21 area with a long rural settlement history and close links to nearby market towns. Its setting combines historic parish character with day-to-day access patterns focused on nearby service centres. Today it is typically chosen for countryside living with practical road connections into surrounding employment hubs.",
   "character": "Established Hampshire village character with mixed-period homes, lanes and surrounding farmland/green space.",
   "amenities": [
@@ -67,7 +69,7 @@
     "Visit nearby market-town amenities, pubs and heritage attractions"
   ],
   "placesToEat": [
-    "Country pubs and caf\u00e9s in the surrounding village/town catchment"
+    "Country pubs and cafés in the surrounding village/town catchment"
   ],
   "pros": [
     "Attractive rural setting with community identity",
@@ -78,14 +80,17 @@
     "Most households rely on car travel for many trips"
   ],
   "whoItSuits": "Well suited to buyers seeking rural or semi-rural Hampshire living with realistic expectations about car dependency and travel to larger service centres.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia \u2014 Colden Common",
+      "label": "Wikipedia — Colden Common",
       "url": "https://en.wikipedia.org/wiki/Colden_Common"
     },
     {
-      "label": "Hampshire County Council \u2014 Find a school",
+      "label": "Hampshire County Council — Find a school",
       "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
     },
     {

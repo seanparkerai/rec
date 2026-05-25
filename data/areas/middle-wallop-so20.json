@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
   "overview": "Middle Wallop is a small linear village in the Test Valley district, around six miles north-west of Stockbridge and seven miles south-west of Andover, sitting between Over Wallop and Nether Wallop along the Wallop Brook — a chalk-stream tributary of the River Test. The village is dominated by Middle Wallop Flying Station, home of the Army Air Corps and the Army Aviation Centre, with the active airfield running north-east of the A343. The Army Flying Museum (SO20 8DY), on the airfield perimeter, opened in 1974 and now holds over 35 fixed-wing and rotary aircraft including a recently-installed Apache AH Mk1 — the only example in any European museum. Visitor numbers run to tens of thousands annually. Middle Wallop was designated a Conservation Area in 2008; the village itself is small, with timber-framed cottages, farmhouses and a handful of mid-20th-century infill. The George Inn is the village pub, and the Wallops Parish Hall and a petrol station are nearby. The village's first recorded historical association is as the supposed site of a 5th-century battle between Vitalinus (possibly Vortigern) and Ambrosius Aurelianus.",
   "character": "Linear village along the A343, defined by the proximity of the active AAC airfield and its operational helicopter traffic. Building stock mixes 16th–19th-century cottages, RAF/AAC-era utilitarian buildings and modern infill. Conservation Area status applies.",
   "amenities": [
@@ -118,7 +120,7 @@
     "Secondary catchment school rated Inadequate in 2022"
   ],
   "whoItSuits": "Buyers comfortable with military aviation noise (AAC helicopters are a daily presence) in exchange for a Good village primary, museum-and-café amenity within the village, and a position equidistant between Andover, Stockbridge and Salisbury. Service families on Middle Wallop posting will find this the obvious choice; civilians attracted by chalk-stream walks and modest prices relative to Stockbridge proper will too. Less suited to those wanting absolute rural quiet or to families needing the catchment secondary school.",
-  "councilTaxBand": "D",
+  "broadbandMedianMbps": null,
   "nearestStation": "Grateley (4.5 mi)",
   "primarySupermarket": "Waitrose, Stockbridge (6.0 mi); Sainsbury's, Andover (7.0 mi)",
   "images": [],

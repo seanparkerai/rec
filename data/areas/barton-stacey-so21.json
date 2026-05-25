@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Barton Stacey is a village and civil parish north of Winchester, close to the River Dever and the A303 corridor. Its history includes agricultural roots and later growth around transport links and nearby military-land influences. In present terms it offers a genuine village setting with practical road access toward Andover, Winchester and Basingstoke.",
   "character": "Established village with mixed-period housing, parish facilities and open countryside edges.",
   "amenities": [
@@ -78,6 +80,9 @@
     "Many higher-order amenities require driving"
   ],
   "whoItSuits": "Well suited to households wanting village living with relatively efficient road access to employment centres in Winchester, Basingstoke and Andover.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

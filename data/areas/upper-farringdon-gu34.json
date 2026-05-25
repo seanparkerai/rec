@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
   "overview": "Upper Farringdon is the larger of the two settlements in the civil parish of Farringdon (the other being Lower Farringdon), in the East Hampshire district, four miles south of Alton and just inside the South Downs National Park. The parish church of All Saints retains the pulpit from which the naturalist Gilbert White preached as curate between 1761 and 1785; Jane Austen, who lived a mile north at Chawton, also visited regularly. The village's most striking building is Massey's Folly, a 17-bedroom, terra-cotta-faced Grade II-listed structure with two towers, built single-handedly by the local rector Thomas Hacket Massey across thirty years until 1919 — its intended purpose was never disclosed, and from 1925 to 1987 it served as the village primary school, then as the village hall until 2015. The Folly featured in the BBC's 2006 Restoration Village programme and was sold for residential conversion in 2015. The village has two pubs (The Rose & Crown and The Royal Oak), an active parish council, and shares amenities with Alton four miles north.",
   "character": "Compact, conservation-influenced village strung along Church Road and Crows Lane, with the listed Folly and the medieval All Saints Church as its visual anchors. Building stock is mixed brick, flint, render and timber-framed cottages, much of it Grade II-listed within the SDNP. East Hampshire 2026/27 Council Tax Band D for the parish was £2,277.91.",
   "amenities": [
@@ -113,7 +115,7 @@
     "Limited public transport beyond the Alton-bound bus"
   ],
   "whoItSuits": "Buyers who want a quiet conservation-led village within a four-mile drive of Alton's amenities and direct Waterloo trains, and who value living next door to two of Hampshire's most-cited cultural sites — Gilbert White's Selborne and Jane Austen's Chawton. Families with primary-age children will need to commit to driving to Holybourne or Alton for school. The two pubs and active parish council suggest a more sociable village than its size would imply, but the absence of a shop or school makes it a poor fit for first-time buyers needing in-village amenities.",
-  "councilTaxBand": "D",
+  "broadbandMedianMbps": null,
   "nearestStation": "Alton (4.0 mi)",
   "primarySupermarket": "Waitrose, Alton (4.5 mi); Sainsbury's, Alton (4.0 mi)",
   "images": [],

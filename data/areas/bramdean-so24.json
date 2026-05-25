@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Bramdean is a village in the South Downs-adjacent countryside east of Winchester and north of Petersfield. It has a historic rural parish setting with church and village institutions tied to surrounding farmland. Modern life in Bramdean is quiet and low-density, with residents typically relying on Alresford and Winchester for higher-order services.",
   "character": "Small historic village with downland scenery and a calm rural rhythm.",
   "amenities": [
@@ -78,6 +80,9 @@
     "Car use is essential for most households"
   ],
   "whoItSuits": "A good fit for buyers who value rural tranquillity and scenery, and who are comfortable travelling to nearby towns for schools, shopping and rail connections.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

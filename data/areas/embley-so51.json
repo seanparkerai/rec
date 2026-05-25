@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Embley is a Hampshire settlement in the SO51 area with longstanding parish and agricultural roots. It sits within a wider rural-commuter geography connected to nearby towns for day-to-day services. Current appeal is primarily village character, countryside access and practical road links across the county.",
   "character": "Rural Hampshire settlement character with mixed housing, parish identity and open countryside setting.",
   "amenities": [
@@ -67,7 +69,7 @@
     "Use nearby market towns for events, dining and heritage attractions"
   ],
   "placesToEat": [
-    "Country pubs and caf\u00e9s in nearby villages and market towns"
+    "Country pubs and cafés in nearby villages and market towns"
   ],
   "pros": [
     "Village/rural environment with community identity",
@@ -78,14 +80,17 @@
     "Car dependency for many everyday journeys"
   ],
   "whoItSuits": "Well suited to buyers seeking Hampshire village living and countryside access, with realistic expectations around driving for schools, stations and larger shops.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia \u2014 Embley",
+      "label": "Wikipedia — Embley",
       "url": "https://en.wikipedia.org/wiki/Embley"
     },
     {
-      "label": "Hampshire County Council \u2014 Find a school",
+      "label": "Hampshire County Council — Find a school",
       "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
     },
     {

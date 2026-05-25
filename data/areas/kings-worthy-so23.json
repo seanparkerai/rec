@@ -16,6 +16,14 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": {
+    "avgDetached": 715443,
+    "avgSemi": 437883,
+    "avgTerraced": 340094,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": "D",
   "overview": "Kings Worthy is a village and civil parish of around 4,925 residents (2011 Census) in the City of Winchester district, set on the north bank of the River Itchen about two miles north-east of Winchester city centre on the line of the Roman road from Silchester. It was a tithing of Barton Stacey at the time of the Domesday survey of 1086 and the present parish (which includes the smaller hamlet of Abbots Worthy) was constituted in 1953. The older core around Church Lane and London Road sits in a designated Settlement Conservation Area; the whole of Abbots Worthy was declared a Countryside Conservation Area in 1985. Between Kings Worthy and Winchester is a 'Local Gap' designated under the District Local Plan to stop the village merging with the city. The parish is bisected by the busy A33/B3047 corridor and the South West Main Line passes close by.",
   "character": "Mixed downland village rather than chalk-cottage village: a Grade II listed Norman-era core around St Mary's church and the Cart and Horses inn, ringed by mid 20th-century estate housing (Springvale, The Pastures) and 21st-century closes. Several streets feel suburban; the older Church Lane end retains a discrete period feel within a conservation area.",
   "amenities": [
@@ -132,7 +140,6 @@
     "No mainline station within the village itself — a 2-mile drive or bus to Winchester"
   ],
   "whoItSuits": "A practical fit for a solo first-time buyer on around £64k who wants direct Winchester and Waterloo access without paying the Easton or Twyford premium. Terraced and semi stock here actually lands close to the £400k ceiling, and the Good primary plus Henry Beaufort secondary is a sensible future-proofing combination. The trade is character: this is mainly estate housing, not chalk-and-flint cottages. If period looks matter more, Easton or Itchen Abbas (both pricier, SO21) sit in the same Itchen valley; if budget is tighter, look at South Wonston or Sutton Scotney further up the A33.",
-  "councilTaxBand": "D",
   "broadbandMedianMbps": null,
   "nearestStation": "Winchester (2.2 mi)",
   "primarySupermarket": "Tesco Express within village; Sainsbury's, Middle Brook Street, Winchester (2.4 mi)",

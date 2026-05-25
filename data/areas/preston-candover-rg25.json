@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
   "overview": "Preston Candover is a village in the now-merged Preston Candover, Nutley and Axford civil parish, in the Basingstoke and Deane district, four and a half miles south of Basingstoke and five miles north of New Alresford on the B3046 chalk-valley road. The 2011 census recorded a parish population of 357 (510 including Bradley and Moundsmere). The village pump in the centre of the village is a Grade II-listed structure; one of the village's two churches (St Mary the Virgin) remains in active use, while the other is redundant. Preston Candover is home to Lord Sainsbury of Preston Candover (the supermarket family) and to the Purefoy Arms — a Grade II-listed Modern British / French gastropub which previously held a Michelin Guide listing and 2 AA Rosettes until early 2024, and which secured planning approval in October 2024 for refurbishment including guest accommodation and a deli/café (reopening date not yet confirmed). The village retains a working village store, village hall, tennis club, pre-school kindergarten and Preston Candover Church of England Primary School (Good, Ofsted January 2023).",
   "character": "Working chalk-valley village with intact 19th-century B3046 frontage of brick-and-flint cottages, Victorian estate housing, and 20th-century additions on the village fringes. Two churches, a working primary school, a village hall and a Grade II village pump anchor the centre. Tight Basingstoke and Deane planning regime; conservation-area sensibility without formal designation.",
   "amenities": [
@@ -120,7 +122,7 @@
     "No mainline station within the parish (Basingstoke is 6.5 mi by road)"
   ],
   "whoItSuits": "Buyers wanting a working village with a Good Ofsted primary, an intact retail and community offering, and the fastest direct-Waterloo commute in this batch (42 minutes from Basingstoke, 7 miles away). Particularly suited to families with primary-age children, Basingstoke-bound commuters who want a village setting, and downsizers from busier south-east towns. The current Purefoy Arms closure removes the destination dining option for the time being; buyers attracted by gastronomy should weigh this against the village's other strengths until the reopening date is confirmed.",
-  "councilTaxBand": "D",
+  "broadbandMedianMbps": null,
   "nearestStation": "Basingstoke (6.5 mi)",
   "primarySupermarket": "Sainsbury's, Basingstoke (7.5 mi); Waitrose, Alresford (5.5 mi); village shop in Preston Candover for daily basics",
   "images": [],

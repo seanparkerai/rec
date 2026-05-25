@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "A village and civil parish in the East Hampshire district, about 1.4 miles north of Petersfield and just inside the western edge of the South Downs National Park, at the foot of the wooded slopes of Stoner Hill and Wheatham Hill. Steep is notable for two things. First, Bedales School (founded 1893 in Lindfield, moved here in 1900) — a co-educational boarding and day independent school with a progressive ethos, which from the early 20th century drew a community of artists, craftsmen and writers to the village: Edward Thomas the war poet lived here from 1906 to 1916, and Alec Guinness, Stanley Spencer, Ernest Gimson and Edward Barnsley all had connections. Second, The Harrow Inn — a 17th-century Grade II listed pub on CAMRA's National Inventory of Historic Pub Interiors, run by the same family since 1932 and serving cask beer drawn straight from the barrel. Population at the 2011 census was 1,391 (civil parish). The Church of All Saints dates from around 1125.",
   "character": "Genuinely literary, slightly bohemian downland village with deep Arts and Crafts roots; mix of period cottages, larger Arts-and-Crafts and Edwardian houses (some by W. F. Unsworth), Bedales-influenced modernist commissions, and 20th-century infill. Strong cultural fabric — Edward Thomas associations, Bedales archive, Edward Barnsley Workshop, village film society founded by Alec Guinness's legacy.",
   "amenities": [
@@ -123,6 +125,7 @@
     "Bedales drop-off and pick-up traffic loads the village lanes at term-time peaks"
   ],
   "whoItSuits": "Buyers committed to Bedales for the independent route, or to Steep CofE Primary plus The Petersfield School / Churcher's, who also want the walking-distance link to the main-line station. Also strong for cultural-and-creative households drawn by the Edward Thomas / Edward Barnsley / Bedales-Arts ecosystem, and for those who can absorb the SDNP planning regime in return for the landscape. Less suited to first-time buyers seeking lower entry pricing — for that, Sheet, Liss or Bordon are better-value alternatives in the same commuter belt.",
+  "broadbandMedianMbps": null,
   "nearestStation": "Petersfield (1.6 mi)",
   "primarySupermarket": "Waitrose Petersfield, Lavant Street (~2 mi)",
   "images": [],

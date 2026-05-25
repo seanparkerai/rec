@@ -16,6 +16,14 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": {
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": "D",
   "overview": "Micheldever is a picture-postcard chalk village and civil parish of around 1,387 residents at the 2011 Census, set on the small River Dever six miles north of Winchester in the City of Winchester district. The parish is one of the most northerly in the district and includes the separate village of Micheldever Station (around 2.4 miles north of the village proper), East and West Stratton, Weston Colley and the hamlet of Woodmancott. The village core, around Duke Street, Church Street and the small green known as The Crease, is famous for its black-and-white half-timbered cottages and the Norman St Mary the Virgin church; the oldest house, Shillingbury, dates to circa 1453. The Half Moon and Spread Eagle pub, originally a drovers' inn at the edge of the village, has been a fixture since the eighteenth century. Micheldever station, opened in 1840 as 'Andover Road', sits two miles up the lane and gives direct South Western Railway trains to London Waterloo.",
   "character": "Genuine timber-framed conservation-area village — one of the prettiest in the Itchen catchment — with a tight nucleated core around the church, the green and the pub. Building stock is mostly Tudor and Georgian thatched cottages, a few Victorian additions and very limited modern infill; planning is tightly constrained inside the conservation area.",
   "amenities": [
@@ -125,7 +133,6 @@
     "Conservation-area status restricts extensions and outbuildings"
   ],
   "whoItSuits": "A strong candidate for a buyer who wants the storybook Hampshire village look with a direct Waterloo train just up the lane. For a solo £64k first-time buyer at £400k, listings here are rare and small — typically a one- or two-bedroom semi or end-terrace when they appear. If timber-framed character matters most, Easton and Itchen Abbas are similar but pricier; if the same Waterloo connection at a much lower entry price matters most, look at the more workaday Micheldever Station hamlet 2 miles north (same line, same district) or Sutton Scotney.",
-  "councilTaxBand": "D",
   "broadbandMedianMbps": null,
   "nearestStation": "Micheldever (2.4 mi)",
   "primarySupermarket": "Co-op, Sutton Scotney (4.5 mi); Sainsbury's, Middle Brook Street, Winchester (6.0 mi)",

@@ -1,7 +1,8 @@
 // page-area-detail.js — renders a single area by ?id=, using the 9-category framework.
-import { getAreas, getAreaDetail, getShortlist, saveShortlist } from './storage.js';
+import { getAreas, getAreaDetail, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
 import { url } from './config.js';
 import { gbp } from './format.js';
+import { assessAffordability } from './affordability.js';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
@@ -29,15 +30,39 @@ function renderOverview(a) {
 
 function renderAmenities(a) { return listOrPlaceholder(a.amenities); }
 
+function ofstedClass(rating) {
+  const r = String(rating || '').toLowerCase();
+  if (/outstanding/.test(r)) return 'ofsted-dot--outstanding';
+  if (/^good\b/.test(r)) return 'ofsted-dot--good';
+  if (/requires improvement|requires/.test(r)) return 'ofsted-dot--requires';
+  if (/inadequate|special measures/.test(r)) return 'ofsted-dot--inadequate';
+  return 'ofsted-dot--unknown';
+}
+
 function renderSchools(a) {
   if (!a.schools?.length) return PLACEHOLDER;
   return `<ul class="mini-list">${a.schools.map((s) => {
-    if (typeof s === 'string') return `<li>${esc(s)}</li>`;
+    if (typeof s === 'string') return `<li><span class="ofsted-dot ofsted-dot--unknown" aria-hidden="true"></span>${esc(s)}</li>`;
     const name = esc(s.name || '');
     const type = s.type ? ` <span class="muted">· ${esc(s.type)}</span>` : '';
+    const dotCls = ofstedClass(s.ofsted);
+    const dotTitle = s.ofsted ? `Ofsted: ${esc(s.ofsted)}` : 'Ofsted: not recorded';
     const ofsted = s.ofsted ? ` <span class="badge">${esc(s.ofsted)}</span>` : '';
-    return `<li><strong>${name}</strong>${type}${ofsted}</li>`;
+    return `<li><span class="ofsted-dot ${dotCls}" title="${dotTitle}" aria-label="${dotTitle}"></span><strong>${name}</strong>${type}${ofsted}</li>`;
   }).join('')}</ul>`;
+}
+
+function commuteBandClass(time) {
+  // Parse "25 min", "1 h 10 min", etc. → minutes.
+  if (!time) return 'commute-band--long';
+  const t = String(time).toLowerCase();
+  const hMatch = t.match(/(\d+)\s*h/);
+  const mMatch = t.match(/(\d+)\s*(?:m|min)/);
+  const mins = (hMatch ? Number(hMatch[1]) * 60 : 0) + (mMatch ? Number(mMatch[1]) : 0);
+  if (mins === 0) return 'commute-band--long';
+  if (mins <= 30) return 'commute-band--quick';
+  if (mins <= 60) return 'commute-band--medium';
+  return 'commute-band--long';
 }
 
 function renderTransport(a) {
@@ -47,7 +72,8 @@ function renderTransport(a) {
     if (typeof c === 'string') return `<li>${esc(c)}</li>`;
     const dest = esc(c.to || c.destination || '');
     const time = c.time || c.typical;
-    const timeStr = time ? ` — ${esc(time)}` : '';
+    const bandCls = commuteBandClass(time);
+    const timeStr = time ? ` <span class="commute-band ${bandCls}">${esc(time)}</span>` : '';
     const mode = c.mode ? ` <span class="muted">(${esc(c.mode)})</span>` : '';
     return `<li><strong>${dest}</strong>${timeStr}${mode}</li>`;
   }).join('')}</ul>`;
@@ -148,6 +174,83 @@ function renderEssentials(a) {
   ).join('');
 }
 
+function matchedPrice(area, criteria) {
+  const ps = area?.priceSummary || area?.prices || null;
+  if (!ps) return { price: null, label: null };
+  const PROP_TO_KEY = {
+    Detached: 'avgDetached', Bungalow: 'avgDetached',
+    'Semi-detached': 'avgSemi', Terraced: 'avgTerraced', 'Flat / Apartment': 'avgFlat',
+  };
+  const preferred = criteria?.propertyTypePrefs?.preferred || [];
+  for (const t of preferred) {
+    const k = PROP_TO_KEY[t];
+    if (k && ps[k] != null) return { price: ps[k], label: t };
+  }
+  for (const [k, label] of [['avgSemi', 'Semi'], ['avgTerraced', 'Terraced'], ['avgDetached', 'Detached'], ['avgFlat', 'Flat']]) {
+    if (ps[k] != null) return { price: ps[k], label };
+  }
+  return { price: null, label: null };
+}
+
+function renderVerdictStrip(a, finances, criteria) {
+  const strip = document.getElementById('area-verdict');
+  if (!strip) return;
+  const dot = document.getElementById('area-verdict-dot');
+  const txt = document.getElementById('area-verdict-text');
+  const num = document.getElementById('area-verdict-num');
+  if (!finances || !criteria) {
+    txt.textContent = 'Finances or criteria unavailable — verdict not computed.';
+    strip.className = 'area-verdict-strip area-verdict-strip--unknown';
+    return;
+  }
+  const { price, label } = matchedPrice(a, criteria);
+  if (!price) {
+    txt.textContent = 'No price data for this area yet — verdict not available.';
+    if (dot) dot.className = 'fit-dot fit-dot--unknown';
+    strip.className = 'area-verdict-strip area-verdict-strip--unknown';
+    return;
+  }
+  const r = assessAffordability({ price, finances, criteria });
+  if (dot) dot.className = `fit-dot fit-dot--${r.verdict}`;
+  strip.className = `area-verdict-strip area-verdict-strip--${r.verdict}`;
+  txt.textContent = r.headline;
+  num.innerHTML = `<span>Avg <strong>${esc(label || '—')}</strong></span><span><strong>${esc(gbp(price))}</strong></span><span><strong>${esc(gbp(r.monthlyPI))}/mo</strong></span>`;
+}
+
+function attachFootAfford(a, finances, criteria) {
+  const wrap = document.getElementById('area-foot-afford');
+  if (!wrap || !finances || !criteria) return;
+  wrap.hidden = false;
+  const slider = document.getElementById('area-afford-slider');
+  const number = document.getElementById('area-afford-number');
+  const display = document.getElementById('area-afford-display');
+  const pill = document.getElementById('area-afford-pill');
+  const initial = matchedPrice(a, criteria).price ?? Number(criteria?.budget?.offerTarget || 380000);
+  slider.value = String(initial);
+  number.value = String(initial);
+  if (display) display.textContent = gbp(initial);
+
+  const update = (raw) => {
+    const price = Math.max(100000, Math.min(2000000, Number(raw) || 0));
+    if (display) display.textContent = gbp(price);
+    if (slider.value !== String(price)) slider.value = String(price);
+    if (number.value !== String(price)) number.value = String(price);
+    const r = assessAffordability({ price, finances, criteria });
+    if (pill) {
+      pill.className = `afford-verdict-pill afford-verdict-pill--${r.verdict}`;
+      pill.textContent = r.verdict;
+    }
+    document.getElementById('area-afford-loan').textContent = gbp(r.loanRequired);
+    document.getElementById('area-afford-ltv').innerHTML = `${r.ltvPct.toFixed(1)}%`;
+    document.getElementById('area-afford-monthly').textContent = gbp(r.monthlyPI);
+    document.getElementById('area-afford-spare').textContent = gbp(r.monthlySpareAfter);
+    document.getElementById('area-afford-why').innerHTML = r.whyVerdict.map((s) => `<li>${esc(s)}</li>`).join('');
+  };
+  slider.addEventListener('input', (e) => update(e.target.value));
+  number.addEventListener('input', (e) => update(e.target.value));
+  update(initial);
+}
+
 function renderArea(a) {
   document.title = `${a.name} · rec`;
 
@@ -230,9 +333,6 @@ async function init() {
   if (!id) { renderNotFound('(no id)'); return; }
 
   try {
-    // Fetch the per-area detail file directly — fall back to scanning the
-    // index if the detail file is missing (shouldn't happen post-migration,
-    // but keeps the page resilient to broken links).
     let a = null;
     try { a = await getAreaDetail(id); } catch (_) { /* fall through */ }
     if (!a) {
@@ -241,6 +341,14 @@ async function init() {
     }
     if (!a) { renderNotFound(id); return; }
     renderArea(a);
+
+    // Phase 4b: verdict strip + foot mini-afford widget — best-effort if
+    // finances/criteria load successfully.
+    let finances = null, criteria = null;
+    try { finances = await getFinances(); } catch (e) { console.error('finances load', e); }
+    try { criteria = await getCriteria(); } catch (e) { console.error('criteria load', e); }
+    renderVerdictStrip(a, finances, criteria);
+    attachFootAfford(a, finances, criteria);
   } catch (e) {
     console.error('area detail error', e);
     renderNotFound(id);

@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
   "overview": "Leckford is a small estate village of around 100 residents in the Test Valley district, two miles north of Stockbridge on the upper River Test. It is unusual among Hampshire villages in being almost entirely owned by a single landlord: John Spedan Lewis bought the 2,800-acre Leckford Estate in 1929 and gifted it to the John Lewis Partnership in 1945-46, since when houses, farmland, the parish church, the bathhouse and most of the surrounding land have remained in Partnership ownership. The estate was integrated into Waitrose in 2001 and now produces apples, pears, milk, arable crops, watercress, sparkling wine and the Leckford Estate brand for Waitrose stores. The Partnership operates a Farm Shop and Café, Longstock Park Nursery, Longstock Park Water Gardens (ranked among Europe's finest of its type) and a fishing/golf club for staff. Recent years have seen tension between Partnership plans to release Leckford and Longstock land for housing development and a strongly organised residents' opposition.",
   "character": "Estate village in the literal sense: thatched and brick-and-flint cottages owned by the Partnership and let to current or former staff under the legacy 'houses for life' scheme (no longer offered to new joiners). The aesthetic is closely-managed, almost National Trust in feel. Building stock is overwhelmingly listed and 17th–19th century.",
   "amenities": [
@@ -106,7 +108,7 @@
     "Affordable housing plans have generated local conflict"
   ],
   "whoItSuits": "A very specific buyer profile: open-market houses come up rarely and tend to be detached period properties on generous plots. Best fit is cash-rich downsizers, former Partnership employees moving from London, or established families willing to wait years for stock. The Partnership's stewardship means the village remains visually intact and the surrounding land remains farmed rather than developed, but it also means newcomers should expect a closely-knit, long-tenured community. Not realistic for first-time buyers.",
-  "councilTaxBand": "D",
+  "broadbandMedianMbps": null,
   "nearestStation": "Andover (5.0 mi)",
   "primarySupermarket": "Waitrose, Stockbridge (3.0 mi); Sainsbury's, Andover (5.5 mi)",
   "images": [],

@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "A village of ~1,000 residents in the Winchester district, set on chalk downland inside the South Downs National Park at the southern end of the Meon Valley. Famed as the \"cradle of cricket\" — the Hambledon Club at nearby Broadhalfpenny Down was central to the sport's 18th-century development.",
   "character": "Linear downland village, 69 listed buildings, Saxon-origin Grade I church; quietly affluent, history-conscious, families and downsizers.",
   "amenities": [
@@ -99,6 +101,9 @@
     "Families chasing the primary school and the National Park setting",
     "Cricket-loving second-homers and retirees"
   ],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {
