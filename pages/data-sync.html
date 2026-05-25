@@ -1038,7 +1038,7 @@
         let status, detail;
         if (localErr) { status = 'err'; detail = `${src === 'file' ? 'Repo' : 'Browser'} read error: ${localErr}`; }
         else if (sbErr) { status = 'err'; detail = `Supabase error: ${sbErr}`; }
-        else if (localData === null && sbData === null) { status = 'warn'; detail = src === 'file' ? 'Repo file missing and not in Supabase.' : 'No data in browser cache or Supabase.'; }
+        else if (localData === null && sbData === null) { status = src === 'file' ? 'warn' : 'ok'; detail = src === 'file' ? 'Repo file missing and not in Supabase.' : 'Empty — not used yet (browser and Supabase both empty).'; }
         else if (sbData === null) { status = 'warn'; detail = src === 'file' ? 'Not yet in Supabase — push to initialise.' : 'Browser cache only — not yet pushed to Supabase.'; }
         else if (localData === null) { status = 'warn'; detail = src === 'file' ? 'Repo file missing but Supabase has data.' : 'In Supabase but not in browser cache — open the app to populate cache.'; }
         else if (jsonEq(localData, sbData)) { status = 'ok'; detail = 'In sync.'; }
