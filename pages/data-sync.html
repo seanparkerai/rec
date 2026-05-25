@@ -712,6 +712,7 @@
 
   </main>
 
+  <script type="module" src="../assets/js/components.js"></script>
   <script type="module">
     import { url } from '../assets/js/config.js';
 
@@ -784,7 +785,7 @@
           btn.textContent = 'Copied';
           btn.classList.add('copied');
           setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2500);
-        } catch { btn.textContent = 'Select &amp; copy manually'; }
+        } catch { btn.textContent = 'Select & copy manually'; }
       });
     }
 
@@ -895,10 +896,10 @@
 
         const li = document.createElement('li');
         li.className = 'align-row';
-        li.innerHTML = `
-          <span class="align-row-name">${table}</span>
-          <span class="align-row-detail">${detail}</span>
-          <span class="align-row-status ${status}">${status === 'ok' ? '✓ in sync' : status === 'warn' ? '⚠ differs' : '✗ error'}</span>`;
+        const nameSpan   = Object.assign(document.createElement('span'), { className: 'align-row-name',              textContent: table });
+        const detailSpan = Object.assign(document.createElement('span'), { className: 'align-row-detail',            textContent: detail });
+        const statusSpan = Object.assign(document.createElement('span'), { className: `align-row-status ${status}`,  textContent: status === 'ok' ? '✓ in sync' : status === 'warn' ? '⚠ differs' : '✗ error' });
+        li.append(nameSpan, detailSpan, statusSpan);
         rowsEl.appendChild(li);
       }
 
@@ -1096,19 +1097,24 @@ Commit message: \`data: sync JSON files from Supabase (${today})\``;
         details.className = 'data-viewer-table';
 
         const meta = err ? 'error' : empty ? 'no data' : when;
-        details.innerHTML = `
-          <summary>
-            <span class="dv-table-name">${table}</span>
-            <span style="flex:1;font-weight:400;color:var(--ink-muted);font-size:var(--text-sm)">${label}</span>
-            <span class="dv-table-meta">${meta}</span>
-            <span class="dv-toggle-icon">▶</span>
-          </summary>`;
+        const summary = document.createElement('summary');
+        const nameEl   = Object.assign(document.createElement('span'), { className: 'dv-table-name',  textContent: table });
+        const labelEl  = document.createElement('span');
+        labelEl.style.cssText = 'flex:1;font-weight:400;color:var(--ink-muted);font-size:var(--text-sm)';
+        labelEl.textContent = label;
+        const metaEl   = Object.assign(document.createElement('span'), { className: 'dv-table-meta',  textContent: meta });
+        const toggleEl = Object.assign(document.createElement('span'), { className: 'dv-toggle-icon', textContent: '▶' });
+        summary.append(nameEl, labelEl, metaEl, toggleEl);
+        details.appendChild(summary);
 
         const body = document.createElement('div');
         body.className = 'dv-body';
 
         if (err) {
-          body.innerHTML = `<p class="dv-no-data" style="color:oklch(55% 0.18 25)">Error: ${err}</p>`;
+          const errP = Object.assign(document.createElement('p'), { className: 'dv-no-data' });
+          errP.style.color = 'oklch(55% 0.18 25)';
+          errP.textContent = `Error: ${err}`;
+          body.appendChild(errP);
         } else if (empty) {
           body.innerHTML = `<p class="dv-no-data">No data in Supabase yet.</p>`;
         } else {
@@ -1159,22 +1165,33 @@ Commit message: \`data: sync JSON files from Supabase (${today})\``;
       for (const { table, ok, missing } of results) {
         const item = document.createElement('div');
         item.className = 'schema-item';
-        item.innerHTML = `
-          <span class="schema-dot ${ok ? 'ok' : 'miss'}"></span>
-          <span class="schema-item-name">${table}</span>
-          <span class="schema-item-status ${ok ? 'ok' : 'miss'}">${ok ? 'exists' : 'missing'}</span>`;
+        const dot    = Object.assign(document.createElement('span'), { className: `schema-dot ${ok ? 'ok' : 'miss'}` });
+        const name   = Object.assign(document.createElement('span'), { className: 'schema-item-name',              textContent: table });
+        const status = Object.assign(document.createElement('span'), { className: `schema-item-status ${ok ? 'ok' : 'miss'}`, textContent: ok ? 'exists' : 'missing' });
+        item.append(dot, name, status);
         listEl.appendChild(item);
       }
 
       if (missingTables.length) {
-        document.getElementById('schema-migration-content').textContent =
-          '-- Run supabase/schema.sql in Supabase → SQL Editor.\n' +
-          '-- It is idempotent (safe to re-run) and will create any missing tables.\n\n' +
-          `-- Missing: ${missingTables.map(r => r.table).join(', ')}\n\n` +
-          '-- To get the full schema, fetch the file at:\n' +
-          '--   supabase/schema.sql\n' +
-          '-- in your repo and paste the contents here.';
+        const preEl = document.getElementById('schema-migration-content');
+        preEl.textContent = 'Fetching supabase/schema.sql…';
         document.getElementById('schema-migration-prompt').classList.add('visible');
+        try {
+          const res = await fetch(url('supabase/schema.sql') + '?_=' + Date.now());
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const sql = await res.text();
+          const header =
+            `-- rec schema migration\n` +
+            `-- Missing tables: ${missingTables.map(r => r.table).join(', ')}\n` +
+            `-- Paste this entire block into Supabase → SQL Editor and Run.\n` +
+            `-- The file is idempotent — safe to re-run on an existing project.\n\n`;
+          preEl.textContent = header + sql;
+        } catch (e) {
+          preEl.textContent =
+            `-- Could not load supabase/schema.sql (${e.message}).\n` +
+            `-- Fetch it manually from the repo at supabase/schema.sql and paste here.\n` +
+            `-- Missing tables: ${missingTables.map(r => r.table).join(', ')}`;
+        }
       }
     });
 
@@ -1259,8 +1276,16 @@ $$;`;
 
 
     // ── Boot ───────────────────────────────────────────────────────────
-    document.addEventListener('shell:ready', () => {
+    document.addEventListener('shell:ready', async () => {
       refreshStatus();
+      const sb = await initSupabase();
+      if (sb) {
+        sb.auth.onAuthStateChange((event) => {
+          if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') {
+            refreshStatus();
+          }
+        });
+      }
       wireCopyBtn(
         document.getElementById('btn-copy-align-prompt'),
         () => document.getElementById('align-prompt-content').textContent
