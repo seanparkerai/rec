@@ -502,6 +502,19 @@
 }
 .tile-card .tile-head .num { color: var(--ink-muted); font-size: var(--text-sm); font-family: var(--font-data); }
 .tile-head-action { font-size: var(--text-sm); color: var(--ink); text-decoration: none; font-weight: 500; white-space: nowrap; }
+.tile-head-action:hover,
+.tile-head-action:focus-visible { color: var(--accent); }
+
+/* Loading placeholders: dimmed, italic, animated ellipsis (motion-gated). */
+[data-loading="true"] { color: var(--ink-subtle); font-style: italic; }
+[data-loading="true"]::after {
+  content: "…"; display: inline-block; margin-left: 0.15em;
+  animation: rec-loading-dots 1.4s steps(4, end) infinite;
+}
+@keyframes rec-loading-dots { 0%, 20% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  [data-loading="true"]::after { animation: none; }
+}
 
 @container (min-width: 720px) {
   .bento          { grid-template-columns: repeat(12, minmax(0, 1fr)); }
@@ -510,8 +523,9 @@
   .tile-flow      { grid-column: span 12; }
   .tile-shortlist { grid-column: span 5; }
   .tile-journey   { grid-column: span 7; }
-  .tile-criteria  { grid-column: span 12; }
-  .tile-ask       { grid-column: span 12; }
+  .tile-criteria  { grid-column: span 8; }
+  .tile-ask       { grid-column: span 4; }
+  .tile-deposit .ring { width: 11rem; height: 11rem; }
 }
 
 /* ---- Tile 2: Deposit story --------------------------------------- */
@@ -632,7 +646,13 @@
 
 /* ---- Tile 4: Money-flow ------------------------------------------ */
 .flow { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
-@container (min-width: 720px) { .flow { grid-template-columns: 1fr 1fr; } }
+@container (min-width: 720px) {
+  .flow { grid-template-columns: 1fr 1px 1fr; column-gap: var(--space-6); row-gap: var(--space-4); align-items: start; }
+  .flow__panel:nth-of-type(1) { grid-column: 1; grid-row: 1; }
+  .flow__panel:nth-of-type(2) { grid-column: 3; grid-row: 1; }
+  .flow::after { content: ""; grid-column: 2; grid-row: 1; align-self: stretch; background: var(--hairline); }
+  .flow__caption, .flow__details { grid-column: 1 / -1; }
+}
 .flow__panel { display: flex; flex-direction: column; gap: var(--space-3); }
 .flow__panel h3 {
   margin: 0; font-size: var(--text-xs); font-weight: 500;
@@ -707,7 +727,7 @@ main > .tile-journey { margin-bottom: var(--space-6); }
   gap: var(--space-3); position: relative; margin-top: var(--space-2);
 }
 .journey-track::before {
-  content: ""; position: absolute; left: 0.5rem; right: 0.5rem; top: 0.5rem;
+  content: ""; position: absolute; left: 0.5rem; right: 0.5rem; top: calc(0.5rem - 1px);
   height: 2px; background: var(--hairline);
 }
 .journey-track__node {

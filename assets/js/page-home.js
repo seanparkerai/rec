@@ -13,8 +13,23 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
 ));
 
 const $ = (id) => document.getElementById(id);
-const setText = (id, v) => { const el = $(id); if (el) el.textContent = v; };
-const setHTML = (id, h) => { const el = $(id); if (el) el.innerHTML = h; };
+const setText = (id, v) => { const el = $(id); if (el) { delete el.dataset.loading; el.textContent = v; } };
+const setHTML = (id, h) => { const el = $(id); if (el) { delete el.dataset.loading; el.innerHTML = h; } };
+
+// Placeholders that show an animated loading indicator until their render lands.
+const LOADING_IDS = ['td-headline', 'tf-headline', 'ta-verdict', 'tj-next-text', 'tc-prose'];
+function markLoading() {
+  for (const id of LOADING_IDS) {
+    const el = $(id);
+    if (el) { el.dataset.loading = 'true'; el.textContent = ''; }
+  }
+}
+function clearStuckLoading() {
+  for (const id of LOADING_IDS) {
+    const el = $(id);
+    if (el && el.dataset.loading) { delete el.dataset.loading; if (!el.textContent.trim()) el.textContent = '—'; }
+  }
+}
 const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ============================================================
@@ -524,6 +539,7 @@ function renderCriteriaProse(criteria, profile, financesData) {
 // ============================================================
 
 async function init() {
+  markLoading();
   let financesData = null, profile = null, criteria = null;
   try { financesData = await getFinances(); } catch (e) { console.error('finances error', e); }
   try { profile = await getProfile(); } catch (e) { console.error('profile error', e); }
@@ -542,6 +558,7 @@ async function init() {
   await renderShortlist(financesData, criteria);
   await renderJourneyTrack();
   renderCriteriaProse(criteria, profile, financesData);
+  clearStuckLoading();
 }
 
 function ready(fn) {
