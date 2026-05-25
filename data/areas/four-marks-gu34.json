@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
   "overview": "Four Marks is a village and civil parish of around 4,800 residents in the East Hampshire district, sitting astride the A31 road four and a half miles south-west of Alton on the high chalk ridge at 630 ft above sea level. The name records a Saxon-era boundary point where four parishes (Ropley, Medstead, Chawton and Farringdon) met; until the turnpike was driven through in 1753, the only settlement was the Windmill Inn and a few cottages. The parish was created in 1932 and has grown rapidly since the 1980s as developers acquired plots between the older hamlets of Hawthorn and Soldridge. The village shares Medstead and Four Marks railway station — at 644 ft, the highest standard-gauge station in southern England — with neighbouring Medstead, but the line is the preserved Watercress Line and does not run commuter services; commuters drive four miles to Alton for direct Waterloo trains. The St Swithun's Way long-distance footpath crosses the southern fringe of the village.",
   "character": "Recent-build commuter village layered over a Saxon boundary; the older cores at Hawthorn and Lymington Bottom retain a few period cottages but most of the modern parish is densely-packed late-20th and 21st-century estate housing, a marked contrast to neighbouring Medstead. Council Tax Band D charge for the parish in 2026/27 is £2,316.05 (East Hampshire local-authority data).",
   "amenities": [
@@ -134,7 +136,7 @@
     "Recent development has been controversial locally"
   ],
   "whoItSuits": "Practical buyers prioritising amenities, schools and A31 access over picture-postcard character — particularly first-time buyers and growing families who would be priced out of Medstead, Bentworth or Beech. The mix of modern estate stock, two primaries within walking distance, a recreation ground with multiple sports and a small but real shopping parade makes it one of the more livable smaller villages in GU34. Less suitable for buyers chasing chalk-cottage aesthetics or planning to commute daily without a car: Alton station is a four-mile drive, and the Watercress Line is heritage, not transport.",
-  "councilTaxBand": "D",
+  "broadbandMedianMbps": null,
   "nearestStation": "Alton (4.4 mi)",
   "primarySupermarket": "Sainsbury's, Draymans Way, Alton (4.5 mi); Co-op within village",
   "images": [],

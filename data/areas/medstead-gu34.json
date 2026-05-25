@@ -16,6 +16,14 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": {
+    "avgDetached": 694500,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "asOf": "2025"
+  },
+  "councilTaxBand": "D",
   "overview": "Medstead is a village and civil parish of around 2,000 residents in the East Hampshire district, four and a quarter miles south-west of Alton on a chalk plateau between the Itchen and Meon valleys. The parish reaches over 210 m at King's Hill, making Medstead one of the highest villages in Hampshire; the 12th-century St Andrew's Church and a Victorian wheelhouse with a working donkey wheel are among its six Grade II-listed buildings. Modern Medstead is anchored by the High Street, where the Castle of Comfort pub, the Handy Stores grocer-newsagent and Medstead Hardware (which houses the village sub-post office) sit close to St Andrew's; the village hall, green and Medstead Primary lie at the other end. Medstead shares the heritage Watercress Line station with Four Marks, but commuters use Alton (4.3 mi) for direct Waterloo services. The parish was one of the first in the UK to receive broadband and now has Superfast FTTC available throughout.",
   "character": "Largely unspoilt rural Hampshire village, more visually coherent than neighbouring Four Marks — period brick and weatherboarded cottages along the High Street, a working farmstead at South Town, and 1960s-1980s additions on the south and east edges. Council Tax Band D charge for Medstead in 2026/27 is around £2,310 (East Hampshire LA, 2026-27 schedule).",
   "amenities": [
@@ -121,7 +129,6 @@
     "A31 traffic accumulates at the Four Marks pinch point at peak times"
   ],
   "whoItSuits": "Families and couples wanting a working chalk-ridge village with a Good primary on the doorstep, a working post office and a traditional freehouse — all within four miles of Alton's full retail set. The visual coherence of the High Street and the listed-building density distinguish it from neighbouring Four Marks. Best fit for buyers comfortable with a fifteen-minute drive to a mainline station, families with primary-age children, and downsizers from busier south-east towns. Less suitable for buyers needing daily train commutes without a car, or for those wanting the chocolate-box thatch character of the Test Valley villages further west.",
-  "councilTaxBand": "D",
   "broadbandMedianMbps": 56,
   "nearestStation": "Alton (4.3 mi)",
   "primarySupermarket": "Sainsbury's, Draymans Way, Alton (4.5 mi); Handy Stores in village",

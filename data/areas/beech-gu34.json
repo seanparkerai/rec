@@ -16,6 +16,14 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": {
+    "avgDetached": 849394,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": "G",
   "overview": "Beech is a village and civil parish of around 530 residents in the East Hampshire district, two miles west of Alton, set on the chalk uplands where the road to Bentworth climbs King's Hill — at 218 m, one of Hampshire's high points. The settlement only takes recognisable form in the late nineteenth century, when the landowner began selling off parcels for housing in the low-cost 'colonial' style of timber and corrugated iron; the process accelerated after the First World War under Lloyd George's Homes for Heroes programme, so what looks ancient is mostly Edwardian and inter-war on Saxon farmland. The village green at the junction of Medstead Road and Wellhouse Road remains the social centre, anchored by a modernised village hall reopened after a 2000s lottery-funded refurbishment. Beech sits half a mile off the A339 Alton–Basingstoke road, with Alton station three miles east.",
   "character": "Open village rather than estate village: dispersed lanes of detached and chalet-style houses, mostly post-1900, with a few older farmhouses. Prices are weighted high by plot size and elevated position — GU34 4AX recorded an average house value of £1.7m and a most-common Council Tax band of G. Building stock is more varied than the surrounding stone-and-flint villages, with brick, render, weatherboard and occasional Arts and Crafts examples on the higher ground.",
   "amenities": [
@@ -98,7 +106,7 @@
     "A339 noise audible on eastern lanes"
   ],
   "whoItSuits": "Buyers who want chalk-country quiet within two miles of a mainline station and a full market town, and who don't mind that the village is open and dispersed rather than gathered around a high street. The price point and absence of in-village amenities make it a harder fit for first-time buyers on a single income; couples relocating with London commutes, downsizers from busier south-east towns, and families willing to drive children to Medstead or Andrews' Endowed primaries get most out of it. Anyone wanting a pub on their doorstep should look at Medstead instead.",
-  "councilTaxBand": "G",
+  "broadbandMedianMbps": null,
   "nearestStation": "Alton (3.0 mi)",
   "primarySupermarket": "Waitrose, Station Road, Alton (3.0 mi)",
   "images": [],

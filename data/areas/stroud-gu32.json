@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "A village and civil parish in the East Hampshire district, 1.4 miles west of Petersfield, strung along the A272 (Winchester–Midhurst road). Population at the 2011 census was 360. Stroud parish sits immediately east of Langrish parish and just outside the western edge of the South Downs National Park. The village has no medieval parish church of its own (Stroud Mission Church serves the village within the Steep and Froxfield with Privett benefice), but it has Langrish Primary School (Outstanding at last inspection, 2019) at Ramsdean Road on the parish boundary, and the Seven Stars at the eastern end of the village — a Hall & Woodhouse country pub since 1996, extended into a converted barn in 2003. The A272 corridor location means easy road access to Petersfield (5 min) and the A3 (3 mi), and Petersfield station for direct London Waterloo trains is within 1.5 miles.",
   "character": "Linear roadside village with a working farm character; mix of period brick-and-flint cottages, post-war and modern infill detached, and a few larger farmhouses. Mixed demographic: commuters, working farms, retirees. Less polished than Steep or East Tisted.",
   "amenities": [
@@ -110,6 +112,7 @@
     "Some new-build infill of varied quality has gone in along the spine road"
   ],
   "whoItSuits": "Practical buyers who want most of the village amenity set (school, pub, shop, station) at a discount to Steep or High Cross, and who can live with an A272 frontage. Strong fit for working families targeting Langrish Primary and Churcher's or The Petersfield School. Less suited to buyers seeking a postcard South Downs village — Stroud is a workmanlike spine village, not a quiet downland nucleus.",
+  "broadbandMedianMbps": null,
   "nearestStation": "Petersfield (1.4 mi)",
   "primarySupermarket": "Waitrose Petersfield, Lavant Street (~2 mi); Tesco Petersfield, Bedford Road (~2.5 mi)",
   "images": [],

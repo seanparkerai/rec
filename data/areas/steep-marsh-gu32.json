@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "A small dispersed village in the civil parish of Steep, East Hampshire district, set in the South Downs National Park about two miles north of Petersfield. Steep Marsh is the marshy lower-lying ground east of Steep village proper, drained by the Ashford Stream and reached by a network of narrow lanes off the A272. The settlement is not a single nucleus: it is a string of period cottages, farmhouses and converted barns including Steep Marsh Farm Cottages, Brickyard Cottages and the cluster at Nine Acres. Day-to-day services are at Steep village (CofE primary, The Harrow Inn, Bedales School, All Saints Church) or in Petersfield itself, which is in walking range at 1.3–1.6 miles. The village historically had a condensed-milk factory and watercress beds drawing on the Ashford Stream; today it is overwhelmingly residential and agricultural.",
   "character": "Dispersed marshland-edge settlement with period cottages and converted farm buildings; mature gardens, lots of trees, no central village green. Working countryside rather than chocolate-box; planning protections via both SDNP and the Steep Conservation Area apply.",
   "amenities": [
@@ -120,6 +122,7 @@
     "Open-market turnover is thin: low single-digit annual sales per postcode unit"
   ],
   "whoItSuits": "Households wanting period or barn-conversion stock in the South Downs with walking distance to Petersfield station, and willing to absorb the practicalities of marshland-edge property (drainage, occasional flooding, septic systems). Strong overlap with Bedales families. Less suited to first-time buyers — entry pricing here sits with Steep proper rather than with the wider Petersfield average.",
+  "broadbandMedianMbps": null,
   "nearestStation": "Petersfield (1.3 mi)",
   "primarySupermarket": "Waitrose Petersfield, Lavant Street (~1.8 mi)",
   "images": [],

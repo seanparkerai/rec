@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Bishop’s Waltham is a historic small town in Hampshire’s SO32 area, known for Bishop’s Waltham Palace ruins and a traditional high street. It grew around medieval ecclesiastical estates and remains a significant service centre for surrounding villages. Today it blends heritage architecture, independent shops and practical commuter access toward Winchester, Southampton and Portsmouth corridors.",
   "character": "Historic market-town feel with active high street, mixed-period housing and strong community life.",
   "amenities": [
@@ -88,6 +90,9 @@
     "Rail access requires travel to nearby stations"
   ],
   "whoItSuits": "Very suitable for families and professionals seeking a characterful small-town base with useful daily amenities, good school options and reasonable road links to larger employment centres.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

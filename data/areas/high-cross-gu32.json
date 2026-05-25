@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "A small village in the civil parish of Froxfield and Privett, East Hampshire district, about three miles north-west of Petersfield and just north of the A272. High Cross is functionally the service hub of the parish: it holds Froxfield Church of England Primary and Pre-School, the King George V Memorial (Froxfield) Village Hall, St Peter's Church (built 1862, with three Norman arches reconstructed from the older church at Froxfield Green) and the Trooper Inn — a 17th-century pub with rooms that markets itself as occupying the highest point in Hampshire. The wider parish has a population of around 929 (2021 census) and includes the linked settlements of Froxfield Green, Privett and Stroud Common. Together they sit on the edge of the hangers landscape inside the South Downs National Park.",
   "character": "Linear downland village strung along the High Cross Lane and Alton Road; mix of period brick-and-flint cottages, post-war detached and a few newer infill dwellings. Active parish life — village hall events, Froxfield Choir, primary school — with a strong commuter and downsizer demographic.",
   "amenities": [
@@ -112,6 +114,7 @@
     "Petersfield 'rush hour' through Sheet and the A3 junction can be slow"
   ],
   "whoItSuits": "Families targeting Froxfield CofE Primary and the Petersfield/Churcher's secondary catchment, who want a working village with a pub and hall on foot rather than an isolated hamlet. Also suits commuters comfortable with a 5-minute drive to Petersfield station for the Portsmouth Direct line. Less suited to buyers needing a village shop or supermarket on foot, or those wanting to be in walking distance of a railway station.",
+  "broadbandMedianMbps": null,
   "nearestStation": "Petersfield (2.7 mi)",
   "primarySupermarket": "Waitrose Petersfield, Lavant Street (~3 mi); Tesco Petersfield, Bedford Road (~3.5 mi)",
   "images": [],

@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "A small linear hamlet in the East Hampshire district, sat astride the A272 about one mile north-west of Langrish and 3.5 miles west of Petersfield, on the western edge of the South Downs National Park. Bordean lies within the civil parish of Langrish, which was carved out of the larger East Meon ancient parish in 1894 (taking Langrish, Ramsdean and part of Bordean with it). Settlement is genuinely thin — a row of cottages, Lower Bordean Farmhouse (Grade II listed) and Bordean House — set in chalk-downland farmland with Hen Wood and the Sir Williams Hill ridge to the south. Day-to-day services are at Langrish (primary school, pub, parish church) and Petersfield (rail, market town shops, hospital). The area is genuinely rural: no village shop, no school in Bordean itself, no bus to count on after dark.",
   "character": "Open downland farmland with scattered period farmhouses and cottages, much of it Grade II listed. Quietly affluent owner-occupiers, working farms, and several converted barns. Inside the South Downs National Park, so any meaningful extension or rebuild will need a planning case made in NPPF terms.",
   "amenities": [
@@ -102,6 +104,7 @@
     "No buses you can rely on at night; car is essentially compulsory"
   ],
   "whoItSuits": "Buyers wanting a Grade II listed farmhouse or barn conversion in the South Downs and willing to absorb the cost of countryside life (oil heating, septic drainage, slower broadband in some lanes, long drives to anything). Empty-nesters and country-house buyers dominate the market here. Less suited to first-time buyers, who will find the stock thin and priced for the listed-building country market rather than the lower end of the Petersfield area.",
+  "broadbandMedianMbps": null,
   "nearestStation": "Petersfield (3.2 mi)",
   "primarySupermarket": "Waitrose Petersfield, Lavant Street (3.5 mi)",
   "images": [],

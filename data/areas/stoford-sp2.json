@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "directory",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "",
   "character": "",
   "amenities": [],
@@ -29,6 +31,9 @@
   "pros": [],
   "cons": [],
   "whoItSuits": [],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": []
 }

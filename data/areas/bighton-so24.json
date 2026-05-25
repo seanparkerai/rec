@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Bighton is a small parish and village locality in the Alresford area of Hampshire, with roots in farming and downland estates. It remains lightly populated and rural, with a close relationship to nearby market-town services in New Alresford.",
   "character": "Quiet rural parish character with scattered homes and open farmland.",
   "amenities": [
@@ -72,6 +74,9 @@
     "Most errands require a car"
   ],
   "whoItSuits": "Well suited to households prioritising rural peace and scenery over walkable day-to-day services.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

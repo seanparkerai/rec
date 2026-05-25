@@ -8,6 +8,7 @@ export const INDEX_FIELDS = [
   'id', 'name', 'village', 'town', 'county', 'postcode',
   'hubCity', 'regionDir', 'settlementType', 'subRegion',
   'coords', 'coordsSource', 'houseTypeIds', 'status',
+  'priceSummary', 'councilTaxBand',
 ];
 
 export const DETAIL_FIELDS = [

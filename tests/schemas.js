@@ -71,6 +71,21 @@ export function validateAreas(arr) {
       `areas[${i}].coords must be null or have numeric lat/lng`);
     check(e, typeOf(a.houseTypeIds) === 'array', `areas[${i}].houseTypeIds must be an array`);
     check(e, typeOf(a.status) === 'string', `areas[${i}].status must be a string`);
+    // Phase 4b: priceSummary + councilTaxBand are optional but typed when present.
+    if ('priceSummary' in a) {
+      const ps = a.priceSummary;
+      check(e, ps === null || typeOf(ps) === 'object', `areas[${i}].priceSummary must be null or an object`);
+      if (typeOf(ps) === 'object') {
+        for (const k of ['avgDetached', 'avgSemi', 'avgTerraced', 'avgFlat']) {
+          if (k in ps) check(e, ps[k] === null || typeof ps[k] === 'number', `areas[${i}].priceSummary.${k} must be null or a number`);
+        }
+        if ('asOf' in ps) check(e, ps.asOf === null || typeof ps.asOf === 'string', `areas[${i}].priceSummary.asOf must be null or a string`);
+      }
+    }
+    if ('councilTaxBand' in a) {
+      const ct = a.councilTaxBand;
+      check(e, ct === null || (typeof ct === 'string' && /^[A-H]$/i.test(ct)), `areas[${i}].councilTaxBand must be null or A-H`);
+    }
   });
   return e;
 }

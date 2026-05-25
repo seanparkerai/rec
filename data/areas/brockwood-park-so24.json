@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Brockwood Park is a small locality in the SO24 countryside, best known for the historic estate and its educational campus setting. It sits within a wider rural belt between Alresford and Petersfield routes, characterised by farmland and woodland edges. Residentially, it behaves as a niche low-density area where amenities are mostly accessed in neighbouring settlements.",
   "character": "Estate/hamlet-style setting with open countryside and very limited standalone service core.",
   "amenities": [
@@ -78,6 +80,9 @@
     "Transport and amenities generally require driving"
   ],
   "whoItSuits": "Suitable for buyers prioritising privacy and countryside context over walkable facilities, especially those comfortable with car-based living.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

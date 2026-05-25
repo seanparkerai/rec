@@ -16,7 +16,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 849394,
+      "avgSemi": null,
+      "avgTerraced": null,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": "G"
   },
   {
     "id": "bradley-gu34",
@@ -35,7 +43,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "chidden-gu34",
@@ -54,7 +64,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "filmore-hill-gu34",
@@ -73,7 +85,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 849394,
+      "avgSemi": 488523,
+      "avgTerraced": null,
+      "avgFlat": null,
+      "asOf": "2025"
+    },
+    "councilTaxBand": null
   },
   {
     "id": "four-marks-gu34",
@@ -92,7 +112,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "medstead-gu34",
@@ -111,7 +133,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 694500,
+      "avgSemi": null,
+      "avgTerraced": null,
+      "avgFlat": null,
+      "asOf": "2025"
+    },
+    "councilTaxBand": "D"
   },
   {
     "id": "upper-farringdon-gu34",
@@ -130,7 +160,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "chilbolton-so20",
@@ -149,7 +181,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "leckford-so20",
@@ -168,7 +202,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "longstock-so20",
@@ -187,7 +223,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "middle-wallop-so20",
@@ -206,7 +244,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "over-wallop-so20",
@@ -225,7 +265,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "newton-stacey-sp11",
@@ -244,7 +286,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "wherwell-sp11",
@@ -263,7 +307,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "wield-gu35",
@@ -282,7 +328,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "brown-candover-rg25",
@@ -301,7 +349,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "farley-mount-rg25",
@@ -320,7 +370,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "partial"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "preston-candover-rg25",
@@ -339,13 +391,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": "D"
   },
   {
     "id": "bordon-gu35",
     "name": "Bordon",
     "village": "Bordon",
-    "town": "Alton",
+    "town": "Farnham",
     "county": "Hampshire",
     "postcode": "GU35",
     "hubCity": "Guildford",
@@ -358,7 +412,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bordean-gu32",
@@ -377,7 +433,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "coombe-gu32",
@@ -396,7 +454,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "flexcombe-gu32",
@@ -415,7 +475,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "high-cross-gu32",
@@ -434,7 +496,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "steep-gu32",
@@ -453,7 +517,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "steep-marsh-gu32",
@@ -472,7 +538,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "stroud-gu32",
@@ -491,7 +559,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "charlwood-gu34",
@@ -510,7 +580,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "colemore-gu34",
@@ -529,13 +601,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "east-tisted-gu34",
     "name": "East Tisted",
     "village": "East Tisted",
-    "town": "Alton",
+    "town": "Petersfield",
     "county": "Hampshire",
     "postcode": "GU34",
     "hubCity": "Guildford",
@@ -543,12 +617,14 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0931,
-      "lng": -1.0086
+      "lat": 51.16424,
+      "lng": -0.9622
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "froxfield-green-gu34",
@@ -567,7 +643,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "monkwood-gu34",
@@ -586,7 +664,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "privett-gu34",
@@ -605,7 +685,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "selborne-gu34",
@@ -624,7 +706,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bramdean-so24",
@@ -643,7 +727,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "brockwood-park-so24",
@@ -662,7 +748,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "kitwood-so24",
@@ -681,7 +769,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "southwick-po17",
@@ -700,7 +790,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "awbridge-so51",
@@ -719,7 +811,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "dunbridge-so51",
@@ -738,7 +832,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "lockerley-so51",
@@ -757,7 +853,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "sherfield-english-so51",
@@ -776,7 +874,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bramshaw-so43",
@@ -795,7 +895,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "chillworth-so16",
@@ -814,7 +916,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ashton-so32",
@@ -833,7 +937,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bishop-s-waltham-so32",
@@ -852,7 +958,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "droxford-so32",
@@ -871,7 +979,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "dundridge-so32",
@@ -890,7 +1000,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "meonstoke-so32",
@@ -909,7 +1021,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "soberton-so32",
@@ -928,7 +1042,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "soberton-heath-so32",
@@ -947,7 +1063,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "swanmore-so32",
@@ -966,7 +1084,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "waltham-chase-so32",
@@ -985,7 +1105,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "lyndhurst-so43",
@@ -1004,7 +1126,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "pucknall-so51",
@@ -1023,7 +1147,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bossington-so20",
@@ -1042,7 +1168,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "broughton-so20",
@@ -1061,7 +1189,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "partial"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "nether-wallop-so20",
@@ -1080,7 +1210,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "hambledon-po7",
@@ -1099,7 +1231,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "partial"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "east-meon-gu32",
@@ -1118,7 +1252,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "west-meon-gu32",
@@ -1137,7 +1273,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bentworth-gu34",
@@ -1156,7 +1294,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "upper-wield-gu35",
@@ -1175,7 +1315,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ashley-so20",
@@ -1194,7 +1336,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "brook-so20",
@@ -1213,7 +1357,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "chilbolton-down-so20",
@@ -1232,7 +1378,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "houghton-so20",
@@ -1251,7 +1399,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "king-s-somborne-so20",
@@ -1270,7 +1420,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "little-sombourne-so20",
@@ -1289,7 +1441,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 950371,
+      "avgSemi": 472304,
+      "avgTerraced": 403667,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": null
   },
   {
     "id": "shootash-so20",
@@ -1308,7 +1468,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "stockbridge-so20",
@@ -1327,7 +1489,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "partial"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "totford-so20",
@@ -1346,7 +1510,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "up-somborne-so20",
@@ -1365,7 +1531,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "abbotstone-so21",
@@ -1384,7 +1552,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "avington-so21",
@@ -1403,7 +1573,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "barton-stacey-so21",
@@ -1422,7 +1594,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "baybridge-so21",
@@ -1441,7 +1615,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "chilcomb-so21",
@@ -1460,7 +1636,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "colden-common-so21",
@@ -1479,7 +1657,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "compton-so21",
@@ -1498,7 +1678,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "crawley-so21",
@@ -1517,7 +1699,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "east-stratton-so21",
@@ -1536,7 +1720,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "easton-so21",
@@ -1555,7 +1741,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "hursley-so21",
@@ -1574,7 +1762,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "itchen-abbas-so21",
@@ -1593,7 +1783,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "lane-end-so21",
@@ -1612,7 +1804,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "partial"
+    "status": "partial",
+    "priceSummary": {
+      "avgDetached": 1058605,
+      "avgSemi": 541803,
+      "avgTerraced": 488613,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": null
   },
   {
     "id": "lower-bullington-so21",
@@ -1631,7 +1831,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 1058605,
+      "avgSemi": 541803,
+      "avgTerraced": 488613,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": null
   },
   {
     "id": "micheldever-so21",
@@ -1650,7 +1858,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 1058605,
+      "avgSemi": 541803,
+      "avgTerraced": 488613,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": "D"
   },
   {
     "id": "morestead-so21",
@@ -1669,7 +1885,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 1058605,
+      "avgSemi": 541803,
+      "avgTerraced": 488613,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": null
   },
   {
     "id": "otterbourne-so21",
@@ -1688,7 +1912,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "owlsbury-so21",
@@ -1707,7 +1933,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "silkstead-so21",
@@ -1726,7 +1954,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "south-wonston-so21",
@@ -1745,7 +1975,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "sparsholt-so21",
@@ -1764,7 +1996,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "stoke-charity-so21",
@@ -1783,7 +2017,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "sutton-scotney-so21",
@@ -1802,7 +2038,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "twyford-so21",
@@ -1821,7 +2059,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "west-stratton-so21",
@@ -1840,7 +2080,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "wonston-so21",
@@ -1859,7 +2101,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "worthy-down-so21",
@@ -1878,7 +2122,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "littleton-so22",
@@ -1897,7 +2143,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 920528,
+      "avgSemi": 593316,
+      "avgTerraced": 518049,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": "D"
   },
   {
     "id": "kings-worthy-so23",
@@ -1916,7 +2170,15 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": {
+      "avgDetached": 715443,
+      "avgSemi": 437883,
+      "avgTerraced": 340094,
+      "avgFlat": null,
+      "asOf": "2026-05"
+    },
+    "councilTaxBand": "D"
   },
   {
     "id": "avington-park-so24",
@@ -1935,7 +2197,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "beauworth-so24",
@@ -1954,7 +2218,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bighton-so24",
@@ -1973,7 +2239,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bishop-s-sutton-so24",
@@ -1992,7 +2260,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "cheriton-so24",
@@ -2011,7 +2281,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "hinton-ampner-so24",
@@ -2030,7 +2302,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "kilmeston-so24",
@@ -2049,7 +2323,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "northington-so24",
@@ -2068,7 +2344,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "old-alresford-so24",
@@ -2087,7 +2365,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ovington-so24",
@@ -2106,7 +2386,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ropley-so24",
@@ -2125,7 +2407,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "shorley-so24",
@@ -2144,7 +2428,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "standon-so24",
@@ -2163,7 +2449,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "tichborne-so24",
@@ -2182,7 +2470,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "west-tisted-so24",
@@ -2201,7 +2491,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "preshaw-so32",
@@ -2220,7 +2512,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "upham-so32",
@@ -2239,7 +2533,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "braishfield-so51",
@@ -2258,7 +2554,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "embley-so51",
@@ -2277,7 +2575,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "kimbridge-so51",
@@ -2296,7 +2596,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "michelmersh-so51",
@@ -2315,7 +2617,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "researched"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "timsbury-so51",
@@ -2334,7 +2638,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "sherrington-ba12",
@@ -2353,7 +2659,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bishopdown-sp1",
@@ -2372,7 +2680,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "stratford-sub-castle-sp1",
@@ -2391,7 +2701,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bemerton-sp2",
@@ -2410,7 +2722,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "burcombe-sp2",
@@ -2429,7 +2743,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "great-wishford-sp2",
@@ -2448,7 +2764,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "little-wishford-sp2",
@@ -2467,7 +2785,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "netherhampton-sp2",
@@ -2486,7 +2806,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "south-newton-sp2",
@@ -2505,7 +2827,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "stapleford-sp2",
@@ -2524,7 +2848,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "stoford-sp2",
@@ -2543,7 +2869,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "wilton-sp2",
@@ -2562,7 +2890,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "chilmark-sp3",
@@ -2581,7 +2911,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "dinton-sp3",
@@ -2600,7 +2932,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "lake-sp3",
@@ -2619,7 +2953,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "lower-chicksgrove-sp3",
@@ -2638,7 +2974,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "sutton-mandeville-sp3",
@@ -2657,7 +2995,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "tisbury-sp3",
@@ -2676,7 +3016,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ford-sp4",
@@ -2695,7 +3037,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "gomeldon-sp4",
@@ -2714,7 +3058,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "little-durnford-sp4",
@@ -2733,7 +3079,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "little-langford-sp4",
@@ -2752,7 +3100,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "middle-woodford-sp4",
@@ -2771,7 +3121,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "porton-down-sp4",
@@ -2790,7 +3142,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "steeple-langford-sp4",
@@ -2809,7 +3163,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ugford-sp4",
@@ -2828,7 +3184,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "upper-woodford-sp4",
@@ -2847,7 +3205,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "winterbourne-earls-sp4",
@@ -2866,7 +3226,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "winterbourne-gunner-sp4",
@@ -2885,7 +3247,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "alderbury-sp5",
@@ -2904,7 +3268,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "barford-st-martin-sp5",
@@ -2923,7 +3289,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bishopstone-sp5",
@@ -2942,7 +3310,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "bowerchalke-sp5",
@@ -2961,7 +3331,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "broad-chalke-sp5",
@@ -2980,7 +3352,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "charlton-all-saints-sp5",
@@ -2999,7 +3373,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "coombe-bissett-sp5",
@@ -3018,7 +3394,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "dean-land-sp5",
@@ -3037,7 +3415,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "downton-sp5",
@@ -3056,7 +3436,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "east-dean-sp5",
@@ -3075,7 +3457,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "east-grimstead-sp5",
@@ -3094,7 +3478,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "east-tytherely-sp5",
@@ -3113,7 +3499,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ebbesbourne-wake-sp5",
@@ -3132,7 +3520,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ebble-sp5",
@@ -3151,7 +3541,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "farley-sp5",
@@ -3170,7 +3562,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "firsdown-sp5",
@@ -3189,7 +3583,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "hampworth-sp5",
@@ -3208,7 +3604,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "homington-sp5",
@@ -3227,7 +3625,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "landford-sp5",
@@ -3246,7 +3646,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "lanford-wood-sp5",
@@ -3265,7 +3667,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "lover-sp5",
@@ -3284,7 +3688,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "mead-end-sp5",
@@ -3303,7 +3709,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "middle-winterslow-sp5",
@@ -3322,7 +3730,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "newtown-sp5",
@@ -3341,7 +3751,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "nunton-sp5",
@@ -3360,7 +3772,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "odstock-sp5",
@@ -3379,7 +3793,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "pitton-sp5",
@@ -3398,7 +3814,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "plaitford-green-sp5",
@@ -3417,7 +3835,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "redlynch-sp5",
@@ -3436,7 +3856,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "ridge-sp5",
@@ -3455,7 +3877,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "west-dean-sp5",
@@ -3474,7 +3898,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "west-grimstead-sp5",
@@ -3493,7 +3919,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "west-tytherely-sp5",
@@ -3512,7 +3940,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "west-winterslow-sp5",
@@ -3531,7 +3961,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "whiteparish-sp5",
@@ -3550,7 +3982,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "witherington-sp5",
@@ -3569,7 +4003,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "woodminton-sp5",
@@ -3588,7 +4024,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "breamore-sp6",
@@ -3607,7 +4045,9 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null
   },
   {
     "id": "whitsbury-sp6",
@@ -3626,82 +4066,8 @@
     },
     "coordsSource": "postcode-outward-approx",
     "houseTypeIds": [],
-    "status": "directory"
-  },
-  {
-    "id": "flexcombe-gu33",
-    "name": "Flexcombe",
-    "village": "",
-    "town": "Liss",
-    "county": "Hampshire",
-    "postcode": "GU33",
-    "hubCity": "",
-    "regionDir": "",
-    "settlementType": "",
-    "subRegion": "",
-    "coords": {
-      "lat": 51.0228,
-      "lng": -0.9456
-    },
-    "coordsSource": "unset",
-    "houseTypeIds": [],
-    "status": "researched"
-  },
-  {
-    "id": "charlwood-so24",
-    "name": "Charlwood",
-    "village": "",
-    "town": "Alresford",
-    "county": "Hampshire",
-    "postcode": "SO24",
-    "hubCity": "",
-    "regionDir": "",
-    "settlementType": "",
-    "subRegion": "",
-    "coords": {
-      "lat": 51.1227,
-      "lng": -1.0578
-    },
-    "coordsSource": "unset",
-    "houseTypeIds": [],
-    "status": "researched"
-  },
-  {
-    "id": "colemore-gu32",
-    "name": "Colemore",
-    "village": "",
-    "town": "Petersfield",
-    "county": "Hampshire",
-    "postcode": "GU32",
-    "hubCity": "",
-    "regionDir": "",
-    "settlementType": "",
-    "subRegion": "",
-    "coords": {
-      "lat": 51.07444,
-      "lng": -0.97852
-    },
-    "coordsSource": "unset",
-    "houseTypeIds": [],
-    "status": "researched"
-  },
-  {
-    "id": "froxfield-green-gu32",
-    "name": "Froxfield Green",
-    "village": "",
-    "town": "Petersfield",
-    "county": "Hampshire",
-    "postcode": "GU32",
-    "hubCity": "",
-    "regionDir": "",
-    "settlementType": "",
-    "subRegion": "",
-    "coords": {
-      "lat": 51.0344,
-      "lng": -0.9763
-    },
-    "coordsSource": "unset",
-    "houseTypeIds": [],
-    "status": "researched"
+    "status": "directory",
+    "priceSummary": null,
+    "councilTaxBand": null
   }
 ]

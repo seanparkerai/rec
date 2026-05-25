@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Bishop’s Sutton is a village immediately east of New Alresford on the A31, within the Winchester district of Hampshire. Historically it developed as an agricultural and route-side settlement connected to the Alresford market hinterland. Today it offers a practical village base with quick access to Alresford services, Winchester employment and South Downs countryside.",
   "character": "Linear village form with mixed housing, road connectivity and close ties to Alresford.",
   "amenities": [
@@ -79,6 +81,9 @@
     "Rail requires drive/bus to a station"
   ],
   "whoItSuits": "Good for families and professionals who want village-scale living with quick access to Alresford schools/services and straightforward commuting links to Winchester and London routes.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

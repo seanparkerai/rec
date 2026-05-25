@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "A handsome single-street town midway between Andover and Romsey, set in the Test Valley. Its wide High Street — a legacy of the drovers' route from Wales — is now lined with tea rooms, gastropubs and independent specialist shops, with a deliberate scarcity of chain stores.",
   "character": "Genteel, free-thinking, well-heeled rural; chalk-stream country with a strong fly-fishing identity (Houghton Fishing Club is the oldest in England, based at the Grosvenor Hotel).",
   "amenities": [
@@ -101,6 +103,9 @@
     "Anglers and slow-food households",
     "Buyers prioritising market-town amenities over commuter speed"
   ],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

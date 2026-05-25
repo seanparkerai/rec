@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Farley Mount is a hill and country park west of Winchester rather than a conventional residential village, and the current RG25/Basingstoke seed appears mismatched with that geography. Existing references point to Farley Mount monument and country park context, while postcode/location references in the record indicate likely source-data error. This record should remain flagged for dataset correction before full residential profiling.",
   "character": "Non-residential country-park / downland landmark context; not a normal village-centre settlement profile.",
   "amenities": [
@@ -70,6 +72,9 @@
     "High dependence on private transport"
   ],
   "whoItSuits": "Not currently suitable for normal residential area comparison until the underlying seed entry is corrected (likely intended settlement differs).",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

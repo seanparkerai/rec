@@ -16,6 +16,14 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": {
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": null,
   "overview": "Lower Bullington is a tiny hamlet in the Bullington civil parish of Test Valley borough, set in the chalk-stream valley of the River Dever about nine miles south-east of Andover and three miles east of the village of Sutton Scotney. The civil parish — comprising Upper Bullington and Lower Bullington — had a recorded population of just 101 at the 2001 Census. Lower Bullington sits in the valley bottom at around 60 m, while Upper Bullington runs along the parallel ridge to the north; both are off the A30 and reached by a single lane signed from Bullington Cross. The hamlet has no shop, school, pub or church of its own and shares amenities with the larger village of Barton Stacey, two miles west.",
   "character": "Sparsely settled chalk-stream hamlet: a handful of brick-and-flint cottages, a working farm and one or two larger detached properties strung along Lower Bullington Lane. Inside the Test Valley Special Landscape Area, with the Dever cress beds prominent in the landscape. No through traffic and big skies; nearest streetlight is at Sutton Scotney.",
   "amenities": [
@@ -120,7 +128,6 @@
     "Mobile signal and broadband patchy at the lower-valley end"
   ],
   "whoItSuits": "Best understood as a quiet country bolt-hole for someone working from home with occasional London or Andover days. For a solo first-time buyer at £400k it's effectively out of reach as a standalone freehold purchase — the few cottages that do come up are typically well above. Barton Stacey (2 mi west) has more terraced and semi stock at more attainable prices with the same A303 access; Wonston (3 mi south) is cheaper still with its own Good primary; Sutton Scotney (3 mi west) has the most amenities for the money.",
-  "councilTaxBand": null,
   "broadbandMedianMbps": null,
   "nearestStation": "Micheldever (4.2 mi)",
   "primarySupermarket": "Co-op, Bullington Cross (1.0 mi); Sainsbury's, Andover Road, Andover (9.0 mi)",

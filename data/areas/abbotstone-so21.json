@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Abbotstone is a tiny rural hamlet east of Winchester, set among rolling downland near the Avington and Itchen Valley area. Historically it formed part of a wider agricultural landscape linked to nearby estates and farms rather than a nucleated village centre. Today it remains sparsely settled, with most day-to-day services accessed in Alresford or Winchester while residents value seclusion and dark-sky countryside.",
   "character": "Very small hamlet character with scattered homes, farm buildings and quiet lanes.",
   "amenities": [
@@ -77,6 +79,9 @@
     "Car dependency is high"
   ],
   "whoItSuits": "Best for buyers seeking a very quiet rural hamlet base and who are comfortable driving for schools, shops and rail.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Bramshaw sits on the Hampshire/Wiltshire edge of the New Forest, with a dispersed settlement pattern, common land and long-standing rural heritage. The area is known for forest ponies, open heath and links to nearby Lyndhurst and Salisbury routes. It offers a distinctive New Forest lifestyle with protected landscapes and tourism-driven local activity.",
   "character": "Dispersed New Forest village character with commons, lanes and mixed historic housing.",
   "amenities": [
@@ -78,6 +80,9 @@
     "Peak-season visitor traffic can affect travel times"
   ],
   "whoItSuits": "Ideal for nature-focused households and remote/hybrid workers who prioritise protected-landscape living and accept rural transport trade-offs.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

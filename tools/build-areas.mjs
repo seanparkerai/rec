@@ -63,6 +63,18 @@ const areas = vRows
       ? { lat: +(r.lat + jitter(id, 1)).toFixed(5), lng: +(r.lng + jitter(id, 7)).toFixed(5) }
       : null;
     const p = prior[id] || {};
+    const prices = p.prices ?? {};
+    // priceSummary: lightweight subset baked into the index so the Areas page
+    // can compute affordability fit dots without loading every per-area file.
+    const hasAnyPrice = ['avgDetached', 'avgSemi', 'avgTerraced', 'avgFlat']
+      .some((k) => prices[k] != null);
+    const priceSummary = hasAnyPrice ? {
+      avgDetached: prices.avgDetached ?? null,
+      avgSemi:     prices.avgSemi     ?? null,
+      avgTerraced: prices.avgTerraced ?? null,
+      avgFlat:     prices.avgFlat     ?? null,
+      asOf:        prices.asOf        ?? null,
+    } : null;
     return {
       id,
       name: village,
@@ -83,7 +95,8 @@ const areas = vRows
       amenities: p.amenities ?? [],
       schools: p.schools ?? [],
       transport: p.transport ?? { commutes: [] },
-      prices: p.prices ?? {},
+      prices,
+      priceSummary,
       thingsToDo: p.thingsToDo ?? [],
       placesToEat: p.placesToEat ?? [],
       pros: p.pros ?? [],

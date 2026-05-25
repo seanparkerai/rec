@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Wield is a small civil parish in the East Hampshire district, on the chalk uplands between Alresford and Basingstoke, containing two villages — Upper Wield and Lower Wield — about a mile apart. The parish population at the 2021 census was 237. The parish church of St James in Upper Wield is mainly Norman, Grade I-listed, and contains a notable monument to William Wallop (c. 1553–1617), who served as MP for Southampton, justice of the peace and three-times mayor of Southampton. The Yew Tree, in Lower Wield, is the parish's pub. The seed CSV records this entry as GU35 but the actual postcode area is SO24 (post town Alresford) — the Yew Tree's address is SO24 9RX. The parish lies in a wide stretch of chalk downland with no significant numbered roads through it; the closest is the B3046 between Alresford and Basingstoke, about a mile and a half west.",
   "character": "Loose two-village civil parish on high chalk downland with mature beechwoods, an active parish hall in Upper Wield and a fishing-and-shooting estate culture. Building stock is predominantly 17th–19th-century brick-and-flint farmhouses and thatched cottages, with a Grade I-listed Norman church anchoring Upper Wield. Strict planning regime; turnover is rare.",
   "amenities": [
@@ -104,6 +106,7 @@
     "Property stock is small and rarely turns over"
   ],
   "whoItSuits": "Cash-buyer households wanting a chalk-downland setting with two-station train optionality (the Basingstoke route to Waterloo is one of the fastest in this whole batch) and accepting that day-to-day life is car-dependent. Best fit for retirees, remote workers, and downsizers from Alresford or Basingstoke. The Wield parish duplicates with the seed CSV's separate `upper-wield-gu35` record (batch 11); Luke should consider consolidating these into one record covering the parish, since the seed-data split between Upper Wield and the parish-level Wield is not reflected in the 2021 census or in the Wikipedia entry.",
+  "broadbandMedianMbps": null,
   "nearestStation": "Alton (5.5 mi)",
   "primarySupermarket": "Waitrose, Alresford (5.5 mi); Sainsbury's, Basingstoke (8.5 mi)",
   "images": [],

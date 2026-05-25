@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Avington is a small village in the Itchen Valley, northeast of Winchester, on the River Itchen corridor. The settlement is closely associated with Avington Park and estate history, and historically formed its own parish before later administrative merger. Today it reads as a highly rural, low-density village with strong landscape and heritage identity.",
   "character": "Historic river-valley village character with estate influence and limited modern commercial core.",
   "amenities": [
@@ -77,6 +79,9 @@
     "Car reliance for most day-to-day needs"
   ],
   "whoItSuits": "Suited to buyers who prioritise river-valley heritage setting and Winchester access over local high-street convenience.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

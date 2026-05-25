@@ -16,6 +16,8 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
   "overview": "Ashton is a very small rural settlement in the SO32 corridor between Bishop’s Waltham and the Meon Valley. It is defined more by farmland, lanes and dispersed housing than by a concentrated village core. The area benefits from access to Bishop’s Waltham services while retaining a quieter countryside setting.",
   "character": "Dispersed semi-rural cluster with agricultural edges and quiet roads.",
   "amenities": [
@@ -77,6 +79,9 @@
     "Public transport options are limited"
   ],
   "whoItSuits": "Suited to rural-lifestyle buyers who are car-based and do not need a walkable high street.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
   "images": [],
   "sources": [
     {

@@ -16,6 +16,14 @@
   "coordsSource": "postcode-outward-approx",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": {
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": null,
   "overview": "Morestead is a tiny former civil parish — now part of Owslebury parish — set on rising downland inside the South Downs National Park about three miles south-east of Winchester city centre. The historic parish covered around 1,701 acres and had just 96 residents at the 1931 census before being merged into Owslebury in 1932. The 12th-century parish church (no known dedication), with parts dating from around 1150 and a font from about 1200, sits at the lane junction at the heart of the hamlet, beside the former rectory built in the mid-1830s. The Roman road from Portchester to Winchester forms the main village street. Morestead is predominantly a farming community, with racehorse training stables, and is in the benefice of the South Downs Gateway Churches with Twyford, Owslebury and Colden Common. There is no shop, school or pub in the hamlet itself.",
   "character": "Dispersed downland farming hamlet of fewer than thirty households: a parish church, a couple of working farms, the old rectory and a thin scatter of brick-and-flint cottages and 20th-century houses along Morestead Road and Fawley Lane. Strictly inside the South Downs National Park, so planning is tightly controlled.",
   "amenities": [
@@ -122,7 +130,6 @@
     "Very limited public transport"
   ],
   "whoItSuits": "Best for a buyer who wants National Park quiet within ten minutes of a mainline station and a market town, and accepts there are no facilities in the lane. For a solo £64k first-time buyer at £400k, freehold listings are typically out of reach in Morestead itself — the much larger village of Twyford (1.5 mi north, same SO21) has more terraced and semi stock and gives you a Good primary, pubs and a station within walking distance, with Owslebury (1.7 mi) cheaper still for the same downs setting. If you'd rather chase budget than National Park status, Colden Common (3 mi south) is the obvious next stop.",
-  "councilTaxBand": null,
   "broadbandMedianMbps": null,
   "nearestStation": "Winchester (3.0 mi)",
   "primarySupermarket": "Sainsbury's, Middle Brook Street, Winchester (3.0 mi); Co-op, Twyford (1.5 mi)",
