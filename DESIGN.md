@@ -76,19 +76,23 @@ Do not ship any of these:
 - Coloured left-border "pill" row indicators (use a background tint instead).
 - Inline styles (always CSS classes).
 
-If any of these appears in a screenshot, refactor before commit.
+If any of these appears, refactor before commit.
 
 ---
 
 ## 4. Verification
 
+No screenshot / Playwright / Lighthouse step — the assistant has no browser. Verify in code, and the
+developer confirms the visuals on-device.
+
 Before merging any UI change:
 
-1. `node tools/verify-ui.mjs` — screenshots every page at 320 / 375 / 768 / 1280 in light + dark + reduced-motion under `artifacts/screenshots/<task>/`.
-2. axe-core CLI: zero serious/critical violations on the changed pages.
-3. Lighthouse: Perf ≥90, A11y ≥95, BP ≥95, SEO ≥90.
-4. `tests/tests.html`: all green.
-5. Eyeball the screenshot grid: each page reads as **Stripe-docs** or **Linear-dense** per its anchor. If it could be mistaken for generic SaaS, redo it.
+1. Re-read the diff and reason through the layout (spans, grid tracks, specificity, token resolution).
+2. `node tools/run-intelligence-tests.mjs`: green. (`tests/tests.html` smoke checks are run by the developer.)
+3. Keep each page true to its anchor — **Stripe-docs** or **Linear-dense**. If it could be mistaken for
+   generic SaaS, redo it.
+4. For anything that needs eyes (spacing, colour, alignment, motion), hand the developer one short note on
+   what to check.
 
 ---
 

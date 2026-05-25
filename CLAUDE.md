@@ -148,18 +148,23 @@ the relevant anchor (*Stripe-docs* or *Linear-dense*) in the commit message.
 
 ## 13. Verification for UI changes
 
+There is **no screenshot / Playwright / Chromium / Lighthouse step** in this workflow. The assistant runs
+in an environment without a browser, so do **not** attempt to capture screenshots, run `verify-ui.mjs`,
+or render pages — and do **not** keep announcing that these are unavailable. Just verify what you can in
+code and hand the visual check to the developer.
+
 Before declaring a UI change complete:
 
-- **Screenshot at 375 / 768 / 1280 px** (Playwright/Chromium when available; manual browser resize as
-  fallback) and save under `artifacts/screenshots/<task>/`. Review the screenshots, not just the markup.
-- **No horizontal scroll** at 320 px (`document.documentElement.scrollWidth === clientWidth`). Encoded
-  as a check in `tests/tests.html`.
-- **Contrast** — verify light + dark token pairs meet 4.5:1 / 3:1; spot-check changed surfaces in DevTools.
-- **Reduced motion** — load with `prefers-reduced-motion: reduce` forced (DevTools → Rendering); confirm
-  no animation runs longer than ~0.01 s.
-- **Axe** — zero serious/critical violations on the changed page (DevTools axe panel or `@axe-core/cli`).
-- **Test harness** — `tests/tests.html` all-green before commit.
-- **Lighthouse (when CI lands)** — target Performance ≥90, Accessibility ≥95, Best Practices ≥95, SEO ≥90.
+- **Code self-review** — re-read the diff and reason through the layout/cascade: spans, grid tracks,
+  specificity, token resolution. Catch the obvious breakage (collapsed grids, undefined tokens, overflow)
+  by reading, since you can't see it.
+- **Test harness** — `node tools/run-intelligence-tests.mjs` green before commit. The browser-side
+  `tests/tests.html` (no-horizontal-scroll, no-inline-style, reachability) is run by the developer.
+- **Design intent in mind** — keep contrast (4.5:1 / 3:1), reduced-motion behaviour, and the page's
+  anchor (Stripe-docs / Linear-dense) correct in the markup and tokens you write.
+- **Hand off the visual pass** — when a change genuinely needs eyes (spacing, alignment, colour, the feel
+  of an animation), state briefly what to look at and let the developer confirm on their device. One short
+  hand-off line, not a repeated disclaimer.
 
 ## 14. Plan Mode contract
 
@@ -177,7 +182,6 @@ If scope changes mid-execution — a new file is needed, a §16 file is touched,
 Subagents are tools, not autonomous workers. The contract:
 
 - **One level of delegation.** A subagent may not spawn further subagents. The main thread orchestrates.
-- **No headed browsers.** Playwright runs headless via `tools/verify-ui.mjs`; subagents must not launch headed instances.
 - **No long-running processes.** No dev servers, watchers, or background jobs that outlive the agent's reply.
 - **Reports, then exits.** Every subagent returns a single summary to the main thread; it does not commit, push, or hand off to another subagent.
 

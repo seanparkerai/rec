@@ -30,8 +30,9 @@ engine** that powers every affordability surface from one source of truth:
   set expectations for what's coming. See `docs/ROADMAP.md`.
 
 Run `npm test` for the pure-module test harness (21 assertions covering affordability bands, money-flow
-sums, savings-velocity scenarios). Browser-side smoke + axe + Lighthouse + screenshot acceptance still
-run via `tests/tests.html` and `node tools/verify-ui.mjs` against a local server.
+sums, savings-velocity scenarios). Browser-side smoke checks (no horizontal scroll, no inline styles,
+page reachability) run via `tests/tests.html` against a local server when you want them; visual review is
+done by eye in the browser.
 
 ## ✨ View live site
 
