@@ -66,7 +66,7 @@
       await test(`partial ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
 
     // --- pages reachable ---
-    for (const p of ['index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html', 'pages/areas.html', 'pages/area-detail.html', 'pages/house-types.html', 'pages/journey.html', 'pages/finances.html', 'pages/map.html'])
+    for (const p of ['index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html', 'pages/areas.html', 'pages/area-detail.html', 'pages/house-types.html', 'pages/journey.html', 'pages/finances.html', 'pages/map.html', 'pages/listings.html', 'pages/outreach.html', 'pages/ask.html'])
       await test(`page ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
 
     // --- storage round-trip (throwaway key, no real data touched) ---

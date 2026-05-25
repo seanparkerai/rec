@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outreach (soon) · rec</title>
+  <meta name="description" content="One-click outreach drafts for viewings, brokers, follow-ups — coming in v3." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Coming in v3</p>
+      <h1>Outreach</h1>
+      <p class="lead">Pre-filled email drafts that turn shortlisted listings into viewings, brokers into appointments, and follow-ups into one click. Templates and example bodies below.</p>
+    </header>
+
+    <section class="placeholder-illus" aria-hidden="true">
+      <p class="placeholder-illus__caption">Drafts · pre-filled from your profile and the listing</p>
+    </section>
+
+    <section class="placeholder-card">
+      <h2>Three templates</h2>
+      <div class="placeholder-grid">
+        <article class="placeholder-tile">
+          <h3>Viewing request</h3>
+          <p class="muted">Subject: <span class="num">Viewing — &lt;listing address&gt;, this weekend</span></p>
+          <p>Polite opener, your two preferred slots, broker status, chain-free flag.</p>
+          <button type="button" class="placeholder-cta" disabled aria-disabled="true">Copy draft</button>
+        </article>
+        <article class="placeholder-tile">
+          <h3>Mortgage broker intro</h3>
+          <p class="muted">Subject: <span class="num">First-time buyer enquiry — &lt;offer target&gt;</span></p>
+          <p>Your finances summary, target price, deposit, moving window. Pulls from <a data-nav="pages/finances.html">finances</a>.</p>
+          <button type="button" class="placeholder-cta" disabled aria-disabled="true">Copy draft</button>
+        </article>
+        <article class="placeholder-tile">
+          <h3>Post-viewing follow-up</h3>
+          <p class="muted">Subject: <span class="num">Following up on &lt;address&gt;</span></p>
+          <p>Quick thanks, two follow-up questions, offer interest signal.</p>
+          <button type="button" class="placeholder-cta" disabled aria-disabled="true">Copy draft</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="placeholder-card">
+      <h2>What this will do</h2>
+      <ul class="placeholder-list">
+        <li><code>mailto:</code> drafts pre-filled from <code>data/profile.json</code> and the chosen listing or area.</li>
+        <li>Falls back to a one-tap copy if <code>mailto:</code> isn&rsquo;t available.</li>
+        <li>Tracks status per outreach (drafted &middot; sent &middot; replied) via <code>storage.js</code>.</li>
+        <li>Pulls listing context from the <a data-nav="pages/listings.html">Listings</a> page once that ships.</li>
+      </ul>
+    </section>
+
+    <section class="placeholder-foot">
+      <p class="placeholder-foot__note">
+        Roadmap context in <a data-nav="docs/ROADMAP.md">docs/ROADMAP.md</a>.
+      </p>
+    </section>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+</body>
+</html>

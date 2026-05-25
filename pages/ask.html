@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ask (soon) · rec</title>
+  <meta name="description" content="Natural-language interface over your shortlist, criteria, and finances — coming in v3." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Coming in v3</p>
+      <h1>Ask anything</h1>
+      <p class="lead">A natural-language interface over the whole dataset — your shortlist, criteria, finances, and (once Phase 5 lands) live listings. Type questions, get ranked answers.</p>
+    </header>
+
+    <section class="placeholder-illus" aria-hidden="true">
+      <p class="placeholder-illus__caption">Search · structured filters · ranked results</p>
+    </section>
+
+    <section class="placeholder-card">
+      <h2>Try a question</h2>
+      <div class="ask-input-wrap">
+        <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="ask-caption" />
+        <p class="ask-caption" id="ask-caption">Disabled until v3 — examples below show the kind of query this will handle.</p>
+      </div>
+      <ul class="ask-chips" aria-label="Example queries">
+        <li><span class="ask-chip">chain-free 3-beds near Winchester under &pound;400k</span></li>
+        <li><span class="ask-chip">most affordable shortlisted areas with an outstanding primary school</span></li>
+        <li><span class="ask-chip">cottages priced LISA-eligible within a 25-min commute</span></li>
+        <li><span class="ask-chip">what would a +&pound;500/mo savings boost do to my move date?</span></li>
+        <li><span class="ask-chip">show me everything where the stretched payment stays under &pound;1,900/mo</span></li>
+      </ul>
+    </section>
+
+    <section class="placeholder-card">
+      <h2>What this will do</h2>
+      <ul class="placeholder-list">
+        <li>Parse natural-language queries into structured filters over <code>data/criteria.json</code>, the areas index, and listings.</li>
+        <li>Return ranked results with the same fit-dot vocabulary used everywhere else in the app.</li>
+        <li>Cite the data it used — area ids, finance lines, criteria fields — so you can trust the answer.</li>
+        <li>Falls back gracefully when a query doesn&rsquo;t resolve to anything.</li>
+      </ul>
+    </section>
+
+    <section class="placeholder-foot">
+      <p class="placeholder-foot__note">
+        Full v3 roadmap in <a data-nav="docs/ROADMAP.md">docs/ROADMAP.md</a>.
+      </p>
+    </section>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+</body>
+</html>
