@@ -91,6 +91,58 @@ function renderNextHint(section) {
   el.innerHTML = `<span class="next-key">Unlocks next</span>${esc(label)}${timing}`;
 }
 
+function renderTopTrack() {
+  const trackEl = $('journey-track');
+  const overall = $('journey-overall');
+  const nextText = $('journey-next-text');
+  const nextTick = $('journey-next-tick');
+  if (!trackEl) return;
+
+  const sections = [
+    { key: 'viewing', label: 'Viewing' },
+    { key: 'process', label: 'Buying process' },
+    { key: 'moving',  label: 'Moving' },
+  ];
+  const stats = sections.map((s) => ({ ...s, ...progress(s.key) }));
+  const totalDone = stats.reduce((n, s) => n + s.done, 0);
+  const totalAll  = stats.reduce((n, s) => n + s.total, 0);
+  if (overall) overall.textContent = `${totalDone}/${totalAll} done`;
+  const currentIdx = stats.findIndex((s) => s.pct < 100);
+
+  trackEl.innerHTML = stats.map((s, i) => {
+    const mod = s.pct >= 100 && s.total > 0 ? '--done'
+              : i === currentIdx ? '--current' : '';
+    return `
+      <li class="journey-track__node ${mod ? 'journey-track__node' + mod : ''}">
+        <span class="journey-track__label">${esc(s.label)}</span>
+        <span class="journey-track__count">${s.done}/${s.total}</span>
+      </li>
+    `;
+  }).join('');
+
+  // Next action across sections (priority: viewing → process → moving).
+  let next = null;
+  for (const s of sections) {
+    const n = nextItem(s.key);
+    if (n) { next = { section: s.key, ...n }; break; }
+  }
+  if (!next) {
+    if (nextText) nextText.textContent = 'All steps ticked off — nice work.';
+    if (nextTick) nextTick.disabled = true;
+    return;
+  }
+  if (nextText) nextText.textContent = labelFor(next.section, next.item);
+  if (nextTick) {
+    nextTick.disabled = false;
+    nextTick.onclick = () => {
+      state[next.section] = state[next.section] || {};
+      state[next.section][next.index] = true;
+      saveState();
+      renderAll();
+    };
+  }
+}
+
 function renderAll() {
   ['viewing', 'process', 'moving'].forEach((section) => {
     $(`list-${section}`).innerHTML = renderSection(section);
@@ -100,6 +152,8 @@ function renderAll() {
     renderNextHint(section);
   });
 
+  renderTopTrack();
+
   document.querySelectorAll('input[type="checkbox"][data-section]').forEach((box) => {
     box.addEventListener('change', (e) => {
       const section = box.dataset.section;
@@ -107,7 +161,6 @@ function renderAll() {
       state[section] = state[section] || {};
       if (box.checked) state[section][i] = true; else delete state[section][i];
       saveState();
-      // Re-render to update line-through + progress.
       renderAll();
     });
   });
