@@ -654,7 +654,7 @@
           <span class="step-num">03</span>
           <div class="step-body">
             <strong class="step-action">Click "Push repo JSON to Supabase" <span class="step-section">§&nbsp;02 below</span></strong>
-            <p class="step-desc">One click overwrites all three Supabase tables (<code>profile</code>, <code>criteria</code>, <code>finances</code>) with the current repo file versions. Watch the log — each table reports <code>✓ updated</code> or an error. Takes a few seconds.</p>
+            <p class="step-desc">One click overwrites all four Supabase tables (<code>profile</code>, <code>criteria</code>, <code>finances</code>, <code>contacts</code>) with the current repo file versions. Watch the log — each table reports <code>✓ updated</code> or an error. Takes a few seconds.</p>
           </div>
         </li>
         <li class="workflow-step">
@@ -671,8 +671,8 @@
     </div>
 
     <div class="sync-note">
-      <strong>What syncs:</strong> <code>profile</code>, <code>criteria</code>, <code>finances</code> — repo JSON ↔ Supabase.
-      <code>shortlist</code>, <code>zones</code>, <code>journey_checks</code> — app-state only, Supabase only.
+      <strong>What syncs:</strong> <code>profile</code>, <code>criteria</code>, <code>finances</code>, <code>contacts</code> — repo JSON ↔ Supabase (push/pull here).
+      <code>shortlist</code>, <code>zones</code>, <code>journey_checks</code>, <code>outreach</code> — app-state only, Supabase only.
       Area content and house types are static reference data — repo only, never in Supabase.
     </div>
 
@@ -767,6 +767,12 @@
             <span class="sync-file-table">finances</span>
             <span class="sync-file-status" id="push-status-finances"></span>
           </li>
+          <li class="sync-file">
+            <span class="sync-file-name">data/contacts.json</span>
+            <span class="sync-file-arrow">→</span>
+            <span class="sync-file-table">contacts</span>
+            <span class="sync-file-status" id="push-status-contacts"></span>
+          </li>
         </ul>
         <div class="sync-btn-row">
           <button type="button" id="btn-push">Push repo JSON to Supabase</button>
@@ -801,6 +807,12 @@
             <span class="sync-file-arrow">→</span>
             <span class="sync-file-table">data/finances.json</span>
             <span class="sync-file-status" id="pull-status-finances"></span>
+          </li>
+          <li class="sync-file">
+            <span class="sync-file-name">contacts</span>
+            <span class="sync-file-arrow">→</span>
+            <span class="sync-file-table">data/contacts.json</span>
+            <span class="sync-file-status" id="pull-status-contacts"></span>
           </li>
         </ul>
         <div class="sync-btn-row">
@@ -1100,6 +1112,7 @@
       { key: 'profile',  table: 'profile',  file: 'data/profile.json'  },
       { key: 'criteria', table: 'criteria', file: 'data/criteria.json' },
       { key: 'finances', table: 'finances', file: 'data/finances.json' },
+      { key: 'contacts', table: 'contacts', file: 'data/contacts.json' },
     ];
 
     // localStorage-backed tables — compared against Supabase to detect cache/cloud drift.
