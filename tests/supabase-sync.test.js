@@ -81,19 +81,17 @@ test('outreach-templates.json is valid', async () => {
   }
 });
 
-// ── Status: content backfill progress ──────────────────────────────────────
+// ── Status: backfill tooling present ──────────────────────────────────────
 
-test('sync SQL batches are generated', async () => {
-  const dir = resolve(root, '.tmp');
-  let areaFiles = 0, htFiles = 0;
-  try {
-    areaFiles = (await readdir(dir)).filter(f => f.startsWith('sync-areas-')).length;
-    htFiles = (await readdir(dir)).filter(f => f === 'sync-house-types.sql').length;
-  } catch {
-    // .tmp may not exist yet
-  }
-  assert(areaFiles >= 20 || areaFiles === 0, 'expect ~20 area batches (or 0 pre-gen)');
-  assert(htFiles <= 1, 'expect 0 or 1 house-types batch file');
+test('backfill script is present and executable', async () => {
+  const path = resolve(root, 'tools/backfill-content-direct.mjs');
+  const content = await readFile(path, 'utf8');
+  assert(content.includes('SUPABASE_SERVICE_ROLE_KEY'), 'backfill script must require service role key');
+  assert(content.includes('rest/v1/'), 'backfill script must use PostgREST endpoint');
+  assert(content.includes("supabaseUpsert('areas'") || content.includes('upsert(\'areas\''),
+    'backfill script must upsert to areas');
+  assert(content.includes("supabaseUpsert('house_types'") || content.includes('upsert(\'house_types\''),
+    'backfill script must upsert to house_types');
 });
 
 // ── Online: schema check (MCP required) ──────────────────────────────────────

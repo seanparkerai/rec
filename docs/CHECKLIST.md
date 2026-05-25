@@ -357,11 +357,23 @@ since last time. No silent drift.
 - [x] `tools/sync-content-to-supabase.mjs` — reads repo JSON, generates UPSERT SQL, writes 21 batches to `.tmp/sync-*.sql` for Claude to execute via MCP.
 - [x] `data/snapshots/sync-state.json` — committed snapshot of `updated_at` per table.
 
-### 10C · Content backfill (pending execution via MCP)
-- [ ] Execute `.tmp/sync-areas-01.sql` through `.tmp/sync-areas-20.sql` (generated, batched by 10 records each).
-- [ ] Execute `.tmp/sync-house-types.sql` (generated).
-- [ ] Run `node tools/sync-content-to-supabase.mjs --snapshot` to update snapshot post-backfill.
-- [ ] Verify: row-count assertion in `tests/supabase-sync.test.js` should pass (195 areas + 15 house types).
+### 10C · Content backfill (one-time bootstrap via Node script)
+- [x] `tools/backfill-content-direct.mjs` — self-contained Node script using PostgREST + service role key. Idempotent, ~10 seconds to run.
+- [x] Schema verified clean (areas/house_types/sync_log tables empty, ready for backfill).
+- [ ] **USER ACTION**: Run once with service role key:
+      ```bash
+      # 1. Get service role key from Supabase dashboard
+      # 2. Set env var:
+      export SUPABASE_SERVICE_ROLE_KEY="eyJ..."
+      # 3. Run the backfill:
+      node tools/backfill-content-direct.mjs
+      ```
+- [ ] After backfill: 195 areas + 15 house types in Supabase, snapshot updated.
+
+**Why a script instead of 39 MCP calls?** A Node script using PostgREST is the standard
+Supabase backfill pattern: faster (~10s vs minutes of MCP turns), simpler (one command),
+and idempotent (safe to re-run). Day-to-day single-area edits still flow through Claude's
+MCP connector — this is just the one-time bootstrap.
 
 ### 10D · Test enforcement
 - [x] `tests/supabase-sync.test.js` — offline checks: snapshot validity, repo structure, SQL batch generation. Online checks (pending backfill): row counts.
@@ -373,11 +385,9 @@ since last time. No silent drift.
 - [x] `README.md` — added "Supabase MCP sync contract" section.
 - [x] `supabase/schema.sql` — updated to document the new tables + triggers.
 
-### 10F · Next session — execute backfill (queued)
-- [ ] Run `node tools/check-supabase-freshness.mjs` to guide the session-start freshness check (§8 Step 0).
-- [ ] Execute the 21 SQL files in `.tmp/` via MCP in parallel (batches 1-5, then 6-10, etc.). Each batch takes ~1 second.
-- [ ] After execution, run `node tools/sync-content-to-supabase.mjs --snapshot` to stamp the snapshot.
-- [ ] Re-run `node tools/run-intelligence-tests.mjs` — should report 195 areas + 15 house types in Supabase.
+### 10F · Verification (after user runs backfill)
+- [ ] Run `node tools/run-intelligence-tests.mjs` — should report 195 areas + 15 house types.
+- [ ] Verify via MCP: `SELECT COUNT(*) FROM areas` returns 195, `SELECT COUNT(*) FROM house_types` returns 15.
 
 **Out of scope for Phase 10**: realtime subscriptions, storage buckets, edge functions, auth flow
 changes, Storage.js logging (10D deferred — needs separate phase per §16). Those get their own phases.

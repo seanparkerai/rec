@@ -51,7 +51,9 @@ async function loadHouseTypes() {
 
 function buildUpsertSQL(table, records) {
   // jsonb_array_elements expansion — one INSERT statement handles all rows.
+  // sync_log uses ID-only array (much smaller than re-embedding all data).
   const json = JSON.stringify(records).replace(/'/g, "''");
+  const ids = JSON.stringify(records.map(r => r.id));
   return `
 INSERT INTO ${table} (id, data, updated_at)
 SELECT (value->>'id')::text, value, now()
@@ -61,8 +63,8 @@ ON CONFLICT (id) DO UPDATE
       updated_at = now()
 WHERE ${table}.data IS DISTINCT FROM EXCLUDED.data;
 INSERT INTO sync_log (table_name, actor, action, row_id)
-SELECT '${table}', 'claude', 'backfill', (value->>'id')::text
-FROM jsonb_array_elements('${json}'::jsonb) AS value;
+SELECT '${table}', 'claude', 'backfill', value::text
+FROM jsonb_array_elements_text('${ids}'::jsonb) AS value;
 `;
 }
 
@@ -100,7 +102,7 @@ async function main() {
   // Batch areas into chunks small enough to fit comfortably in an MCP message.
   // Day-to-day single-area edits do one UPSERT per area; this batching only
   // matters for the one-time backfill.
-  const BATCH = 10;
+  const BATCH = 5;
   const batches = [];
   for (let i = 0; i < areas.records.length; i += BATCH) {
     batches.push(areas.records.slice(i, i + BATCH));
