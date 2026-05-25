@@ -1,0 +1,39 @@
+{
+  "id": "lake-sp3",
+  "name": "Lake",
+  "village": "Lake",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP3",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.0972,
+    "lng": -1.94612
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": []
+}

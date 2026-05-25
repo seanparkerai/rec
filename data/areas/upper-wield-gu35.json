@@ -1,0 +1,39 @@
+{
+  "id": "upper-wield-gu35",
+  "name": "Upper Wield",
+  "village": "Upper Wield",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "GU35",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.1128,
+    "lng": -0.881
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": []
+}

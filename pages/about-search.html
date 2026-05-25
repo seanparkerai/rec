@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>About &amp; search · rec</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Search profile</p>
+      <h1>About you &amp; your search</h1>
+      <p class="lead">Who&rsquo;s buying, how you want to live, and the filters that&rsquo;ll cut a portal listing in or out. One page — your local edits persist in this browser.</p>
+    </header>
+
+    <div class="about-layout">
+      <nav class="about-toc" aria-label="On this page">
+        <ol>
+          <li><a href="#about">About you</a></li>
+          <li><a href="#search">Search criteria</a></li>
+        </ol>
+      </nav>
+
+      <div>
+        <!-- ============================== ABOUT YOU =============================== -->
+        <section class="about-section" id="about" data-page="profile" aria-labelledby="h-about">
+          <header class="section-head">
+            <div>
+              <h2 id="h-about">About you <span class="chip" id="p-overlay-badge" hidden>Local edits</span></h2>
+            </div>
+            <div class="page-actions">
+              <button id="p-btn-edit">Edit profile</button>
+            </div>
+          </header>
+
+          <dl class="stat-strip" aria-label="Headline figures">
+            <div><dt>Max property</dt> <dd class="num" id="tile-budget">—</dd></div>
+            <div><dt>Deposit target</dt><dd class="num" id="tile-deposit">—</dd></div>
+            <div><dt>Saved to date</dt><dd class="num" id="tile-saved">—</dd></div>
+            <div><dt>Moving window</dt><dd class="is-text" id="tile-window">—</dd></div>
+          </dl>
+
+          <p class="status-line" id="p-status" aria-live="polite"></p>
+          <p class="lead" id="headline-lead" hidden></p>
+
+          <article class="article" id="article-view" aria-label="Profile sections">
+            <section class="article-section" id="sec-buyer">
+              <h3>Who&rsquo;s buying</h3>
+              <dl class="field-list" id="dl-buyer"></dl>
+            </section>
+            <section class="article-section" id="sec-lifestyle">
+              <h3>How we want to live</h3>
+              <dl class="field-list" id="dl-lifestyle"></dl>
+            </section>
+            <section class="article-section" id="sec-priorities">
+              <h3>Priorities</h3>
+              <ul class="chip-grid" id="chips-priorities"></ul>
+            </section>
+            <section class="article-section" id="sec-dealbreakers">
+              <h3>Deal-breakers</h3>
+              <ul class="chip-grid" id="chips-dealbreakers"></ul>
+            </section>
+            <section class="article-section" id="sec-notes">
+              <h3>Notes</h3>
+              <p class="prose" id="p-notes"></p>
+            </section>
+          </article>
+
+          <dialog id="edit-dialog" aria-labelledby="edit-title">
+            <article>
+              <header class="dialog-head">
+                <h2 id="edit-title">Edit profile</h2>
+                <button type="button" class="outline secondary" id="dlg-close" aria-label="Close">Cancel</button>
+              </header>
+              <form id="edit-form" method="dialog">
+                <div id="edit-fields"></div>
+              </form>
+              <footer class="dialog-foot">
+                <button type="button" class="outline secondary" id="p-btn-reset">Reset to defaults</button>
+                <button type="button" id="p-btn-save">Save</button>
+              </footer>
+            </article>
+          </dialog>
+        </section>
+
+        <!-- ============================ SEARCH CRITERIA =========================== -->
+        <section class="about-section" id="search" data-page="criteria" aria-labelledby="h-search">
+          <header class="section-head has-actions">
+            <div>
+              <h2 id="h-search">Search criteria <span class="chip" id="overlay-badge" hidden>Local edits</span></h2>
+              <p class="muted">Must-haves vs nice-to-haves, property types, budget, mortgage assumptions.</p>
+            </div>
+            <div class="page-actions">
+              <button id="btn-edit">Edit</button>
+              <button id="btn-save" hidden>Save</button>
+              <button id="btn-cancel" class="secondary" hidden>Cancel</button>
+              <button id="btn-reset" class="outline secondary" hidden>Reset to defaults</button>
+            </div>
+          </header>
+
+          <p class="muted status-line" id="status" aria-live="polite"></p>
+
+          <section class="tiles" aria-label="Key figures">
+            <div class="tile">
+              <p class="tile-label">Max property price</p>
+              <p class="tile-value accent" id="tile-max-price">—</p>
+              <p class="tile-sub">budget</p>
+            </div>
+            <div class="tile">
+              <p class="tile-label">Min bedrooms</p>
+              <p class="tile-value" id="tile-min-beds">—</p>
+              <p class="tile-sub">requirement</p>
+            </div>
+            <div class="tile">
+              <p class="tile-label">Must-haves</p>
+              <p class="tile-value" id="tile-must-count">0</p>
+              <p class="tile-sub">priorities</p>
+            </div>
+            <div class="tile">
+              <p class="tile-label">Nice-to-haves</p>
+              <p class="tile-value" id="tile-nice-count">0</p>
+              <p class="tile-sub">weighted</p>
+            </div>
+          </section>
+
+          <div class="dash-grid">
+            <section class="card span-6" id="card-budget"></section>
+            <section class="card span-6" id="card-size"></section>
+            <section class="card span-6" id="card-types"></section>
+            <section class="card span-6" id="card-tenure"></section>
+            <section class="card span-6" id="card-features"></section>
+            <section class="card span-6" id="card-condition"></section>
+            <section class="card span-6" id="card-freshness"></section>
+            <section class="card span-6" id="card-keywords"></section>
+            <section class="card span-6" id="card-mortgage"></section>
+            <section class="card span-12" id="card-priorities"></section>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="criteria-save-bar" aria-hidden="false">
+      <span class="criteria-save-status">Editing — unsaved changes are kept locally on Save.</span>
+      <button type="button" class="secondary" onclick="document.getElementById('btn-cancel').click()">Cancel</button>
+      <button type="button" onclick="document.getElementById('btn-save').click()">Save</button>
+    </div>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-profile.js"></script>
+  <script type="module" src="../assets/js/page-criteria.js"></script>
+  <script>
+    // Highlight current TOC entry on scroll.
+    (() => {
+      const links = document.querySelectorAll('.about-toc a');
+      const map = new Map();
+      links.forEach((a) => {
+        const id = a.getAttribute('href').slice(1);
+        const sec = document.getElementById(id);
+        if (sec) map.set(sec, a);
+      });
+      if (!map.size) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          const a = map.get(e.target);
+          if (!a) return;
+          if (e.isIntersecting) {
+            links.forEach((x) => x.removeAttribute('aria-current'));
+            a.setAttribute('aria-current', 'true');
+          }
+        });
+      }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+      map.forEach((_a, sec) => io.observe(sec));
+    })();
+  </script>
+</body>
+</html>

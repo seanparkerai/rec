@@ -1,0 +1,125 @@
+{
+  "id": "beech-gu34",
+  "name": "Beech",
+  "village": "Beech",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Alton",
+  "coords": {
+    "lat": 51.15928,
+    "lng": -0.9786
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": {
+    "avgDetached": 849394,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": "G",
+  "overview": "Beech is a village and civil parish of around 530 residents in the East Hampshire district, two miles west of Alton, set on the chalk uplands where the road to Bentworth climbs King's Hill — at 218 m, one of Hampshire's high points. The settlement only takes recognisable form in the late nineteenth century, when the landowner began selling off parcels for housing in the low-cost 'colonial' style of timber and corrugated iron; the process accelerated after the First World War under Lloyd George's Homes for Heroes programme, so what looks ancient is mostly Edwardian and inter-war on Saxon farmland. The village green at the junction of Medstead Road and Wellhouse Road remains the social centre, anchored by a modernised village hall reopened after a 2000s lottery-funded refurbishment. Beech sits half a mile off the A339 Alton–Basingstoke road, with Alton station three miles east.",
+  "character": "Open village rather than estate village: dispersed lanes of detached and chalet-style houses, mostly post-1900, with a few older farmhouses. Prices are weighted high by plot size and elevated position — GU34 4AX recorded an average house value of £1.7m and a most-common Council Tax band of G. Building stock is more varied than the surrounding stone-and-flint villages, with brick, render, weatherboard and occasional Arts and Crafts examples on the higher ground.",
+  "amenities": [
+    "Beech Village Hall (Wellhouse Road)",
+    "St Peter's Church",
+    "Village green at Medstead Road junction",
+    "Active village social calendar (monthly Village Social, quiz nights)",
+    "Bus stops on Medstead Road (Wellhouse Road, Bushy Leaze)",
+    "Alton facilities two miles east (full high street, Sainsbury's, Waitrose)"
+  ],
+  "schools": [
+    {
+      "name": "Medstead Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "2.0 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116300"
+    },
+    {
+      "name": "Andrews' Endowed Church of England Primary School (Holybourne)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "2.7 mi",
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116300"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 13m",
+        "mode": "train (direct, South Western Railway)",
+        "source": "https://www.thetrainline.com/stations/alton"
+      },
+      {
+        "to": "London Waterloo (fastest)",
+        "time": "1h 6m",
+        "mode": "train (direct)",
+        "source": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+      }
+    ],
+    "nearestStation": "Alton (3.0 mi)",
+    "roads": "A339 ~0.5 mi; A31 ~3 mi; M3 J5 (Hook) ~12 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": 849394,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu34.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking the chalk ridge up to King's Hill (218 m)",
+    "Bushy Leaze woodland circular",
+    "Beech-to-Alton footpath via Wellhouse Lane",
+    "Watercress Line heritage railway (Medstead & Four Marks, 3 mi)",
+    "Jane Austen's House Museum, Chawton (3 mi)",
+    "South Downs National Park edge (4 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Castle of Comfort, Medstead",
+      "type": "Country pub",
+      "notes": "Traditional freehouse 1.5 mi south; bitters, ales and pub lunches",
+      "url": "https://www.useyourlocal.com/pubs-in-medstead/"
+    }
+  ],
+  "pros": [
+    "Tranquil chalk-ridge setting two miles from Alton high street",
+    "Detached housing on generous plots, mostly post-1900 stock",
+    "Direct Waterloo trains from Alton, hourly off-peak",
+    "Strong active village hall and community programme"
+  ],
+  "cons": [
+    "No shop, school or pub within the village itself",
+    "Open dispersed layout means walking to amenities needs a car",
+    "House prices weighted heavily towards detached G-band properties",
+    "A339 noise audible on eastern lanes"
+  ],
+  "whoItSuits": "Buyers who want chalk-country quiet within two miles of a mainline station and a full market town, and who don't mind that the village is open and dispersed rather than gathered around a high street. The price point and absence of in-village amenities make it a harder fit for first-time buyers on a single income; couples relocating with London commutes, downsizers from busier south-east towns, and families willing to drive children to Medstead or Andrews' Endowed primaries get most out of it. Anyone wanting a pub on their doorstep should look at Medstead instead.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (3.0 mi)",
+  "primarySupermarket": "Waitrose, Station Road, Alton (3.0 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Beech,_Hampshire",
+    "https://www.beechvillage.org.uk/village-hall/how-to-find-beech-village-hall/",
+    "https://www.beechvillage.org.uk/faq/where-are-you/",
+    "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf",
+    "https://www.thetrainline.com/stations/alton",
+    "https://www.thetrainline.com/train-times/alton-to-london-waterloo",
+    "https://checkmypostcode.uk/gu344ax",
+    "https://www.rightmove.co.uk/house-prices/gu34.html",
+    "https://reports.ofsted.gov.uk/provider/21/116300",
+    "https://www.alton.gov.uk/shopping-in-alton/"
+  ]
+}

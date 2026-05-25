@@ -1,0 +1,105 @@
+{
+  "id": "barton-stacey-so21",
+  "name": "Barton Stacey",
+  "village": "Barton Stacey",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.06508,
+    "lng": -1.3
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Barton Stacey is a village and civil parish north of Winchester, close to the River Dever and the A303 corridor. Its history includes agricultural roots and later growth around transport links and nearby military-land influences. In present terms it offers a genuine village setting with practical road access toward Andover, Winchester and Basingstoke.",
+  "character": "Established village with mixed-period housing, parish facilities and open countryside edges.",
+  "amenities": [
+    "Village hall, recreation spaces and parish church context.",
+    "Local convenience options in-village, with broader retail in Andover and Winchester.",
+    "Community facilities tied to nearby Sutton Scotney and Micheldever areas."
+  ],
+  "schools": [
+    {
+      "name": "Barton Stacey Church of England Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In village",
+      "url": "https://www.barton-stacey.hants.sch.uk/"
+    },
+    {
+      "name": "Testbourne Community School",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~7-10 miles",
+      "url": "https://www.testbourne.school/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~20-25 min",
+        "notes": "Via A34 southbound"
+      },
+      {
+        "to": "Basingstoke",
+        "mode": "Drive",
+        "typical": "~20-30 min",
+        "notes": "Via A303/A34 depending on traffic"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO21 market conditions generally indicate strong pricing for well-connected villages, with detached family homes forming a notable share of listings.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Countryside walking and cycling on local rights of way",
+    "Village events and nearby Test Valley day trips"
+  ],
+  "placesToEat": [
+    "Village/nearby pubs around Sutton Scotney and Micheldever Station area"
+  ],
+  "pros": [
+    "Useful A303/A34 connectivity for commuters",
+    "Village identity with access to larger towns"
+  ],
+  "cons": [
+    "Traffic noise can affect homes near major routes",
+    "Many higher-order amenities require driving"
+  ],
+  "whoItSuits": "Well suited to households wanting village living with relatively efficient road access to employment centres in Winchester, Basingstoke and Andover.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Barton Stacey",
+      "url": "https://en.wikipedia.org/wiki/Barton_Stacey"
+    },
+    {
+      "label": "Barton Stacey C of E Primary School",
+      "url": "https://www.barton-stacey.hants.sch.uk/"
+    },
+    {
+      "label": "Rightmove House Prices SO21",
+      "url": "https://www.rightmove.co.uk/house-prices/SO21.html"
+    },
+    {
+      "label": "Hampshire County Council parish information",
+      "url": "https://www.hants.gov.uk/"
+    }
+  ]
+}

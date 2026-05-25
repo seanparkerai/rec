@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dashboard · rec</title>
+  <meta name="description" content="First-time buyer dashboard for Hampshire & Wiltshire." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Hampshire &amp; Wiltshire · First-time buyer</p>
+      <h1>Where you&rsquo;re at</h1>
+      <p class="lead" id="page-lead">A snapshot of your search — progress, shortlist, journey.</p>
+    </header>
+
+    <section class="page-lede" id="home-lede" aria-label="Search summary">
+      <p class="lede-prose" id="lede-prose">Loading your search snapshot…</p>
+      <ul class="lede-meta">
+        <li><span class="lede-key">Budget</span><span class="lede-val num" id="lede-budget">—</span></li>
+        <li><span class="lede-key">Deposit</span><span class="lede-val num" id="lede-deposit">—</span></li>
+        <li><span class="lede-key">Beds</span><span class="lede-val num" id="lede-beds">—</span></li>
+        <li><span class="lede-key">Window</span><span class="lede-val" id="lede-window">—</span></li>
+      </ul>
+    </section>
+
+    <div class="bento" aria-label="Dashboard">
+
+      <section class="tile-card tile-deposit" id="tile-deposit" aria-labelledby="td-label">
+        <header class="tile-head">
+          <h2 id="td-label">Deposit story</h2>
+          <span class="num" id="td-headline">—</span>
+        </header>
+        <div class="deposit-arc">
+          <div class="ring" role="img" aria-label="Deposit progress">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-track" cx="60" cy="60" r="52"/>
+              <circle class="ring-bar" id="td-ring-bar" cx="60" cy="60" r="52"
+                      pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100"/>
+            </svg>
+            <div class="ring-value"><span id="td-ring-pct">0</span><small>%</small></div>
+          </div>
+          <dl class="arc-stats">
+            <div><dt>Saved</dt>     <dd id="td-saved">£0</dd></div>
+            <div><dt>Target</dt>    <dd id="td-target">£0</dd></div>
+            <div><dt>Per month</dt> <dd id="td-monthly">£0</dd></div>
+          </dl>
+        </div>
+        <p class="eyebrow mini-flow-label">This month&rsquo;s flow</p>
+        <div class="mini-flow" id="td-flow" aria-hidden="true"></div>
+        <ul class="mini-flow-legend" id="td-flow-legend"></ul>
+        <p class="deposit-eta" id="td-eta">Calculating&hellip;</p>
+        <ul class="scenario-row" role="group" aria-label="Savings scenarios">
+          <li><button class="scenario-chip" type="button" data-scenario="baseline" aria-pressed="true">Baseline</button></li>
+          <li><button class="scenario-chip" type="button" data-scenario="+200" aria-pressed="false">+&pound;200/mo</button></li>
+          <li><button class="scenario-chip" type="button" data-scenario="+500" aria-pressed="false">+&pound;500/mo</button></li>
+          <li><button class="scenario-chip" type="button" data-scenario="+5k" aria-pressed="false">+&pound;5k windfall</button></li>
+        </ul>
+      </section>
+
+      <section class="tile-card tile-afford" id="tile-afford" aria-labelledby="ta-label">
+        <header class="tile-head">
+          <h2 id="ta-label">Affordability</h2>
+        </header>
+        <p class="verdict-line" id="ta-verdict">Calculating verdict&hellip;</p>
+        <svg class="ladder" id="ta-ladder" viewBox="0 0 300 80" aria-label="Affordability bands by price"></svg>
+        <div class="ladder-inputs" role="group" aria-label="Affordability range">
+          <label>
+            <span>From &pound;</span>
+            <input type="number" id="ta-price-a" inputmode="numeric" placeholder="320000" min="100000" max="2000000" step="5000" />
+          </label>
+          <label>
+            <span>To &pound;</span>
+            <input type="number" id="ta-price-b" inputmode="numeric" placeholder="450000" min="100000" max="2000000" step="5000" />
+          </label>
+        </div>
+      </section>
+
+      <section class="tile-card tile-flow" id="tile-flow" aria-labelledby="tf-label">
+        <header class="tile-head">
+          <h2 id="tf-label">Money-flow</h2>
+          <span class="num" id="tf-headline">&mdash;</span>
+        </header>
+        <div class="flow">
+          <div class="flow__panel">
+            <h3>Today</h3>
+            <svg class="flow__bar" id="tf-flow-today" viewBox="0 0 300 40" aria-label="Today&rsquo;s monthly money-flow"></svg>
+            <ul class="flow__legend" id="tf-legend-today"></ul>
+          </div>
+          <div class="flow__panel">
+            <h3>After move</h3>
+            <svg class="flow__bar" id="tf-flow-after" viewBox="0 0 300 40" aria-label="After-move monthly money-flow"></svg>
+            <ul class="flow__legend" id="tf-legend-after"></ul>
+          </div>
+        </div>
+        <p class="flow__caption" id="tf-caption">&mdash;</p>
+        <details class="flow__details" id="tf-details" hidden>
+          <summary id="tf-details-summary">Line items</summary>
+          <ul id="tf-details-list"></ul>
+        </details>
+      </section>
+
+      <section class="tile-card tile-shortlist" id="tile-shortlist" aria-labelledby="ts-label">
+        <header class="tile-head">
+          <h2 id="ts-label">Shortlist</h2>
+          <span class="num" id="ts-count">0 areas</span>
+        </header>
+        <ul class="shortlist-list" id="home-areas">
+          <li class="empty-note">Loading&hellip;</li>
+        </ul>
+        <footer class="cell-foot">
+          <a data-nav="pages/areas.html">Browse directory &rarr;</a>
+          <a data-nav="pages/map.html">See on map &rarr;</a>
+        </footer>
+      </section>
+
+      <section class="tile-card tile-journey" id="tile-journey" aria-labelledby="tj-label">
+        <header class="tile-head">
+          <h2 id="tj-label">Checklists</h2>
+          <a data-nav="pages/journey.html" class="tile-head-action">Open checklists &rarr;</a>
+        </header>
+        <ul class="journey-track" id="tj-track"></ul>
+        <div class="journey-next">
+          <span class="journey-next-label">Next</span>
+          <span class="journey-next-text" id="tj-next-text">Loading&hellip;</span>
+          <button type="button" class="journey-tick" id="tj-next-tick" aria-label="Mark next action done" disabled>&check;</button>
+        </div>
+      </section>
+
+      <section class="tile-card tile-criteria" id="tile-criteria" aria-labelledby="tc-label">
+        <header class="tile-head">
+          <h2 id="tc-label">What you&rsquo;re looking for</h2>
+          <a data-nav="pages/about-search.html#search" class="tile-head-action">Edit criteria &rarr;</a>
+        </header>
+        <p class="criteria-prose" id="tc-prose">Loading&hellip;</p>
+        <dl class="spec-strip" id="tc-strip"></dl>
+      </section>
+
+      <section class="tile-card tile-ask" id="tile-ask" aria-labelledby="tk-label">
+        <header class="tile-head">
+          <h2 id="tk-label">Ask anything</h2>
+        </header>
+        <div class="ask-input-wrap">
+          <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="tk-caption" />
+          <p class="ask-caption" id="tk-caption">Coming in v3 &mdash; <a data-nav="pages/ask.html">read what this will do &rarr;</a></p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+
+  <script type="module" src="assets/js/components.js"></script>
+  <script type="module" src="assets/js/page-home.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+{
+  "id": "colemore-gu32",
+  "name": "Colemore",
+  "village": "",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "",
+  "coords": {
+    "lat": 51.07444,
+    "lng": -0.97852
+  },
+  "coordsSource": "unset",
+  "houseTypeIds": [],
+  "status": "researched",
+  "overview": "A village and former civil parish — now part of the merged Colemore and Priors Dean parish — in the East Hampshire district. Colemore sits in the Hampshire Downs about five miles north-west of Petersfield, off lanes north of the A272. It was once a sizeable medieval settlement; the site of the abandoned village south-west of the church and south-east of Manor Farm is a scheduled ancient monument (Historic England 1001805), with the church of St Peter ad Vincula the only substantial medieval survival. The church is now redundant, vested in the Churches Conservation Trust, and notable for its 12th-century Norman chancel arch. Today Colemore is a scatter of farmhouses, the church, Manor Farmhouse (Grade II listed) and a handful of cottages — much of the parish land is tied to the Rotherfield Park estate. The Pub With No Name (The White Horse) at neighbouring Priors Dean serves the wider parish.",
+  "character": "Deserted-medieval-village landscape — wide skies, sheep pasture, ancient hedgerows, one redundant Norman church. Estate-tied and very quiet. Stock is dominated by listed farmhouses and a few converted barns.",
+  "amenities": [
+    "Church of St Peter ad Vincula (Grade II* listed, Churches Conservation Trust)",
+    "Manor Farmhouse (Grade II listed)",
+    "Scheduled ancient monument: deserted medieval village (HE 1001805)",
+    "(at Priors Dean ~0.8 mi:) The Pub With No Name (White Horse Inn)",
+    "Footpaths to Newton Valence, East Tisted and Hawkley"
+  ],
+  "schools": [
+    {
+      "name": "Froxfield Church of England Primary and Pre-School",
+      "phase": "Primary",
+      "ofsted": "Good (March 2024)",
+      "distance": "2.5 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116289"
+    },
+    {
+      "name": "Ropley Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "3.0 mi",
+      "url": "https://www.ropley.hants.sch.uk/"
+    },
+    {
+      "name": "The Petersfield School",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "5.0 mi",
+      "url": "https://www.tps.hants.sch.uk/"
+    }
+  ],
+  "transport": {
+    "nearestStation": "Alton (5.5 mi)",
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 6m – 1h 18m direct",
+        "mode": "drive to Alton + direct South Western Railway",
+        "source": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+      },
+      {
+        "to": "London Waterloo (alt.)",
+        "time": "1h 2m – 1h 17m direct",
+        "mode": "drive to Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+      }
+    ],
+    "roads": "A272 (Petersfield–Winchester) ~2 mi south; A32 (Alton–Fareham) ~3 mi west; A3 (London–Portsmouth) ~6 mi east at Petersfield"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Church of St Peter ad Vincula (open in season via Churches Conservation Trust)",
+    "Hangers Way walking through Hawkley and Selborne",
+    "Selborne and Gilbert White's House (~3.5 mi)",
+    "Rotherfield Park public open days (National Garden Scheme)",
+    "Cycling on quiet lanes around Priors Dean and Newton Valence"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Pub With No Name (White Horse)",
+      "type": "Country pub with rooms",
+      "notes": "17th-century pub at Priors Dean ~0.8 mi, reopened 2023; cask ales, dining room with inglenook",
+      "url": "https://www.thepubwithnoname.uk/"
+    },
+    {
+      "name": "The Trooper Inn",
+      "type": "Pub with rooms",
+      "notes": "17th-century inn at High Cross, ~3 mi south-east",
+      "url": "https://www.trooperinn.com/"
+    }
+  ],
+  "pros": [
+    "Scheduled-ancient-monument landscape — deeply historic with very low building density",
+    "Among the lowest council tax precepts in East Hants (Colemore & Priors Dean parish Band D £1,982.51 in 2026/27 — below most neighbours)",
+    "Two heritage-quality pubs within 3 miles (Pub With No Name, The Trooper)",
+    "Within easy drive of both Alton and Petersfield stations",
+    "Strong landscape protection — most of the parish is in the South Downs National Park"
+  ],
+  "cons": [
+    "Functionally a working farming hamlet — no shop, no school, no active church for services",
+    "Open-market stock is dominated by listed farmhouses or estate-tied properties; freehold turnover is very thin",
+    "No public transport to count on",
+    "Properties on listed-building consent — alterations need careful planning",
+    "Rural broadband: speeds vary sharply by individual postcode"
+  ],
+  "whoItSuits": "Buyers wanting a Grade II listed farmhouse or converted barn in a scheduled deserted-medieval-village landscape, with two heritage pubs nearby and good A272/A32 access. Strong fit for retirees, country-house buyers, and home-workers happy to drive five miles for the station. Not for first-time buyers or those needing village amenities on foot.",
+  "nearestStation": "Alton (5.5 mi)",
+  "primarySupermarket": "Sainsbury's Alton, Sainsbury Way (~5.5 mi); Waitrose Petersfield (~6 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Colemore",
+      "url": "https://en.wikipedia.org/wiki/Colemore"
+    },
+    {
+      "label": "Wikipedia — Priors Dean",
+      "url": "https://en.wikipedia.org/wiki/Priors_Dean"
+    },
+    {
+      "label": "Historic England — Deserted medieval village at Colemore",
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1001805"
+    },
+    {
+      "label": "Churches Conservation Trust — St Peter ad Vincula",
+      "url": "https://www.visitchurches.org.uk/our-churches/complete-list-of-churches/st-peter-ad-vincula-colemore.html"
+    },
+    {
+      "label": "The Pub With No Name (White Horse, Priors Dean)",
+      "url": "https://www.thepubwithnoname.uk/"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (Colemore & Priors Dean parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ]
+}

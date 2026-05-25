@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Areas · rec</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Directory</p>
+      <h1>Areas</h1>
+      <p class="lead">Towns and villages across Hampshire &amp; Wiltshire — <strong class="num" id="total-count">191</strong> in the directory, <strong class="num" id="shortlist-count">0</strong> shortlisted.</p>
+    </header>
+
+    <div class="filter-trigger-row">
+      <div class="active-filters" id="active-filters" aria-live="polite">No filters set.</div>
+      <button type="button" id="open-filters" aria-haspopup="dialog" aria-controls="filter-sheet">Filters</button>
+    </div>
+
+    <dialog class="filter-sheet" id="filter-sheet" aria-labelledby="filter-sheet-title" open>
+      <article>
+        <header>
+          <h2 id="filter-sheet-title">Filters</h2>
+          <button type="button" class="outline secondary" id="filter-sheet-close" aria-label="Close">Done</button>
+        </header>
+        <form method="dialog" id="filter-form">
+          <div class="filter-row">
+            <label class="filter-field">
+              <span>Search</span>
+              <input type="search" id="search" placeholder="Name, town, postcode…" />
+            </label>
+            <label class="filter-field">
+              <span>County</span>
+              <select id="filter-county"></select>
+            </label>
+            <label class="filter-field">
+              <span>Sub-region</span>
+              <select id="filter-subregion"></select>
+            </label>
+            <label class="filter-field">
+              <span>Sort by</span>
+              <select id="sort">
+                <option value="name">Name</option>
+                <option value="town">Town</option>
+                <option value="postcode">Postcode</option>
+                <option value="status">Profile status</option>
+                <option value="fit">Fit (best first)</option>
+                <option value="price">Avg price (low → high)</option>
+                <option value="counciltax">Council tax (A → H)</option>
+              </select>
+            </label>
+          </div>
+          <div class="filter-row">
+            <label class="filter-field">
+              <span>Fit</span>
+              <select id="filter-fit">
+                <option value="all">Any fit</option>
+                <option value="comfortable">Comfortable</option>
+                <option value="stretch">Stretch</option>
+                <option value="tight">Tight</option>
+                <option value="out-of-reach">Out of reach</option>
+              </select>
+            </label>
+          </div>
+          <div class="filter-row filter-row-end">
+            <label class="check-row">
+              <input type="checkbox" id="only-shortlisted" />
+              <span>Show shortlisted only</span>
+            </label>
+            <button type="button" id="btn-clear" class="outline secondary">Clear filters</button>
+          </div>
+        </form>
+        <footer>
+          <p class="muted filter-sheet-count"><strong class="num" id="filter-sheet-count">0</strong> areas match.</p>
+        </footer>
+      </article>
+    </dialog>
+
+    <p class="result-summary"><strong id="result-count">0</strong> areas shown</p>
+
+    <ol id="areas-grid" class="area-list" aria-live="polite"></ol>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-areas.js"></script>
+  <script>
+    // Filter sheet: inline card on desktop, modal bottom-sheet on mobile.
+    (() => {
+      const dlg = document.getElementById('filter-sheet');
+      const openBtn = document.getElementById('open-filters');
+      const closeBtn = document.getElementById('filter-sheet-close');
+      const mq = matchMedia('(max-width: 767.98px)');
+
+      function syncMode() {
+        if (mq.matches) {
+          if (dlg.hasAttribute('open') && !dlg.matches(':modal')) dlg.removeAttribute('open');
+        } else {
+          if (!dlg.hasAttribute('open')) dlg.setAttribute('open', '');
+        }
+      }
+      openBtn?.addEventListener('click', () => {
+        if (dlg.hasAttribute('open')) dlg.close();
+        dlg.showModal();
+      });
+      closeBtn?.addEventListener('click', () => dlg.close());
+      mq.addEventListener?.('change', syncMode);
+      syncMode();
+
+      // Mirror "x active filters" summary on the trigger row.
+      const active = document.getElementById('active-filters');
+      const sheetCount = document.getElementById('filter-sheet-count');
+      const resultCount = document.getElementById('result-count');
+      function refreshSummary() {
+        const parts = [];
+        const q = document.getElementById('search')?.value?.trim();
+        const c = document.getElementById('filter-county')?.value;
+        const s = document.getElementById('filter-subregion')?.value;
+        const sl = document.getElementById('only-shortlisted')?.checked;
+        if (q) parts.push(`<span class="filter-pill">“${q}”</span>`);
+        if (c && c !== 'all') parts.push(`<span class="filter-pill">${c}</span>`);
+        if (s && s !== 'all') parts.push(`<span class="filter-pill">${s}</span>`);
+        if (sl) parts.push(`<span class="filter-pill">★ shortlisted</span>`);
+        active.innerHTML = parts.length ? parts.join('') : 'No filters set.';
+        if (sheetCount && resultCount) sheetCount.textContent = resultCount.textContent || '0';
+      }
+      document.addEventListener('input', (e) => {
+        if (e.target?.closest('#filter-sheet')) refreshSummary();
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target?.closest('#filter-sheet')) refreshSummary();
+      });
+      // Also refresh after the page script renders results (areas list changes).
+      const ol = document.getElementById('areas-grid');
+      if (ol) new MutationObserver(refreshSummary).observe(ol, { childList: true });
+      document.addEventListener('shell:ready', refreshSummary);
+      refreshSummary();
+    })();
+  </script>
+</body>
+</html>

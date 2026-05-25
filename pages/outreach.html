@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outreach · rec</title>
+  <meta name="description" content="Generate best-practice email drafts for every party in your UK property purchase — viewings, offers, solicitors, surveyors and more." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/components/outreach.css" />
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="outreach-head">
+      <p class="eyebrow">Buyer toolkit</p>
+      <h1>Outreach</h1>
+      <p class="lead">Generate a best-practice email for any party involved in your purchase. Drafts pull from your profile, criteria, finances and chosen property — only the right details for the right recipient.</p>
+    </header>
+
+    <!-- ── Filters ──────────────────────────────────────────────────────── -->
+    <div class="outreach-filters">
+      <div>
+        <p class="filter-row-label" id="stage-filter-label">Stage</p>
+        <div class="filter-row" role="tablist" aria-labelledby="stage-filter-label" id="stage-filter">
+          <button type="button" class="filter-chip is-active" role="tab" aria-selected="true" data-stage="">All stages</button>
+          <button type="button" class="filter-chip" role="tab" aria-selected="false" data-stage="A">A — Search</button>
+          <button type="button" class="filter-chip" role="tab" aria-selected="false" data-stage="B">B — Offer</button>
+          <button type="button" class="filter-chip" role="tab" aria-selected="false" data-stage="C">C — Post-acceptance</button>
+          <button type="button" class="filter-chip" role="tab" aria-selected="false" data-stage="D">D — Pre-completion</button>
+        </div>
+      </div>
+      <div>
+        <p class="filter-row-label" id="role-filter-label">Recipient</p>
+        <div class="filter-row" aria-labelledby="role-filter-label" id="role-filter">
+          <button type="button" class="filter-chip is-active" aria-pressed="true" data-role="">All</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="estate-agent">Estate agent</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="mortgage-broker">Mortgage broker</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="solicitor">Solicitor</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="surveyor">Surveyor</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="vendor">Vendor</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="local-authority">Local authority</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="removals">Removals</button>
+          <button type="button" class="filter-chip" aria-pressed="false" data-role="insurance">Insurance</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Template grid ─────────────────────────────────────────────────── -->
+    <section aria-label="Email templates">
+      <div class="template-grid" id="template-grid" role="list">
+        <!-- Populated by page-outreach.js -->
+        <p class="log-empty" id="template-grid-empty" hidden>No templates match the current filters.</p>
+      </div>
+    </section>
+
+    <!-- ── Generate dialog ────────────────────────────────────────────────── -->
+    <dialog id="outreach-dialog" aria-labelledby="dialog-title" aria-modal="true">
+      <article>
+        <header class="dialog-head">
+          <h2 id="dialog-title">Generate email</h2>
+          <button type="button" id="dialog-close" aria-label="Close dialog">&#x2715;</button>
+        </header>
+
+        <div class="dialog-body">
+          <!-- Left rail: best-practice notes + sources -->
+          <aside class="dialog-rail" aria-label="Best-practice guidance">
+            <div>
+              <h3>Best practice</h3>
+              <ul class="bpn-list" id="bpn-list" aria-label="Best-practice notes"></ul>
+            </div>
+            <ul class="sources-list" id="sources-list" aria-label="Sources"></ul>
+            <details class="qoi-detail">
+              <summary>Why so little / so much detail?</summary>
+              <p>Each template only shares the information that recipient needs. An estate agent on a viewing request gets your proceedability signal — not your salary. A mortgage broker gets full finances. This is the <strong>Quantity-of-Information Ladder</strong>: the right depth for the right recipient, every time.</p>
+            </details>
+          </aside>
+
+          <!-- Right: context, preview, actions -->
+          <div class="dialog-main" id="dialog-main">
+            <!-- Context: contact picker -->
+            <section aria-label="Contact and property context">
+              <p class="dialog-section-head">Context</p>
+              <div class="dialog-fields">
+                <div class="dialog-field">
+                  <label for="ctx-contact">Contact</label>
+                  <select id="ctx-contact">
+                    <option value="">— select or type below —</option>
+                  </select>
+                </div>
+                <div class="dialog-field" id="ctx-contact-name-wrap">
+                  <label for="ctx-contact-name">Contact name (if not listed above)</label>
+                  <input type="text" id="ctx-contact-name" placeholder="e.g. Jane Doe" autocomplete="off" />
+                </div>
+                <div class="dialog-field">
+                  <label for="ctx-address">Property address</label>
+                  <input type="text" id="ctx-address" placeholder="10 Cottage Lane, Sparsholt, SO21 2NX" autocomplete="off" />
+                </div>
+                <div class="dialog-field" id="ctx-price-wrap">
+                  <label for="ctx-price">Asking / agreed price (£)</label>
+                  <input type="number" id="ctx-price" placeholder="390000" min="0" step="1000" />
+                </div>
+                <div class="dialog-field" id="ctx-offer-wrap">
+                  <label for="ctx-offer">Your offer amount (£)</label>
+                  <input type="number" id="ctx-offer" placeholder="375000" min="0" step="1000" />
+                </div>
+                <div class="dialog-field" id="ctx-portal-wrap">
+                  <label for="ctx-portal">Portal</label>
+                  <input type="text" id="ctx-portal" placeholder="Rightmove" />
+                </div>
+                <div class="dialog-field" id="ctx-ref-wrap">
+                  <label for="ctx-ref">Listing reference</label>
+                  <input type="text" id="ctx-ref" placeholder="RM123456" />
+                </div>
+                <div class="dialog-field" id="ctx-tenure-wrap">
+                  <label for="ctx-tenure">Tenure</label>
+                  <select id="ctx-tenure">
+                    <option value="">Select…</option>
+                    <option value="Freehold">Freehold</option>
+                    <option value="Leasehold">Leasehold</option>
+                    <option value="Share of freehold">Share of freehold</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <!-- Extra fields (template-specific) -->
+            <section id="extra-fields-section" aria-label="Template-specific fields">
+              <p class="dialog-section-head">Template fields</p>
+              <div class="dialog-fields" id="extra-fields">
+                <!-- Populated dynamically -->
+              </div>
+            </section>
+
+            <!-- Missing-fields warning -->
+            <div class="missing-warn" id="missing-warn" role="status" aria-live="polite" hidden>
+              <p class="missing-warn__head">[!] Complete these to send:</p>
+              <ul id="missing-list"></ul>
+            </div>
+
+            <!-- Live preview -->
+            <section aria-label="Draft preview" aria-live="polite" aria-atomic="true" id="preview-region">
+              <p class="dialog-section-head">Preview</p>
+              <div class="preview-pane" id="preview-pane">
+                <p class="preview-subject"><span>Subject:</span><span id="preview-subject-text"></span></p>
+                <pre class="preview-body" id="preview-body-text"></pre>
+                <div class="preview-attach" id="preview-attach" hidden>
+                  <strong>Attach before sending: </strong><span id="preview-attach-list"></span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- Action row -->
+        <footer>
+          <div class="dialog-actions">
+            <button type="button" id="btn-mailto" class="btn-primary">Open in mail client</button>
+            <button type="button" id="btn-copy" class="btn-secondary outline">Copy draft</button>
+            <button type="button" id="btn-save" class="btn-secondary outline">Save as drafted</button>
+          </div>
+        </footer>
+      </article>
+    </dialog>
+
+    <!-- ── Contacts ──────────────────────────────────────────────────────── -->
+    <details class="contacts-section" id="contacts-section">
+      <summary>Contacts directory</summary>
+      <div class="contacts-grid" id="contacts-grid">
+        <!-- Populated by page-outreach.js -->
+      </div>
+    </details>
+
+    <!-- ── Outreach log ───────────────────────────────────────────────────── -->
+    <section class="outreach-log-section" aria-labelledby="log-heading">
+      <h2 id="log-heading">Outreach log</h2>
+      <div class="log-table-wrap">
+        <table class="log-table" id="log-table" aria-label="Outreach history">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Template</th>
+              <th scope="col">Recipient</th>
+              <th scope="col">Property</th>
+              <th scope="col">Subject</th>
+              <th scope="col">Status</th>
+              <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="log-tbody">
+            <tr><td colspan="7" class="log-empty">No emails drafted yet. Generate one above.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-outreach.js"></script>
+</body>
+</html>

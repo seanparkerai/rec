@@ -1,0 +1,39 @@
+{
+  "id": "flexcombe-gu32",
+  "name": "Flexcombe",
+  "village": "Flexcombe",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.0228,
+    "lng": -0.9456
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": []
+}

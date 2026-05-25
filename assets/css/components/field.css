@@ -1,0 +1,24 @@
+/* components/field.css — field-list (view), field-edit, edit/add rows.
+   Loaded via @import from base.css. */
+
+.field-list { margin: 0; }
+.field-list .field-view { display: grid; grid-template-columns: 9rem 1fr; gap: 0.5rem 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--pico-muted-border-color); }
+.field-list .field-view:last-child { border-bottom: 0; }
+.field-list dt { color: var(--pico-muted-color); font-size: 0.85rem; margin: 0; }
+.field-list dd { margin: 0; }
+
+.field-edit { margin-bottom: 0.85rem; }
+.field-edit label { display: block; font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 0.25rem; }
+.field-edit input,
+.field-edit textarea { margin: 0; }
+
+.edit-list { list-style: none; margin: 0 0 0.6rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.edit-list .edit-row {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--pico-secondary-background);
+  border-radius: 999px; padding: 0.25rem 0.35rem 0.25rem 0.75rem;
+  font-size: 0.9rem;
+}
+.add-row { gap: 0.5rem; }
+.add-row input { flex: 1 1 12rem; margin: 0; }
+.add-row button { margin: 0; }

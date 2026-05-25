@@ -1,0 +1,105 @@
+{
+  "id": "braishfield-so51",
+  "name": "Braishfield",
+  "village": "Braishfield",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO51",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 50.99684,
+    "lng": -1.50936
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Braishfield is a Hampshire village north-east of Romsey, known for its spring flowers and elevated views over Test Valley countryside. It has long agricultural roots and retains a classic village form centred on parish life and local lanes. Today it offers a desirable rural setting within practical reach of Romsey, Winchester and Southampton routes.",
+  "character": "Traditional village with period homes, parish institutions and strong community identity.",
+  "amenities": [
+    "Village church, hall and recreation facilities",
+    "Primary schooling and local pub/social spaces in village context",
+    "Broader supermarkets/rail connections in Romsey"
+  ],
+  "schools": [
+    {
+      "name": "Braishfield Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In village",
+      "url": "https://www.braishfield.hants.sch.uk/"
+    },
+    {
+      "name": "The Romsey School",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~4-6 miles",
+      "url": "https://www.theromseyschool.org/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "typical": "~10-15 min",
+        "notes": "Nearest major services and station"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~25-35 min",
+        "notes": "Via M27 corridor from Romsey side"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO51 prices in and around Braishfield are typically buoyed by village demand and commuter appeal to the Southampton/Winchester corridor.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO51.html"
+  },
+  "thingsToDo": [
+    "Seasonal walks and countryside trails around village lanes",
+    "Romsey Abbey, market town amenities and Test Valley attractions nearby"
+  ],
+  "placesToEat": [
+    "Village/nearby country pubs and Romsey restaurants"
+  ],
+  "pros": [
+    "Attractive village setting with strong community feel",
+    "Convenient road links to Romsey and Southampton"
+  ],
+  "cons": [
+    "Limited in-village retail breadth",
+    "Public transport less flexible than town locations"
+  ],
+  "whoItSuits": "Well suited to families and professionals seeking a picturesque Hampshire village with a real community core and manageable driving access to major employment centres.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Braishfield",
+      "url": "https://en.wikipedia.org/wiki/Braishfield"
+    },
+    {
+      "label": "Braishfield Primary School",
+      "url": "https://www.braishfield.hants.sch.uk/"
+    },
+    {
+      "label": "Rightmove House Prices SO51",
+      "url": "https://www.rightmove.co.uk/house-prices/SO51.html"
+    },
+    {
+      "label": "Romsey School",
+      "url": "https://www.theromseyschool.org/"
+    }
+  ]
+}

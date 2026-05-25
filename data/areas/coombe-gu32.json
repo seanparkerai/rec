@@ -1,0 +1,139 @@
+{
+  "id": "coombe-gu32",
+  "name": "Coombe",
+  "village": "Coombe",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 50.98764,
+    "lng": -0.94316
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "A small downland hamlet in the East Hampshire district, in the civil parish of East Meon (one of the historic East Meon tithings of Combe, Oxenbourne, Westbury and part of Bordean retained by the ancient parish at the 1894 split with Langrish). Coombe sits south of the East Meon village core, in a dry chalk valley on the southern slope of the South Downs ridge. It is a working-farm hamlet with cottages and a handful of period houses rather than a planned village: it has no shop, no school and no pub of its own. The administrative postcode is GU32 1 (Petersfield post town), but day-to-day life is shared with East Meon village a short distance to the north. East Meon proper holds the church (All Saints, a Grade I listed Norman building, one of the finest small churches in Hampshire), two pubs (the Olde George Inn and the Izaak Walton), a primary school and a village shop.",
+  "character": "Quiet, dispersed downland settlement; chalk-stream and downland landscape; very few new builds; planning controlled by both East Meon Conservation Area policies and the South Downs National Park Authority.",
+  "amenities": [
+    "(amenities at East Meon ~1 mi north:) The Olde George Inn",
+    "The Izaak Walton",
+    "East Meon village shop and post office",
+    "All Saints Church, East Meon (Grade I listed, Norman)",
+    "East Meon Village Hall",
+    "East Meon Cricket Club"
+  ],
+  "schools": [
+    {
+      "name": "East Meon Church of England Controlled Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "0.8 mi",
+      "url": "https://www.eastmeonprimary.hants.sch.uk/"
+    },
+    {
+      "name": "The Petersfield School",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "4.4 mi",
+      "url": "https://www.tps.hants.sch.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 2m – 1h 17m direct",
+        "mode": "drive to Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+      },
+      {
+        "to": "Portsmouth Harbour",
+        "time": "~30m",
+        "mode": "drive to Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield"
+      }
+    ],
+    "nearestStation": "Petersfield (4.5 mi)",
+    "roads": "Single-track lanes connecting to the A272 (Petersfield–West Meon) ~2 mi north and the A3 ~4 mi east"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "South Downs Way (Old Winchester Hill, Butser Hill)",
+    "Meon Valley cycling and walking",
+    "All Saints Church East Meon and font tours",
+    "Walking from East Meon to West Meon and Privett"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Olde George Inn",
+      "type": "Pub with rooms",
+      "notes": "Grade II 15th-century inn in East Meon village",
+      "url": "https://www.theoldegeorgeinn.uk/"
+    },
+    {
+      "name": "The Izaak Walton",
+      "type": "Pub",
+      "notes": "Riverside pub on the River Meon in East Meon",
+      "url": "https://www.theizaakwalton.co.uk/"
+    }
+  ],
+  "pros": [
+    "Inside the South Downs National Park; permanent landscape protection",
+    "East Meon village within walking distance for full village amenity set",
+    "Grade I Norman church and historic village fabric a short walk away",
+    "Petersfield station with direct London Waterloo trains in <5 mi",
+    "Genuinely rural feel; very low through-traffic on the lanes"
+  ],
+  "cons": [
+    "Hamlet only — Coombe itself has no shop, school, pub or church",
+    "Stock turnover is very thin; expect single-figure listings per year",
+    "Lanes are narrow and unlit; car essential, evening buses limited",
+    "Some properties on oil heating and private drainage — running costs higher than mains",
+    "Strict planning regime: SDNP plus East Meon Conservation Area"
+  ],
+  "whoItSuits": "Downsizers and second-home buyers wanting a small period cottage or barn conversion in a working downland hamlet, with East Meon's pubs and church within walking distance. Also suits country-buyers prepared for the practical realities (oil, septic tank, narrow lanes). Less suited to households needing village amenities on the doorstep — for that East Meon proper is the more practical choice. Not first-time buyer stock: prices in the East Meon catchment are firmly in the country-cottage market.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (4.5 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (~5 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Coombe, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Coombe,_Hampshire"
+    },
+    {
+      "label": "British History Online — East Meon parish",
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp64-75"
+    },
+    {
+      "label": "East Meon CE Controlled Primary School",
+      "url": "https://www.eastmeonprimary.hants.sch.uk/"
+    },
+    {
+      "label": "The Olde George Inn, East Meon",
+      "url": "https://www.theoldegeorgeinn.uk/"
+    },
+    {
+      "label": "South Western Railway — Petersfield",
+      "url": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (East Meon parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ]
+}

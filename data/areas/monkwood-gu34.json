@@ -1,0 +1,39 @@
+{
+  "id": "monkwood-gu34",
+  "name": "Monkwood",
+  "village": "Monkwood",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.13288,
+    "lng": -0.96476
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": []
+}

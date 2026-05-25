@@ -1,0 +1,39 @@
+{
+  "id": "winterbourne-earls-sp4",
+  "name": "Winterbourne Earls",
+  "village": "Winterbourne Earls",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP4",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 51.1574,
+    "lng": -1.77156
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": []
+}

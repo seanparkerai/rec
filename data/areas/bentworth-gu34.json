@@ -1,0 +1,106 @@
+{
+  "id": "bentworth-gu34",
+  "name": "Bentworth",
+  "village": "Bentworth",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.15176,
+    "lng": -0.96956
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Bentworth is a substantial village and civil parish in East Hampshire, west of Alton in the GU34 area. It has medieval roots, a notable church heritage and a long-established agricultural setting on higher ground. Modern Bentworth combines historic lanes and period property with active parish life and access to Alton’s rail and shopping services.",
+  "character": "Historic hill village with period homes, parish facilities and a strong rural landscape setting.",
+  "amenities": [
+    "Village hall, church community and recreation spaces.",
+    "Primary school and local pub provision in or near the parish.",
+    "Broader supermarkets, rail station and secondary schools in Alton."
+  ],
+  "schools": [
+    {
+      "name": "Bentworth Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In/near village",
+      "url": "https://www.bentworth.hants.sch.uk/"
+    },
+    {
+      "name": "Eggar’s School, Alton",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~5-7 miles",
+      "url": "https://www.eggars.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Alton",
+        "mode": "Drive",
+        "typical": "~10-15 min",
+        "notes": "Nearest rail hub for London Waterloo services"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~30-40 min",
+        "notes": "Via A31 corridor"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "GU34 pricing varies by micro-location; Bentworth period and detached homes often attract a premium relative to more urban Alton stock.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/GU34.html"
+  },
+  "thingsToDo": [
+    "Walking routes across the surrounding downland and rights of way",
+    "Village events and nearby Alton heritage attractions"
+  ],
+  "placesToEat": [
+    "The Sun Inn (Bentworth)",
+    "Wider pub and restaurant choice in Alton"
+  ],
+  "pros": [
+    "Attractive historic character and rural views",
+    "Good access to Alton rail/services without being suburban"
+  ],
+  "cons": [
+    "Public transport is limited; car use is common",
+    "Amenity range in-village is modest"
+  ],
+  "whoItSuits": "A strong fit for buyers wanting a classic East Hampshire village atmosphere, period housing and countryside access, while still needing practical links to Alton and London rail connections.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Bentworth",
+      "url": "https://en.wikipedia.org/wiki/Bentworth"
+    },
+    {
+      "label": "Bentworth Primary School",
+      "url": "https://www.bentworth.hants.sch.uk/"
+    },
+    {
+      "label": "Rightmove House Prices GU34",
+      "url": "https://www.rightmove.co.uk/house-prices/GU34.html"
+    },
+    {
+      "label": "National Rail — Alton station",
+      "url": "https://www.nationalrail.co.uk/stations/alton/"
+    }
+  ]
+}

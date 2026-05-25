@@ -1,0 +1,105 @@
+{
+  "id": "bramshaw-so43",
+  "name": "Bramshaw",
+  "village": "Bramshaw",
+  "town": "Salisbury",
+  "county": "Hampshire",
+  "postcode": "SO43",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Salisbury",
+  "coords": {
+    "lat": 50.86808,
+    "lng": -1.57228
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Bramshaw sits on the Hampshire/Wiltshire edge of the New Forest, with a dispersed settlement pattern, common land and long-standing rural heritage. The area is known for forest ponies, open heath and links to nearby Lyndhurst and Salisbury routes. It offers a distinctive New Forest lifestyle with protected landscapes and tourism-driven local activity.",
+  "character": "Dispersed New Forest village character with commons, lanes and mixed historic housing.",
+  "amenities": [
+    "Parish church and village institutions with active local groups",
+    "Forest access, riding/cycling/walking routes and visitor economy facilities nearby",
+    "Wider shops and services in Lyndhurst, Romsey and Salisbury corridors"
+  ],
+  "schools": [
+    {
+      "name": "Bramshaw C of E Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In village area",
+      "url": "https://www.bramshaw.hants.sch.uk/"
+    },
+    {
+      "name": "The Burgate School, Fordingbridge",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~6-9 miles",
+      "url": "https://www.theburgate.com/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~30-45 min",
+        "notes": "Via Lyndhurst/M27 route"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "typical": "~25-35 min",
+        "notes": "Via A36 corridor"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO43/New Forest pricing is typically supported by high landscape demand and constrained housing supply in protected areas.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO43.html"
+  },
+  "thingsToDo": [
+    "New Forest walks, cycling and wildlife watching",
+    "Explore nearby Lyndhurst museums and forest villages"
+  ],
+  "placesToEat": [
+    "Country pubs and hotel restaurants in Bramshaw/Lyndhurst/Fordingbridge area"
+  ],
+  "pros": [
+    "Outstanding natural setting and recreation access",
+    "Strong place identity tied to the New Forest"
+  ],
+  "cons": [
+    "Planning constraints can limit change/expansion",
+    "Peak-season visitor traffic can affect travel times"
+  ],
+  "whoItSuits": "Ideal for nature-focused households and remote/hybrid workers who prioritise protected-landscape living and accept rural transport trade-offs.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Bramshaw",
+      "url": "https://en.wikipedia.org/wiki/Bramshaw"
+    },
+    {
+      "label": "New Forest National Park",
+      "url": "https://www.newforestnpa.gov.uk/"
+    },
+    {
+      "label": "Rightmove House Prices SO43",
+      "url": "https://www.rightmove.co.uk/house-prices/SO43.html"
+    },
+    {
+      "label": "The Burgate School",
+      "url": "https://www.theburgate.com/"
+    }
+  ]
+}

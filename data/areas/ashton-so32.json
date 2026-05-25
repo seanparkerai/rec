@@ -1,0 +1,100 @@
+{
+  "id": "ashton-so32",
+  "name": "Ashton",
+  "village": "Ashton",
+  "town": "Southampton",
+  "county": "Hampshire",
+  "postcode": "SO32",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Southampton",
+  "coords": {
+    "lat": 50.95332,
+    "lng": -1.19484
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Ashton is a very small rural settlement in the SO32 corridor between Bishop’s Waltham and the Meon Valley. It is defined more by farmland, lanes and dispersed housing than by a concentrated village core. The area benefits from access to Bishop’s Waltham services while retaining a quieter countryside setting.",
+  "character": "Dispersed semi-rural cluster with agricultural edges and quiet roads.",
+  "amenities": [
+    "Limited on-site amenities; most daily needs met in Bishop’s Waltham.",
+    "Nearby public footpaths and countryside routes.",
+    "Wider services, supermarkets and health facilities in Fareham/Winchester corridor."
+  ],
+  "schools": [
+    {
+      "name": "Bishop’s Waltham Infant School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~2-4 miles",
+      "url": "https://www.bwschool.org.uk/"
+    },
+    {
+      "name": "Swanmore College",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~4-6 miles",
+      "url": "https://www.swanmore-school.co.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~25-35 min",
+        "notes": "A333/A34 corridor depending on start point"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~35-45 min",
+        "notes": "Via Bishops Waltham/Botley approach to M27"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO32 pricing reflects strong demand for village and semi-rural homes, with larger detached stock generally commanding higher values.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Meon Valley and South Downs walks nearby"
+  ],
+  "placesToEat": [
+    "Pubs, cafés and restaurants concentrated in Bishop’s Waltham and Swanmore"
+  ],
+  "pros": [
+    "Quiet countryside setting",
+    "Good car access to wider South Hampshire"
+  ],
+  "cons": [
+    "Sparse local amenities",
+    "Public transport options are limited"
+  ],
+  "whoItSuits": "Suited to rural-lifestyle buyers who are car-based and do not need a walkable high street.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Ashton, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Ashton%2C_Hampshire"
+    },
+    {
+      "label": "Property brochure context (Ashton SO32 1FR)",
+      "url": "https://content.knightfrank.com/property/win012126924/brochures/en/win012126924-en-brochure-d6841c03-c32c-4e60-a1d9-76553f552c7c-1.pdf"
+    },
+    {
+      "label": "Google Maps — Ashton (SO32) to Southampton",
+      "url": "https://www.google.com/maps/dir/Ashton+SO32/Southampton"
+    }
+  ]
+}

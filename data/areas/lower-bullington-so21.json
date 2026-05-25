@@ -1,0 +1,157 @@
+{
+  "id": "lower-bullington-so21",
+  "name": "Lower Bullington",
+  "village": "Lower Bullington",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.08288,
+    "lng": -1.29756
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": {
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": null,
+  "overview": "Lower Bullington is a tiny hamlet in the Bullington civil parish of Test Valley borough, set in the chalk-stream valley of the River Dever about nine miles south-east of Andover and three miles east of the village of Sutton Scotney. The civil parish — comprising Upper Bullington and Lower Bullington — had a recorded population of just 101 at the 2001 Census. Lower Bullington sits in the valley bottom at around 60 m, while Upper Bullington runs along the parallel ridge to the north; both are off the A30 and reached by a single lane signed from Bullington Cross. The hamlet has no shop, school, pub or church of its own and shares amenities with the larger village of Barton Stacey, two miles west.",
+  "character": "Sparsely settled chalk-stream hamlet: a handful of brick-and-flint cottages, a working farm and one or two larger detached properties strung along Lower Bullington Lane. Inside the Test Valley Special Landscape Area, with the Dever cress beds prominent in the landscape. No through traffic and big skies; nearest streetlight is at Sutton Scotney.",
+  "amenities": [
+    "Nearest shop and pub: Barton Stacey village (The Swan Inn, Village Stores) — 2 mi",
+    "Nearest GP and pharmacy: Sutton Scotney (3 mi)",
+    "A303 service area and Co-op, Bullington Cross (1 mi)",
+    "Andover full retail and Sainsbury's (9 mi)",
+    "Winchester full retail (8 mi)"
+  ],
+  "schools": [
+    {
+      "name": "Barton Stacey Church of England Primary School",
+      "phase": "Primary",
+      "type": "State (Voluntary Controlled)",
+      "ofsted": "Good (2024)",
+      "distance": "2.4 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115898"
+    },
+    {
+      "name": "Wonston Primary School",
+      "phase": "Primary",
+      "type": "State (Community)",
+      "ofsted": "Good (2023)",
+      "distance": "3.1 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115950"
+    },
+    {
+      "name": "Test Valley School (Stockbridge)",
+      "phase": "Secondary",
+      "type": "State (Comprehensive)",
+      "ofsted": "Good (2022)",
+      "distance": "8.0 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116440"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 13m",
+        "mode": "drive to Micheldever Station (4 mi) + direct train (SWR)",
+        "source": "https://www.thetrainline.com/stations/micheldever"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~20m",
+        "mode": "drive (A34/A30)",
+        "source": "https://www.google.com/maps"
+      },
+      {
+        "to": "Andover (by road)",
+        "time": "~15m",
+        "mode": "drive (A303)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Micheldever (4.2 mi)",
+    "roads": "A30 (parish edge); A34 ~1 mi; A303 (Bullington Cross) ~1 mi; M3 J9 ~9 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 712724,
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so21.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking the River Dever and the Test Way footpath",
+    "Tidbury Ring Iron Age hillfort (2 mi)",
+    "Bombay Sapphire Distillery, Laverstoke Mill (8 mi)",
+    "The Hawk Conservancy Trust, Andover (8 mi)",
+    "Whitchurch Silk Mill (10 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Swan Inn, Barton Stacey",
+      "type": "Village pub",
+      "notes": "Two miles west; the local for Bullington residents",
+      "url": "https://www.theswaninn-bartonstacey.co.uk/"
+    },
+    {
+      "name": "Bullington Cross Inn",
+      "type": "Roadside pub",
+      "notes": "1 mile north at the A303/A34 junction",
+      "url": "https://whatpub.com/pubs/HAS/00059/bullington-cross-inn"
+    }
+  ],
+  "pros": [
+    "Three trunk roads (A30/A34/A303) within a mile; fast access to Andover, Winchester, the Midlands",
+    "Direct Waterloo trains from Micheldever, 4 miles south",
+    "Genuine downland silence at home; chalk-stream walks from the door",
+    "Two Good village primaries within 3 miles (Barton Stacey, Wonston)"
+  ],
+  "cons": [
+    "Nothing in the hamlet itself — pub, shop, school all 2+ miles away",
+    "A303/A34 noise audible at Upper Bullington and the northern edge",
+    "Catchment secondary (Test Valley, Stockbridge) is 8 miles by road",
+    "SO21 detached stock averages £1.06m; tiny housing market means little ever lists here",
+    "Mobile signal and broadband patchy at the lower-valley end"
+  ],
+  "whoItSuits": "Best understood as a quiet country bolt-hole for someone working from home with occasional London or Andover days. For a solo first-time buyer at £400k it's effectively out of reach as a standalone freehold purchase — the few cottages that do come up are typically well above. Barton Stacey (2 mi west) has more terraced and semi stock at more attainable prices with the same A303 access; Wonston (3 mi south) is cheaper still with its own Good primary; Sutton Scotney (3 mi west) has the most amenities for the money.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Micheldever (4.2 mi)",
+  "primarySupermarket": "Co-op, Bullington Cross (1.0 mi); Sainsbury's, Andover Road, Andover (9.0 mi)",
+  "images": [],
+  "sources": [
+    {
+      "title": "Wikipedia — Bullington, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Bullington,_Hampshire"
+    },
+    {
+      "title": "Barton Stacey Parish Council — About",
+      "url": "https://www.bartonstaceyparishcouncil.gov.uk/about/"
+    },
+    {
+      "title": "Ofsted — Barton Stacey CofE Primary",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115898"
+    },
+    {
+      "title": "Rightmove — SO21 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/so21.html"
+    },
+    {
+      "title": "Trainline — Micheldever station",
+      "url": "https://www.thetrainline.com/stations/micheldever"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "id": "medstead-gu34",
+  "name": "Medstead",
+  "village": "Medstead",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Alton",
+  "coords": {
+    "lat": 51.15116,
+    "lng": -0.98648
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": {
+    "avgDetached": 694500,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "asOf": "2025"
+  },
+  "councilTaxBand": "D",
+  "overview": "Medstead is a village and civil parish of around 2,000 residents in the East Hampshire district, four and a quarter miles south-west of Alton on a chalk plateau between the Itchen and Meon valleys. The parish reaches over 210 m at King's Hill, making Medstead one of the highest villages in Hampshire; the 12th-century St Andrew's Church and a Victorian wheelhouse with a working donkey wheel are among its six Grade II-listed buildings. Modern Medstead is anchored by the High Street, where the Castle of Comfort pub, the Handy Stores grocer-newsagent and Medstead Hardware (which houses the village sub-post office) sit close to St Andrew's; the village hall, green and Medstead Primary lie at the other end. Medstead shares the heritage Watercress Line station with Four Marks, but commuters use Alton (4.3 mi) for direct Waterloo services. The parish was one of the first in the UK to receive broadband and now has Superfast FTTC available throughout.",
+  "character": "Largely unspoilt rural Hampshire village, more visually coherent than neighbouring Four Marks — period brick and weatherboarded cottages along the High Street, a working farmstead at South Town, and 1960s-1980s additions on the south and east edges. Council Tax Band D charge for Medstead in 2026/27 is around £2,310 (East Hampshire LA, 2026-27 schedule).",
+  "amenities": [
+    "Castle of Comfort (traditional freehouse, High Street)",
+    "Handy Stores (grocer + newsagent)",
+    "Medstead Hardware + sub-Post Office",
+    "St Andrew's Church (12th century)",
+    "Medstead Village Hall and green",
+    "Convent of St Lucy",
+    "Tennis club and bowls club",
+    "Medstead Church of England Primary School (Good, Ofsted March 2023)",
+    "Medstead and Four Marks station (Watercress Line, heritage)"
+  ],
+  "schools": [
+    {
+      "name": "Medstead Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "0.3 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116300"
+    },
+    {
+      "name": "Four Marks Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "1.8 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Amery Hill School, Alton",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "4.3 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 13m",
+        "mode": "drive to Alton + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/stations/alton"
+      },
+      {
+        "to": "London Waterloo (fastest)",
+        "time": "1h 6m",
+        "mode": "drive + train",
+        "source": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~25m",
+        "mode": "drive (A31 via Four Marks)",
+        "source": "https://www.nationalrail.co.uk/"
+      }
+    ],
+    "nearestStation": "Alton (4.3 mi)",
+    "roads": "A31 ~1.5 mi (via Four Marks); A32 ~4 mi; M3 J9 ~14 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 534986,
+    "avgDetached": 694500,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.getthedata.com/postcode/GU34-5PF",
+    "asOf": "2025"
+  },
+  "thingsToDo": [
+    "Walking King's Hill (one of Hampshire's highest points)",
+    "Watercress Line steam-train day trip (Alresford–Alton)",
+    "Annual village fête (July, on the green)",
+    "St Andrew's Church and donkey-wheel wheelhouse heritage tour",
+    "Hattingley Valley Wines (~2 mi)",
+    "Triple fff Brewery taproom, Four Marks (~2 mi)",
+    "Jane Austen's House Museum, Chawton (3 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Castle of Comfort",
+      "type": "Traditional pub",
+      "notes": "Freehouse on the High Street; pub lunches, range of bitters and real ales",
+      "url": "https://www.castleofcomfort.co.uk/"
+    },
+    {
+      "name": "The Three Horseshoes, Bighton",
+      "type": "Country pub",
+      "notes": "Freehouse 3 mi west, near Alresford",
+      "url": "https://www.useyourlocal.com/pubs-in-medstead/"
+    }
+  ],
+  "pros": [
+    "Full village amenity set retained (pub, shop, post office, school)",
+    "Ofsted Good primary in the village (Medstead C of E)",
+    "Six Grade II-listed buildings and a 12th-century church",
+    "Substantial period stock alongside post-war additions"
+  ],
+  "cons": [
+    "No commuter station — heritage line only, drive to Alton for Waterloo",
+    "Elevated chalk-ridge position can be exposed in winter",
+    "Limited choice of pubs; one in village",
+    "A31 traffic accumulates at the Four Marks pinch point at peak times"
+  ],
+  "whoItSuits": "Families and couples wanting a working chalk-ridge village with a Good primary on the doorstep, a working post office and a traditional freehouse — all within four miles of Alton's full retail set. The visual coherence of the High Street and the listed-building density distinguish it from neighbouring Four Marks. Best fit for buyers comfortable with a fifteen-minute drive to a mainline station, families with primary-age children, and downsizers from busier south-east towns. Less suitable for buyers needing daily train commutes without a car, or for those wanting the chocolate-box thatch character of the Test Valley villages further west.",
+  "broadbandMedianMbps": 56,
+  "nearestStation": "Alton (4.3 mi)",
+  "primarySupermarket": "Sainsbury's, Draymans Way, Alton (4.5 mi); Handy Stores in village",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Medstead",
+    "https://www.medsteadpc.org/_VirDir/CoreContents/Organisations/Display.aspx?id=5676",
+    "https://www.medsteadpc.org/Local_Information_33013.aspx",
+    "https://reports.ofsted.gov.uk/provider/21/116300",
+    "https://www.medstead.hants.sch.uk/",
+    "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf",
+    "https://www.thetrainline.com/stations/alton",
+    "https://www.getthedata.com/postcode/GU34-5PF",
+    "https://littleplaceinthecountry.com/en/medstead-local-guide"
+  ]
+}

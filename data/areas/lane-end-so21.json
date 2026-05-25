@@ -1,0 +1,160 @@
+{
+  "id": "lane-end-so21",
+  "name": "Lane End",
+  "village": "Lane End",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.09496,
+    "lng": -1.29068
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "partial",
+  "priceSummary": {
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": null,
+  "overview": "Lane End is a tiny hamlet of barely a dozen cottages on Longwood Dean Lane, in the Longwood valley between the villages of Owslebury and Kilmeston, in the City of Winchester district. Set at around 112 m on a chalk fold of the South Downs National Park about five miles south-east of Winchester and roughly five miles south-west of New Alresford, it has no shop, pub, school or church of its own. The cluster takes its name from the road end — a Hampshire convention for hamlets at the head of a lane. Properties are spread thinly along the lane, mostly converted farm buildings, cottages and one or two larger homes; the area falls within the Owslebury civil parish for governance and the South Downs National Park for planning. The post town is Winchester but the nearest day-to-day services are at Owslebury, half a mile west.",
+  "character": "Dispersed downland hamlet inside the South Downs National Park: a handful of brick, flint and tile-hung properties (some Victorian estate cottages, some 20th-century barn conversions) on a narrow single-track lane. SDNP planning policy strictly limits new build and the lane has no through traffic, which preserves both the quiet and the absence of facilities.",
+  "amenities": [
+    "Nearest shop, pub and school: Owslebury village (0.6 mi)",
+    "Marwell Outdoor Activity Centre and Marwell Zoo (2 mi)",
+    "Bus stops on Longwood Road (Owslebury services)",
+    "Full amenities, supermarkets and GP at Winchester (5 mi)",
+    "Bishop's Waltham high street (5 mi) for everyday shopping"
+  ],
+  "schools": [
+    {
+      "name": "Owslebury Primary School",
+      "phase": "Primary",
+      "type": "State (Community)",
+      "ofsted": "Good (2022)",
+      "distance": "0.6 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+    },
+    {
+      "name": "Cheriton Primary School",
+      "phase": "Primary",
+      "type": "State (Community)",
+      "ofsted": "Good (2025)",
+      "distance": "2.6 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115874"
+    },
+    {
+      "name": "Kings' School, Winchester",
+      "phase": "Secondary",
+      "type": "State (Comprehensive)",
+      "ofsted": "Good (2023)",
+      "distance": "5.7 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/23/136451"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 4m (fastest)",
+        "mode": "drive to Winchester or Shawford + direct train (SWR)",
+        "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~15m",
+        "mode": "drive (Morestead/Twyford lanes)",
+        "source": "https://www.google.com/maps"
+      },
+      {
+        "to": "Southampton (by road)",
+        "time": "~25m",
+        "mode": "drive (B2177/M3 J11)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Shawford (5.1 mi)",
+    "roads": "Longwood Dean Lane (single-track); B2177 ~2 mi; M3 J11 ~6 mi; A31/A272 ~3 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 712724,
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so21.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking and cycling the South Downs lanes around Longwood Estate",
+    "Marwell Zoo (2 mi) — over 1,200 animals on the former Marwell Hall estate",
+    "Hinton Ampner gardens (National Trust, 3 mi)",
+    "Owslebury Old Stables café and Owslebury Brewery taproom in Owslebury village",
+    "South Downs National Park footpaths to Twyford Down"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Ship Inn, Owslebury",
+      "type": "Country pub with rooms",
+      "notes": "Half a mile away in Owslebury; oldest pub in the area",
+      "url": "https://whatpub.com/pubs/HAS/00337/ship-inn-owslebury"
+    },
+    {
+      "name": "The Phoenix, Twyford",
+      "type": "Village pub",
+      "notes": "2 miles north-west in Twyford; full menu",
+      "url": "https://www.thephoenixtwyford.co.uk/"
+    }
+  ],
+  "pros": [
+    "Quietest possible setting inside the South Downs National Park",
+    "Walking distance to a Good village primary (Owslebury) and a country pub",
+    "Plenty of footpath access onto the downs from the door",
+    "15-minute drive to Winchester and the SWR main line at Shawford"
+  ],
+  "cons": [
+    "No shop, pub, GP, school or station in the hamlet itself — totally car-dependent",
+    "Detached SO21 stock averages over £1m; what little sells here is well above budget",
+    "Single-track lane, no streetlights, limited mobile signal in places",
+    "SDNP planning severely restricts extensions, outbuildings and conversions"
+  ],
+  "whoItSuits": "Suited to a buyer prepared to wait for a small cottage or barn conversion and who genuinely wants downland silence, footpaths from the door and a Good village primary one lane away. For a solo £64k buyer with a £400k ceiling this is realistically out of reach for a freehold house — Lane End almost always trades at the SO21 premium, with detacheds averaging over £1m. Owslebury village itself is fractionally cheaper and gives you the pub and primary on the same lane; Cheriton (2.6 mi east, SO24) is cheaper still and has a Good village school; Twyford (2 mi north-west) is more expensive but has a station within walking distance.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Shawford (5.1 mi)",
+  "primarySupermarket": "Sainsbury's, Middle Brook Street, Winchester (5.0 mi); Tesco Bishop's Waltham (5.0 mi)",
+  "images": [],
+  "sources": [
+    {
+      "title": "GetTheData — Where is Lane End SO21",
+      "url": "https://www.getthedata.com/lane-end-so21/where-is-lane-end-so21"
+    },
+    {
+      "title": "StreetCheck — SO21 1JX (Lane End)",
+      "url": "https://www.streetcheck.co.uk/postcode/so211jx"
+    },
+    {
+      "title": "Ofsted — Owslebury Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+    },
+    {
+      "title": "Ofsted — Cheriton Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115874"
+    },
+    {
+      "title": "Rightmove — SO21 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/so21.html"
+    },
+    {
+      "title": "Trainline — Winchester to London Waterloo",
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+    }
+  ]
+}

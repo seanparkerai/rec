@@ -1,0 +1,39 @@
+{
+  "id": "southwick-po17",
+  "name": "Southwick",
+  "village": "Southwick",
+  "town": "Portsmouth",
+  "county": "Hampshire",
+  "postcode": "PO17",
+  "hubCity": "Portsmouth",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Portsmouth",
+  "coords": {
+    "lat": 50.90572,
+    "lng": -1.19008
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "directory",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "",
+  "character": "",
+  "amenities": [],
+  "schools": [],
+  "transport": {
+    "commutes": []
+  },
+  "prices": {},
+  "thingsToDo": [],
+  "placesToEat": [],
+  "pros": [],
+  "cons": [],
+  "whoItSuits": [],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": []
+}

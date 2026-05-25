@@ -1,0 +1,125 @@
+{
+  "id": "filmore-hill-gu34",
+  "name": "Filmore Hill",
+  "village": "Filmore Hill",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Alton",
+  "coords": {
+    "lat": 51.13144,
+    "lng": -0.99276
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": {
+    "avgDetached": 849394,
+    "avgSemi": 488523,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "asOf": "2025"
+  },
+  "councilTaxBand": null,
+  "overview": "Filmore Hill is a rural hamlet of around 28 residents in the civil parish of Froxfield and Privett, in the East Hampshire district, sitting at the chalk-down top of Stoner Hill within the South Downs National Park. The postcode GU34 3NX is correctly tagged in the seed data, though geographically the hamlet is much closer to Petersfield (6.8 mi south-east) than to Alton (around ten miles north) — buyers should treat Petersfield as the practical hub town despite the seed list grouping. The parish climbs to over 240 m on its northern boundary and is separated from Petersfield by the Stoner Hill scarp; the Basing Park estate lies in the north-west of the parish. The most prominent building is the 18th-century Grade II-listed Filmore Hill Farmhouse, a brick former farmhouse still in private ownership. The nearest village amenities — church, hall and shop — sit at Privett and the Meon Hut crossroads, about a mile and a quarter away.",
+  "character": "Dispersed cluster of large detached farmhouses and barn conversions along a single chalk lane, with frontages of brick, flint and the occasional cob-and-thatch survivor. The locality type is officially 'rural hamlet and isolated dwellings'. Plot sizes are large, planning constraints are exceptionally tight given SDNP designation, and turnover is rare; recent detached sales in GU34 3NX have averaged in the high £800,000s.",
+  "amenities": [
+    "Privett shop and village hall (1.2 mi)",
+    "Meon Hut crossroads (food stop, ~1 mi)",
+    "Holy Trinity Church, Privett (1.5 mi)",
+    "South Downs National Park designation",
+    "Gigabit-capable broadband at one or more premises"
+  ],
+  "schools": [
+    {
+      "name": "West Meon Church of England Voluntary Controlled Primary School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "2.4 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Perins School (secondary, Alresford)",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "5.7 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo (via Petersfield)",
+        "time": "~1h 10m + drive",
+        "mode": "drive + train",
+        "source": "https://www.nationalrail.co.uk/"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~30m",
+        "mode": "drive (A272)",
+        "source": "https://www.streetcheck.co.uk/postcode/gu343nx"
+      }
+    ],
+    "nearestStation": "Petersfield (~6.8 mi)",
+    "roads": "A272 ~1 mi; A3 (Petersfield) ~7 mi; A32 ~4 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": 849394,
+    "avgSemi": 488523,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://zestate.co.uk/address/Filmore-Hill-Farmhouse-Filmore-Hill-Privett-ALTON-Hampshire-GU34-3NX/11517613/",
+    "asOf": "2025"
+  },
+  "thingsToDo": [
+    "South Downs Way walking from Stoner Hill",
+    "Basing Park estate footpaths",
+    "Hawkley Hangers ancient woodland (~3 mi)",
+    "West Meon vineyards and Hambledon Vineyard tour (~6 mi)",
+    "Petersfield Heath and Petersfield Pond (~7 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Pub With No Name (White Horse Inn), Priors Dean",
+      "type": "Country pub",
+      "notes": "Famously named for its missing sign, ~3 mi north",
+      "url": "https://www.thepubwithnoname.co.uk/"
+    },
+    {
+      "name": "The Thomas Lord, West Meon",
+      "type": "Gastropub",
+      "notes": "Mains around £18–£26, two miles south-west",
+      "url": "https://www.thethomaslord.co.uk/"
+    }
+  ],
+  "pros": [
+    "Inside the South Downs National Park with strong planning protection",
+    "Gigabit broadband at one or more premises (rare for a chalk hamlet)",
+    "Petersfield mainline 6.8 mi for direct Waterloo trains",
+    "Substantial period properties with generous land"
+  ],
+  "cons": [
+    "Seed data lists Alton as hub town; Petersfield is the real centre",
+    "No shop, school, pub or village hall within the hamlet",
+    "Property stock is small and rarely turns over",
+    "Steep lanes around Stoner Hill can ice in winter"
+  ],
+  "whoItSuits": "Cash-rich buyers wanting a National Park position with substantial period stock and accepting that everyday life requires a car. The combination of SDNP designation, listed houses and seven property sales since 1995 means stock is small, slow-moving and priced accordingly. Best fit is downsizing-up households moving from London or south-east commuter towns, retirees, or remote workers who genuinely value the gigabit-capable broadband. Poor fit for first-time buyers or anyone reliant on public transport.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (~6.8 mi)",
+  "primarySupermarket": "Waitrose, Petersfield (~7 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Froxfield_and_Privett",
+    "https://search.savills.com/com/en/property-detail/gbwnrsclv253732",
+    "https://zestate.co.uk/address/Filmore-Hill-Farmhouse-Filmore-Hill-Privett-ALTON-Hampshire-GU34-3NX/11517613/",
+    "https://www.streetcheck.co.uk/postcode/gu343nx",
+    "https://www.primelocation.com/for-sale/houses/privett/filmore-hill/",
+    "https://en.wikipedia.org/wiki/Privett_(disambiguation)"
+  ]
+}

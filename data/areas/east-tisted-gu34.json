@@ -1,0 +1,152 @@
+{
+  "id": "east-tisted-gu34",
+  "name": "East Tisted",
+  "village": "East Tisted",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.16424,
+    "lng": -0.9622
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "A village and civil parish in the East Hampshire district, 4.8 miles south of Alton on the A32. Population at the 2011 census was around 221 in about 100 households. East Tisted is, in practical terms, an estate village: the Rotherfield Park estate (Grade I-listed country house, 1815–21 by Joseph T. Parkinson, with a Grade II-registered park of around 175 hectares) sits to the west of the A32 and owns the manor house, the church, the Front Lodge, the almshouses (built and endowed by Thomas and Septimus Scott in 1879 and 1893) and a significant tranche of village housing. The parish church of St James was rebuilt in 1846 (the 14th-century 3-stage tower survives) and contains tombs of the medieval Norton family. The village is inside the South Downs National Park; the old Meon Valley railway, closed in 1955, ran through the parish and the redundant station building survives.",
+  "character": "A protected, picture-book estate village — Picturesque-theory landscape with managed sightlines from the manor through the village to the open downland beyond. Mix of listed cottages, almshouses, the Home Farm and a small number of more recent infill houses. Quiet, very tightly managed, deeply rural.",
+  "amenities": [
+    "Rotherfield Park (Grade I-listed country house, opens for National Garden Scheme days)",
+    "Front Lodge (Grade II listed, c. 1820)",
+    "Church of St James (rebuilt 1846, retains 14th-century tower)",
+    "Almshouses (1879 and 1893, Thomas and Septimus Scott)",
+    "East Tisted Village Hall",
+    "Cricket and recreation ground",
+    "Disused Meon Valley railway line walking route"
+  ],
+  "schools": [
+    {
+      "name": "Ropley Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "2.5 mi",
+      "url": "https://www.ropley.hants.sch.uk/"
+    },
+    {
+      "name": "Amery Hill School (Alton)",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "5.5 mi",
+      "url": "https://www.ameryhill.hants.sch.uk/"
+    },
+    {
+      "name": "Eggar's School (Alton)",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "5.0 mi",
+      "url": "https://www.eggars.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 6m – 1h 18m direct",
+        "mode": "drive to Alton + direct South Western Railway",
+        "source": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+      },
+      {
+        "to": "London Waterloo (alt.)",
+        "time": "1h 2m – 1h 17m direct",
+        "mode": "drive to Liss (~5 mi) + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/liss"
+      }
+    ],
+    "nearestStation": "Alton (5.0 mi)",
+    "roads": "A32 (Alton–Fareham) runs through the village; A31 (M3 to Winchester) ~5 mi north at Alton"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu34-3ql.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Rotherfield Park gardens (National Garden Scheme open days)",
+    "Walking on the disused Meon Valley railway line and the Shipwrights Way",
+    "Selborne and Gilbert White's House (~3 mi)",
+    "Jane Austen's House at Chawton (~6 mi)",
+    "Watercress Line steam railway from Alton (~5 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Pub With No Name (White Horse)",
+      "type": "Country pub with rooms",
+      "notes": "17th-century pub at Priors Dean, ~2 mi south",
+      "url": "https://www.thepubwithnoname.uk/"
+    },
+    {
+      "name": "The Selborne Arms",
+      "type": "Village pub",
+      "notes": "Country pub in Selborne, ~3 mi east",
+      "url": "https://www.selbornearms.co.uk/"
+    }
+  ],
+  "pros": [
+    "Inside the South Downs National Park with Grade I-listed country house and Grade II-registered park on its doorstep",
+    "Two market towns within easy drive — Alton (with direct London Waterloo trains) ~5 mi north, Petersfield ~7 mi south",
+    "Strong walking infrastructure: Shipwrights Way, Hangers Way, old Meon Valley line",
+    "Picturesque, deliberately managed visual character",
+    "Cricket ground, village hall and active parish council"
+  ],
+  "cons": [
+    "No pub or shop within the village itself — closest pub is The Pub With No Name at Priors Dean (~2 mi)",
+    "Estate ownership means open-market freehold supply is unusual; many houses are estate-tenanted",
+    "A32 runs through the village — through-traffic noise on frontages",
+    "No mainline station within walking distance; car essential",
+    "Strict SDNP and conservation-area planning constraints"
+  ],
+  "whoItSuits": "Buyers prepared to wait for relatively scarce open-market opportunities in an estate village inside the South Downs National Park. Strong fit for retirees, country-house buyers, equestrian households, and home-workers willing to absorb the 5-mile drive to Alton or Liss for the station. Not first-time buyer territory: when freehold stock does come up, it usually sits in the country-cottage market.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (5.0 mi)",
+  "primarySupermarket": "Sainsbury's Alton (~5 mi); Waitrose New Alresford (~7 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — East Tisted",
+      "url": "https://en.wikipedia.org/wiki/East_Tisted"
+    },
+    {
+      "label": "Wikipedia — Rotherfield Park",
+      "url": "https://en.wikipedia.org/wiki/Rotherfield_Park"
+    },
+    {
+      "label": "Historic England — Rotherfield Park (registered)",
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1000163"
+    },
+    {
+      "label": "East Tisted Parish Council",
+      "url": "https://www.easttisted-pc.gov.uk/"
+    },
+    {
+      "label": "British History Online — Parishes: East Tisted",
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp30-35"
+    },
+    {
+      "label": "South Western Railway — Alton to London Waterloo",
+      "url": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (East Tisted parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ]
+}

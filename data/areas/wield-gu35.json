@@ -1,0 +1,121 @@
+{
+  "id": "wield-gu35",
+  "name": "Wield",
+  "village": "Wield",
+  "town": "Basingstoke",
+  "county": "Hampshire",
+  "postcode": "GU35",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Basingstoke",
+  "coords": {
+    "lat": 51.09988,
+    "lng": -0.85
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Wield is a small civil parish in the East Hampshire district, on the chalk uplands between Alresford and Basingstoke, containing two villages — Upper Wield and Lower Wield — about a mile apart. The parish population at the 2021 census was 237. The parish church of St James in Upper Wield is mainly Norman, Grade I-listed, and contains a notable monument to William Wallop (c. 1553–1617), who served as MP for Southampton, justice of the peace and three-times mayor of Southampton. The Yew Tree, in Lower Wield, is the parish's pub. The seed CSV records this entry as GU35 but the actual postcode area is SO24 (post town Alresford) — the Yew Tree's address is SO24 9RX. The parish lies in a wide stretch of chalk downland with no significant numbered roads through it; the closest is the B3046 between Alresford and Basingstoke, about a mile and a half west.",
+  "character": "Loose two-village civil parish on high chalk downland with mature beechwoods, an active parish hall in Upper Wield and a fishing-and-shooting estate culture. Building stock is predominantly 17th–19th-century brick-and-flint farmhouses and thatched cottages, with a Grade I-listed Norman church anchoring Upper Wield. Strict planning regime; turnover is rare.",
+  "amenities": [
+    "St James's Church, Upper Wield (Grade I, mainly Norman)",
+    "The Yew Tree, Lower Wield (village pub)",
+    "Parish Hall, Upper Wield",
+    "Village green at Upper Wield",
+    "Active quarterly parish council meetings",
+    "Open chalk downland walking from both villages"
+  ],
+  "schools": [
+    {
+      "name": "Preston Candover Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "3.0 mi",
+      "url": "https://files.ofsted.gov.uk/v1/file/50209502"
+    },
+    {
+      "name": "Bentworth Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "2.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "5.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo (via Alton)",
+        "time": "1h 13m",
+        "mode": "drive + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/stations/alton"
+      },
+      {
+        "to": "London Waterloo (via Basingstoke, fastest)",
+        "time": "42m + drive",
+        "mode": "drive ~8 mi + direct train (SWR)",
+        "source": "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo"
+      }
+    ],
+    "nearestStation": "Alton (5.5 mi)",
+    "roads": "B3046 ~1.5 mi; A339 ~3 mi; A31 ~5 mi; M3 J7 (Basingstoke) ~9 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so24.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking the chalk downland circular Wield–Bentworth–Bradley",
+    "St James's Church visit (Grade I Norman building, Wallop memorial)",
+    "Hattingley Valley Wines tour (3 mi south)",
+    "The Grange, Northington estate (5 mi)",
+    "Watercress Line heritage railway from Alresford (5 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Yew Tree, Lower Wield",
+      "type": "Country pub",
+      "notes": "Sole village pub; traditional menu",
+      "url": "http://www.the-yewtree.org.uk/"
+    }
+  ],
+  "pros": [
+    "Grade I-listed Norman church (one of the finest in north Hampshire)",
+    "Two-station optionality: Alton (slow direct) or Basingstoke (fast direct)",
+    "Open chalk downland walking from both villages",
+    "Strict planning protects rural character"
+  ],
+  "cons": [
+    "Seed CSV records this record as GU35; the actual postal district is SO24",
+    "No shop, post office or school within the parish (Lower Wield's Yew Tree is the only commercial venue)",
+    "Mobile signal patchy across the chalk downs",
+    "Property stock is small and rarely turns over"
+  ],
+  "whoItSuits": "Cash-buyer households wanting a chalk-downland setting with two-station train optionality (the Basingstoke route to Waterloo is one of the fastest in this whole batch) and accepting that day-to-day life is car-dependent. Best fit for retirees, remote workers, and downsizers from Alresford or Basingstoke. The Wield parish duplicates with the seed CSV's separate `upper-wield-gu35` record (batch 11); Luke should consider consolidating these into one record covering the parish, since the seed-data split between Upper Wield and the parish-level Wield is not reflected in the 2021 census or in the Wikipedia entry.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (5.5 mi)",
+  "primarySupermarket": "Waitrose, Alresford (5.5 mi); Sainsbury's, Basingstoke (8.5 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Wield",
+    "https://en.wikipedia.org/wiki/Lower_Wield",
+    "https://fancyfreewalks.org/Hampshire/Wield.pdf",
+    "https://files.ofsted.gov.uk/v1/file/50209502",
+    "https://www.thetrainline.com/stations/alton",
+    "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo"
+  ]
+}

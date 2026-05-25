@@ -1,0 +1,160 @@
+{
+  "id": "michelmersh-so51",
+  "name": "Michelmersh",
+  "village": "Michelmersh",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO51",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 50.97212,
+    "lng": -1.50032
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Michelmersh is a small, scattered village in the Test Valley district about three miles north of Romsey, set on high ground overlooking the River Test valley. It forms one half of the joint civil parish of Michelmersh and Timsbury, which had a combined population of 915 in 2021 across an area of about 1,128 hectares (1.80% of the borough), making it Test Valley's twenty-second largest parish by area. The 12th-century Grade I-listed St Mary's Church sits at the village heart, with the Monarch's Way long-distance footpath crossing its churchyard. The Georgian former rectory, Michelmersh Court, is Grade II*-listed and was for many years the home of broadcaster Sir David Frost. The parish hosts Michelmersh Brick Holdings, the last operational brickworks in Hampshire, producing premium clay bricks from on-site materials. Michelmersh was a regular filming location for the 1980s ITV series Worzel Gummidge.",
+  "character": "Linear, scattered village of brick, brick-and-flint and tile-hung cottages along Church Road and Hartley Lane, with the brickworks site forming a distinct industrial presence to one side. The Test valley setting is broad and chalky in the north of the parish, sliding into Eocene sands and clays further south. Plenty of working farmland, no nucleated centre but a strong sense of community.",
+  "amenities": [
+    "Bear and Ragged Staff (Romsey Road, the village pub)",
+    "St Mary's Church (Grade I, 12th-century)",
+    "Michelmersh Brickworks (working brickworks and visitor element)",
+    "Michelmersh and Timsbury Village Hall",
+    "Nearest convenience shop: Awbridge or Timsbury (1 mi)",
+    "Full retail at Romsey high street and Waitrose (3 mi)",
+    "Mottisfont Abbey gardens (National Trust, 3 mi)",
+    "Test Valley footpaths and the Monarch's Way"
+  ],
+  "schools": [
+    {
+      "name": "Awbridge Primary School",
+      "phase": "Primary",
+      "type": "State (Community)",
+      "ofsted": "Good (2023)",
+      "distance": "1.5 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115872"
+    },
+    {
+      "name": "Braishfield Church of England Primary School",
+      "phase": "Primary",
+      "type": "State (Voluntary Controlled)",
+      "ofsted": "Good (2022)",
+      "distance": "2.3 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115835"
+    },
+    {
+      "name": "The Romsey School",
+      "phase": "Secondary",
+      "type": "State (Academy, Comprehensive)",
+      "ofsted": "Good (2023)",
+      "distance": "3.5 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/23/137094"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 25m",
+        "mode": "drive to Romsey (3 mi) + train via Southampton Central (SWR)",
+        "source": "https://www.thetrainline.com/train-times/romsey-to-london-waterloo"
+      },
+      {
+        "to": "Southampton Central",
+        "time": "~25m",
+        "mode": "drive (A3057/M27)",
+        "source": "https://www.google.com/maps"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~25m",
+        "mode": "drive (A3090)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Mottisfont and Dunbridge (1.8 mi)",
+    "roads": "A3057 ~1 mi; A36 ~3 mi; M27 J3 ~5 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 485894,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so51.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Mottisfont Abbey rose gardens (National Trust, 3 mi)",
+    "Walking the Monarch's Way through the parish",
+    "Test Way footpath along the chalk stream",
+    "Sir Harold Hillier Gardens (3 mi)",
+    "Romsey Abbey and Saturday market (3 mi)",
+    "Broadlands House and grounds (3 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "Bear and Ragged Staff",
+      "type": "Village pub",
+      "notes": "Romsey Road, traditional country pub with food",
+      "url": "https://whatpub.com/pubs/HAS/00018/bear-and-ragged-staff-michelmersh"
+    },
+    {
+      "name": "Mottisfont Abbey Kitchen",
+      "type": "National Trust café",
+      "notes": "3 miles away at Mottisfont; lunch and cakes",
+      "url": "https://www.nationaltrust.org.uk/visit/hampshire/mottisfont"
+    }
+  ],
+  "pros": [
+    "Genuine rural Test Valley setting with the Monarch's Way through the village",
+    "SO51 average sold price (£485k) is the most attainable of all the buyer's target postcodes",
+    "Mottisfont and Dunbridge station (1.8 mi) gives a quiet direct line to Romsey and Salisbury",
+    "Two Good village primaries within 2.5 miles, plus a Good comprehensive at Romsey",
+    "Mottisfont Abbey, Hillier Gardens and Romsey market town all within 5 miles"
+  ],
+  "cons": [
+    "Scattered village means a car is essential — no walkable shop or GP cluster",
+    "Brickworks lorries periodically use the lanes",
+    "Direct Waterloo journey requires change at Southampton (1h 25m total)",
+    "Limited mobile coverage in parts of the parish",
+    "Listed and conservation considerations on much of the older stock"
+  ],
+  "whoItSuits": "Easily the most affordable of this batch and the best fit for a solo first-time buyer at £400k who wants Test Valley countryside and Romsey/Salisbury access more than Waterloo speed — SO51 averages under £500k and terraced and semi-detached stock can land well inside budget. The Bear and Ragged Staff plus a Good primary in either Awbridge or Braishfield are real day-to-day positives. For a stronger station and cheaper still, look at Dunbridge or Lockerley (both SO51); for prettier-but-pricier with the same Test feel, Mottisfont itself or Houghton (SO20).",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Mottisfont and Dunbridge (1.8 mi)",
+  "primarySupermarket": "Waitrose, The Hundred, Romsey (3.0 mi); Co-op, Romsey (3.0 mi)",
+  "images": [],
+  "sources": [
+    {
+      "title": "Wikipedia — Michelmersh",
+      "url": "https://en.wikipedia.org/wiki/Michelmersh"
+    },
+    {
+      "title": "Test Valley BC — Michelmersh and Timsbury Parish Profile 2024",
+      "url": "https://testvalley.gov.uk/assets/attach/21890/Michelmersh-and-Timsbury-Profile-2024.pdf"
+    },
+    {
+      "title": "Ofsted — Awbridge Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115872"
+    },
+    {
+      "title": "Ofsted — The Romsey School",
+      "url": "https://reports.ofsted.gov.uk/provider/23/137094"
+    },
+    {
+      "title": "Rightmove — SO51 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/so51.html"
+    },
+    {
+      "title": "Trainline — Romsey to London Waterloo",
+      "url": "https://www.thetrainline.com/train-times/romsey-to-london-waterloo"
+    }
+  ]
+}

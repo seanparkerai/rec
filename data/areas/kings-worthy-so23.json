@@ -1,0 +1,177 @@
+{
+  "id": "kings-worthy-so23",
+  "name": "Kings Worthy",
+  "village": "Kings Worthy",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO23",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.06576,
+    "lng": -1.30504
+  },
+  "coordsSource": "postcode-outward-approx",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": {
+    "avgDetached": 715443,
+    "avgSemi": 437883,
+    "avgTerraced": 340094,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": "D",
+  "overview": "Kings Worthy is a village and civil parish of around 4,925 residents (2011 Census) in the City of Winchester district, set on the north bank of the River Itchen about two miles north-east of Winchester city centre on the line of the Roman road from Silchester. It was a tithing of Barton Stacey at the time of the Domesday survey of 1086 and the present parish (which includes the smaller hamlet of Abbots Worthy) was constituted in 1953. The older core around Church Lane and London Road sits in a designated Settlement Conservation Area; the whole of Abbots Worthy was declared a Countryside Conservation Area in 1985. Between Kings Worthy and Winchester is a 'Local Gap' designated under the District Local Plan to stop the village merging with the city. The parish is bisected by the busy A33/B3047 corridor and the South West Main Line passes close by.",
+  "character": "Mixed downland village rather than chalk-cottage village: a Grade II listed Norman-era core around St Mary's church and the Cart and Horses inn, ringed by mid 20th-century estate housing (Springvale, The Pastures) and 21st-century closes. Several streets feel suburban; the older Church Lane end retains a discrete period feel within a conservation area.",
+  "amenities": [
+    "Cart and Horses (Grade II listed pub, London Road)",
+    "The King Charles (second village pub)",
+    "Tesco Express and convenience store on London Road",
+    "Two newsagents/post offices (one in Springvale, one in older Kings Worthy)",
+    "Kings Worthy Surgery (GP)",
+    "Worthies Sports and Social Club and Eversley Park playing fields",
+    "St Mary's Church (Church of England)",
+    "Jubilee Hall (Worthy Players drama group, three productions a year)",
+    "Worthy Down (1 mi) and Winchester (2 mi) for larger food shops"
+  ],
+  "schools": [
+    {
+      "name": "Kings Worthy Primary School",
+      "phase": "Primary",
+      "type": "State (Community)",
+      "ofsted": "Good (2022, short inspection)",
+      "distance": "in village",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115922"
+    },
+    {
+      "name": "Henry Beaufort School",
+      "phase": "Secondary",
+      "type": "State (Comprehensive)",
+      "ofsted": "Good (2023)",
+      "distance": "1.7 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+    },
+    {
+      "name": "Peter Symonds College (16-18)",
+      "phase": "Sixth Form",
+      "type": "State (Sixth-form college)",
+      "ofsted": "Outstanding (2019)",
+      "distance": "2.7 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/22/130688"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "56m (fastest) / 1h 23m (average)",
+        "mode": "drive to Winchester station + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      },
+      {
+        "to": "Southampton Central",
+        "time": "15m",
+        "mode": "train from Winchester (SWR)",
+        "source": "https://www.thetrainline.com/train-times/winchester-to-southampton-central"
+      },
+      {
+        "to": "Basingstoke",
+        "time": "~25m",
+        "mode": "drive (A33/M3)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Winchester (2.2 mi)",
+    "roads": "A33 (parish edge); B3047 through village; M3 J9 ~4 mi; M3 J10 (Compton) ~6 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 462443,
+    "avgDetached": 715443,
+    "avgSemi": 437883,
+    "avgTerraced": 340094,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/kings-worthy.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking the Itchen Way along the river bank",
+    "Watercress Line steam railway from Alresford (8 mi)",
+    "Hillier Garden Centre, Sir Harold Hillier Gardens (10 mi)",
+    "St Catherine's Hill nature reserve and Iron Age hillfort, Winchester (3 mi)",
+    "Worthies Sports and Social Club fixtures (football, cricket)",
+    "Winchester Cathedral and city centre cafés (2 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Cart and Horses",
+      "type": "Country pub",
+      "notes": "Grade II listed, refreshed menu, skittle alley function room, dog-friendly",
+      "url": "https://www.thecartandhorses-kingsworthy.co.uk/"
+    },
+    {
+      "name": "The King Charles",
+      "type": "Village pub",
+      "notes": "Second pub in the village, Springvale end",
+      "url": "https://whatpub.com/pubs/HAS/00231/king-charles-kings-worthy"
+    },
+    {
+      "name": "Worthies Sports and Social Club",
+      "type": "Members' bar",
+      "notes": "Adjacent to Eversley Park, hosts village events",
+      "url": "https://www.facebook.com/worthiesclub/"
+    }
+  ],
+  "pros": [
+    "Two miles from a direct Waterloo line (Winchester); fastest train 56 minutes",
+    "Good Ofsted-rated primary in the village and Good catchment secondary (Henry Beaufort)",
+    "Terraced houses still achievable on the buyer's budget (avg £340k)",
+    "Two pubs, two convenience stores and a GP surgery in the parish",
+    "Itchen riverside walks and St Catherine's Hill on the doorstep"
+  ],
+  "cons": [
+    "Modern estate housing dominates; less chalk-village character than Easton or Itchen Abbas",
+    "A33 traffic is constant and audible on the western edge",
+    "Detached stock is well over £400k — likely a semi or terrace at this budget",
+    "Local Gap policy preserves Winchester edge but limits future growth value",
+    "No mainline station within the village itself — a 2-mile drive or bus to Winchester"
+  ],
+  "whoItSuits": "A practical fit for a solo first-time buyer on around £64k who wants direct Winchester and Waterloo access without paying the Easton or Twyford premium. Terraced and semi stock here actually lands close to the £400k ceiling, and the Good primary plus Henry Beaufort secondary is a sensible future-proofing combination. The trade is character: this is mainly estate housing, not chalk-and-flint cottages. If period looks matter more, Easton or Itchen Abbas (both pricier, SO21) sit in the same Itchen valley; if budget is tighter, look at South Wonston or Sutton Scotney further up the A33.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (2.2 mi)",
+  "primarySupermarket": "Tesco Express within village; Sainsbury's, Middle Brook Street, Winchester (2.4 mi)",
+  "images": [],
+  "sources": [
+    {
+      "title": "Wikipedia — Kings Worthy",
+      "url": "https://en.wikipedia.org/wiki/Kings_Worthy"
+    },
+    {
+      "title": "Kings Worthy Parish Council — About",
+      "url": "https://www.kingsworthy-pc.org.uk/about-the-council/"
+    },
+    {
+      "title": "Ofsted — Kings Worthy Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115922"
+    },
+    {
+      "title": "Ofsted — Henry Beaufort School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+    },
+    {
+      "title": "Rightmove — Kings Worthy house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/kings-worthy.html"
+    },
+    {
+      "title": "Trainline — Winchester to London Waterloo",
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+    },
+    {
+      "title": "The Cart and Horses, Kings Worthy",
+      "url": "https://www.thecartandhorses-kingsworthy.co.uk/"
+    }
+  ]
+}
