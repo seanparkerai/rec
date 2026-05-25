@@ -256,6 +256,54 @@ CREATE POLICY "household members can update outreach"
   ON outreach FOR UPDATE USING (is_household_member(household_id));
 
 -- -----------------------------------------------------------------------
+-- areas — content mirror (canonical source is data/areas/<id>.json in repo).
+-- Public read; writes via Supabase MCP only (service role bypasses RLS).
+-- See CLAUDE.md §18 + docs/SUPABASE_SYNC.md for the sync contract.
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS areas (
+  id           text PRIMARY KEY,
+  data         jsonb NOT NULL,
+  updated_at   timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE areas ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "areas public read" ON areas;
+CREATE POLICY "areas public read" ON areas FOR SELECT USING (true);
+
+-- -----------------------------------------------------------------------
+-- house_types — content mirror (canonical source is data/house-types.json).
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS house_types (
+  id           text PRIMARY KEY,
+  data         jsonb NOT NULL,
+  updated_at   timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE house_types ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "house_types public read" ON house_types;
+CREATE POLICY "house_types public read" ON house_types FOR SELECT USING (true);
+
+-- -----------------------------------------------------------------------
+-- sync_log — append-only audit of every Claude/portal write.
+-- Used by tests/supabase-sync.test.js to verify the sync contract.
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS sync_log (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  table_name   text NOT NULL,
+  actor        text NOT NULL CHECK (actor IN ('claude', 'portal', 'system')),
+  row_id       text,
+  action       text NOT NULL CHECK (action IN ('insert', 'update', 'delete', 'backfill')),
+  at           timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE sync_log ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "sync_log public read" ON sync_log;
+CREATE POLICY "sync_log public read" ON sync_log FOR SELECT USING (true);
+
+-- -----------------------------------------------------------------------
 -- updated_at trigger — applied to every data table
 -- DROP TRIGGER IF EXISTS inside a DO block is already idempotent.
 -- -----------------------------------------------------------------------
@@ -269,7 +317,8 @@ DECLARE tbl text;
 BEGIN
   FOREACH tbl IN ARRAY ARRAY[
     'profile','criteria','finances','shortlist',
-    'zones','journey_checks','contacts','outreach'
+    'zones','journey_checks','contacts','outreach',
+    'areas','house_types'
   ]
   LOOP
     EXECUTE format(

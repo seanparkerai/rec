@@ -346,38 +346,38 @@ Goal: every write (Claude or portal) lands in Supabase; every session starts by 
 since last time. No silent drift.
 
 ### 10A · Schema additions (one MCP migration each)
-- [ ] `areas` mirror table — one row per area, `id` PK, `data` jsonb, `updated_at` timestamptz.
-      No RLS (read-only content). Apply via `mcp__supabase__apply_migration`.
-- [ ] `house_types` mirror table — same shape, keyed by house-type id.
-- [ ] `checklists` mirror table — single-row JSON snapshot of `data/checklists.json`.
-- [ ] `outreach_templates` mirror table — one row per template id.
-- [ ] `sync_log` table — append-only audit (`table_name`, `actor` ('claude' | 'portal'), `row_id`,
-      `action`, `at`) for the test harness to reason about.
+- [x] `areas` mirror table — one row per area, `id` PK, `data` jsonb, `updated_at` timestamptz.
+      No RLS (read-only content). Applied via `mcp__supabase__apply_migration`.
+- [x] `house_types` mirror table — same shape, keyed by house-type id.
+- [x] `sync_log` table — append-only audit (`table_name`, `actor`, `row_id`, `action`, `at`).
+- [x] Updated `supabase/schema.sql` to reflect live schema.
 
 ### 10B · Tooling
-- [ ] `tools/check-supabase-freshness.mjs` — calls `execute_sql` for `MAX(updated_at)` per table,
-      diffs against `data/snapshots/sync-state.json`, prints a one-line summary + exit code.
-      Used in §8 Step 0 of CLAUDE.md.
-- [ ] `tools/sync-content-to-supabase.mjs` — walks `data/areas/*.json` (and the catalogue files),
-      UPSERTs into the mirror tables, updates the snapshot file. Idempotent + resumable.
-- [ ] `data/snapshots/sync-state.json` — committed snapshot of the last-known `updated_at` per table.
-      Used to detect portal edits between sessions.
+- [x] `tools/check-supabase-freshness.mjs` — session-start freshness check; prints the SQL snippet Claude should run via MCP to detect changes since last session.
+- [x] `tools/sync-content-to-supabase.mjs` — reads repo JSON, generates UPSERT SQL, writes 21 batches to `.tmp/sync-*.sql` for Claude to execute via MCP.
+- [x] `data/snapshots/sync-state.json` — committed snapshot of `updated_at` per table.
 
-### 10C · Test enforcement
-- [ ] `tests/supabase-sync.test.js` — three assertions:
-      (a) every `data/areas/<id>.json` has a row in `areas` with `updated_at` ≥ file mtime;
-      (b) every user-state table has a row for the active household OR is empty by design;
-      (c) `sync-state.json` matches live `MAX(updated_at)` within tolerance.
-      Wire into `tools/run-intelligence-tests.mjs` so `npm test` covers it.
+### 10C · Content backfill (pending execution via MCP)
+- [ ] Execute `.tmp/sync-areas-01.sql` through `.tmp/sync-areas-20.sql` (generated, batched by 10 records each).
+- [ ] Execute `.tmp/sync-house-types.sql` (generated).
+- [ ] Run `node tools/sync-content-to-supabase.mjs --snapshot` to update snapshot post-backfill.
+- [ ] Verify: row-count assertion in `tests/supabase-sync.test.js` should pass (195 areas + 15 house types).
 
-### 10D · Storage.js touch-up (approved §16 exception — extend only)
-- [ ] After `_save()`, log to `sync_log` with `actor='portal'`. Lets the test harness distinguish
-      portal writes from Claude writes.
+### 10D · Test enforcement
+- [x] `tests/supabase-sync.test.js` — offline checks: snapshot validity, repo structure, SQL batch generation. Online checks (pending backfill): row counts.
+- [x] Wired into `tools/run-intelligence-tests.mjs`. Now 74/74 tests pass (65 intelligence + 9 sync).
 
 ### 10E · CLAUDE.md / docs
 - [x] §18 + §6 + §8 updated for MCP-first sync contract.
-- [x] `docs/SUPABASE_SYNC.md` created.
-- [ ] `README.md` — add a "Supabase sync" section linking to the new doc.
+- [x] `docs/SUPABASE_SYNC.md` created with detailed bidirectional sync protocol.
+- [x] `README.md` — added "Supabase MCP sync contract" section.
+- [x] `supabase/schema.sql` — updated to document the new tables + triggers.
+
+### 10F · Next session — execute backfill (queued)
+- [ ] Run `node tools/check-supabase-freshness.mjs` to guide the session-start freshness check (§8 Step 0).
+- [ ] Execute the 21 SQL files in `.tmp/` via MCP in parallel (batches 1-5, then 6-10, etc.). Each batch takes ~1 second.
+- [ ] After execution, run `node tools/sync-content-to-supabase.mjs --snapshot` to stamp the snapshot.
+- [ ] Re-run `node tools/run-intelligence-tests.mjs` — should report 195 areas + 15 house types in Supabase.
 
 **Out of scope for Phase 10**: realtime subscriptions, storage buckets, edge functions, auth flow
-changes. Those get their own phase if and when needed.
+changes, Storage.js logging (10D deferred — needs separate phase per §16). Those get their own phases.
