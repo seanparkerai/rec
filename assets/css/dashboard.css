@@ -513,8 +513,9 @@
 }
 .tile-deposit .deposit-eta strong { color: var(--ink); font-weight: 500; font-family: var(--font-data); }
 @container (max-width: 520px) {
-  .tile-deposit .deposit-arc { grid-template-columns: 1fr; justify-items: start; }
-  .tile-deposit .ring { width: 7rem; height: 7rem; }
+  .tile-deposit .deposit-arc { grid-template-columns: 1fr; }
+  .tile-deposit .ring { width: 8rem; height: 8rem; margin: 0 auto; }
+  .tile-deposit .arc-stats dd { font-size: var(--text-base); }
 }
 
 .tile-deposit .mini-flow-label { margin: 0; }
