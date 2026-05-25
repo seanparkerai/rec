@@ -2,6 +2,7 @@
 // Loaded on every page as <script type="module">.
 import { url, STORAGE_NS } from './config.js';
 import { signOut, getCurrentUser } from './storage.js';
+import './auth-guard.js';
 
 const THEME_KEY = `${STORAGE_NS}:theme`;
 
