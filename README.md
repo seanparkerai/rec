@@ -8,6 +8,31 @@ interactive map of search areas.
 It is a **zero-build static web app** (plain HTML/CSS/JS, libraries via CDN) that stores content as
 editable JSON in the repo. Designed so a future login + web-server backend is a swap, not a rewrite.
 
+## v2 — visual-first overhaul + intelligence engine
+
+The v2 cycle (`docs/PLAN.md`) shipped a calm-precise-editorial redesign plus a small **intelligence
+engine** that powers every affordability surface from one source of truth:
+
+- **Affordability verdict** (`assets/js/affordability.js`) — given a price + finances + criteria, returns
+  a comfortable / stretch / tight / out-of-reach band plus the loan, LTV (with tier), SDLT, LISA
+  eligibility, monthly P&I (contract + stressed), and post-move spare cash. Rules calibrated and
+  documented in `docs/INTELLIGENCE_RULES.md`.
+- **Money-flow** (`assets/js/money-flow.js`) and **savings-velocity** (`assets/js/savings-velocity.js`)
+  expose the shapes consumed by the dashboard, finances and area-detail pages.
+- **Dashboard** is a 7-tile bento: deposit story (with scenario chips) · affordability ladder · today-vs-
+  after-move money-flow · shortlist with fit dots · journey track · criteria-as-prose · ask placeholder.
+- **Finances page** replaced four siloed calculator fieldsets with one **unified affordability widget**
+  (slider → mono grid → colour-banded verdict pill) plus a "What if…" projection chart.
+- **Areas page** rows gain a fit dot, bed-fit chip and council-tax band column (all sortable + filterable).
+- **Area-detail** gets a verdict strip across the top, Ofsted dots on schools, coloured commute bands
+  on transport, and a foot mini-affordability widget bound to the same engine.
+- **v3 placeholders** live at `pages/listings.html` · `pages/outreach.html` · `pages/ask.html` and
+  set expectations for what's coming. See `docs/ROADMAP.md`.
+
+Run `npm test` for the pure-module test harness (21 assertions covering affordability bands, money-flow
+sums, savings-velocity scenarios). Browser-side smoke + axe + Lighthouse + screenshot acceptance still
+run via `tests/tests.html` and `node tools/verify-ui.mjs` against a local server.
+
 ## ✨ View live site
 
 **Live:** https://lukeclifforduk.github.io/rec/
