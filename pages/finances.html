@@ -58,24 +58,32 @@
           <p class="eyebrow">Deposit progress</p>
           <p class="finance-hero-num"><span class="num" id="tile-progress">0</span><small>%</small></p>
           <div class="progress"><span id="progress-bar"></span></div>
+          <p class="finance-hero-lisa" id="tile-lisa">&mdash;</p>
         </div>
         <dl class="finance-hero-stats">
-          <div><dt>Total savings</dt>     <dd class="num" id="tile-saved">—</dd></div>
-          <div><dt>Per month</dt>          <dd class="num" id="tile-monthly">—</dd></div>
-          <div><dt>Months to target</dt>  <dd class="num" id="tile-months">—</dd></div>
+          <div><dt>Total savings</dt>      <dd class="num" id="tile-saved">&mdash;</dd></div>
+          <div><dt>Per month</dt>           <dd class="num" id="tile-monthly">&mdash;</dd></div>
+          <div><dt>Months to target</dt>   <dd class="num" id="tile-months">&mdash;</dd></div>
         </dl>
       </section>
 
-      <section class="card">
-        <h3>Savings projection</h3>
-        <div class="chart-wrap chart-tall"><canvas id="savings-chart"></canvas></div>
+      <section class="tile tile-flow" id="now-flow-tile" aria-labelledby="now-flow-h">
+        <header class="tile-head">
+          <h2 id="now-flow-h">Where this month&rsquo;s income lands</h2>
+          <span class="num" id="now-flow-headline">&mdash;</span>
+        </header>
+        <div class="flow">
+          <div class="flow__panel">
+            <h3>Today</h3>
+            <svg class="flow__bar" id="now-flow-bar" viewBox="0 0 300 40" aria-label="Today&rsquo;s monthly flow"></svg>
+            <ul class="flow__legend" id="now-flow-legend"></ul>
+          </div>
+          <div class="flow__panel">
+            <h3>Per category</h3>
+            <p class="flow__caption" id="now-flow-caption">&mdash;</p>
+          </div>
+        </div>
       </section>
-
-      <div class="dash-grid">
-        <section class="card span-6"><h3>Income</h3><div id="sum-income"></div></section>
-        <section class="card span-6"><h3>Goal</h3><div id="sum-goal"></div></section>
-        <section class="card span-12"><h3>Savings</h3><div id="sum-savings"></div></section>
-      </div>
 
       <section class="card">
         <h3>Ongoing bills</h3>
@@ -94,67 +102,71 @@
           <span class="stage-chip" style="color:var(--ink-muted);background:color-mix(in oklch, var(--ink-subtle) 14%, transparent);">Later</span>
           <h2 id="stage-later-h">When you complete</h2>
         </div>
-        <p class="stage-lead">Mortgage planning, one-off completion costs, home setup spend, and live calculators.</p>
+        <p class="stage-lead">Side-by-side outgoings before and after the move, the unified affordability widget, and the "what if" projections.</p>
       </header>
 
-      <section class="card">
-        <h3>Mortgage</h3>
-        <div id="sum-mortgage"></div>
-      </section>
-
-      <section class="card">
-        <h3>One-time purchase costs</h3>
-        <div id="tbl-onetime"></div>
-      </section>
-      <section class="card">
-        <h3>Home setup shopping list</h3>
-        <div id="tbl-shopping"></div>
-      </section>
-      <section class="card">
-        <h3>Gift cards</h3>
-        <div id="tbl-giftcards"></div>
-      </section>
-
-      <section class="card">
-        <h3>Calculators</h3>
-        <p class="muted">Edit any field — results recalculate live. UK rules (Apr 2025+).</p>
-        <div class="calc-grid">
-          <fieldset>
-            <legend>Stamp Duty (SDLT)</legend>
-            <label for="calc-price">Purchase price (£)</label>
-            <input id="calc-price" type="number" min="0" step="1000" />
-            <label class="check-row" style="margin-top: 0.5rem;">
-              <input id="calc-ftb" type="checkbox" />
-              <span>First-time buyer</span>
-            </label>
-            <p class="calc-result">SDLT payable: <strong id="calc-sdlt-out">—</strong></p>
-          </fieldset>
-          <fieldset>
-            <legend>Monthly mortgage (P&amp;I)</legend>
-            <label for="calc-loan">Loan (£)</label>
-            <input id="calc-loan" type="number" min="0" step="1000" />
-            <label for="calc-rate">Rate (% per year)</label>
-            <input id="calc-rate" type="number" min="0" step="0.01" />
-            <label for="calc-term">Term (years)</label>
-            <input id="calc-term" type="number" min="1" max="40" step="1" />
-            <p class="calc-result">Monthly payment: <strong id="calc-mortgage-out">—</strong></p>
-          </fieldset>
-          <fieldset>
-            <legend>Loan-to-value (LTV)</legend>
-            <label for="calc-value">Property value (£)</label>
-            <input id="calc-value" type="number" min="0" step="1000" />
-            <p class="muted" style="font-size: var(--text-xs); margin: 0.25rem 0 0;">Loan from the Mortgage calculator above.</p>
-            <p class="calc-result">LTV: <strong id="calc-ltv-out">—</strong></p>
-          </fieldset>
-          <fieldset>
-            <legend>LISA bonus</legend>
-            <label for="calc-lisa">Annual contribution (£)</label>
-            <input id="calc-lisa" type="number" min="0" max="4000" step="100" />
-            <p class="calc-result"><strong id="calc-lisa-out">—</strong></p>
-            <p class="muted" style="font-size: var(--text-xs); margin: 0;">Property cap £450k. Eligible at the price above? <strong id="calc-lisa-eligible">—</strong></p>
-          </fieldset>
+      <section class="tile tile-flow" id="later-flow-tile" aria-labelledby="later-flow-h">
+        <header class="tile-head">
+          <h2 id="later-flow-h">Money-flow today vs after move</h2>
+          <span class="num" id="later-flow-headline">&mdash;</span>
+        </header>
+        <div class="flow">
+          <div class="flow__panel">
+            <h3>Today</h3>
+            <svg class="flow__bar" id="later-flow-today" viewBox="0 0 300 40" aria-label="Today&rsquo;s flow"></svg>
+            <ul class="flow__legend" id="later-legend-today"></ul>
+          </div>
+          <div class="flow__panel">
+            <h3>After move</h3>
+            <svg class="flow__bar" id="later-flow-after" viewBox="0 0 300 40" aria-label="After-move flow"></svg>
+            <ul class="flow__legend" id="later-legend-after"></ul>
+          </div>
         </div>
+        <p class="flow__caption" id="later-flow-caption">&mdash;</p>
       </section>
+
+      <section class="afford-widget" id="afford-widget" aria-labelledby="afford-h">
+        <header class="afford-widget__head">
+          <h3 id="afford-h">Affordability at price</h3>
+          <span class="afford-verdict-pill" id="afford-pill">&mdash;</span>
+        </header>
+        <p class="afford-price"><span id="afford-price-display">&pound;380,000</span><label for="afford-price-input" class="visually-hidden">Set price</label><input type="number" id="afford-price-input" min="100000" max="2000000" step="5000" value="380000" /></p>
+        <div class="afford-slider-row">
+          <label for="afford-slider">Price slider
+            <input type="range" id="afford-slider" class="afford-slider" min="200000" max="600000" step="2000" value="380000" />
+          </label>
+        </div>
+        <dl class="afford-grid">
+          <div><dt>Required deposit</dt><dd id="afford-deposit">&mdash;</dd></div>
+          <div><dt>Loan needed</dt><dd id="afford-loan">&mdash;</dd></div>
+          <div><dt>LTV</dt><dd id="afford-ltv">&mdash;</dd></div>
+          <div><dt>Stamp duty</dt><dd id="afford-sdlt">&mdash;</dd></div>
+          <div><dt>LISA eligible</dt><dd id="afford-lisa">&mdash;</dd></div>
+          <div><dt>Monthly P&amp;I</dt><dd id="afford-monthly">&mdash;</dd></div>
+          <div><dt>Stressed P&amp;I</dt><dd id="afford-stressed">&mdash;<small>+3pp</small></dd></div>
+          <div><dt>Spare after</dt><dd id="afford-spare">&mdash;</dd></div>
+        </dl>
+        <ul class="afford-why" id="afford-why" aria-live="polite"></ul>
+      </section>
+
+      <section class="card">
+        <h3>What if&hellip;</h3>
+        <p class="muted" style="font-size: var(--text-sm); margin: 0 0 var(--space-2);">Baseline savings projection plus ghosted scenarios. Hover a series for amounts.</p>
+        <div class="what-if-chart"><canvas id="what-if-canvas"></canvas></div>
+      </section>
+
+      <details class="collapsible-card" id="card-onetime">
+        <summary><h3>One-time purchase costs</h3><span class="num" id="onetime-total">&mdash;</span></summary>
+        <div class="collapsible-body"><div id="tbl-onetime"></div></div>
+      </details>
+      <details class="collapsible-card" id="card-shopping">
+        <summary><h3>Home setup shopping list</h3><span class="num" id="shopping-total">&mdash;</span></summary>
+        <div class="collapsible-body"><div id="tbl-shopping"></div></div>
+      </details>
+      <details class="collapsible-card" id="card-giftcards">
+        <summary><h3>Gift cards</h3><span class="num" id="giftcards-total">&mdash;</span></summary>
+        <div class="collapsible-body"><div id="tbl-giftcards"></div></div>
+      </details>
     </section>
   </main>
 

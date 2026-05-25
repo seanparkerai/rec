@@ -3,6 +3,7 @@
 // Fixtures = { finances: data/finances.json, criteria: data/criteria.json }.
 
 import { assessAffordability } from '../assets/js/affordability.js';
+import { calcSDLT, calcMonthlyMortgage, calcLTV, lisaEligible } from '../assets/js/finances.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances, criteria } = fixtures;
@@ -89,5 +90,21 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     const r = at(380_000);
     assertEqual(r.ltvTier, 90);
     assertEqual(r.depositGapToTier, 19_000);
+  });
+
+  // --- Parity with the old siloed calculators (Phase 4a acceptance) -----------
+
+  await test('affordability: SDLT / monthlyPI / LTV / lisaEligible match underlying calcs at offer target', () => {
+    const price = 380_000;
+    const r = at(price);
+    const deposit = Number(criteria.budget.targetDeposit ?? finances.goal.targetDeposit);
+    const loan = price - deposit;
+    const ftb = finances.firstTimeBuyer !== false;
+    const rate = finances.mortgage.ratePctAssumed;
+    const term = finances.mortgage.termYears;
+    assertEqual(r.sdlt, calcSDLT(price, { firstTimeBuyer: ftb }), 'SDLT mismatch');
+    assertEqual(r.monthlyPI, calcMonthlyMortgage(loan, rate, term), 'monthlyPI mismatch');
+    assertEqual(r.ltvPct, calcLTV(loan, price), 'LTV mismatch');
+    assertEqual(r.bandSignals.lisaEligible, lisaEligible(price), 'lisaEligible mismatch');
   });
 }
