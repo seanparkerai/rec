@@ -395,14 +395,20 @@ function journeyState() {
   return _internal.readLocal('journey-checks') || { viewing: {}, process: {}, moving: {} };
 }
 
+// Items in checklists.json have no stable id — the journey page uses array index
+// as the state key. Match that convention so dashboard state writes/reads
+// interoperate with the journey page's ticks.
+function itemLabel(section, item) {
+  return section === 'moving' ? (item.task || '') : (item.item || '');
+}
+
 function findNextAction(checklists, state) {
   const order = ['viewing', 'process', 'moving'];
   for (const key of order) {
     const items = checklists?.[key] || [];
-    for (const item of items) {
-      const id = item.id ?? item.title;
-      if (!state[key]?.[id]) {
-        return { section: key, id, title: item.title };
+    for (let i = 0; i < items.length; i++) {
+      if (!state[key]?.[i]) {
+        return { section: key, index: i, title: itemLabel(key, items[i]) };
       }
     }
   }
@@ -421,7 +427,7 @@ async function renderJourneyTrack() {
     const stats = sections.map((s) => {
       const items = data[s.key] || [];
       const total = items.length;
-      const done = items.filter((it) => state[s.key]?.[it.id ?? it.title]).length;
+      const done = items.reduce((n, _, i) => n + (state[s.key]?.[i] ? 1 : 0), 0);
       return { ...s, total, done, isDone: total > 0 && done >= total };
     });
     const currentIdx = stats.findIndex((s) => !s.isDone);
@@ -449,7 +455,7 @@ async function renderJourneyTrack() {
       tickBtn.onclick = () => {
         const fresh = journeyState();
         fresh[next.section] = fresh[next.section] || {};
-        fresh[next.section][next.id] = true;
+        fresh[next.section][next.index] = true;
         _internal.writeLocal('journey-checks', fresh);
         renderJourneyTrack();
       };
