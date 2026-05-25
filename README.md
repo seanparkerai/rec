@@ -36,7 +36,7 @@ done by eye in the browser.
 
 ## ✨ View live site
 
-**Live:** https://lukeclifforduk.github.io/rec/
+**Live:** https://seanparkerai.github.io/rec/
 
 The site auto-deploys from `main` via GitHub Actions.
 
@@ -67,7 +67,15 @@ and shows pass/fail. Run it before each commit.
 ## Tech
 
 Pico CSS + design tokens · vanilla-JS fetch-injected partials · Chart.js · Leaflet + Leaflet-Geoman ·
-JSON + `localStorage` behind a storage abstraction. No build step.
+**Supabase** (Postgres + Auth) behind a storage abstraction · `localStorage` write-through cache for instant renders. No build step.
+
+## Supabase backend
+
+The app now uses **Supabase** for cloud-synced, multi-device data storage and login. All user data (profile, criteria, finances, shortlist, map zones, journey checks) is stored in a private Supabase Postgres database, protected by Row Level Security so only authenticated household members can access it.
+
+To set up Supabase for the first time, follow the interactive guide at **[`pages/setup.html`](pages/setup.html)** — it walks through account creation, schema deployment, user management, and data migration in five phases.
+
+The Supabase schema lives in [`supabase/schema.sql`](supabase/schema.sql). The only files that talk to Supabase directly are `assets/js/storage.js` (data) and `assets/js/auth-guard.js` (sessions).
 
 ## Storage abstraction → backend migration path
 

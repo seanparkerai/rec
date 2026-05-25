@@ -143,6 +143,25 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
 /* Drop the caption on very narrow screens so the header doesn't crowd the toggle. */
 @media (max-width: 380px) { .brand small { display: none; } }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+.header-user {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  max-width: 18ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#btn-sign-out {
+  width: auto; min-height: 36px;
+  padding: 0 var(--space-3); margin: 0;
+  font-size: var(--text-xs); font-weight: 500;
+}
 #theme-toggle {
   width: auto; min-height: 44px; min-width: 44px;
   padding: 0 var(--space-3); margin: 0;
