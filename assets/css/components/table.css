@@ -1,7 +1,8 @@
 /* components/table.css — finance/breakdown table primitive.
-   Loaded via @import from base.css.
+   Loaded via @import from base.css. */
 
-   Current table rules live in dashboard.css §"Finance tables" (.table-wrap,
-   #tbl-* cards). Reserved for the consolidated .table primitive — sticky
-   header on long tables, hairline rows, right-aligned numerics, mobile
-   horizontal scroll. */
+.table-wrap { overflow-x: auto; }
+.table-wrap table { width: 100%; margin: 0; font-size: var(--text-sm); }
+.table-wrap th, .table-wrap td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--pico-muted-border-color); vertical-align: top; }
+.table-wrap th.num, .table-wrap td.num { text-align: right; white-space: nowrap; }
+.table-wrap tfoot td { border-top: 2px solid var(--pico-muted-border-color); border-bottom: 0; }
