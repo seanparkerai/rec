@@ -41,31 +41,35 @@
           <h2 id="td-label">Deposit story</h2>
           <span class="num" id="td-headline">—</span>
         </header>
-        <div class="deposit-arc">
-          <div class="ring" role="img" aria-label="Deposit progress">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="ring-track" cx="60" cy="60" r="52"/>
-              <circle class="ring-bar" id="td-ring-bar" cx="60" cy="60" r="52"
-                      pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100"/>
-            </svg>
-            <div class="ring-value"><span id="td-ring-pct">0</span><small>%</small></div>
+        <div class="deposit-cols">
+          <div class="deposit-arc">
+            <div class="ring" role="img" aria-label="Deposit progress">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="ring-track" cx="60" cy="60" r="52"/>
+                <circle class="ring-bar" id="td-ring-bar" cx="60" cy="60" r="52"
+                        pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100"/>
+              </svg>
+              <div class="ring-value"><span id="td-ring-pct">0</span><small>%</small></div>
+            </div>
+            <dl class="arc-stats">
+              <div><dt>Saved</dt>     <dd id="td-saved">£0</dd></div>
+              <div><dt>Target</dt>    <dd id="td-target">£0</dd></div>
+              <div><dt>Per month</dt> <dd id="td-monthly">£0</dd></div>
+            </dl>
           </div>
-          <dl class="arc-stats">
-            <div><dt>Saved</dt>     <dd id="td-saved">£0</dd></div>
-            <div><dt>Target</dt>    <dd id="td-target">£0</dd></div>
-            <div><dt>Per month</dt> <dd id="td-monthly">£0</dd></div>
-          </dl>
+          <div class="deposit-right">
+            <p class="eyebrow mini-flow-label">This month&rsquo;s flow</p>
+            <div class="mini-flow" id="td-flow" aria-hidden="true"></div>
+            <ul class="mini-flow-legend" id="td-flow-legend"></ul>
+            <p class="deposit-eta" id="td-eta">Calculating&hellip;</p>
+            <ul class="scenario-row" role="group" aria-label="Savings scenarios">
+              <li><button class="scenario-chip" type="button" data-scenario="baseline" aria-pressed="true">Baseline</button></li>
+              <li><button class="scenario-chip" type="button" data-scenario="+200" aria-pressed="false">+&pound;200/mo</button></li>
+              <li><button class="scenario-chip" type="button" data-scenario="+500" aria-pressed="false">+&pound;500/mo</button></li>
+              <li><button class="scenario-chip" type="button" data-scenario="+5k" aria-pressed="false">+&pound;5k windfall</button></li>
+            </ul>
+          </div>
         </div>
-        <p class="eyebrow mini-flow-label">This month&rsquo;s flow</p>
-        <div class="mini-flow" id="td-flow" aria-hidden="true"></div>
-        <ul class="mini-flow-legend" id="td-flow-legend"></ul>
-        <p class="deposit-eta" id="td-eta">Calculating&hellip;</p>
-        <ul class="scenario-row" role="group" aria-label="Savings scenarios">
-          <li><button class="scenario-chip" type="button" data-scenario="baseline" aria-pressed="true">Baseline</button></li>
-          <li><button class="scenario-chip" type="button" data-scenario="+200" aria-pressed="false">+&pound;200/mo</button></li>
-          <li><button class="scenario-chip" type="button" data-scenario="+500" aria-pressed="false">+&pound;500/mo</button></li>
-          <li><button class="scenario-chip" type="button" data-scenario="+5k" aria-pressed="false">+&pound;5k windfall</button></li>
-        </ul>
       </section>
 
       <section class="tile-card tile-afford" id="tile-afford" aria-labelledby="ta-label">

@@ -205,14 +205,14 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
 }
 .site-nav ul::-webkit-scrollbar { display: none; }
 .site-nav li { scroll-snap-align: start; }
-/* Desktop: all items visible — no scroll, allow wrap */
-@media (min-width: 768px) {
+/* Desktop ≥1024px: compact links so all 11 items fit on one row, no scroll */
+@media (min-width: 1024px) {
   .site-nav ul {
-    overflow-x: visible; overflow: visible;
+    overflow: hidden;
     scroll-snap-type: none;
-    flex-wrap: wrap;
   }
   .site-nav li { scroll-snap-align: none; }
+  .site-nav a { padding: 0.45rem 0.55rem; }
 }
 .site-nav a {
   position: relative;
