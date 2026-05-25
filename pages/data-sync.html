@@ -912,7 +912,7 @@
     }
 
     // ── Status tiles ───────────────────────────────────────────────────
-    const ALL_TABLES = ['profile', 'criteria', 'finances', 'shortlist', 'journey_checks'];
+    const ALL_TABLES = ['profile', 'criteria', 'finances', 'shortlist', 'journey_checks', 'contacts', 'outreach'];
 
     async function refreshStatus() {
       const sb = await initSupabase();
@@ -1263,7 +1263,8 @@ Commit message: \`data: sync JSON files from Supabase (${today})\``;
     const EXPECTED_TABLES = [
       'households', 'household_members',
       'profile', 'criteria', 'finances',
-      'shortlist', 'zones', 'journey_checks'
+      'shortlist', 'zones', 'journey_checks',
+      'contacts', 'outreach'
     ];
 
     document.getElementById('btn-check-schema')?.addEventListener('click', async () => {
