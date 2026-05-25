@@ -201,9 +201,19 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
   overflow-x: auto; -webkit-overflow-scrolling: touch;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
+  flex-wrap: nowrap;
 }
 .site-nav ul::-webkit-scrollbar { display: none; }
 .site-nav li { scroll-snap-align: start; }
+/* Desktop: all items visible — no scroll, allow wrap */
+@media (min-width: 768px) {
+  .site-nav ul {
+    overflow-x: visible; overflow: visible;
+    scroll-snap-type: none;
+    flex-wrap: wrap;
+  }
+  .site-nav li { scroll-snap-align: none; }
+}
 .site-nav a {
   position: relative;
   display: inline-flex; align-items: center;
