@@ -26,13 +26,18 @@ engine** that powers every affordability surface from one source of truth:
 - **Areas page** rows gain a fit dot, bed-fit chip and council-tax band column (all sortable + filterable).
 - **Area-detail** gets a verdict strip across the top, Ofsted dots on schools, coloured commute bands
   on transport, and a foot mini-affordability widget bound to the same engine.
-- **v3 placeholders** live at `pages/listings.html` · `pages/outreach.html` · `pages/ask.html` and
-  set expectations for what's coming. See `docs/ROADMAP.md`.
+- **v3 Outreach generator** ships at `pages/outreach.html` — 24 researched best-practice email templates
+  for every party in a UK property purchase. Drafts are pre-filled from profile / finances / area data,
+  filtered by the Quantity-of-Information Ladder (only the right depth for each recipient), and sent via
+  `mailto:` or copied to clipboard. Outreach log + contacts directory persist via Supabase. Deep-linked
+  from area-detail, finances, and journey checklist rows.
+- **v3 placeholders** remain at `pages/listings.html` and `pages/ask.html`. See `docs/ROADMAP.md`.
 
-Run `npm test` for the pure-module test harness (21 assertions covering affordability bands, money-flow
-sums, savings-velocity scenarios). Browser-side smoke checks (no horizontal scroll, no inline styles,
-page reachability) run via `tests/tests.html` against a local server when you want them; visual review is
-done by eye in the browser.
+Run `node tools/run-intelligence-tests.mjs` for the pure-module test harness (65 assertions covering
+affordability bands, money-flow sums, savings-velocity scenarios, outreach template schema, and the
+renderer + QoI leak guard). Browser-side smoke checks (no horizontal scroll, no inline styles, page
+reachability) run via `tests/tests.html` against a local server when you want them; visual review is done
+by eye in the browser.
 
 ## ✨ View live site
 
@@ -109,6 +114,8 @@ immediately, then revalidates from the server in the background. Pages remain un
 | `rec:shortlist`      | `pages/areas.html` + map               | Array of area ids                      |
 | `rec:zones`          | `pages/map.html`                       | GeoJSON FeatureCollection (drawn zones)|
 | `rec:journey-checks` | `pages/journey.html`                   | `{ viewing:{}, process:{}, moving:{} }`|
+| `rec:contacts`       | `pages/outreach.html`                  | `{ agents:[], brokers:[], solicitors:[], surveyors:[] }` |
+| `rec:outreach`       | `pages/outreach.html`                  | Array of outreach log entries          |
 | `rec:theme`          | global (header toggle)                 | `"light" \| "dark"` (override)         |
 
 Phase 9 didn't add any new keys — the about-search.html merge (Phase 9A) preserved

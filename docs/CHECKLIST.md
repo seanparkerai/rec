@@ -324,3 +324,15 @@ Adopted 2026-05-25. Tick each v2 phase as it lands; commits go directly to `main
 
 ### Phase 6 follow-up tasks (not blocking v2 tag)
 - [ ] Compare drawer on the Areas page (deferred from Phase 4b): multi-select 2–4 areas → bottom drawer slides up with side-by-side mono columns.
+
+---
+
+## v3.0 — Outreach generator
+
+- [x] **Phase 1** — Data: 24-template registry (`data/outreach-templates.json`), contacts seed (`data/contacts.json`), JSON schema (`data/schema/outreach-template.schema.json`), `validateOutreachTemplate()` in `tests/schemas.js`, `tests/outreach-templates.test.js`. 51/51 green.
+- [x] **Phase 2** — JS: pure renderer (`assets/js/outreach-renderer.js`), storage extension (`assets/js/outreach-store.js`), four approved exports appended to `assets/js/storage.js`, Supabase `contacts` + `outreach` tables in `supabase/schema.sql`. 63/63 green.
+- [x] **Phase 3** — Page shell: `pages/outreach.html` full rewrite (Linear-dense), `assets/css/components/outreach.css`, `assets/js/page-outreach.js` (filter chips, template grid, generate dialog, contacts CRUD, outreach log), nav `soon` chip removed. 63/63 green.
+- [x] **Phase 4** — QoI ladder: `filterContextByDataNeeded()` enforces per-template data access; two new sentinel tests confirm salary never leaks into estate-agent templates. 65/65 green.
+- [x] **Phase 5** — Contacts management: shipped in Phase 3 (agents / brokers / solicitors / surveyors CRUD with add/delete, persists via `storage.js`).
+- [x] **Phase 6** — Cross-linking: area-detail verdict strip → A1, finances affordability widget → A5, journey checklist rows → 7 templates (A5, C3, B1, C5, C2, D1, D5, D6, D7). Deep-link parser in `page-outreach.js` reads `?templateId=`.
+- [x] **Phase 7** — Docs: `docs/ROADMAP.md` Outreach moved to "Shipped in v3.0"; `docs/CHECKLIST.md` updated; `README.md` storage-keys table updated.
