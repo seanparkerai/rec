@@ -84,6 +84,7 @@
       padding: var(--space-3) var(--space-5);
       background: var(--surface);
       border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
     }
     .align-badge {
       font-family: var(--font-mono);
@@ -92,37 +93,124 @@
       padding: 2px var(--space-2);
       border-radius: var(--rec-radius-sm);
       letter-spacing: 0.04em;
+      flex-shrink: 0;
     }
     .align-badge.ok   { background: color-mix(in oklch, var(--accent) 12%, transparent); color: var(--accent); }
     .align-badge.warn { background: color-mix(in oklch, oklch(65% 0.16 70) 12%, transparent); color: oklch(55% 0.12 70); }
     .align-badge.err  { background: color-mix(in oklch, oklch(55% 0.18 25) 12%, transparent); color: oklch(40% 0.18 25); }
-    .align-result-msg {
-      font-size: var(--text-sm);
-      color: var(--ink);
+    .align-result-msg { font-size: var(--text-sm); color: var(--ink); }
+    .align-counts {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--ink-muted);
+      margin-left: auto;
     }
-    .align-rows {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .align-row {
-      display: grid;
-      grid-template-columns: 6rem 1fr auto;
-      align-items: start;
-      gap: var(--space-4);
-      padding: var(--space-3) var(--space-5);
-      border-bottom: 1px solid var(--border);
-      font-size: var(--text-sm);
-    }
+    .align-rows { list-style: none; margin: 0; padding: 0; }
+    .align-row  { border-bottom: 1px solid var(--border); }
     .align-row:last-child { border-bottom: none; }
-    .align-row-name  { font-family: var(--font-mono); color: var(--ink-muted); font-size: var(--text-xs); padding-top: 2px; }
-    .align-row-detail { color: var(--ink); line-height: 1.5; }
-    .align-row-status { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 500; }
-    .align-row-status.ok   { color: var(--accent); }
-    .align-row-status.warn { color: oklch(65% 0.16 70); }
-    .align-row-status.err  { color: oklch(55% 0.18 25); }
+    .align-row-head {
+      display: grid;
+      grid-template-columns: 12px 150px 42px 1fr auto;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-5);
+    }
+    @media (max-width: 600px) {
+      .align-row-head { grid-template-columns: 12px 1fr 36px; }
+      .align-row-detail, .align-row-ts { grid-column: 2 / -1; }
+    }
+    .align-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .align-dot.ok   { background: var(--accent); }
+    .align-dot.warn { background: oklch(65% 0.16 70); }
+    .align-dot.err  { background: oklch(55% 0.18 25); }
+    .align-row-name {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .align-row-src {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-muted);
+      background: color-mix(in oklch, var(--ink) 6%, transparent);
+      border-radius: 3px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .align-row-detail { font-size: var(--text-xs); color: var(--ink-muted); line-height: 1.5; }
+    .align-row-detail.warn { color: oklch(50% 0.14 70); font-weight: 500; }
+    .align-row-detail.err  { color: oklch(50% 0.18 25); font-weight: 500; }
+    .align-row-ts { font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted); white-space: nowrap; text-align: right; }
 
-    /* ── Prompt box (for Claude Code) ─────────────────────────────── */
+    /* ── Per-row diff section ─────────────────────────────────────── */
+    .align-diff { border-top: 1px solid var(--border); }
+    .align-diff summary {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: oklch(50% 0.14 70);
+      cursor: pointer;
+      padding: var(--space-2) var(--space-5);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: color-mix(in oklch, oklch(65% 0.16 70) 5%, var(--paper));
+      user-select: none;
+    }
+    .align-diff summary::-webkit-details-marker { display: none; }
+    .align-diff-toggle { font-size: 9px; display: inline-block; transition: transform 0.12s; }
+    .align-diff[open] .align-diff-toggle { transform: rotate(90deg); }
+    .align-diff[open] summary { border-bottom: 1px solid var(--border); }
+    .diff-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: var(--text-xs); }
+    .diff-table th {
+      text-align: left;
+      padding: var(--space-2) var(--space-5);
+      color: var(--ink-muted);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .diff-table td {
+      padding: var(--space-2) var(--space-5);
+      vertical-align: top;
+      border-bottom: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+      word-break: break-all;
+      line-height: 1.5;
+    }
+    .diff-table tr:last-child td { border-bottom: none; }
+    .diff-table td:first-child   { color: var(--ink-muted); white-space: nowrap; min-width: 120px; }
+    .diff-row--add td            { background: color-mix(in oklch, var(--accent) 4%, transparent); }
+    .diff-row--add td:nth-child(2)    { color: var(--ink-muted); font-style: italic; }
+    .diff-row--add td:nth-child(3)    { color: var(--accent); }
+    .diff-row--remove td              { background: color-mix(in oklch, oklch(55% 0.18 25) 4%, transparent); }
+    .diff-row--remove td:nth-child(2) { color: oklch(50% 0.14 70); }
+    .diff-row--remove td:nth-child(3) { color: var(--ink-muted); font-style: italic; }
+    .diff-row--change td:nth-child(2) { color: oklch(50% 0.14 70); }
+    .diff-row--change td:nth-child(3) { color: var(--accent); }
+    .diff-more {
+      display: block;
+      padding: var(--space-2) var(--space-5);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--ink-muted);
+      font-style: italic;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    @media (prefers-reduced-motion: reduce) { .align-diff-toggle { transition: none; } }
+
+    /* ── Kept for pull/schema prompt boxes ──────────────────────── */
     .prompt-wrap { display: none; margin-top: var(--space-4); }
     .prompt-wrap.visible { display: block; }
     .prompt-label { font-size: var(--text-sm); font-weight: 500; color: var(--ink); margin-bottom: var(--space-2); }
@@ -638,16 +726,9 @@
       <div class="align-result-header">
         <span class="align-badge" id="align-badge">—</span>
         <span class="align-result-msg" id="align-msg">Running…</span>
+        <span class="align-counts" id="align-counts"></span>
       </div>
       <ul class="align-rows" id="align-rows"></ul>
-    </div>
-
-    <div class="prompt-wrap" id="align-prompt-wrap">
-      <p class="prompt-label">Paste this into Claude Code to resolve the misalignment:</p>
-      <div class="prompt-box">
-        <pre id="align-prompt-content"></pre>
-        <button type="button" class="copy-btn" id="btn-copy-align-prompt">Copy</button>
-      </div>
     </div>
 
     <!-- ── 2. Push / Pull ─────────────────────────────────────────── -->
@@ -917,6 +998,52 @@
     }
     function jsonEq(a, b) { return JSON.stringify(sortJson(a)) === JSON.stringify(sortJson(b)); }
 
+    // Produce a flat list of {path, local, sb, type} for every differing leaf.
+    function diffData(a, b, prefix, depth) {
+      prefix = prefix || '';
+      depth  = depth  || 0;
+      const diffs = [];
+
+      const fmt = (v) => {
+        if (v === null || v === undefined) return String(v);
+        if (Array.isArray(v)) return `[${v.length} item${v.length !== 1 ? 's' : ''}]`;
+        if (typeof v === 'object') return '{…}';
+        const s = JSON.stringify(v);
+        return s.length > 60 ? s.slice(0, 57) + '…' : s;
+      };
+
+      if (Array.isArray(a) || Array.isArray(b)) {
+        if (!jsonEq(a, b))
+          diffs.push({ path: prefix || '(root)', local: fmt(a), sb: fmt(b), type: 'change' });
+        return diffs;
+      }
+      if (a === null || b === null || typeof a !== 'object' || typeof b !== 'object') {
+        if (!jsonEq(a, b))
+          diffs.push({ path: prefix || '(root)', local: fmt(a), sb: fmt(b), type: 'change' });
+        return diffs;
+      }
+      const allKeys = new Set([...Object.keys(a), ...Object.keys(b)]);
+      for (const k of [...allKeys].sort()) {
+        const p = prefix ? `${prefix}.${k}` : k;
+        if (!(k in b))        { diffs.push({ path: p, local: fmt(a[k]), sb: '(missing)', type: 'remove' }); }
+        else if (!(k in a))   { diffs.push({ path: p, local: '(missing)', sb: fmt(b[k]), type: 'add' }); }
+        else if (!jsonEq(a[k], b[k])) {
+          if (depth < 2 && typeof a[k] === 'object' && !Array.isArray(a[k]) && a[k] !== null
+                         && typeof b[k] === 'object' && !Array.isArray(b[k]) && b[k] !== null) {
+            diffs.push(...diffData(a[k], b[k], p, depth + 1));
+          } else {
+            diffs.push({ path: p, local: fmt(a[k]), sb: fmt(b[k]), type: 'change' });
+          }
+        }
+      }
+      return diffs;
+    }
+
+    function formatTs(iso) {
+      if (!iso) return '';
+      return new Date(iso).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    }
+
     // ── Copy button helper ────────────────────────────────────────────
     function wireCopyBtn(btn, getContent) {
       btn?.addEventListener('click', async () => {
@@ -992,26 +1119,25 @@
     document.getElementById('btn-validate')?.addEventListener('click', async () => {
       if (!await requireAuth()) return;
 
-      const resultEl  = document.getElementById('align-result');
-      const badgeEl   = document.getElementById('align-badge');
-      const msgEl     = document.getElementById('align-msg');
-      const rowsEl    = document.getElementById('align-rows');
-      const promptWrap = document.getElementById('align-prompt-wrap');
-      const promptPre  = document.getElementById('align-prompt-content');
+      const resultEl = document.getElementById('align-result');
+      const badgeEl  = document.getElementById('align-badge');
+      const msgEl    = document.getElementById('align-msg');
+      const countsEl = document.getElementById('align-counts');
+      const rowsEl   = document.getElementById('align-rows');
 
       resultEl.classList.add('visible');
       badgeEl.className = 'align-badge';
       badgeEl.textContent = '…';
-      msgEl.textContent = 'Checking…';
+      msgEl.textContent = 'Checking all tables…';
+      countsEl.textContent = '';
       rowsEl.innerHTML = '';
-      promptWrap.classList.remove('visible');
 
       const hid = await getHouseholdId();
       const results = [];
 
       for (const entry of VALIDATE_ALL) {
         const { key, table, src } = entry;
-        let localData = null, sbData = null, localErr = null, sbErr = null;
+        let localData = null, sbData = null, sbTs = null, localErr = null, sbErr = null;
 
         if (src === 'file') {
           try {
@@ -1027,96 +1153,129 @@
         try {
           const { data, error } = await supabase
             .from(table)
-            .select('data')
+            .select('data, updated_at')
             .eq('household_id', hid)
             .limit(1);
           if (error) throw new Error(error.message);
-          sbData = data?.[0]?.data ?? null;
+          sbData = data?.[0]?.data      ?? null;
+          sbTs   = data?.[0]?.updated_at ?? null;
         } catch (e) { sbErr = e.message; }
 
-        const srcLabel = src === 'file' ? `data/${key}.json` : 'browser cache';
-        let status, detail;
-        if (localErr) { status = 'err'; detail = `${src === 'file' ? 'Repo' : 'Browser'} read error: ${localErr}`; }
-        else if (sbErr) { status = 'err'; detail = `Supabase error: ${sbErr}`; }
-        else if (localData === null && sbData === null) { status = src === 'file' ? 'warn' : 'ok'; detail = src === 'file' ? 'Repo file missing and not in Supabase.' : 'Empty — not used yet (browser and Supabase both empty).'; }
-        else if (sbData === null) { status = 'warn'; detail = src === 'file' ? 'Not yet in Supabase — push to initialise.' : 'Browser cache only — not yet pushed to Supabase.'; }
-        else if (localData === null) { status = 'warn'; detail = src === 'file' ? 'Repo file missing but Supabase has data.' : 'In Supabase but not in browser cache — open the app to populate cache.'; }
+        const srcLabel = src === 'file' ? 'Repo' : 'Browser';
+        let status, detail, diffs = [];
+
+        if (localErr)   { status = 'err';  detail = `${srcLabel} read error: ${localErr}`; }
+        else if (sbErr) { status = 'err';  detail = `Supabase error: ${sbErr}`; }
+        else if (localData === null && sbData === null) {
+          status = src === 'file' ? 'warn' : 'ok';
+          detail = src === 'file' ? 'Repo file missing — not in Supabase either.' : 'Not used yet.';
+        }
+        else if (sbData === null) {
+          status = 'warn';
+          detail = src === 'file' ? 'Not in Supabase — push to initialise.' : `${srcLabel} has data but Supabase is empty — save in the app to sync.`;
+        }
+        else if (localData === null) {
+          status = 'warn';
+          detail = src === 'file' ? 'Repo file missing; Supabase has data — pull to restore.' : `Supabase has data but nothing in browser — visit the page to populate cache.`;
+        }
         else if (jsonEq(localData, sbData)) { status = 'ok'; detail = 'In sync.'; }
-        else if (Array.isArray(localData) || Array.isArray(sbData)) {
-          const lLen = Array.isArray(localData) ? localData.length : '?';
-          const sLen = Array.isArray(sbData) ? sbData.length : '?';
+        else {
+          diffs  = diffData(localData, sbData);
           status = 'warn';
-          detail = `Out of sync — ${srcLabel} has ${lLen} item${lLen !== 1 ? 's' : ''}, Supabase has ${sLen}.`;
-        } else {
-          const localKeys = new Set(Object.keys(localData || {}));
-          const sbKeys    = new Set(Object.keys(sbData || {}));
-          const onlyLocal = [...localKeys].filter(k => !sbKeys.has(k));
-          const onlySb    = [...sbKeys].filter(k => !localKeys.has(k));
-          const diffParts = [];
-          if (onlyLocal.length) diffParts.push(`${srcLabel} only: ${onlyLocal.join(', ')}`);
-          if (onlySb.length)    diffParts.push(`Supabase only: ${onlySb.join(', ')}`);
-          if (!diffParts.length) diffParts.push('values differ (same keys)');
-          status = 'warn';
-          detail = `Out of sync — ${diffParts.join('; ')}.`;
+          detail = `${diffs.length} field${diffs.length !== 1 ? 's' : ''} differ.`;
         }
 
-        results.push({ key, table, status, detail, localData, sbData, src, srcLabel });
+        results.push({ key, table, status, detail, diffs, sbTs, src, srcLabel });
 
-        const li = document.createElement('li');
+        // ── Build row ──
+        const li   = document.createElement('li');
         li.className = 'align-row';
-        const nameSpan   = Object.assign(document.createElement('span'), { className: 'align-row-name',             textContent: table });
-        const detailSpan = Object.assign(document.createElement('span'), { className: 'align-row-detail',           textContent: detail });
-        const statusSpan = Object.assign(document.createElement('span'), { className: `align-row-status ${status}`, textContent: status === 'ok' ? '✓ in sync' : status === 'warn' ? '⚠ differs' : '✗ error' });
-        li.append(nameSpan, detailSpan, statusSpan);
+
+        const head = document.createElement('div');
+        head.className = 'align-row-head';
+
+        const dot      = Object.assign(document.createElement('span'), { className: `align-dot ${status}` });
+        const name_    = Object.assign(document.createElement('span'), { className: 'align-row-name',   textContent: table });
+        const srcTag   = Object.assign(document.createElement('span'), { className: 'align-row-src',    textContent: src === 'file' ? 'file' : 'cache' });
+        const detailEl = Object.assign(document.createElement('span'), {
+          className: `align-row-detail${status === 'warn' ? ' warn' : status === 'err' ? ' err' : ''}`,
+          textContent: detail,
+        });
+        const tsEl = Object.assign(document.createElement('span'), {
+          className: 'align-row-ts',
+          textContent: sbTs ? formatTs(sbTs) : '',
+        });
+
+        head.append(dot, name_, srcTag, detailEl, tsEl);
+        li.appendChild(head);
+
+        // Expandable field-level diff for actual value mismatches
+        if (status === 'warn' && diffs.length > 0) {
+          const details_ = document.createElement('details');
+          details_.className = 'align-diff';
+
+          const summary = document.createElement('summary');
+          const toggle  = Object.assign(document.createElement('span'), { className: 'align-diff-toggle', textContent: '▶' });
+          summary.append(toggle, ` ${diffs.length} difference${diffs.length !== 1 ? 's' : ''} — click to inspect`);
+          details_.appendChild(summary);
+
+          const tbl = document.createElement('table');
+          tbl.className = 'diff-table';
+          const thead = tbl.createTHead();
+          const hr    = thead.insertRow();
+          ['Field', srcLabel, 'Supabase'].forEach(h => {
+            const th = document.createElement('th'); th.textContent = h; hr.appendChild(th);
+          });
+          const tbody = tbl.createTBody();
+          const MAX = 25;
+          diffs.slice(0, MAX).forEach(d => {
+            const tr = tbody.insertRow();
+            tr.className = `diff-row--${d.type}`;
+            [d.path, d.local, d.sb].forEach(v => { const td = tr.insertCell(); td.textContent = v; });
+          });
+          details_.appendChild(tbl);
+
+          if (diffs.length > MAX) {
+            const more = Object.assign(document.createElement('span'), {
+              className: 'diff-more',
+              textContent: `… and ${diffs.length - MAX} more field${diffs.length - MAX !== 1 ? 's' : ''}`,
+            });
+            details_.appendChild(more);
+          }
+          li.appendChild(details_);
+        }
+
         rowsEl.appendChild(li);
       }
 
-      const anyErr  = results.some(r => r.status === 'err');
-      const anyWarn = results.some(r => r.status === 'warn');
-      const allOk   = !anyErr && !anyWarn;
+      // ── Summary ──
+      const nErr   = results.filter(r => r.status === 'err').length;
+      const nWarn  = results.filter(r => r.status === 'warn').length;
+      const nOk    = results.filter(r => r.status === 'ok').length;
+      const nEmpty = results.filter(r => r.status === 'ok' && r.detail === 'Not used yet.').length;
+      const nSync  = nOk - nEmpty;
+      const allOk  = nErr === 0 && nWarn === 0;
 
       if (allOk) {
         badgeEl.className = 'align-badge ok';
         badgeEl.textContent = 'IN SYNC';
-        msgEl.textContent = 'All tables are in sync — repo files, browser caches, and Supabase all match.';
-      } else if (anyErr) {
+        msgEl.textContent = 'All tables match.';
+      } else if (nErr > 0 && nWarn === 0) {
         badgeEl.className = 'align-badge err';
         badgeEl.textContent = 'ERROR';
-        msgEl.textContent = 'One or more tables could not be compared. Check details below.';
+        msgEl.textContent = `${nErr} table${nErr !== 1 ? 's' : ''} could not be read.`;
       } else {
         badgeEl.className = 'align-badge warn';
         badgeEl.textContent = 'OUT OF SYNC';
-        msgEl.textContent = 'Differences found — see details below.';
+        msgEl.textContent = `${nWarn} table${nWarn !== 1 ? 's' : ''} need${nWarn === 1 ? 's' : ''} attention.`;
       }
 
-      if (!allOk) {
-        const today = new Date().toISOString().slice(0, 10);
-        const parts = results
-          .filter(r => r.status !== 'ok')
-          .map(r => {
-            if (r.status === 'err') return `• ${r.table}: ${r.detail}`;
-            if (r.localData === null && r.sbData !== null)
-              return `• ${r.table}: ${r.detail}\n  Supabase:\n${JSON.stringify(r.sbData, null, 2)}`;
-            if (r.localData !== null && r.sbData === null)
-              return `• ${r.table}: ${r.detail}\n  ${r.src === 'file' ? 'Repo' : 'Browser cache'}:\n${JSON.stringify(r.localData, null, 2)}`;
-            if (r.localData === null && r.sbData === null)
-              return `• ${r.table}: ${r.detail}`;
-            return `• ${r.table}: ${r.detail}\n  ${r.src === 'file' ? 'Repo' : 'Browser cache'}:\n${JSON.stringify(r.localData, null, 2)}\n  Supabase:\n${JSON.stringify(r.sbData, null, 2)}`;
-          });
-
-        promptPre.textContent = `Data alignment check — ${today}
-
-The following tables are out of sync:
-
-${parts.join('\n\n')}
-
-To resolve, decide which version is the source of truth:
-  • Repo files (profile/criteria/finances): use the Push button on the Data Sync page.
-  • App-state tables (shortlist/zones/journey_checks/contacts/outreach): open the relevant app page — the browser cache auto-syncs to Supabase on next save. Or pull from Supabase via the Pull button.
-  • Need manual edits → describe the desired state and I will update the relevant data/*.json file.`;
-
-        promptWrap.classList.add('visible');
-      }
+      const parts = [];
+      if (nSync  > 0) parts.push(`${nSync} in sync`);
+      if (nEmpty > 0) parts.push(`${nEmpty} empty`);
+      if (nWarn  > 0) parts.push(`${nWarn} differ`);
+      if (nErr   > 0) parts.push(`${nErr} error${nErr !== 1 ? 's' : ''}`);
+      countsEl.textContent = `${results.length} tables · ${parts.join(' · ')}`;
     });
 
 
@@ -1464,10 +1623,6 @@ $$;`;
           }
         });
       }
-      wireCopyBtn(
-        document.getElementById('btn-copy-align-prompt'),
-        () => document.getElementById('align-prompt-content').textContent
-      );
       wireCopyBtn(
         document.getElementById('btn-copy-pull-prompt'),
         () => document.getElementById('pull-prompt-content').textContent
