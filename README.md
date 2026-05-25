@@ -26,17 +26,22 @@ engine** that powers every affordability surface from one source of truth:
 - **Areas page** rows gain a fit dot, bed-fit chip and council-tax band column (all sortable + filterable).
 - **Area-detail** gets a verdict strip across the top, Ofsted dots on schools, coloured commute bands
   on transport, and a foot mini-affordability widget bound to the same engine.
-- **v3 placeholders** live at `pages/listings.html` · `pages/outreach.html` · `pages/ask.html` and
-  set expectations for what's coming. See `docs/ROADMAP.md`.
+- **v3 Outreach generator** ships at `pages/outreach.html` — 24 researched best-practice email templates
+  for every party in a UK property purchase. Drafts are pre-filled from profile / finances / area data,
+  filtered by the Quantity-of-Information Ladder (only the right depth for each recipient), and sent via
+  `mailto:` or copied to clipboard. Outreach log + contacts directory persist via Supabase. Deep-linked
+  from area-detail, finances, and journey checklist rows.
+- **v3 placeholders** remain at `pages/listings.html` and `pages/ask.html`. See `docs/ROADMAP.md`.
 
-Run `npm test` for the pure-module test harness (21 assertions covering affordability bands, money-flow
-sums, savings-velocity scenarios). Browser-side smoke checks (no horizontal scroll, no inline styles,
-page reachability) run via `tests/tests.html` against a local server when you want them; visual review is
-done by eye in the browser.
+Run `node tools/run-intelligence-tests.mjs` for the pure-module test harness (65 assertions covering
+affordability bands, money-flow sums, savings-velocity scenarios, outreach template schema, and the
+renderer + QoI leak guard). Browser-side smoke checks (no horizontal scroll, no inline styles, page
+reachability) run via `tests/tests.html` against a local server when you want them; visual review is done
+by eye in the browser.
 
 ## ✨ View live site
 
-**Live:** https://lukeclifforduk.github.io/rec/
+**Live:** https://seanparkerai.github.io/rec/
 
 The site auto-deploys from `main` via GitHub Actions.
 
@@ -67,7 +72,15 @@ and shows pass/fail. Run it before each commit.
 ## Tech
 
 Pico CSS + design tokens · vanilla-JS fetch-injected partials · Chart.js · Leaflet + Leaflet-Geoman ·
-JSON + `localStorage` behind a storage abstraction. No build step.
+**Supabase** (Postgres + Auth) behind a storage abstraction · `localStorage` write-through cache for instant renders. No build step.
+
+## Supabase backend
+
+The app now uses **Supabase** for cloud-synced, multi-device data storage and login. All user data (profile, criteria, finances, shortlist, map zones, journey checks) is stored in a private Supabase Postgres database, protected by Row Level Security so only authenticated household members can access it.
+
+To set up Supabase for the first time, follow the interactive guide at **[`pages/setup.html`](pages/setup.html)** — it walks through account creation, schema deployment, user management, and data migration in five phases.
+
+The Supabase schema lives in [`supabase/schema.sql`](supabase/schema.sql). The only files that talk to Supabase directly are `assets/js/storage.js` (data) and `assets/js/auth-guard.js` (sessions).
 
 ## Storage abstraction → backend migration path
 
@@ -101,6 +114,8 @@ immediately, then revalidates from the server in the background. Pages remain un
 | `rec:shortlist`      | `pages/areas.html` + map               | Array of area ids                      |
 | `rec:zones`          | `pages/map.html`                       | GeoJSON FeatureCollection (drawn zones)|
 | `rec:journey-checks` | `pages/journey.html`                   | `{ viewing:{}, process:{}, moving:{} }`|
+| `rec:contacts`       | `pages/outreach.html`                  | `{ agents:[], brokers:[], solicitors:[], surveyors:[] }` |
+| `rec:outreach`       | `pages/outreach.html`                  | Array of outreach log entries          |
 | `rec:theme`          | global (header toggle)                 | `"light" \| "dark"` (override)         |
 
 Phase 9 didn't add any new keys — the about-search.html merge (Phase 9A) preserved

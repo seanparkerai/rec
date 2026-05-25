@@ -94,7 +94,12 @@
 .dash-grid > .span-6 { grid-column: span 6; }
 .dash-grid > .span-4 { grid-column: span 4; }
 .dash-grid > .span-12 { grid-column: span 12; }
-@media (max-width: 800px) { .dash-grid > [class^="span-"] { grid-column: 1 / -1; } }
+@media (max-width: 800px) {
+  .dash-grid > .span-4,
+  .dash-grid > .span-6,
+  .dash-grid > .span-8,
+  .dash-grid > .span-12 { grid-column: 1 / -1; }
+}
 
 /* Chart canvas placeholder sizing (shared) */
 .chart-wrap { position: relative; height: 240px; }
@@ -109,7 +114,10 @@
 .filter-bar { margin-bottom: var(--space-4); }
 .filter-row {
   display: grid; gap: var(--space-3);
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  /* Each control keeps a usable min width and wraps to a new row rather than
+     clipping its option text (was a fixed 2fr 1fr 1fr 1fr that squeezed the
+     selects at mid widths). auto-fit makes the 768/480 overrides redundant. */
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
 }
 .filter-row + .filter-row { margin-top: var(--space-3); }
 .filter-row-end {
@@ -123,11 +131,7 @@
 .check-row { display: inline-flex; align-items: center; gap: var(--space-2); margin: 0; min-height: 44px; }
 .check-row input { margin: 0; width: 1.1rem; height: 1.1rem; }
 
-@media (max-width: 768px) {
-  .filter-row { grid-template-columns: 1fr 1fr; }
-}
 @media (max-width: 480px) {
-  .filter-row { grid-template-columns: 1fr; }
   .filter-row-end { grid-template-columns: 1fr; }
 }
 
@@ -513,8 +517,9 @@
 }
 .tile-deposit .deposit-eta strong { color: var(--ink); font-weight: 500; font-family: var(--font-data); }
 @container (max-width: 520px) {
-  .tile-deposit .deposit-arc { grid-template-columns: 1fr; justify-items: start; }
-  .tile-deposit .ring { width: 7rem; height: 7rem; }
+  .tile-deposit .deposit-arc { grid-template-columns: 1fr; }
+  .tile-deposit .ring { width: 8rem; height: 8rem; margin: 0 auto; }
+  .tile-deposit .arc-stats dd { font-size: var(--text-base); }
 }
 
 .tile-deposit .mini-flow-label { margin: 0; }

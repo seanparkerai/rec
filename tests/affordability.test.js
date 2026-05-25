@@ -85,11 +85,11 @@ export async function register({ test, assert, assertEqual, fixtures }) {
   // --- LTV deposit gap ---------------------------------------------------------
 
   await test('affordability: deposit gap to next tier is computed', () => {
-    // £380k with £38k target deposit → LTV exactly 90% → already at the 90 tier.
-    // Gap to next tier (85) = ceil(380k × 0.15) − 38k = 57000 − 38000 = 19000.
+    // £380k with £40k target deposit → LTV 89.5% → already at the 90 tier.
+    // Gap to next tier (85) = ceil(380k × 0.15) − 40k = 57000 − 40000 = 17000.
     const r = at(380_000);
     assertEqual(r.ltvTier, 90);
-    assertEqual(r.depositGapToTier, 19_000);
+    assertEqual(r.depositGapToTier, 17_000);
   });
 
   // --- Parity with the old siloed calculators (Phase 4a acceptance) -----------

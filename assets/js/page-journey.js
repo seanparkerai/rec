@@ -27,6 +27,11 @@ function labelFor(section, item) {
   return section === 'moving' ? (item.task || '') : (item.item || '');
 }
 
+function outreachFor(item) {
+  if (!item.outreachTemplateId) return '';
+  return `<a href="outreach.html?templateId=${item.outreachTemplateId}" data-nav="pages/outreach.html?templateId=${item.outreachTemplateId}" class="journey-outreach-link" aria-label="Open email template for this step">&rarr; Email</a>`;
+}
+
 function metaFor(item) {
   const bits = [];
   if (item.timing) bits.push(`<span class="meta-chip meta-timing">${esc(item.timing)}</span>`);
@@ -50,6 +55,7 @@ function renderSection(section) {
             <span class="check-title">${esc(label)}</span>
             ${metaFor(item)}
           </span>
+          ${outreachFor(item)}
         </label>
       </li>
     `;

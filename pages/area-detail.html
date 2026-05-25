@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Area · rec</title>
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css" />
   <link rel="stylesheet" href="../assets/css/base.css" />
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/components/outreach.css" />
 </head>
 <body>
   <div data-include="components/header.html"></div>
@@ -32,6 +34,7 @@
       <span class="fit-dot fit-dot--unknown" id="area-verdict-dot" aria-hidden="true"></span>
       <p class="area-verdict-strip__verdict" id="area-verdict-text">Loading affordability verdict&hellip;</p>
       <p class="area-verdict-strip__num" id="area-verdict-num"></p>
+      <a id="area-outreach-link" href="outreach.html?templateId=A1" class="area-verdict-strip__action" hidden>Draft viewing request &rarr;</a>
     </section>
 
     <dl class="stat-strip" aria-label="Key facts">

@@ -9,7 +9,7 @@
     "totalMonthly": 3727.5
   },
   "goal": {
-    "targetDeposit": 38000,
+    "targetDeposit": 40000,
     "targetPropertyPrice": 400000,
     "offerTarget": 380000,
     "depositPct": 10,
@@ -18,7 +18,7 @@
     "movingWindow": "March – September 2026"
   },
   "savings": {
-    "current": 22000,
+    "current": 24500,
     "monthlyContribution": 2000,
     "giftCardsValue": 910,
     "projectedCompound": 2750,

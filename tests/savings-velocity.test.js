@@ -21,10 +21,10 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     const v = getSavingsVelocity(finances);
     const plus500 = v.scenarios.find((s) => s.label === '+£500/mo');
     assert(plus500, 'scenario "+£500/mo" missing');
-    // Gap = £38,000 − £25,660 = £12,340. At £2,000/mo → 6.2; at £2,500/mo → 4.9. Delta ≈ 1.3.
+    // Gap = £40,000 − £25,660 = £14,340. At £2,000/mo → 7.2; at £2,500/mo → 5.7. Delta ≈ 1.5.
     assert(
-      Math.abs(plus500.deltaMonths - 1.3) < 0.1,
-      `expected ≈1.3 months sooner, got ${plus500.deltaMonths}`,
+      Math.abs(plus500.deltaMonths - 1.5) < 0.1,
+      `expected ≈1.5 months sooner, got ${plus500.deltaMonths}`,
     );
   });
 
