@@ -3,14 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "House-search web app for Hampshire & Wiltshire (zero-build static site, served from GitHub Pages). This package.json exists only for dev tooling (Playwright verify harness, font fetcher); the site itself ships no node_modules.",
+  "description": "House-search web app for Hampshire & Wiltshire (zero-build static site, served from GitHub Pages). This package.json exists only for dev tooling (font fetcher, test harness); the site itself ships no node_modules.",
   "scripts": {
     "serve": "python3 -m http.server 8000",
-    "verify": "node tools/verify-ui.mjs",
     "fonts": "node tools/fetch-fonts.mjs",
     "test": "node tools/run-intelligence-tests.mjs"
-  },
-  "devDependencies": {
-    "playwright": "^1.60.0"
   }
 }

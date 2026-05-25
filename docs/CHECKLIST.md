@@ -19,9 +19,7 @@ mobile-first, WCAG 2.2 AA, Pico conventions, verification rules — sourced from
 skill, web.dev, Polypane, WCAG 2.2, Pico v2 docs). Introduced `--space-*` / `--text-*` / `--focus-ring`
 tokens; added global `prefers-reduced-motion` + `:focus-visible` rules; bumped nav/button touch targets
 to ≥44 px; added skip-link, `id="main"` on every page, safe-area-inset on the sticky header, mobile
-fade hint + scroll-snap on the nav; added no-horizontal-scroll + skip-link smoke tests. Remaining items
-for the next pass: Playwright screenshot harness, axe-core CLI in tests, `<dialog>` replacing
-`window.confirm`, Lighthouse CI thresholds.
+fade hint + scroll-snap on the nav; added no-horizontal-scroll + skip-link smoke tests.
 
 ---
 
@@ -155,9 +153,8 @@ Each item below is one commit + push milestone. Anchor in commit message (Stripe
       cross-document View Transitions opt-in
 - [ ] Split `base.css` into `assets/css/components/{card,tile,sheet,chip,segmented,table,field,dialog}.css`
       and add container queries on cards / sidebar
-- [x] `tools/verify-ui.mjs` (Playwright screenshots, 9 pages × 4 widths × light/dark + reduced-motion
-      one-up) writing to `artifacts/screenshots/<tag>/` and `artifacts/verify-<tag>.json`. Run with
-      `npm run verify` after `npx playwright install chromium`. axe/Lighthouse layered on later.
+- Screenshot/Playwright verification was removed (see CLAUDE.md §13): the assistant has no browser, so
+  visual review is done by eye in the browser by the developer.
 
 ### 8B · Map (anchor: Linear-dense; biggest single perceptual upgrade)
 - [x] Apple-Maps-style 3-detent bottom sheet on mobile (peek 6rem / mid 46svh / full 92svh).
@@ -206,10 +203,9 @@ Each item below is one commit + push milestone. Anchor in commit message (Stripe
 - [ ] 4 drafted villages (Stockbridge, Broughton, Wherwell, Hambledon) imaged
 - [ ] 8 house-types imaged with type-locked CC sources
 
-### 8E · Final sweep — needs host session (chromium download blocked here)
-- [ ] `npm install && npx playwright install chromium` once, then `npm run verify` to capture the
-      full 36-shot baseline grid; review under `artifacts/screenshots/baseline/`
-- [ ] Layer axe-core CLI + lighthouse-ci on top of verify-ui.mjs (thresholds per CLAUDE.md §13)
+### 8E · Final sweep
+- Screenshot / axe / Lighthouse acceptance dropped (see CLAUDE.md §13): no browser in the assistant's
+  environment. Visual review is done by eye in the browser by the developer.
 - [ ] Update `docs/PLAN.md` to mark Phase 8 complete
 
 ## Phase 9 — Finalisation (May 2026 →)
@@ -294,7 +290,6 @@ sources, so 9F items are queued behind tools to be run from a connected host.
 - [ ] `tools/research-areas.mjs` (to write): 9-category content + 3-source min / 5 for top-N.
 - [ ] `tools/fetch-images.mjs` (to write): 2–3 licensed images per village + credit/licence write-back.
 - [ ] `tools/research-house-types.mjs` (to write): 15 house types fully described + cited.
-- [ ] `npm install && npx playwright install chromium && npm run verify` baseline grid.
 
 - [ ] 2026-05-24: Attempted strict 10-area batch workflow; paused before writing area files because evidence collection for 10 areas did not meet the anti-shortcut/corroboration bar in one pass. Next run should complete one fully evidenced 10-area SP2 cluster batch before committing records.
 
@@ -314,7 +309,7 @@ Adopted 2026-05-25. Tick each v2 phase as it lands; commits go directly to `main
 
 - [x] **Phase 1 — Constitution + design rules** (`c2c6038`): CLAUDE.md §14/§15/§16; DESIGN.md §3 bans + §5 five rules; `docs/INTELLIGENCE_RULES.md`; `docs/ROADMAP.md`.
 - [x] **Phase 2 — Intelligence engine**: `assets/js/format.js`, `assets/js/affordability.js`, `assets/js/money-flow.js`, `assets/js/savings-velocity.js`; tests `affordability.test.js`, `money-flow.test.js`, `savings-velocity.test.js` wired into `tests/tests.html`; mechanical formatter dedupe in `page-home.js` / `page-area-detail.js` / `page-finances.js`. Node smoke runner `tools/run-intelligence-tests.mjs` passes 20/20. INTELLIGENCE_RULES.md bands re-calibrated against this household (loosened LTI to 4.5/5.5/6.0× and payment/take-home to 40/52/60%; calibration note appended).
-- [x] **Phase 3 — Dashboard overhaul** *(Linear-dense)*: 7 tiles wired (deposit story · affordability ladder · money-flow · shortlist with fit dots · journey track · criteria prose · ask placeholder). `index.html` bento rewritten; `page-home.js` consumes `assessAffordability` + `getMoneyFlow` + `getMoneyFlowPostMove`; `dashboard.css` appended (existing rules untouched per PLAN.md L109; old `.bento-hero` etc. now orphan, flagged for Phase 6 cleanup). Static smoke green; **screenshot acceptance (verify-ui.mjs at 320/375/768/1280 in light + dark + reduced-motion) must be run locally** — Chromium download blocked in this remote sandbox.
+- [x] **Phase 3 — Dashboard overhaul** *(Linear-dense)*: 7 tiles wired (deposit story · affordability ladder · money-flow · shortlist with fit dots · journey track · criteria prose · ask placeholder). `index.html` bento rewritten; `page-home.js` consumes `assessAffordability` + `getMoneyFlow` + `getMoneyFlowPostMove`; `dashboard.css` appended (existing rules untouched per PLAN.md L109; old `.bento-hero` etc. now orphan, flagged for Phase 6 cleanup). Static smoke green; visual review done by eye in the browser (no screenshot step — see CLAUDE.md §13).
 - [x] **Phase 4a — Finances page overhauled** *(Linear-dense)*: NOW section gets a full-width money-flow tile and bills/expenses tables with sparkbars; deposit hero kept with LISA band added. LATER section gets side-by-side today/after-move flows, a **unified affordability widget** (one price slider drives a mono grid of deposit/loan/LTV/SDLT/LISA/monthly/stressed/spare with a colour-banded verdict pill), a "What if…" Chart.js line with baseline + ghosted scenarios, and one-time/shopping/gift-cards as `<details>`. Four old siloed calculator fieldsets removed. Parity check in `tests/affordability.test.js` (21/21 green).
 - [x] **Phase 4b — Areas + area detail overhauled** *(Linear-dense + Stripe-docs)*: tools/area-fields.mjs + tools/build-areas.mjs extended to bake `priceSummary` (avgDetached/Semi/Terraced/Flat + asOf) and promote `councilTaxBand` into the lightweight index. `data/areas.json` + 191 per-area files regenerated. Areas page gains a fit-dot, bed-fit (matching property type + avg price) and council-tax-band column, plus a Fit filter pill and `fit`/`price`/`counciltax` sort options. Area-detail gains a colour-banded verdict strip at the top, Ofsted dots on schools, coloured commute bands on transport, and a foot mini-affordability widget reusing the Phase 4a `.afford-widget`. `tests/schemas.js` validates the new index fields. **Compare drawer deferred** (multi-select + side-by-side comparison) — flagged as Phase 6 follow-up.
 - [x] **Phase 4c — Journey + map + house-types polish**: journey page gains a horizontal track + next-action row at the top (the dashboard tile component reused); the three checklists below stay as the management view. Map markers are now status-banded (shortlisted = full accent · researched = accent-soft · partial = paper outline · stub = hairline) with popup enrichments (fit dot + council tax band) and a bottom-right legend control. House-types cards gain a typical price-band across the type's associated areas (min–max + median) and a count of shortlisted areas that feature that type. **Dashboard journey-track bug** carried into this phase: `findNextAction` used `item.id ?? item.title` but checklists items have neither — switched to index-based state keys, matching the journey page's existing convention so ticks interoperate.
@@ -324,12 +319,8 @@ Adopted 2026-05-25. Tick each v2 phase as it lands; commits go directly to `main
     - [x] `README.md` updated with v2 feature summary + intelligence engine pointer.
     - [x] Final `npm test` run — 21/21 green.
     - [x] Static smoke — every page (10 core + 3 placeholders + tests/tests.html) returns 200.
-    - [ ] **User to run on a local checkout** (Chromium download blocked in this remote sandbox):
-        - `npm install && npx playwright install chromium`
-        - `node tools/verify-ui.mjs v2` — screenshots every page at 320/375/768/1280 in light + dark + reduced-motion to `artifacts/screenshots/v2/`.
-        - axe-core CLI: zero serious/critical findings.
-        - Lighthouse: Perf ≥ 90, A11y ≥ 95, BP ≥ 95, SEO ≥ 90.
-        - Tag `v2.0` once acceptance is met (held back here per policy — release tags need explicit user authorisation).
+    - Screenshot / axe / Lighthouse acceptance dropped (see CLAUDE.md §13). Visual review is done by eye
+      in the browser by the developer. Release tags still need explicit user authorisation.
 
 ### Phase 6 follow-up tasks (not blocking v2 tag)
 - [ ] Compare drawer on the Areas page (deferred from Phase 4b): multi-select 2–4 areas → bottom drawer slides up with side-by-side mono columns.

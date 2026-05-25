@@ -19,7 +19,7 @@ v2 overhauls the seven existing pages to be visual-first and adds a small intell
 | Areas index | `data/areas.json` lacks prices/council-tax-band; per-area files have them | `tools/build-areas.mjs` extended to bake a summary |
 | Design system | `DESIGN.md` anchors: **Stripe-docs** (editorial) and **Linear-dense** (data). Tokens in `assets/css/tokens.css` (OKLCH, fluid type, 4px spacing). 11 component CSS files | No new tokens, no new dependencies |
 | Tests | `tests/tests.html` + `tests/assert.js` + `tests/schemas.js`; benchmarks for finance calcs already in place | Append new tests in same pattern |
-| Tooling | `tools/area-status.mjs`, `tools/build-areas.mjs`, `tools/insert-content.mjs`, `tools/verify-ui.mjs` (Playwright; needs one-off `npm i && npx playwright install chromium`) all real | Use as is |
+| Tooling | `tools/area-status.mjs`, `tools/build-areas.mjs`, `tools/insert-content.mjs`, `tools/run-intelligence-tests.mjs` all real | Use as is |
 | CLAUDE.md | Sections numbered through §13 | §14/§15/§16 are free |
 | Missing pages | `pages/{listings,outreach,ask}.html` and `docs/{INTELLIGENCE_RULES,ROADMAP}.md` do not exist | Created in Phase 1/5 |
 
@@ -122,7 +122,7 @@ Bans appended: hero KPI cards on a personal dashboard; coloured left-border "pil
 - Ladder and money-flow: pure inline SVG (no D3, no Chart.js). Mortgage/scenario charts: keep Chart.js (already loaded).
 - Hover/tap interactions respect `prefers-reduced-motion`.
 
-**Acceptance**: `node tools/verify-ui.mjs` screenshots at 320/375/768/1280 in light + dark + reduced-motion saved under `artifacts/screenshots/phase-3/`. No horizontal scroll at 320 px (existing tests cover this). axe zero serious/critical. Changing `offerTarget` in `finances.json` moves the marker and verdict. Commit: `ui: phase 3 — dashboard overhaul (linear-dense)`.
+**Acceptance**: harness green; no horizontal scroll at 320 px (existing tests cover this); changing `offerTarget` in `finances.json` moves the marker and verdict; developer eyeballs the page. Commit: `ui: phase 3 — dashboard overhaul (linear-dense)`.
 
 ---
 
@@ -170,7 +170,7 @@ Bans appended: hero KPI cards on a personal dashboard; coloured left-border "pil
 
 **House types** (`pages/house-types.html` + `page-house-types.js`): fill in the page — gallery cards with image, type name, typical price band for the user's search area (cross-reference `house-types.json` × `priceSummary` from the new areas index), and "found in N of your shortlisted areas".
 
-**Acceptance**: each page passes verify-ui + axe + harness. Commit: `ui: phase 4c — journey + map + house-types polish`.
+**Acceptance**: harness green; developer eyeballs each page. Commit: `ui: phase 4c — journey + map + house-types polish`.
 
 ---
 
@@ -185,21 +185,20 @@ Bans appended: hero KPI cards on a personal dashboard; coloured left-border "pil
 - `components/nav.html` — final link order: `Home · About · Areas · House Types · Listings (soon) · Ask (soon) · Finances · Journey · Map · Outreach (soon)`. `(soon)` is a small mono superscript in muted ink (CSS, not text content).
 - Phase 3's ask-anything placeholder slot now `href`s `pages/ask.html`.
 
-**Acceptance**: three pages render at all breakpoints in both themes; axe clean; `tests/tests.html` page-reachable checks updated to include them. Commit: `feat: phase 5 — placeholder pages for v3 capabilities`.
+**Acceptance**: three pages render at all breakpoints in both themes (developer-reviewed); `tests/tests.html` page-reachable checks updated to include them. Commit: `feat: phase 5 — placeholder pages for v3 capabilities`.
 
 ---
 
 ## Phase 6 — Verification + polish · ~0.5 ev
 
 **Scope**:
-- `node tools/verify-ui.mjs` against every page at 320/375/768/1280 in light + dark + reduced-motion. Save to `artifacts/screenshots/v2/`. Eyeball the grid for inconsistent visual weight.
-- axe on every page; zero serious/critical findings.
-- Lighthouse locally (Chromium devtools): Perf ≥ 90, A11y ≥ 95, BP ≥ 95, SEO ≥ 90. Image-budget review if needed.
+- No screenshot / axe / Lighthouse step (see CLAUDE.md §13) — verify in code; the developer reviews
+  visuals by eye in the browser.
 - `README.md` feature list updated to reflect v2.
-- Final `tests/tests.html` run.
+- Final `node tools/run-intelligence-tests.mjs` run.
 - Tag `v2.0`.
 
-**Acceptance**: all targets met; screenshot grid committed; release tagged. Commit: `chore: phase 6 — verification pass; tag v2.0`.
+**Acceptance**: code review + harness green; developer has eyeballed the pages; release tagged. Commit: `chore: phase 6 — verification pass; tag v2.0`.
 
 ---
 
@@ -215,10 +214,11 @@ Bans appended: hero KPI cards on a personal dashboard; coloured left-border "pil
 ## Verification commands (per phase)
 
 ```bash
-# Local server (test harness + verify-ui both need it)
-python3 -m http.server 8000
+# Module test harness (assistant runs this)
+node tools/run-intelligence-tests.mjs
 
-# Test harness
+# Local server (for the developer's own browser review + the browser smoke suite)
+python3 -m http.server 8000
 open http://localhost:8000/tests/tests.html   # eyeball: all green
 
 # Area progress (no behavioural impact in v2 but used by Phase 4b)
@@ -226,12 +226,10 @@ node tools/area-status.mjs
 
 # Rebuild index (Phase 4b only, after extending build-areas.mjs)
 node tools/build-areas.mjs
-
-# Screenshot pipeline (Phase 3, 4*, 5, 6)
-npm install                              # one-off
-npx playwright install chromium          # one-off
-node tools/verify-ui.mjs --tag phase-3   # outputs PNGs + JSON report
 ```
+
+Visual review is done by eye in the browser by the developer — there is no screenshot/Playwright step
+(see CLAUDE.md §13).
 
 ## Resume protocol
 
