@@ -32,10 +32,12 @@ const fixtures = {
 const { register: registerAffordability } = await import('../tests/affordability.test.js');
 const { register: registerMoneyFlow }     = await import('../tests/money-flow.test.js');
 const { register: registerSavingsVelocity } = await import('../tests/savings-velocity.test.js');
+const { register: registerOutreachTemplates } = await import('../tests/outreach-templates.test.js');
 
 await registerAffordability({ test, assert, assertEqual, fixtures });
 await registerMoneyFlow({ test, assert, assertEqual, fixtures });
 await registerSavingsVelocity({ test, assert, assertEqual, fixtures });
+await registerOutreachTemplates({ test, assert, assertEqual, fixtures });
 
 const passed = results.filter((r) => r.pass).length;
 const failed = results.length - passed;
