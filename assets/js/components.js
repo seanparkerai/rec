@@ -73,6 +73,19 @@ function initScrollShrink() {
   window.addEventListener('scroll', set, { passive: true });
 }
 
+function initHeaderHeightVar() {
+  const setH = () => {
+    const h = document.querySelector('.site-header')?.offsetHeight || 64;
+    document.documentElement.style.setProperty('--header-h', `${h}px`);
+  };
+  setH();
+  window.addEventListener('resize', setH, { passive: true });
+  new MutationObserver(setH).observe(
+    document.documentElement,
+    { attributes: true, attributeFilter: ['data-scrolled'] }
+  );
+}
+
 /* Apply saved theme ASAP to reduce flash (before includes resolve). */
 applyTheme(localStorage.getItem(THEME_KEY));
 
@@ -80,6 +93,7 @@ injectIncludes().then(() => {
   setActiveNav();
   initTheme();
   initScrollShrink();
+  initHeaderHeightVar();
   document.dispatchEvent(new CustomEvent('shell:ready'));
 });
 

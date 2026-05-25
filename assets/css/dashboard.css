@@ -464,7 +464,7 @@
    per PLAN.md L109; tile-* selectors below take over the grid.
    ============================================================ */
 
-.bento .tile {
+.tile-card {
   background: var(--paper);
   border: 1px solid var(--hairline);
   border-radius: var(--rec-radius);
@@ -472,17 +472,18 @@
   display: flex; flex-direction: column; gap: var(--space-4);
   min-width: 0;
 }
-.bento .tile .tile-head {
+.tile-card .tile-head {
   display: flex; justify-content: space-between; align-items: baseline;
   gap: var(--space-3); margin: 0;
 }
-.bento .tile .tile-head h2 {
+.tile-card .tile-head h2 {
   margin: 0; font-size: var(--text-lg); font-weight: 600;
   font-family: var(--font-body); letter-spacing: -0.01em;
 }
-.bento .tile .tile-head .num { color: var(--ink-muted); font-size: var(--text-sm); font-family: var(--font-data); }
+.tile-card .tile-head .num { color: var(--ink-muted); font-size: var(--text-sm); font-family: var(--font-data); }
 
 @container (min-width: 720px) {
+  .bento          { grid-template-columns: repeat(12, minmax(0, 1fr)); }
   .tile-deposit   { grid-column: span 8; }
   .tile-afford    { grid-column: span 4; }
   .tile-flow      { grid-column: span 12; }
@@ -676,6 +677,8 @@
 }
 
 /* ---- Tile 6: Journey track --------------------------------------- */
+/* Standalone journey-page card (not a bento child) needs its own gap. */
+main > .tile-journey { margin-bottom: var(--space-6); }
 .journey-track {
   list-style: none; margin: 0; padding: 0;
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
