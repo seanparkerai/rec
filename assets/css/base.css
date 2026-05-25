@@ -19,6 +19,8 @@
 
 /* ---- Typography root: body sans, display serif, mono numerals -------- */
 html { color-scheme: light dark; }
+/* Auth flash prevention: body hidden until auth-guard confirms session. */
+html[data-auth-state="pending"] body { visibility: hidden; }
 body {
   font-family: var(--font-body);
   font-feature-settings: "ss01", "cv11", "kern";
