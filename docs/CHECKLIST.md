@@ -305,3 +305,18 @@ sources, so 9F items are queued behind tools to be run from a connected host.
 - [x] 2026-05-24: Quality remediation pass reverted 60 previously templated area records from researched back to directory stubs pending proper multi-source per-area rewrite.
 
 - [x] 2026-05-24: Re-ran next 10 records (alderbury-sp5 to charlton-all-saints-sp5) with refreshed sourced content pass.
+
+---
+
+## V2 Overhaul (docs/PLAN.md)
+
+Adopted 2026-05-25. Tick each v2 phase as it lands; commits go directly to `main` per CLAUDE.md §1.
+
+- [x] **Phase 1 — Constitution + design rules** (`c2c6038`): CLAUDE.md §14/§15/§16; DESIGN.md §3 bans + §5 five rules; `docs/INTELLIGENCE_RULES.md`; `docs/ROADMAP.md`.
+- [x] **Phase 2 — Intelligence engine**: `assets/js/format.js`, `assets/js/affordability.js`, `assets/js/money-flow.js`, `assets/js/savings-velocity.js`; tests `affordability.test.js`, `money-flow.test.js`, `savings-velocity.test.js` wired into `tests/tests.html`; mechanical formatter dedupe in `page-home.js` / `page-area-detail.js` / `page-finances.js`. Node smoke runner `tools/run-intelligence-tests.mjs` passes 20/20. INTELLIGENCE_RULES.md bands re-calibrated against this household (loosened LTI to 4.5/5.5/6.0× and payment/take-home to 40/52/60%; calibration note appended).
+- [ ] **Phase 3 — Dashboard overhaul** *(Linear-dense)*: bento layout consuming `assessAffordability` + `getMoneyFlow` + `getSavingsVelocity`. Phase-3 plan-mode breakdown to come.
+- [ ] **Phase 4a — Finances page overhauled** *(Linear-dense)*.
+- [ ] **Phase 4b — Areas + area detail overhauled** *(Linear-dense + Stripe-docs)*.
+- [ ] **Phase 4c — Journey + map + house-types polish**.
+- [ ] **Phase 5 — Placeholder pages** (`pages/listings.html`, `pages/outreach.html`, `pages/ask.html`).
+- [ ] **Phase 6 — Verification + polish**: full `tools/verify-ui.mjs` sweep at 320 / 375 / 768 / 1280 (light + dark + reduced-motion), axe-clean, Lighthouse targets met.

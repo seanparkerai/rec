@@ -2,13 +2,7 @@
 // including read-only summaries, breakdown tables, a savings projection chart, and live calculator tools.
 import { getFinances } from './storage.js';
 import * as fin from './finances.js';
-
-const gbp = (n) => new Intl.NumberFormat('en-GB', {
-  style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
-}).format(n || 0);
-const gbpPence = (n) => new Intl.NumberFormat('en-GB', {
-  style: 'currency', currency: 'GBP', minimumFractionDigits: 2, maximumFractionDigits: 2,
-}).format(n || 0);
+import { gbp, gbpPence } from './format.js';
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
 ));

@@ -3,10 +3,7 @@
 import { getFinances, getShortlist, getAreas, getProfile, getCriteria, _internal } from './storage.js';
 import { loadJSON } from './data-loader.js';
 import * as fin from './finances.js';
-
-const gbp = (n) => new Intl.NumberFormat('en-GB', {
-  style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
-}).format(n || 0);
+import { gbp } from './format.js';
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]

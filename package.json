@@ -7,7 +7,8 @@
   "scripts": {
     "serve": "python3 -m http.server 8000",
     "verify": "node tools/verify-ui.mjs",
-    "fonts": "node tools/fetch-fonts.mjs"
+    "fonts": "node tools/fetch-fonts.mjs",
+    "test": "node tools/run-intelligence-tests.mjs"
   },
   "devDependencies": {
     "playwright": "^1.60.0"

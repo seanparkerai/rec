@@ -26,6 +26,9 @@
     import * as schema from './schemas.js';
     import * as fin from '../assets/js/finances.js';
     import { test, assert, assertEqual, render } from './assert.js';
+    import { register as registerAffordability } from './affordability.test.js';
+    import { register as registerMoneyFlow } from './money-flow.test.js';
+    import { register as registerSavingsVelocity } from './savings-velocity.test.js';
 
     const fetchOk = async (path) => (await fetch(url(path))).ok;
 
@@ -142,6 +145,15 @@
     await test('Months to target: already at target → 0', () => {
       assertEqual(fin.calcMonthsToTarget(50000, 38000, 2000), 0);
     });
+
+    // --- Phase 2 intelligence modules (affordability, money-flow, savings-velocity) ---
+    const fixtures = {
+      finances: await loadJSON('finances'),
+      criteria: await loadJSON('criteria'),
+    };
+    await registerAffordability({ test, assert, assertEqual, fixtures });
+    await registerMoneyFlow({ test, assert, assertEqual, fixtures });
+    await registerSavingsVelocity({ test, assert, assertEqual, fixtures });
 
     document.getElementById('results').innerHTML = '';
     render(document.getElementById('results'));

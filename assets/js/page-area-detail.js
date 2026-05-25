@@ -1,14 +1,11 @@
 // page-area-detail.js — renders a single area by ?id=, using the 9-category framework.
 import { getAreas, getAreaDetail, getShortlist, saveShortlist } from './storage.js';
 import { url } from './config.js';
+import { gbp } from './format.js';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
 ));
-
-const gbp = (n) => new Intl.NumberFormat('en-GB', {
-  style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
-}).format(n || 0);
 
 const $ = (id) => document.getElementById(id);
 

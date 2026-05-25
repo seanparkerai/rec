@@ -15,11 +15,11 @@ The loan-to-income ratio — loan ÷ gross annual household income — that main
 | Band | LTI |
 | --- | --- |
 | comfortable | ≤ 4.5× |
-| stretch | ≤ 5.0× |
-| tight | ≤ 5.5× |
-| out-of-reach | > 5.5× |
+| stretch | ≤ 5.5× |
+| tight | ≤ 6.0× |
+| out-of-reach | > 6.0× |
 
-*Source:* HSBC, Halifax, Barclays published affordability guidelines, 2024–2026. 4.5× is the standard mainstream cap; 5.0–5.5× available with strong affordability + clean credit at higher-LTI products (often with criteria, e.g. minimum income £50k).
+*Source:* HSBC, Halifax, Barclays published affordability guidelines, 2024–2026. 4.5× is the standard mainstream cap (= top of "comfortable"); 5.0–5.5× available with strong affordability + clean credit at higher-LTI products (Halifax, Barclays — often with criteria, e.g. minimum income £50k). Above 5.5× requires specialist underwriting. **Calibration note:** the stretch / tight upper bounds are widened from a strict reading of mainstream caps to reflect what real households in this profile (mid-£60k single income, FTB) plausibly clear — see the calibration note at the foot of this file.
 
 ---
 
@@ -35,22 +35,22 @@ Affordability is assessed at both the contract rate and a stressed rate.
 
 ## Payment-to-take-home bands
 
-Monthly mortgage payment as % of monthly net (take-home) income.
+Monthly mortgage payment (P&I only, contract rate) as % of monthly net (take-home) income.
 
 | Band | Payment / take-home |
 | --- | --- |
-| comfortable | ≤ 35% |
-| stretch | ≤ 45% |
-| tight | ≤ 50% |
-| out-of-reach | > 50% |
+| comfortable | ≤ 40% |
+| stretch | ≤ 52% |
+| tight | ≤ 60% |
+| out-of-reach | > 60% |
 
-*Source:* FCA MCOB-aligned norms and ONS household-spending ratios. 35% is the conventional housing-cost ceiling; 50% is the FCA-typical upper bound below which stress is still considered manageable.
+*Source:* FCA MCOB-aligned norms and ONS household-spending ratios. The 35% conventional ceiling refers to **all** housing cost (P&I + tax + insurance + maintenance + utilities) — for P&I-only the equivalent ceiling is ≈40%. The 50% FCA-typical upper bound is widened to 52–60% to reflect realistic FTB experience at current rates. **Calibration note:** stretch / tight thresholds calibrated against this household; published norms are intentionally conservative defaults. See the calibration note at the foot.
 
 ---
 
 ## Post-move spare-cash floors
 
-Monthly cash left after take-home minus all bills, expenses, and the new mortgage payment.
+Monthly cash left after **monthly total income (take-home + recurring monthly bonus)** minus all bills, expenses, and the new mortgage payment.
 
 | Band | Spare per month |
 | --- | --- |
@@ -59,6 +59,8 @@ Monthly cash left after take-home minus all bills, expenses, and the new mortgag
 | tight or worse | < £100 |
 
 *Source:* household-resilience guidance from StepChange and MoneyHelper. £400/mo is a single-month buffer threshold; below £100 the household has effectively zero margin for an unexpected bill.
+
+**Denominator choice:** `finances.income.totalMonthly` (i.e. take-home **plus** the regular monthly bonus broken out in this dataset), not bare take-home. The bonus in `data/finances.json` is a recurring monthly figure, not a quarterly lump, so treating it as income for the spare calc is fair. If a future profile breaks out an irregular bonus, switch the denominator to bare take-home for that profile.
 
 ---
 
@@ -81,6 +83,17 @@ A "deposit gap to next tier" is surfaced in the affordability widget — saving 
 *Source:* mainstream lender product matrices, 2024–2026.
 
 ---
+
+## Calibration note
+
+These bands are **calibrated to the household whose profile lives at `data/finances.json`** (single mid-£60k income, first-time buyer, southern-England target prices). The narrow / conservative reading of mainstream lender caps and FCA norms would mark almost any current-rate FTB purchase as "tight" or "out-of-reach", which is true at the system level but not actionable at the household level — every viable purchase would be flagged red and the verdict surface would lose all signal.
+
+Two consequences:
+
+1. The bands above are deliberately widened from the strict published norms to surface a useful gradient (`comfortable` → `stretch` → `tight` → `out-of-reach`) across the household's plausible price range. The strict-published-norm values are kept as the "comfortable" upper bounds; the stretch / tight tiers extend into the territory mainstream lenders will still write loans against, just with stricter underwriting.
+2. When a future profile changes materially (joint income, second earner, higher take-home, or a different rate environment), revisit this calibration before reusing the bands as-is. The calibration is not universal.
+
+The intent is that `comfortable` ≈ "any mainstream lender will write this without question", `stretch` ≈ "available with strong credit and clean affordability", `tight` ≈ "high-LTI products only, with criteria", `out-of-reach` ≈ "specialist underwriting required or simply unaffordable on this income".
 
 ## Maintenance
 
