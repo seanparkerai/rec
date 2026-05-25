@@ -408,10 +408,10 @@ function populateContactSelect(role) {
   sel.innerHTML = '<option value="">— select or type below —</option>';
 
   const roleMap = {
-    'estate-agent': contacts.agents || [],
-    'mortgage-broker': contacts.brokers || [],
-    'solicitor': contacts.solicitors || [],
-    'surveyor': contacts.surveyors || [],
+    'estate-agent': contacts?.agents ?? [],
+    'mortgage-broker': contacts?.brokers ?? [],
+    'solicitor': contacts?.solicitors ?? [],
+    'surveyor': contacts?.surveyors ?? [],
   };
   const list = roleMap[role] || [];
   for (const c of list) {
@@ -554,9 +554,9 @@ function renderContacts() {
     <div class="contacts-group">
       <h3>${esc(g.label)}</h3>
       <ul class="contacts-list" id="clist-${esc(g.key)}">
-        ${(contacts[g.key] || []).length === 0
+        ${(contacts?.[g.key] ?? []).filter(Boolean).length === 0
           ? `<li class="contact-item__detail">None yet.</li>`
-          : (contacts[g.key] || []).map((c, i) => `
+          : (contacts?.[g.key] ?? []).filter(Boolean).map((c, i) => `
             <li class="contact-item">
               <div>
                 <div class="contact-item__name">${esc(c.name)}</div>
