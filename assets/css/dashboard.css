@@ -471,12 +471,12 @@
 @container (min-width: 720px) {
   .bento          { grid-template-columns: repeat(12, minmax(0, 1fr)); }
   .tile-deposit   { grid-column: span 12; }
-  .tile-afford    { grid-column: span 5; }
-  .tile-flow      { grid-column: span 7; }
-  .tile-shortlist { grid-column: span 5; }
-  .tile-journey   { grid-column: span 7; }
-  .tile-criteria  { grid-column: span 8; }
-  .tile-ask       { grid-column: span 4; }
+  .tile-afford    { grid-column: span 12; }
+  .tile-flow      { grid-column: span 12; }
+  .tile-shortlist { grid-column: span 12; }
+  .tile-journey   { grid-column: span 12; }
+  .tile-criteria  { grid-column: span 12; }
+  .tile-ask       { grid-column: span 12; }
   .tile-deposit .ring { width: 11rem; height: 11rem; }
 }
 
