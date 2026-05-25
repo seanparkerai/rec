@@ -36,7 +36,7 @@ done by eye in the browser.
 
 ## ✨ View live site
 
-**Live:** https://lukeclifforduk.github.io/rec/
+**Live:** https://seanparkerai.github.io/rec/
 
 The site auto-deploys from `main` via GitHub Actions.
 

@@ -143,7 +143,7 @@ placeholders if you'd rather supply later:
 
 > **GitHub Pages:** the workflow deploys the site root on every push to `main`. This needs a **one-time
 > toggle** by you in the repo: *Settings → Pages → Source: GitHub Actions*. I'll flag this in Phase 1 and
-> in the README. Live URL will be `https://lukeclifforduk.github.io/rec/`.
+> in the README. Live URL will be `https://seanparkerai.github.io/rec/`.
 
 ---
 
