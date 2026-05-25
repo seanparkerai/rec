@@ -945,10 +945,6 @@ To resolve, decide which version is the source of truth:
       }
     });
 
-    wireCopyBtn(
-      document.getElementById('btn-copy-align-prompt'),
-      () => document.getElementById('align-prompt-content').textContent
-    );
 
     // ── Push: repo JSON → Supabase ────────────────────────────────────
     document.getElementById('btn-push')?.addEventListener('click', async () => {
@@ -1036,10 +1032,6 @@ Commit message: \`data: sync JSON files from Supabase (${today})\``;
       document.getElementById('pull-prompt-wrap').classList.add('visible');
     });
 
-    wireCopyBtn(
-      document.getElementById('btn-copy-pull-prompt'),
-      () => document.getElementById('pull-prompt-content').textContent
-    );
 
     // ── Data viewer ───────────────────────────────────────────────────
     const VIEWER_TABLES = [
@@ -1186,10 +1178,6 @@ Commit message: \`data: sync JSON files from Supabase (${today})\``;
       }
     });
 
-    wireCopyBtn(
-      document.getElementById('btn-copy-schema-prompt'),
-      () => document.getElementById('schema-migration-content').textContent
-    );
 
     // ── Config: credential file generator ────────────────────────────
     document.getElementById('btn-gen-client')?.addEventListener('click', () => {
@@ -1208,10 +1196,6 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       document.getElementById('gen-client-wrap').classList.add('visible');
     });
 
-    wireCopyBtn(
-      document.querySelector('[data-copy-id="gen-client-content"]'),
-      () => document.getElementById('gen-client-content').textContent
-    );
 
     // ── Config: member SQL generator ──────────────────────────────────
     const rowsWrap = document.getElementById('member-rows');
@@ -1273,14 +1257,30 @@ $$;`;
       document.getElementById('gen-member-wrap').classList.add('visible');
     });
 
-    wireCopyBtn(
-      document.querySelector('[data-copy-id="gen-member-content"]'),
-      () => document.getElementById('gen-member-content').textContent
-    );
 
     // ── Boot ───────────────────────────────────────────────────────────
     document.addEventListener('shell:ready', () => {
       refreshStatus();
+      wireCopyBtn(
+        document.getElementById('btn-copy-align-prompt'),
+        () => document.getElementById('align-prompt-content').textContent
+      );
+      wireCopyBtn(
+        document.getElementById('btn-copy-pull-prompt'),
+        () => document.getElementById('pull-prompt-content').textContent
+      );
+      wireCopyBtn(
+        document.getElementById('btn-copy-schema-prompt'),
+        () => document.getElementById('schema-migration-content').textContent
+      );
+      wireCopyBtn(
+        document.querySelector('[data-copy-id="gen-client-content"]'),
+        () => document.getElementById('gen-client-content').textContent
+      );
+      wireCopyBtn(
+        document.querySelector('[data-copy-id="gen-member-content"]'),
+        () => document.getElementById('gen-member-content').textContent
+      );
     });
 
     document.addEventListener('DOMContentLoaded', () => {
