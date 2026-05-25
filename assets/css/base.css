@@ -156,7 +156,7 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
 
 /* ---- Top nav ---- */
 .site-nav {
-  position: sticky; top: 0; z-index: 19;
+  position: sticky; top: var(--header-h, 4rem); z-index: 19;
   background: color-mix(in oklch, var(--paper) 92%, transparent);
   -webkit-backdrop-filter: saturate(160%) blur(12px);
           backdrop-filter: saturate(160%) blur(12px);
@@ -198,9 +198,8 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
   animation-timing-function: var(--ease-out);
 }
 
-/* Mobile-only fade hint on the scrollable nav */
+/* Mobile-only fade hint on the scrollable nav (stays sticky below the header) */
 @media (max-width: 480px) {
-  .site-nav { position: relative; }
   .site-nav::after {
     content: ""; position: absolute; top: 0; right: 0; bottom: 0;
     width: 2.5rem; pointer-events: none;

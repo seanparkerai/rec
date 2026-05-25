@@ -73,13 +73,13 @@
         </header>
         <p class="verdict-line" id="ta-verdict">Calculating verdict&hellip;</p>
         <svg class="ladder" id="ta-ladder" viewBox="0 0 300 80" aria-label="Affordability bands by price"></svg>
-        <div class="ladder-inputs">
+        <div class="ladder-inputs" role="group" aria-label="Affordability range">
           <label>
-            <span>What about &pound;?</span>
+            <span>From &pound;</span>
             <input type="number" id="ta-price-a" inputmode="numeric" placeholder="320000" min="100000" max="2000000" step="5000" />
           </label>
           <label>
-            <span>And &pound;?</span>
+            <span>To &pound;</span>
             <input type="number" id="ta-price-b" inputmode="numeric" placeholder="450000" min="100000" max="2000000" step="5000" />
           </label>
         </div>
@@ -125,8 +125,8 @@
 
       <section class="tile-card tile-journey" id="tile-journey" aria-labelledby="tj-label">
         <header class="tile-head">
-          <h2 id="tj-label">Journey</h2>
-          <a data-nav="pages/journey.html" class="tile-head-action">Open journey &rarr;</a>
+          <h2 id="tj-label">Checklists</h2>
+          <a data-nav="pages/journey.html" class="tile-head-action">Open checklists &rarr;</a>
         </header>
         <ul class="journey-track" id="tj-track"></ul>
         <div class="journey-next">

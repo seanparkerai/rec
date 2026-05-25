@@ -14,9 +14,10 @@
 /* ---- Magazine lede (above bento) ----------------------------------- */
 .page-lede {
   margin: var(--space-6) 0 var(--space-6);
-  padding: var(--space-5) 0;
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
+  padding: var(--space-5);
+  border: 1px solid var(--hairline);
+  border-radius: var(--rec-radius);
+  background: var(--paper);
   display: grid; gap: var(--space-4);
 }
 .page-lede .lede-prose {
@@ -628,6 +629,7 @@
 .ladder__band--tight        { fill: color-mix(in oklch, var(--ink) 10%, var(--paper)); }
 .ladder__band--out-of-reach { fill: color-mix(in oklch, var(--ink) 22%, var(--paper)); }
 .ladder__marker { stroke: var(--ink); stroke-width: 2; fill: var(--paper); }
+.ladder__range { fill: color-mix(in oklch, var(--accent) 10%, transparent); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 2; }
 .ladder__tick   { fill: var(--ink-muted); font-size: 8px; font-family: var(--font-data); }
 .ladder__label  { fill: var(--ink); font-size: 9px; font-family: var(--font-data); font-weight: 500; }
 
