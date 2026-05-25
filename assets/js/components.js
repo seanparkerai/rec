@@ -1,6 +1,7 @@
 // components.js — shell bootstrap: inject shared partials, mark active nav, wire theme toggle.
 // Loaded on every page as <script type="module">.
 import { url, STORAGE_NS } from './config.js';
+import { signOut, getCurrentUser } from './storage.js';
 
 const THEME_KEY = `${STORAGE_NS}:theme`;
 
@@ -89,12 +90,56 @@ function initHeaderHeightVar() {
 /* Apply saved theme ASAP to reduce flash (before includes resolve). */
 applyTheme(localStorage.getItem(THEME_KEY));
 
-injectIncludes().then(() => {
+injectIncludes().then(async () => {
   setActiveNav();
   initTheme();
   initScrollShrink();
   initHeaderHeightVar();
+  hideSetupNavIfComplete();
+  await initHeaderUser();
   document.dispatchEvent(new CustomEvent('shell:ready'));
 });
+
+function hideSetupNavIfComplete() {
+  try {
+    const raw = localStorage.getItem(`${STORAGE_NS}:setup-progress`);
+    if (!raw) return;
+    const progress = JSON.parse(raw);
+    const STEP_IDS = [
+      'chk-1-1','chk-1-2','chk-1-3',
+      'chk-2-1','chk-2-2','chk-2-3',
+      'chk-3-1','chk-3-2','chk-3-3',
+      'chk-4-1','chk-4-2','chk-4-3',
+      'chk-5-1','chk-5-2','chk-5-3',
+    ];
+    const allDone = STEP_IDS.every(id => progress[id]);
+    if (allDone) {
+      const li = document.getElementById('nav-setup-item');
+      if (li) li.hidden = true;
+    }
+  } catch { /* ignore */ }
+}
+
+async function initHeaderUser() {
+  try {
+    const user = await getCurrentUser();
+    if (!user) return;
+    const userEl = document.getElementById('header-user');
+    const signOutBtn = document.getElementById('btn-sign-out');
+    if (userEl) {
+      userEl.textContent = user.email;
+      userEl.hidden = false;
+    }
+    if (signOutBtn) {
+      signOutBtn.hidden = false;
+      signOutBtn.addEventListener('click', async () => {
+        await signOut();
+        // Resolve login page path relative to config.js location
+        const loginUrl = url('pages/login.html');
+        location.replace(loginUrl);
+      });
+    }
+  } catch { /* ignore — pre-setup mode */ }
+}
 
 export { injectIncludes, setActiveNav, initTheme, effectiveTheme };

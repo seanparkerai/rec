@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Sign in · rec</title>
+  <meta name="description" content="Sign in to rec — your first-time buyer dashboard." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <style>
+    /* ── Login page — Stripe-docs anchor ─────────────────────────────── */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      background: var(--paper);
+    }
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8) var(--space-4);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--rec-radius);
+      padding: var(--space-8);
+    }
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-8);
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .login-brand-mark {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 500;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--border);
+      border-radius: var(--rec-radius-sm);
+    }
+    .login-brand-text {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 500;
+    }
+    .login-brand-sub {
+      font-size: var(--text-xs);
+      color: var(--ink-muted);
+      font-family: var(--font-body);
+      font-weight: 400;
+      margin-left: var(--space-1);
+    }
+    .login-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 500;
+      margin-bottom: var(--space-6);
+      color: var(--ink);
+    }
+    .login-error {
+      background: color-mix(in oklch, oklch(55% 0.18 25) 12%, var(--surface));
+      border: 1px solid oklch(55% 0.18 25);
+      border-radius: var(--rec-radius-sm);
+      color: oklch(42% 0.18 25);
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-4);
+      display: none;
+    }
+    .login-error.visible { display: block; }
+    .login-form label {
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: var(--space-1);
+      display: block;
+    }
+    .login-form input[type="email"],
+    .login-form input[type="password"] {
+      width: 100%;
+      margin-bottom: var(--space-4);
+    }
+    .login-form button[type="submit"] {
+      width: 100%;
+      margin-top: var(--space-2);
+    }
+    .login-form button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .login-footer {
+      margin-top: var(--space-6);
+      font-size: var(--text-xs);
+      color: var(--ink-muted);
+      text-align: center;
+    }
+    .login-footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <a class="login-brand" href="../index.html">
+        <span class="login-brand-mark">r</span>
+        <span>
+          <span class="login-brand-text">rec</span>
+          <span class="login-brand-sub">Hampshire &amp; Wiltshire</span>
+        </span>
+      </a>
+
+      <h1 class="login-title">Sign in</h1>
+
+      <div class="login-error" id="login-error" role="alert"></div>
+
+      <form class="login-form" id="login-form" novalidate>
+        <div>
+          <label for="login-email">Email address</label>
+          <input
+            type="email"
+            id="login-email"
+            name="email"
+            autocomplete="email"
+            required
+            placeholder="you@example.com"
+          />
+        </div>
+        <div>
+          <label for="login-password">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            autocomplete="current-password"
+            required
+            placeholder="••••••••"
+          />
+        </div>
+        <button type="submit" id="login-submit">Sign in</button>
+      </form>
+
+      <p class="login-footer">
+        Need access? Ask the household admin to add you in
+        <a href="setup.html">Setup</a>.
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    // If supabase-client.js doesn't exist yet, show a helpful message.
+    let supabase;
+    try {
+      const mod = await import('../assets/js/supabase-client.js');
+      supabase = mod.supabase;
+    } catch {
+      document.getElementById('login-error').textContent =
+        'Supabase is not configured yet. Complete the setup at pages/setup.html first.';
+      document.getElementById('login-error').classList.add('visible');
+      document.getElementById('login-submit').disabled = true;
+    }
+
+    // If already signed in, redirect to intended destination.
+    if (supabase) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const params = new URLSearchParams(location.search);
+        location.replace(params.get('next') || '../index.html');
+      }
+    }
+
+    const form = document.getElementById('login-form');
+    const errorEl = document.getElementById('login-error');
+    const submitBtn = document.getElementById('login-submit');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!supabase) return;
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        errorEl.textContent = 'Please enter your email and password.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      errorEl.classList.remove('visible');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in…';
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errorEl.textContent = error.message;
+        errorEl.classList.add('visible');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign in';
+        document.getElementById('login-password').focus();
+        return;
+      }
+
+      const params = new URLSearchParams(location.search);
+      location.replace(params.get('next') || '../index.html');
+    });
+  </script>
+</body>
+</html>
