@@ -1277,9 +1277,11 @@ Commit message: \`data: sync JSON files from Supabase (${today})\``;
 
       const results = await Promise.all(EXPECTED_TABLES.map(async table => {
         const { error } = await sb.from(table).select('id').limit(1);
-        const missing = error?.code === '42P01' || error?.message?.includes('does not exist');
-        const ok = !error || !missing;
-        return { table, ok, missing };
+        // Any error means the table is missing or inaccessible — don't try to
+        // classify the error code since PostgREST wraps Postgres errors differently
+        // across versions (42P01 vs PGRST116 vs plain 404).
+        const ok = !error;
+        return { table, ok, missing: !ok };
       }));
 
       listEl.innerHTML = '';
