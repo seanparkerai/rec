@@ -270,6 +270,25 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     });
 
     // ── dataNeeded vs body placeholder consistency ────────────────────
+    test('outreach-renderer: filterContextByDataNeeded strips paths not in dataNeeded', () => {
+      const { filterContextByDataNeeded: fctx } = renderer;
+      const ctx = { profile: { firstName: 'Alex', sensitive: 'SECRET' }, finances: { income: { annualBaseSalary: 64000 } } };
+      const filtered = fctx(ctx, ['profile.firstName']);
+      assert(filtered.profile.firstName === 'Alex', 'Allowed field should be present');
+      assert(filtered.profile.sensitive === undefined, 'Not-in-dataNeeded field should be stripped');
+      assert(filtered.finances === undefined, 'Entire finances branch should be stripped when not needed');
+    });
+
+    test('outreach-renderer: A1 filtered context never contains salary even when full context has it', () => {
+      const { filterContextByDataNeeded: fctx } = renderer;
+      const tmpl = templates.find((t) => t.id === 'A1');
+      const fullCtx = assembleContext({ finances: SAMPLE_CTX.finances, profile: SAMPLE_CTX.profile, contact: SAMPLE_CTX.contact, listing: SAMPLE_CTX.listing, extras: {} });
+      const filtered = fctx(fullCtx, tmpl.dataNeeded);
+      // finances.income.annualBaseSalary should not be reachable.
+      const leaked = renderer.resolvePath(filtered, 'finances.income.annualBaseSalary');
+      assert(leaked === undefined, 'Salary should not be accessible in filtered A1 context');
+    });
+
     test('outreach-templates: no body placeholder outside dataNeeded', () => {
       const placeholderRe = /\{\{(?!#if|\/if)([^}]+)\}\}/g;
       for (const tmpl of templates) {
