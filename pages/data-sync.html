@@ -615,6 +615,14 @@
         <span class="sync-status-tile-name">journey_checks</span>
         <span class="sync-status-tile-val none" id="status-journey_checks">—</span>
       </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">contacts</span>
+        <span class="sync-status-tile-val none" id="status-contacts">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">outreach</span>
+        <span class="sync-status-tile-val none" id="status-outreach">—</span>
+      </div>
     </div>
     <p class="refresh-row">Last Supabase update times. <button id="btn-refresh-status">Refresh</button></p>
 
@@ -1164,6 +1172,8 @@ Commit message: \`data: sync JSON files from Supabase (${today})\``;
       { table: 'shortlist',      label: 'Area shortlist' },
       { table: 'zones',          label: 'Map zones' },
       { table: 'journey_checks', label: 'Journey checklist' },
+      { table: 'contacts',       label: 'Contacts directory' },
+      { table: 'outreach',       label: 'Outreach log' },
     ];
 
     function flattenToRows(obj, prefix = '') {
