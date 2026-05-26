@@ -16,9 +16,9 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(r.verdict, 'comfortable', `got ${r.verdict} — ${r.headline}`);
   });
 
-  await test('affordability: £380k → stretch (plan acceptance criterion)', () => {
+  await test('affordability: £380k → tight (corrected take-home £3,543.54)', () => {
     const r = at(380_000);
-    assertEqual(r.verdict, 'stretch', `got ${r.verdict} — ${r.headline}`);
+    assertEqual(r.verdict, 'tight', `got ${r.verdict} — ${r.headline}`);
   });
 
   await test('affordability: £420k → tight', () => {
