@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Basingstoke",
   "coords": {
-    "lat": 51.09988,
-    "lng": -0.85
+    "lat": 51.1138,
+    "lng": -1.0259
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

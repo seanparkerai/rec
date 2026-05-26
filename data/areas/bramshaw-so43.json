@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.86808,
-    "lng": -1.57228
+    "lat": 50.9663,
+    "lng": -1.5809
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
