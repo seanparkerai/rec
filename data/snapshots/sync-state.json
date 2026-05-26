@@ -43,8 +43,8 @@
     "last_synced_at": "2026-05-26T21:57:08Z"
   },
   "investments_history": {
-    "count": 0,
-    "last_synced_at": null,
-    "_note": "T212 importer not yet run — table remains empty until scripts/import-trading212.mjs is executed"
+    "count": 12,
+    "last_synced_at": "2026-05-26T22:55:00Z",
+    "_note": "T212 CSV imported 2026-05-26; 12 months 2025-05 → 2026-05; net contributed £22,719.32"
   }
 }
