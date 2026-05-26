@@ -8,6 +8,35 @@ interactive map of search areas.
 It is a **zero-build static web app** (plain HTML/CSS/JS, libraries via CDN) that stores content as
 editable JSON in the repo. Designed so a future login + web-server backend is a swap, not a rewrite.
 
+## v3 — visuals + page re-prioritisation
+
+The v3 cycle adds the visual surfaces that turn the v2 intelligence engine into
+something you read at a glance. Eleven new visualisations across the dashboard and
+finances page, each paired with a caption-as-answer (DESIGN.md §5 rule 4):
+
+- **Savings over time** on the dashboard (sparkline) and finances page (full Chart.js
+  line) — actual cumulative balance plotted against the engine baseline and the £40k
+  target hairline.
+- **Trading 212 ISA performance suite** on the finances page — monthly deposits, ISA
+  stacked area (contributions vs dividends vs interest vs market growth), cumulative
+  dividends + interest, strategy-epoch comparison, ticker exposure treemap, realised
+  vs unrealised P&L. All stub-safe: when the T212 importer hasn't been run, every
+  visual degrades to a single explanatory placeholder.
+- **Dashboard re-ranked** by decision value × visual density per pixel — scenario fan,
+  net-worth donut, withdrawal-readiness seasoning bar, and an in-tile savings
+  sparkline join the existing tiles; shortlist/criteria/ask move to a foot context strip.
+- **Finances Now stage** re-ordered so the savings trajectory chart sits below the
+  hero. **Later stage** leads with the affordability widget; deposit-at-risk upgraded
+  from a text scenarios table to a 3-step waterfall (current → −10% → −20%) labelled
+  with months-of-savings-lost.
+- **Profile** page promotes "Things to check" to rank 2 — actions before known data.
+- **Supabase contract** (CLAUDE.md §18) extended: `storage.js` gains `getGoals`,
+  `getReadinessChecklist`, `saveReadinessItem`, `getInvestmentsHistory`. Four v3
+  tables (`goals`, `readiness_checklist`, `investments_accounts`,
+  `investments_history`) are backfilled via the Supabase MCP connector.
+
+See `PROGRESS.md` for the phase-by-phase delivery.
+
 ## v2 — visual-first overhaul + intelligence engine
 
 The v2 cycle (`docs/PLAN.md`) shipped a calm-precise-editorial redesign plus a small **intelligence

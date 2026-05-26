@@ -128,3 +128,63 @@ then wire up storage.js to the new tables, and extend `tests/supabase-sync.test.
 
 
 
+
+---
+
+## Phase v3.0 — Visuals + re-prioritisation
+
+**Goal:** add the visual surfaces (savings-over-time + ISA performance suite + dashboard reorganisation) that turn the v2 intelligence engine into something a user reads at a glance, and finish wiring v3 Supabase tables.
+
+### Deliverables
+
+**Phase 1 — data plumbing**
+- `assets/js/savings-series.js` — new pure module `buildSavingsSeries()`; composes T212 monthly cumulatives with the engine baseline projection. Stub-safe.
+- `assets/js/investment-performance.js` — extended with `getMonthlyCumulativeDeposits()` and `getEpochAttribution()` (contribution-weighted estimated annualised return per epoch).
+- Tests: 3 new `savings-series.test.js` cases; 4 new `investment-performance.test.js` cases.
+
+**Phase 2 — dashboard tiles + re-rank**
+- `index.html` reorganised into the v3 rank order: deposit → afford → scenarios-fan (NEW) → deposit-risk (promoted) → networth (NEW) → flow → readiness → journey → scenarios → withdraw-ready (NEW) → context strip (shortlist/criteria/ask).
+- Savings sparkline added inside the deposit tile.
+- 4 new render functions in `page-home.js`; all stub-safe.
+
+**Phase 3 — finances/Now seven-visual ISA suite**
+- 7 new sections in priority order: savings-over-time, monthly deposits, ISA stacked area, cumulative dividends + interest, strategy-epoch comparison, ticker exposure treemap (squarified), realised vs unrealised P&L.
+- Money-flow tile, bills, expenses demoted to the foot of the stage.
+- All renderers stub-safe; each carries a caption-as-answer.
+
+**Phase 4 — finances/Later re-order + waterfall**
+- Later stage re-ordered: afford-widget → what-if → later-flow → deposit-risk → collapsibles.
+- Deposit-at-risk tile upgraded to a 3-step waterfall SVG (current → −10% → −20%) with months-of-savings-lost annotations.
+
+**Phase 5 — profile re-order + storage + Supabase backfill**
+- Profile page: Things to check promoted to rank 2 (after Personal details).
+- `storage.js` extended (not rewritten) with `getGoals`/`saveGoals`, `getReadinessChecklist`/`saveReadinessItem`, `getInvestmentsHistory`.
+- MCP backfill: 1 goals row, 13 readiness items, 1 investments_accounts row (Trading 212 ISA). investments_history skipped (importer not yet run).
+- Snapshot extended; new sync test asserts the v3 tables are tracked.
+
+### v3 visual count
+
+Eleven visuals across two surfaces, all carrying a caption-as-answer (DESIGN.md §5 rule 4):
+
+| # | Visual | Surface |
+|---|--------|---------|
+| 1 | Savings-over-time | Dashboard sparkline + finances full chart |
+| 2 | Monthly deposits column | Finances/Now |
+| 3 | ISA stacked-area | Finances/Now (after attribution bar) |
+| 4 | Cumulative dividends + interest | Finances/Now |
+| 5 | Strategy-epoch comparison | Finances/Now |
+| 6 | Ticker exposure treemap | Finances/Now |
+| 7 | Realised vs unrealised P&L | Finances/Now |
+| 8 | Withdrawal-readiness countdown | Dashboard |
+| 9 | Deposit-at-risk waterfall | Finances/Later |
+| 10 | Months-to-target scenario fan | Dashboard |
+| 11 | Net-worth composition donut | Dashboard |
+
+### Out of scope (untouched per §16)
+
+`assets/css/tokens.css`, `assets/js/finances.js` (core calculators), `assets/js/config.js`, `assets/js/data-loader.js`, `data/schema/area.schema.json`, `.github/workflows/*`.
+
+### Stub-safe contract
+
+Every new visual gracefully renders an explanatory placeholder (`"Run the Trading 212 importer to see this chart"`) when `data/imports/trading212-history.json` is the stub. A fresh checkout never sees broken charts.
+

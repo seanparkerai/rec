@@ -124,5 +124,6 @@ Validates T212 column format, deduplicates by transaction ID, writes output file
 | `assets/js/money-flow.js` | `getMoneyFlow()`, `getMoneyFlowPostMove()` | finances | Pre/post-move bucket shapes |
 | `assets/js/savings-velocity.js` | `getSavingsVelocity()`, `getVelocityFromHistory()` | finances / history | History variant stub-safe |
 | `assets/js/deposit-risk.js` | `assessDepositRisk()` | investments, goals | Luke current = high-risk (100% equity, 3-6mo) |
-| `assets/js/investment-performance.js` | `analysePerformance()` | history | Stub-safe; returns isStub=true when no data |
+| `assets/js/investment-performance.js` | `analysePerformance()`, `getMonthlyCumulativeDeposits()`, `getEpochAttribution()` | history | Stub-safe. v3 adds cumulative + per-epoch helpers. |
+| `assets/js/savings-series.js` | `buildSavingsSeries()` | history + finances + goal | v3: composes monthly cumulative deposits with the engine baseline projection for the savings-over-time chart. Stub-safe. |
 | `assets/js/finances.js` | `calcSDLT()`, `calcMonthlyMortgage()`, `calcLTV()` etc. | primitives | Pure; do not rewrite |
