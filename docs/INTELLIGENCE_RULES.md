@@ -103,3 +103,60 @@ When any constant changes:
 2. Update the matching literal in `assets/js/affordability.js`.
 3. Update the affordability test fixtures in `tests/affordability.test.js` if a band edge moved across a test case.
 4. Commit with `docs: update intelligence rules — <which one>` and a one-line rationale.
+
+---
+
+## Deposit-risk verdict engine (`assets/js/deposit-risk.js`)
+
+Verdict thresholds for `assessDepositRisk(investments, goals)`:
+
+| Verdict | Condition |
+|---------|-----------|
+| `low-risk` | earmarked equity < 50% **OR** timeline > 12 months |
+| `moderate-risk` | 50-100% equity **AND** timeline 6-12 months |
+| `high-risk` | 100% equity **AND** timeline < 6 months |
+
+**Luke's current state:** 100% in equity ETFs (VHYL/VUSA/VEVE/VFEM) + physical gold (SGLN), 3-6 month timeline → **high-risk**, urgency=high.
+
+**Risk recommendation logic:**
+
+- `high-risk` → "De-risk 50-100% to a Cash ISA or high-interest savings account", urgency=high. Rationale: 3-6 month timeline with 100% equity means a market correction maps directly to a deposit shortfall.
+- `moderate-risk` → "Consider partially de-risking (50%)", urgency=medium.
+- `low-risk` → "No immediate action required", urgency=low.
+
+**Scenarios returned:** 5%, 10%, 15%, 20% drop. The dashboard surfaces 10% and 20%.
+
+**Withdrawal readiness note:** Lenders need a 3-month paper trail showing the deposit source. Sell ETFs and transfer to Barclays at least 3 months before applying.
+
+*Source:* standard lender source-of-funds requirements; volatility risk is user-specific based on 3-6 month timeline stated in `data/goals.json`.
+
+---
+
+## Affordability scenarios (`assessAffordabilityScenarios()`)
+
+Three canned scenarios produced by `assessAffordabilityScenarios({ finances, criteria, goals })`:
+
+| Scenario key | Price | Deposit | Description |
+|-------------|-------|---------|-------------|
+| `buyNowLowerTarget` | £340,000 | current savings (£31,193) | Buy sooner with current pot |
+| `buyOnTargetDeposit` | £375,000 (engine centre) | hoped-for £50,000 | Buy when hoped deposit is reached |
+| `buyAtHigherTarget` | £400,000 | 12.5% of price (£50,000) | Stretch scenario at upper budget bound |
+
+**monthsToReady** is computed as `ceil((targetDeposit - currentSavings) / monthlyContribution)`. For `buyNowLowerTarget` it is always 0.
+
+**Important:** Bonus (£3,000 discretionary) and pay rise scenario (£66k) are **not** used in these projections. They are available as scenario toggles only.
+
+**Verdict for Luke's actual numbers (£3,543.54 take-home, £64k gross, April 2026):**
+- buyNow £340k: stretch (LTI 4.76×, spare ~£229)
+- target £375k: tight (LTI 5.07×, spare ~£19 with £50k deposit)
+- higher £400k: tight (LTI 5.22×, spare negative without bonus)
+
+---
+
+## Maintenance (additions)
+
+When deposit-risk thresholds change:
+1. Update verdict logic in `assets/js/deposit-risk.js` `deriveVerdict()`.
+2. Update the table above with rationale.
+3. Update test cases in `tests/deposit-risk.test.js`.
+4. Commit with `docs: update intelligence rules — deposit-risk thresholds`.

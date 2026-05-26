@@ -61,4 +61,70 @@ _Status: COMPLETE_
 - tests/schemas.js: validateProfile() updated to accept new nested format (backward compatible with old format)
 - Visual check needed by developer at 320/375/768/1280px widths
 
+---
+
+## Phase 5 — Documentation + Supabase handoff
+_Status: COMPLETE_
+
+- `docs/DATA_MODEL.md`: new — all 7 JSON files documented (purpose, key fields, update cadence, consumer modules)
+- `docs/INTELLIGENCE_RULES.md`: extended with deposit-risk verdict thresholds and affordability-scenarios spec + maintenance instructions
+- `supabase/schema-additions.sql`: 7 new tables (goals, investments_accounts, investments_history, debts_credit_cards, debts_student_loans, debts_other, readiness_checklist) + ALTER profile for extended_data. All RLS. Idempotent. NOT executed here — awaiting Supabase MCP run.
+- `docs/SUPABASE_MIGRATION.md`: new — explains what schema-additions.sql is, how to apply (MCP preferred), what needs wiring post-migration
+
+---
+
+## HANDOFF
+
+### Completed (this session)
+
+**Phase 1 — Data model:**
+- `data/profile.json` — full nested profile (person/employment/credit/debts/pension/insurance)
+- `data/finances.json` — income corrected to April 2026 payslip (take-home £3,543.54); outgoings block added; all arrays preserved
+- `data/criteria.json` — expanded property types, renovation appetite, lifestyle two-tier vision, area scoring; legacy keys preserved
+- `data/goals.json` — deposit targets, readiness checklist, timeline
+- `data/investments.json` — T212 ISA structure, epochs, risk scenarios, LISA skip rationale
+- `data/imports/trading212-history.json` — stub (ready for real CSV import)
+
+**Phase 2 — Intelligence engine:**
+- `assets/js/deposit-risk.js` — high-risk verdict for Luke's state (100% equity, 3-6mo)
+- `assets/js/affordability.js` — `assessAffordabilityScenarios()` (3-scenario: £340k/stretch/now, £375k/tight/10mo, £400k/tight/10mo)
+- `assets/js/savings-velocity.js` — `getVelocityFromHistory()` (stub-safe, 3-month window)
+- `assets/js/investment-performance.js` — `analysePerformance()` (stub-safe, epoch attribution)
+- Tests: 3 new test files wired into tests.html
+
+**Phase 3 — Historical import:**
+- `scripts/import-trading212.mjs` — Node.js T212 CSV importer; runs as: `node scripts/import-trading212.mjs path/to/export.csv`
+- `page-finances.js` — ISA attribution + deposit-risk tile (both stub-safe)
+- `page-home.js` — ISA YTD stat (stub-safe)
+
+**Phase 4 — Dashboard surfaces:**
+- 3 new bento tiles: readiness, deposit-at-risk, affordability scenarios
+- `pages/profile.html` — full read-only profile page (person/employment/credit/debts/pension/followup)
+- `assets/js/page-profile-detail.js` — new module for new profile.json format
+
+**Phase 5 — Docs + Supabase:**
+- `docs/DATA_MODEL.md`, `docs/INTELLIGENCE_RULES.md` (extended), `docs/SUPABASE_MIGRATION.md`
+- `supabase/schema-additions.sql` — idempotent DDL for 7 new tables (NOT yet applied)
+
+### Deferred
+
+- Credit scores (Experian/Equifax/TransUnion) — `null` with `_followUp` in profile.json; populate after user checks
+- Pension pot value — `null` with `_followUp`; populate from provider portal
+- Student loan balance — `null`; retrieve from student loans portal
+- Pay rise confirmation (£66k scenario) — `confidence: low`; monitor
+- Barclays bank statement import — not built
+- Barclaycard balance clearing confirmation — action pending
+- LISA: no account opened; if timeline slips past 12 months, open with £1 to start the clock
+- T212 CSV import — user needs to run: `node scripts/import-trading212.mjs path/to/your-export.csv`
+- Supabase schema migration — see `docs/SUPABASE_MIGRATION.md` and `supabase/schema-additions.sql`
+- storage.js extensions for new tables (goals, investments, readiness checklist)
+- LLM ask front-end, Rightmove scraping, outreach sending — all remain placeholder
+
+### Exact next step
+
+Run the Supabase migration prompt in Claude web with the Supabase MCP connector enabled.
+The companion prompt should apply `supabase/schema-additions.sql` via `mcp__supabase__apply_migration`,
+then wire up storage.js to the new tables, and extend `tests/supabase-sync.test.js`.
+
+
 
