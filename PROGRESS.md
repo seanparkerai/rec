@@ -48,4 +48,17 @@ _Status: COMPLETE_
 - `page-finances.js` updated: imports analysePerformance + assessDepositRisk; renderISAAttribution() + renderDepositRiskTile() added (both gracefully stub-safe)
 - `page-home.js` updated: imports analysePerformance; renderISAYTD() added (stub-safe, shows YTD contributions)
 
+---
+
+## Phase 4 — Dashboard surface upgrades
+_Status: COMPLETE_
+
+- index.html: 3 new tiles added to bento (readiness, deposit-risk, affordability scenarios); ISA YTD stat added to deposit tile
+- page-home.js: renderReadinessTile(), renderDepositRiskTile(), renderAffordabilityScenariosTile() + renderISAYTD() wired
+- pages/profile.html: redirect stub replaced with full read-only profile page (6 sections)
+- assets/js/page-profile-detail.js: new module rendering person/employment/credit/debts/pension + followup list from new profile.json format
+- assets/css/dashboard.css: verdict-badge, readiness, deposit-risk, scenario, ISA attribution, profile-dl styles appended
+- tests/schemas.js: validateProfile() updated to accept new nested format (backward compatible with old format)
+- Visual check needed by developer at 320/375/768/1280px widths
+
 
