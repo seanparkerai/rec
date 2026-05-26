@@ -32,6 +32,7 @@
     import { register as registerDepositRisk } from './deposit-risk.test.js';
     import { register as registerAffordabilityScenarios } from './affordability-scenarios.test.js';
     import { register as registerInvestmentPerformance } from './investment-performance.test.js';
+    import { register as registerSavingsSeries } from './savings-series.test.js';
     import { register as registerFinanceDerive } from './finance-derive.test.js';
     import { deriveFinances } from '../assets/js/finance-derive.js';
 
@@ -197,6 +198,7 @@
     await registerDepositRisk({ test, assert, assertEqual, fixtures });
     await registerAffordabilityScenarios({ test, assert, assertEqual, fixtures });
     await registerInvestmentPerformance({ test, assert, assertEqual, fixtures });
+    await registerSavingsSeries({ test, assert, assertEqual, fixtures });
 
     document.getElementById('results').innerHTML = '';
     render(document.getElementById('results'));

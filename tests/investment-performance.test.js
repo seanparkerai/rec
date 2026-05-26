@@ -1,6 +1,6 @@
 // investment-performance.test.js — analysePerformance() + getVelocityFromHistory()
 
-import { analysePerformance } from '../assets/js/investment-performance.js';
+import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution } from '../assets/js/investment-performance.js';
 import { getVelocityFromHistory } from '../assets/js/savings-velocity.js';
 
 // Stub history — should return zeros gracefully.
@@ -108,5 +108,37 @@ export async function register({ test, assert, assertEqual }) {
     const horizons = r.projections.map((p) => p.horizonMonths);
     assert(horizons.includes(1), 'missing 1mo horizon');
     assert(horizons.includes(12), 'missing 12mo horizon');
+  });
+
+  // --- Monthly cumulative deposits --------------------------------------------
+
+  await test('getMonthlyCumulativeDeposits: stub history returns []', () => {
+    assertEqual(getMonthlyCumulativeDeposits(STUB_HISTORY).length, 0);
+  });
+
+  await test('getMonthlyCumulativeDeposits: running sum across synthetic history', () => {
+    const r = getMonthlyCumulativeDeposits(SYNTHETIC_HISTORY);
+    assertEqual(r.length, 5);
+    assertEqual(r[0].cumulative, 2000);   // 2000
+    assertEqual(r[1].cumulative, 5000);   // 2000 + 3000
+    assertEqual(r[4].cumulative, 14000);  // 2 + 3 + 3 + 3 + 3 = 14k
+  });
+
+  // --- Epoch attribution -------------------------------------------------------
+
+  await test('getEpochAttribution: stub returns []', () => {
+    assertEqual(getEpochAttribution(STUB_HISTORY).length, 0);
+  });
+
+  await test('getEpochAttribution: two-epoch decomposition (stockpicker contributed £14k)', () => {
+    const r = getEpochAttribution(SYNTHETIC_HISTORY);
+    const sp = r.find((e) => e.id === 'stockpicker');
+    const etf = r.find((e) => e.id === 'etfCore');
+    assert(sp, 'missing stockpicker');
+    assert(etf, 'missing etfCore');
+    assertEqual(sp.contributedDuringEpoch, 14000);
+    assertEqual(etf.contributedDuringEpoch, 0);
+    assertEqual(sp.monthsHeld, 5);
+    assert(sp.returnPct !== null, 'expected stockpicker returnPct estimate');
   });
 }
