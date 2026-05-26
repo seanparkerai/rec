@@ -604,10 +604,6 @@ async function init() {
 
 // --- New Phase 4 tiles ---------------------------------------------------------
 
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
 const READINESS_PRIORITY = [
   { key: 'experianChecked',              label: 'Check your Experian credit score' },
   { key: 'equifaxChecked',               label: 'Check your Equifax credit score' },
