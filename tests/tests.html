@@ -178,14 +178,14 @@
     // rendering, so the test fixtures mirror that contract — no derived fields are read
     // off the raw record.
     //
-    // The default `finances` fixture is derived WITHOUT investments so totals reflect cash
-    // + gift cards only (deterministic, matches the hand-computed values in tests). Tests
-    // that exercise cross-resource ISA behaviour can re-derive with `fixtures.investments`.
+    // Derived WITH investments so totals reflect the user's reality: cash + ISA earmark.
+    // Gift cards are NOT in totalSavings (they aren't deposit-eligible) — tracked
+    // separately as giftCardsTotal.
     const rawFinances = await loadJSON('finances');
     let rawInvestments = null;
     try { rawInvestments = await loadJSON('investments'); } catch { /* optional */ }
     const fixtures = {
-      finances: deriveFinances(rawFinances),
+      finances: deriveFinances(rawFinances, { investments: rawInvestments }),
       rawFinances,
       investments: rawInvestments,
       criteria: await loadJSON('criteria'),

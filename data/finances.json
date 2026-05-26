@@ -75,10 +75,10 @@
     "movingWindow": "March – September 2026"
   },
   "savings": {
-    "current": 24500,
+    "current": 0,
     "monthlyContribution": 2000,
-    "projectedCompound": 2750,
-    "history": []
+    "history": [],
+    "_note": "All liquid savings live in trading212ISA (data/investments.json). This field is cash held OUTSIDE investment accounts — currently zero."
   },
   "mortgage": {
     "targetMax": 360000,

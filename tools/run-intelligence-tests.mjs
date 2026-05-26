@@ -33,7 +33,7 @@ let rawInvestments = null;
 try { rawInvestments = readJson('data/investments.json'); } catch { /* optional */ }
 
 const fixtures = {
-  finances: deriveFinances(rawFinances),
+  finances: deriveFinances(rawFinances, { investments: rawInvestments }),
   rawFinances,
   investments: rawInvestments,
   criteria: readJson('data/criteria.json'),

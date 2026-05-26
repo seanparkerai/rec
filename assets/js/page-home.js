@@ -42,7 +42,7 @@ const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)'
 
 function renderLede(profile, criteria, financesData) {
   const max = criteria?.budget?.max || 0;
-  const dep = criteria?.budget?.targetDeposit || 0;
+  const dep = financesData?.goal?.targetDeposit || 0;
   const beds = criteria?.size?.minBeds;
   const ideal = criteria?.size?.idealBeds;
   const win = financesData?.goal?.movingWindow || profile?.movingTimeline;
@@ -321,7 +321,7 @@ function lineItemsFor(kind, financesData, monthlyMortgage) {
 
 function renderMoneyFlow(financesData, criteria) {
   const offerTarget = Number(criteria?.budget?.offerTarget || financesData?.goal?.offerTarget || 380000);
-  const targetDeposit = Number(criteria?.budget?.targetDeposit || financesData?.goal?.targetDeposit || 0);
+  const targetDeposit = Number(financesData?.goal?.targetDeposit || 0);
   const loan = Math.max(0, offerTarget - targetDeposit);
   const monthlyMortgage = fin.calcMonthlyMortgage(loan, financesData.mortgage?.ratePctAssumed || 0, financesData.mortgage?.termYears || 0);
 
@@ -552,7 +552,7 @@ function buildSpecStrip(criteria, financesData) {
   const bedsStr = beds ? (ideal && ideal > beds ? `${beds}–${ideal}` : String(beds)) : '—';
   const min = criteria?.budget?.min, max = criteria?.budget?.max;
   const budgetStr = (min && max) ? `${gbp(min)}–${gbp(max)}` : (max ? gbp(max) : '—');
-  const dep = criteria?.budget?.targetDeposit || financesData?.goal?.targetDeposit;
+  const dep = financesData?.goal?.targetDeposit;
   const epc = criteria?.epcMin || '—';
   const tenure = criteria?.tenure?.preferred?.[0] || '—';
   const win = financesData?.goal?.movingWindow || '—';

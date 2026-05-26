@@ -42,7 +42,8 @@ const round2 = (n) => Math.round(n * 100) / 100;
  *   income.bonusMonthly     (annualBonus / 12 — informational, not in totalMonthly)
  *   oneTimeCostsTotal, ongoingBillsTotal{monthly,annual},
  *   expensesTotal{monthly,annual,weekly}, shoppingTotal, giftCardsTotal
- *   savings.giftCardsValue, savings.totalSavings, savings.savingsGap, savings.monthsToSave
+ *   savings.giftCardsValue (= giftCardsTotal — alias for legacy callers)
+ *   savings.totalSavings, savings.savingsGap, savings.monthsToSave
  *   monthlyOutgoingsPostMove{bills,expenses,mortgage,total}
  *   spare.monthly
  *
@@ -85,6 +86,11 @@ export function deriveFinances(raw, opts = {}) {
   };
 
   // --- Savings (cross-resource if investments provided) ---------------------
+  // totalSavings = liquid funds available to put toward the deposit.
+  //   - cash savings (current accounts / cash ISA)
+  //   - + earmarked portion of the Trading 212 ISA, if investments provided
+  // Gift cards are NOT deposit-eligible (a solicitor doesn't take M&S vouchers);
+  // they're tracked separately and offset the move-in shopping list.
   const cashSavings = num(raw.savings?.current);
   const isaTotal = num(investments?.trading212ISA?.currentPortfolioValue);
   const isaEarmarkPct = num(investments?.trading212ISA?.earmarkPct);
@@ -93,7 +99,7 @@ export function deriveFinances(raw, opts = {}) {
   const isaForDeposit = investments?.trading212ISA
     ? (isaEarmarkPct > 0 ? round2((isaTotal * isaEarmarkPct) / 100) : isaTotal)
     : 0;
-  const totalSavings = round2(cashSavings + isaForDeposit + giftCardsTotal);
+  const totalSavings = round2(cashSavings + isaForDeposit);
 
   const targetDeposit = num(raw.goal?.targetDeposit);
   const monthlyContribution = num(raw.savings?.monthlyContribution);

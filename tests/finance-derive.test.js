@@ -79,44 +79,51 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   // --- Savings cross-resource ----------------------------------------------
-  await test('derive: totalSavings = cash + giftCards when no investments', () => {
+  // Gift cards are NOT counted in totalSavings — they aren't deposit-eligible.
+  await test('derive: totalSavings = cash only when no investments', () => {
     const d = deriveFinances(RAW);
-    // 24500 + 550 = 25050
-    assertEqual(d.savings.totalSavings, 25050);
+    assertEqual(d.savings.totalSavings, 24500);
   });
 
   await test('derive: totalSavings includes ISA earmark when investments provided', () => {
     const d = deriveFinances(RAW, { investments: INVESTMENTS });
-    // 24500 + (31193 * 100%) + 550 = 56243
-    assertEqual(d.savings.totalSavings, 56243);
+    // 24500 + (31193 * 100%) = 55693 — gift cards excluded
+    assertEqual(d.savings.totalSavings, 55693);
   });
 
   await test('derive: ISA earmark pct is respected', () => {
     const halfEarmark = { trading212ISA: { currentPortfolioValue: 31193, earmarkPct: 50 } };
     const d = deriveFinances(RAW, { investments: halfEarmark });
-    // 24500 + (31193 * 50%) + 550 = 24500 + 15596.5 + 550 = 40646.5
-    assertEqual(d.savings.totalSavings, 40646.5);
+    // 24500 + (31193 * 50%) = 40096.5
+    assertEqual(d.savings.totalSavings, 40096.5);
   });
 
   await test('derive: savingsGap = max(0, target - totalSavings)', () => {
     const d = deriveFinances(RAW);
-    // target 40000 - totalSavings 25050 = 14950
-    assertEqual(d.savings.savingsGap, 14950);
+    // target 40000 - totalSavings 24500 = 15500
+    assertEqual(d.savings.savingsGap, 15500);
   });
 
   await test('derive: savingsGap clamps to 0 when surplus', () => {
     const d = deriveFinances(RAW, { investments: INVESTMENTS });
-    // 56243 > 40000 → gap is 0
+    // 55693 > 40000 → gap is 0
     assertEqual(d.savings.savingsGap, 0);
   });
 
   await test('derive: monthsToSave = gap / monthlyContribution, 0 when at target', () => {
     const d = deriveFinances(RAW);
-    // 14950 / 2000 = 7.475 → 7.48 (2dp)
-    assertEqual(d.savings.monthsToSave, 7.48);
+    // 15500 / 2000 = 7.75
+    assertEqual(d.savings.monthsToSave, 7.75);
 
     const surplus = deriveFinances(RAW, { investments: INVESTMENTS });
     assertEqual(surplus.savings.monthsToSave, 0);
+  });
+
+  await test('derive: gift cards tracked separately, NOT in totalSavings', () => {
+    const d = deriveFinances(RAW);
+    assertEqual(d.giftCardsTotal, 550);
+    // totalSavings is purely cash — gift cards excluded
+    assertEqual(d.savings.totalSavings, 24500);
   });
 
   // --- Post-move outgoings + spare -----------------------------------------

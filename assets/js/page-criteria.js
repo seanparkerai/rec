@@ -67,7 +67,6 @@ function renderBudget() {
     ['Min price', 'budget.min', b.min, 'currency'],
     ['Max price', 'budget.max', b.max, 'currency'],
     ['Offer target', 'budget.offerTarget', b.offerTarget, 'currency'],
-    ['Deposit target', 'budget.targetDeposit', b.targetDeposit, 'currency'],
     ['Offer strategy', 'budget.offerStrategy', b.offerStrategy, 'text'],
   ];
   if (editing) {
@@ -334,7 +333,6 @@ function collectForm() {
     ['budget.min', 'f-budget.min'],
     ['budget.max', 'f-budget.max'],
     ['budget.offerTarget', 'f-budget.offerTarget'],
-    ['budget.targetDeposit', 'f-budget.targetDeposit'],
     ['budget.offerStrategy', 'f-budget.offerStrategy'],
     ['size.minBeds', 'f-size.minBeds'],
     ['size.idealBeds', 'f-size.idealBeds'],

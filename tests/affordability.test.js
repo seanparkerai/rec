@@ -97,7 +97,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
   await test('affordability: SDLT / monthlyPI / LTV / lisaEligible match underlying calcs at offer target', () => {
     const price = 380_000;
     const r = at(price);
-    const deposit = Number(criteria.budget.targetDeposit ?? finances.goal.targetDeposit);
+    const deposit = Number(finances.goal.targetDeposit);
     const loan = price - deposit;
     const ftb = finances.firstTimeBuyer !== false;
     const rate = finances.mortgage.ratePctAssumed;
