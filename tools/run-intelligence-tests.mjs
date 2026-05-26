@@ -46,6 +46,7 @@ const { register: registerSavingsVelocity } = await import('../tests/savings-vel
 const { register: registerDepositRisk } = await import('../tests/deposit-risk.test.js');
 const { register: registerAffordabilityScenarios } = await import('../tests/affordability-scenarios.test.js');
 const { register: registerInvestmentPerformance } = await import('../tests/investment-performance.test.js');
+const { register: registerSavingsSeries } = await import('../tests/savings-series.test.js');
 const { register: registerOutreachTemplates } = await import('../tests/outreach-templates.test.js');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
@@ -55,6 +56,7 @@ await registerSavingsVelocity({ test, assert, assertEqual, fixtures });
 await registerDepositRisk({ test, assert, assertEqual, fixtures });
 await registerAffordabilityScenarios({ test, assert, assertEqual, fixtures });
 await registerInvestmentPerformance({ test, assert, assertEqual, fixtures });
+await registerSavingsSeries({ test, assert, assertEqual, fixtures });
 await registerOutreachTemplates({ test, assert, assertEqual, fixtures });
 
 // Run Supabase sync tests

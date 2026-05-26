@@ -70,6 +70,78 @@ export function analysePerformance(historyJson) {
   };
 }
 
+/**
+ * Cumulative running net-deposit balance across the import's monthlySummary, sorted
+ * ascending. Returns [] for stub history.
+ *
+ * @param {object} historyJson
+ * @returns {Array<{ month: string, cumulative: number, delta: number, epoch?: string }>}
+ */
+export function getMonthlyCumulativeDeposits(historyJson) {
+  const monthly = historyJson?.monthlySummary;
+  if (!Array.isArray(monthly) || monthly.length === 0) return [];
+  const sorted = [...monthly].sort((a, b) => a.month.localeCompare(b.month));
+  let running = 0;
+  return sorted.map((m) => {
+    const delta = num(m.net);
+    running += delta;
+    return {
+      month: m.month,
+      cumulative: Math.round(running * 100) / 100,
+      delta: Math.round(delta * 100) / 100,
+      epoch: m.epoch ?? undefined,
+    };
+  });
+}
+
+/**
+ * Per-epoch attribution: contribution + dividends during the epoch, plus a
+ * contribution-weighted estimated annualised return %. NOTE: this is an estimate,
+ * not a true TWRR/MWRR — the import does not include month-end portfolio valuations.
+ *
+ * @param {object} historyJson
+ * @returns {Array<{ id: string, label: string, start: string|null, end: string|null,
+ *   contributedDuringEpoch: number, dividendsDuringEpoch: number,
+ *   monthsHeld: number, returnPct: number | null }>}
+ */
+export function getEpochAttribution(historyJson) {
+  const epochDefs = historyJson?.epochs ?? {};
+  const monthly = historyJson?.monthlySummary;
+  if (!Array.isArray(monthly) || monthly.length === 0) return [];
+
+  return Object.entries(epochDefs).map(([id, def]) => {
+    const monthsInEpoch = monthly.filter((m) => {
+      const mo = m.month;
+      const afterStart = !def.start || mo >= def.start.slice(0, 7);
+      const beforeEnd = !def.end || mo <= def.end.slice(0, 7);
+      return afterStart && beforeEnd;
+    });
+    const contributed = monthsInEpoch.reduce((s, m) => s + num(m.net), 0);
+    const dividends = monthsInEpoch.reduce((s, m) => s + num(m.dividends), 0);
+    const realised = monthsInEpoch.reduce((s, m) => s + num(m.realisedPnL), 0);
+    const monthsHeld = monthsInEpoch.length;
+
+    // Contribution-weighted estimated annualised return.
+    // Income (dividends + realised) over contributed × (12 / monthsHeld).
+    let returnPct = null;
+    if (contributed > 0 && monthsHeld > 0) {
+      const pct = ((dividends + realised) / contributed) * (12 / monthsHeld) * 100;
+      returnPct = Math.round(pct * 100) / 100;
+    }
+
+    return {
+      id,
+      label: def.label ?? id,
+      start: def.start ?? null,
+      end: def.end ?? null,
+      contributedDuringEpoch: Math.round(contributed * 100) / 100,
+      dividendsDuringEpoch: Math.round(dividends * 100) / 100,
+      monthsHeld,
+      returnPct,
+    };
+  });
+}
+
 // --- Helpers -------------------------------------------------------------------
 
 function emptyResult(historyJson, isStub) {
