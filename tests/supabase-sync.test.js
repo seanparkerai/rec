@@ -34,6 +34,15 @@ test('snapshot includes all 10 tables', async () => {
   }
 });
 
+test('snapshot tracks v3 user-state tables (goals, readiness_checklist, investments_accounts)', async () => {
+  const path = resolve(root, 'data/snapshots/sync-state.json');
+  const snapshot = JSON.parse(await readFile(path, 'utf8'));
+  for (const table of ['goals', 'readiness_checklist', 'investments_accounts']) {
+    assert(table in snapshot, `snapshot missing v3 table: ${table}`);
+    assert(snapshot[table].last_synced_at, `snapshot.${table} missing last_synced_at`);
+  }
+});
+
 // ── Offline: repo content structure ──────────────────────────────────────────
 
 test('all area files match schema', async () => {

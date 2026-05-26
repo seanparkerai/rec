@@ -190,6 +190,105 @@ export async function saveCriteria(d)         { return _save('criteria', 'criter
 export async function getFinances(opts = {})  { return _get('finances',  'finances',  'finances', opts.onUpdate || null); }
 export async function saveFinances(d)         { return _save('finances', 'finances',  d); }
 
+// v3 — goals (blob pattern)
+export async function getGoals(opts = {})     { return _get('goals',     'goals',     'goals',    opts.onUpdate || null); }
+export async function saveGoals(d)            { return _save('goals',    'goals',     d); }
+
+// v3 — readiness checklist (row-per-item; no blob).
+export async function getReadinessChecklist(opts = {}) {
+  const cached = readLocal('readiness');
+  if (cached !== null) {
+    _sbGetReadinessRows().then((fresh) => {
+      if (!fresh) return;
+      if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
+        writeLocal('readiness', fresh);
+        if (opts.onUpdate) opts.onUpdate(fresh);
+      }
+    }).catch(() => {});
+    return cached;
+  }
+  const fresh = await _sbGetReadinessRows();
+  if (fresh && fresh.length > 0) { writeLocal('readiness', fresh); return fresh; }
+  // Fallback: derive from goals.json so the dashboard works on a fresh install.
+  try {
+    const goals = await loadJSON('goals');
+    const items = Object.entries(goals?.readiness?.checklist ?? {}).map(([key, val]) => ({
+      item_key: key, item_label: key, completed: val === true, updated_at: null,
+    }));
+    writeLocal('readiness', items);
+    return items;
+  } catch { return []; }
+}
+
+export async function saveReadinessItem({ item_key, item_label, completed }) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return false;
+  try {
+    const { error } = await sb
+      .from('readiness_checklist')
+      .upsert(
+        { household_id: hid, item_key, item_label: item_label ?? item_key, completed: !!completed, updated_at: new Date().toISOString() },
+        { onConflict: 'household_id,item_key' }
+      );
+    if (error) throw error;
+    // Refresh cache.
+    const fresh = await _sbGetReadinessRows();
+    if (fresh) writeLocal('readiness', fresh);
+    return true;
+  } catch (e) {
+    console.error('storage: write readiness_checklist', e.message);
+    _toast(`Sync error (readiness): ${e.message}`, true);
+    return false;
+  }
+}
+
+async function _sbGetReadinessRows() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return null;
+  try {
+    const { data, error } = await sb
+      .from('readiness_checklist')
+      .select('item_key, item_label, completed, updated_at')
+      .eq('household_id', hid);
+    if (error) throw error;
+    return data ?? [];
+  } catch (e) {
+    console.error('storage: read readiness_checklist', e.message);
+    return null;
+  }
+}
+
+// v3 — investments history (row-per-month; falls back to repo JSON).
+// Returns the same shape as data/imports/trading212-history.json so the
+// existing analysePerformance() / buildSavingsSeries() consumers don't have
+// to know whether the data came from Supabase or the file.
+export async function getInvestmentsHistory() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (sb && hid) {
+    try {
+      const { data, error } = await sb
+        .from('investments_history')
+        .select('month, deposits, withdrawals, net, dividends, interest, realised_pnl, epoch')
+        .eq('household_id', hid)
+        .order('month', { ascending: true });
+      if (error) throw error;
+      if (data && data.length > 0) {
+        return {
+          _status: 'from-supabase',
+          monthlySummary: data.map((r) => ({
+            month: r.month, deposits: r.deposits, withdrawals: r.withdrawals,
+            net: r.net, dividends: r.dividends, interest: r.interest,
+            realisedPnL: r.realised_pnl, epoch: r.epoch,
+          })),
+        };
+      }
+    } catch (e) { console.error('storage: read investments_history', e.message); }
+  }
+  // Fallback: repo JSON (stub when the importer hasn't run yet).
+  try { return await loadJSON('imports/trading212-history'); }
+  catch { return { _status: 'awaiting Phase 3 import', monthlySummary: [], tickerExposure: {}, realisedPnL: null }; }
+}
+
 // Read-only, repo-owned content (no Supabase — served from data/ in the repo).
 export async function getAreas()        { return await loadJSON('areas'); }
 export async function getAreaDetail(id) { return await loadJSON(`data/areas/${id}.json`); }
