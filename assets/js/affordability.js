@@ -240,6 +240,84 @@ function buildHeadline({ price, verdict, loanRequired, monthlyPI, paymentToIncom
   return `${priceGbp} ${verdictText} — ${loanGbp} loan at ~${monthlyGbp}/month (${paymentToIncomePct.toFixed(0)}% of take-home).`;
 }
 
+// --- Scenario modelling --------------------------------------------------------
+
+/**
+ * Three affordability scenarios for the same buyer at different price/deposit combos.
+ * Bonus is NOT included in income — treated as scenario-only per house rules.
+ *
+ * @param {object} args
+ * @param {object} args.finances    contents of data/finances.json
+ * @param {object} args.criteria    contents of data/criteria.json
+ * @param {object} args.goals       contents of data/goals.json
+ * @param {string} [args.councilTaxBand]
+ * @returns {{
+ *   buyNowLowerTarget: object,
+ *   buyOnTargetDeposit: object,
+ *   buyAtHigherTarget: object
+ * }}
+ */
+export function assessAffordabilityScenarios({ finances, criteria, goals, councilTaxBand } = {}) {
+  const currentSavings = Number(goals?.deposit?.currentSavings ?? finances?.savings?.current ?? 0);
+  const hopedDeposit = Number(goals?.deposit?.hopedFor ?? 40_000);
+  const monthlyContrib = Number(finances?.savings?.monthlyContribution ?? 2000);
+
+  const lowerTargetPrice = 340_000;
+  const midTargetPrice = Number(goals?.target?.currentSystemCentre ?? 375_000);
+  const highTargetPrice = 400_000;
+
+  // "Buy sooner, smaller" — use current savings as deposit right now.
+  const lowerDepositNow = currentSavings;
+  const lowerResult = scenarioAffordability({ price: lowerTargetPrice, finances, criteria, deposit: lowerDepositNow, councilTaxBand });
+
+  // "Buy at hoped deposit" — how many months until £50k?
+  const monthsToHoped = monthlyContrib > 0
+    ? Math.max(0, Math.ceil((hopedDeposit - currentSavings) / monthlyContrib))
+    : null;
+  const midResult = scenarioAffordability({ price: midTargetPrice, finances, criteria, deposit: hopedDeposit, councilTaxBand });
+
+  // "Stretch to £400k" — how many months until enough deposit for ~87.5% LTV?
+  const highDeposit = Math.ceil(highTargetPrice * 0.125); // ~£50k for 87.5% LTV
+  const monthsToHigh = monthlyContrib > 0
+    ? Math.max(0, Math.ceil((highDeposit - currentSavings) / monthlyContrib))
+    : null;
+  const highResult = scenarioAffordability({ price: highTargetPrice, finances, criteria, deposit: highDeposit, councilTaxBand });
+
+  return {
+    buyNowLowerTarget: {
+      price: lowerTargetPrice,
+      deposit: lowerDepositNow,
+      monthsToReady: 0,
+      ...lowerResult,
+    },
+    buyOnTargetDeposit: {
+      price: midTargetPrice,
+      deposit: hopedDeposit,
+      monthsToReady: monthsToHoped,
+      ...midResult,
+    },
+    buyAtHigherTarget: {
+      price: highTargetPrice,
+      deposit: highDeposit,
+      monthsToReady: monthsToHigh,
+      ...highResult,
+    },
+  };
+}
+
+/** Call assessAffordability with a scenario-specific deposit overriding the criteria value. */
+function scenarioAffordability({ price, finances, criteria, deposit, councilTaxBand }) {
+  const overrideCriteria = {
+    ...criteria,
+    budget: { ...(criteria?.budget ?? {}), targetDeposit: deposit },
+  };
+  const overrideFinances = {
+    ...finances,
+    savings: { ...(finances?.savings ?? {}), totalSavings: deposit },
+  };
+  return assessAffordability({ price, finances: overrideFinances, criteria: overrideCriteria, councilTaxBand });
+}
+
 // Re-export band constants for tests + consumers that want to render thresholds.
 export const BANDS = {
   lti: { ...LTI_BANDS },
