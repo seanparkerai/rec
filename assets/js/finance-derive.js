@@ -108,12 +108,26 @@ export function deriveFinances(raw, opts = {}) {
     ? round2(savingsGap / monthlyContribution)
     : 0;
 
+  // Average monthly deposit into T212 ISA, estimated from currentValue ÷
+  // months since accountOpened. Includes market growth — replace with the
+  // actual CSV-derived figure once the Phase 3 import runs.
+  const isaOpenedStr = investments?.trading212ISA?.accountOpened;
+  let avgMonthlyDepositEstimate = null;
+  if (isaTotal > 0 && isaOpenedStr) {
+    const opened = new Date(isaOpenedStr);
+    if (!Number.isNaN(opened.getTime())) {
+      const months = Math.max(1, (Date.now() - opened.getTime()) / (1000 * 60 * 60 * 24 * 30.4375));
+      avgMonthlyDepositEstimate = round2(isaTotal / months);
+    }
+  }
+
   const savings = {
     ...(raw.savings || {}),
     giftCardsValue: giftCardsTotal,
     totalSavings,
     savingsGap,
     monthsToSave,
+    avgMonthlyDepositEstimate,
   };
 
   // --- Post-move outgoings + spare -----------------------------------------

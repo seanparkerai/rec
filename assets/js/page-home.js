@@ -91,7 +91,9 @@ function applyDepositScenario(base, scenarioKey) {
 
   setText('td-saved', gbp(saved));
   setText('td-target', gbp(target));
-  setText('td-monthly', gbp(monthly) + '/mo');
+  setText('td-monthly', `${gbp(monthly)} goal`);
+  const avgMo = base.avgMonthly;
+  setText('td-monthly-avg', Number.isFinite(avgMo) && avgMo > 0 ? `${gbp(avgMo)} avg` : '');
   setText('td-ring-pct', String(pct));
   setText('td-headline', `${gbp(saved)} / ${gbp(target)}`);
   setRing(pct);
@@ -139,6 +141,7 @@ function renderDeposit(financesData) {
   const base = {
     saved:   Number(financesData?.savings?.totalSavings ?? financesData?.savings?.current ?? 0),
     monthly: Number(financesData?.savings?.monthlyContribution || 0),
+    avgMonthly: Number(financesData?.savings?.avgMonthlyDepositEstimate || 0),
     target:  Number(financesData?.goal?.targetDeposit || 0),
     window:  financesData?.goal?.movingWindow,
   };

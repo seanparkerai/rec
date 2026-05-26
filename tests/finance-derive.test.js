@@ -119,6 +119,21 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(surplus.savings.monthsToSave, 0);
   });
 
+  await test('derive: avgMonthlyDepositEstimate = ISA value / months since opened', () => {
+    // Build an investments fixture opened exactly 12 months ago.
+    const opened = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+    const inv = { trading212ISA: { currentPortfolioValue: 24000, earmarkPct: 100, accountOpened: opened.toISOString().slice(0, 10) } };
+    const d = deriveFinances(RAW, { investments: inv });
+    // 24000 / 12 ≈ 2000 — allow ±50 for month-length drift.
+    assert(Math.abs(d.savings.avgMonthlyDepositEstimate - 2000) < 50,
+      `expected ~2000, got ${d.savings.avgMonthlyDepositEstimate}`);
+  });
+
+  await test('derive: avgMonthlyDepositEstimate is null without investments', () => {
+    const d = deriveFinances(RAW);
+    assertEqual(d.savings.avgMonthlyDepositEstimate, null);
+  });
+
   await test('derive: gift cards tracked separately, NOT in totalSavings', () => {
     const d = deriveFinances(RAW);
     assertEqual(d.giftCardsTotal, 550);

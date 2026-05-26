@@ -37,7 +37,10 @@ function renderTiles() {
   setText('tile-progress', String(pct));
   const bar = $('progress-bar'); if (bar) bar.style.width = `${pct}%`;
   setText('tile-saved', gbp(saved));
-  setText('tile-monthly', gbp(finData.savings?.monthlyContribution || 0) + '/mo');
+  const goalMo = Number(finData.savings?.monthlyContribution || 0);
+  const avgMo = finData.savings?.avgMonthlyDepositEstimate;
+  setText('tile-monthly', goalMo ? `${gbp(goalMo)} goal` : '—');
+  setText('tile-monthly-avg', Number.isFinite(avgMo) && avgMo > 0 ? `${gbp(avgMo)} avg` : '');
   setText('tile-months', Number.isFinite(months) ? `${monthsAsDuration(months)}` : '—');
 
   // LISA band — show eligibility note tied to the current goal price.
