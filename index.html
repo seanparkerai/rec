@@ -62,6 +62,7 @@
             <div class="mini-flow" id="td-flow" aria-hidden="true"></div>
             <ul class="mini-flow-legend" id="td-flow-legend"></ul>
             <p class="deposit-eta" id="td-eta">Calculating&hellip;</p>
+            <p class="deposit-ytd">ISA contributions YTD: <strong id="isa-ytd-stat">—</strong></p>
             <ul class="scenario-row" role="group" aria-label="Savings scenarios">
               <li><button class="scenario-chip" type="button" data-scenario="baseline" aria-pressed="true">Baseline</button></li>
               <li><button class="scenario-chip" type="button" data-scenario="+200" aria-pressed="false">+&pound;200/mo</button></li>
@@ -158,6 +159,36 @@
           <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="tk-caption" />
           <p class="ask-caption" id="tk-caption">Coming in v3 &mdash; <a data-nav="pages/ask.html">read what this will do &rarr;</a></p>
         </div>
+      </section>
+
+      <!-- Tile A: Readiness -->
+      <section class="tile-card tile-readiness" id="tile-readiness" aria-labelledby="tr-label">
+        <header class="tile-head">
+          <h2 id="tr-label">Your readiness right now.</h2>
+        </header>
+        <p class="readiness-headline" id="readiness-headline">Calculating&hellip;</p>
+        <dl class="readiness-stats" id="readiness-stats" aria-label="Months to deposit goal at different savings rates"></dl>
+        <div class="readiness-next" id="readiness-next" aria-live="polite">
+          <span class="readiness-next-label">Next action</span>
+          <span class="readiness-next-text" id="readiness-next-text">Loading&hellip;</span>
+        </div>
+      </section>
+
+      <!-- Tile B: Deposit at risk -->
+      <section class="tile-card tile-deposit-risk" id="tile-deposit-risk" aria-labelledby="tdr-label">
+        <header class="tile-head">
+          <h2 id="tdr-label">Deposit at risk.</h2>
+          <span class="verdict-badge verdict-badge--loading" id="tdr-badge">—</span>
+        </header>
+        <div id="tdr-body" aria-live="polite"><p class="muted">Loading&hellip;</p></div>
+      </section>
+
+      <!-- Tile C: What you can actually afford -->
+      <section class="tile-card tile-scenarios" id="tile-scenarios" aria-labelledby="tsc-label">
+        <header class="tile-head">
+          <h2 id="tsc-label">What you can actually afford today.</h2>
+        </header>
+        <div id="tsc-body" aria-live="polite"><p class="muted">Calculating&hellip;</p></div>
       </section>
 
     </div>
