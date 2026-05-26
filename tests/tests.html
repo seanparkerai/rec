@@ -76,6 +76,14 @@
     for (const p of ALL_PAGES)
       await test(`page ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
 
+    // --- v3 dashboard tiles present ---
+    await test('index.html contains v3 dashboard tile ids', async () => {
+      const html = await (await fetch(url('index.html'))).text();
+      const required = ['tile-scenarios-fan', 'tile-networth', 'tile-withdraw-ready', 'td-savings-spark'];
+      const missing = required.filter((id) => !html.includes(`id="${id}"`));
+      assert(missing.length === 0, `missing tile ids: ${missing.join(', ')}`);
+    });
+
     // --- §9: no inline style="" attributes shipped in any page ---
     await test('no inline style="" attributes in any page', async () => {
       const offenders = [];

@@ -69,6 +69,8 @@
               <li><button class="scenario-chip" type="button" data-scenario="+500" aria-pressed="false">+&pound;500/mo</button></li>
               <li><button class="scenario-chip" type="button" data-scenario="+5k" aria-pressed="false">+&pound;5k windfall</button></li>
             </ul>
+            <svg class="deposit-sparkline" id="td-savings-spark" viewBox="0 0 280 60" preserveAspectRatio="none" aria-label="Savings over the last 12 months"></svg>
+            <p class="deposit-spark-caption" id="td-spark-caption">&mdash;</p>
           </div>
         </div>
       </section>
@@ -91,6 +93,37 @@
         </div>
       </section>
 
+      <!-- v3 Rank 3 — Scenario fan (NEW): months-to-target across baseline ±£200 / ±£500 / +£5k -->
+      <section class="tile-card tile-scenarios-fan" id="tile-scenarios-fan" aria-labelledby="tsf-label">
+        <header class="tile-head">
+          <h2 id="tsf-label">What would change the date</h2>
+        </header>
+        <svg class="scenarios-fan" id="tsf-svg" viewBox="0 0 320 140" preserveAspectRatio="none" aria-label="Months-to-target scenarios"></svg>
+        <p class="scenarios-fan-caption" id="tsf-caption">&mdash;</p>
+      </section>
+
+      <!-- v3 Rank 4 — Deposit at risk (promoted from rank 9) -->
+      <section class="tile-card tile-deposit-risk" id="tile-deposit-risk" aria-labelledby="tdr-label">
+        <header class="tile-head">
+          <h2 id="tdr-label">Deposit at risk.</h2>
+          <span class="verdict-badge verdict-badge--loading" id="tdr-badge">—</span>
+        </header>
+        <div id="tdr-body" aria-live="polite"><p class="muted">Loading&hellip;</p></div>
+      </section>
+
+      <!-- v3 Rank 5 — Net-worth composition donut (NEW): effective deposit after debt -->
+      <section class="tile-card tile-networth" id="tile-networth" aria-labelledby="tnw-label">
+        <header class="tile-head">
+          <h2 id="tnw-label">Your effective deposit</h2>
+        </header>
+        <div class="networth-cols">
+          <svg class="networth-donut" id="tnw-svg" viewBox="0 0 200 200" aria-label="Net-worth composition"></svg>
+          <dl class="networth-stats" id="tnw-stats"></dl>
+        </div>
+        <p class="networth-caption" id="tnw-caption">&mdash;</p>
+      </section>
+
+      <!-- v3 Rank 6 — Money-flow -->
       <section class="tile-card tile-flow" id="tile-flow" aria-labelledby="tf-label">
         <header class="tile-head">
           <h2 id="tf-label">Money-flow</h2>
@@ -115,6 +148,54 @@
         </details>
       </section>
 
+      <!-- v3 Rank 7 — Readiness -->
+      <section class="tile-card tile-readiness" id="tile-readiness" aria-labelledby="tr-label">
+        <header class="tile-head">
+          <h2 id="tr-label">Your readiness right now.</h2>
+        </header>
+        <p class="readiness-headline" id="readiness-headline">Calculating&hellip;</p>
+        <dl class="readiness-stats" id="readiness-stats" aria-label="Months to deposit goal at different savings rates"></dl>
+        <div class="readiness-next" id="readiness-next" aria-live="polite">
+          <span class="readiness-next-label">Next action</span>
+          <span class="readiness-next-text" id="readiness-next-text">Loading&hellip;</span>
+        </div>
+      </section>
+
+      <!-- v3 Rank 8 — Checklists -->
+      <section class="tile-card tile-journey" id="tile-journey" aria-labelledby="tj-label">
+        <header class="tile-head">
+          <h2 id="tj-label">Checklists</h2>
+          <a data-nav="pages/journey.html" class="tile-head-action">Open checklists &rarr;</a>
+        </header>
+        <ul class="journey-track" id="tj-track"></ul>
+        <div class="journey-next">
+          <span class="journey-next-label">Next</span>
+          <span class="journey-next-text" id="tj-next-text">Loading&hellip;</span>
+          <button type="button" class="journey-tick" id="tj-next-tick" aria-label="Mark next action done" disabled>&check;</button>
+        </div>
+      </section>
+
+      <!-- v3 Rank 9 — What you can actually afford today -->
+      <section class="tile-card tile-scenarios" id="tile-scenarios" aria-labelledby="tsc-label">
+        <header class="tile-head">
+          <h2 id="tsc-label">What you can actually afford today.</h2>
+        </header>
+        <div id="tsc-body" aria-live="polite"><p class="muted">Calculating&hellip;</p></div>
+      </section>
+
+      <!-- v3 Rank 10 — Withdrawal-readiness countdown (NEW): seasoning window before mortgage -->
+      <section class="tile-card tile-withdraw-ready" id="tile-withdraw-ready" aria-labelledby="tws-label">
+        <header class="tile-head">
+          <h2 id="tws-label">Withdrawal &amp; seasoning</h2>
+        </header>
+        <div class="seasoning-bar" id="tws-bar" aria-label="Seasoning progress">
+          <span class="seasoning-bar__fill" id="tws-fill"></span>
+          <span class="seasoning-bar__marker" id="tws-marker"></span>
+        </div>
+        <p class="seasoning-bar__caption" id="tws-caption">&mdash;</p>
+      </section>
+
+      <!-- v3 Foot — context strip: Shortlist · Criteria · Ask -->
       <section class="tile-card tile-shortlist" id="tile-shortlist" aria-labelledby="ts-label">
         <header class="tile-head">
           <h2 id="ts-label">Shortlist</h2>
@@ -127,19 +208,6 @@
           <a data-nav="pages/areas.html">Browse directory &rarr;</a>
           <a data-nav="pages/map.html">See on map &rarr;</a>
         </footer>
-      </section>
-
-      <section class="tile-card tile-journey" id="tile-journey" aria-labelledby="tj-label">
-        <header class="tile-head">
-          <h2 id="tj-label">Checklists</h2>
-          <a data-nav="pages/journey.html" class="tile-head-action">Open checklists &rarr;</a>
-        </header>
-        <ul class="journey-track" id="tj-track"></ul>
-        <div class="journey-next">
-          <span class="journey-next-label">Next</span>
-          <span class="journey-next-text" id="tj-next-text">Loading&hellip;</span>
-          <button type="button" class="journey-tick" id="tj-next-tick" aria-label="Mark next action done" disabled>&check;</button>
-        </div>
       </section>
 
       <section class="tile-card tile-criteria" id="tile-criteria" aria-labelledby="tc-label">
@@ -159,36 +227,6 @@
           <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="tk-caption" />
           <p class="ask-caption" id="tk-caption">Coming in v3 &mdash; <a data-nav="pages/ask.html">read what this will do &rarr;</a></p>
         </div>
-      </section>
-
-      <!-- Tile A: Readiness -->
-      <section class="tile-card tile-readiness" id="tile-readiness" aria-labelledby="tr-label">
-        <header class="tile-head">
-          <h2 id="tr-label">Your readiness right now.</h2>
-        </header>
-        <p class="readiness-headline" id="readiness-headline">Calculating&hellip;</p>
-        <dl class="readiness-stats" id="readiness-stats" aria-label="Months to deposit goal at different savings rates"></dl>
-        <div class="readiness-next" id="readiness-next" aria-live="polite">
-          <span class="readiness-next-label">Next action</span>
-          <span class="readiness-next-text" id="readiness-next-text">Loading&hellip;</span>
-        </div>
-      </section>
-
-      <!-- Tile B: Deposit at risk -->
-      <section class="tile-card tile-deposit-risk" id="tile-deposit-risk" aria-labelledby="tdr-label">
-        <header class="tile-head">
-          <h2 id="tdr-label">Deposit at risk.</h2>
-          <span class="verdict-badge verdict-badge--loading" id="tdr-badge">—</span>
-        </header>
-        <div id="tdr-body" aria-live="polite"><p class="muted">Loading&hellip;</p></div>
-      </section>
-
-      <!-- Tile C: What you can actually afford -->
-      <section class="tile-card tile-scenarios" id="tile-scenarios" aria-labelledby="tsc-label">
-        <header class="tile-head">
-          <h2 id="tsc-label">What you can actually afford today.</h2>
-        </header>
-        <div id="tsc-body" aria-live="polite"><p class="muted">Calculating&hellip;</p></div>
       </section>
 
     </div>
