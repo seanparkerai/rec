@@ -1,17 +1,14 @@
 // page-criteria.js — render the editable search criteria form with all filters.
 import { getCriteria, saveCriteria, _internal } from './storage.js';
 import { loadJSON } from './data-loader.js';
+import { esc, byId } from './dom.js';
 
 const gbp = (n) => new Intl.NumberFormat('en-GB', {
   style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
 }).format(n || 0);
 
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
 const ROOT = document.querySelector('[data-page="criteria"]') || document;
-const $ = (id) => ROOT.querySelector('#' + id);
+const $ = (id) => byId(id, ROOT);
 const $$ = (sel) => ROOT.querySelectorAll(sel);
 
 let current = null;
