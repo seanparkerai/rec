@@ -1,4 +1,5 @@
 import { url, STORAGE_NS } from './config.js';
+import { byId, on } from './dom.js';
 
 // ── Supabase bootstrap ─────────────────────────────────────────────
 let supabase = null;
@@ -132,7 +133,7 @@ async function refreshStatus() {
   const sb = await initSupabase();
   const setAll = (text, cls) => {
     ALL_TABLES.forEach(t => {
-      const el = document.getElementById(`status-${t}`);
+      const el = byId(`status-${t}`);
       if (el) { el.textContent = text; el.className = `sync-status-tile-val ${cls}`; }
     });
   };
@@ -143,7 +144,7 @@ async function refreshStatus() {
   if (!hid) { setAll('no household', 'none'); return; }
 
   await Promise.all(ALL_TABLES.map(async table => {
-    const el = document.getElementById(`status-${table}`);
+    const el = byId(`status-${table}`);
     if (!el) return;
     const { data, error } = await sb
       .from(table)
@@ -162,7 +163,7 @@ async function refreshStatus() {
   }));
 }
 
-document.getElementById('btn-refresh-status')?.addEventListener('click', refreshStatus);
+on(byId('btn-refresh-status'), 'click', refreshStatus);
 
 // ── Alignment validator ───────────────────────────────────────────
 const SYNC_TABLES = [
@@ -186,14 +187,14 @@ const VALIDATE_ALL = [
   ...VALIDATE_LOCAL.map(t => ({ ...t, src: 'local' })),
 ];
 
-document.getElementById('btn-validate')?.addEventListener('click', async () => {
+on(byId('btn-validate'), 'click', async () => {
   if (!await requireAuth()) return;
 
-  const resultEl = document.getElementById('align-result');
-  const badgeEl  = document.getElementById('align-badge');
-  const msgEl    = document.getElementById('align-msg');
-  const countsEl = document.getElementById('align-counts');
-  const rowsEl   = document.getElementById('align-rows');
+  const resultEl = byId('align-result');
+  const badgeEl  = byId('align-badge');
+  const msgEl    = byId('align-msg');
+  const countsEl = byId('align-counts');
+  const rowsEl   = byId('align-rows');
 
   resultEl.classList.add('visible');
   badgeEl.className = 'align-badge';
@@ -350,12 +351,12 @@ document.getElementById('btn-validate')?.addEventListener('click', async () => {
 
 
 // ── Push: repo JSON → Supabase ────────────────────────────────────
-document.getElementById('btn-push')?.addEventListener('click', async () => {
+on(byId('btn-push'), 'click', async () => {
   if (!await requireAuth()) return;
-  const log = document.getElementById('push-log');
+  const log = byId('push-log');
   clearLog(log);
   const statusEls = Object.fromEntries(SYNC_TABLES.map(({ key }) =>
-    [key, document.getElementById(`push-status-${key}`)]));
+    [key, byId(`push-status-${key}`)]));
   Object.values(statusEls).forEach(el => { if (el) { el.textContent = ''; el.className = 'sync-file-status'; } });
   logLine(log, 'Reading repo JSON files…', 'info');
   let allOk = true;
@@ -392,12 +393,12 @@ document.getElementById('btn-push')?.addEventListener('click', async () => {
 });
 
 // ── Pull: Supabase → Claude Code prompt ──────────────────────────
-document.getElementById('btn-pull')?.addEventListener('click', async () => {
+on(byId('btn-pull'), 'click', async () => {
   if (!await requireAuth()) return;
-  const log = document.getElementById('pull-log');
+  const log = byId('pull-log');
   clearLog(log);
   const statusEls = Object.fromEntries(SYNC_TABLES.map(({ key }) =>
-    [key, document.getElementById(`pull-status-${key}`)]));
+    [key, byId(`pull-status-${key}`)]));
   Object.values(statusEls).forEach(el => { if (el) { el.textContent = ''; el.className = 'sync-file-status'; } });
   logLine(log, 'Reading from Supabase…', 'info');
   const results = {};
@@ -431,8 +432,8 @@ For each file listed below, replace the entire file contents with the JSON provi
 ${parts.join('\n\n')}
 
 Commit message: \`data: sync JSON files from Supabase (${today})\``;
-  document.getElementById('pull-prompt-content').textContent = prompt;
-  document.getElementById('pull-prompt-wrap').classList.add('visible');
+  byId('pull-prompt-content').textContent = prompt;
+  byId('pull-prompt-wrap').classList.add('visible');
 });
 
 
@@ -473,9 +474,9 @@ function flattenToRows(obj, prefix = '') {
   return rows;
 }
 
-document.getElementById('btn-load-viewer')?.addEventListener('click', async () => {
+on(byId('btn-load-viewer'), 'click', async () => {
   if (!await requireAuth()) return;
-  const viewerEl = document.getElementById('data-viewer');
+  const viewerEl = byId('data-viewer');
   viewerEl.innerHTML = '<p style="font-size:var(--text-sm);color:var(--ink-muted)">Loading…</p>';
   const hid = await getHouseholdId();
 
@@ -549,13 +550,13 @@ const EXPECTED_TABLES = [
   'contacts', 'outreach'
 ];
 
-document.getElementById('btn-check-schema')?.addEventListener('click', async () => {
+on(byId('btn-check-schema'), 'click', async () => {
   const sb = await initSupabase();
   if (!sb) { alert('Supabase not configured.'); return; }
 
-  const listEl = document.getElementById('schema-list');
+  const listEl = byId('schema-list');
   listEl.innerHTML = '<p style="font-size:var(--text-sm);color:var(--ink-muted)">Checking…</p>';
-  document.getElementById('schema-migration-prompt').classList.remove('visible');
+  byId('schema-migration-prompt').classList.remove('visible');
 
   const results = await Promise.all(EXPECTED_TABLES.map(async table => {
     const { error } = await sb.from(table).select('id').limit(1);
@@ -580,9 +581,9 @@ document.getElementById('btn-check-schema')?.addEventListener('click', async () 
   }
 
   if (missingTables.length) {
-    const preEl = document.getElementById('schema-migration-content');
+    const preEl = byId('schema-migration-content');
     preEl.textContent = 'Fetching supabase/schema.sql…';
-    document.getElementById('schema-migration-prompt').classList.add('visible');
+    byId('schema-migration-prompt').classList.add('visible');
     try {
       const res = await fetch(url('supabase/schema.sql') + '?_=' + Date.now());
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -604,9 +605,9 @@ document.getElementById('btn-check-schema')?.addEventListener('click', async () 
 
 
 // ── Config: credential file generator ────────────────────────────
-document.getElementById('btn-gen-client')?.addEventListener('click', () => {
-  const rawUrl = document.getElementById('input-sb-url').value.trim();
-  const key    = document.getElementById('input-sb-key').value.trim();
+on(byId('btn-gen-client'), 'click', () => {
+  const rawUrl = byId('input-sb-url').value.trim();
+  const key    = byId('input-sb-key').value.trim();
   if (!rawUrl || !key) { alert('Enter both the Project URL and the anon key first.'); return; }
   const sbUrl  = rawUrl.replace(/\/$/, '');
   const content = `import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -616,13 +617,13 @@ const SUPABASE_ANON_KEY = '${key}';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 `;
-  document.getElementById('gen-client-content').textContent = content;
-  document.getElementById('gen-client-wrap').classList.add('visible');
+  byId('gen-client-content').textContent = content;
+  byId('gen-client-wrap').classList.add('visible');
 });
 
 
 // ── Config: member SQL generator ──────────────────────────────────
-const rowsWrap = document.getElementById('member-rows');
+const rowsWrap = byId('member-rows');
 
 function updateRemoveButtons() {
   const rows = rowsWrap.querySelectorAll('.member-row');
@@ -632,7 +633,7 @@ function updateRemoveButtons() {
   });
 }
 
-document.getElementById('btn-add-member')?.addEventListener('click', () => {
+on(byId('btn-add-member'), 'click', () => {
   const idx = rowsWrap.querySelectorAll('.member-row').length;
   const row = document.createElement('div');
   row.className = 'member-row';
@@ -658,7 +659,7 @@ document.getElementById('btn-add-member')?.addEventListener('click', () => {
   updateRemoveButtons();
 });
 
-document.getElementById('btn-gen-member-sql')?.addEventListener('click', () => {
+on(byId('btn-gen-member-sql'), 'click', () => {
   const rows  = rowsWrap.querySelectorAll('.member-row');
   const entries = [];
   rows.forEach(r => {
@@ -677,8 +678,8 @@ ${entries.map(uid =>
 ).join('\n\n')}
 END;
 $$;`;
-  document.getElementById('gen-member-content').textContent = sql;
-  document.getElementById('gen-member-wrap').classList.add('visible');
+  byId('gen-member-content').textContent = sql;
+  byId('gen-member-wrap').classList.add('visible');
 });
 
 
@@ -694,20 +695,20 @@ document.addEventListener('shell:ready', async () => {
     });
   }
   wireCopyBtn(
-    document.getElementById('btn-copy-pull-prompt'),
-    () => document.getElementById('pull-prompt-content').textContent
+    byId('btn-copy-pull-prompt'),
+    () => byId('pull-prompt-content').textContent
   );
   wireCopyBtn(
-    document.getElementById('btn-copy-schema-prompt'),
-    () => document.getElementById('schema-migration-content').textContent
+    byId('btn-copy-schema-prompt'),
+    () => byId('schema-migration-content').textContent
   );
   wireCopyBtn(
     document.querySelector('[data-copy-id="gen-client-content"]'),
-    () => document.getElementById('gen-client-content').textContent
+    () => byId('gen-client-content').textContent
   );
   wireCopyBtn(
     document.querySelector('[data-copy-id="gen-member-content"]'),
-    () => document.getElementById('gen-member-content').textContent
+    () => byId('gen-member-content').textContent
   );
 });
 
