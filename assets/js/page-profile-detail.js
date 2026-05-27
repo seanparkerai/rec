@@ -3,13 +3,9 @@
 // Anchor: Stripe-docs editorial article (restrained, field-list layout).
 
 import { loadJSON } from './data-loader.js';
+import { esc, byId as $, setText as _setText, setHTML } from './dom.js';
 
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-const $ = (id) => document.getElementById(id);
-const setText = (id, v) => { const el = $(id); if (el) el.textContent = v || '—'; };
-const setHTML = (id, h) => { const el = $(id); if (el) el.innerHTML = h; };
+const setText = (id, v) => _setText(id, v, { fallback: '—' });
 const gbp = (n) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(n || 0);
 const nullish = (v) => v === null || v === undefined;
 const orDash = (v) => nullish(v) ? '<span class="muted">not yet captured</span>' : esc(String(v));
