@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Debug · rec</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 1rem; max-width: 720px; margin: 0 auto; }
+    .row { padding: 0.75rem; border-bottom: 1px solid #ddd; }
+    .label { font-weight: 600; font-size: 0.9rem; }
+    .val { font-family: ui-monospace, monospace; font-size: 0.85rem; word-break: break-all; white-space: pre-wrap; }
+    .ok { color: #0a6b3a; } .err { color: #b30b0b; }
+  </style>
+</head>
+<body>
+  <h1>Storage diagnostics</h1>
+  <p>Reads each storage helper and shows what it returned. Share a screenshot of this with Claude.</p>
+  <div id="out"></div>
+  <script type="module">
+    const out = document.getElementById('out');
+    const row = (label, ok, value) => {
+      const div = document.createElement('div');
+      div.className = 'row';
+      div.innerHTML = `<div class="label ${ok ? 'ok' : 'err'}">${ok ? 'OK' : 'FAIL'} — ${label}</div><div class="val"></div>`;
+      div.querySelector('.val').textContent = value;
+      out.appendChild(div);
+    };
+
+    async function check(label, fn) {
+      try {
+        const v = await fn();
+        const summary = v === null || v === undefined
+          ? String(v)
+          : (typeof v === 'object' ? JSON.stringify(v).slice(0, 500) : String(v));
+        row(label, true, summary);
+        return v;
+      } catch (e) {
+        row(label, false, e.message + '\n' + (e.stack || '').split('\n').slice(0, 3).join('\n'));
+        return null;
+      }
+    }
+
+    // Probe supabase-client.js directly
+    let sb = null;
+    try {
+      const mod = await import('../assets/js/supabase-client.js');
+      sb = mod.supabase;
+      row('import supabase-client.js', true, 'loaded; URL=' + (sb?.supabaseUrl ?? 'unknown'));
+    } catch (e) {
+      row('import supabase-client.js', false, e.message);
+    }
+
+    if (sb) {
+      const { data: { session } } = await sb.auth.getSession();
+      row('auth session', !!session, session ? `user=${session.user.email} id=${session.user.id}` : 'NO SESSION — sign in first');
+
+      if (session) {
+        const { data: hm, error: hmErr } = await sb.from('household_members').select('household_id').eq('user_id', session.user.id);
+        row('household_members lookup', !hmErr && hm?.length > 0, hmErr ? hmErr.message : JSON.stringify(hm));
+
+        const hid = hm?.[0]?.household_id;
+        if (hid) {
+          const { data: inv, error: invErr } = await sb.from('investments_accounts').select('*').eq('household_id', hid);
+          row('investments_accounts row', !invErr && inv?.length > 0, invErr ? invErr.message : JSON.stringify(inv).slice(0, 600));
+
+          const { data: hist, error: histErr } = await sb.from('investments_history').select('month, net, deposits').eq('household_id', hid).order('month');
+          row('investments_history rows', !histErr && hist?.length > 0, histErr ? histErr.message : `${hist?.length ?? 0} rows: ${JSON.stringify(hist).slice(0, 400)}`);
+
+          const { data: g, error: gErr } = await sb.from('goals').select('data').eq('household_id', hid);
+          row('goals row', !gErr && g?.length > 0, gErr ? gErr.message : JSON.stringify(g).slice(0, 400));
+        }
+      }
+    }
+
+    // Now exercise the storage layer itself
+    const storage = await import('../assets/js/storage.js');
+    await check('storage.getInvestments()', () => storage.getInvestments());
+    await check('storage.getInvestmentsHistory()', () => storage.getInvestmentsHistory());
+    await check('storage.getGoals()', () => storage.getGoals());
+    await check('storage.getFinances()', () => storage.getFinances());
+
+    // Also run deriveFinances to confirm the math
+    try {
+      const { deriveFinances } = await import('../assets/js/finance-derive.js');
+      const fin = await storage.getFinances();
+      const inv = await storage.getInvestments();
+      const enriched = deriveFinances(fin, { investments: inv });
+      row('deriveFinances totalSavings', enriched?.savings?.totalSavings > 0, `totalSavings=${enriched?.savings?.totalSavings}  cashSavings=${enriched?.savings?.current}  isaForDeposit=${enriched?.savings?.totalSavings - (enriched?.savings?.current||0)}`);
+    } catch (e) { row('deriveFinances', false, e.message); }
+
+    // localStorage cache state
+    const keys = Object.keys(localStorage).filter((k) => k.startsWith('rec:'));
+    row('localStorage rec:* keys', true, keys.join(', ') || '(empty)');
+  </script>
+</body>
+</html>
