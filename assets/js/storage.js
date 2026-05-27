@@ -129,25 +129,46 @@ async function _sbUpsert(table, value) {
   }
 }
 
-// ── Write-through pattern ─────────────────────────────────────────────
-// Returns cached value immediately; revalidates from Supabase in background.
-// If the cloud value differs, calls onUpdate(freshValue) for the caller to re-render.
+// ── Read pattern ──────────────────────────────────────────────────────
+// Resolution order (per CLAUDE.md §18: Supabase is source of truth for user state):
+//   1. localStorage cache — returned immediately, revalidated against Supabase in background.
+//   2. Supabase row       — awaited synchronously on first visit (no cache yet).
+//   3. JSON seed file     — used only when both cache and Supabase are empty (true first install).
+//                           Written to cache so the JSON file is never re-read after first use.
+//
+// onUpdate(fresh) fires when background revalidation finds a divergent Supabase row,
+// so consumers can re-render with fresh data without a page reload.
 async function _get(lsKey, table, fallbackJson, onUpdate) {
   const cached = readLocal(lsKey);
-  const result = cached ?? (fallbackJson ? await loadJSON(fallbackJson) : null);
 
-  // Background revalidation
-  _sbGet(table).then((fresh) => {
-    if (fresh === null) return; // nothing in Supabase yet
-    const localStr = JSON.stringify(cached);
-    const freshStr = JSON.stringify(fresh);
-    if (freshStr !== localStr) {
-      writeLocal(lsKey, fresh); // update cache
-      if (onUpdate) onUpdate(fresh);
-    }
-  }).catch(() => { /* ignore */ });
+  if (cached !== null) {
+    // Fast path. Kick off revalidation; return cache immediately.
+    _sbGet(table).then((fresh) => {
+      if (fresh === null) return;
+      if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
+        writeLocal(lsKey, fresh);
+        if (onUpdate) onUpdate(fresh);
+      }
+    }).catch(() => { /* ignore */ });
+    return cached;
+  }
 
-  return result;
+  // No cache. Try Supabase synchronously.
+  const fresh = await _sbGet(table);
+  if (fresh !== null) {
+    writeLocal(lsKey, fresh);
+    return fresh;
+  }
+
+  // Neither cache nor Supabase has data. Seed from the JSON file (one-time only —
+  // we write it into the cache so this branch only runs on the true first install).
+  if (fallbackJson) {
+    const seed = await loadJSON(fallbackJson);
+    if (seed) writeLocal(lsKey, seed);
+    return seed;
+  }
+
+  return null;
 }
 
 async function _save(lsKey, table, value) {
@@ -156,16 +177,116 @@ async function _save(lsKey, table, value) {
   return true;
 }
 
-// ── Exported API — identical signatures to the original storage.js ─────
+// ── Exported API ──────────────────────────────────────────────────────
+// Each getter accepts { onUpdate } so pages can re-render when background
+// revalidation pulls a divergent row from Supabase.
 
-export async function getProfile()   { return _get('profile',   'profile',   'fixtures/profile.sample',  null); }
-export async function saveProfile(d) { return _save('profile',  'profile',   d); }
+export async function getProfile(opts = {})   { return _get('profile',   'profile',   'fixtures/profile.sample',  opts.onUpdate || null); }
+export async function saveProfile(d)          { return _save('profile',  'profile',   d); }
 
-export async function getCriteria()  { return _get('criteria',  'criteria',  'fixtures/criteria.sample', null); }
-export async function saveCriteria(d){ return _save('criteria', 'criteria',  d); }
+export async function getCriteria(opts = {})  { return _get('criteria',  'criteria',  'fixtures/criteria.sample', opts.onUpdate || null); }
+export async function saveCriteria(d)         { return _save('criteria', 'criteria',  d); }
 
-export async function getFinances()  { return _get('finances',  'finances',  'fixtures/finances.sample', null); }
-export async function saveFinances(d){ return _save('finances', 'finances',  d); }
+export async function getFinances(opts = {})  { return _get('finances',  'finances',  'fixtures/finances.sample', opts.onUpdate || null); }
+export async function saveFinances(d)         { return _save('finances', 'finances',  d); }
+
+// v3 — goals (blob pattern)
+export async function getGoals(opts = {})     { return _get('goals',     'goals',     'fixtures/goals.sample',    opts.onUpdate || null); }
+export async function saveGoals(d)            { return _save('goals',    'goals',     d); }
+
+// v3 — readiness checklist (row-per-item; no blob).
+export async function getReadinessChecklist(opts = {}) {
+  const cached = readLocal('readiness');
+  if (cached !== null) {
+    _sbGetReadinessRows().then((fresh) => {
+      if (!fresh) return;
+      if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
+        writeLocal('readiness', fresh);
+        if (opts.onUpdate) opts.onUpdate(fresh);
+      }
+    }).catch(() => {});
+    return cached;
+  }
+  const fresh = await _sbGetReadinessRows();
+  if (fresh && fresh.length > 0) { writeLocal('readiness', fresh); return fresh; }
+  // Fallback: derive from sample fixture so the dashboard works on a fresh install.
+  try {
+    const goals = await loadJSON('fixtures/goals.sample');
+    const items = Object.entries(goals?.readiness?.checklist ?? {}).map(([key, val]) => ({
+      item_key: key, item_label: key, completed: val === true, updated_at: null,
+    }));
+    writeLocal('readiness', items);
+    return items;
+  } catch { return []; }
+}
+
+export async function saveReadinessItem({ item_key, item_label, completed }) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return false;
+  try {
+    const { error } = await sb
+      .from('readiness_checklist')
+      .upsert(
+        { household_id: hid, item_key, item_label: item_label ?? item_key, completed: !!completed, updated_at: new Date().toISOString() },
+        { onConflict: 'household_id,item_key' }
+      );
+    if (error) throw error;
+    // Refresh cache.
+    const fresh = await _sbGetReadinessRows();
+    if (fresh) writeLocal('readiness', fresh);
+    return true;
+  } catch (e) {
+    console.error('storage: write readiness_checklist', e.message);
+    _toast(`Sync error (readiness): ${e.message}`, true);
+    return false;
+  }
+}
+
+async function _sbGetReadinessRows() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return null;
+  try {
+    const { data, error } = await sb
+      .from('readiness_checklist')
+      .select('item_key, item_label, completed, updated_at')
+      .eq('household_id', hid);
+    if (error) throw error;
+    return data ?? [];
+  } catch (e) {
+    console.error('storage: read readiness_checklist', e.message);
+    return null;
+  }
+}
+
+// v3 — investments history (row-per-month; falls back to repo JSON).
+// Returns the same shape as data/imports/trading212-history.json so the
+// existing analysePerformance() / buildSavingsSeries() consumers don't have
+// to know whether the data came from Supabase or the file.
+export async function getInvestmentsHistory() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (sb && hid) {
+    try {
+      const { data, error } = await sb
+        .from('investments_history')
+        .select('month, deposits, withdrawals, net, dividends, interest, realised_pnl, epoch')
+        .eq('household_id', hid)
+        .order('month', { ascending: true });
+      if (error) throw error;
+      if (data && data.length > 0) {
+        return {
+          _status: 'from-supabase',
+          monthlySummary: data.map((r) => ({
+            month: r.month, deposits: r.deposits, withdrawals: r.withdrawals,
+            net: r.net, dividends: r.dividends, interest: r.interest,
+            realisedPnL: r.realised_pnl, epoch: r.epoch,
+          })),
+        };
+      }
+    } catch (e) { console.error('storage: read investments_history', e.message); }
+  }
+  // Fallback: stub (importer hasn't run yet; real history lives in Supabase).
+  return { _status: 'awaiting Phase 3 import', monthlySummary: [], tickerExposure: {}, realisedPnL: null };
+}
 
 // Read-only, repo-owned content (no Supabase — served from data/ in the repo).
 export async function getAreas()        { return await loadJSON('areas'); }

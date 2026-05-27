@@ -150,8 +150,8 @@
 
     <div class="criteria-save-bar" aria-hidden="false">
       <span class="criteria-save-status">Editing — unsaved changes are kept locally on Save.</span>
-      <button type="button" class="secondary" onclick="document.getElementById('btn-cancel').click()">Cancel</button>
-      <button type="button" onclick="document.getElementById('btn-save').click()">Save</button>
+      <button type="button" class="secondary" id="save-bar-cancel">Cancel</button>
+      <button type="button" id="save-bar-save">Save</button>
     </div>
   </main>
 
@@ -159,6 +159,7 @@
   <script type="module" src="../assets/js/components.js"></script>
   <script type="module" src="../assets/js/page-profile.js"></script>
   <script type="module" src="../assets/js/page-criteria.js"></script>
+  <script type="module" src="../assets/js/page-about-search.js"></script>
   <script>
     // Highlight current TOC entry on scroll.
     (() => {

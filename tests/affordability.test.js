@@ -16,9 +16,9 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(r.verdict, 'comfortable', `got ${r.verdict} — ${r.headline}`);
   });
 
-  await test('affordability: £380k → stretch (plan acceptance criterion)', () => {
+  await test('affordability: £380k → tight (corrected take-home £3,543.54)', () => {
     const r = at(380_000);
-    assertEqual(r.verdict, 'stretch', `got ${r.verdict} — ${r.headline}`);
+    assertEqual(r.verdict, 'tight', `got ${r.verdict} — ${r.headline}`);
   });
 
   await test('affordability: £420k → tight', () => {
@@ -97,7 +97,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
   await test('affordability: SDLT / monthlyPI / LTV / lisaEligible match underlying calcs at offer target', () => {
     const price = 380_000;
     const r = at(price);
-    const deposit = Number(criteria.budget.targetDeposit ?? finances.goal.targetDeposit);
+    const deposit = Number(finances.goal.targetDeposit);
     const loan = price - deposit;
     const ftb = finances.firstTimeBuyer !== false;
     const rate = finances.mortgage.ratePctAssumed;

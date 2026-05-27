@@ -29,6 +29,12 @@
     import { register as registerAffordability } from './affordability.test.js';
     import { register as registerMoneyFlow } from './money-flow.test.js';
     import { register as registerSavingsVelocity } from './savings-velocity.test.js';
+    import { register as registerDepositRisk } from './deposit-risk.test.js';
+    import { register as registerAffordabilityScenarios } from './affordability-scenarios.test.js';
+    import { register as registerInvestmentPerformance } from './investment-performance.test.js';
+    import { register as registerSavingsSeries } from './savings-series.test.js';
+    import { register as registerFinanceDerive } from './finance-derive.test.js';
+    import { deriveFinances } from '../assets/js/finance-derive.js';
 
     const fetchOk = async (path) => (await fetch(url(path))).ok;
 
@@ -69,6 +75,26 @@
     const ALL_PAGES = ['index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html', 'pages/areas.html', 'pages/area-detail.html', 'pages/house-types.html', 'pages/journey.html', 'pages/finances.html', 'pages/map.html', 'pages/listings.html', 'pages/outreach.html', 'pages/ask.html'];
     for (const p of ALL_PAGES)
       await test(`page ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
+
+    // --- v3 dashboard tiles present ---
+    await test('index.html contains v3 dashboard tile ids', async () => {
+      const html = await (await fetch(url('index.html'))).text();
+      const required = ['tile-scenarios-fan', 'tile-networth', 'tile-withdraw-ready', 'td-savings-spark'];
+      const missing = required.filter((id) => !html.includes(`id="${id}"`));
+      assert(missing.length === 0, `missing tile ids: ${missing.join(', ')}`);
+    });
+
+    // --- v3 finances Now-stage visuals present ---
+    await test('pages/finances.html contains v3 Now-stage section ids', async () => {
+      const html = await (await fetch(url('pages/finances.html'))).text();
+      const required = [
+        'savings-over-time-card', 'monthly-deposits-card', 'isa-stacked-area-card',
+        'div-int-cumulative-card', 'epoch-comparison-card', 'ticker-treemap-card',
+        'realised-unrealised-card', 'dr-waterfall-svg',
+      ];
+      const missing = required.filter((id) => !html.includes(`id="${id}"`));
+      assert(missing.length === 0, `missing finances v3 ids: ${missing.join(', ')}`);
+    });
 
     // --- §9: no inline style="" attributes shipped in any page ---
     await test('no inline style="" attributes in any page', async () => {
@@ -169,13 +195,30 @@
     });
 
     // --- Phase 2 intelligence modules (affordability, money-flow, savings-velocity) ---
+    // Fixtures are derived from raw repo JSON. Consumer-side code always derives before
+    // rendering, so the test fixtures mirror that contract — no derived fields are read
+    // off the raw record.
+    //
+    // Derived WITH investments so totals reflect the user's reality: cash + ISA earmark.
+    // Gift cards are NOT in totalSavings (they aren't deposit-eligible) — tracked
+    // separately as giftCardsTotal.
+    const rawFinances = await loadJSON('finances');
+    let rawInvestments = null;
+    try { rawInvestments = await loadJSON('investments'); } catch { /* optional */ }
     const fixtures = {
-      finances: await loadJSON('finances'),
+      finances: deriveFinances(rawFinances, { investments: rawInvestments }),
+      rawFinances,
+      investments: rawInvestments,
       criteria: await loadJSON('criteria'),
     };
+    await registerFinanceDerive({ test, assert, assertEqual, fixtures });
     await registerAffordability({ test, assert, assertEqual, fixtures });
     await registerMoneyFlow({ test, assert, assertEqual, fixtures });
     await registerSavingsVelocity({ test, assert, assertEqual, fixtures });
+    await registerDepositRisk({ test, assert, assertEqual, fixtures });
+    await registerAffordabilityScenarios({ test, assert, assertEqual, fixtures });
+    await registerInvestmentPerformance({ test, assert, assertEqual, fixtures });
+    await registerSavingsSeries({ test, assert, assertEqual, fixtures });
 
     document.getElementById('results').innerHTML = '';
     render(document.getElementById('results'));

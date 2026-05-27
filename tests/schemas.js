@@ -7,9 +7,18 @@ export function validateProfile(o) {
   const e = [];
   check(e, typeOf(o) === 'object', 'profile must be an object');
   if (typeOf(o) !== 'object') return e;
-  check(e, typeOf(o.priorities) === 'array', 'profile.priorities must be an array');
-  check(e, typeOf(o.dealBreakers) === 'array', 'profile.dealBreakers must be an array');
-  check(e, 'locationFocus' in o, 'profile.locationFocus missing');
+  // Accept either the legacy simple format or the new structured format.
+  const isNewFormat = 'person' in o || 'employment' in o || 'creditProfile' in o;
+  if (isNewFormat) {
+    check(e, typeOf(o.person) === 'object', 'profile.person must be an object');
+    check(e, typeOf(o.employment) === 'object', 'profile.employment must be an object');
+    check(e, typeOf(o.creditProfile) === 'object', 'profile.creditProfile must be an object');
+    check(e, typeOf(o.debts) === 'object', 'profile.debts must be an object');
+  } else {
+    check(e, typeOf(o.priorities) === 'array', 'profile.priorities must be an array');
+    check(e, typeOf(o.dealBreakers) === 'array', 'profile.dealBreakers must be an array');
+    check(e, 'locationFocus' in o, 'profile.locationFocus missing');
+  }
   return e;
 }
 

@@ -25,6 +25,23 @@
   --accent-ink:     color-mix(in oklch, var(--accent) 70%, var(--ink));
   --accent-contrast: var(--paper);
 
+  /* ---- Semantic aliases (vocabulary over the paper/ink/accent ladder) -
+     Pure indirection — no new hues. Keeps the single-accent direction
+     (DESIGN.md §2) while giving components a meaning-led name to reach for.
+     These inherit dark-theme values automatically via the tokens they map. */
+  --surface:        var(--paper);
+  --surface-raised: var(--paper-2);
+  --surface-sunken: var(--paper-3);
+  --ink-1: var(--ink);
+  --ink-2: var(--ink-muted);
+  --ink-3: var(--ink-subtle);
+  --positive:      var(--accent);       /* "good" already reads as accent */
+  --positive-soft: var(--accent-soft);
+  /* The one genuine second colour: danger. Formalised so component CSS
+     never hard-codes a red (was a stray #c53030 in base.css). */
+  --danger:      oklch(50% 0.18 27);
+  --danger-soft: color-mix(in oklch, var(--danger) 14%, var(--paper));
+
   /* ---- Pico mapping (buttons, links, focus) --------------------------- */
   --pico-primary-background: var(--accent);
   --pico-primary-hover-background: var(--accent-hover);
@@ -112,6 +129,9 @@
   --accent-ink:   color-mix(in oklch, var(--accent) 70%, var(--ink));
   --accent-contrast: oklch(15% 0.04 var(--hue-accent));
 
+  --danger:      oklch(75% 0.14 25);   /* lighter for contrast on dark paper */
+  --danger-soft: color-mix(in oklch, var(--danger) 20%, var(--paper));
+
   --rec-shadow:    0 1px 2px rgba(0, 0, 0, 0.5),
                    0 12px 32px rgba(0, 0, 0, 0.45);
   --rec-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.55),
@@ -136,6 +156,9 @@
     --accent-soft:  color-mix(in oklch, var(--accent) 18%, var(--paper));
     --accent-ink:   color-mix(in oklch, var(--accent) 70%, var(--ink));
     --accent-contrast: oklch(15% 0.04 var(--hue-accent));
+
+    --danger:      oklch(75% 0.14 25);
+    --danger-soft: color-mix(in oklch, var(--danger) 20%, var(--paper));
 
     --rec-shadow:    0 1px 2px rgba(0, 0, 0, 0.5),
                      0 12px 32px rgba(0, 0, 0, 0.45);

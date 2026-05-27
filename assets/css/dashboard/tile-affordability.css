@@ -1,0 +1,30 @@
+/* dashboard/tile-affordability.css — affordability ladder SVG. */
+
+.tile-afford .verdict-line {
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.25rem);
+  line-height: 1.35; letter-spacing: -0.01em;
+  color: var(--ink); margin: 0;
+}
+.ladder { display: block; width: 100%; height: 5rem; font-family: var(--font-data); }
+.ladder__band--comfortable  { fill: color-mix(in oklch, var(--accent) 30%, var(--paper)); }
+.ladder__band--stretch      { fill: color-mix(in oklch, var(--accent) 16%, var(--paper)); }
+.ladder__band--tight        { fill: color-mix(in oklch, var(--ink) 10%, var(--paper)); }
+.ladder__band--out-of-reach { fill: color-mix(in oklch, var(--ink) 22%, var(--paper)); }
+.ladder__marker { stroke: var(--ink); stroke-width: 2; fill: var(--paper); }
+.ladder__range { fill: color-mix(in oklch, var(--accent) 10%, transparent); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 2; }
+.ladder__tick   { fill: var(--ink-muted); font-size: 8px; font-family: var(--font-data); }
+.ladder__label  { fill: var(--ink); font-size: 9px; font-family: var(--font-data); font-weight: 500; }
+
+.ladder-inputs { display: flex; gap: var(--space-2); font-size: var(--text-sm); }
+.ladder-inputs label { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; margin: 0; }
+.ladder-inputs label > span { color: var(--ink-muted); font-size: var(--text-xs); }
+.ladder-inputs input {
+  margin: 0; padding: var(--space-2) var(--space-3);
+  font-family: var(--font-data);
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink); min-height: 44px;
+}
+.ladder-inputs input:focus-visible {
+  outline: 2px solid var(--focus-ring); outline-offset: 2px; border-color: var(--accent);
+}

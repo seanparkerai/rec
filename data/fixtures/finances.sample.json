@@ -3,11 +3,7 @@
   "firstTimeBuyer": true,
   "income": {
     "annualGrossBase": 64000,
-    "annualBaseSalary": 64000,
     "monthlyNetTakeHome": 3543.54,
-    "takeHomeMonthly": 3543.54,
-    "bonusMonthly": 250,
-    "totalMonthly": 3793.54,
     "taxCode": "1257L",
     "taxPeriodCurrent": 1,
     "mostRecentPayslipDate": "2026-01-01",
@@ -80,13 +76,9 @@
   },
   "savings": {
     "current": 0,
-    "totalSavings": 25000,
     "monthlyContribution": 2000,
     "history": [],
-    "_note": "totalSavings = combined liquid savings (investments + cash). This field tracks cash held outside investment accounts — currently zero; totalSavings includes portfolio value."
-  },
-  "spare": {
-    "monthly": 161.04
+    "_note": "All liquid savings live in trading212ISA (data/fixtures/investments.sample.json). This field is cash held OUTSIDE investment accounts — currently zero."
   },
   "mortgage": {
     "targetMax": 360000,
@@ -119,10 +111,6 @@
     { "item": "Buildings Insurance (& contents)", "annual": 450, "monthly": 37.5 },
     { "item": "Smart Gadgets", "annual": 250, "monthly": 20.83 }
   ],
-  "ongoingBillsTotal": {
-    "monthly": 612.5,
-    "annual": 7350
-  },
   "expenses": [
     { "item": "Food & Shopping", "annual": 3900, "monthly": 300, "weekly": 75 },
     { "item": "Petrol", "annual": 2080, "monthly": 160, "weekly": 40 },
@@ -131,10 +119,6 @@
     { "item": "Pet & miscellaneous", "annual": 780, "monthly": 60, "weekly": 15 },
     { "item": "Presents & Holidays", "annual": 1200, "monthly": 100, "weekly": 25 }
   ],
-  "expensesTotal": {
-    "monthly": 1120,
-    "annual": 13440
-  },
   "shoppingList": [
     { "category": "Kitchen Basics", "cost": 230, "items": "Plates/bowls/mugs/glasses £50; cutlery/utensils £35; kettle/toaster £50; pans/tray £30; chopping/knives £35; storage/foil/cling £10; tea/coffee/oil/basics £20" },
     { "category": "Appliances", "cost": 1150, "items": "Microwave £0; fridge-freezer £500; washing machine £300; dishwasher £350" },

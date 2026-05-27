@@ -2,12 +2,7 @@
 // Checked state is persisted in localStorage separately from the canonical data/checklists.json.
 import { loadJSON } from './data-loader.js';
 import { _internal } from './storage.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
+import { esc, byId as $ } from './dom.js';
 
 const STATE_KEY = 'journey-checks'; // namespace handled by storage._internal
 

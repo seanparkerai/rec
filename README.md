@@ -6,7 +6,36 @@ research-backed town/village profiles, characteristic house-types, a savings/fin
 interactive map of search areas.
 
 It is a **zero-build static web app** (plain HTML/CSS/JS, libraries via CDN) that stores content as
-editable JSON in the repo. Designed so a future login + web-server backend is a swap, not a rewrite.
+editable JSON in the repo, with user state persisted to Supabase via the MCP-backed storage layer.
+
+## v3 — visuals + page re-prioritisation
+
+The v3 cycle adds the visual surfaces that turn the v2 intelligence engine into
+something you read at a glance. Eleven new visualisations across the dashboard and
+finances page, each paired with a caption-as-answer (DESIGN.md §5 rule 4):
+
+- **Savings over time** on the dashboard (sparkline) and finances page (full Chart.js
+  line) — actual cumulative balance plotted against the engine baseline and the £40k
+  target hairline.
+- **Trading 212 ISA performance suite** on the finances page — monthly deposits, ISA
+  stacked area (contributions vs dividends vs interest vs market growth), cumulative
+  dividends + interest, strategy-epoch comparison, ticker exposure treemap, realised
+  vs unrealised P&L. All stub-safe: when the T212 importer hasn't been run, every
+  visual degrades to a single explanatory placeholder.
+- **Dashboard re-ranked** by decision value × visual density per pixel — scenario fan,
+  net-worth donut, withdrawal-readiness seasoning bar, and an in-tile savings
+  sparkline join the existing tiles; shortlist/criteria/ask move to a foot context strip.
+- **Finances Now stage** re-ordered so the savings trajectory chart sits below the
+  hero. **Later stage** leads with the affordability widget; deposit-at-risk upgraded
+  from a text scenarios table to a 3-step waterfall (current → −10% → −20%) labelled
+  with months-of-savings-lost.
+- **Profile** page promotes "Things to check" to rank 2 — actions before known data.
+- **Supabase contract** (CLAUDE.md §18) extended: `storage.js` gains `getGoals`,
+  `getReadinessChecklist`, `saveReadinessItem`, `getInvestmentsHistory`. Four v3
+  tables (`goals`, `readiness_checklist`, `investments_accounts`,
+  `investments_history`) are backfilled via the Supabase MCP connector.
+
+See `docs/archive/PROGRESS-2026-05-26.md` for the phase-by-phase delivery log.
 
 ## v2 — visual-first overhaul + intelligence engine
 
@@ -33,11 +62,27 @@ engine** that powers every affordability surface from one source of truth:
   from area-detail, finances, and journey checklist rows.
 - **v3 placeholders** remain at `pages/listings.html` and `pages/ask.html`. See `docs/ROADMAP.md`.
 
-Run `node tools/run-intelligence-tests.mjs` for the pure-module test harness (65 assertions covering
-affordability bands, money-flow sums, savings-velocity scenarios, outreach template schema, and the
-renderer + QoI leak guard). Browser-side smoke checks (no horizontal scroll, no inline styles, page
+Run `node tools/run-intelligence-tests.mjs` for the unified test harness (184+ assertions covering
+affordability bands, money-flow sums, savings-velocity, savings series, deposit risk, investment
+performance, outreach template schema, renderer + QoI leak guard, Supabase sync state, and
+computation-pipeline characterization baselines). Browser-side smoke checks (no horizontal scroll, no inline styles, page
 reachability) run via `tests/tests.html` against a local server when you want them; visual review is done
 by eye in the browser.
+
+## Supabase MCP sync contract
+
+The app uses Supabase for all stateful data and Claude is wired to Supabase via the MCP connector.
+The full bidirectional sync contract — what lives in the database vs the repo, how user-portal edits
+and Claude edits stay aligned, and the mandatory MCP-first session start — lives in
+**[`docs/SUPABASE_SYNC.md`](docs/SUPABASE_SYNC.md)** (operational detail) and **`CLAUDE.md` §18**
+(rules of engagement). TL;DR:
+
+- **User state** (profile, criteria, finances, shortlist, zones, journey, contacts, outreach) →
+  Supabase is canonical; the portal writes via `storage.js`, Claude writes via MCP `execute_sql`.
+- **Content** (areas, house-types, checklists, outreach-templates) → repo JSON is canonical, mirrored
+  to Supabase tables for query access.
+- **Every Claude session** opens by polling `MAX(updated_at)` across all tables to detect portal
+  edits that happened while Claude was away, and closes by verifying every write landed.
 
 ## ✨ View live site
 

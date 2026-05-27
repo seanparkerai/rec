@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Portsmouth",
   "coords": {
-    "lat": 50.90572,
-    "lng": -1.19008
+    "lat": 50.8843,
+    "lng": -1.1651
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "directory",
   "priceSummary": null,

@@ -336,3 +336,58 @@ Adopted 2026-05-25. Tick each v2 phase as it lands; commits go directly to `main
 - [x] **Phase 5** — Contacts management: shipped in Phase 3 (agents / brokers / solicitors / surveyors CRUD with add/delete, persists via `storage.js`).
 - [x] **Phase 6** — Cross-linking: area-detail verdict strip → A1, finances affordability widget → A5, journey checklist rows → 7 templates (A5, C3, B1, C5, C2, D1, D5, D6, D7). Deep-link parser in `page-outreach.js` reads `?templateId=`.
 - [x] **Phase 7** — Docs: `docs/ROADMAP.md` Outreach moved to "Shipped in v3.0"; `docs/CHECKLIST.md` updated; `README.md` storage-keys table updated.
+
+---
+
+## Phase 10 — Supabase MCP sync hardening (May 2026 →)
+
+Adopted 2026-05-25. Codifies the bidirectional sync contract in `CLAUDE.md §18` + `docs/SUPABASE_SYNC.md`.
+Goal: every write (Claude or portal) lands in Supabase; every session starts by checking what changed
+since last time. No silent drift.
+
+### 10A · Schema additions (one MCP migration each)
+- [x] `areas` mirror table — one row per area, `id` PK, `data` jsonb, `updated_at` timestamptz.
+      No RLS (read-only content). Applied via `mcp__supabase__apply_migration`.
+- [x] `house_types` mirror table — same shape, keyed by house-type id.
+- [x] `sync_log` table — append-only audit (`table_name`, `actor`, `row_id`, `action`, `at`).
+- [x] Updated `supabase/schema.sql` to reflect live schema.
+
+### 10B · Tooling
+- [x] `tools/check-supabase-freshness.mjs` — session-start freshness check; prints the SQL snippet Claude should run via MCP to detect changes since last session.
+- [x] `tools/sync-content-to-supabase.mjs` — reads repo JSON, generates UPSERT SQL, writes 21 batches to `.tmp/sync-*.sql` for Claude to execute via MCP.
+- [x] `data/snapshots/sync-state.json` — committed snapshot of `updated_at` per table.
+
+### 10C · Content backfill (one-time bootstrap via Node script)
+- [x] `tools/backfill-content-direct.mjs` — self-contained Node script using PostgREST + service role key. Idempotent, ~10 seconds to run.
+- [x] Schema verified clean (areas/house_types/sync_log tables empty, ready for backfill).
+- [ ] **USER ACTION**: Run once with service role key:
+      ```bash
+      # 1. Get service role key from Supabase dashboard
+      # 2. Set env var:
+      export SUPABASE_SERVICE_ROLE_KEY="eyJ..."
+      # 3. Run the backfill:
+      node tools/backfill-content-direct.mjs
+      ```
+- [ ] After backfill: 195 areas + 15 house types in Supabase, snapshot updated.
+
+**Why a script instead of 39 MCP calls?** A Node script using PostgREST is the standard
+Supabase backfill pattern: faster (~10s vs minutes of MCP turns), simpler (one command),
+and idempotent (safe to re-run). Day-to-day single-area edits still flow through Claude's
+MCP connector — this is just the one-time bootstrap.
+
+### 10D · Test enforcement
+- [x] `tests/supabase-sync.test.js` — offline checks: snapshot validity, repo structure, SQL batch generation. Online checks (pending backfill): row counts.
+- [x] Wired into `tools/run-intelligence-tests.mjs`. Now 74/74 tests pass (65 intelligence + 9 sync).
+
+### 10E · CLAUDE.md / docs
+- [x] §18 + §6 + §8 updated for MCP-first sync contract.
+- [x] `docs/SUPABASE_SYNC.md` created with detailed bidirectional sync protocol.
+- [x] `README.md` — added "Supabase MCP sync contract" section.
+- [x] `supabase/schema.sql` — updated to document the new tables + triggers.
+
+### 10F · Verification (after user runs backfill)
+- [ ] Run `node tools/run-intelligence-tests.mjs` — should report 195 areas + 15 house types.
+- [ ] Verify via MCP: `SELECT COUNT(*) FROM areas` returns 195, `SELECT COUNT(*) FROM house_types` returns 15.
+
+**Out of scope for Phase 10**: realtime subscriptions, storage buckets, edge functions, auth flow
+changes, Storage.js logging (10D deferred — needs separate phase per §16). Those get their own phases.

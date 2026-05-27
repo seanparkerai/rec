@@ -13,7 +13,7 @@
     "lat": 51.0228,
     "lng": -0.9456
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "directory",
   "priceSummary": null,

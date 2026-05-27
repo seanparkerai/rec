@@ -17,11 +17,20 @@
     "areaSource": "data/areas.json (191 villages — Hampshire + Wiltshire)",
     "searchRadiusMiles": 1
   },
-  "propertyTypes": ["Detached", "Bungalow", "Semi-detached", "Terraced"],
+  "propertyTypes": [
+    "Detached",
+    "Bungalow",
+    "Semi-detached",
+    "Terraced"
+  ],
   "propertyTypePrefs": {
     "preferred": ["Detached", "Bungalow"],
     "acceptable": ["Semi-detached", "Terraced"],
     "excluded": ["Flat / Apartment", "Park / Mobile Home"]
+  },
+  "propertyTypesExpanded": {
+    "considered": ["detached", "semi-detached", "end-terrace", "mid-terrace", "bungalow-detached", "cottage"],
+    "ruledOut": ["new-build-estate", "flat", "maisonette", "barn-conversion"]
   },
   "tenurePref": "freehold",
   "tenure": {
@@ -38,14 +47,43 @@
   "parking": "Off-street parking required",
   "features": {
     "mustHave": ["Garden", "Off-street parking"],
-    "niceToHave": ["Garage", "Driveway", "Balcony / Terrace", "En-suite", "Conservatory", "Home office / Study", "EV charging point"]
+    "niceToHave": [
+      "Garage",
+      "Driveway",
+      "Balcony / Terrace",
+      "En-suite",
+      "Conservatory",
+      "Home office / Study",
+      "EV charging point"
+    ]
   },
   "epcMin": "C",
   "condition": "Move-in ready preferred (check roof, boiler, damp)",
-  "listingFreshness": { "addedWithinHours": 24 },
+  "listingFreshness": {
+    "addedWithinHours": 24
+  },
   "keywords": {
-    "include": ["village", "rural", "countryside", "freehold", "EPC C", "EPC B", "EPC A"],
-    "exclude": ["leasehold", "shared ownership", "retirement", "auction", "cash buyers only", "needs modernisation", "in need of refurbishment", "investment opportunity", "mobile home", "park home"]
+    "include": [
+      "village",
+      "rural",
+      "countryside",
+      "freehold",
+      "EPC C",
+      "EPC B",
+      "EPC A"
+    ],
+    "exclude": [
+      "leasehold",
+      "shared ownership",
+      "retirement",
+      "auction",
+      "cash buyers only",
+      "needs modernisation",
+      "in need of refurbishment",
+      "investment opportunity",
+      "mobile home",
+      "park home"
+    ]
   },
   "mortgage": {
     "targetMax": 360000,
@@ -55,23 +93,105 @@
     "monthlyPaymentRange": { "min": 1800, "max": 2000 },
     "fixedRatePref": "2-year"
   },
-  "mustHaves": ["Freehold", "2+ bedrooms", "Garden", "Off-street parking", "EPC C or above", "Countryside / rural setting"],
-  "niceToHaves": ["3 bedrooms", "2 bathrooms", "Detached or bungalow", "Move-in ready (no major works)", "Near Winchester or Salisbury", "Low-population village", "Chain-free seller", "Recently price-reduced"],
+  "mustHaves": [
+    "Freehold",
+    "2+ bedrooms",
+    "Garden",
+    "Off-street parking",
+    "EPC C or above",
+    "Countryside / rural setting"
+  ],
+  "niceToHaves": [
+    "3 bedrooms",
+    "2 bathrooms",
+    "Detached or bungalow",
+    "Move-in ready (no major works)",
+    "Near Winchester or Salisbury",
+    "Low-population village",
+    "Chain-free seller",
+    "Recently price-reduced"
+  ],
+  "sizeExpanded": {
+    "bedroomsMinimum": 2,
+    "bedroomsIdeal": 3,
+    "bathroomsMinimum": 1,
+    "homeOfficeArrangement": "spare bedroom of 3 doubles as office",
+    "specialRooms": {
+      "downstairsWC": "preferred but not required"
+    }
+  },
+  "propertyAge": {
+    "acceptable": ["pre-1900", "1900-1945", "1945-1980", "1980-2010", "2010-onwards"],
+    "ruledOut": ["new-build-under-5yr"]
+  },
+  "renovationAppetite": {
+    "level": "mid-level work fine (kitchen/bathroom)",
+    "excludes": "extreme renovations",
+    "encoded": "between-options-2-and-3"
+  },
+  "featuresExpanded": {
+    "garden": { "importance": "strong-preference" },
+    "parking": { "preference": "driveway-preferred, on-street acceptable" },
+    "heating": {
+      "central": "required",
+      "acceptableSystems": ["gas", "oil", "lpg", "heatpump"]
+    }
+  },
+  "dealBreakersExpanded": [
+    "extremely built-up roads",
+    "leasehold",
+    "no central heating",
+    "ex-council estate",
+    "loud areas",
+    "right next to schools (noise/parking)"
+  ],
+  "stretchFeatures": [
+    "rural theme",
+    "exposed beams",
+    "cottage style",
+    "Georgian houses",
+    "British countryside character",
+    "countryside views",
+    "quiet lanes"
+  ],
   "lifestyle": {
     "saturdayMorningVision": "Coffee in garden. Village pub. Walking. Quiet. Quaint. Village life. Away from cities.",
     "preferenceMode": "two-tier",
     "ideal": "rural village, pub + butcher walkable, character cottage, beams, quiet lane",
-    "acceptable": "semi-rural village or large village on edge of market town"
+    "acceptable": "semi-rural village or large village on edge of market town, character preserved even if not chocolate-box, decent walking access to a pub/shop/green"
   },
   "areaCriteria": {
     "counties": ["Hampshire", "Wiltshire"],
     "weighting": "equal",
+    "settlementTypePreferences": {
+      "trueVillage": 1.0,
+      "largeVillage": 0.9,
+      "marketTownEdge": 0.7,
+      "marketTownWithin": 0.5,
+      "cityOutskirts": 0.3,
+      "withinCity": 0
+    },
+    "walkability": {
+      "mode": "scoring-not-filtering",
+      "factors": [
+        { "id": "pub", "weight": "high" },
+        { "id": "shop", "weight": "high" },
+        { "id": "gp-pharmacy", "weight": "medium" },
+        { "id": "park-green", "weight": "medium" },
+        { "id": "train-station", "weight": "low" }
+      ]
+    },
     "commute": {
       "officeLocation": "London",
       "mode": "fully remote",
       "scoreWeight": "very low — occasional trips only",
       "carOwnership": false,
       "trainAccessWeight": "elevated due to no car"
+    },
+    "schools": {
+      "factorIn": true,
+      "weight": "tiebreaker only",
+      "reason": "no dependents at present"
     }
   }
 }

@@ -3,12 +3,7 @@ import { getAreas, getShortlist, saveShortlist, getFinances, getCriteria } from 
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
+import { esc, byId as $ } from './dom.js';
 
 let areas = [];
 let shortlist = new Set();
