@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Debug · rec</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
   <style>
     body { font-family: system-ui, sans-serif; padding: 1rem; max-width: 900px; margin: 0 auto; }
     h2 { margin-top: 2rem; border-bottom: 2px solid #ddd; padding-bottom: 0.25rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: #555; }
@@ -368,9 +369,12 @@
       '--space-1',
       '--space-2',
       '--space-4',
-      '--rec-accent',
+      '--accent',
       '--focus-ring',
       '--text-base',
+      '--paper',
+      '--ink',
+      '--positive',
     ];
 
     const probe = document.createElement('div');
@@ -383,8 +387,7 @@
       if (val) {
         row(outTokens, token, 'ok', val);
       } else {
-        // Some are project-specific and may not be loaded on this page
-        row(outTokens, token, 'warn', '(empty — token not defined on this page; load dashboard CSS to test)');
+        row(outTokens, token, 'err', `(empty — token not resolved; check tokens.css is loading correctly)`);
       }
     }
     document.body.removeChild(probe);
