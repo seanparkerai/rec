@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Romsey",
   "coords": {
-    "lat": 50.99864,
-    "lng": -1.507
+    "lat": 51.0011,
+    "lng": -1.5439
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "directory",
   "priceSummary": null,

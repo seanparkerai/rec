@@ -1,7 +1,7 @@
 // affordability.js — verdict engine.
 // Pure module. No DOM, no storage, no fetch.
-// Constants duplicated literally from docs/INTELLIGENCE_RULES.md — when that file
-// changes, update the BANDS object below in lockstep (see §Maintenance there).
+// Rule constants live in intelligence-constants.js (single source of truth).
+// When updating a constant, update both that file AND docs/INTELLIGENCE_RULES.md.
 
 import {
   calcMonthlyMortgage,
@@ -9,29 +9,15 @@ import {
   calcLTV,
   lisaEligible,
 } from './finances.js';
-
-// --- Band constants ------------------------------------------------------------
-
-/** Loan-to-income (loan ÷ gross annual income). Upper bound is "out-of-reach". */
-const LTI_BANDS = { comfortable: 4.5, stretch: 5.5, tight: 6.0 };
-
-/** Monthly mortgage payment as % of monthly take-home (P&I, contract rate). */
-const PAYMENT_BANDS_PCT = { comfortable: 40, stretch: 52, tight: 60 };
-
-/** Monthly cash left after total-monthly minus bills + expenses + mortgage. */
-const SPARE_BANDS_GBP = { comfortable: 400, stretch: 100 };
-
-/** LISA bonus available only up to this purchase price (statutory). */
-const LISA_CAP_GBP = 450_000;
-
-/** LTV tier boundaries — lender rate cliffs. Sorted ascending. */
-const LTV_TIERS = [60, 75, 85, 90, 95];
-
-/** Stressed-rate uplift over contract rate (percentage points). */
-const STRESS_UPLIFT_PP = 3;
-
-/** Stressed payment / take-home above this triggers a whyVerdict warning. */
-const STRESS_WARNING_PCT = 60;
+import {
+  LTI_BANDS,
+  PAYMENT_BANDS_PCT,
+  SPARE_BANDS_GBP,
+  LISA_CAP_GBP,
+  LTV_TIERS,
+  STRESS_UPLIFT_PP,
+  STRESS_WARNING_PCT,
+} from './intelligence-constants.js';
 
 const VERDICTS = ['comfortable', 'stretch', 'tight', 'out-of-reach'];
 
@@ -122,9 +108,9 @@ export function assessAffordability({ price, finances, criteria, councilTaxBand:
   const takeHome = Number(finances?.income?.takeHomeMonthly || 0);
   const totalMonthly = Number(finances?.income?.totalMonthly || takeHome);
 
-  const targetDeposit = Number(
-    criteria?.budget?.targetDeposit ?? finances?.goal?.targetDeposit ?? 0,
-  );
+  // Single source: finances.goal.targetDeposit. criteria.budget.targetDeposit
+  // was a stale duplicate and has been removed from data/criteria.json.
+  const targetDeposit = Number(finances?.goal?.targetDeposit ?? 0);
   const currentDeposit = Number(finances?.savings?.totalSavings || 0);
 
   const rate = Number(finances?.mortgage?.ratePctAssumed || 0);
@@ -238,6 +224,82 @@ function buildHeadline({ price, verdict, loanRequired, monthlyPI, paymentToIncom
   const loanGbp = loanRequired.toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
   const monthlyGbp = monthlyPI.toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
   return `${priceGbp} ${verdictText} — ${loanGbp} loan at ~${monthlyGbp}/month (${paymentToIncomePct.toFixed(0)}% of take-home).`;
+}
+
+// --- Scenario modelling --------------------------------------------------------
+
+/**
+ * Three affordability scenarios for the same buyer at different price/deposit combos.
+ * Bonus is NOT included in income — treated as scenario-only per house rules.
+ *
+ * @param {object} args
+ * @param {object} args.finances    contents of data/finances.json
+ * @param {object} args.criteria    contents of data/criteria.json
+ * @param {object} args.goals       contents of data/goals.json
+ * @param {string} [args.councilTaxBand]
+ * @returns {{
+ *   buyNowLowerTarget: object,
+ *   buyOnTargetDeposit: object,
+ *   buyAtHigherTarget: object
+ * }}
+ */
+export function assessAffordabilityScenarios({ finances, criteria, goals, councilTaxBand } = {}) {
+  const currentSavings = Number(goals?.deposit?.currentSavings ?? finances?.savings?.current ?? 0);
+  const hopedDeposit = Number(goals?.deposit?.hopedFor ?? 40_000);
+  const monthlyContrib = Number(finances?.savings?.monthlyContribution ?? 2000);
+
+  const lowerTargetPrice = 340_000;
+  const midTargetPrice = Number(goals?.target?.currentSystemCentre ?? 375_000);
+  const highTargetPrice = 400_000;
+
+  // "Buy sooner, smaller" — use current savings as deposit right now.
+  const lowerDepositNow = currentSavings;
+  const lowerResult = scenarioAffordability({ price: lowerTargetPrice, finances, criteria, deposit: lowerDepositNow, councilTaxBand });
+
+  // "Buy at hoped deposit" — how many months until £50k?
+  const monthsToHoped = monthlyContrib > 0
+    ? Math.max(0, Math.ceil((hopedDeposit - currentSavings) / monthlyContrib))
+    : null;
+  const midResult = scenarioAffordability({ price: midTargetPrice, finances, criteria, deposit: hopedDeposit, councilTaxBand });
+
+  // "Stretch to £400k" — how many months until enough deposit for ~87.5% LTV?
+  const highDeposit = Math.ceil(highTargetPrice * 0.125); // ~£50k for 87.5% LTV
+  const monthsToHigh = monthlyContrib > 0
+    ? Math.max(0, Math.ceil((highDeposit - currentSavings) / monthlyContrib))
+    : null;
+  const highResult = scenarioAffordability({ price: highTargetPrice, finances, criteria, deposit: highDeposit, councilTaxBand });
+
+  return {
+    buyNowLowerTarget: {
+      price: lowerTargetPrice,
+      deposit: lowerDepositNow,
+      monthsToReady: 0,
+      ...lowerResult,
+    },
+    buyOnTargetDeposit: {
+      price: midTargetPrice,
+      deposit: hopedDeposit,
+      monthsToReady: monthsToHoped,
+      ...midResult,
+    },
+    buyAtHigherTarget: {
+      price: highTargetPrice,
+      deposit: highDeposit,
+      monthsToReady: monthsToHigh,
+      ...highResult,
+    },
+  };
+}
+
+/** Call assessAffordability with a scenario-specific deposit overriding the
+ *  canonical finances.goal.targetDeposit and totalSavings (used as currentDeposit). */
+function scenarioAffordability({ price, finances, criteria, deposit, councilTaxBand }) {
+  const overrideFinances = {
+    ...finances,
+    goal: { ...(finances?.goal ?? {}), targetDeposit: deposit },
+    savings: { ...(finances?.savings ?? {}), totalSavings: deposit },
+  };
+  return assessAffordability({ price, finances: overrideFinances, criteria, councilTaxBand });
 }
 
 // Re-export band constants for tests + consumers that want to render thresholds.

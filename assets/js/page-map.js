@@ -6,11 +6,7 @@ import { getAreas, getShortlist, getDrawnZones, saveDrawnZones, getFinances, get
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
-
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
+import { esc, byId as $ } from './dom.js';
 
 const HAMPS_WILTS_CENTRE = [51.05, -1.6];
 const DEFAULT_ZOOM = 9;

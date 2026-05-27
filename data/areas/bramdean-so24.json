@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.08048,
-    "lng": -1.15888
+    "lat": 51.0531,
+    "lng": -1.114
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

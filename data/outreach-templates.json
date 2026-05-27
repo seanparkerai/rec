@@ -1,0 +1,824 @@
+[
+  {
+    "id": "A1",
+    "stage": "A",
+    "stageName": "Search",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — viewing request",
+    "description": "Arrange a viewing with proceedability signals in one short email.",
+    "subjectTemplate": "Viewing — {{listing.address}}",
+    "bodyTemplate": "Hi {{contact.agentName}},\n\nI'd like to arrange a viewing of {{listing.address}} (listed at £{{listing.askingPrice}}, {{listing.portal}} ref {{listing.ref}}).\n\nPosition: first-time buyer, chain-free, AIP in place for £{{finances.aipAmount}}.\n\nCould either {{viewingDateOption1}} or {{viewingDateOption2}} work? I can also do most evenings after 5pm.\n\nMany thanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.agentName",
+      "listing.address",
+      "listing.askingPrice",
+      "listing.portal",
+      "listing.ref",
+      "finances.aipAmount",
+      "viewingDateOption1",
+      "viewingDateOption2"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Mentions proceedability in one line — earns priority in the agent's pile",
+      "Offers two specific time slots — research shows this triples the reply rate vs. 'when suits'",
+      "Includes the listing reference so the agent can find the property instantly"
+    ],
+    "sources": [
+      { "title": "Avocado Property — Setting up a viewing", "url": "https://avocadopropertyagents.co.uk/blog/setting-up-a-viewing/734" },
+      { "title": "Rightmove Guides — sent enquiries", "url": "https://www.rightmove.co.uk/guides/keep-track-of-your-sent-enquiries-to-estate-agents/" }
+    ]
+  },
+  {
+    "id": "A2",
+    "stage": "A",
+    "stageName": "Search",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — saved-search registration",
+    "description": "Introduce yourself so the agent calls you first when a matching property comes to market.",
+    "subjectTemplate": "FTB buyer registration — {{criteria.areaFocus}}",
+    "bodyTemplate": "Hi {{contact.agentName}},\n\nI wanted to introduce myself — I'm actively looking for a property in {{criteria.areaFocus}} and would like to register with you so you can alert me when something suitable comes on.\n\nWhat I'm looking for:\n- {{criteria.beds}}-bed freehold, ideally {{criteria.propertyType}}\n- Budget up to £{{criteria.budget}}\n- Must-haves: {{criteria.mustHaves}}\n- Target move: {{finances.goal.movingWindow}}\n\nMy position: first-time buyer, chain-free, AIP in place for £{{finances.aipAmount}}. I'm proceedable now.\n\nPlease do keep me on your list — I reply promptly and I'm serious about moving. My mobile is {{profile.mobile}}.\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "contact.agentName",
+      "criteria.areaFocus",
+      "criteria.beds",
+      "criteria.propertyType",
+      "criteria.budget",
+      "criteria.mustHaves",
+      "finances.aipAmount",
+      "finances.goal.movingWindow"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Agents prioritise registered buyers with AIP — you move to the top of their call list",
+      "Listing specific criteria saves agents filtering unsuitable properties at you",
+      "Saying 'I reply promptly' signals you are a low-friction buyer — agents prefer easy completions"
+    ],
+    "sources": [
+      { "title": "HomeOwners Alliance — Finding a property", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/top-tips-clever-questions-to-ask-the-estate-agent/" },
+      { "title": "MoneySavingExpert — Estate agents by email", "url": "https://forums.moneysavingexpert.com/discussion/6502007/do-you-deal-with-estate-agents-by-email" }
+    ]
+  },
+  {
+    "id": "A3",
+    "stage": "A",
+    "stageName": "Search",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — pre-viewing question batch",
+    "description": "Get answers to the 10 key questions before spending time on a viewing.",
+    "subjectTemplate": "Questions — {{listing.address}}",
+    "bodyTemplate": "Hi {{contact.agentName}},\n\nBefore I book a viewing of {{listing.address}}, could you confirm a few things?\n\n1. Chain: is the vendor already in a chain, or are they chain-free?\n2. Time on market: how long has the property been listed?\n3. Offers: have any offers already been made or declined?\n4. EPC: what is the current energy rating?\n5. Council tax: which band?\n6. Any structural disclosures — damp, subsidence, planning refusals, boundary disputes?\n7. Parking: is there off-street parking included?\n8. Broadband: what is the current speed/type available?\n9. Last sold: when and for how much?\n10. Reason for sale?\n\nMany thanks — happy to book a viewing once I have these.\n\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.agentName",
+      "listing.address"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Gathering this before viewing saves a wasted trip and signals you're a serious, prepared buyer",
+      "Structural disclosures — asked in writing — are harder for agents to dismiss later",
+      "Reason for sale and time on market inform your offer strategy before you set foot inside"
+    ],
+    "sources": [
+      { "title": "HomeOwners Alliance — 25 questions to ask the estate agent", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/top-tips-clever-questions-to-ask-the-estate-agent/" },
+      { "title": "Propphy — Follow-up email templates", "url": "https://www.propphy.com/blog/real-estate-follow-up-email-templates" }
+    ]
+  },
+  {
+    "id": "A4",
+    "stage": "A",
+    "stageName": "Search",
+    "recipientRole": "vendor",
+    "title": "Vendor direct — off-market enquiry",
+    "description": "A polite, human letter to a homeowner you'd love to buy from.",
+    "subjectTemplate": "A short note about {{vendor.streetName}}",
+    "bodyTemplate": "Hello,\n\nI hope you don't mind a short letter from a stranger. My name is {{profile.firstName}} — I've been looking for a home in {{vendor.areaName}} for several months and I love your street.\n\nI'm a first-time buyer, chain-free, with a mortgage agreement already in place. I'm not from an agency and there's no fee involved — I'd simply love to know if you've ever thought about selling, now or in the next year. If the timing is wrong, I completely understand — please feel free to disregard this.\n\nIf it's a 'maybe one day', I'd really value a brief chat. You can reach me on {{profile.mobile}} or {{profile.email}} — no obligation, no follow-up unless you'd like one.\n\nWith thanks,\n{{profile.firstName}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.mobile",
+      "profile.email",
+      "vendor.streetName",
+      "vendor.areaName"
+    ],
+    "tone": "warm-human-no-jargon",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "First-name only — you're writing to someone's home, not a transaction",
+      "Opt-out language up front earns the right to be read",
+      "No price, no specifics — that conversation comes if they reply",
+      "Avoids spam-trigger phrases ('cash buyer', 'will pay any price') that read as wholesaler outreach"
+    ],
+    "sources": [
+      { "title": "Agent Fire — Cold email guide for real estate leads", "url": "https://agentfire.com/blog/the-catch-all-guide-for-cold-emailing-real-estate-leads/" }
+    ]
+  },
+  {
+    "id": "A5",
+    "stage": "A",
+    "stageName": "Search",
+    "recipientRole": "mortgage-broker",
+    "title": "Mortgage broker — initial enquiry",
+    "description": "Full intro to a broker with all the numbers they need to advise you.",
+    "subjectTemplate": "FTB mortgage enquiry — Hampshire/Wiltshire",
+    "bodyTemplate": "Hi {{contact.brokerName}},\n\nI'm looking for first-time buyer mortgage advice and would like to set up an initial call.\n\nQuick context so you can come prepared:\n- Solo applicant, no dependents, excellent credit, no adverse history.\n- Permanent employment: £{{finances.income.annualBaseSalary}} base + ~£{{finances.income.annualBonus}} average bonus.\n- Target property price: £{{finances.goal.targetPropertyPrice}} (offer target £{{finances.goal.offerTarget}}).\n- Deposit: £{{finances.goal.targetDeposit}} ({{finances.goal.depositPct}}% LTV target).\n- Saving £{{finances.savings.monthlyContribution}}/month; currently £{{finances.savings.current}} saved.\n- Moving window: {{finances.goal.movingWindow}}.\n- Preference: {{finances.mortgage.fixedRatePref}} fixed, willing to pay £{{finances.mortgage.feesWillingness.max}} max in arrangement fees.\n- Search area: Hampshire (near Winchester/Salisbury), countryside villages.\n\nCould we book a 30-minute call this week or next? Tuesday/Thursday afternoons work well for me, but I'm flexible.\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "contact.brokerName",
+      "finances.income.annualBaseSalary",
+      "finances.income.annualBonus",
+      "finances.goal.targetPropertyPrice",
+      "finances.goal.offerTarget",
+      "finances.goal.targetDeposit",
+      "finances.goal.depositPct",
+      "finances.goal.movingWindow",
+      "finances.savings.monthlyContribution",
+      "finances.savings.current",
+      "finances.mortgage.fixedRatePref",
+      "finances.mortgage.feesWillingness.max"
+    ],
+    "tone": "warm-complete",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Brokers triage by completeness — listing all the numbers up front saves a back-and-forth",
+      "Specifying credit profile and FTB status sets expectations for product range",
+      "Suggested call slots beat 'whenever suits'"
+    ],
+    "sources": [
+      { "title": "Your Mortgage Expert (Salisbury) — FTB", "url": "https://your-mortgage-expert.co.uk/first-time-buyer-mortgage/" },
+      { "title": "Strive Mortgages — AIP guide", "url": "https://strivemortgages.co.uk/professional/do-i-need-an-aip-before-making-an-offer/" },
+      { "title": "nesto — FTB approval guide", "url": "https://nesto.co.uk/blog/first-time-buyer-mortgage-how-to-get-approved-uk/" }
+    ]
+  },
+  {
+    "id": "A6",
+    "stage": "A",
+    "stageName": "Search",
+    "recipientRole": "mortgage-broker",
+    "title": "Mortgage broker — AIP renewal",
+    "description": "Request a refreshed Agreement in Principle before yours expires.",
+    "subjectTemplate": "AIP renewal — {{profile.firstName}} {{profile.lastName}}",
+    "bodyTemplate": "Hi {{contact.brokerName}},\n\nMy current Agreement in Principle from {{finances.aipLender}} is due to expire on {{finances.aipExpiryDate}}. Could you please initiate a renewal?\n\nMy circumstances are unchanged:\n- Permanent employment, same employer.\n- Income: £{{finances.income.annualBaseSalary}} base, unchanged.\n- Deposit now at £{{finances.savings.current}} saved.\n- Still targeting £{{finances.goal.targetPropertyPrice}} in Hampshire/Wiltshire, moving window {{finances.goal.movingWindow}}.\n\nI'm actively viewing properties and would like a refreshed AIP before I make an offer.\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.brokerName",
+      "finances.aipLender",
+      "finances.aipExpiryDate",
+      "finances.income.annualBaseSalary",
+      "finances.savings.current",
+      "finances.goal.targetPropertyPrice",
+      "finances.goal.movingWindow"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "AIPs expire at 60–90 days — renewing proactively avoids a gap when you need to move fast on an offer",
+      "Confirming circumstances unchanged saves a full re-interview",
+      "Brokers can often renew on a soft search if nothing has changed"
+    ],
+    "sources": [
+      { "title": "Strive Mortgages — AIP guide", "url": "https://strivemortgages.co.uk/professional/do-i-need-an-aip-before-making-an-offer/" },
+      { "title": "Boon Brokers — Offer accepted", "url": "https://boonbrokers.co.uk/mortgage-guides/offer-accepted-next-steps-buying-house/" }
+    ]
+  },
+  {
+    "id": "B1",
+    "stage": "B",
+    "stageName": "Offer",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — formal offer (with mortgage)",
+    "description": "The Charlie Lamdin 'First and Final' offer structure, adapted for FTB.",
+    "subjectTemplate": "Offer — {{listing.address}} — {{profile.firstName}} {{profile.lastName}}",
+    "bodyTemplate": "Dear {{contact.agentName}},\n\nSubject to survey and contract.\n\nI'd like to make a formal offer to purchase {{listing.address}}. Please acknowledge receipt of this offer by return, and confirm once it has been passed to the seller.\n\nOffer amount: £{{listing.offerAmount}}{{#if listing.offerAsPctOfAsking}} ({{listing.offerAsPctOfAsking}}% of the £{{listing.askingPrice}} asking price){{/if}}.\n\nMy position:\n- First-time buyer, chain-free, no property to sell.\n- Agreement in Principle from {{finances.aipLender}} for up to £{{finances.aipAmount}} — attached.\n- Deposit of £{{finances.depositAmount}} held in {{finances.depositSource}} — screenshot attached.\n- Conveyancer instructed: {{contact.solicitorFirm}}, {{contact.solicitorEmail}}.\n- Target exchange within 8–12 weeks of acceptance; happy to discuss a specific completion date.\n\nThis is not an opening bid. It reflects the maximum I am comfortable paying for this property at current market conditions. If it is not acceptable, I will respectfully withdraw and continue my search.\n\nI'd appreciate a response by {{offerDeadline}}. If I don't hear back by then I'll assume the offer is declined and reallocate my attention.\n\nBest regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}\n{{profile.postcode}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "profile.postcode",
+      "contact.agentName",
+      "contact.solicitorFirm",
+      "contact.solicitorEmail",
+      "listing.address",
+      "listing.askingPrice",
+      "listing.offerAmount",
+      "listing.offerAsPctOfAsking",
+      "finances.aipLender",
+      "finances.aipAmount",
+      "finances.depositAmount",
+      "finances.depositSource",
+      "offerDeadline"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [
+      "AIP / DIP certificate (PDF)",
+      "Bank balance / deposit source screenshot",
+      "Solicitor's letter of engagement (optional but powerful)"
+    ],
+    "bestPracticeNotes": [
+      "States proceedability up front — the only thing the agent forwards to the seller",
+      "Anchors the offer as a final, not opening bid — reduces back-and-forth",
+      "Time-boxed deadline forces agent action; protects you from being held while other offers are sought",
+      "Subject-to-survey-and-contract is non-negotiable boilerplate"
+    ],
+    "sources": [
+      { "title": "Moving Home With Charlie — FTB Offer Template", "url": "https://mhwc.co.uk/suggested-email-template-for-first-time-buyers-making-an-offer-with-a-mortgage/" },
+      { "title": "HomeOwners Alliance — House Offer Accepted", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/house-offer-accepted-what-now/" },
+      { "title": "BestAgent — offer email template", "url": "https://bestagent.co.uk/property-insights/suggested-email-template-for-first-time-buyers-making-an-offer-with-a-mortgage/" }
+    ]
+  },
+  {
+    "id": "B2",
+    "stage": "B",
+    "stageName": "Offer",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — counter-offer response",
+    "description": "Respond to a counter-offer: accept, revise or decline clearly.",
+    "subjectTemplate": "Counter-offer — {{listing.address}}",
+    "bodyTemplate": "Dear {{contact.agentName}},\n\nThank you for coming back to me regarding {{listing.address}}.\n\nHaving considered the counter-offer of £{{listing.counterOfferAmount}}, my response is as follows:\n\n{{counterOfferResponse}}\n\nMy position remains unchanged — first-time buyer, chain-free, AIP in place. I can proceed quickly if we can reach an agreement.\n\nPlease pass this response to the seller and confirm receipt.\n\nBest regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "contact.agentName",
+      "listing.address",
+      "listing.counterOfferAmount",
+      "counterOfferResponse"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Reaffirming your position in every counter-offer email reminds the seller you're a proceedable buyer",
+      "A written response creates a paper trail — useful if the agent misrepresents the exchange",
+      "Requesting confirmation of receipt triggers Property Ombudsman obligations on the agent"
+    ],
+    "sources": [
+      { "title": "HomeOwners Alliance — House Offer Accepted", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/house-offer-accepted-what-now/" },
+      { "title": "haart — Offer accepted what next", "url": "https://www.haart.co.uk/buying/buying-process/once-your-offer-has-been-accepted/" }
+    ]
+  },
+  {
+    "id": "B3",
+    "stage": "B",
+    "stageName": "Offer",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — offer withdrawal",
+    "description": "Withdraw an offer cleanly if research surfaces a deal-breaker post-viewing.",
+    "subjectTemplate": "Offer withdrawal — {{listing.address}}",
+    "bodyTemplate": "Dear {{contact.agentName}},\n\nI am writing to formally withdraw my offer of £{{listing.offerAmount}} on {{listing.address}}.\n\nReason: {{withdrawalReason}}.\n\nPlease confirm receipt and pass this withdrawal to the seller. I wish them well in finding a buyer.\n\nKind regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.agentName",
+      "listing.address",
+      "listing.offerAmount",
+      "withdrawalReason"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Written withdrawal creates a clear end-point — protects you if the agent later claims the offer stood",
+      "Providing a reason (briefly) is professional and helps maintain goodwill with the agent",
+      "Always withdraw in writing, not just verbally — verbal withdrawals are frequently disputed"
+    ],
+    "sources": [
+      { "title": "Compare My Move — Offer accepted on a house", "url": "https://www.comparemymove.com/guides/conveyancing/offer-accepted-house" },
+      { "title": "Setfords — Offer accepted what next", "url": "https://www.setfords.co.uk/2026/01/08/offer-accepted-on-a-house-what-next/" }
+    ]
+  },
+  {
+    "id": "B4",
+    "stage": "B",
+    "stageName": "Offer",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — confirm offer was conveyed",
+    "description": "Written nudge to confirm the agent passed your offer to the seller (Property Ombudsman obligation).",
+    "subjectTemplate": "Offer confirmation — {{listing.address}}",
+    "bodyTemplate": "Dear {{contact.agentName}},\n\nI made a formal offer of £{{listing.offerAmount}} on {{listing.address}} on {{offerDate}}. Could you please confirm:\n\n1. The offer has been passed to the seller.\n2. The seller has been informed of all the details including my buyer position.\n3. The current status of the seller's decision.\n\nAs you'll be aware, estate agents are required under the Property Ombudsman Code of Practice to pass all offers to the seller promptly and in writing. I would appreciate your written confirmation.\n\nKind regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "contact.agentName",
+      "listing.address",
+      "listing.offerAmount",
+      "offerDate"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Property Ombudsman Code obliges agents to pass all offers — this email invokes that obligation in writing",
+      "Creates a paper trail if you later need to complain about an offer not being presented",
+      "Firm but polite — agents who know you understand the rules tend to act faster"
+    ],
+    "sources": [
+      { "title": "Property Buyers Today — Proof of funds", "url": "https://propertybuyerstoday.co.uk/send-proof-of-funds/" },
+      { "title": "First Keys Toolkit — After offer accepted", "url": "https://firstkeystoolkit.co.uk/what-happens-after-offer-accepted-uk/" }
+    ]
+  },
+  {
+    "id": "C1",
+    "stage": "C",
+    "stageName": "Post-acceptance",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — request property removed from market",
+    "description": "Anti-gazumping: formally request the property is marked Sold Subject to Contract.",
+    "subjectTemplate": "Request to remove from market — {{listing.address}}",
+    "bodyTemplate": "Dear {{contact.agentName}},\n\nFollowing the acceptance of my offer of £{{listing.agreedPrice}} on {{listing.address}}, I'd like to formally request that the property is now marked as Sold Subject to Contract and removed from active marketing on all portals.\n\nGazumping is a known risk at this stage. Continuing to market the property exposes both parties to delays and failed sales — not in anyone's interest.\n\nCould you confirm once this has been done?\n\nKind regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "contact.agentName",
+      "listing.address",
+      "listing.agreedPrice"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Agents are not legally obliged to remove a property from market — but this written request creates accountability",
+      "Referencing both parties' interests frames this as a collaborative ask, not a demand",
+      "If the agent refuses, you have a documented signal that may inform your risk appetite"
+    ],
+    "sources": [
+      { "title": "HomeOwners Alliance — House Offer Accepted", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/house-offer-accepted-what-now/" },
+      { "title": "Boon Brokers — Offer accepted next steps", "url": "https://boonbrokers.co.uk/mortgage-guides/offer-accepted-next-steps-buying-house/" }
+    ]
+  },
+  {
+    "id": "C2",
+    "stage": "C",
+    "stageName": "Post-acceptance",
+    "recipientRole": "mortgage-broker",
+    "title": "Mortgage broker — proceed with full application",
+    "description": "Instruct the broker to progress to a full mortgage application now an offer is accepted.",
+    "subjectTemplate": "Please proceed — {{listing.address}}, £{{listing.agreedPrice}}",
+    "bodyTemplate": "Hi {{contact.brokerName}},\n\nGreat news — my offer of £{{listing.agreedPrice}} on {{listing.address}} has been accepted. Please proceed with the full mortgage application.\n\nKey details:\n- Property: {{listing.address}}\n- Purchase price: £{{listing.agreedPrice}}\n- Tenure: {{listing.tenure}}\n- Target exchange: 8–12 weeks from today ({{offerAcceptedDate}})\n\nMy solicitor is:\n{{contact.solicitorFirm}}\n{{contact.solicitorEmail}}\n{{contact.solicitorPhone}}\n\nPlease liaise with them directly as needed. Let me know what you need from me to get the application submitted.\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.brokerName",
+      "contact.solicitorFirm",
+      "contact.solicitorEmail",
+      "contact.solicitorPhone",
+      "listing.address",
+      "listing.agreedPrice",
+      "listing.tenure",
+      "offerAcceptedDate"
+    ],
+    "tone": "warm-complete",
+    "attachmentsHint": [
+      "Signed mortgage application form (if requested)",
+      "Proof of ID and address (passport + utility bill)",
+      "Three months' payslips",
+      "Three months' bank statements"
+    ],
+    "bestPracticeNotes": [
+      "Sharing your solicitor's details up front saves days of back-and-forth between broker and conveyancer",
+      "Including the target exchange date creates a shared timeline to work towards",
+      "Asking 'what do you need from me' shifts responsibility for the next step to the broker"
+    ],
+    "sources": [
+      { "title": "Compare My Move — Offer accepted on a house", "url": "https://www.comparemymove.com/guides/conveyancing/offer-accepted-house" },
+      { "title": "haart — Offer accepted what next", "url": "https://www.haart.co.uk/buying/buying-process/once-your-offer-has-been-accepted/" }
+    ]
+  },
+  {
+    "id": "C3",
+    "stage": "C",
+    "stageName": "Post-acceptance",
+    "recipientRole": "solicitor",
+    "title": "Solicitor — conveyancing quote request",
+    "description": "Request a like-for-like quote from a conveyancer with six specific questions.",
+    "subjectTemplate": "Conveyancing quote — {{listing.address}}, £{{listing.agreedPrice}}",
+    "bodyTemplate": "Dear Sirs,\n\nI'd like to request a conveyancing quote for the purchase of {{listing.address}}, agreed at £{{listing.agreedPrice}}.\n\nKey details:\n- Tenure: {{listing.tenure}}.\n- Property type: {{listing.propertyType}}, {{listing.beds}}-bed.\n- New build: {{listing.isNewBuild}}.\n- Mortgage lender: {{finances.aipLender}} (subject to full application).\n- I am a first-time buyer, chain-free.\n- Target exchange: 8–12 weeks from offer acceptance ({{offerAcceptedDate}}).\n\nPlease could your quote include:\n1. Total fees including VAT, broken down by stage.\n2. All disbursements (Land Registry, searches, SDLT submission, AML).\n3. Whether you offer a no-sale-no-fee arrangement, and what disbursements remain payable if so.\n4. The name of the solicitor/conveyancer who will handle my file day-to-day.\n5. Whether you are on {{finances.aipLender}}'s panel.\n6. Your CLC / SRA regulation number and complaints procedure.\n\nMany thanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "listing.address",
+      "listing.agreedPrice",
+      "listing.tenure",
+      "listing.propertyType",
+      "listing.beds",
+      "listing.isNewBuild",
+      "finances.aipLender",
+      "offerAcceptedDate"
+    ],
+    "tone": "formal-complete",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "The six numbered questions force apples-to-apples quotes between firms",
+      "Confirming lender panel up front prevents 'panel fee' surprises after instruction",
+      "Naming your day-to-day contact prevents being handed to a junior post-instruction"
+    ],
+    "sources": [
+      { "title": "Barratt London — Questions to ask your solicitor", "url": "https://www.barratthomes.co.uk/new-homes/london/advice-and-inspiration/key-questions-to-ask-your-solicitor-or-conveyancer/" },
+      { "title": "HomeOwners Alliance — 10 questions for conveyancers", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/questions-to-ask-conveyancing-solicitor/" },
+      { "title": "My Home Move Conveyancing", "url": "https://myhomemoveconveyancing.co.uk/buyers/conveyancing/questions-to-ask-your-conveyancer/" }
+    ]
+  },
+  {
+    "id": "C4",
+    "stage": "C",
+    "stageName": "Post-acceptance",
+    "recipientRole": "solicitor",
+    "title": "Solicitor — formal instruction",
+    "description": "Formally instruct your chosen conveyancer with all the details they need to open your file.",
+    "subjectTemplate": "Instruction — {{listing.address}} purchase",
+    "bodyTemplate": "Dear {{contact.solicitorName}},\n\nI'd like to formally instruct {{contact.solicitorFirm}} to act on my behalf in the purchase of {{listing.address}} at the agreed price of £{{listing.agreedPrice}}.\n\nMy details:\n- Full name: {{profile.firstName}} {{profile.lastName}}\n- Date of birth: {{profile.dob}}\n- Mobile: {{profile.mobile}}\n- Email: {{profile.email}}\n- Current address: {{profile.address}}\n\nProperty details:\n- Address: {{listing.address}}\n- Tenure: {{listing.tenure}}\n- Agreed price: £{{listing.agreedPrice}}\n- Seller's solicitor (if known): {{listing.sellerSolicitor}}\n- Selling agent: {{contact.agentName}}, {{contact.agentEmail}}, {{contact.agentPhone}}\n\nMortgage:\n- Lender: {{finances.aipLender}}\n- Deposit source: {{finances.depositSource}}\n- Broker: {{contact.brokerName}}, {{contact.brokerEmail}}\n\nTarget exchange: 8–12 weeks from acceptance ({{offerAcceptedDate}}).\n\nPlease send your client care letter and I will sign and return it promptly.\n\nKind regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "profile.dob",
+      "profile.address",
+      "contact.solicitorName",
+      "contact.solicitorFirm",
+      "contact.agentName",
+      "contact.agentEmail",
+      "contact.agentPhone",
+      "contact.brokerName",
+      "contact.brokerEmail",
+      "listing.address",
+      "listing.agreedPrice",
+      "listing.tenure",
+      "listing.sellerSolicitor",
+      "finances.aipLender",
+      "finances.depositSource",
+      "offerAcceptedDate"
+    ],
+    "tone": "formal-complete",
+    "attachmentsHint": [
+      "Signed client care letter / letter of engagement",
+      "Proof of ID (passport)",
+      "Proof of address (utility bill or bank statement, dated within 3 months)",
+      "Proof of deposit source (bank statements or gift letter)"
+    ],
+    "bestPracticeNotes": [
+      "Sharing seller's solicitor details at instruction speeds up the memorandum of sale",
+      "Introducing broker and agent in the same email reduces solicitor admin time",
+      "Stating the target exchange date from day one creates a shared goal"
+    ],
+    "sources": [
+      { "title": "HomeOwners Alliance — Offer accepted next steps", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/house-offer-accepted-what-now/" },
+      { "title": "First Keys Toolkit — After offer accepted", "url": "https://firstkeystoolkit.co.uk/what-happens-after-offer-accepted-uk/" }
+    ]
+  },
+  {
+    "id": "C5",
+    "stage": "C",
+    "stageName": "Post-acceptance",
+    "recipientRole": "surveyor",
+    "title": "Surveyor — RICS Level 2 quote request",
+    "description": "Request a HomeBuyer Report quote with access details and specific concerns.",
+    "subjectTemplate": "RICS Level 2 quote — {{listing.address}}",
+    "bodyTemplate": "Hi,\n\nI'd like a quote for a RICS Level 2 HomeBuyer Report on {{listing.address}}, including a market valuation if priced as a small add-on.\n\nProperty details:\n- Type: {{listing.propertyType}}, {{listing.beds}}-bed.\n- Approx age / construction: {{listing.age}} / {{listing.construction}}.\n- Agreed purchase price: £{{listing.agreedPrice}}.\n- Listing: {{listing.url}}.\n- Specific concerns I'd like the report to flag: {{surveyConcerns}}.\n\nFor booking, the access contact is:\n- {{contact.agentName}}, {{contact.agentEmail}}, {{contact.agentPhone}}.\n\nI'd like the survey carried out within 2 weeks if possible. Could you confirm:\n1. Your fee inc. VAT.\n2. Earliest available date.\n3. Turnaround for the report after inspection.\n4. Whether a 15-minute follow-up call with the surveyor is included.\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.agentName",
+      "contact.agentEmail",
+      "contact.agentPhone",
+      "listing.address",
+      "listing.propertyType",
+      "listing.beds",
+      "listing.age",
+      "listing.construction",
+      "listing.agreedPrice",
+      "listing.url",
+      "surveyConcerns"
+    ],
+    "tone": "practical-dates-led",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Naming the access contact saves a day of back-and-forth",
+      "Asking for the follow-up call up front avoids being charged extra later",
+      "Specifying concerns sharpens the report — surveyors know where to look"
+    ],
+    "sources": [
+      { "title": "Cosey Homes — RICS Level 2", "url": "https://www.coseyhomes.co.uk/choose-your-survey/rics-homebuyers-survey/" },
+      { "title": "Camsure Homes — RICS Level 2", "url": "https://camsurehomes.com/surveyor-services/rics-homebuyer-survey" },
+      { "title": "Walker Dunn — RICS Level 2", "url": "https://walkerdunn.co.uk/rics-home-survey-level-2/" }
+    ]
+  },
+  {
+    "id": "C6",
+    "stage": "C",
+    "stageName": "Post-acceptance",
+    "recipientRole": "surveyor",
+    "title": "Surveyor — booking confirmation",
+    "description": "Confirm the chosen surveyor and access arrangement for the inspection.",
+    "subjectTemplate": "Survey booking — {{listing.address}}",
+    "bodyTemplate": "Hi {{contact.surveyorName}},\n\nThank you for your quote — I'd like to go ahead and book a RICS Level 2 HomeBuyer Report on {{listing.address}} at the agreed fee of £{{surveyFee}}.\n\nPreferred dates (in order of preference):\n1. {{surveyDateOption1}}\n2. {{surveyDateOption2}}\n\nAccess is via the selling agent:\n- {{contact.agentName}}, {{contact.agentPhone}}, {{contact.agentEmail}}\n\nPlease liaise with them directly to confirm entry. I'll let them know to expect your call.\n\nI look forward to receiving the report within {{surveyTurnaround}} days of inspection.\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "contact.surveyorName",
+      "contact.agentName",
+      "contact.agentPhone",
+      "contact.agentEmail",
+      "listing.address",
+      "surveyFee",
+      "surveyDateOption1",
+      "surveyDateOption2",
+      "surveyTurnaround"
+    ],
+    "tone": "practical-dates-led",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Giving two date options avoids a scheduling back-and-forth",
+      "Letting the agent know to expect the surveyor's call prevents access delays",
+      "Confirming the turnaround period in writing holds the surveyor to the quoted timeframe"
+    ],
+    "sources": [
+      { "title": "Local Building Surveyor — RICS Level 2", "url": "https://www.localbuildingsurveyor.co.uk/rics-survey-types/rics-level-2-homebuyer-survey" },
+      { "title": "Cosey Homes — RICS Level 2", "url": "https://www.coseyhomes.co.uk/choose-your-survey/rics-homebuyers-survey/" }
+    ]
+  },
+  {
+    "id": "C7",
+    "stage": "C",
+    "stageName": "Post-acceptance",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — share solicitor and broker contacts",
+    "description": "Send your professional contacts to the agent for the memorandum of sale.",
+    "subjectTemplate": "Solicitor + broker details — {{listing.address}}",
+    "bodyTemplate": "Hi {{contact.agentName}},\n\nTo help you prepare the memorandum of sale for {{listing.address}}, here are my solicitor and mortgage broker details:\n\nSolicitor / conveyancer:\n- {{contact.solicitorFirm}}\n- {{contact.solicitorName}}\n- {{contact.solicitorEmail}} · {{contact.solicitorPhone}}\n\nMortgage broker:\n- {{contact.brokerName}}\n- {{contact.brokerEmail}} · {{contact.brokerPhone}}\n\nPlease let me know if you need anything else to proceed.\n\nKind regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.agentName",
+      "contact.solicitorFirm",
+      "contact.solicitorName",
+      "contact.solicitorEmail",
+      "contact.solicitorPhone",
+      "contact.brokerName",
+      "contact.brokerEmail",
+      "contact.brokerPhone",
+      "listing.address"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "The memorandum of sale can't be issued until the agent has both sets of details — sending proactively saves days",
+      "A single email with all contacts prevents the agent chasing each party separately",
+      "Getting this done quickly reduces the window for gazumping"
+    ],
+    "sources": [
+      { "title": "Boon Brokers — Offer accepted next steps", "url": "https://boonbrokers.co.uk/mortgage-guides/offer-accepted-next-steps-buying-house/" },
+      { "title": "Compare My Move — Offer accepted on a house", "url": "https://www.comparemymove.com/guides/conveyancing/offer-accepted-house" }
+    ]
+  },
+  {
+    "id": "D1",
+    "stage": "D",
+    "stageName": "Pre-completion",
+    "recipientRole": "solicitor",
+    "title": "Solicitor — progress chase",
+    "description": "A respectful weekly nudge to keep your file moving forward.",
+    "subjectTemplate": "Progress update — {{listing.address}}",
+    "bodyTemplate": "Dear {{contact.solicitorName}},\n\nI hope you're well. I'm writing for a brief progress update on the purchase of {{listing.address}}.\n\nCould you confirm:\n1. Where we are in the process (searches, enquiries, mortgage offer).\n2. Any outstanding items you're waiting on — and from whom.\n3. Your current estimate for exchange and completion.\n\nI'm keen to keep things moving and happy to chase any third parties if it helps. Please let me know if there's anything you need from me.\n\nMany thanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.solicitorName",
+      "listing.address"
+    ],
+    "tone": "formal-complete",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "A weekly written chase (not phone call) creates a timestamped record of your engagement",
+      "Offering to chase third parties shifts perceived burden — solicitors often welcome it",
+      "Asking for an exchange estimate surfaces any hidden delays early"
+    ],
+    "sources": [
+      { "title": "HomeOwners Alliance — Offer accepted next steps", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/house-offer-accepted-what-now/" },
+      { "title": "Setfords — Offer accepted what next", "url": "https://www.setfords.co.uk/2026/01/08/offer-accepted-on-a-house-what-next/" }
+    ]
+  },
+  {
+    "id": "D2",
+    "stage": "D",
+    "stageName": "Pre-completion",
+    "recipientRole": "surveyor",
+    "title": "Surveyor — request post-report call",
+    "description": "Request a 15-minute walk-through of your RICS Level 2 report findings.",
+    "subjectTemplate": "Post-report call request — {{listing.address}}",
+    "bodyTemplate": "Hi {{contact.surveyorName}},\n\nThank you for the report on {{listing.address}}. I've read it carefully and have a few follow-up questions I'd appreciate 15 minutes to discuss.\n\nMy main questions are:\n{{surveyQuestions}}\n\nCould we arrange a brief call this week or next? I'm available most mornings and most weekday evenings after 6pm.\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.surveyorName",
+      "listing.address",
+      "surveyQuestions"
+    ],
+    "tone": "practical-dates-led",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "RICS Level 2 reports use standard traffic-light ratings — a 15-min call clarifies whether 'amber' means 'monitor' or 'renegotiate'",
+      "Listing your questions up front lets the surveyor prepare and makes the call efficient",
+      "This call is often free if agreed in the booking; if not, negotiate a small fixed fee"
+    ],
+    "sources": [
+      { "title": "Cosey Homes — RICS Level 2", "url": "https://www.coseyhomes.co.uk/choose-your-survey/rics-homebuyers-survey/" },
+      { "title": "Local Building Surveyor — RICS Level 2", "url": "https://www.localbuildingsurveyor.co.uk/rics-survey-types/rics-level-2-homebuyer-survey" }
+    ]
+  },
+  {
+    "id": "D3",
+    "stage": "D",
+    "stageName": "Pre-completion",
+    "recipientRole": "estate-agent",
+    "title": "Estate agent — renegotiate after survey",
+    "description": "Request a price reduction based on specific surveyor-quoted repair costs.",
+    "subjectTemplate": "Price renegotiation — {{listing.address}}",
+    "bodyTemplate": "Dear {{contact.agentName}},\n\nThank you for all the progress so far on {{listing.address}}. Following my RICS Level 2 HomeBuyer Report I need to raise a concern.\n\nThe survey has identified the following issues:\n{{surveyFindings}}\n\nMy surveyor has estimated remediation costs of approximately £{{surveyRemediationCost}}. In light of this, I'd like to revise my offer to £{{listing.revisedOfferAmount}}.\n\nI remain committed to the purchase and keen to exchange as planned. I hope we can resolve this quickly. Please pass this to the seller and confirm receipt.\n\nBest regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "contact.agentName",
+      "listing.address",
+      "listing.revisedOfferAmount",
+      "surveyFindings",
+      "surveyRemediationCost"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [
+      "RICS Level 2 report (relevant sections or full report)",
+      "Surveyor's cost estimate if provided separately"
+    ],
+    "bestPracticeNotes": [
+      "Citing specific surveyor-quoted figures (not estimates you've made) gives the renegotiation credibility",
+      "Reaffirming commitment to the purchase reduces seller anxiety — you want a reduction, not an exit",
+      "Attaching the relevant report sections prevents the seller dismissing findings as buyer invention"
+    ],
+    "sources": [
+      { "title": "HomeOwners Alliance — Offer accepted next steps", "url": "https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/house-offer-accepted-what-now/" },
+      { "title": "Moving Home With Charlie — FTB Offer Template", "url": "https://mhwc.co.uk/suggested-email-template-for-first-time-buyers-making-an-offer-with-a-mortgage/" }
+    ]
+  },
+  {
+    "id": "D4",
+    "stage": "D",
+    "stageName": "Pre-completion",
+    "recipientRole": "solicitor",
+    "title": "Solicitor — request exchange target / expedite",
+    "description": "Set a concrete exchange target date and ask what's blocking it.",
+    "subjectTemplate": "Exchange target — {{listing.address}}",
+    "bodyTemplate": "Dear {{contact.solicitorName}},\n\nI'd like to propose {{targetExchangeDate}} as our target exchange date for {{listing.address}}, with a completion on {{targetCompletionDate}}.\n\nCould you confirm:\n1. Whether this timeline is achievable from your side.\n2. Any outstanding enquiries or searches that are blocking exchange.\n3. Whether the seller's solicitor has confirmed their readiness.\n\nIf there are specific items holding things up, please let me know and I'll do whatever I can to help move things forward.\n\nKind regards,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "contact.solicitorName",
+      "listing.address",
+      "targetExchangeDate",
+      "targetCompletionDate"
+    ],
+    "tone": "formal-complete",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Proposing a specific exchange date shifts from open-ended to time-bounded — solicitors respond better to deadlines",
+      "Asking about seller's solicitor readiness surfaces the most common source of delay",
+      "Written exchange target creates mutual accountability between both sets of solicitors"
+    ],
+    "sources": [
+      { "title": "Compare My Move — Offer accepted on a house", "url": "https://www.comparemymove.com/guides/conveyancing/offer-accepted-house" },
+      { "title": "Setfords — Offer accepted what next", "url": "https://www.setfords.co.uk/2026/01/08/offer-accepted-on-a-house-what-next/" }
+    ]
+  },
+  {
+    "id": "D5",
+    "stage": "D",
+    "stageName": "Pre-completion",
+    "recipientRole": "removals",
+    "title": "Removals — quote request",
+    "description": "Request a like-for-like removals quote from three firms.",
+    "subjectTemplate": "Removals quote — {{profile.postcode}} to {{listing.address}}",
+    "bodyTemplate": "Hi,\n\nI'm looking for a removals quote for a house move.\n\nMove details:\n- From: {{profile.address}} ({{profile.postcode}})\n- To: {{listing.address}}\n- Target move date: around {{targetCompletionDate}} (subject to exchange — I'll confirm once a date is set).\n- Volume: {{removalsVolume}} (approx {{removalsRooms}} bedrooms).\n- Large / specialist items: {{removalsSpecialItems}}.\n- Packing: {{removalsPackingReq}}.\n\nCould you provide a fixed-price quote including VAT, and confirm whether you offer a date-change policy if completion moves?\n\nThanks,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}} · {{profile.email}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "profile.address",
+      "profile.postcode",
+      "listing.address",
+      "targetCompletionDate",
+      "removalsVolume",
+      "removalsRooms",
+      "removalsSpecialItems",
+      "removalsPackingReq"
+    ],
+    "tone": "practical-dates-led",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Send to three firms simultaneously — prices can vary by 40% for identical moves",
+      "Asking about a date-change policy is critical since completion dates often shift at the last minute",
+      "Specifying large/specialist items up front prevents surprise surcharges on the day"
+    ],
+    "sources": [
+      { "title": "Compare My Move — Offer accepted on a house", "url": "https://www.comparemymove.com/guides/conveyancing/offer-accepted-house" }
+    ]
+  },
+  {
+    "id": "D6",
+    "stage": "D",
+    "stageName": "Pre-completion",
+    "recipientRole": "insurance",
+    "title": "Buildings insurance — quote request",
+    "description": "Request buildings insurance from exchange day — required by your mortgage lender.",
+    "subjectTemplate": "Buildings insurance quote — {{listing.address}}",
+    "bodyTemplate": "Hi,\n\nI'd like a buildings insurance quote for a property I'm purchasing.\n\nProperty details:\n- Address: {{listing.address}}\n- Property type: {{listing.propertyType}}, {{listing.beds}}-bed.\n- Construction: {{listing.construction}}\n- Rebuild cost (from RICS Level 2 survey): £{{listing.rebuildCost}}\n- Cover required from: {{targetExchangeDate}} (exchange date — lender requirement)\n\nAbout me:\n- Date of birth: {{profile.dob}}\n- No claims in past 5 years.\n- Mobile: {{profile.mobile}}\n\nMortgage lender: {{finances.aipLender}} — please confirm your policy is acceptable to them.\n\nMany thanks,\n{{profile.firstName}} {{profile.lastName}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.dob",
+      "listing.address",
+      "listing.propertyType",
+      "listing.beds",
+      "listing.construction",
+      "listing.rebuildCost",
+      "finances.aipLender",
+      "targetExchangeDate"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [],
+    "bestPracticeNotes": [
+      "Cover must begin at exchange, not completion — lenders require this and many buyers miss the gap",
+      "Using the RICS rebuild cost (not market value) ensures correct cover and avoids over-insurance",
+      "Confirming lender acceptability up front avoids having to switch policy under pressure"
+    ],
+    "sources": [
+      { "title": "Boon Brokers — Offer accepted next steps", "url": "https://boonbrokers.co.uk/mortgage-guides/offer-accepted-next-steps-buying-house/" },
+      { "title": "Compare My Move — Offer accepted on a house", "url": "https://www.comparemymove.com/guides/conveyancing/offer-accepted-house" }
+    ]
+  },
+  {
+    "id": "D7",
+    "stage": "D",
+    "stageName": "Pre-completion",
+    "recipientRole": "local-authority",
+    "title": "Utilities — change of occupier notification",
+    "description": "Notify energy, water, council tax and broadband suppliers on completion day.",
+    "subjectTemplate": "Change of occupier — {{listing.address}}, {{targetCompletionDate}}",
+    "bodyTemplate": "To whom it may concern,\n\nI am writing to notify you of a change of occupier at {{listing.address}}, effective {{targetCompletionDate}}.\n\nNew occupier details:\n- Name: {{profile.firstName}} {{profile.lastName}}\n- Contact: {{profile.mobile}} · {{profile.email}}\n- Correspondence address from {{targetCompletionDate}}: {{listing.address}}\n\nMeter readings taken on {{targetCompletionDate}}:\n- Gas: {{meterReadingGas}}\n- Electricity: {{meterReadingElec}}\n- Water: {{meterReadingWater}}\n\nPrevious account details (if known): account held in seller's name.\n\nPlease set up an account in my name from {{targetCompletionDate}} using the above readings as the opening read, and send my first bill to {{profile.email}}.\n\nThank you,\n{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}",
+    "dataNeeded": [
+      "profile.firstName",
+      "profile.lastName",
+      "profile.mobile",
+      "profile.email",
+      "listing.address",
+      "targetCompletionDate",
+      "meterReadingGas",
+      "meterReadingElec",
+      "meterReadingWater"
+    ],
+    "tone": "warm-brief",
+    "attachmentsHint": [
+      "Photos of meter readings taken on completion day"
+    ],
+    "bestPracticeNotes": [
+      "Send to: energy supplier, water company, council tax office, broadband provider, TV Licence",
+      "Taking meter readings on completion day prevents being billed for the seller's usage",
+      "Use this same template for each supplier — only the opening paragraph needs to change"
+    ],
+    "sources": [
+      { "title": "Compare My Move — Offer accepted on a house", "url": "https://www.comparemymove.com/guides/conveyancing/offer-accepted-house" },
+      { "title": "haart — Offer accepted what next", "url": "https://www.haart.co.uk/buying/buying-process/once-your-offer-has-been-accepted/" }
+    ]
+  }
+]

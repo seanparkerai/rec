@@ -3,12 +3,7 @@
 import { getHouseTypes, getAreas, getShortlist } from './storage.js';
 import { url } from './config.js';
 import { gbp } from './format.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
+import { esc, byId as $ } from './dom.js';
 
 // Pick the price key most aligned with each house type's name.
 function priceKeyFor(typeName) {

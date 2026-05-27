@@ -8,12 +8,15 @@
 
 (async () => {
   const html = document.documentElement;
-  const here = location.pathname;
-  const isLogin = here.endsWith('/login.html');
-  const isSetup = here.endsWith('/setup.html');
+  const here     = location.pathname;
+  const isLogin  = here.endsWith('/login.html');
+  const isSetup  = here.endsWith('/setup.html');
+  const isSync   = here.endsWith('/data-sync.html');
 
-  // Setup page is always accessible — reveal immediately.
-  if (isSetup) {
+  // Setup and Data Sync pages are always accessible — they contain the
+  // credential / household configuration tools, so blocking them would
+  // trap users who have a bad supabase-client.js or stale session.
+  if (isSetup || isSync) {
     html.removeAttribute('data-auth-state');
     return;
   }

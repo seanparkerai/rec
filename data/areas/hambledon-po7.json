@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Waterlooville",
   "coords": {
-    "lat": 50.86996,
-    "lng": -1.03648
+    "lat": 50.886,
+    "lng": -1.0713
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
