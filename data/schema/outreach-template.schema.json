@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OutreachTemplate",
+  "description": "A single email template in the outreach generator.",
+  "type": "object",
+  "required": ["id", "stage", "recipientRole", "title", "description", "subjectTemplate", "bodyTemplate", "dataNeeded", "tone", "attachmentsHint", "bestPracticeNotes", "sources"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique template ID, e.g. A1, B2, C3",
+      "pattern": "^[A-D]\\d+$"
+    },
+    "stage": {
+      "type": "string",
+      "description": "Purchase stage",
+      "enum": ["A", "B", "C", "D"]
+    },
+    "stageName": {
+      "type": "string",
+      "description": "Human-readable stage name",
+      "enum": ["Search", "Offer", "Post-acceptance", "Pre-completion"]
+    },
+    "recipientRole": {
+      "type": "string",
+      "description": "Who receives this email",
+      "enum": [
+        "estate-agent",
+        "mortgage-broker",
+        "solicitor",
+        "surveyor",
+        "vendor",
+        "local-authority",
+        "removals",
+        "insurance"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "description": "Short display title shown in the template grid"
+    },
+    "description": {
+      "type": "string",
+      "description": "One-line description shown in the template tile"
+    },
+    "subjectTemplate": {
+      "type": "string",
+      "description": "Email subject with {{path}} placeholders. Should be ≤50 chars after substitution."
+    },
+    "bodyTemplate": {
+      "type": "string",
+      "description": "Email body with {{path}} and {{#if path}}...{{/if}} blocks."
+    },
+    "dataNeeded": {
+      "type": "array",
+      "description": "Dotted paths into profile/criteria/finances/area/listing/contact that this template uses.",
+      "items": { "type": "string" }
+    },
+    "tone": {
+      "type": "string",
+      "enum": ["warm-brief", "warm-complete", "formal-complete", "practical-dates-led", "warm-human-no-jargon"]
+    },
+    "attachmentsHint": {
+      "type": "array",
+      "description": "Reminder strings of what to attach before sending.",
+      "items": { "type": "string" }
+    },
+    "bestPracticeNotes": {
+      "type": "array",
+      "description": "Short bullets explaining WHY each section exists.",
+      "items": { "type": "string" }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "url"],
+        "properties": {
+          "title": { "type": "string" },
+          "url": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

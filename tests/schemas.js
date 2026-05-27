@@ -7,9 +7,18 @@ export function validateProfile(o) {
   const e = [];
   check(e, typeOf(o) === 'object', 'profile must be an object');
   if (typeOf(o) !== 'object') return e;
-  check(e, typeOf(o.priorities) === 'array', 'profile.priorities must be an array');
-  check(e, typeOf(o.dealBreakers) === 'array', 'profile.dealBreakers must be an array');
-  check(e, 'locationFocus' in o, 'profile.locationFocus missing');
+  // Accept either the legacy simple format or the new structured format.
+  const isNewFormat = 'person' in o || 'employment' in o || 'creditProfile' in o;
+  if (isNewFormat) {
+    check(e, typeOf(o.person) === 'object', 'profile.person must be an object');
+    check(e, typeOf(o.employment) === 'object', 'profile.employment must be an object');
+    check(e, typeOf(o.creditProfile) === 'object', 'profile.creditProfile must be an object');
+    check(e, typeOf(o.debts) === 'object', 'profile.debts must be an object');
+  } else {
+    check(e, typeOf(o.priorities) === 'array', 'profile.priorities must be an array');
+    check(e, typeOf(o.dealBreakers) === 'array', 'profile.dealBreakers must be an array');
+    check(e, 'locationFocus' in o, 'profile.locationFocus missing');
+  }
   return e;
 }
 
@@ -142,6 +151,37 @@ export function validateFinances(o) {
   check(e, typeOf(o.expenses) === 'array', 'finances.expenses must be an array');
   check(e, typeOf(o.shoppingList) === 'array', 'finances.shoppingList must be an array');
   check(e, typeOf(o.giftCards) === 'array', 'finances.giftCards must be an array');
+  return e;
+}
+
+const VALID_STAGES = ['A', 'B', 'C', 'D'];
+const VALID_STAGE_NAMES = ['Search', 'Offer', 'Post-acceptance', 'Pre-completion'];
+const VALID_ROLES = ['estate-agent', 'mortgage-broker', 'solicitor', 'surveyor', 'vendor', 'local-authority', 'removals', 'insurance'];
+const VALID_TONES = ['warm-brief', 'warm-complete', 'formal-complete', 'practical-dates-led', 'warm-human-no-jargon'];
+
+export function validateOutreachTemplate(o) {
+  const e = [];
+  check(e, typeOf(o) === 'object', 'template must be an object');
+  if (typeOf(o) !== 'object') return e;
+  check(e, typeof o.id === 'string' && /^[A-D]\d+$/.test(o.id), 'template.id must match /^[A-D]\\d+$/');
+  check(e, VALID_STAGES.includes(o.stage), `template.stage must be one of ${VALID_STAGES.join('|')}`);
+  check(e, VALID_STAGE_NAMES.includes(o.stageName), `template.stageName must be one of the valid stage names`);
+  check(e, VALID_ROLES.includes(o.recipientRole), `template.recipientRole must be a valid role`);
+  check(e, typeof o.title === 'string' && o.title.length > 0, 'template.title must be a non-empty string');
+  check(e, typeof o.description === 'string' && o.description.length > 0, 'template.description must be a non-empty string');
+  check(e, typeof o.subjectTemplate === 'string' && o.subjectTemplate.length > 0, 'template.subjectTemplate must be a non-empty string');
+  check(e, typeof o.bodyTemplate === 'string' && o.bodyTemplate.length > 0, 'template.bodyTemplate must be a non-empty string');
+  check(e, typeOf(o.dataNeeded) === 'array', 'template.dataNeeded must be an array');
+  check(e, VALID_TONES.includes(o.tone), `template.tone must be one of ${VALID_TONES.join('|')}`);
+  check(e, typeOf(o.attachmentsHint) === 'array', 'template.attachmentsHint must be an array');
+  check(e, typeOf(o.bestPracticeNotes) === 'array' && o.bestPracticeNotes.length >= 1, 'template.bestPracticeNotes must be a non-empty array');
+  check(e, typeOf(o.sources) === 'array', 'template.sources must be an array');
+  if (typeOf(o.sources) === 'array') {
+    o.sources.forEach((s, i) => {
+      check(e, typeof s.title === 'string', `template.sources[${i}].title must be a string`);
+      check(e, typeof s.url === 'string', `template.sources[${i}].url must be a string`);
+    });
+  }
   return e;
 }
 

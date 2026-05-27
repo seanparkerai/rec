@@ -21,3 +21,4 @@ npm-debug.log*
 # Verify-UI harness output (regenerated on each run)
 /artifacts/screenshots/*/
 /artifacts/verify-*.json
+.tmp/

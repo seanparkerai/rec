@@ -2,11 +2,68 @@
   "currency": "GBP",
   "firstTimeBuyer": true,
   "income": {
-    "annualBaseSalary": 64000,
+    "annualGrossBase": 64000,
+    "monthlyNetTakeHome": 3543.54,
+    "taxCode": "1248L",
+    "taxPeriodCurrent": 1,
+    "mostRecentPayslipDate": "2026-04-29",
+    "payslipReference": "1047",
+    "niNumber": "[REDACTED]",
+    "employerNI": 737.45,
+    "deductions": {
+      "payeTax": 1090.86,
+      "nationalInsurance": 274.17,
+      "employeePension": 146.76,
+      "studentLoanPlan1": 278.00
+    },
+    "benefitsInKind": [
+      { "name": "Perkbox", "monthlyValue": 5.94 }
+    ],
     "annualBonus": 3000,
-    "takeHomeMonthly": 3590,
-    "bonusMonthly": 137.5,
-    "totalMonthly": 3727.5
+    "bonus": {
+      "structure": "discretionary",
+      "schedule": "no fixed schedule",
+      "lastReceived": { "amount": 3000, "date": "2025-05" },
+      "rolling3YearAverage": null,
+      "expectedAnnualised": 3000,
+      "confidence": "medium-low",
+      "lenderTreatment": "expect 0-50% counted on first application until 2-3 year history"
+    },
+    "equityCompensation": null,
+    "sideIncome": {
+      "active": false,
+      "sources": [],
+      "note": "investment gains held in T212 ISA — not income"
+    },
+    "payRise": {
+      "scenario": "possible",
+      "confidence": "low",
+      "expectedNewSalary": 66000,
+      "expectedDate": "2026-05",
+      "monthlyNetDeltaEstimate": 106
+    }
+  },
+  "outgoings": {
+    "householdContribution": {
+      "amount": 480,
+      "recipient": "family",
+      "postMoveValue": 0,
+      "note": "informal arrangement, will appear on bank statements"
+    },
+    "subscriptions": {
+      "softwareAI": {
+        "total": 50,
+        "itemised": false,
+        "note": "aggregate Claude/ChatGPT/other tools — can itemise later"
+      }
+    },
+    "creditCardPayment": {
+      "amount": 13,
+      "provider": "Barclaycard",
+      "note": "minimum payment, balance being carried until cleared pre-mortgage"
+    },
+    "carCosts": { "active": false, "_note": "no car currently" },
+    "charitableGiving": { "active": false }
   },
   "goal": {
     "targetDeposit": 40000,
@@ -18,14 +75,10 @@
     "movingWindow": "March – September 2026"
   },
   "savings": {
-    "current": 24500,
+    "current": 0,
     "monthlyContribution": 2000,
-    "giftCardsValue": 910,
-    "projectedCompound": 2750,
-    "totalSavings": 25660,
-    "savingsGap": 29340,
-    "monthsToSave": 14.67,
-    "history": []
+    "history": [],
+    "_note": "All liquid savings live in trading212ISA (data/investments.json). This field is cash held OUTSIDE investment accounts — currently zero."
   },
   "mortgage": {
     "targetMax": 360000,
@@ -46,7 +99,6 @@
     { "item": "Mortgage Arrangement Fees", "cost": 0, "notes": "Reduce where possible" },
     { "item": "Car Purchase", "cost": 6000, "notes": "" }
   ],
-  "oneTimeCostsTotal": 11650,
   "ongoingBills": [
     { "item": "Phone Bill", "annual": 900, "monthly": 75 },
     { "item": "Car Tax", "annual": 200, "monthly": 16.67 },
@@ -59,7 +111,6 @@
     { "item": "Buildings Insurance (& contents)", "annual": 450, "monthly": 37.5 },
     { "item": "Smart Gadgets", "annual": 250, "monthly": 20.83 }
   ],
-  "ongoingBillsTotal": { "annual": 7350, "monthly": 612.5 },
   "expenses": [
     { "item": "Food & Shopping", "annual": 3900, "monthly": 300, "weekly": 75 },
     { "item": "Petrol", "annual": 2080, "monthly": 160, "weekly": 40 },
@@ -68,7 +119,6 @@
     { "item": "Frankie", "annual": 780, "monthly": 60, "weekly": 15 },
     { "item": "Presents & Holidays", "annual": 1200, "monthly": 100, "weekly": 25 }
   ],
-  "expensesTotal": { "annual": 14460, "monthly": 1120, "weekly": 280 },
   "shoppingList": [
     { "category": "Kitchen Basics", "cost": 230, "items": "Plates/bowls/mugs/glasses £50; cutlery/utensils £35; kettle/toaster £50; pans/tray £30; chopping/knives £35; storage/foil/cling £10; tea/coffee/oil/basics £20" },
     { "category": "Appliances", "cost": 1150, "items": "Microwave £0; fridge-freezer £500; washing machine £300; dishwasher £350" },
@@ -88,7 +138,6 @@
     { "category": "Decor", "cost": 250, "items": "Mirrors/rugs/art £250" },
     { "category": "Garden / Outdoor", "cost": 150, "items": "Hose/mower/tools £150" }
   ],
-  "shoppingTotal": 5350,
   "giftCards": [
     { "source": "Currys", "amount": 50, "expiry": "2028" },
     { "source": "Ikea", "amount": 50, "expiry": "On move day" },
@@ -102,8 +151,5 @@
     { "source": "One4all", "amount": 30, "expiry": "" },
     { "source": "One4all", "amount": 50, "expiry": "" },
     { "source": "M&D", "amount": 500, "expiry": "" }
-  ],
-  "giftCardsTotal": 910,
-  "monthlyOutgoingsPostMove": { "bills": 612.5, "expenses": 1120, "mortgage": 1900, "total": 3632.5 },
-  "spare": { "monthly": 95, "invest": 71.25, "spend": 23.75 }
+  ]
 }

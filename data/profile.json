@@ -1,24 +1,100 @@
 {
-  "buyers": "Solo first-time buyer",
-  "household": "No dependents",
-  "employment": "Permanent — £64,000 base salary + ~£3,000 average annual bonus",
-  "creditProfile": "Excellent (no adverse history)",
-  "headline": "First-time buyer seeking a 2–3 bed freehold home with a garden and parking in the Hampshire countryside near Winchester/Salisbury — move-in ready, EPC C or above.",
-  "lifestyle": "Countryside living in a low-population village; quiet rural setting preferred.",
-  "priorities": [
-    "Countryside / rural setting",
-    "Near Winchester or Salisbury",
-    "Low population village",
-    "Garden",
-    "Off-street parking",
-    "Move-in ready"
-  ],
-  "dealBreakers": [
-    "Leasehold (wants freehold)",
-    "EPC below C",
-    "Major works needed (roof / boiler / damp)"
-  ],
-  "locationFocus": "Hampshire (near Winchester / Salisbury), countryside",
-  "movingTimeline": "March – September 2026",
-  "notes": "Comfortable maximising borrowing as salary increases are expected. Prefers a 2-year fixed rate. Keen to reduce mortgage/arrangement fees where possible."
+  "person": {
+    "fullName": "Luke Clifford",
+    "dateOfBirth": "1991-11-13",
+    "mobile": "07411557076",
+    "email": "lukeclifford.uk@gmail.com",
+    "address": {
+      "line1": "19 John Bunyan Close",
+      "town": "Whiteley",
+      "county": "Hampshire",
+      "postcode": "PO15 7LE"
+    },
+    "previousAddresses": [],
+    "yearsAtCurrent": "childhood home — same address",
+    "nationality": "UK resident",
+    "household": {
+      "livingArrangement": "with family",
+      "dependents": 0,
+      "tenancyEndDate": null,
+      "monthlyHouseholdContribution": 480,
+      "recipientNote": "informal contribution to parents, no tenancy agreement"
+    }
+  },
+  "employment": {
+    "employer": "PXP Solutions Limited",
+    "industry": "fintech",
+    "role": "Product Manager",
+    "startDate": "2024-11-01",
+    "type": "permanent",
+    "probationStatus": "passed",
+    "probationEndDate": "2025-05-01",
+    "workPattern": "full-time, remote",
+    "occasionalOfficeLocation": "Stansted Abbotts, Hertfordshire",
+    "officeFrequency": "occasional",
+    "tenureYears": 10,
+    "yearsInField": 10,
+    "promotionLikelihoodNext12Mo": "uncertain",
+    "jobStability": "very stable — core team member",
+    "plannedCareerChange": null
+  },
+  "creditProfile": {
+    "scoresChecked": false,
+    "experianScore": null,
+    "experianCheckDate": null,
+    "equifaxScore": null,
+    "equifaxCheckDate": null,
+    "transUnionScore": null,
+    "transUnionCheckDate": null,
+    "adverseHistory": null,
+    "onElectoralRoll": null,
+    "oldestActiveCreditYears": null,
+    "_followUp": "needs to be checked before mortgage application"
+  },
+  "debts": {
+    "creditCards": [
+      {
+        "provider": "Barclaycard",
+        "cardName": "Platinum Visa",
+        "creditLimit": 6192,
+        "currentBalance": 307,
+        "minimumMonthlyPayment": 13,
+        "paysInFullMonthly": false,
+        "utilisationPct": 4.96,
+        "intendedAction": "clear before mortgage application",
+        "closeCardAfterClearing": null
+      }
+    ],
+    "studentLoan": {
+      "plan": "Plan 1",
+      "monthlyDeduction": 278,
+      "balance": null,
+      "_followUp": "balance to be retrieved from student loans portal"
+    },
+    "carFinance": null,
+    "personalLoans": [],
+    "buyNowPayLater": [],
+    "regularOverdraft": false
+  },
+  "pension": {
+    "workplacePensionStatus": "enrolled, default",
+    "employeeContributionPct": 5,
+    "employerContributionPct": 3,
+    "employeeContributionMonthly": 146.76,
+    "employerContributionMonthly": 110.07,
+    "currentPotValue": null,
+    "otherPensionPots": [],
+    "_followUp": "pot value from provider"
+  },
+  "insuranceAndProtection": {
+    "lifeInsurance": null,
+    "incomeProtection": null,
+    "criticalIllness": null,
+    "contentsInsurance": null
+  },
+  "healthFactors": {
+    "longTermConditionsAffectingInsurance": null,
+    "smokerStatus": null,
+    "_disclosure": "data not captured at planning stage; user can populate when needed"
+  }
 }

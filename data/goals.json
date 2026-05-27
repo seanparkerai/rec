@@ -1,0 +1,49 @@
+{
+  "timeline": {
+    "horizon": "3-6 months",
+    "type": "soft target",
+    "confidence": "flexible"
+  },
+  "target": {
+    "propertyPriceBand": "£300k-£400k",
+    "engineAutoCalibrate": true,
+    "currentSystemCentre": 375000,
+    "note": "user requested engine drives final number"
+  },
+  "deposit": {
+    "hopedFor": 50000,
+    "currentSavings": 31193,
+    "gapToHoped": 18807,
+    "engineAutoCalibrate": true,
+    "fundingSource": "Trading 212 ISA only (100%)",
+    "giftedDepositPortion": 0
+  },
+  "mortgage": {
+    "termPreference": "no-preference, engine defaults to 5-year-fix",
+    "lengthPreference": "no-preference, engine defaults to 30-years",
+    "comparisonsToOffer": ["25y", "30y", "35y", "40y"]
+  },
+  "readiness": {
+    "checklist": {
+      "experianChecked": false,
+      "equifaxChecked": false,
+      "transUnionChecked": false,
+      "electoralRollRegistered": null,
+      "agreementInPrincipleObtained": false,
+      "mortgageBrokerConversation": false,
+      "lenderConversation": false,
+      "conveyancerIdentified": false,
+      "documentsGathered": false,
+      "stampDutyResearched": false,
+      "mortgageRatesResearched": false,
+      "bankStatementsSavedAsPDF": false,
+      "giftedDepositDiscussed": null
+    },
+    "_status": "empty — to be populated as user progresses"
+  },
+  "softFields": {
+    "biggestConcern": null,
+    "visionStatement": null,
+    "_status": "deferred — schema in place, populate later"
+  }
+}

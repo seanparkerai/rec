@@ -2,12 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Profile · rec</title>
-  <meta http-equiv="refresh" content="0;url=about-search.html#about" />
-  <link rel="canonical" href="about-search.html#about" />
-  <script>location.replace('about-search.html#about');</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
 </head>
 <body>
-  <p>Profile has moved to <a href="about-search.html#about">About &amp; search</a>.</p>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div data-include="../components/header.html"></div>
+  <div data-include="../components/nav.html"></div>
+
+  <main id="main" class="container" data-page="profile-detail">
+    <div class="page-head">
+      <h1>Your profile</h1>
+      <p class="muted">Single source of truth for your mortgage application. Read-only view of <code>data/profile.json</code>.</p>
+    </div>
+
+    <!-- Person -->
+    <section class="profile-section card" aria-labelledby="ps-person">
+      <h2 id="ps-person">Personal details</h2>
+      <dl class="profile-dl" id="dl-person">
+        <div class="field-view"><dt>Full name</dt><dd id="p-name">—</dd></div>
+        <div class="field-view"><dt>Date of birth</dt><dd id="p-dob">—</dd></div>
+        <div class="field-view"><dt>Email</dt><dd id="p-email">—</dd></div>
+        <div class="field-view"><dt>Address</dt><dd id="p-address">—</dd></div>
+        <div class="field-view"><dt>Nationality</dt><dd id="p-nationality">—</dd></div>
+        <div class="field-view"><dt>Living arrangement</dt><dd id="p-living">—</dd></div>
+        <div class="field-view"><dt>Dependents</dt><dd id="p-dependents">—</dd></div>
+        <div class="field-view"><dt>Monthly household contribution</dt><dd id="p-contribution">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- v3: Things to check (promoted to rank 2 — shows actions before known data) -->
+    <section class="profile-section card" aria-labelledby="ps-checklist">
+      <h2 id="ps-checklist">Things to check before applying</h2>
+      <p class="muted">Items surfaced from <code>_followUp</code> notes in your profile data.</p>
+      <ul class="followup-list" id="p-followup-list" aria-label="Items to action before mortgage application">
+        <li class="muted">Loading&hellip;</li>
+      </ul>
+    </section>
+
+    <!-- Employment -->
+    <section class="profile-section card" aria-labelledby="ps-employment">
+      <h2 id="ps-employment">Employment</h2>
+      <dl class="profile-dl" id="dl-employment">
+        <div class="field-view"><dt>Employer</dt><dd id="p-employer">—</dd></div>
+        <div class="field-view"><dt>Role</dt><dd id="p-role">—</dd></div>
+        <div class="field-view"><dt>Start date</dt><dd id="p-startdate">—</dd></div>
+        <div class="field-view"><dt>Type</dt><dd id="p-emptype">—</dd></div>
+        <div class="field-view"><dt>Probation</dt><dd id="p-probation">—</dd></div>
+        <div class="field-view"><dt>Work pattern</dt><dd id="p-workpattern">—</dd></div>
+        <div class="field-view"><dt>Job stability</dt><dd id="p-stability">—</dd></div>
+        <div class="field-view"><dt>Years in field</dt><dd id="p-yearsfield">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- Credit -->
+    <section class="profile-section card" aria-labelledby="ps-credit">
+      <h2 id="ps-credit">Credit profile</h2>
+      <p class="muted" id="p-credit-note"></p>
+      <dl class="profile-dl" id="dl-credit">
+        <div class="field-view"><dt>Experian score</dt><dd id="p-experian">—</dd></div>
+        <div class="field-view"><dt>Equifax score</dt><dd id="p-equifax">—</dd></div>
+        <div class="field-view"><dt>TransUnion score</dt><dd id="p-transunion">—</dd></div>
+        <div class="field-view"><dt>On electoral roll</dt><dd id="p-electoral">—</dd></div>
+        <div class="field-view"><dt>Adverse history</dt><dd id="p-adverse">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- Debts -->
+    <section class="profile-section card" aria-labelledby="ps-debts">
+      <h2 id="ps-debts">Debts</h2>
+      <dl class="profile-dl" id="dl-debts">
+        <div class="field-view"><dt>Credit cards</dt><dd id="p-creditcards">—</dd></div>
+        <div class="field-view"><dt>Student loan</dt><dd id="p-studentloan">—</dd></div>
+        <div class="field-view"><dt>Car finance</dt><dd id="p-carfinance">—</dd></div>
+        <div class="field-view"><dt>Regular overdraft</dt><dd id="p-overdraft">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- Pension -->
+    <section class="profile-section card" aria-labelledby="ps-pension">
+      <h2 id="ps-pension">Pension</h2>
+      <dl class="profile-dl" id="dl-pension">
+        <div class="field-view"><dt>Status</dt><dd id="p-pension-status">—</dd></div>
+        <div class="field-view"><dt>Employee contribution</dt><dd id="p-pension-ee">—</dd></div>
+        <div class="field-view"><dt>Employer contribution</dt><dd id="p-pension-er">—</dd></div>
+        <div class="field-view"><dt>Current pot value</dt><dd id="p-pension-pot">—</dd></div>
+      </dl>
+    </section>
+
+  </main>
+
+  <div data-include="../components/footer.html"></div>
+
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-profile-detail.js"></script>
 </body>
 </html>

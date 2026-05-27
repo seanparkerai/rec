@@ -10,10 +10,10 @@
   "settlementType": "Outlier",
   "subRegion": "Basingstoke",
   "coords": {
-    "lat": 51.24304,
-    "lng": -1.25364
+    "lat": 51.1703,
+    "lng": -1.1237
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

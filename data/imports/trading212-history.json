@@ -1,0 +1,475 @@
+{
+  "_status": "imported",
+  "source": "Trading 212 history export",
+  "importedAt": "2026-05-26T22:54:33.056Z",
+  "dateRange": {
+    "from": "2025-05-26",
+    "to": "2026-05-14"
+  },
+  "summary": {
+    "totalDeposited": 29253.87,
+    "totalWithdrawn": 6534.55,
+    "netContributed": 22719.32,
+    "totalDividends": 215.5,
+    "totalInterest": 2.49,
+    "totalRealisedPnL": 1185.17,
+    "currentValueDeclared": 31193,
+    "impliedGainUnrealised": 7070.52
+  },
+  "monthlySummary": [
+    {
+      "month": "2025-05",
+      "deposits": 86.98,
+      "withdrawals": 771.98,
+      "net": -685,
+      "dividends": 0.08,
+      "interest": 0,
+      "realisedPnL": 32.97,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2025-06",
+      "deposits": 759,
+      "withdrawals": 2123.61,
+      "net": -1364.61,
+      "dividends": 1.02,
+      "interest": 0,
+      "realisedPnL": 140.54,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2025-07",
+      "deposits": 2397.03,
+      "withdrawals": 0,
+      "net": 2397.03,
+      "dividends": 2.07,
+      "interest": 0,
+      "realisedPnL": 0,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2025-08",
+      "deposits": 661.8,
+      "withdrawals": 0,
+      "net": 661.8,
+      "dividends": 3.87,
+      "interest": 0,
+      "realisedPnL": 8.05,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2025-09",
+      "deposits": 1329.1,
+      "withdrawals": 302.1,
+      "net": 1027,
+      "dividends": 32.74,
+      "interest": 0,
+      "realisedPnL": 0.31,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2025-10",
+      "deposits": 3204,
+      "withdrawals": 25.86,
+      "net": 3178.14,
+      "dividends": 18.23,
+      "interest": 0,
+      "realisedPnL": 0,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2025-11",
+      "deposits": 1213.56,
+      "withdrawals": 310,
+      "net": 903.56,
+      "dividends": 6.47,
+      "interest": 0,
+      "realisedPnL": 6.02,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2025-12",
+      "deposits": 5310.55,
+      "withdrawals": 3000,
+      "net": 2310.55,
+      "dividends": 37.35,
+      "interest": 0,
+      "realisedPnL": 7.36,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2026-01",
+      "deposits": 9466.06,
+      "withdrawals": 0,
+      "net": 9466.06,
+      "dividends": 9.61,
+      "interest": 0.88,
+      "realisedPnL": 599.87,
+      "epoch": "stockpicker"
+    },
+    {
+      "month": "2026-02",
+      "deposits": 1192.79,
+      "withdrawals": 1,
+      "net": 1191.79,
+      "dividends": 4.76,
+      "interest": 0.02,
+      "realisedPnL": 0,
+      "epoch": "etfCore"
+    },
+    {
+      "month": "2026-04",
+      "deposits": 3633,
+      "withdrawals": 0,
+      "net": 3633,
+      "dividends": 99.3,
+      "interest": 0.57,
+      "realisedPnL": 390.05,
+      "epoch": "etfCore"
+    },
+    {
+      "month": "2026-05",
+      "deposits": 0,
+      "withdrawals": 0,
+      "net": 0,
+      "dividends": 0,
+      "interest": 1.02,
+      "realisedPnL": 0,
+      "epoch": "etfCore"
+    }
+  ],
+  "tickerExposure": {
+    "BLND": {
+      "name": "British Land",
+      "netDeployed": -8.67,
+      "epoch": "stockpicker"
+    },
+    "GSK": {
+      "name": "GSK",
+      "netDeployed": -29.94,
+      "epoch": "stockpicker"
+    },
+    "BARC": {
+      "name": "Barclays",
+      "netDeployed": -58.85,
+      "epoch": "stockpicker"
+    },
+    "TSCO": {
+      "name": "Tesco",
+      "netDeployed": -15.63,
+      "epoch": "stockpicker"
+    },
+    "RIO": {
+      "name": "Rio Tinto",
+      "netDeployed": -90.29,
+      "epoch": "stockpicker"
+    },
+    "NWG": {
+      "name": "NatWest",
+      "netDeployed": -45.5,
+      "epoch": "stockpicker"
+    },
+    "NG": {
+      "name": "National Grid",
+      "netDeployed": -37.21,
+      "epoch": "stockpicker"
+    },
+    "BP": {
+      "name": "BP",
+      "netDeployed": -36.56,
+      "epoch": "stockpicker"
+    },
+    "AV": {
+      "name": "Aviva",
+      "netDeployed": -33.34,
+      "epoch": "stockpicker"
+    },
+    "SSE": {
+      "name": "SSE",
+      "netDeployed": -25.68,
+      "epoch": "stockpicker"
+    },
+    "BATS": {
+      "name": "British American Tobacco",
+      "netDeployed": -19.52,
+      "epoch": "stockpicker"
+    },
+    "HSBA": {
+      "name": "HSBC",
+      "netDeployed": -49.67,
+      "epoch": "stockpicker"
+    },
+    "MNG": {
+      "name": "M&G",
+      "netDeployed": -40.86,
+      "epoch": "stockpicker"
+    },
+    "LLOY": {
+      "name": "Lloyds Banking Group",
+      "netDeployed": -40.9,
+      "epoch": "stockpicker"
+    },
+    "GLEN": {
+      "name": "Glencore",
+      "netDeployed": -46.8,
+      "epoch": "stockpicker"
+    },
+    "SHEL": {
+      "name": "Shell",
+      "netDeployed": -32.27,
+      "epoch": "stockpicker"
+    },
+    "ULVR": {
+      "name": "Unilever",
+      "netDeployed": -5.98,
+      "epoch": "stockpicker"
+    },
+    "LAND": {
+      "name": "Land Securities",
+      "netDeployed": -7.61,
+      "epoch": "stockpicker"
+    },
+    "BNZL": {
+      "name": "Bunzl",
+      "netDeployed": 2.1,
+      "epoch": "stockpicker"
+    },
+    "BA": {
+      "name": "BAE Systems",
+      "netDeployed": -3.68,
+      "epoch": "stockpicker"
+    },
+    "UU": {
+      "name": "United Utilities",
+      "netDeployed": -12.68,
+      "epoch": "stockpicker"
+    },
+    "SDLF": {
+      "name": "Standard Life",
+      "netDeployed": -19.76,
+      "epoch": "stockpicker"
+    },
+    "AZN": {
+      "name": "AstraZeneca",
+      "netDeployed": -40.45,
+      "epoch": "stockpicker"
+    },
+    "DGE": {
+      "name": "Diageo",
+      "netDeployed": -8.28,
+      "epoch": "stockpicker"
+    },
+    "AAL": {
+      "name": "Anglo American",
+      "netDeployed": -7.08,
+      "epoch": "stockpicker"
+    },
+    "ABDN": {
+      "name": "Aberdeen Group",
+      "netDeployed": -15.47,
+      "epoch": "stockpicker"
+    },
+    "MNDI": {
+      "name": "Mondi",
+      "netDeployed": -13.3,
+      "epoch": "stockpicker"
+    },
+    "SBRY": {
+      "name": "J Sainsbury",
+      "netDeployed": -8.09,
+      "epoch": "stockpicker"
+    },
+    "TATE": {
+      "name": "Tate & Lyle",
+      "netDeployed": 17.16,
+      "epoch": "stockpicker"
+    },
+    "LGEN": {
+      "name": "Legal & General",
+      "netDeployed": -21.47,
+      "epoch": "stockpicker"
+    },
+    "CCH": {
+      "name": "Coca-Cola HBC",
+      "netDeployed": -9.81,
+      "epoch": "stockpicker"
+    },
+    "SGE": {
+      "name": "The Sage Group",
+      "netDeployed": 2.04,
+      "epoch": "stockpicker"
+    },
+    "BYG": {
+      "name": "Big Yellow Group",
+      "netDeployed": -8.67,
+      "epoch": "stockpicker"
+    },
+    "ABF": {
+      "name": "Associated British Foods",
+      "netDeployed": -9.39,
+      "epoch": "stockpicker"
+    },
+    "UKW": {
+      "name": "Greencoat UK Wind",
+      "netDeployed": 7.06,
+      "epoch": "stockpicker"
+    },
+    "BAG": {
+      "name": "AG Barr",
+      "netDeployed": 1.1,
+      "epoch": "stockpicker"
+    },
+    "SGRO": {
+      "name": "Segro",
+      "netDeployed": -7.68,
+      "epoch": "stockpicker"
+    },
+    "MONY": {
+      "name": "MONY Group",
+      "netDeployed": 5.52,
+      "epoch": "stockpicker"
+    },
+    "AGR": {
+      "name": "Assura",
+      "netDeployed": -7.32,
+      "epoch": "stockpicker"
+    },
+    "TRIG": {
+      "name": "Renewables Infrastructure Group",
+      "netDeployed": 9.18,
+      "epoch": "stockpicker"
+    },
+    "VUSA": {
+      "name": "Vanguard S&P 500 (Dist)",
+      "netDeployed": 3502.82,
+      "epoch": "both"
+    },
+    "VEVE": {
+      "name": "Vanguard FTSE Developed World (Dist)",
+      "netDeployed": 1802.32,
+      "epoch": "both"
+    },
+    "VFEM": {
+      "name": "Vanguard FTSE Emerging Markets (Dist)",
+      "netDeployed": 1263.69,
+      "epoch": "both"
+    },
+    "IMB": {
+      "name": "Imperial Brands",
+      "netDeployed": -4.92,
+      "epoch": "stockpicker"
+    },
+    "BT/A": {
+      "name": "BT Group",
+      "netDeployed": 3,
+      "epoch": "stockpicker"
+    },
+    "WPP": {
+      "name": "WPP",
+      "netDeployed": 27.37,
+      "epoch": "stockpicker"
+    },
+    "GAW": {
+      "name": "Games Workshop",
+      "netDeployed": -17.04,
+      "epoch": "stockpicker"
+    },
+    "TUN": {
+      "name": "Tungsten West",
+      "netDeployed": -514.25,
+      "epoch": "stockpicker"
+    },
+    "VHYL": {
+      "name": "Vanguard FTSE All-World High Dividend Yield (Dist)",
+      "netDeployed": 16289.32,
+      "epoch": "both"
+    },
+    "RKT": {
+      "name": "Reckitt Benckiser",
+      "netDeployed": -1.86,
+      "epoch": "stockpicker"
+    },
+    "REL": {
+      "name": "RELX",
+      "netDeployed": 0.89,
+      "epoch": "stockpicker"
+    },
+    "SGLN": {
+      "name": "iShares Physical Gold",
+      "netDeployed": 2242.87,
+      "epoch": "etfCore"
+    }
+  },
+  "epochs": {
+    "stockpicker": {
+      "start": "2025-05-26",
+      "end": "2026-01-01",
+      "totalContributedDuring": 17894.53,
+      "tickersHeld": [
+        "BLND",
+        "GSK",
+        "BARC",
+        "TSCO",
+        "RIO",
+        "NWG",
+        "NG",
+        "BP",
+        "AV",
+        "SSE",
+        "BATS",
+        "HSBA",
+        "MNG",
+        "LLOY",
+        "GLEN",
+        "SHEL",
+        "ULVR",
+        "LAND",
+        "BNZL",
+        "BA",
+        "UU",
+        "SDLF",
+        "AZN",
+        "DGE",
+        "AAL",
+        "ABDN",
+        "MNDI",
+        "SBRY",
+        "TATE",
+        "LGEN",
+        "CCH",
+        "SGE",
+        "BYG",
+        "ABF",
+        "UKW",
+        "BAG",
+        "SGRO",
+        "MONY",
+        "AGR",
+        "TRIG",
+        "VUSA",
+        "VEVE",
+        "VFEM",
+        "IMB",
+        "BT/A",
+        "WPP",
+        "GAW",
+        "TUN",
+        "VHYL",
+        "RKT",
+        "REL"
+      ]
+    },
+    "etfCore": {
+      "start": "2026-01-02",
+      "end": null,
+      "totalContributedDuring": 14290.85,
+      "tickersHeld": [
+        "VUSA",
+        "VEVE",
+        "VFEM",
+        "VHYL",
+        "SGLN"
+      ]
+    }
+  }
+}

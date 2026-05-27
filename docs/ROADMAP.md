@@ -1,10 +1,29 @@
 # v3 Roadmap
 
-v2 covers the visual-first overhaul of seven existing pages plus an intelligence engine (affordability, money-flow, savings-velocity). Three v3 capabilities are scaffolded in v2 as placeholder pages but not built — they need data sources or LLM infrastructure that don't belong in a zero-build static site without explicit design work. This file describes what each becomes, what data it needs, and which v2 surface it slots into.
+v2 covers the visual-first overhaul of seven existing pages plus an intelligence engine (affordability, money-flow, savings-velocity). Three v3 capabilities were scaffolded in v2 as placeholder pages. One has now shipped; two remain.
 
 ---
 
-## Live listings — `pages/listings.html`
+## Shipped in v3.0
+
+### Outreach generator — `pages/outreach.html`
+
+**Shipped.** 24 researched best-practice email templates covering every party a UK FTB engages with during a purchase — estate agents, mortgage brokers, solicitors, surveyors, vendors, removals, insurers, and local authorities.
+
+- Templates are data (`data/outreach-templates.json`), not code — editable without touching JS.
+- Pure renderer (`assets/js/outreach-renderer.js`) substitutes `{{path}}` placeholders and evaluates `{{#if}}` blocks.
+- The Quantity-of-Information Ladder (`filterContextByDataNeeded`) ensures each template only shares the data appropriate for its recipient.
+- `mailto:` and clipboard copy; falls back to clipboard when the URL exceeds 1800 chars.
+- Outreach log persists via `storage.js`; Supabase `contacts` and `outreach` tables added.
+- Contacts CRUD (agents / brokers / solicitors / surveyors) in a collapsible directory.
+- Deep-linked from area-detail verdict strip (A1), finances affordability widget (A5), and seven journey checklist rows.
+- Nav chip removed; feature is live.
+
+---
+
+## Still to come
+
+### Live listings — `pages/listings.html`
 
 **Goal.** Replace manual area research with live property listings filtered to the user's criteria and ranked by affordability fit.
 
@@ -22,24 +41,6 @@ v2 covers the visual-first overhaul of seven existing pages plus an intelligence
 **v2 surface it slots into**
 - Placeholder page at `pages/listings.html` (Phase 5). Nav already carries `Listings (soon)`.
 - The dashboard's shortlist tile will gain a "new listings since last visit" indicator once the feed is wired up.
-
----
-
-## Outreach — `pages/outreach.html`
-
-**Goal.** Turn viewings, broker intros, and follow-ups into one-click email drafts pre-filled with the user's profile and the listing or area context.
-
-**What it does**
-- Three templates: viewing request, mortgage broker intro, post-viewing follow-up.
-- `mailto:` drafts (or copy-to-clipboard if `mailto:` is unavailable) pre-filled from `data/profile.json` and the chosen listing or area.
-- Tracks status per outreach (drafted / sent / replied) via `storage.js`.
-
-**Data it needs**
-- Estate agent and broker contacts. Optional: a curated `data/contacts.json`.
-- Listing context for the subject line — depends on **Live listings** being in first.
-
-**v2 surface it slots into**
-- Placeholder page at `pages/outreach.html` (Phase 5). Nav carries `Outreach (soon)`.
 
 ---
 

@@ -3,12 +3,7 @@ import { getAreas, getAreaDetail, getShortlist, saveShortlist, getFinances, getC
 import { url } from './config.js';
 import { gbp } from './format.js';
 import { assessAffordability } from './affordability.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
+import { esc, byId as $ } from './dom.js';
 
 const PLACEHOLDER = '<p class="muted mb-0">Content for this section is being researched and will be added in a future update.</p>';
 
@@ -215,6 +210,8 @@ function renderVerdictStrip(a, finances, criteria) {
   strip.className = `area-verdict-strip area-verdict-strip--${r.verdict}`;
   txt.textContent = r.headline;
   num.innerHTML = `<span>Avg <strong>${esc(label || '—')}</strong></span><span><strong>${esc(gbp(price))}</strong></span><span><strong>${esc(gbp(r.monthlyPI))}/mo</strong></span>`;
+  const outreachLink = document.getElementById('area-outreach-link');
+  if (outreachLink) outreachLink.hidden = false;
 }
 
 function attachFootAfford(a, finances, criteria) {
