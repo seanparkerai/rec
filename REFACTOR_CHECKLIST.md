@@ -1,10 +1,10 @@
 # REFACTOR_CHECKLIST.md — live progress tracker
 
 > **Resume here ↓**
-> Next action: Phase 2.1 — create `assets/js/intelligence-constants.js` (LISA_CAP, LTV_TIERS, INCOME_MULTIPLE, LADDER, etc.)
-> Last commit on branch: phase 1 complete (see git log)
+> Next action: Phase 3.1 — create `assets/js/dashboard/` directory; extract `tile-lede.js` from `page-home.js`
+> Last commit on branch: phase 2 complete (see git log)
 > Tests last run: 2026-05-27 — 184/184 passed
-> Active phase: Phase 2 — constants extraction
+> Active phase: Phase 3 — split page-home.js into dashboard tile modules
 
 ---
 
@@ -54,11 +54,11 @@
 - [x] 1.18 Final commit + push: phase 1 complete
 
 ## Phase 2 — Constants extraction
-- [ ] 2.1 Create `assets/js/intelligence-constants.js`
-- [ ] 2.2 Create `assets/js/flow-constants.js`
-- [ ] 2.3 Replace magic numbers in `affordability.js`; commit + push
-- [ ] 2.4 Replace `LADDER_*` / `FLOW_PALETTE` in `page-home.js`; commit + push
-- [ ] 2.5 Replace `FLOW_PALETTE` in `page-finances.js`; commit + push
+- [x] 2.1 Create `assets/js/intelligence-constants.js`
+- [x] 2.2 Create `assets/js/flow-constants.js`
+- [x] 2.3 Replace magic numbers in `affordability.js`; commit + push
+- [x] 2.4 Replace `LADDER_*` / `FLOW_PALETTE` in `page-home.js`; commit + push
+- [x] 2.5 Replace `FLOW_PALETTE` in `page-finances.js`; commit + push
 
 ## Phase 3 — Split `page-home.js` (one commit per tile)
 - [ ] 3.1 Create `assets/js/dashboard/`; extract `tile-lede.js`
@@ -124,3 +124,4 @@
 - 2026-05-27 — Phase 0 complete: characterization tests (174/174), REFACTOR_PLAN.md + REFACTOR_CHECKLIST.md created
 - 2026-05-27 — Phase 0.5 complete: doc audit, 4 CLAUDE.md fixes, PLAN.md v2-complete note, PROGRESS.md archived, README updated
 - 2026-05-27 — Phase 1 complete: dom.js/motion.js/svg.js/css-vars.js created; 11 page modules updated; 10 esc/$/SVG_NS duplicates eliminated; 184/184 tests
+- 2026-05-27 — Phase 2 complete: intelligence-constants.js + flow-constants.js; FLOW_PALETTE/LADDER_RANGE/LTI_BANDS/etc extracted; 184/184 tests

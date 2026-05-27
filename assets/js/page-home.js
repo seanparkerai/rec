@@ -16,6 +16,8 @@ import { getSavingsVelocity } from './savings-velocity.js';
 import { esc, byId as $, setText, setHTML } from './dom.js';
 import { prefersReducedMotion } from './motion.js';
 import { SVG_NS } from './svg.js';
+import { LADDER_RANGE, LADDER_TICKS } from './intelligence-constants.js';
+import { FLOW_PALETTE } from './flow-constants.js';
 
 // Placeholders that show an animated loading indicator until their render lands.
 const LOADING_IDS = ['td-headline', 'tf-headline', 'ta-verdict', 'tj-next-text', 'tc-prose'];
@@ -161,8 +163,7 @@ function renderDeposit(financesData) {
 // Tile 3 — Affordability ladder
 // ============================================================
 
-const LADDER_RANGE = { min: 250000, max: 500000, step: 2000 };
-const LADDER_TICKS = [250000, 300000, 350000, 400000, 450000, 500000];
+
 
 function findBands(financesData, criteria) {
   const points = [];
@@ -269,7 +270,7 @@ function renderAffordability(financesData, criteria) {
 // Tile 4 — Money-flow (today vs after-move, SVG bars + tap details)
 // ============================================================
 
-const FLOW_PALETTE = { bills: 'bills', expenses: 'expenses', savings: 'savings', mortgage: 'mortgage', spare: 'spare' };
+
 
 function buildFlowBar(flow, maxTotal) {
   const w = 300, h = 40, padX = 4, barY = 8, barH = 24;

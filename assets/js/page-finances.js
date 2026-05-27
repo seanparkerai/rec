@@ -16,6 +16,7 @@ import { esc, byId as $, setText, setHTML } from './dom.js';
 import { prefersReducedMotion } from './motion.js';
 import { cssVar } from './css-vars.js';
 import { SVG_NS as SVG_NS_F } from './svg.js';
+import { FLOW_PALETTE } from './flow-constants.js';
 
 let finData = null;
 let criData = null;
@@ -53,7 +54,6 @@ function renderTiles() {
 }
 
 // Reusable: build an SVG flow bar (mirrors the dashboard tile-flow shape).
-const FLOW_PALETTE = { bills: 'bills', expenses: 'expenses', savings: 'savings', mortgage: 'mortgage', spare: 'spare' };
 function buildFlowBar(flow, maxTotal) {
   const w = 300, h = 40, padX = 4, barY = 8, barH = 24;
   const innerW = w - 2 * padX;
