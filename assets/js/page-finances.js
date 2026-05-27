@@ -12,16 +12,9 @@ import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution }
 import { buildSavingsSeries } from './savings-series.js';
 import { assessDepositRisk } from './deposit-risk.js';
 import { deriveFinances } from './finance-derive.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
-const setText = (id, v) => { const el = $(id); if (el) el.textContent = v; };
-const setHTML = (id, h) => { const el = $(id); if (el) el.innerHTML = h; };
-const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+import { esc, byId as $, setText, setHTML } from './dom.js';
+import { prefersReducedMotion } from './motion.js';
+import { cssVar } from './css-vars.js';
 
 let finData = null;
 let criData = null;
