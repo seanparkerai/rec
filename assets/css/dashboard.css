@@ -15,7 +15,7 @@
 @import 'dashboard/tile-journey.css';
 @import 'dashboard/tile-criteria.css';
 @import 'dashboard/tile-ask.css';
-@import 'dashboard/tile-phase4.css';
+@import 'dashboard/tile-extended.css';
 @import 'dashboard/tile-v3-visuals.css';
 
 /* Page-specific styles */
@@ -25,8 +25,8 @@
 @import 'pages/journey.css';
 @import 'pages/house-types.css';
 @import 'pages/map.css';
-@import 'pages/finances-phase4.css';
-@import 'pages/areas-phase4b.css';
-@import 'pages/shared-phase4c.css';
+@import 'pages/finances-widgets.css';
+@import 'pages/areas-rows.css';
+@import 'pages/shared.css';
 @import 'pages/placeholder.css';
-@import 'pages/finances-v3-charts.css';
+@import 'pages/finances-charts.css';
