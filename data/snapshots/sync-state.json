@@ -6,7 +6,8 @@
     "last_synced_at": "2026-05-26T21:01:52Z"
   },
   "finances": {
-    "last_synced_at": "2026-05-26T21:11:21Z"
+    "last_synced_at": "2026-05-27T23:04:22Z",
+    "_note": "2026-05-27: 3.08% pay rise applied (£64,000 → £65,971.20); deductions/monthlyNetTakeHome still reflect pre-rise payslip pending fresh payslip"
   },
   "shortlist": {
     "last_synced_at": "2026-05-25T21:44:00Z"
@@ -40,7 +41,8 @@
   },
   "investments_accounts": {
     "count": 1,
-    "last_synced_at": "2026-05-26T21:57:08Z"
+    "last_synced_at": "2026-05-27T23:04:32Z",
+    "_note": "2026-05-27: T212 portfolio snapshot — £31,194.45 across 6 holdings (VHYL 57.46%, VUSA 19.67%, VEVE 9.78%, SGLN 7.04%, VFEM 4.75%, TUN 1.30%); unrealised +£2,982.72 (10.57%); cost basis £28,211.73; holdings array added to account data jsonb"
   },
   "investments_history": {
     "count": 12,
