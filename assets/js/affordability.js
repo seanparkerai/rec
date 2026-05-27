@@ -1,7 +1,7 @@
 // affordability.js — verdict engine.
 // Pure module. No DOM, no storage, no fetch.
-// Constants duplicated literally from docs/INTELLIGENCE_RULES.md — when that file
-// changes, update the BANDS object below in lockstep (see §Maintenance there).
+// Rule constants live in intelligence-constants.js (single source of truth).
+// When updating a constant, update both that file AND docs/INTELLIGENCE_RULES.md.
 
 import {
   calcMonthlyMortgage,
@@ -9,29 +9,15 @@ import {
   calcLTV,
   lisaEligible,
 } from './finances.js';
-
-// --- Band constants ------------------------------------------------------------
-
-/** Loan-to-income (loan ÷ gross annual income). Upper bound is "out-of-reach". */
-const LTI_BANDS = { comfortable: 4.5, stretch: 5.5, tight: 6.0 };
-
-/** Monthly mortgage payment as % of monthly take-home (P&I, contract rate). */
-const PAYMENT_BANDS_PCT = { comfortable: 40, stretch: 52, tight: 60 };
-
-/** Monthly cash left after total-monthly minus bills + expenses + mortgage. */
-const SPARE_BANDS_GBP = { comfortable: 400, stretch: 100 };
-
-/** LISA bonus available only up to this purchase price (statutory). */
-const LISA_CAP_GBP = 450_000;
-
-/** LTV tier boundaries — lender rate cliffs. Sorted ascending. */
-const LTV_TIERS = [60, 75, 85, 90, 95];
-
-/** Stressed-rate uplift over contract rate (percentage points). */
-const STRESS_UPLIFT_PP = 3;
-
-/** Stressed payment / take-home above this triggers a whyVerdict warning. */
-const STRESS_WARNING_PCT = 60;
+import {
+  LTI_BANDS,
+  PAYMENT_BANDS_PCT,
+  SPARE_BANDS_GBP,
+  LISA_CAP_GBP,
+  LTV_TIERS,
+  STRESS_UPLIFT_PP,
+  STRESS_WARNING_PCT,
+} from './intelligence-constants.js';
 
 const VERDICTS = ['comfortable', 'stretch', 'tight', 'out-of-reach'];
 
