@@ -13,14 +13,8 @@ import { assessAffordabilityScenarios } from './affordability.js';
 import { deriveFinances } from './finance-derive.js';
 import { buildSavingsSeries } from './savings-series.js';
 import { getSavingsVelocity } from './savings-velocity.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
-const setText = (id, v) => { const el = $(id); if (el) { delete el.dataset.loading; el.textContent = v; } };
-const setHTML = (id, h) => { const el = $(id); if (el) { delete el.dataset.loading; el.innerHTML = h; } };
+import { esc, byId as $, setText, setHTML } from './dom.js';
+import { prefersReducedMotion } from './motion.js';
 
 // Placeholders that show an animated loading indicator until their render lands.
 const LOADING_IDS = ['td-headline', 'tf-headline', 'ta-verdict', 'tj-next-text', 'tc-prose'];
@@ -36,7 +30,6 @@ function clearStuckLoading() {
     if (el && el.dataset.loading) { delete el.dataset.loading; if (!el.textContent.trim()) el.textContent = '—'; }
   }
 }
-const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ============================================================
 // Page-lede (strip above the bento — unchanged from Phase 2)
