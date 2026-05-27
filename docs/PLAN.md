@@ -1,6 +1,6 @@
 # `rec` — v2 Overhaul Plan (deliverable)
 
-> **STATUS: v2 COMPLETE (2026-05)** — All phases shipped. v3 Outreach also shipped. Current active plan: `REFACTOR_PLAN.md` (code quality) and Phase 10 (Supabase sync hardening) tracked in `docs/CHECKLIST.md`.
+> **STATUS: v2 COMPLETE (2026-05)** — All phases shipped. v3 Outreach also shipped. Code-quality refactor (Phases 0–9 of `REFACTOR_PLAN.md`) also complete (2026-05). Current active plan: Phase 10 (Supabase sync hardening) tracked in `docs/CHECKLIST.md`.
 
 
 ## Context

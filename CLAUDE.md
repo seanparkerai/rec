@@ -206,6 +206,7 @@ The following files are **never touched** by feature work. Modifying any of them
 - `assets/js/config.js` — base-URL + `url()` helpers.
 - `assets/js/data-loader.js` — JSON loader.
 - `assets/js/finances.js` — finance calculators. **Extend, do not rewrite.**
+- `assets/css/dashboard.css` — `@import` entry shell (order-sensitive); extend by appending imports only.
 - `data/schema/area.schema.json` — per-area schema.
 - `.github/workflows/*` — CI / deploy pipelines.
 
@@ -324,3 +325,55 @@ The content mirror tables (`areas`, `house_types`, `checklists`, `outreach_templ
 Until that phase ships, content edits remain repo-JSON-only; the §18.2/§18.3 mirror steps activate
 once the migration is in place. Session-start freshness checks against user-state tables apply
 immediately.
+
+## 19. Module layout (post-refactor)
+
+After the 2026-05 refactor (Phases 0–9), the JS and CSS are split as follows.
+
+### `assets/js/` — flat utilities
+| File | Purpose |
+|------|---------|
+| `dom.js` | `byId`, `setText`, `setHTML`, `on`, `esc` — DOM micro-utilities |
+| `motion.js` | `prefersReducedMotion()` helper |
+| `svg.js` | `SVG_NS`, `createSVGElement` |
+| `css-vars.js` | `cssVar()` — reads a CSS custom property value |
+| `intelligence-constants.js` | `LADDER_RANGE`, `LTI_BANDS`, `SDLT_BANDS`, `LISA_LIMIT`, `STRESS_RATE` |
+| `flow-constants.js` | `FLOW_PALETTE`, `FLOW_ORDER` |
+| `affordability.js` | Affordability verdict engine |
+| `finance-derive.js` | Derived finance figures |
+| `money-flow.js` | Money-flow shape |
+| `savings-velocity.js` | Savings velocity + projection |
+| `savings-series.js` | Savings time-series |
+| `deposit-risk.js` | Deposit-risk waterfall |
+| `investment-performance.js` | T212 investment performance |
+| `outreach-renderer.js` | Outreach template renderer |
+| `outreach-store.js` | Outreach persistence helpers |
+| `format.js` | Currency / date formatters |
+
+### `assets/js/dashboard/` — 12 dashboard tile modules
+`tile-lede`, `tile-deposit`, `tile-deposit-risk`, `tile-affordability`, `tile-affordability-scenarios`, `tile-money-flow`, `tile-shortlist`, `tile-journey`, `tile-criteria`, `tile-isa-ytd`, `tile-readiness`, `tile-savings-visuals`
+
+### `assets/js/finances/` — 8 finance section modules
+`chart-helpers`, `section-deposit`, `section-deposit-risk`, `section-flow`, `section-isa-attribution`, `section-later`, `section-breakdowns`, `section-v3-charts`
+
+### `assets/js/outreach/` — 8 outreach modules
+`context`, `grid`, `filters`, `dialog`, `contacts`, `log`, `toast`, `state`
+
+### `assets/js/page-*.js` — thin page coordinators
+One per page: `page-home`, `page-finances`, `page-outreach`, `page-data-sync`, `page-about-search`, `page-profile`, `page-profile-detail`, `page-area-detail`, `page-areas`, `page-criteria`, `page-house-types`, `page-journey`, `page-map`
+
+### `assets/css/` — structure
+```
+tokens.css          ← guard-railed; colours, type, spacing tokens
+base.css            ← global resets and shared layout
+dashboard.css       ← @import shell loaded by every page (guard-railed)
+dashboard/          ← per-tile CSS partials
+  tile-card.css, tile-deposit.css, tile-affordability.css, tile-money-flow.css,
+  tile-shortlist.css, tile-journey.css, tile-criteria.css, tile-ask.css,
+  tile-extended.css, tile-v3-visuals.css, base.css
+pages/              ← per-page CSS partials (imported by dashboard.css)
+  areas.css, area-detail.css, finances.css, finances-widgets.css,
+  finances-charts.css, journey.css, house-types.css, map.css, areas-rows.css,
+  shared.css, placeholder.css, data-sync.css
+components/         ← reusable component CSS
+```

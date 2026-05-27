@@ -62,7 +62,7 @@ engine** that powers every affordability surface from one source of truth:
   from area-detail, finances, and journey checklist rows.
 - **v3 placeholders** remain at `pages/listings.html` and `pages/ask.html`. See `docs/ROADMAP.md`.
 
-Run `node tools/run-intelligence-tests.mjs` for the unified test harness (174+ assertions covering
+Run `node tools/run-intelligence-tests.mjs` for the unified test harness (184+ assertions covering
 affordability bands, money-flow sums, savings-velocity, savings series, deposit risk, investment
 performance, outreach template schema, renderer + QoI leak guard, Supabase sync state, and
 computation-pipeline characterization baselines). Browser-side smoke checks (no horizontal scroll, no inline styles, page

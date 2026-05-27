@@ -100,23 +100,23 @@
 - [ ] 7.4 Developer smoke-checks page
 
 ## Phase 8 — `about-search.html` inline-handler removal
-- [ ] 8.1 Remove `onclick=` attributes; add listeners in module; commit + push
+- [x] 8.1 Remove `onclick=` attributes; add listeners in module; commit + push
 
 ## Phase 9 — Naming polish
-- [ ] 9.1 Audit `supabase-types.ts` location
-- [ ] 9.2 Confirm `page-profile.js` vs `page-profile-detail.js`
-- [ ] 9.3 Folder hygiene sweep
-- [ ] 9.4 Commit + push
+- [x] 9.1 Audit `supabase-types.ts` location
+- [x] 9.2 Confirm `page-profile.js` vs `page-profile-detail.js`
+- [x] 9.3 Folder hygiene sweep
+- [x] 9.4 Commit + push
 
 ## Phase 11 — Post-refactor doc reconciliation
-- [ ] 11.1 Re-read every doc file against final state
-- [ ] 11.2 Update `CLAUDE.md §16` guard-rail list
-- [ ] 11.3 Add `CLAUDE.md §19` "Module layout (post-refactor)"
-- [ ] 11.4 Update `README.md` module map
-- [ ] 11.5 Update `docs/PLAN.md` foot with refactor completion note
-- [ ] 11.6 Create `docs/REFACTOR_NOTES.md` archaeology summary
-- [ ] 11.7 Archive `REFACTOR_CHECKLIST.md` and `REFACTOR_PLAN.md` to `docs/archive/`
-- [ ] 11.8 Final commit + push: `docs: phase 11 — post-refactor reconciliation`
+- [x] 11.1 Re-read every doc file against final state
+- [x] 11.2 Update `CLAUDE.md §16` guard-rail list
+- [x] 11.3 Add `CLAUDE.md §19` "Module layout (post-refactor)"
+- [x] 11.4 Update `README.md` module map
+- [x] 11.5 Update `docs/PLAN.md` foot with refactor completion note
+- [x] 11.6 Create `docs/REFACTOR_NOTES.md` archaeology summary
+- [x] 11.7 Archive `REFACTOR_CHECKLIST.md` and `REFACTOR_PLAN.md` to `docs/archive/`
+- [x] 11.8 Final commit + push: `docs: phase 11 — post-refactor reconciliation`
 
 ---
 
@@ -130,3 +130,6 @@
 - 2026-05-27 — Phase 5 complete: 8 outreach modules; page-outreach.js → coordinator
 - 2026-05-27 — Phase 6 complete: dashboard.css split into @import shell + per-tile/page partials
 - 2026-05-27 — Phase 7 complete: data-sync.html style+script extracted; dom.js helpers applied; 184/184 tests
+- 2026-05-27 — Phase 8 complete: about-search.html onclick= removed; page-about-search.js module created
+- 2026-05-27 — Phase 9 complete: 5 phase-numbered CSS files renamed; supabase-types.ts + profile naming confirmed
+- 2026-05-27 — Phase 11 complete: CLAUDE.md §16+§19 updated, README test count, PLAN.md note, REFACTOR_NOTES.md; files archived
