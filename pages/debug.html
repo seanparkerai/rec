@@ -238,9 +238,10 @@
     /* ── 4. Finance derivation ── */
     const outDerive = document.getElementById('out-derive');
 
+    let enriched = null;
     try {
       const { deriveFinances } = await import('../assets/js/finance-derive.js');
-      const enriched = deriveFinances(storageFin, { investments: storageInv });
+      enriched = deriveFinances(storageFin, { investments: storageInv });
 
       if (!enriched) {
         row(outDerive, 'deriveFinances()', 'warn', 'returned null/undefined');
@@ -250,11 +251,11 @@
         row(outDerive, 'savings.current (cash)', 'info', String(s.current));
         row(outDerive, 'savings.isaForDeposit', 'info', String(s.totalSavings - (s.current ?? 0)));
         row(outDerive, 'savings.monthlyContribution', 'info', String(s.monthlyContribution));
-        row(outDerive, 'savings.savingsGap', 'info', String(enriched.savings?.savingsGap ?? enriched.savingsGap ?? 'n/a'));
-
-        const aff = enriched.affordability ?? {};
-        row(outDerive, 'affordability.verdict', aff.verdict ? 'ok' : 'warn', aff.verdict ?? 'missing');
-        row(outDerive, 'affordability.maxBorrow', 'info', String(aff.maxBorrow ?? 'n/a'));
+        row(outDerive, 'savings.savingsGap', 'info', String(s.savingsGap ?? 'n/a'));
+        row(outDerive, 'savings.monthsToSave', 'info', String(s.monthsToSave ?? 'n/a'));
+        row(outDerive, 'income.takeHomeMonthly', 'info', String(enriched.income?.takeHomeMonthly ?? 'n/a'));
+        row(outDerive, 'income.annualBaseSalary', 'info', String(enriched.income?.annualBaseSalary ?? 'n/a'));
+        row(outDerive, 'spare.monthly', 'info', String(enriched.spare?.monthly ?? 'n/a'));
 
         // Full dump in a collapsible
         const details = document.createElement('details');
@@ -272,6 +273,26 @@
       }
     } catch (e) {
       row(outDerive, 'deriveFinances()', 'err', e.message + '\n' + (e.stack || '').split('\n').slice(0, 4).join('\n'));
+    }
+
+    // assessAffordability is a separate engine — not part of deriveFinances output
+    try {
+      const { assessAffordability } = await import('../assets/js/affordability.js');
+      const storageCrit = await (await import('../assets/js/storage.js')).getCriteria();
+      const price = Number(enriched?.goal?.offerTarget ?? enriched?.goal?.targetPropertyPrice ?? 380000);
+      const result = assessAffordability({ price, finances: enriched, criteria: storageCrit });
+      row(outDerive, `assessAffordability(£${price.toLocaleString()}).verdict`, result?.verdict ? 'ok' : 'err',
+        result?.verdict ?? 'null — check finances inputs');
+      if (result) {
+        row(outDerive, 'affordability.maxBorrow', 'info', String(result.maxBorrow ?? 'n/a'));
+        row(outDerive, 'affordability.lti', 'info', String(result.lti ?? 'n/a'));
+        row(outDerive, 'affordability.paymentToIncomePct', 'info',
+          result.paymentToIncomePct != null ? `${result.paymentToIncomePct.toFixed(1)}%` : 'n/a');
+        row(outDerive, 'affordability.whyVerdict', result.whyVerdict?.length ? 'warn' : 'ok',
+          result.whyVerdict?.join('; ') || 'none');
+      }
+    } catch (e) {
+      row(outDerive, 'assessAffordability()', 'err', e.message);
     }
 
     /* ── 5. Dashboard tile module imports ── */
