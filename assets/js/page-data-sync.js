@@ -127,7 +127,12 @@ function wireCopyBtn(btn, getContent) {
 }
 
 // ── Status tiles ───────────────────────────────────────────────────
-const ALL_TABLES = ['profile', 'criteria', 'finances', 'shortlist', 'zones', 'journey_checks', 'contacts', 'outreach'];
+const ALL_TABLES = [
+  'profile', 'criteria', 'finances', 'shortlist', 'zones', 'journey_checks',
+  'contacts', 'outreach', 'goals', 'readiness_checklist',
+  'investments_accounts', 'investments_history',
+  'debts_credit_cards', 'debts_student_loans', 'debts_other',
+];
 
 async function refreshStatus() {
   const sb = await initSupabase();
@@ -176,6 +181,8 @@ const VALIDATE_LOCAL = [
   { key: 'journey_checks', table: 'journey_checks', lsKey: 'journey-checks' },
   { key: 'contacts',       table: 'contacts',       lsKey: 'contacts'       },
   { key: 'outreach',       table: 'outreach',       lsKey: 'outreach'       },
+  { key: 'goals',          table: 'goals',          lsKey: 'goals'          },
+  { key: 'investments_accounts', table: 'investments_accounts', lsKey: 'investments' },
 ];
 
 const VALIDATE_ALL = [

@@ -22,24 +22,36 @@ test('snapshot file exists and is valid JSON', async () => {
   assert(typeof parsed === 'object', 'snapshot must be an object');
 });
 
-test('snapshot includes all 10 tables', async () => {
+test('snapshot includes all 17 tracked tables', async () => {
   const path = resolve(root, 'data/snapshots/sync-state.json');
   const snapshot = JSON.parse(await readFile(path, 'utf8'));
+  // 15 user-state tables + 2 content mirrors
   const expected = [
-    'profile', 'criteria', 'finances', 'shortlist', 'zones', 'journey_checks',
-    'contacts', 'outreach', 'areas', 'house_types'
+    'profile', 'criteria', 'finances', 'goals', 'shortlist', 'zones',
+    'journey_checks', 'contacts', 'outreach',
+    'readiness_checklist', 'investments_accounts', 'investments_history',
+    'debts_credit_cards', 'debts_student_loans', 'debts_other',
+    'areas', 'house_types',
   ];
   for (const table of expected) {
     assert(table in snapshot, `snapshot missing table: ${table}`);
   }
 });
 
-test('snapshot tracks v3 user-state tables (goals, readiness_checklist, investments_accounts)', async () => {
+test('snapshot v3+ tables have required shape', async () => {
   const path = resolve(root, 'data/snapshots/sync-state.json');
   const snapshot = JSON.parse(await readFile(path, 'utf8'));
-  for (const table of ['goals', 'readiness_checklist', 'investments_accounts']) {
-    assert(table in snapshot, `snapshot missing v3 table: ${table}`);
+  // Tables with real data must have a non-null last_synced_at
+  const withData = ['goals', 'readiness_checklist', 'investments_accounts', 'investments_history'];
+  for (const table of withData) {
+    assert(table in snapshot, `snapshot missing table: ${table}`);
     assert(snapshot[table].last_synced_at, `snapshot.${table} missing last_synced_at`);
+  }
+  // Debt tables exist but may be empty; shape must still be present
+  const debtTables = ['debts_credit_cards', 'debts_student_loans', 'debts_other'];
+  for (const table of debtTables) {
+    assert(table in snapshot, `snapshot missing debt table: ${table}`);
+    assert('count' in snapshot[table], `snapshot.${table} missing count`);
   }
 });
 

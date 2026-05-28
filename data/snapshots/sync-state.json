@@ -50,5 +50,20 @@
     "count": 13,
     "last_synced_at": "2026-05-28T20:00:00Z",
     "_note": "2026-05-28: 2026-05 net corrected 1801.02→1800.00; 2026-03 £0 row inserted (ISA annual reset month — no activity confirmed by user)"
+  },
+  "debts_credit_cards": {
+    "count": 0,
+    "last_synced_at": null,
+    "_note": "empty — no credit card debts entered; no app UI yet"
+  },
+  "debts_student_loans": {
+    "count": 0,
+    "last_synced_at": null,
+    "_note": "empty — no student loan debt entered; no app UI yet"
+  },
+  "debts_other": {
+    "count": 0,
+    "last_synced_at": null,
+    "_note": "empty — no other debts entered; no app UI yet"
   }
 }

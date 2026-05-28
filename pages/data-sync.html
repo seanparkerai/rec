@@ -62,9 +62,9 @@
     </div>
 
     <div class="sync-note">
-      <strong>What syncs:</strong> <code>profile</code>, <code>criteria</code>, <code>finances</code>, <code>contacts</code> — repo JSON ↔ Supabase (push/pull here).
-      <code>shortlist</code>, <code>zones</code>, <code>journey_checks</code>, <code>outreach</code> — app-state only, Supabase only.
-      Area content and house types are static reference data — repo only, never in Supabase.
+      <strong>What syncs:</strong> 15 user-state tables live in Supabase as source of truth (see status bar below).
+      Content mirrors — <code>areas</code> (195 rows) and <code>house_types</code> (15 rows) — are repo JSON pushed to Supabase via <code>tools/backfill-content-direct.mjs</code>.
+      <code>debts_credit_cards</code>, <code>debts_student_loans</code>, <code>debts_other</code> have no app UI yet; rows will appear here when data is entered.
     </div>
 
     <!-- ── 1. Status & Alignment ─────────────────────────────────── -->
@@ -105,6 +105,34 @@
       <div class="sync-status-tile">
         <span class="sync-status-tile-name">outreach</span>
         <span class="sync-status-tile-val none" id="status-outreach">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">goals</span>
+        <span class="sync-status-tile-val none" id="status-goals">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">readiness_checklist</span>
+        <span class="sync-status-tile-val none" id="status-readiness_checklist">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">investments_accounts</span>
+        <span class="sync-status-tile-val none" id="status-investments_accounts">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">investments_history</span>
+        <span class="sync-status-tile-val none" id="status-investments_history">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">debts_cc</span>
+        <span class="sync-status-tile-val none" id="status-debts_credit_cards">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">debts_loans</span>
+        <span class="sync-status-tile-val none" id="status-debts_student_loans">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">debts_other</span>
+        <span class="sync-status-tile-val none" id="status-debts_other">—</span>
       </div>
     </div>
     <p class="refresh-row">Last Supabase update times. <button id="btn-refresh-status">Refresh</button></p>
