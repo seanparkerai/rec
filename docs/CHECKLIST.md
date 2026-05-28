@@ -438,6 +438,15 @@ All tests 189/189 green before each push.
 
 ### Pending (separate phases)
 
-- [ ] **B3 — About you consolidation**: migrate debt data from profile blob into `debts_credit_cards`, `debts_student_loans`, `debts_other` tables via MCP UPSERT; extend `tests/supabase-sync.test.js` to assert debts live in `debts_*` tables.
+- [x] **B3 — About you consolidation** (`8529835`):
+  - MCP inspection confirmed `profile.creditProfile` is a credit rating string, not debt data. No debt blob to migrate.
+  - `debts_credit_cards`, `debts_student_loans`, `debts_other` correctly empty (0 rows, no app UI yet).
+  - `sync-state.json` now records these tables with `count:0, last_synced_at:null`.
+  - `tests/supabase-sync.test.js` updated: debt tables checked for presence + `count` field shape.
+- [x] **A4 remaining** (`8529835`):
+  - `pages/data-sync.html`: 7 new status tiles for goals, readiness_checklist, investments_accounts, investments_history, debts_credit_cards, debts_student_loans, debts_other.
+  - `page-data-sync.js`: `ALL_TABLES` expanded to all 15 user-state tables; `VALIDATE_LOCAL` gains goals + investments_accounts.
+  - `sync-state.json`: all 17 tracked tables present (15 user-state + 2 content mirrors).
+  - `tests/supabase-sync.test.js`: test 2 now requires all 17 tables; test 3 split into "with-data" vs "debt-table" assertions.
+  - 189/189 tests green.
 - [ ] **B4 — Shortlist single source**: `getShortlist()` path currently localStorage-first; making it Supabase-first touches `storage.js` (§16 guard — separate named phase required).
-- [ ] **A4 remaining**: update `pages/data-sync.html` + `page-data-sync.js` to cover all 20 live tables; extend `tests/supabase-sync.test.js` to cover newly documented user-state tables (goals, investments_*, debts_*, readiness_checklist).
