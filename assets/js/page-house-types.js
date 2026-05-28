@@ -73,7 +73,7 @@ async function init() {
   try {
     const types = await getHouseTypes();
     const areas = await getAreas();
-    const shortlistIds = new Set(getShortlist());
+    const shortlistIds = new Set(await getShortlist());
     $('ht-count').textContent = types.length;
 
     const areasByType = {};

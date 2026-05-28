@@ -21,7 +21,7 @@ function priceFor(area) {
 
 export async function renderShortlist(financesData, criteria) {
   try {
-    const shortlist = getShortlist();
+    const shortlist = await getShortlist();
     const areas = await getAreas();
     const items = shortlist.length
       ? areas.filter((a) => shortlist.includes(a.id))

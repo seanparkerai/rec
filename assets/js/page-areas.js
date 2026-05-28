@@ -239,7 +239,7 @@ function attachControls() {
 async function init() {
   try {
     areas = await getAreas();
-    shortlist = new Set(getShortlist());
+    shortlist = new Set(await getShortlist());
     try { finData = await getFinances(); } catch (e) { console.error('finances fetch', e); }
     try { criData = await getCriteria(); } catch (e) { console.error('criteria fetch', e); }
     $('total-count').textContent = areas.length;

@@ -379,8 +379,10 @@ export async function getAreas()        { return await loadJSON('areas'); }
 export async function getAreaDetail(id) { return await loadJSON(`data/areas/${id}.json`); }
 export async function getHouseTypes()   { return await loadJSON('house-types'); }
 
-// Purely client-side state — localStorage cache + Supabase sync.
-export function getShortlist()    { return readLocal('shortlist') ?? []; }
+// Shortlist follows the _get pattern (Supabase-first, localStorage write-through cache).
+export async function getShortlist(opts = {}) {
+  return (await _get('shortlist', 'shortlist', null, opts.onUpdate || null)) ?? [];
+}
 export function saveShortlist(d)  { writeLocal('shortlist', d); _sbUpsert('shortlist', d); return true; }
 export function getDrawnZones()   { return readLocal('zones') ?? null; }
 export function saveDrawnZones(g) { writeLocal('zones', g); _sbUpsert('zones', g); return true; }

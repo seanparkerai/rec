@@ -248,7 +248,7 @@ function attachFootAfford(a, finances, criteria) {
   update(initial);
 }
 
-function renderArea(a) {
+async function renderArea(a) {
   document.title = `${a.name} · rec`;
 
   // Header
@@ -293,14 +293,14 @@ function renderArea(a) {
   $('extras').innerHTML = renderImages(a) + renderSources(a);
 
   // Shortlist button
-  const shortlist = new Set(getShortlist());
+  const shortlist = new Set(await getShortlist());
   const starred = shortlist.has(a.id);
   const btn = $('btn-star');
   btn.textContent = starred ? '★ Shortlisted' : '☆ Add to shortlist';
   btn.setAttribute('aria-pressed', starred);
   btn.classList.toggle('is-starred', starred);
-  btn.addEventListener('click', () => {
-    const s = new Set(getShortlist());
+  btn.addEventListener('click', async () => {
+    const s = new Set(await getShortlist());
     if (s.has(a.id)) s.delete(a.id); else s.add(a.id);
     saveShortlist([...s]);
     const now = s.has(a.id);
@@ -337,7 +337,7 @@ async function init() {
       a = areas.find((x) => x.id === id) || null;
     }
     if (!a) { renderNotFound(id); return; }
-    renderArea(a);
+    await renderArea(a);
 
     // Phase 4b: verdict strip + foot mini-afford widget — best-effort if
     // finances/criteria load successfully.

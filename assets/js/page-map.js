@@ -150,7 +150,7 @@ async function loadAreaMarkers() {
       return;
     }
 
-    const shortlist = new Set(getShortlist());
+    const shortlist = new Set(await getShortlist());
     const cluster = L.featureGroup();
     withCoords.forEach((a) => {
       const isShort = shortlist.has(a.id);
@@ -218,7 +218,7 @@ function addLegend() {
 
 async function loadShortlistPanel() {
   try {
-    const ids = new Set(getShortlist());
+    const ids = new Set(await getShortlist());
     const areas = await getAreas();
     const list = areas.filter((a) => ids.has(a.id));
     const panel = $('shortlist-panel');
