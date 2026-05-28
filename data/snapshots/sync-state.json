@@ -46,8 +46,8 @@
     "_note": "2026-05-28: portfolio £32,994.45 (invested £31,194.45 + uninvested cash £1,800); cost basis £28,211.73; unrealised +£2,982.72 (10.57%)"
   },
   "investments_history": {
-    "count": 12,
-    "last_synced_at": "2026-05-28T18:00:37Z",
-    "_note": "2026-05-28: 2026-05 row net corrected 1801.02→1800.00 (interest £1.02 already tracked separately); 2026-03 absent — confirmed no activity that month"
+    "count": 13,
+    "last_synced_at": "2026-05-28T20:00:00Z",
+    "_note": "2026-05-28: 2026-05 net corrected 1801.02→1800.00; 2026-03 £0 row inserted (ISA annual reset month — no activity confirmed by user)"
   }
 }
