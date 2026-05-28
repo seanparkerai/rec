@@ -7,17 +7,7 @@ import { renderTiles }               from './finances/section-deposit.js';
 import { renderNowFlow }             from './finances/section-flow.js';
 import { renderBreakdowns }          from './finances/section-breakdowns.js';
 import { renderLaterFlow, attachAffordabilityWidget, renderWhatIfChart } from './finances/section-later.js';
-import { renderISAAttribution }      from './finances/section-isa-attribution.js';
 import { renderDepositRiskTile }     from './finances/section-deposit-risk.js';
-import {
-  renderSavingsOverTime,
-  renderMonthlyDeposits,
-  renderISAStackedArea,
-  renderDividendsInterest,
-  renderEpochComparison,
-  renderTickerTreemap,
-  renderRealisedUnrealised,
-} from './finances/section-v3-charts.js';
 
 let finData = null;
 let criData = null;
@@ -30,15 +20,7 @@ function renderEverything() {
   renderLaterFlow(finData, criData);
   attachAffordabilityWidget(finData, criData);
   renderWhatIfChart(finData);
-  renderISAAttribution(finData);
   renderDepositRiskTile(finData);
-  renderSavingsOverTime(finData);
-  renderMonthlyDeposits(finData);
-  renderISAStackedArea(finData);
-  renderDividendsInterest();
-  renderEpochComparison();
-  renderTickerTreemap();
-  renderRealisedUnrealised();
 }
 
 async function init() {
