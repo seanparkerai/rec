@@ -1,7 +1,8 @@
 # USER PROFILE — about the buyer
 
-The narrative version of `data/profile.json` (and related figures in `data/criteria.json` /
-`data/finances.json`).
+> **Note (2026-05-27):** References to `data/profile.json`, `data/criteria.json`, `data/finances.json` in this document are historical. Those files have been removed. User data lives in Supabase — access via `mcp__supabase__execute_sql` or the portal.
+
+The narrative version of the buyer profile (Supabase `profile`, `criteria`, and `finances` tables).
 
 ## Who's buying
 Solo **first-time buyer**, no dependents. Permanent employment — **£64,000** base salary plus a consistent

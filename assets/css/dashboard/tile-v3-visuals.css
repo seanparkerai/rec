@@ -1,0 +1,161 @@
+/* dashboard/tile-v3-visuals.css — v3 visual tiles.
+   Sparkline · scenarios fan · net-worth donut · withdrawal-readiness seasoning bar. */
+
+/* Deposit-tile sparkline */
+.deposit-sparkline {
+  display: block;
+  width: 100%;
+  height: 60px;
+  margin-top: var(--space-3);
+}
+.deposit-sparkline__target {
+  stroke: var(--hairline-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  fill: none;
+}
+.deposit-sparkline__area {
+  fill: var(--accent-soft);
+  stroke: none;
+}
+.deposit-sparkline__line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.deposit-spark-caption {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  margin: var(--space-2) 0 0;
+}
+
+/* Scenarios fan */
+.scenarios-fan {
+  display: block;
+  width: 100%;
+  height: 140px;
+  margin: var(--space-2) 0;
+}
+.scenarios-fan__label {
+  font-family: var(--font-data);
+  font-size: 11px;
+  fill: var(--ink-muted);
+}
+.scenarios-fan__label.is-baseline {
+  fill: var(--ink);
+  font-weight: 600;
+}
+.scenarios-fan__bar {
+  fill: color-mix(in oklch, var(--accent) 40%, var(--paper));
+}
+.scenarios-fan__bar.is-baseline {
+  fill: var(--accent);
+}
+.scenarios-fan__value {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  fill: var(--ink);
+}
+.scenarios-fan-caption {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  margin: var(--space-2) 0 0;
+}
+
+/* Net-worth donut */
+.networth-cols {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--space-4);
+  align-items: center;
+  margin: var(--space-2) 0;
+}
+.networth-donut {
+  display: block;
+  width: 200px;
+  height: 200px;
+  max-width: 100%;
+}
+.networth-donut__track {
+  fill: none;
+  stroke: var(--hairline);
+}
+.networth-donut__isa {
+  fill: none;
+  stroke: var(--accent);
+  transition: stroke-dasharray 0.4s ease;
+}
+.networth-donut__cash {
+  fill: none;
+  stroke: color-mix(in oklch, var(--accent) 45%, var(--paper));
+}
+.networth-donut__value {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+  fill: var(--ink);
+  font-weight: 600;
+}
+.networth-donut__label {
+  font-size: 11px;
+  fill: var(--ink-muted);
+}
+.networth-stats {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+.networth-stats > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.networth-stats > div:last-child { border-bottom: 0; }
+.networth-stats dt { font-size: var(--text-sm); color: var(--ink-muted); margin: 0; }
+.networth-stats dd { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: var(--text-sm); margin: 0; color: var(--ink); }
+.networth-caption {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  margin: var(--space-2) 0 0;
+}
+
+@media (max-width: 480px) {
+  .networth-cols { grid-template-columns: 1fr; }
+  .networth-donut { margin: 0 auto; }
+}
+
+/* Withdrawal-readiness seasoning bar */
+.seasoning-bar {
+  position: relative;
+  height: 12px;
+  background: var(--hairline);
+  border-radius: var(--rec-radius-sm);
+  margin: var(--space-3) 0 var(--space-2);
+  overflow: hidden;
+}
+.seasoning-bar__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--seasoning-pct, 0%);
+  background: var(--accent-soft);
+}
+.seasoning-bar__marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: var(--marker-pct, 0%);
+  width: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+.seasoning-bar__caption {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  margin: 0;
+}

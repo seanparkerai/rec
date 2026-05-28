@@ -201,9 +201,19 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
   overflow-x: auto; -webkit-overflow-scrolling: touch;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
+  flex-wrap: nowrap;
 }
 .site-nav ul::-webkit-scrollbar { display: none; }
 .site-nav li { scroll-snap-align: start; }
+/* Desktop ≥1024px: compact links so all 11 items fit on one row, no scroll */
+@media (min-width: 1024px) {
+  .site-nav ul {
+    overflow: hidden;
+    scroll-snap-type: none;
+  }
+  .site-nav li { scroll-snap-align: none; }
+  .site-nav a { padding: 0.45rem 0.55rem; }
+}
 .site-nav a {
   position: relative;
   display: inline-flex; align-items: center;
@@ -347,11 +357,16 @@ main.container {
   margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
   font-feature-settings: "tnum"; font-variant-numeric: tabular-nums;
   font-size: var(--text-2xl); font-weight: 500; line-height: 1.05; letter-spacing: -0.02em;
-  color: var(--ink); word-break: break-word;
+  color: var(--ink);
+  /* A tabular figure (e.g. £400,000) must never split mid-number. The cell
+     already has min-width:0 + a 2-col phone layout to absorb the width. */
+  overflow-wrap: normal; white-space: nowrap;
 }
 .stat-strip dd.is-text {
   font-family: var(--font-body); font-size: var(--text-base); font-weight: 500;
   letter-spacing: 0; line-height: 1.3;
+  /* Text values (e.g. a date range) wrap normally — only numerals stay nowrap. */
+  white-space: normal; overflow-wrap: anywhere;
 }
 /* 2-col on phones; reset left-border on odd cells and add top-border from row 2. */
 @media (max-width: 540px) {
@@ -381,7 +396,7 @@ main.container {
 
 .status-line { min-height: 1.25rem; margin: 0 0 1rem; font-size: 0.9rem; }
 .status-line[data-kind="ok"]  { color: var(--accent); }
-.status-line[data-kind="err"] { color: #c53030; }
+.status-line[data-kind="err"] { color: var(--danger); }
 
 .lead { font-size: 1.05rem; line-height: 1.5; margin: 0; }
 

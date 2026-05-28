@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css" />
   <link rel="stylesheet" href="../assets/css/base.css" />
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/components/outreach.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
 </head>
 <body>
@@ -42,11 +43,14 @@
         </div>
         <dl class="finance-hero-stats">
           <div><dt>Total savings</dt>      <dd class="num" id="tile-saved">&mdash;</dd></div>
-          <div><dt>Per month</dt>           <dd class="num" id="tile-monthly">&mdash;</dd></div>
+          <div><dt>Per month</dt>           <dd class="num" id="tile-monthly">&mdash;</dd><dd class="muted small" id="tile-monthly-avg"></dd></div>
           <div><dt>Months to target</dt>   <dd class="num" id="tile-months">&mdash;</dd></div>
         </dl>
       </section>
 
+      <p class="cell-foot" style="margin-bottom:var(--space-4)"><a data-nav="pages/investments.html">How are my investments doing? &rarr;</a></p>
+
+      <!-- Now flow -->
       <section class="tile-card tile-flow" id="now-flow-tile" aria-labelledby="now-flow-h">
         <header class="tile-head">
           <h2 id="now-flow-h">Where this month&rsquo;s income lands</h2>
@@ -85,6 +89,40 @@
         <p class="stage-lead">Side-by-side outgoings before and after the move, the unified affordability widget, and the "what if" projections.</p>
       </header>
 
+      <!-- v3 Later Rank 1 — Affordability widget (promoted) -->
+      <section class="afford-widget" id="afford-widget" aria-labelledby="afford-h">
+        <header class="afford-widget__head">
+          <h3 id="afford-h">Affordability at price</h3>
+          <span class="afford-verdict-pill" id="afford-pill">&mdash;</span>
+        </header>
+        <p class="afford-price"><span id="afford-price-display">&mdash;</span><label for="afford-price-input" class="visually-hidden">Set price</label><input type="number" id="afford-price-input" min="100000" max="2000000" step="5000" /></p>
+        <div class="afford-slider-row">
+          <label for="afford-slider">Price slider
+            <input type="range" id="afford-slider" class="afford-slider" min="200000" max="600000" step="2000" />
+          </label>
+        </div>
+        <dl class="afford-grid">
+          <div><dt>Required deposit</dt><dd id="afford-deposit">&mdash;</dd></div>
+          <div><dt>Loan needed</dt><dd id="afford-loan">&mdash;</dd></div>
+          <div><dt>LTV</dt><dd id="afford-ltv">&mdash;</dd></div>
+          <div><dt>Stamp duty</dt><dd id="afford-sdlt">&mdash;</dd></div>
+          <div><dt>LISA eligible</dt><dd id="afford-lisa">&mdash;</dd></div>
+          <div><dt>Monthly P&amp;I</dt><dd id="afford-monthly">&mdash;</dd></div>
+          <div><dt>Stressed P&amp;I</dt><dd id="afford-stressed">&mdash;<small>+3pp</small></dd></div>
+          <div><dt>Spare after</dt><dd id="afford-spare">&mdash;</dd></div>
+        </dl>
+        <ul class="afford-why" id="afford-why" aria-live="polite"></ul>
+        <a href="outreach.html?templateId=A5" data-nav="pages/outreach.html?templateId=A5" class="afford-outreach-link">Email these figures to a mortgage broker &rarr;</a>
+      </section>
+
+      <!-- v3 Later Rank 2 — What-if projection -->
+      <section class="card">
+        <h3>What if&hellip;</h3>
+        <p class="muted is-card-intro">Baseline savings projection plus ghosted scenarios. Hover a series for amounts.</p>
+        <div class="what-if-chart"><canvas id="what-if-canvas"></canvas></div>
+      </section>
+
+      <!-- v3 Later Rank 3 — Money-flow today vs after move (demoted) -->
       <section class="tile-card tile-flow" id="later-flow-tile" aria-labelledby="later-flow-h">
         <header class="tile-head">
           <h2 id="later-flow-h">Money-flow today vs after move</h2>
@@ -105,34 +143,19 @@
         <p class="flow__caption" id="later-flow-caption">&mdash;</p>
       </section>
 
-      <section class="afford-widget" id="afford-widget" aria-labelledby="afford-h">
-        <header class="afford-widget__head">
-          <h3 id="afford-h">Affordability at price</h3>
-          <span class="afford-verdict-pill" id="afford-pill">&mdash;</span>
+      <!-- v3 Later Rank 4 — Deposit at risk waterfall (promoted + upgraded) -->
+      <section class="tile-card tile-deposit-risk" id="deposit-risk-tile" aria-labelledby="deposit-risk-h" aria-live="polite">
+        <header class="tile-head">
+          <h3 id="deposit-risk-h">Deposit at risk</h3>
+          <span class="verdict-badge verdict-badge--loading" id="tdr-badge">—</span>
         </header>
-        <p class="afford-price"><span id="afford-price-display">&pound;380,000</span><label for="afford-price-input" class="visually-hidden">Set price</label><input type="number" id="afford-price-input" min="100000" max="2000000" step="5000" value="380000" /></p>
-        <div class="afford-slider-row">
-          <label for="afford-slider">Price slider
-            <input type="range" id="afford-slider" class="afford-slider" min="200000" max="600000" step="2000" value="380000" />
-          </label>
-        </div>
-        <dl class="afford-grid">
-          <div><dt>Required deposit</dt><dd id="afford-deposit">&mdash;</dd></div>
-          <div><dt>Loan needed</dt><dd id="afford-loan">&mdash;</dd></div>
-          <div><dt>LTV</dt><dd id="afford-ltv">&mdash;</dd></div>
-          <div><dt>Stamp duty</dt><dd id="afford-sdlt">&mdash;</dd></div>
-          <div><dt>LISA eligible</dt><dd id="afford-lisa">&mdash;</dd></div>
-          <div><dt>Monthly P&amp;I</dt><dd id="afford-monthly">&mdash;</dd></div>
-          <div><dt>Stressed P&amp;I</dt><dd id="afford-stressed">&mdash;<small>+3pp</small></dd></div>
-          <div><dt>Spare after</dt><dd id="afford-spare">&mdash;</dd></div>
-        </dl>
-        <ul class="afford-why" id="afford-why" aria-live="polite"></ul>
-      </section>
-
-      <section class="card">
-        <h3>What if&hellip;</h3>
-        <p class="muted is-card-intro">Baseline savings projection plus ghosted scenarios. Hover a series for amounts.</p>
-        <div class="what-if-chart"><canvas id="what-if-canvas"></canvas></div>
+        <p class="muted is-card-intro">What a market correction would do to your deposit before you buy.</p>
+        <svg id="dr-waterfall-svg" class="deposit-risk-waterfall" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet" aria-label="Deposit at risk waterfall"></svg>
+        <p class="chart-caption" id="dr-waterfall-caption">&mdash;</p>
+        <details class="dr-waterfall-details">
+          <summary>See scenario details</summary>
+          <div id="dr-waterfall-rows" class="dr-waterfall-rows"></div>
+        </details>
       </section>
 
       <details class="collapsible-card" id="card-onetime">
@@ -147,6 +170,28 @@
         <summary><h3>Gift cards</h3><span class="num" id="giftcards-total">&mdash;</span></summary>
         <div class="collapsible-body"><div id="tbl-giftcards"></div></div>
       </details>
+
+      <section class="outlay-summary" aria-label="Total initial outlay summary">
+        <h3>Total initial outlay</h3>
+        <dl class="outlay-dl">
+          <div class="outlay-row">
+            <dt>Core purchase <small>(deposit + SDLT + legal)</small></dt>
+            <dd id="outlay-core">&mdash;</dd>
+          </div>
+          <div class="outlay-row">
+            <dt>Home setup &amp; furnishing</dt>
+            <dd id="outlay-furnish">&mdash;</dd>
+          </div>
+          <div class="outlay-row">
+            <dt>Major purchases <small>(car etc.)</small></dt>
+            <dd id="outlay-major">&mdash;</dd>
+          </div>
+          <div class="outlay-row outlay-total-row">
+            <dt><strong>Grand total</strong></dt>
+            <dd id="outlay-total"><strong>&mdash;</strong></dd>
+          </div>
+        </dl>
+      </section>
     </section>
   </main>
 

@@ -1,17 +1,14 @@
 // page-criteria.js — render the editable search criteria form with all filters.
 import { getCriteria, saveCriteria, _internal } from './storage.js';
 import { loadJSON } from './data-loader.js';
+import { esc, byId } from './dom.js';
 
 const gbp = (n) => new Intl.NumberFormat('en-GB', {
   style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
 }).format(n || 0);
 
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
 const ROOT = document.querySelector('[data-page="criteria"]') || document;
-const $ = (id) => ROOT.querySelector('#' + id);
+const $ = (id) => byId(id, ROOT);
 const $$ = (sel) => ROOT.querySelectorAll(sel);
 
 let current = null;
@@ -67,7 +64,6 @@ function renderBudget() {
     ['Min price', 'budget.min', b.min, 'currency'],
     ['Max price', 'budget.max', b.max, 'currency'],
     ['Offer target', 'budget.offerTarget', b.offerTarget, 'currency'],
-    ['Deposit target', 'budget.targetDeposit', b.targetDeposit, 'currency'],
     ['Offer strategy', 'budget.offerStrategy', b.offerStrategy, 'text'],
   ];
   if (editing) {
@@ -334,7 +330,6 @@ function collectForm() {
     ['budget.min', 'f-budget.min'],
     ['budget.max', 'f-budget.max'],
     ['budget.offerTarget', 'f-budget.offerTarget'],
-    ['budget.targetDeposit', 'f-budget.targetDeposit'],
     ['budget.offerStrategy', 'f-budget.offerStrategy'],
     ['size.minBeds', 'f-size.minBeds'],
     ['size.idealBeds', 'f-size.idealBeds'],

@@ -3,15 +3,13 @@
 // Edit = native <dialog> with all fields, save persists via storage.js.
 import { getProfile, saveProfile, getCriteria, getFinances, _internal } from './storage.js';
 import { loadJSON } from './data-loader.js';
+import { esc, byId } from './dom.js';
 
 const gbp = (n) => new Intl.NumberFormat('en-GB', {
   style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
 }).format(n || 0);
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
 const ROOT = document.querySelector('[data-page="profile"]') || document;
-const $ = (id) => ROOT.querySelector('#' + id);
+const $ = (id) => byId(id, ROOT);
 const $$ = (sel) => ROOT.querySelectorAll(sel);
 
 let current = null;

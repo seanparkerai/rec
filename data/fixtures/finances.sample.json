@@ -1,0 +1,155 @@
+{
+  "currency": "GBP",
+  "firstTimeBuyer": true,
+  "income": {
+    "annualGrossBase": 65971.2,
+    "monthlyNetTakeHome": 3623.52,
+    "taxCode": "1248L",
+    "taxPeriodCurrent": 1,
+    "mostRecentPayslipDate": "2026-05-29",
+    "payslipReference": "1047",
+    "niNumber": "AB123456C",
+    "employerNI": 737.45,
+    "deductions": {
+      "payeTax": 1156.57,
+      "nationalInsurance": 277.46,
+      "employeePension": 147.27,
+      "studentLoanPlan1": 292.78
+    },
+    "benefitsInKind": [
+      { "name": "Perkbox", "monthlyValue": 5.94 }
+    ],
+    "annualBonus": 3000,
+    "bonus": {
+      "structure": "discretionary",
+      "schedule": "no fixed schedule",
+      "lastReceived": { "amount": 3000, "date": "2025-05" },
+      "rolling3YearAverage": null,
+      "expectedAnnualised": 3000,
+      "confidence": "medium-low",
+      "lenderTreatment": "expect 0-50% counted on first application until 2-3 year history"
+    },
+    "equityCompensation": null,
+    "sideIncome": {
+      "active": false,
+      "sources": [],
+      "note": "investment gains held in ISA — not income"
+    },
+    "payRise": {
+      "scenario": "received",
+      "confidence": "actual",
+      "newSalary": 65971.2,
+      "previousSalary": 64000,
+      "receivedDate": "2026-05",
+      "risePct": 3.08,
+      "monthlyNetDeltaEstimate": 74
+    }
+  },
+  "outgoings": {
+    "householdContribution": {
+      "amount": 480,
+      "recipient": "family",
+      "postMoveValue": 0,
+      "note": "informal arrangement, will appear on bank statements"
+    },
+    "subscriptions": {
+      "softwareAI": {
+        "total": 50,
+        "itemised": false,
+        "note": "aggregate AI/software tools"
+      }
+    },
+    "creditCardPayment": {
+      "amount": 13,
+      "provider": "Example Bank",
+      "note": "minimum payment, balance being carried until cleared pre-mortgage"
+    },
+    "carCosts": { "active": false, "_note": "no car currently" },
+    "charitableGiving": { "active": false }
+  },
+  "goal": {
+    "targetDeposit": 40000,
+    "targetPropertyPrice": 400000,
+    "offerTarget": 380000,
+    "depositPct": 10,
+    "movingWindow": "March – September 2026"
+  },
+  "savings": {
+    "current": 0,
+    "monthlyContribution": 2000,
+    "history": [],
+    "_note": "All liquid savings live in trading212ISA (data/fixtures/investments.sample.json). This field is cash held OUTSIDE investment accounts — currently zero."
+  },
+  "mortgage": {
+    "targetMax": 360000,
+    "ratePctAssumed": 5.35,
+    "termYears": 35,
+    "ltvRange": "90–95%",
+    "monthlyPaymentRange": { "min": 1800, "max": 2000 },
+    "estimatedMonthlyPayment": 1900,
+    "fixedRatePref": "2-year",
+    "feesWillingness": { "min": 0, "max": 2000 }
+  },
+  "oneTimeCosts": [
+    { "item": "Stamp Duty", "cost": 4000, "notes": "First-time buyer (5% of the £80k above £300k on a £380k purchase)", "category": "sdlt" },
+    { "item": "Solicitor / Conveyancing", "cost": 1150, "notes": "Including searches", "category": "legal" },
+    { "item": "Survey / Valuation", "cost": 500, "notes": "HomeBuyer (Level 2)", "category": "legal" },
+    { "item": "Removals", "cost": 0, "notes": "DIY or minimal", "category": "removal" },
+    { "item": "Contingency Buffer", "cost": 0, "notes": "For unexpected", "category": "contingency" },
+    { "item": "Mortgage Arrangement Fees", "cost": 0, "notes": "Reduce where possible", "category": "legal" },
+    { "item": "Car Purchase", "cost": 6000, "notes": "", "category": "transport" }
+  ],
+  "ongoingBills": [
+    { "item": "Phone Bill", "annual": 900, "monthly": 75 },
+    { "item": "Car Tax", "annual": 200, "monthly": 16.67 },
+    { "item": "Car Insurance", "annual": 600, "monthly": 50 },
+    { "item": "Council Tax", "annual": 2000, "monthly": 166.67 },
+    { "item": "Gas & Electricity", "annual": 1800, "monthly": 150 },
+    { "item": "Water", "annual": 400, "monthly": 33.33 },
+    { "item": "Internet & Broadband", "annual": 750, "monthly": 62.5 },
+    { "item": "TV Licence", "annual": 0, "monthly": 0 },
+    { "item": "Buildings Insurance (& contents)", "annual": 450, "monthly": 37.5 },
+    { "item": "Smart Gadgets", "annual": 250, "monthly": 20.83 }
+  ],
+  "expenses": [
+    { "item": "Food & Shopping", "annual": 3900, "monthly": 300, "weekly": 75 },
+    { "item": "Petrol", "annual": 2080, "monthly": 160, "weekly": 40 },
+    { "item": "Personal consumables", "annual": 3900, "monthly": 300, "weekly": 75 },
+    { "item": "Fun & Stuff", "annual": 2600, "monthly": 200, "weekly": 50 },
+    { "item": "Pet & miscellaneous", "annual": 780, "monthly": 60, "weekly": 15 },
+    { "item": "Presents & Holidays", "annual": 1200, "monthly": 100, "weekly": 25 }
+  ],
+  "shoppingList": [
+    { "category": "Kitchen Basics", "cost": 230, "items": "Plates/bowls/mugs/glasses £50; cutlery/utensils £35; kettle/toaster £50; pans/tray £30; chopping/knives £35; storage/foil/cling £10; tea/coffee/oil/basics £20" },
+    { "category": "Appliances", "cost": 1150, "items": "Microwave £0; fridge-freezer £500; washing machine £300; dishwasher £350" },
+    { "category": "Bedroom", "cost": 100, "items": "Beds/mattresses £500; bedding £100" },
+    { "category": "Bathroom", "cost": 100, "items": "Towels £60; shower curtain £25; toilet brush/bin £15" },
+    { "category": "Curtains / Blinds", "cost": 500, "items": "All rooms £400; poles £100" },
+    { "category": "Heating & Comfort", "cost": 200, "items": "Smart thermostat £150; space heaters £25; fan £25" },
+    { "category": "Cleaning & Maintenance", "cost": 380, "items": "Vacuum £350; mop/bucket/sprays £15; bin bags/sponges £10; dishwasher pods £5" },
+    { "category": "Tools", "cost": 40, "items": "Screwdriver/hammer/measure £40" },
+    { "category": "Safety", "cost": 65, "items": "Smoke/CO detectors £20; fire extinguisher/blanket £15; first aid £30" },
+    { "category": "Storage", "cost": 350, "items": "Wardrobes/dressers £300; bookshelves £50" },
+    { "category": "Laundry", "cost": 45, "items": "Baskets £30; iron/board £15" },
+    { "category": "Entryway", "cost": 15, "items": "Doormat/shoe rack £15" },
+    { "category": "Lighting", "cost": 75, "items": "Lamps/spare bulbs £75" },
+    { "category": "Power", "cost": 50, "items": "Extension leads/surge protectors £50" },
+    { "category": "Furniture", "cost": 1650, "items": "Sofa £1000; coffee table £150; dining table/chairs £500" },
+    { "category": "Decor", "cost": 250, "items": "Mirrors/rugs/art £250" },
+    { "category": "Garden / Outdoor", "cost": 150, "items": "Hose/mower/tools £150" }
+  ],
+  "giftCards": [
+    { "source": "Retailer A", "amount": 50, "expiry": "2028" },
+    { "source": "Retailer B", "amount": 50, "expiry": "On move day" },
+    { "source": "Retailer B", "amount": 25, "expiry": "" },
+    { "source": "Online retailer", "amount": 10, "expiry": "" },
+    { "source": "Department store", "amount": 20, "expiry": "" },
+    { "source": "Department store", "amount": 25, "expiry": "" },
+    { "source": "Multi-store", "amount": 50, "expiry": "" },
+    { "source": "Multi-store", "amount": 50, "expiry": "" },
+    { "source": "Multi-store", "amount": 50, "expiry": "" },
+    { "source": "Multi-store", "amount": 30, "expiry": "" },
+    { "source": "Multi-store", "amount": 50, "expiry": "" },
+    { "source": "Gift", "amount": 500, "expiry": "" }
+  ]
+}

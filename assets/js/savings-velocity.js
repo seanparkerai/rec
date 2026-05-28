@@ -85,6 +85,53 @@ function monthsToDate(etaMonths, from) {
   return dateFromMonths(etaMonths, from);
 }
 
+/**
+ * Velocity derived from a real contribution history (Phase 3 import data).
+ * Falls back gracefully if history is empty or the stub placeholder.
+ *
+ * @param {object} historyJson    contents of data/imports/trading212-history.json
+ * @param {number} [windowMonths] rolling average window in months (default 3)
+ * @param {number} [currentValue] current portfolio value to project from
+ * @param {number} [targetDeposit] target to hit
+ * @param {Date}   [now]          base date for projections
+ * @returns {{
+ *   windowMonths: number,
+ *   avgMonthlyContribution: number | null,
+ *   avgGrowthRate: number | null,
+ *   projections: Array<{ horizonMonths: number, projectedValue: number }>
+ * }}
+ */
+export function getVelocityFromHistory(historyJson, windowMonths = 3, currentValue = 0, targetDeposit = 0, now = new Date()) {
+  const monthly = historyJson?.monthlySummary ?? [];
+  if (monthly.length === 0 || historyJson?._status === 'awaiting Phase 3 import') {
+    return { windowMonths, avgMonthlyContribution: null, avgGrowthRate: null, projections: [] };
+  }
+
+  // Sort descending by month string (YYYY-MM sorts correctly lexicographically).
+  const sorted = [...monthly].sort((a, b) => b.month.localeCompare(a.month));
+  const window = sorted.slice(0, windowMonths);
+
+  const totalNet = window.reduce((s, m) => s + num(m.net), 0);
+  const avgMonthlyContribution = window.length > 0 ? totalNet / window.length : null;
+
+  // Growth rate: average of (dividends + realisedPnL) / deposits per month.
+  const growthRates = window
+    .filter((m) => num(m.deposits) > 0)
+    .map((m) => (num(m.dividends) + num(m.realisedPnL)) / num(m.deposits));
+  const avgGrowthRate = growthRates.length > 0
+    ? growthRates.reduce((s, r) => s + r, 0) / growthRates.length
+    : null;
+
+  const horizons = [1, 3, 6, 12];
+  const projections = horizons.map((h) => {
+    const added = avgMonthlyContribution != null ? avgMonthlyContribution * h : 0;
+    const growth = avgGrowthRate != null ? currentValue * (avgGrowthRate / 12) * h : 0;
+    return { horizonMonths: h, projectedValue: Math.round(currentValue + added + growth) };
+  });
+
+  return { windowMonths, avgMonthlyContribution, avgGrowthRate, projections };
+}
+
 function num(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;

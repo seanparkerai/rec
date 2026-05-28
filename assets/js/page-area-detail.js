@@ -3,12 +3,7 @@ import { getAreas, getAreaDetail, getShortlist, saveShortlist, getFinances, getC
 import { url } from './config.js';
 import { gbp } from './format.js';
 import { assessAffordability } from './affordability.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
+import { esc, byId as $ } from './dom.js';
 
 const PLACEHOLDER = '<p class="muted mb-0">Content for this section is being researched and will be added in a future update.</p>';
 
@@ -215,6 +210,8 @@ function renderVerdictStrip(a, finances, criteria) {
   strip.className = `area-verdict-strip area-verdict-strip--${r.verdict}`;
   txt.textContent = r.headline;
   num.innerHTML = `<span>Avg <strong>${esc(label || '—')}</strong></span><span><strong>${esc(gbp(price))}</strong></span><span><strong>${esc(gbp(r.monthlyPI))}/mo</strong></span>`;
+  const outreachLink = document.getElementById('area-outreach-link');
+  if (outreachLink) outreachLink.hidden = false;
 }
 
 function attachFootAfford(a, finances, criteria) {
@@ -225,7 +222,7 @@ function attachFootAfford(a, finances, criteria) {
   const number = document.getElementById('area-afford-number');
   const display = document.getElementById('area-afford-display');
   const pill = document.getElementById('area-afford-pill');
-  const initial = matchedPrice(a, criteria).price ?? Number(criteria?.budget?.offerTarget || 380000);
+  const initial = matchedPrice(a, criteria).price ?? Number(criteria?.budget?.max || 0);
   slider.value = String(initial);
   number.value = String(initial);
   if (display) display.textContent = gbp(initial);

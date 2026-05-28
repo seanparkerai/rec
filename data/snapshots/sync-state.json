@@ -1,0 +1,54 @@
+{
+  "profile": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "criteria": {
+    "last_synced_at": "2026-05-28T21:51:28Z",
+    "_note": "2026-05-28 overhaul A1: removed budget.offerTarget (D2 — canonical lives in finances.goal.offerTarget)"
+  },
+  "finances": {
+    "last_synced_at": "2026-05-28T21:51:22Z",
+    "_note": "2026-05-28 overhaul A1: removed goal.targetSavingsRange (D1 — single canonical deposit target = £40k)"
+  },
+  "shortlist": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "zones": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "journey_checks": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "contacts": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "outreach": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "areas": {
+    "count": 195,
+    "last_synced_at": "2026-05-26T10:51:53.837Z"
+  },
+  "house_types": {
+    "count": 15,
+    "last_synced_at": "2026-05-26T10:51:53.837Z"
+  },
+  "goals": {
+    "last_synced_at": "2026-05-28T21:51:27Z",
+    "_note": "2026-05-28 overhaul A1+A3: deposit.hopedFor updated to £40,000 (D1 canonical); gapToHoped corrected to £7,005.55; readiness.checklist blob retired (D4 — source is now readiness_checklist table)"
+  },
+  "readiness_checklist": {
+    "count": 13,
+    "last_synced_at": "2026-05-26T21:57:00Z"
+  },
+  "investments_accounts": {
+    "count": 1,
+    "last_synced_at": "2026-05-28T18:00:45Z",
+    "_note": "2026-05-28: portfolio £32,994.45 (invested £31,194.45 + uninvested cash £1,800); cost basis £28,211.73; unrealised +£2,982.72 (10.57%)"
+  },
+  "investments_history": {
+    "count": 13,
+    "last_synced_at": "2026-05-28T20:00:00Z",
+    "_note": "2026-05-28: 2026-05 net corrected 1801.02→1800.00; 2026-03 £0 row inserted (ISA annual reset month — no activity confirmed by user)"
+  }
+}

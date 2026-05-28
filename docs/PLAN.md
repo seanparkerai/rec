@@ -1,5 +1,10 @@
 # `rec` — v2 Overhaul Plan (deliverable)
 
+> **STATUS: v2 COMPLETE (2026-05)** — All phases shipped. v3 Outreach also shipped. Code-quality refactor (Phases 0–9 of `REFACTOR_PLAN.md`) also complete (2026-05). Current active plan: Phase 10 (Supabase sync hardening) tracked in `docs/CHECKLIST.md`.
+>
+> **Note (2026-05-27):** User-state JSON files (`data/finances.json`, `data/criteria.json`, etc.) referenced in this document have been removed from the repo in the data security refactor. They live exclusively in Supabase. References in this document are historical.
+
+
 ## Context
 
 `rec` is a zero-build static site for a UK first-time buyer (Hampshire/Wiltshire). The data layer is rich — `data/finances.json` holds income, take-home, savings velocity, expenses, post-move outgoings, mortgage assumptions; `data/criteria.json` holds budget and offer strategy; per-area files (`data/areas/<id>.json`) carry prices, council tax bands, schools, transport, sources. The current pages render that data *informationally* (definition lists, tables, four isolated calculators) — never as a *decision surface*. The single most important question a first-time buyer asks — *"can I afford a £X house, and what does it do to my month?"* — has no answer on the site today.

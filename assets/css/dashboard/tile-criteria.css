@@ -1,0 +1,23 @@
+/* dashboard/tile-criteria.css — criteria prose + spec strip. */
+
+.criteria-prose {
+  margin: 0;
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1rem, 0.95rem + 0.4vw, 1.25rem);
+  line-height: 1.45; letter-spacing: -0.005em;
+  color: var(--ink); max-width: 60ch;
+}
+.spec-strip {
+  display: grid; gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  margin: 0; padding-top: var(--space-3); border-top: 1px solid var(--hairline);
+}
+.spec-strip > div { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; }
+.spec-strip dt {
+  font-size: var(--text-xs); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-muted); margin: 0;
+}
+.spec-strip dd {
+  margin: 0; font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); color: var(--ink);
+}

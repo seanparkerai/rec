@@ -3,7 +3,7 @@
 // Fixtures = { finances: data/finances.json, criteria: data/criteria.json }.
 
 import { assessAffordability } from '../assets/js/affordability.js';
-import { calcSDLT, calcMonthlyMortgage, calcLTV, lisaEligible } from '../assets/js/finances.js';
+import { calcSDLT, calcMonthlyMortgage, calcLTV, lisaEligible, computeOutlayBreakdown } from '../assets/js/finances.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances, criteria } = fixtures;
@@ -16,9 +16,9 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(r.verdict, 'comfortable', `got ${r.verdict} — ${r.headline}`);
   });
 
-  await test('affordability: £380k → stretch (plan acceptance criterion)', () => {
+  await test('affordability: £380k → tight (corrected take-home £3,543.54)', () => {
     const r = at(380_000);
-    assertEqual(r.verdict, 'stretch', `got ${r.verdict} — ${r.headline}`);
+    assertEqual(r.verdict, 'tight', `got ${r.verdict} — ${r.headline}`);
   });
 
   await test('affordability: £420k → tight', () => {
@@ -57,7 +57,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
       `expected stressed ratio > 60%, got ${r.bandSignals.stressedPaymentToIncome}`,
     );
     assert(
-      r.whyVerdict.some((s) => /Stressed at \+3pp/.test(s)),
+      r.whyVerdict.some((s) => /Stress test:/.test(s)),
       'expected whyVerdict to mention the stress test; got: ' + r.whyVerdict.join(' | '),
     );
   });
@@ -97,7 +97,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
   await test('affordability: SDLT / monthlyPI / LTV / lisaEligible match underlying calcs at offer target', () => {
     const price = 380_000;
     const r = at(price);
-    const deposit = Number(criteria.budget.targetDeposit ?? finances.goal.targetDeposit);
+    const deposit = Number(finances.goal.targetDeposit);
     const loan = price - deposit;
     const ftb = finances.firstTimeBuyer !== false;
     const rate = finances.mortgage.ratePctAssumed;
@@ -106,5 +106,46 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(r.monthlyPI, calcMonthlyMortgage(loan, rate, term), 'monthlyPI mismatch');
     assertEqual(r.ltvPct, calcLTV(loan, price), 'LTV mismatch');
     assertEqual(r.bandSignals.lisaEligible, lisaEligible(price), 'lisaEligible mismatch');
+  });
+
+  // --- SDLT regression ---------------------------------------------------------
+
+  await test('calcSDLT: £380k FTB = £4,000', () => {
+    assertEqual(calcSDLT(380_000, { firstTimeBuyer: true }), 4_000);
+  });
+
+  await test('calcSDLT: £300k FTB = £0 (at threshold)', () => {
+    assertEqual(calcSDLT(300_000, { firstTimeBuyer: true }), 0);
+  });
+
+  await test('calcSDLT: £500,001 FTB loses full relief, SDLT > £4,000', () => {
+    assert(calcSDLT(500_001, { firstTimeBuyer: true }) > 4_000,
+      'above £500k cliff: FTB relief lost, SDLT should jump above £4k');
+  });
+
+  // --- computeOutlayBreakdown --------------------------------------------------
+
+  await test('computeOutlayBreakdown: three-group grand total = £57,000', () => {
+    const breakdown = computeOutlayBreakdown({
+      targetDeposit: 40_000,
+      offerTarget: 380_000,
+      firstTimeBuyer: true,
+      oneTimeCosts: [
+        { category: 'sdlt',        cost: 0    },  // SDLT is computed from offerTarget — this item ignored
+        { category: 'legal',       cost: 1150 },
+        { category: 'legal',       cost: 500  },
+        { category: 'removal',     cost: 0    },
+        { category: 'contingency', cost: 0    },
+        { category: 'legal',       cost: 0    },
+        { category: 'transport',   cost: 6000 },
+      ],
+      shoppingList: [{ cost: 5350 }],
+    });
+    assertEqual(breakdown.sdlt, 4_000);
+    assertEqual(breakdown.legalCosts, 1_650);   // 1150 + 500 + 0
+    assertEqual(breakdown.corePurchase, 45_650); // 40000 + 4000 + 1650
+    assertEqual(breakdown.furnishing, 5_350);
+    assertEqual(breakdown.majorPurchases, 6_000);
+    assertEqual(breakdown.grandTotal, 57_000);
   });
 }

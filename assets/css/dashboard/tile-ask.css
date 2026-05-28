@@ -1,0 +1,14 @@
+/* dashboard/tile-ask.css — ask placeholder tile. */
+
+.tile-ask { background: color-mix(in oklch, var(--ink) 4%, var(--paper)); }
+.ask-input-wrap { display: flex; flex-direction: column; gap: var(--space-2); }
+.ask-input {
+  margin: 0; padding: var(--space-3) var(--space-4);
+  font-family: var(--font-body); font-size: var(--text-base);
+  background: var(--paper); color: var(--ink-muted);
+  border: 1px dashed var(--hairline-strong);
+  border-radius: var(--rec-radius); cursor: not-allowed;
+}
+.ask-caption { font-size: var(--text-sm); color: var(--ink-muted); margin: 0; }
+.ask-caption a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.ask-caption a:hover { color: var(--accent); }

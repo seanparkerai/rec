@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Andover",
   "coords": {
-    "lat": 51.10068,
-    "lng": -1.50248
+    "lat": 51.1131,
+    "lng": -1.4941
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

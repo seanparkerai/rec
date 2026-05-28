@@ -10,443 +10,7 @@
   <link rel="stylesheet" href="../assets/css/fonts.css" />
   <link rel="stylesheet" href="../assets/css/tokens.css" />
   <link rel="stylesheet" href="../assets/css/base.css" />
-  <style>
-    /* ── Data Sync page — Linear-dense anchor ───────────────────────── */
-
-    /* ── Section dividers ─────────────────────────────────────────── */
-    .section-head {
-      display: flex;
-      align-items: baseline;
-      gap: var(--space-3);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: var(--space-3);
-      margin: var(--space-10) 0 var(--space-5);
-    }
-    .section-num {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--accent);
-      font-weight: 500;
-      letter-spacing: 0.06em;
-    }
-    .section-title {
-      font-family: var(--font-display);
-      font-size: var(--text-lg);
-      font-weight: 500;
-      color: var(--ink);
-      margin: 0;
-    }
-
-    /* ── Status tiles ─────────────────────────────────────────────── */
-    .sync-status-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: var(--space-3);
-      margin-top: var(--space-4);
-    }
-    .sync-status-tile {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius-sm);
-      padding: var(--space-3) var(--space-4);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-    }
-    .sync-status-tile-name {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--ink-muted);
-    }
-    .sync-status-tile-val {
-      font-size: var(--text-sm);
-      font-weight: 500;
-      color: var(--ink);
-    }
-    .sync-status-tile-val.none { color: var(--ink-muted); font-weight: 400; }
-    .sync-status-tile-val.ok   { color: var(--accent); }
-    .sync-status-tile-val.warn { color: oklch(65% 0.16 70); }
-    .sync-status-tile-val.err  { color: oklch(55% 0.18 25); }
-
-    /* ── Alignment result ─────────────────────────────────────────── */
-    .align-result {
-      display: none;
-      margin-top: var(--space-4);
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius);
-      overflow: hidden;
-    }
-    .align-result.visible { display: block; }
-    .align-result-header {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-3) var(--space-5);
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-    }
-    .align-badge {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      padding: 2px var(--space-2);
-      border-radius: var(--rec-radius-sm);
-      letter-spacing: 0.04em;
-    }
-    .align-badge.ok   { background: color-mix(in oklch, var(--accent) 12%, transparent); color: var(--accent); }
-    .align-badge.warn { background: color-mix(in oklch, oklch(65% 0.16 70) 12%, transparent); color: oklch(55% 0.12 70); }
-    .align-badge.err  { background: color-mix(in oklch, oklch(55% 0.18 25) 12%, transparent); color: oklch(40% 0.18 25); }
-    .align-result-msg {
-      font-size: var(--text-sm);
-      color: var(--ink);
-    }
-    .align-rows {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .align-row {
-      display: grid;
-      grid-template-columns: 6rem 1fr auto;
-      align-items: start;
-      gap: var(--space-4);
-      padding: var(--space-3) var(--space-5);
-      border-bottom: 1px solid var(--border);
-      font-size: var(--text-sm);
-    }
-    .align-row:last-child { border-bottom: none; }
-    .align-row-name  { font-family: var(--font-mono); color: var(--ink-muted); font-size: var(--text-xs); padding-top: 2px; }
-    .align-row-detail { color: var(--ink); line-height: 1.5; }
-    .align-row-status { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 500; }
-    .align-row-status.ok   { color: var(--accent); }
-    .align-row-status.warn { color: oklch(65% 0.16 70); }
-    .align-row-status.err  { color: oklch(55% 0.18 25); }
-
-    /* ── Prompt box (for Claude Code) ─────────────────────────────── */
-    .prompt-wrap { display: none; margin-top: var(--space-4); }
-    .prompt-wrap.visible { display: block; }
-    .prompt-label { font-size: var(--text-sm); font-weight: 500; color: var(--ink); margin-bottom: var(--space-2); }
-    .prompt-box {
-      position: relative;
-      background: color-mix(in oklch, var(--ink) 4%, var(--paper));
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius-sm);
-      padding: var(--space-4);
-    }
-    .prompt-box pre {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin: 0;
-      max-height: 320px;
-      overflow-y: auto;
-      color: var(--ink);
-    }
-    .copy-btn {
-      position: absolute;
-      top: var(--space-2);
-      right: var(--space-2);
-      font-size: var(--text-xs);
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--rec-radius-sm);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--ink-muted);
-      cursor: pointer;
-      font-family: var(--font-body);
-      min-height: 28px;
-      line-height: 1.4;
-    }
-    .copy-btn:hover { background: var(--border); color: var(--ink); }
-    .copy-btn:focus-visible { outline: var(--focus-ring); }
-    .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
-
-    /* ── Push / Pull panels ──────────────────────────────────────── */
-    .sync-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-6);
-    }
-    @media (max-width: 768px) {
-      .sync-grid { grid-template-columns: 1fr; }
-    }
-    .sync-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius);
-      padding: var(--space-6);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-4);
-    }
-    .sync-panel-title {
-      font-family: var(--font-display);
-      font-size: var(--text-base);
-      font-weight: 500;
-      margin: 0;
-      color: var(--ink);
-    }
-    .sync-panel-dir {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--accent);
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      margin-bottom: var(--space-1);
-    }
-    .sync-panel-desc {
-      font-size: var(--text-sm);
-      color: var(--ink-muted);
-      line-height: var(--leading-body);
-      margin: 0;
-    }
-    .sync-files {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-    .sync-file {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      font-size: var(--text-sm);
-      padding: var(--space-2) var(--space-3);
-      background: color-mix(in oklch, var(--ink) 3%, var(--paper));
-      border-radius: var(--rec-radius-sm);
-      border: 1px solid var(--border);
-    }
-    .sync-file-name  { font-family: var(--font-mono); font-size: var(--text-xs); flex: 1; color: var(--ink); }
-    .sync-file-arrow { font-size: var(--text-xs); color: var(--ink-muted); }
-    .sync-file-table { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent); }
-    .sync-file-status { font-size: var(--text-xs); color: var(--ink-muted); min-width: 6ch; text-align: right; }
-    .sync-file-status.ok  { color: var(--accent); }
-    .sync-file-status.err { color: oklch(55% 0.18 25); }
-    .sync-btn-row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
-    .sync-log {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      line-height: 1.8;
-      background: color-mix(in oklch, var(--ink) 4%, var(--paper));
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius-sm);
-      padding: var(--space-4);
-      min-height: 80px;
-      max-height: 220px;
-      overflow-y: auto;
-      display: none;
-    }
-    .sync-log.visible { display: block; }
-    .sync-log-line       { display: block; }
-    .sync-log-line.ok    { color: var(--accent); }
-    .sync-log-line.err   { color: oklch(55% 0.18 25); }
-    .sync-log-line.info  { color: var(--ink-muted); }
-    .sync-log-line.warn  { color: oklch(65% 0.16 70); }
-
-    /* ── Data viewer ─────────────────────────────────────────────── */
-    .data-viewer {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      margin-top: var(--space-4);
-    }
-    .data-viewer-table {
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius);
-      overflow: hidden;
-    }
-    details.data-viewer-table summary {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-3) var(--space-5);
-      background: var(--surface);
-      cursor: pointer;
-      list-style: none;
-      border-bottom: 1px solid transparent;
-      font-size: var(--text-sm);
-      font-weight: 500;
-      color: var(--ink);
-    }
-    details.data-viewer-table[open] summary {
-      border-bottom-color: var(--border);
-    }
-    details.data-viewer-table summary::-webkit-details-marker { display: none; }
-    .dv-table-name { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent); }
-    .dv-table-meta { font-size: var(--text-xs); color: var(--ink-muted); font-weight: 400; margin-left: auto; }
-    .dv-toggle-icon { font-size: var(--text-xs); color: var(--ink-muted); transition: transform 0.15s; }
-    details.data-viewer-table[open] .dv-toggle-icon { transform: rotate(90deg); }
-    .dv-body {
-      padding: var(--space-4) var(--space-5);
-      max-height: 400px;
-      overflow-y: auto;
-    }
-    .dv-kv {
-      display: grid;
-      grid-template-columns: minmax(140px, 28%) 1fr;
-      gap: var(--space-1) var(--space-4);
-      align-items: start;
-    }
-    .dv-key {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--ink-muted);
-      padding-top: 3px;
-      word-break: break-all;
-    }
-    .dv-val {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--ink);
-      white-space: pre-wrap;
-      word-break: break-word;
-      line-height: 1.5;
-    }
-    .dv-val.is-null   { color: var(--ink-muted); font-style: italic; }
-    .dv-val.is-obj    { color: var(--accent); }
-    .dv-no-data { font-size: var(--text-sm); color: var(--ink-muted); padding: var(--space-4) 0; }
-
-    /* ── Schema checker ──────────────────────────────────────────── */
-    .schema-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: var(--space-2);
-      margin-top: var(--space-4);
-    }
-    .schema-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-2) var(--space-4);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius-sm);
-      font-size: var(--text-sm);
-    }
-    .schema-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: var(--border);
-    }
-    .schema-dot.ok   { background: var(--accent); }
-    .schema-dot.miss { background: oklch(55% 0.18 25); }
-    .schema-item-name { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--ink); flex: 1; }
-    .schema-item-status { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--ink-muted); }
-    .schema-item-status.ok   { color: var(--accent); }
-    .schema-item-status.miss { color: oklch(55% 0.18 25); }
-    .schema-migration-prompt { display: none; margin-top: var(--space-4); }
-    .schema-migration-prompt.visible { display: block; }
-
-    /* ── Config tools ────────────────────────────────────────────── */
-    .config-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-6);
-    }
-    @media (max-width: 768px) {
-      .config-grid { grid-template-columns: 1fr; }
-    }
-    .config-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius);
-      padding: var(--space-6);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-4);
-    }
-    .config-panel-title {
-      font-family: var(--font-display);
-      font-size: var(--text-base);
-      font-weight: 500;
-      margin: 0;
-      color: var(--ink);
-    }
-    .config-panel-desc { font-size: var(--text-sm); color: var(--ink-muted); margin: 0; }
-    .config-fields { display: grid; gap: var(--space-3); }
-    .config-fields label { font-size: var(--text-sm); font-weight: 500; color: var(--ink); display: block; margin-bottom: var(--space-1); }
-    .config-fields input[type="url"],
-    .config-fields input[type="text"] {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      width: 100%;
-    }
-    .config-hint { font-size: var(--text-xs); color: var(--ink-muted); }
-    .config-generated { display: none; }
-    .config-generated.visible { display: block; }
-    .code-path { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--ink-muted); margin-bottom: var(--space-2); display: block; }
-    .code-block {
-      position: relative;
-      background: color-mix(in oklch, var(--ink) 4%, var(--paper));
-      border: 1px solid var(--border);
-      border-radius: var(--rec-radius-sm);
-      padding: var(--space-4);
-      overflow: auto;
-    }
-    .code-block pre {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      line-height: 1.6;
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-all;
-      color: var(--ink);
-    }
-    .member-rows { display: grid; gap: var(--space-3); }
-    .member-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: var(--space-3);
-      align-items: end;
-    }
-    @media (max-width: 600px) { .member-row { grid-template-columns: 1fr; } }
-    .member-row label { font-size: var(--text-sm); font-weight: 500; color: var(--ink); margin-bottom: var(--space-1); display: block; }
-    .member-row input { font-family: var(--font-mono); font-size: var(--text-xs); width: 100%; }
-    .btn-row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
-
-    /* ── Note callout ─────────────────────────────────────────────── */
-    .sync-note {
-      font-size: var(--text-xs);
-      color: var(--ink-muted);
-      background: color-mix(in oklch, var(--accent) 8%, var(--surface));
-      border-left: 3px solid var(--accent);
-      padding: var(--space-2) var(--space-4);
-      border-radius: 0 var(--rec-radius-sm) var(--rec-radius-sm) 0;
-    }
-
-    /* ── Page head ─────────────────────────────────────────────────── */
-    .page-head { margin-bottom: var(--space-6); }
-    .page-head .eyebrow { color: var(--ink-muted); font-size: var(--text-sm); margin-bottom: var(--space-2); }
-    .page-head h1 { margin-bottom: var(--space-2); }
-    .page-head .lead { color: var(--ink-muted); max-width: 64ch; }
-
-    /* ── Refresh row ─────────────────────────────────────────────── */
-    .refresh-row {
-      font-size: var(--text-xs);
-      color: var(--ink-muted);
-      margin-top: var(--space-2);
-    }
-    .refresh-row button {
-      font-size: var(--text-xs);
-      padding: 0;
-      background: none;
-      border: none;
-      color: var(--accent);
-      cursor: pointer;
-      text-decoration: underline;
-      min-height: auto;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .dv-toggle-icon { transition: none; }
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/pages/data-sync.css" />
 </head>
 <body>
   <div data-include="components/header.html"></div>
@@ -460,9 +24,46 @@
       <p class="lead">The canonical source of truth is the repo. Work with Claude Code to edit <code>data/*.json</code> files, then validate and push them to Supabase here. Pull in the other direction to generate a Claude Code prompt.</p>
     </header>
 
+    <div class="workflow-guide">
+      <h2 class="workflow-guide-title">After editing with Claude Code — two buttons, done</h2>
+      <ol class="workflow-steps">
+        <li class="workflow-step">
+          <span class="step-num">01</span>
+          <div class="step-body">
+            <strong class="step-action">Come here after Claude Code commits <span class="step-section">always start here</span></strong>
+            <p class="step-desc">Whenever Claude Code has edited or updated any <code>data/*.json</code> file and pushed, open this page. The status tiles at §&nbsp;01 show the last Supabase update time for each table — a quick indicator of how stale the database is.</p>
+          </div>
+        </li>
+        <li class="workflow-step">
+          <span class="step-num">02</span>
+          <div class="step-body">
+            <strong class="step-action">Click "Validate alignment" <span class="step-section">§&nbsp;01 below</span></strong>
+            <p class="step-desc">This compares each repo JSON file against the live Supabase row. You'll get a row-by-row result. If everything shows <span class="step-badge step-badge-ok">IN SYNC</span> you're done — nothing to push. If anything shows <span class="step-badge step-badge-warn">OUT OF SYNC</span>, continue to step 3.</p>
+          </div>
+        </li>
+        <li class="workflow-step">
+          <span class="step-num">03</span>
+          <div class="step-body">
+            <strong class="step-action">Click "Push repo JSON to Supabase" <span class="step-section">§&nbsp;02 below</span></strong>
+            <p class="step-desc">One click overwrites all four Supabase tables (<code>profile</code>, <code>criteria</code>, <code>finances</code>, <code>contacts</code>) with the current repo file versions. Watch the log — each table reports <code>✓ updated</code> or an error. Takes a few seconds.</p>
+          </div>
+        </li>
+        <li class="workflow-step">
+          <span class="step-num">04</span>
+          <div class="step-body">
+            <strong class="step-action">Re-run Validate alignment to confirm <span class="step-section">optional but fast</span></strong>
+            <p class="step-desc">Click Validate alignment again. All rows should now show <span class="step-badge step-badge-ok">✓ in sync</span> and the badge should read <span class="step-badge step-badge-ok">IN SYNC</span>. Done.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="workflow-aside">
+        <strong>Reverse direction</strong> — if you edited data inside the app (shortlist, journey checks, map zones) and want to bring those values into the repo: use <strong>Pull from Supabase</strong> in §&nbsp;02. It reads the current Supabase rows and generates a Claude Code prompt you can paste directly — Claude Code will write the values back to the relevant <code>data/*.json</code> files and commit.
+      </div>
+    </div>
+
     <div class="sync-note">
-      <strong>What syncs:</strong> <code>profile</code>, <code>criteria</code>, <code>finances</code> — repo JSON ↔ Supabase.
-      <code>shortlist</code>, <code>zones</code>, <code>journey_checks</code> — app-state only, Supabase only.
+      <strong>What syncs:</strong> <code>profile</code>, <code>criteria</code>, <code>finances</code>, <code>contacts</code> — repo JSON ↔ Supabase (push/pull here).
+      <code>shortlist</code>, <code>zones</code>, <code>journey_checks</code>, <code>outreach</code> — app-state only, Supabase only.
       Area content and house types are static reference data — repo only, never in Supabase.
     </div>
 
@@ -490,8 +91,20 @@
         <span class="sync-status-tile-val none" id="status-shortlist">—</span>
       </div>
       <div class="sync-status-tile">
+        <span class="sync-status-tile-name">zones</span>
+        <span class="sync-status-tile-val none" id="status-zones">—</span>
+      </div>
+      <div class="sync-status-tile">
         <span class="sync-status-tile-name">journey_checks</span>
         <span class="sync-status-tile-val none" id="status-journey_checks">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">contacts</span>
+        <span class="sync-status-tile-val none" id="status-contacts">—</span>
+      </div>
+      <div class="sync-status-tile">
+        <span class="sync-status-tile-name">outreach</span>
+        <span class="sync-status-tile-val none" id="status-outreach">—</span>
       </div>
     </div>
     <p class="refresh-row">Last Supabase update times. <button id="btn-refresh-status">Refresh</button></p>
@@ -504,16 +117,9 @@
       <div class="align-result-header">
         <span class="align-badge" id="align-badge">—</span>
         <span class="align-result-msg" id="align-msg">Running…</span>
+        <span class="align-counts" id="align-counts"></span>
       </div>
       <ul class="align-rows" id="align-rows"></ul>
-    </div>
-
-    <div class="prompt-wrap" id="align-prompt-wrap">
-      <p class="prompt-label">Paste this into Claude Code to resolve the misalignment:</p>
-      <div class="prompt-box">
-        <pre id="align-prompt-content"></pre>
-        <button type="button" class="copy-btn" id="btn-copy-align-prompt">Copy</button>
-      </div>
     </div>
 
     <!-- ── 2. Push / Pull ─────────────────────────────────────────── -->
@@ -535,22 +141,28 @@
         </p>
         <ul class="sync-files">
           <li class="sync-file">
-            <span class="sync-file-name">data/profile.json</span>
+            <span class="sync-file-name">profile (Supabase)</span>
             <span class="sync-file-arrow">→</span>
             <span class="sync-file-table">profile</span>
             <span class="sync-file-status" id="push-status-profile"></span>
           </li>
           <li class="sync-file">
-            <span class="sync-file-name">data/criteria.json</span>
+            <span class="sync-file-name">criteria (Supabase)</span>
             <span class="sync-file-arrow">→</span>
             <span class="sync-file-table">criteria</span>
             <span class="sync-file-status" id="push-status-criteria"></span>
           </li>
           <li class="sync-file">
-            <span class="sync-file-name">data/finances.json</span>
+            <span class="sync-file-name">finances (Supabase)</span>
             <span class="sync-file-arrow">→</span>
             <span class="sync-file-table">finances</span>
             <span class="sync-file-status" id="push-status-finances"></span>
+          </li>
+          <li class="sync-file">
+            <span class="sync-file-name">contacts (Supabase)</span>
+            <span class="sync-file-arrow">→</span>
+            <span class="sync-file-table">contacts</span>
+            <span class="sync-file-status" id="push-status-contacts"></span>
           </li>
         </ul>
         <div class="sync-btn-row">
@@ -572,20 +184,26 @@
           <li class="sync-file">
             <span class="sync-file-name">profile</span>
             <span class="sync-file-arrow">→</span>
-            <span class="sync-file-table">data/profile.json</span>
+            <span class="sync-file-table">Supabase (MCP)</span>
             <span class="sync-file-status" id="pull-status-profile"></span>
           </li>
           <li class="sync-file">
             <span class="sync-file-name">criteria</span>
             <span class="sync-file-arrow">→</span>
-            <span class="sync-file-table">data/criteria.json</span>
+            <span class="sync-file-table">Supabase (MCP)</span>
             <span class="sync-file-status" id="pull-status-criteria"></span>
           </li>
           <li class="sync-file">
             <span class="sync-file-name">finances</span>
             <span class="sync-file-arrow">→</span>
-            <span class="sync-file-table">data/finances.json</span>
+            <span class="sync-file-table">Supabase (MCP)</span>
             <span class="sync-file-status" id="pull-status-finances"></span>
+          </li>
+          <li class="sync-file">
+            <span class="sync-file-name">contacts</span>
+            <span class="sync-file-arrow">→</span>
+            <span class="sync-file-table">Supabase (MCP)</span>
+            <span class="sync-file-status" id="pull-status-contacts"></span>
           </li>
         </ul>
         <div class="sync-btn-row">
@@ -712,580 +330,7 @@
 
   </main>
 
-  <script type="module">
-    import { url } from '../assets/js/config.js';
-
-    // ── Supabase bootstrap ─────────────────────────────────────────────
-    let supabase = null;
-    let householdId = null;
-
-    async function initSupabase() {
-      if (supabase !== null) return supabase;
-      try {
-        const mod = await import('../assets/js/supabase-client.js');
-        supabase = mod.supabase;
-      } catch {
-        supabase = undefined;
-      }
-      return supabase;
-    }
-
-    async function getHouseholdId() {
-      if (householdId) return householdId;
-      const sb = await initSupabase();
-      if (!sb) return null;
-      const { data: { session } } = await sb.auth.getSession();
-      if (!session) return null;
-      const { data } = await sb
-        .from('household_members')
-        .select('household_id')
-        .eq('user_id', session.user.id)
-        .limit(1);
-      householdId = data?.[0]?.household_id ?? null;
-      return householdId;
-    }
-
-    async function requireAuth() {
-      const sb = await initSupabase();
-      if (!sb) { alert('Supabase is not configured. Generate credentials in section 05 below.'); return false; }
-      const { data: { session } } = await sb.auth.getSession();
-      if (!session) { alert('Not logged in. Sign in via the login page first.'); return false; }
-      const hid = await getHouseholdId();
-      if (!hid) { alert('No household found. Generate the member SQL in section 05 and run it in Supabase.'); return false; }
-      return true;
-    }
-
-    // ── Log helpers ────────────────────────────────────────────────────
-    function logLine(el, msg, type = 'info') {
-      el.classList.add('visible');
-      const span = document.createElement('span');
-      span.className = `sync-log-line ${type}`;
-      span.textContent = msg;
-      el.appendChild(span);
-      el.scrollTop = el.scrollHeight;
-    }
-    function clearLog(el) { el.innerHTML = ''; el.classList.remove('visible'); }
-
-    // ── Deep equality (key-order-insensitive) ─────────────────────────
-    function sortJson(v) {
-      if (Array.isArray(v)) return v.map(sortJson);
-      if (v !== null && typeof v === 'object') {
-        return Object.fromEntries(Object.keys(v).sort().map(k => [k, sortJson(v[k])]));
-      }
-      return v;
-    }
-    function jsonEq(a, b) { return JSON.stringify(sortJson(a)) === JSON.stringify(sortJson(b)); }
-
-    // ── Copy button helper ────────────────────────────────────────────
-    function wireCopyBtn(btn, getContent) {
-      btn?.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(getContent());
-          btn.textContent = 'Copied';
-          btn.classList.add('copied');
-          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2500);
-        } catch { btn.textContent = 'Select &amp; copy manually'; }
-      });
-    }
-
-    // ── Status tiles ───────────────────────────────────────────────────
-    const ALL_TABLES = ['profile', 'criteria', 'finances', 'shortlist', 'journey_checks'];
-
-    async function refreshStatus() {
-      const sb = await initSupabase();
-      const setAll = (text, cls) => {
-        ALL_TABLES.forEach(t => {
-          const el = document.getElementById(`status-${t}`);
-          if (el) { el.textContent = text; el.className = `sync-status-tile-val ${cls}`; }
-        });
-      };
-      if (!sb) { setAll('no Supabase', 'none'); return; }
-      const { data: { session } } = await sb.auth.getSession();
-      if (!session) { setAll('not logged in', 'none'); return; }
-      const hid = await getHouseholdId();
-      if (!hid) { setAll('no household', 'none'); return; }
-
-      await Promise.all(ALL_TABLES.map(async table => {
-        const el = document.getElementById(`status-${table}`);
-        if (!el) return;
-        const { data, error } = await sb
-          .from(table)
-          .select('updated_at')
-          .eq('household_id', hid)
-          .limit(1);
-        if (error || !data?.length) {
-          el.textContent = 'no data';
-          el.className = 'sync-status-tile-val none';
-        } else {
-          el.textContent = new Date(data[0].updated_at).toLocaleString('en-GB', {
-            day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-          });
-          el.className = 'sync-status-tile-val ok';
-        }
-      }));
-    }
-
-    document.getElementById('btn-refresh-status')?.addEventListener('click', refreshStatus);
-
-    // ── Alignment validator ───────────────────────────────────────────
-    const SYNC_TABLES = [
-      { key: 'profile',  table: 'profile',  file: 'data/profile.json'  },
-      { key: 'criteria', table: 'criteria', file: 'data/criteria.json' },
-      { key: 'finances', table: 'finances', file: 'data/finances.json' },
-    ];
-
-    document.getElementById('btn-validate')?.addEventListener('click', async () => {
-      if (!await requireAuth()) return;
-
-      const resultEl  = document.getElementById('align-result');
-      const badgeEl   = document.getElementById('align-badge');
-      const msgEl     = document.getElementById('align-msg');
-      const rowsEl    = document.getElementById('align-rows');
-      const promptWrap = document.getElementById('align-prompt-wrap');
-      const promptPre  = document.getElementById('align-prompt-content');
-
-      resultEl.classList.add('visible');
-      badgeEl.className = 'align-badge';
-      badgeEl.textContent = '…';
-      msgEl.textContent = 'Checking…';
-      rowsEl.innerHTML = '';
-      promptWrap.classList.remove('visible');
-
-      const hid = await getHouseholdId();
-      const results = [];
-
-      for (const { key, table, file } of SYNC_TABLES) {
-        let repoData = null, sbData = null, repoErr = null, sbErr = null;
-
-        try {
-          const res = await fetch(url(file) + '?_=' + Date.now());
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          repoData = await res.json();
-        } catch (e) { repoErr = e.message; }
-
-        try {
-          const { data, error } = await supabase
-            .from(table)
-            .select('data')
-            .eq('household_id', hid)
-            .limit(1);
-          if (error) throw new Error(error.message);
-          sbData = data?.[0]?.data ?? null;
-        } catch (e) { sbErr = e.message; }
-
-        let status, detail;
-        if (repoErr) { status = 'err'; detail = `Repo read error: ${repoErr}`; }
-        else if (sbErr) { status = 'err'; detail = `Supabase error: ${sbErr}`; }
-        else if (sbData === null) { status = 'warn'; detail = 'Not yet in Supabase — push to initialise.'; }
-        else if (jsonEq(repoData, sbData)) { status = 'ok'; detail = 'In sync.'; }
-        else {
-          const repoKeys = new Set(Object.keys(repoData || {}));
-          const sbKeys   = new Set(Object.keys(sbData || {}));
-          const onlyRepo = [...repoKeys].filter(k => !sbKeys.has(k));
-          const onlySb   = [...sbKeys].filter(k => !repoKeys.has(k));
-          const diffParts = [];
-          if (onlyRepo.length) diffParts.push(`repo only: ${onlyRepo.join(', ')}`);
-          if (onlySb.length)   diffParts.push(`Supabase only: ${onlySb.join(', ')}`);
-          if (!diffParts.length) diffParts.push('values differ (same keys)');
-          status = 'warn';
-          detail = `Out of sync — ${diffParts.join('; ')}.`;
-        }
-
-        results.push({ key, table, file, status, detail, repoData, sbData });
-
-        const li = document.createElement('li');
-        li.className = 'align-row';
-        li.innerHTML = `
-          <span class="align-row-name">${table}</span>
-          <span class="align-row-detail">${detail}</span>
-          <span class="align-row-status ${status}">${status === 'ok' ? '✓ in sync' : status === 'warn' ? '⚠ differs' : '✗ error'}</span>`;
-        rowsEl.appendChild(li);
-      }
-
-      const anyErr  = results.some(r => r.status === 'err');
-      const anyWarn = results.some(r => r.status === 'warn');
-      const allOk   = !anyErr && !anyWarn;
-
-      if (allOk) {
-        badgeEl.className = 'align-badge ok';
-        badgeEl.textContent = 'IN SYNC';
-        msgEl.textContent = 'All repo JSON files match Supabase data.';
-      } else if (anyErr) {
-        badgeEl.className = 'align-badge err';
-        badgeEl.textContent = 'ERROR';
-        msgEl.textContent = 'One or more tables could not be compared. Check details below.';
-      } else {
-        badgeEl.className = 'align-badge warn';
-        badgeEl.textContent = 'OUT OF SYNC';
-        msgEl.textContent = 'Differences found. Push to overwrite Supabase, or Pull to update repo files.';
-      }
-
-      if (!allOk) {
-        const today = new Date().toISOString().slice(0, 10);
-        const parts = results
-          .filter(r => r.status !== 'ok')
-          .map(r => {
-            if (r.status === 'err') return `• ${r.table}: ${r.detail}`;
-            if (r.sbData === null) return `• ${r.table}: not in Supabase — needs push.\n  Repo data:\n${JSON.stringify(r.repoData, null, 2)}`;
-            return `• ${r.table}: ${r.detail}\n  Repo:\n${JSON.stringify(r.repoData, null, 2)}\n  Supabase:\n${JSON.stringify(r.sbData, null, 2)}`;
-          });
-
-        promptPre.textContent = `Data alignment check — ${today}
-
-The following tables are out of sync between the repo JSON files and Supabase:
-
-${parts.join('\n\n')}
-
-To resolve, decide which version is the source of truth:
-  • Repo is correct → use the Push button on the Data Sync page (pages/data-sync.html).
-  • Supabase is correct → use the Pull button to generate a commit prompt.
-  • Need manual edits → describe the desired state and I will update the relevant data/*.json file.`;
-
-        promptWrap.classList.add('visible');
-      }
-    });
-
-
-    // ── Push: repo JSON → Supabase ────────────────────────────────────
-    document.getElementById('btn-push')?.addEventListener('click', async () => {
-      if (!await requireAuth()) return;
-      const log = document.getElementById('push-log');
-      clearLog(log);
-      const statusEls = Object.fromEntries(SYNC_TABLES.map(({ key }) =>
-        [key, document.getElementById(`push-status-${key}`)]));
-      Object.values(statusEls).forEach(el => { if (el) { el.textContent = ''; el.className = 'sync-file-status'; } });
-      logLine(log, 'Reading repo JSON files…', 'info');
-      let allOk = true;
-      for (const { key, table } of SYNC_TABLES) {
-        let data;
-        try {
-          const res = await fetch(url(`data/${key}.json`) + '?_=' + Date.now());
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          data = await res.json();
-          logLine(log, `  Read data/${key}.json`, 'info');
-        } catch (e) {
-          logLine(log, `✗ data/${key}.json: ${e.message}`, 'err');
-          if (statusEls[key]) { statusEls[key].textContent = 'read error'; statusEls[key].className = 'sync-file-status err'; }
-          allOk = false;
-          continue;
-        }
-        const { error } = await supabase
-          .from(table)
-          .upsert(
-            { household_id: householdId, data, updated_at: new Date().toISOString() },
-            { onConflict: 'household_id' }
-          );
-        if (error) {
-          logLine(log, `✗ ${table}: ${error.message}`, 'err');
-          if (statusEls[key]) { statusEls[key].textContent = 'write error'; statusEls[key].className = 'sync-file-status err'; }
-          allOk = false;
-        } else {
-          logLine(log, `✓ ${table} updated`, 'ok');
-          if (statusEls[key]) { statusEls[key].textContent = 'pushed'; statusEls[key].className = 'sync-file-status ok'; }
-        }
-      }
-      logLine(log, allOk ? 'Done — all tables updated.' : 'Finished with errors.', allOk ? 'ok' : 'warn');
-      refreshStatus();
-    });
-
-    // ── Pull: Supabase → Claude Code prompt ──────────────────────────
-    document.getElementById('btn-pull')?.addEventListener('click', async () => {
-      if (!await requireAuth()) return;
-      const log = document.getElementById('pull-log');
-      clearLog(log);
-      const statusEls = Object.fromEntries(SYNC_TABLES.map(({ key }) =>
-        [key, document.getElementById(`pull-status-${key}`)]));
-      Object.values(statusEls).forEach(el => { if (el) { el.textContent = ''; el.className = 'sync-file-status'; } });
-      logLine(log, 'Reading from Supabase…', 'info');
-      const results = {};
-      let allOk = true;
-      for (const { key, table } of SYNC_TABLES) {
-        const { data, error } = await supabase
-          .from(table)
-          .select('data, updated_at')
-          .eq('household_id', householdId)
-          .limit(1);
-        if (error || !data?.length) {
-          const msg = error?.message ?? 'no row found';
-          logLine(log, `✗ ${table}: ${msg}`, 'err');
-          if (statusEls[key]) { statusEls[key].textContent = 'not found'; statusEls[key].className = 'sync-file-status err'; }
-          allOk = false;
-        } else {
-          results[key] = data[0].data;
-          const when = new Date(data[0].updated_at).toLocaleString('en-GB');
-          logLine(log, `✓ ${table} read (updated ${when})`, 'ok');
-          if (statusEls[key]) { statusEls[key].textContent = 'read'; statusEls[key].className = 'sync-file-status ok'; }
-        }
-      }
-      if (!allOk && Object.keys(results).length === 0) { logLine(log, 'Nothing to generate.', 'warn'); return; }
-      logLine(log, 'Generating Claude Code prompt…', 'info');
-      const today = new Date().toISOString().slice(0, 10);
-      const parts = Object.entries(results).map(([key, data]) =>
-        `**data/${key}.json** — replace entire file contents with:\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``);
-      const prompt = `Update the following repo JSON files to match the current Supabase data.
-For each file listed below, replace the entire file contents with the JSON provided, then run the test harness (\`npm test\`) and commit.
-
-${parts.join('\n\n')}
-
-Commit message: \`data: sync JSON files from Supabase (${today})\``;
-      document.getElementById('pull-prompt-content').textContent = prompt;
-      document.getElementById('pull-prompt-wrap').classList.add('visible');
-    });
-
-
-    // ── Data viewer ───────────────────────────────────────────────────
-    const VIEWER_TABLES = [
-      { table: 'profile',        label: 'Buyer profile' },
-      { table: 'criteria',       label: 'Search criteria' },
-      { table: 'finances',       label: 'Finances' },
-      { table: 'shortlist',      label: 'Area shortlist' },
-      { table: 'zones',          label: 'Map zones' },
-      { table: 'journey_checks', label: 'Journey checklist' },
-    ];
-
-    function flattenToRows(obj, prefix = '') {
-      const rows = [];
-      if (obj === null || obj === undefined) {
-        rows.push({ key: prefix || '(root)', val: null, isNull: true });
-      } else if (Array.isArray(obj)) {
-        rows.push({ key: prefix || '(root)', val: `[array, ${obj.length} items]`, isObj: true, raw: JSON.stringify(obj, null, 2) });
-      } else if (typeof obj === 'object') {
-        for (const [k, v] of Object.entries(obj)) {
-          const fullKey = prefix ? `${prefix}.${k}` : k;
-          if (v !== null && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length <= 8 && JSON.stringify(v).length < 200) {
-            rows.push(...flattenToRows(v, fullKey));
-          } else if (Array.isArray(v) && v.length <= 6 && v.every(x => typeof x !== 'object')) {
-            rows.push({ key: fullKey, val: JSON.stringify(v) });
-          } else if (v !== null && typeof v === 'object') {
-            rows.push({ key: fullKey, val: JSON.stringify(v, null, 2), isObj: true });
-          } else {
-            rows.push({ key: fullKey, val: v === null ? null : String(v), isNull: v === null });
-          }
-        }
-      } else {
-        rows.push({ key: prefix || '(root)', val: String(obj) });
-      }
-      return rows;
-    }
-
-    document.getElementById('btn-load-viewer')?.addEventListener('click', async () => {
-      if (!await requireAuth()) return;
-      const viewerEl = document.getElementById('data-viewer');
-      viewerEl.innerHTML = '<p style="font-size:var(--text-sm);color:var(--ink-muted)">Loading…</p>';
-      const hid = await getHouseholdId();
-
-      const sections = await Promise.all(VIEWER_TABLES.map(async ({ table, label }) => {
-        const { data, error } = await supabase
-          .from(table)
-          .select('data, updated_at')
-          .eq('household_id', hid)
-          .limit(1);
-
-        if (error) return { table, label, err: error.message };
-        if (!data?.length) return { table, label, empty: true };
-
-        const payload = data[0].data;
-        const when    = new Date(data[0].updated_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-        const rows    = flattenToRows(payload);
-        return { table, label, rows, when };
-      }));
-
-      viewerEl.innerHTML = '';
-      for (const { table, label, err, empty, rows, when } of sections) {
-        const details = document.createElement('details');
-        details.className = 'data-viewer-table';
-
-        const meta = err ? 'error' : empty ? 'no data' : when;
-        details.innerHTML = `
-          <summary>
-            <span class="dv-table-name">${table}</span>
-            <span style="flex:1;font-weight:400;color:var(--ink-muted);font-size:var(--text-sm)">${label}</span>
-            <span class="dv-table-meta">${meta}</span>
-            <span class="dv-toggle-icon">▶</span>
-          </summary>`;
-
-        const body = document.createElement('div');
-        body.className = 'dv-body';
-
-        if (err) {
-          body.innerHTML = `<p class="dv-no-data" style="color:oklch(55% 0.18 25)">Error: ${err}</p>`;
-        } else if (empty) {
-          body.innerHTML = `<p class="dv-no-data">No data in Supabase yet.</p>`;
-        } else {
-          const kv = document.createElement('dl');
-          kv.className = 'dv-kv';
-          for (const { key, val, isNull, isObj } of rows) {
-            const dt = document.createElement('dt');
-            dt.className = 'dv-key';
-            dt.textContent = key;
-            const dd = document.createElement('dd');
-            dd.className = `dv-val${isNull ? ' is-null' : ''}${isObj ? ' is-obj' : ''}`;
-            dd.textContent = isNull ? 'null' : val;
-            kv.appendChild(dt);
-            kv.appendChild(dd);
-          }
-          body.appendChild(kv);
-        }
-        details.appendChild(body);
-        viewerEl.appendChild(details);
-      }
-    });
-
-    // ── Schema checker ────────────────────────────────────────────────
-    const EXPECTED_TABLES = [
-      'households', 'household_members',
-      'profile', 'criteria', 'finances',
-      'shortlist', 'zones', 'journey_checks'
-    ];
-
-    document.getElementById('btn-check-schema')?.addEventListener('click', async () => {
-      const sb = await initSupabase();
-      if (!sb) { alert('Supabase not configured.'); return; }
-
-      const listEl = document.getElementById('schema-list');
-      listEl.innerHTML = '<p style="font-size:var(--text-sm);color:var(--ink-muted)">Checking…</p>';
-      document.getElementById('schema-migration-prompt').classList.remove('visible');
-
-      const results = await Promise.all(EXPECTED_TABLES.map(async table => {
-        const { error } = await sb.from(table).select('id').limit(1);
-        const missing = error?.code === '42P01' || error?.message?.includes('does not exist');
-        const ok = !error || !missing;
-        return { table, ok, missing };
-      }));
-
-      listEl.innerHTML = '';
-      const missingTables = results.filter(r => r.missing);
-
-      for (const { table, ok, missing } of results) {
-        const item = document.createElement('div');
-        item.className = 'schema-item';
-        item.innerHTML = `
-          <span class="schema-dot ${ok ? 'ok' : 'miss'}"></span>
-          <span class="schema-item-name">${table}</span>
-          <span class="schema-item-status ${ok ? 'ok' : 'miss'}">${ok ? 'exists' : 'missing'}</span>`;
-        listEl.appendChild(item);
-      }
-
-      if (missingTables.length) {
-        document.getElementById('schema-migration-content').textContent =
-          '-- Run supabase/schema.sql in Supabase → SQL Editor.\n' +
-          '-- It is idempotent (safe to re-run) and will create any missing tables.\n\n' +
-          `-- Missing: ${missingTables.map(r => r.table).join(', ')}\n\n` +
-          '-- To get the full schema, fetch the file at:\n' +
-          '--   supabase/schema.sql\n' +
-          '-- in your repo and paste the contents here.';
-        document.getElementById('schema-migration-prompt').classList.add('visible');
-      }
-    });
-
-
-    // ── Config: credential file generator ────────────────────────────
-    document.getElementById('btn-gen-client')?.addEventListener('click', () => {
-      const rawUrl = document.getElementById('input-sb-url').value.trim();
-      const key    = document.getElementById('input-sb-key').value.trim();
-      if (!rawUrl || !key) { alert('Enter both the Project URL and the anon key first.'); return; }
-      const sbUrl  = rawUrl.replace(/\/$/, '');
-      const content = `import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-const SUPABASE_URL = '${sbUrl}';
-const SUPABASE_ANON_KEY = '${key}';
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-`;
-      document.getElementById('gen-client-content').textContent = content;
-      document.getElementById('gen-client-wrap').classList.add('visible');
-    });
-
-
-    // ── Config: member SQL generator ──────────────────────────────────
-    const rowsWrap = document.getElementById('member-rows');
-
-    function updateRemoveButtons() {
-      const rows = rowsWrap.querySelectorAll('.member-row');
-      rows.forEach(r => {
-        const btn = r.querySelector('.btn-remove-member');
-        if (btn) btn.style.display = rows.length > 1 ? '' : 'none';
-      });
-    }
-
-    document.getElementById('btn-add-member')?.addEventListener('click', () => {
-      const idx = rowsWrap.querySelectorAll('.member-row').length;
-      const row = document.createElement('div');
-      row.className = 'member-row';
-      row.dataset.row = idx;
-      row.innerHTML = `
-        <div>
-          <label>Name (for reference)</label>
-          <input type="text" placeholder="e.g. Alex" class="member-name" />
-        </div>
-        <div>
-          <label>Supabase UID</label>
-          <input type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" class="member-uid" spellcheck="false" />
-        </div>
-        <div style="padding-bottom:0">
-          <label>&nbsp;</label>
-          <button type="button" class="outline secondary btn-remove-member">Remove</button>
-        </div>`;
-      row.querySelector('.btn-remove-member').addEventListener('click', () => {
-        row.remove();
-        updateRemoveButtons();
-      });
-      rowsWrap.appendChild(row);
-      updateRemoveButtons();
-    });
-
-    document.getElementById('btn-gen-member-sql')?.addEventListener('click', () => {
-      const rows  = rowsWrap.querySelectorAll('.member-row');
-      const entries = [];
-      rows.forEach(r => {
-        const uid = r.querySelector('.member-uid').value.trim();
-        if (uid) entries.push(uid);
-      });
-      if (!entries.length) { alert('Enter at least one Supabase UID.'); return; }
-      const sql = `DO $$
-DECLARE
-  v_household_id uuid;
-BEGIN
-  SELECT id INTO v_household_id FROM households LIMIT 1;
-
-${entries.map(uid =>
-  `  INSERT INTO household_members (household_id, user_id)\n  VALUES (v_household_id, '${uid}')\n  ON CONFLICT (household_id, user_id) DO NOTHING;`
-).join('\n\n')}
-END;
-$$;`;
-      document.getElementById('gen-member-content').textContent = sql;
-      document.getElementById('gen-member-wrap').classList.add('visible');
-    });
-
-
-    // ── Boot ───────────────────────────────────────────────────────────
-    document.addEventListener('shell:ready', () => {
-      refreshStatus();
-      wireCopyBtn(
-        document.getElementById('btn-copy-align-prompt'),
-        () => document.getElementById('align-prompt-content').textContent
-      );
-      wireCopyBtn(
-        document.getElementById('btn-copy-pull-prompt'),
-        () => document.getElementById('pull-prompt-content').textContent
-      );
-      wireCopyBtn(
-        document.getElementById('btn-copy-schema-prompt'),
-        () => document.getElementById('schema-migration-content').textContent
-      );
-      wireCopyBtn(
-        document.querySelector('[data-copy-id="gen-client-content"]'),
-        () => document.getElementById('gen-client-content').textContent
-      );
-      wireCopyBtn(
-        document.querySelector('[data-copy-id="gen-member-content"]'),
-        () => document.getElementById('gen-member-content').textContent
-      );
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      updateRemoveButtons();
-    });
-  </script>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-data-sync.js"></script>
 </body>
 </html>

@@ -36,37 +36,94 @@
 
     <div class="bento" aria-label="Dashboard">
 
+      <h2 class="band-label">Goal progress</h2>
+
       <section class="tile-card tile-deposit" id="tile-deposit" aria-labelledby="td-label">
         <header class="tile-head">
           <h2 id="td-label">Deposit story</h2>
           <span class="num" id="td-headline">—</span>
         </header>
-        <div class="deposit-arc">
-          <div class="ring" role="img" aria-label="Deposit progress">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="ring-track" cx="60" cy="60" r="52"/>
-              <circle class="ring-bar" id="td-ring-bar" cx="60" cy="60" r="52"
-                      pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100"/>
-            </svg>
-            <div class="ring-value"><span id="td-ring-pct">0</span><small>%</small></div>
+        <div class="deposit-cols">
+          <div class="deposit-arc">
+            <div class="ring" role="img" aria-label="Deposit progress">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="ring-track" cx="60" cy="60" r="52"/>
+                <circle class="ring-bar" id="td-ring-bar" cx="60" cy="60" r="52"
+                        pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100"/>
+              </svg>
+              <div class="ring-value"><span id="td-ring-pct">0</span><small>%</small></div>
+            </div>
+            <dl class="arc-stats">
+              <div><dt>Saved</dt>     <dd id="td-saved">£0</dd></div>
+              <div><dt>Target</dt>    <dd id="td-target">£0</dd></div>
+              <div><dt>Per month</dt> <dd id="td-monthly">£0</dd><dd class="muted small" id="td-monthly-avg"></dd></div>
+            </dl>
           </div>
-          <dl class="arc-stats">
-            <div><dt>Saved</dt>     <dd id="td-saved">£0</dd></div>
-            <div><dt>Target</dt>    <dd id="td-target">£0</dd></div>
-            <div><dt>Per month</dt> <dd id="td-monthly">£0</dd></div>
-          </dl>
+          <div class="deposit-right">
+            <p class="eyebrow mini-flow-label">This month&rsquo;s flow</p>
+            <div class="mini-flow" id="td-flow" aria-hidden="true"></div>
+            <ul class="mini-flow-legend" id="td-flow-legend"></ul>
+            <p class="deposit-eta" id="td-eta">Calculating&hellip;</p>
+            <p class="deposit-ytd">ISA contributions YTD: <strong id="isa-ytd-stat">—</strong></p>
+            <ul class="scenario-row" role="group" aria-label="Savings scenarios">
+              <li><button class="scenario-chip" type="button" data-scenario="baseline" aria-pressed="true">Baseline</button></li>
+              <li><button class="scenario-chip" type="button" data-scenario="+200" aria-pressed="false">+&pound;200/mo</button></li>
+              <li><button class="scenario-chip" type="button" data-scenario="+500" aria-pressed="false">+&pound;500/mo</button></li>
+              <li><button class="scenario-chip" type="button" data-scenario="+5k" aria-pressed="false">+&pound;5k windfall</button></li>
+            </ul>
+            <svg class="deposit-sparkline" id="td-savings-spark" viewBox="0 0 280 60" preserveAspectRatio="none" aria-label="Savings over the last 12 months"></svg>
+            <p class="deposit-spark-caption" id="td-spark-caption">&mdash;</p>
+          </div>
         </div>
-        <p class="eyebrow mini-flow-label">This month&rsquo;s flow</p>
-        <div class="mini-flow" id="td-flow" aria-hidden="true"></div>
-        <ul class="mini-flow-legend" id="td-flow-legend"></ul>
-        <p class="deposit-eta" id="td-eta">Calculating&hellip;</p>
-        <ul class="scenario-row" role="group" aria-label="Savings scenarios">
-          <li><button class="scenario-chip" type="button" data-scenario="baseline" aria-pressed="true">Baseline</button></li>
-          <li><button class="scenario-chip" type="button" data-scenario="+200" aria-pressed="false">+&pound;200/mo</button></li>
-          <li><button class="scenario-chip" type="button" data-scenario="+500" aria-pressed="false">+&pound;500/mo</button></li>
-          <li><button class="scenario-chip" type="button" data-scenario="+5k" aria-pressed="false">+&pound;5k windfall</button></li>
-        </ul>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">Full breakdown &rarr;</a></footer>
       </section>
+
+      <section class="tile-card tile-readiness" id="tile-readiness" aria-labelledby="tr-label">
+        <header class="tile-head">
+          <h2 id="tr-label">Your readiness right now.</h2>
+        </header>
+        <p class="readiness-headline" id="readiness-headline">Calculating&hellip;</p>
+        <dl class="readiness-stats" id="readiness-stats" aria-label="Months to deposit goal at different savings rates"></dl>
+        <div class="readiness-next" id="readiness-next" aria-live="polite">
+          <span class="readiness-next-label">Next action</span>
+          <span class="readiness-next-text" id="readiness-next-text">Loading&hellip;</span>
+        </div>
+        <footer class="cell-foot"><a data-nav="pages/journey.html">Full checklist &rarr;</a></footer>
+      </section>
+
+      <section class="tile-card tile-scenarios-fan" id="tile-scenarios-fan" aria-labelledby="tsf-label">
+        <header class="tile-head">
+          <h2 id="tsf-label">What would change the date</h2>
+        </header>
+        <svg class="scenarios-fan" id="tsf-svg" viewBox="0 0 320 140" preserveAspectRatio="none" aria-label="Months-to-target scenarios"></svg>
+        <p class="scenarios-fan-caption" id="tsf-caption">&mdash;</p>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">See projections &rarr;</a></footer>
+      </section>
+
+      <section class="tile-card tile-networth" id="tile-networth" aria-labelledby="tnw-label">
+        <header class="tile-head">
+          <h2 id="tnw-label">Your effective deposit</h2>
+        </header>
+        <div class="networth-cols">
+          <svg class="networth-donut" id="tnw-svg" viewBox="0 0 200 200" aria-label="Net-worth composition"></svg>
+          <dl class="networth-stats" id="tnw-stats"></dl>
+        </div>
+        <p class="networth-caption" id="tnw-caption">&mdash;</p>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">Full deposit picture &rarr;</a></footer>
+      </section>
+
+      <section class="tile-card tile-withdraw-ready" id="tile-withdraw-ready" aria-labelledby="tws-label">
+        <header class="tile-head">
+          <h2 id="tws-label">Withdrawal &amp; seasoning</h2>
+        </header>
+        <div class="seasoning-bar" id="tws-bar" aria-label="Seasoning progress">
+          <span class="seasoning-bar__fill" id="tws-fill"></span>
+          <span class="seasoning-bar__marker" id="tws-marker"></span>
+        </div>
+        <p class="seasoning-bar__caption" id="tws-caption">&mdash;</p>
+      </section>
+
+      <h2 class="band-label">Affordability</h2>
 
       <section class="tile-card tile-afford" id="tile-afford" aria-labelledby="ta-label">
         <header class="tile-head">
@@ -84,6 +141,15 @@
             <input type="number" id="ta-price-b" inputmode="numeric" placeholder="450000" min="100000" max="2000000" step="5000" />
           </label>
         </div>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">Full affordability detail &rarr;</a></footer>
+      </section>
+
+      <section class="tile-card tile-scenarios" id="tile-scenarios" aria-labelledby="tsc-label">
+        <header class="tile-head">
+          <h2 id="tsc-label">What you can actually afford today.</h2>
+        </header>
+        <div id="tsc-body" aria-live="polite"><p class="muted">Calculating&hellip;</p></div>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">See all scenarios &rarr;</a></footer>
       </section>
 
       <section class="tile-card tile-flow" id="tile-flow" aria-labelledby="tf-label">
@@ -108,7 +174,19 @@
           <summary id="tf-details-summary">Line items</summary>
           <ul id="tf-details-list"></ul>
         </details>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">See budget breakdown &rarr;</a></footer>
       </section>
+
+      <section class="tile-card tile-deposit-risk" id="tile-deposit-risk" aria-labelledby="tdr-label">
+        <header class="tile-head">
+          <h2 id="tdr-label">Deposit at risk.</h2>
+          <span class="verdict-badge verdict-badge--loading" id="tdr-badge">—</span>
+        </header>
+        <div id="tdr-body" aria-live="polite"><p class="muted">Loading&hellip;</p></div>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">See deposit risk detail &rarr;</a></footer>
+      </section>
+
+      <h2 class="band-label">Search</h2>
 
       <section class="tile-card tile-shortlist" id="tile-shortlist" aria-labelledby="ts-label">
         <header class="tile-head">
@@ -124,6 +202,17 @@
         </footer>
       </section>
 
+      <section class="tile-card tile-criteria" id="tile-criteria" aria-labelledby="tc-label">
+        <header class="tile-head">
+          <h2 id="tc-label">What you&rsquo;re looking for</h2>
+          <a data-nav="pages/about-search.html#search" class="tile-head-action">Edit criteria &rarr;</a>
+        </header>
+        <p class="criteria-prose" id="tc-prose">Loading&hellip;</p>
+        <dl class="spec-strip" id="tc-strip"></dl>
+      </section>
+
+      <h2 class="band-label">Next steps</h2>
+
       <section class="tile-card tile-journey" id="tile-journey" aria-labelledby="tj-label">
         <header class="tile-head">
           <h2 id="tj-label">Checklists</h2>
@@ -137,22 +226,13 @@
         </div>
       </section>
 
-      <section class="tile-card tile-criteria" id="tile-criteria" aria-labelledby="tc-label">
-        <header class="tile-head">
-          <h2 id="tc-label">What you&rsquo;re looking for</h2>
-          <a data-nav="pages/about-search.html#search" class="tile-head-action">Edit criteria &rarr;</a>
-        </header>
-        <p class="criteria-prose" id="tc-prose">Loading&hellip;</p>
-        <dl class="spec-strip" id="tc-strip"></dl>
-      </section>
-
       <section class="tile-card tile-ask" id="tile-ask" aria-labelledby="tk-label">
         <header class="tile-head">
           <h2 id="tk-label">Ask anything</h2>
         </header>
         <div class="ask-input-wrap">
           <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="tk-caption" />
-          <p class="ask-caption" id="tk-caption">Coming in v3 &mdash; <a data-nav="pages/ask.html">read what this will do &rarr;</a></p>
+          <p class="ask-caption" id="tk-caption">Coming soon &mdash; <a data-nav="pages/ask.html">read what this will do &rarr;</a></p>
         </div>
       </section>
 

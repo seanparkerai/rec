@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Alton",
   "coords": {
-    "lat": 51.13024,
-    "lng": -0.97844
+    "lat": 51.1274,
+    "lng": -1.0927
   },
-  "coordsSource": "postcode-outward-approx",
+  "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

@@ -11,10 +11,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.15928,
-      "lng": -0.9786
+      "lat": 51.146,
+      "lng": -1.0878
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -38,10 +38,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.13024,
-      "lng": -0.97844
+      "lat": 51.1274,
+      "lng": -1.0927
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -59,10 +59,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.14248,
-      "lng": -0.98044
+      "lat": 51.04,
+      "lng": -1.0199
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -80,10 +80,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.13144,
-      "lng": -0.99276
+      "lat": 51.0937,
+      "lng": -1.0265
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -107,10 +107,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.13612,
-      "lng": -0.98344
+      "lat": 51.1006,
+      "lng": -1.0438
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -128,10 +128,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.15116,
-      "lng": -0.98648
+      "lat": 51.1008,
+      "lng": -1.055
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -155,10 +155,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.16748,
-      "lng": -0.9892
+      "lat": 51.0793,
+      "lng": -0.9896
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -176,10 +176,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.1324,
-      "lng": -1.48372
+      "lat": 51.1329,
+      "lng": -1.4554
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -197,10 +197,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.13464,
-      "lng": -1.48516
+      "lat": 51.1263,
+      "lng": -1.4913
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -218,10 +218,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.10068,
-      "lng": -1.50248
+      "lat": 51.1131,
+      "lng": -1.4941
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -239,10 +239,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.13144,
-      "lng": -1.47436
+      "lat": 51.1434,
+      "lng": -1.5651
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -260,10 +260,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.127,
-      "lng": -1.50896
+      "lat": 51.1479,
+      "lng": -1.5632
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -281,10 +281,10 @@
     "settlementType": "",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.18764,
-      "lng": -1.50756
+      "lat": 51.177,
+      "lng": -1.4537
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -302,10 +302,10 @@
     "settlementType": "",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.19876,
-      "lng": -1.50188
+      "lat": 51.1624,
+      "lng": -1.4756
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -323,10 +323,10 @@
     "settlementType": "",
     "subRegion": "Basingstoke",
     "coords": {
-      "lat": 51.09988,
-      "lng": -0.85
+      "lat": 51.1138,
+      "lng": -1.0259
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -344,10 +344,10 @@
     "settlementType": "Outlier",
     "subRegion": "Basingstoke",
     "coords": {
-      "lat": 51.24028,
-      "lng": -1.272
+      "lat": 51.1521,
+      "lng": -1.1527
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -365,10 +365,10 @@
     "settlementType": "Outlier",
     "subRegion": "Basingstoke",
     "coords": {
-      "lat": 51.24068,
-      "lng": -1.26248
+      "lat": 51.0513,
+      "lng": -1.3823
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -386,10 +386,10 @@
     "settlementType": "Outlier",
     "subRegion": "Basingstoke",
     "coords": {
-      "lat": 51.24304,
-      "lng": -1.25364
+      "lat": 51.1703,
+      "lng": -1.1237
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -407,10 +407,10 @@
     "settlementType": "",
     "subRegion": "Farnham",
     "coords": {
-      "lat": 51.10716,
-      "lng": -0.87768
+      "lat": 51.1076,
+      "lng": -0.8631
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -428,10 +428,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 50.99784,
-      "lng": -0.9408
+      "lat": 51.0056,
+      "lng": -1.0041
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -449,10 +449,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 50.98764,
-      "lng": -0.94316
+      "lat": 50.9901,
+      "lng": -0.9907
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -473,7 +473,7 @@
       "lat": 51.0228,
       "lng": -0.9456
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -491,10 +491,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 50.99292,
-      "lng": -0.93676
+      "lat": 50.9852,
+      "lng": -0.999
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -512,10 +512,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.00216,
-      "lng": -0.93096
+      "lat": 51.0042,
+      "lng": -0.9697
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -533,10 +533,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 50.9928,
-      "lng": -0.93576
+      "lat": 50.9971,
+      "lng": -0.9653
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -554,10 +554,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.02172,
-      "lng": -0.92236
+      "lat": 51.0017,
+      "lng": -0.9578
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -575,10 +575,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.15008,
-      "lng": -0.96788
+      "lat": 51.0775,
+      "lng": -0.9846
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -596,10 +596,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.14232,
-      "lng": -0.98196
+      "lat": 51.0547,
+      "lng": -1.0506
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -617,10 +617,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.16424,
-      "lng": -0.9622
+      "lat": 51.0808,
+      "lng": -1.0443
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -638,10 +638,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.15752,
-      "lng": -0.99708
+      "lat": 51.0344,
+      "lng": -0.9763
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -659,10 +659,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.13288,
-      "lng": -0.96476
+      "lat": 51.0841,
+      "lng": -1.033
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -680,10 +680,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.1326,
-      "lng": -0.97056
+      "lat": 51.0622,
+      "lng": -1.0234
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -701,10 +701,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.16208,
-      "lng": -0.97556
+      "lat": 51.0889,
+      "lng": -0.946
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -722,10 +722,10 @@
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.08048,
-      "lng": -1.15888
+      "lat": 51.0531,
+      "lng": -1.114
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -743,10 +743,10 @@
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0886,
-      "lng": -1.17684
+      "lat": 51.0463,
+      "lng": -1.107
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -764,10 +764,10 @@
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.08088,
-      "lng": -1.17008
+      "lat": 51.0618,
+      "lng": -1.131
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -785,10 +785,10 @@
     "settlementType": "Non-City",
     "subRegion": "Portsmouth",
     "coords": {
-      "lat": 50.90572,
-      "lng": -1.19008
+      "lat": 50.8843,
+      "lng": -1.1651
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -806,10 +806,10 @@
     "settlementType": "Non-City",
     "subRegion": "Romsey",
     "coords": {
-      "lat": 51.0004,
-      "lng": -1.51596
+      "lat": 51.0099,
+      "lng": -1.5256
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -827,10 +827,10 @@
     "settlementType": "Non-City",
     "subRegion": "Romsey",
     "coords": {
-      "lat": 50.99392,
-      "lng": -1.50228
+      "lat": 50.9952,
+      "lng": -1.5122
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -848,10 +848,10 @@
     "settlementType": "Non-City",
     "subRegion": "Romsey",
     "coords": {
-      "lat": 50.99864,
-      "lng": -1.507
+      "lat": 51.0011,
+      "lng": -1.5439
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -869,10 +869,10 @@
     "settlementType": "Non-City",
     "subRegion": "Romsey",
     "coords": {
-      "lat": 50.98572,
-      "lng": -1.50544
+      "lat": 50.9818,
+      "lng": -1.5524
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -890,10 +890,10 @@
     "settlementType": "Non-City",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.86808,
-      "lng": -1.57228
+      "lat": 50.9663,
+      "lng": -1.5809
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -911,10 +911,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.94804,
-      "lng": -1.46788
+      "lat": 50.9529,
+      "lng": -1.4274
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -932,10 +932,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.95332,
-      "lng": -1.19484
+      "lat": 50.9651,
+      "lng": -1.1682
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -953,10 +953,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.94192,
-      "lng": -1.21376
+      "lat": 50.9573,
+      "lng": -1.216
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -974,10 +974,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.94648,
-      "lng": -1.20888
+      "lat": 50.9598,
+      "lng": -1.1703
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -995,10 +995,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.9386,
-      "lng": -1.19796
+      "lat": 50.9413,
+      "lng": -1.1952
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1016,10 +1016,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.9548,
-      "lng": -1.2036
+      "lat": 50.9595,
+      "lng": -1.19
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1037,10 +1037,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.97112,
-      "lng": -1.20864
+      "lat": 50.9597,
+      "lng": -1.1835
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1058,10 +1058,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.96844,
-      "lng": -1.213
+      "lat": 50.958,
+      "lng": -1.1836
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1079,10 +1079,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.95488,
-      "lng": -1.22176
+      "lat": 50.9556,
+      "lng": -1.2195
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1100,10 +1100,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.96704,
-      "lng": -1.20528
+      "lat": 50.9675,
+      "lng": -1.2077
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1121,10 +1121,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.86092,
-      "lng": -1.58872
+      "lat": 50.876,
+      "lng": -1.5761
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1142,10 +1142,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.97596,
-      "lng": -1.50248
+      "lat": 50.9903,
+      "lng": -1.495
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1163,10 +1163,10 @@
     "settlementType": "Non-City",
     "subRegion": "Stockbridge",
     "coords": {
-      "lat": 51.10256,
-      "lng": -1.4854
+      "lat": 51.0862,
+      "lng": -1.4794
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1184,10 +1184,10 @@
     "settlementType": "Non-City",
     "subRegion": "Stockbridge",
     "coords": {
-      "lat": 51.12636,
-      "lng": -1.48816
+      "lat": 51.0795,
+      "lng": -1.5277
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1206,9 +1206,9 @@
     "subRegion": "Stockbridge",
     "coords": {
       "lat": 51.137,
-      "lng": -1.47992
+      "lng": -1.558
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1226,10 +1226,10 @@
     "settlementType": "Non-City",
     "subRegion": "Waterlooville",
     "coords": {
-      "lat": 50.86996,
-      "lng": -1.03648
+      "lat": 50.886,
+      "lng": -1.0713
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1247,10 +1247,10 @@
     "settlementType": "",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.01656,
-      "lng": -0.93936
+      "lat": 50.9977,
+      "lng": -1.008
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1268,10 +1268,10 @@
     "settlementType": "",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.01784,
-      "lng": -0.9512
+      "lat": 51.0057,
+      "lng": -1.0169
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1289,10 +1289,10 @@
     "settlementType": "",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.15176,
-      "lng": -0.96956
+      "lat": 51.1399,
+      "lng": -1.0995
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1310,10 +1310,10 @@
     "settlementType": "",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1128,
-      "lng": -0.881
+      "lat": 51.1113,
+      "lng": -1.0242
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1331,10 +1331,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1336,
-      "lng": -1.48812
+      "lat": 51.0826,
+      "lng": -1.4933
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1352,10 +1352,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.10232,
-      "lng": -1.47756
+      "lat": 51.0931,
+      "lng": -1.4747
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1373,10 +1373,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.12632,
-      "lng": -1.47692
+      "lat": 51.1315,
+      "lng": -1.4649
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1394,10 +1394,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.12536,
-      "lng": -1.49428
+      "lat": 51.054,
+      "lng": -1.488
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1415,10 +1415,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.12984,
-      "lng": -1.48044
+      "lat": 51.0622,
+      "lng": -1.4762
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1436,10 +1436,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.101,
-      "lng": -1.47248
+      "lat": 51.0737,
+      "lng": -1.473
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -1463,10 +1463,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.13164,
-      "lng": -1.48216
+      "lat": 51.0328,
+      "lng": -1.4872
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1484,10 +1484,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.12808,
-      "lng": -1.50172
+      "lat": 51.112,
+      "lng": -1.4914
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1505,10 +1505,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.10908,
-      "lng": -1.49104
+      "lat": 51.0921,
+      "lng": -1.4543
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1526,10 +1526,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1064,
-      "lng": -1.4834
+      "lat": 51.0726,
+      "lng": -1.484
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1547,10 +1547,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.07796,
-      "lng": -1.30688
+      "lat": 51.0852,
+      "lng": -1.1773
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1568,10 +1568,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06408,
-      "lng": -1.28156
+      "lat": 51.0912,
+      "lng": -1.2142
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1589,10 +1589,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06508,
-      "lng": -1.3
+      "lat": 51.1549,
+      "lng": -1.3708
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1610,10 +1610,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06448,
-      "lng": -1.28884
+      "lat": 51.0481,
+      "lng": -1.25
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1631,10 +1631,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.07676,
-      "lng": -1.2876
+      "lat": 51.0574,
+      "lng": -1.2805
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1652,10 +1652,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.07208,
-      "lng": -1.28468
+      "lat": 51.0174,
+      "lng": -1.2923
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1673,10 +1673,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.07756,
-      "lng": -1.31664
+      "lat": 51.0421,
+      "lng": -1.317
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1694,10 +1694,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.05552,
-      "lng": -1.29972
+      "lat": 51.0692,
+      "lng": -1.3576
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1715,10 +1715,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.056,
-      "lng": -1.29092
+      "lat": 51.1237,
+      "lng": -1.2157
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1736,10 +1736,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08688,
-      "lng": -1.31852
+      "lat": 51.0753,
+      "lng": -1.2698
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1757,10 +1757,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06308,
-      "lng": -1.29704
+      "lat": 51.0123,
+      "lng": -1.376
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1778,10 +1778,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.05668,
-      "lng": -1.31552
+      "lat": 51.0933,
+      "lng": -1.2356
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1799,10 +1799,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.09496,
-      "lng": -1.29068
+      "lat": 51.0398,
+      "lng": -1.2683
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "partial",
     "priceSummary": {
@@ -1826,10 +1826,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08288,
-      "lng": -1.29756
+      "lat": 51.1428,
+      "lng": -1.3047
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -1853,10 +1853,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06068,
-      "lng": -1.29512
+      "lat": 51.1202,
+      "lng": -1.2329
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -1880,10 +1880,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08228,
-      "lng": -1.29608
+      "lat": 51.0428,
+      "lng": -1.2752
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -1907,10 +1907,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.05968,
-      "lng": -1.29364
+      "lat": 51.0119,
+      "lng": -1.3495
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1928,10 +1928,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08284,
-      "lng": -1.31848
+      "lat": 51.0503,
+      "lng": -1.2932
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1949,10 +1949,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0938,
-      "lng": -1.3076
+      "lat": 51.0357,
+      "lng": -1.3296
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1970,10 +1970,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06436,
-      "lng": -1.28888
+      "lat": 51.1032,
+      "lng": -1.279
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -1991,10 +1991,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.09484,
-      "lng": -1.30864
+      "lat": 51.0641,
+      "lng": -1.3697
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2012,10 +2012,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.05832,
-      "lng": -1.29844
+      "lat": 51.1358,
+      "lng": -1.2801
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2033,10 +2033,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08572,
-      "lng": -1.30472
+      "lat": 51.1373,
+      "lng": -1.283
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2054,10 +2054,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.07544,
-      "lng": -1.31964
+      "lat": 51.0092,
+      "lng": -1.3197
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2075,10 +2075,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06888,
-      "lng": -1.3038
+      "lat": 51.1338,
+      "lng": -1.2213
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2096,10 +2096,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06372,
-      "lng": -1.30792
+      "lat": 51.0993,
+      "lng": -1.2871
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2117,10 +2117,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08268,
-      "lng": -1.28688
+      "lat": 51.0943,
+      "lng": -1.2977
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2138,10 +2138,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.05788,
-      "lng": -1.32468
+      "lat": 51.0749,
+      "lng": -1.3328
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -2165,10 +2165,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.06576,
-      "lng": -1.30504
+      "lat": 51.0824,
+      "lng": -1.301
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -2192,10 +2192,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.09024,
-      "lng": -1.17016
+      "lat": 51.0903,
+      "lng": -1.2107
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2213,10 +2213,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08136,
-      "lng": -1.14016
+      "lat": 51.049,
+      "lng": -1.1688
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2234,10 +2234,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.10328,
-      "lng": -1.15248
+      "lat": 51.0737,
+      "lng": -1.1453
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2255,10 +2255,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.10936,
-      "lng": -1.17008
+      "lat": 51.0585,
+      "lng": -1.1483
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2276,10 +2276,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0956,
-      "lng": -1.16504
+      "lat": 51.0471,
+      "lng": -1.1659
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2297,10 +2297,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08068,
-      "lng": -1.16892
+      "lat": 51.056,
+      "lng": -1.1482
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2318,10 +2318,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.10828,
-      "lng": -1.17764
+      "lat": 51.046,
+      "lng": -1.1629
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2339,10 +2339,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.07556,
-      "lng": -1.15364
+      "lat": 51.0985,
+      "lng": -1.1672
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2360,10 +2360,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08052,
-      "lng": -1.15124
+      "lat": 51.094,
+      "lng": -1.1692
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2381,10 +2381,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08712,
-      "lng": -1.17352
+      "lat": 51.0813,
+      "lng": -1.1995
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2402,10 +2402,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.09332,
-      "lng": -1.16996
+      "lat": 51.0479,
+      "lng": -1.1068
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2423,10 +2423,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.09316,
-      "lng": -1.14236
+      "lat": 51.0567,
+      "lng": -1.127
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2444,10 +2444,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.10384,
-      "lng": -1.15304
+      "lat": 51.0458,
+      "lng": -1.166
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2465,10 +2465,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.08116,
-      "lng": -1.17996
+      "lat": 51.0637,
+      "lng": -1.153
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2486,10 +2486,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1036,
-      "lng": -1.1656
+      "lat": 51.061,
+      "lng": -1.0771
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2507,10 +2507,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.93916,
-      "lng": -1.20764
+      "lat": 50.9781,
+      "lng": -1.192
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2528,10 +2528,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.958,
-      "lng": -1.19712
+      "lat": 50.9672,
+      "lng": -1.211
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2549,10 +2549,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.99684,
-      "lng": -1.50936
+      "lat": 51.0247,
+      "lng": -1.4877
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2570,10 +2570,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.9978,
-      "lng": -1.48832
+      "lat": 51.0051,
+      "lng": -1.4972
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2591,10 +2591,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.99352,
-      "lng": -1.50188
+      "lat": 50.9888,
+      "lng": -1.5173
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2612,10 +2612,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.97212,
-      "lng": -1.50032
+      "lat": 51.0097,
+      "lng": -1.4963
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2633,10 +2633,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.99968,
-      "lng": -1.51668
+      "lat": 51.0122,
+      "lng": -1.4943
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2654,10 +2654,10 @@
     "settlementType": "Outlier",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.22484,
-      "lng": -2.17936
+      "lat": 51.1687,
+      "lng": -2.1
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2675,10 +2675,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.07108,
-      "lng": -1.77688
+      "lat": 51.0958,
+      "lng": -1.778
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2696,10 +2696,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.06612,
-      "lng": -1.7844
+      "lat": 51.0877,
+      "lng": -1.8143
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2717,10 +2717,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.04664,
-      "lng": -1.83456
+      "lat": 51.0726,
+      "lng": -1.8222
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2738,10 +2738,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.07324,
-      "lng": -1.83044
+      "lat": 51.0762,
+      "lng": -1.8771
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2759,10 +2759,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.06176,
-      "lng": -1.858
+      "lat": 51.0628,
+      "lng": -1.8721
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2780,10 +2780,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.04576,
-      "lng": -1.8408
+      "lat": 51.0498,
+      "lng": -1.8572
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2801,10 +2801,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.07336,
-      "lng": -1.85416
+      "lat": 51.0658,
+      "lng": -1.8373
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2822,10 +2822,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0578,
-      "lng": -1.825
+      "lat": 51.0573,
+      "lng": -1.853
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2843,10 +2843,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.05432,
-      "lng": -1.82112
+      "lat": 51.0953,
+      "lng": -1.9428
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2864,10 +2864,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.04384,
-      "lng": -1.84336
+      "lat": 51.0433,
+      "lng": -1.8612
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2885,10 +2885,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.04396,
-      "lng": -1.85108
+      "lat": 51.0754,
+      "lng": -1.8591
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2906,10 +2906,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.08368,
-      "lng": -1.92588
+      "lat": 51.0821,
+      "lng": -1.9847
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2927,10 +2927,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.07308,
-      "lng": -1.94304
+      "lat": 51.0798,
+      "lng": -1.9472
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2948,10 +2948,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0972,
-      "lng": -1.94612
+      "lat": 51.0971,
+      "lng": -1.9413
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2969,10 +2969,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.064,
-      "lng": -1.95668
+      "lat": 51.0727,
+      "lng": -1.9933
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2990,10 +2990,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.06244,
-      "lng": -1.96392
+      "lat": 51.0625,
+      "lng": -1.9741
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3011,10 +3011,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.07888,
-      "lng": -1.9634
+      "lat": 51.0641,
+      "lng": -2.0743
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3032,10 +3032,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1652,
-      "lng": -1.77744
+      "lat": 51.1089,
+      "lng": -1.8001
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3053,10 +3053,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1888,
-      "lng": -1.778
+      "lat": 51.1174,
+      "lng": -1.7682
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3074,10 +3074,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1642,
-      "lng": -1.78692
+      "lat": 51.1553,
+      "lng": -1.7789
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3095,10 +3095,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.18984,
-      "lng": -1.7776
+      "lat": 51.1246,
+      "lng": -1.8789
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3116,10 +3116,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.16624,
-      "lng": -1.77032
+      "lat": 51.1448,
+      "lng": -1.7839
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3137,10 +3137,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.15444,
-      "lng": -1.78276
+      "lat": 51.1305,
+      "lng": -1.7463
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3158,10 +3158,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.16316,
-      "lng": -1.78372
+      "lat": 51.1601,
+      "lng": -1.894
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3179,10 +3179,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.17472,
-      "lng": -1.78376
+      "lat": 51.0741,
+      "lng": -1.8313
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3200,10 +3200,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.16648,
-      "lng": -1.79472
+      "lat": 51.147,
+      "lng": -1.7823
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3221,10 +3221,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1574,
-      "lng": -1.77156
+      "lat": 51.1243,
+      "lng": -1.7693
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3242,10 +3242,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.16336,
-      "lng": -1.78104
+      "lat": 51.1213,
+      "lng": -1.764
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3263,10 +3263,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.00768,
-      "lng": -1.84168
+      "lat": 51.027,
+      "lng": -1.7537
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3284,10 +3284,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9888,
-      "lng": -1.84152
+      "lat": 51.0779,
+      "lng": -1.963
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3305,10 +3305,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01536,
-      "lng": -1.8452
+      "lat": 51.0113,
+      "lng": -1.8547
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3326,10 +3326,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01404,
-      "lng": -1.85236
+      "lat": 51.0174,
+      "lng": -1.972
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3347,10 +3347,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99312,
-      "lng": -1.84608
+      "lat": 51.0176,
+      "lng": -1.9631
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3368,10 +3368,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.994,
-      "lng": -1.8736
+      "lat": 50.9812,
+      "lng": -1.8009
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3389,10 +3389,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01108,
-      "lng": -1.86716
+      "lat": 51.0106,
+      "lng": -1.8195
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3410,10 +3410,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.00664,
-      "lng": -1.87728
+      "lat": 51.0048,
+      "lng": -1.8878
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3431,10 +3431,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01732,
-      "lng": -1.84396
+      "lat": 50.993,
+      "lng": -1.7826
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3452,10 +3452,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.00024,
-      "lng": -1.87776
+      "lat": 50.9933,
+      "lng": -1.875
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3473,10 +3473,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0198,
-      "lng": -1.84972
+      "lat": 51.0213,
+      "lng": -1.8348
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3494,10 +3494,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99476,
-      "lng": -1.847
+      "lat": 50.9947,
+      "lng": -1.601
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3515,10 +3515,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01456,
-      "lng": -1.84512
+      "lat": 51.009,
+      "lng": -1.9847
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3536,10 +3536,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.982,
-      "lng": -1.86048
+      "lat": 50.9818,
+      "lng": -1.8718
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3557,10 +3557,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99424,
-      "lng": -1.85488
+      "lat": 51.003,
+      "lng": -1.747
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3578,10 +3578,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99692,
-      "lng": -1.86588
+      "lat": 51.0178,
+      "lng": -1.767
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3599,10 +3599,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01576,
-      "lng": -1.85488
+      "lat": 50.9775,
+      "lng": -1.665
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3620,10 +3620,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01508,
-      "lng": -1.87428
+      "lat": 51.0113,
+      "lng": -1.8435
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3641,10 +3641,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99892,
-      "lng": -1.84188
+      "lat": 50.9749,
+      "lng": -1.6478
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3662,10 +3662,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01108,
-      "lng": -1.86972
+      "lat": 50.9898,
+      "lng": -1.6599
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3683,10 +3683,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.00288,
-      "lng": -1.87256
+      "lat": 50.99,
+      "lng": -1.7474
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3704,10 +3704,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.00032,
-      "lng": -1.87952
+      "lat": 50.9798,
+      "lng": -1.7598
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3725,10 +3725,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.98792,
-      "lng": -1.86176
+      "lat": 51.0139,
+      "lng": -1.682
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3746,10 +3746,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.98808,
-      "lng": -1.8696
+      "lat": 50.9873,
+      "lng": -1.7612
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3767,10 +3767,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0158,
-      "lng": -1.85508
+      "lat": 51.0049,
+      "lng": -1.7914
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3788,10 +3788,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01668,
-      "lng": -1.86484
+      "lat": 51.0216,
+      "lng": -1.8108
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3809,10 +3809,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01668,
-      "lng": -1.87244
+      "lat": 51.0897,
+      "lng": -1.693
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3830,10 +3830,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.983,
-      "lng": -1.85844
+      "lat": 50.984,
+      "lng": -1.6373
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3851,10 +3851,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99248,
-      "lng": -1.84832
+      "lat": 50.9902,
+      "lng": -1.7321
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3872,10 +3872,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.003,
-      "lng": -1.86668
+      "lat": 50.9998,
+      "lng": -1.75
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3893,10 +3893,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.00208,
-      "lng": -1.8796
+      "lat": 50.9924,
+      "lng": -1.844
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3914,10 +3914,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01916,
-      "lng": -1.8626
+      "lat": 51.0151,
+      "lng": -1.8597
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3935,10 +3935,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.98188,
-      "lng": -1.85988
+      "lat": 51.0038,
+      "lng": -1.6057
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3956,10 +3956,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.01008,
-      "lng": -1.84552
+      "lat": 51.0126,
+      "lng": -1.6831
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3977,10 +3977,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99416,
-      "lng": -1.864
+      "lat": 51.0231,
+      "lng": -1.6443
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -3998,10 +3998,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0018,
-      "lng": -1.87076
+      "lat": 51.0048,
+      "lng": -1.8898
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -4019,10 +4019,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.99116,
-      "lng": -1.87996
+      "lat": 51.0099,
+      "lng": -2.0001
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -4040,10 +4040,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.92608,
-      "lng": -1.79904
+      "lat": 50.9561,
+      "lng": -1.7961
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4061,10 +4061,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.91196,
-      "lng": -1.7994
+      "lat": 50.9627,
+      "lng": -1.8198
     },
-    "coordsSource": "postcode-outward-approx",
+    "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,

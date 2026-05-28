@@ -324,3 +324,120 @@ Adopted 2026-05-25. Tick each v2 phase as it lands; commits go directly to `main
 
 ### Phase 6 follow-up tasks (not blocking v2 tag)
 - [ ] Compare drawer on the Areas page (deferred from Phase 4b): multi-select 2–4 areas → bottom drawer slides up with side-by-side mono columns.
+
+---
+
+## v3.0 — Outreach generator
+
+- [x] **Phase 1** — Data: 24-template registry (`data/outreach-templates.json`), contacts seed (`data/contacts.json`), JSON schema (`data/schema/outreach-template.schema.json`), `validateOutreachTemplate()` in `tests/schemas.js`, `tests/outreach-templates.test.js`. 51/51 green.
+- [x] **Phase 2** — JS: pure renderer (`assets/js/outreach-renderer.js`), storage extension (`assets/js/outreach-store.js`), four approved exports appended to `assets/js/storage.js`, Supabase `contacts` + `outreach` tables in `supabase/schema.sql`. 63/63 green.
+- [x] **Phase 3** — Page shell: `pages/outreach.html` full rewrite (Linear-dense), `assets/css/components/outreach.css`, `assets/js/page-outreach.js` (filter chips, template grid, generate dialog, contacts CRUD, outreach log), nav `soon` chip removed. 63/63 green.
+- [x] **Phase 4** — QoI ladder: `filterContextByDataNeeded()` enforces per-template data access; two new sentinel tests confirm salary never leaks into estate-agent templates. 65/65 green.
+- [x] **Phase 5** — Contacts management: shipped in Phase 3 (agents / brokers / solicitors / surveyors CRUD with add/delete, persists via `storage.js`).
+- [x] **Phase 6** — Cross-linking: area-detail verdict strip → A1, finances affordability widget → A5, journey checklist rows → 7 templates (A5, C3, B1, C5, C2, D1, D5, D6, D7). Deep-link parser in `page-outreach.js` reads `?templateId=`.
+- [x] **Phase 7** — Docs: `docs/ROADMAP.md` Outreach moved to "Shipped in v3.0"; `docs/CHECKLIST.md` updated; `README.md` storage-keys table updated.
+
+---
+
+## Phase 10 — Supabase MCP sync hardening (May 2026 →)
+
+Adopted 2026-05-25. Codifies the bidirectional sync contract in `CLAUDE.md §18` + `docs/SUPABASE_SYNC.md`.
+Goal: every write (Claude or portal) lands in Supabase; every session starts by checking what changed
+since last time. No silent drift.
+
+### 10A · Schema additions (one MCP migration each)
+- [x] `areas` mirror table — one row per area, `id` PK, `data` jsonb, `updated_at` timestamptz.
+      No RLS (read-only content). Applied via `mcp__supabase__apply_migration`.
+- [x] `house_types` mirror table — same shape, keyed by house-type id.
+- [x] `sync_log` table — append-only audit (`table_name`, `actor`, `row_id`, `action`, `at`).
+- [x] Updated `supabase/schema.sql` to reflect live schema.
+
+### 10B · Tooling
+- [x] `tools/check-supabase-freshness.mjs` — session-start freshness check; prints the SQL snippet Claude should run via MCP to detect changes since last session.
+- [x] `tools/sync-content-to-supabase.mjs` — reads repo JSON, generates UPSERT SQL, writes 21 batches to `.tmp/sync-*.sql` for Claude to execute via MCP.
+- [x] `data/snapshots/sync-state.json` — committed snapshot of `updated_at` per table.
+
+### 10C · Content backfill (one-time bootstrap via Node script)
+- [x] `tools/backfill-content-direct.mjs` — self-contained Node script using PostgREST + service role key. Idempotent, ~10 seconds to run.
+- [x] Schema verified clean (areas/house_types/sync_log tables empty, ready for backfill).
+- [ ] **USER ACTION**: Run once with service role key:
+      ```bash
+      # 1. Get service role key from Supabase dashboard
+      # 2. Set env var:
+      export SUPABASE_SERVICE_ROLE_KEY="eyJ..."
+      # 3. Run the backfill:
+      node tools/backfill-content-direct.mjs
+      ```
+- [ ] After backfill: 195 areas + 15 house types in Supabase, snapshot updated.
+
+**Why a script instead of 39 MCP calls?** A Node script using PostgREST is the standard
+Supabase backfill pattern: faster (~10s vs minutes of MCP turns), simpler (one command),
+and idempotent (safe to re-run). Day-to-day single-area edits still flow through Claude's
+MCP connector — this is just the one-time bootstrap.
+
+### 10D · Test enforcement
+- [x] `tests/supabase-sync.test.js` — offline checks: snapshot validity, repo structure, SQL batch generation. Online checks (pending backfill): row counts.
+- [x] Wired into `tools/run-intelligence-tests.mjs`. Now 74/74 tests pass (65 intelligence + 9 sync).
+
+### 10E · CLAUDE.md / docs
+- [x] §18 + §6 + §8 updated for MCP-first sync contract.
+- [x] `docs/SUPABASE_SYNC.md` created with detailed bidirectional sync protocol.
+- [x] `README.md` — added "Supabase MCP sync contract" section.
+- [x] `supabase/schema.sql` — updated to document the new tables + triggers.
+
+### 10F · Verification (after user runs backfill)
+- [ ] Run `node tools/run-intelligence-tests.mjs` — should report 195 areas + 15 house types.
+- [ ] Verify via MCP: `SELECT COUNT(*) FROM areas` returns 195, `SELECT COUNT(*) FROM house_types` returns 15.
+
+**Out of scope for Phase 10**: realtime subscriptions, storage buckets, edge functions, auth flow
+changes, Storage.js logging (10D deferred — needs separate phase per §16). Those get their own phases.
+
+---
+
+## Overhaul — Data integrity + information architecture (May 2026)
+
+Adopted 2026-05-28. Branch: `claude/peaceful-goldberg-gIEgT`. Two tracks:
+**A (data integrity)** lands first; **B (IA)** depends on every page already reading one canonical number.
+All tests 189/189 green before each push.
+
+### Track A — Single source of truth
+
+- [x] **A1 — Conflicting monetary targets resolved** (`db58be7`):
+  - `finances.goal.targetDeposit = £40,000` is the single canonical deposit target.
+  - `finances.goal.offerTarget = £380,000` is the single canonical offer price (removed from `criteria.budget`).
+  - `finances.goal.targetPropertyPrice = £400,000` retained as upper budget anchor.
+  - DB updated via MCP UPSERT (finances + goals + criteria rows); fixtures updated (`finances.sample.json`, `goals.sample.json`); `sync-state.json` high-water marks updated.
+- [x] **A2 — Hardcoded personal-value fallbacks removed** (`db58be7`):
+  - All `?? 50_000`, `?? 2000`, `?? 380000`, `?? 375_000` replaced with canonical DB reads or `?? 0` with "not set" UI guards.
+  - Files: `affordability.js`, `tile-affordability.js`, `section-later.js`, `section-v3-charts.js`, `section-deposit-risk.js`, `page-area-detail.js`, `pages/finances.html`, `pages/area-detail.html`.
+- [x] **A3 — tile-readiness.js reads `readiness_checklist` table** (`db58be7`):
+  - Full rewrite of `assets/js/dashboard/tile-readiness.js` to call `getReadinessChecklist()` (row-per-item) instead of `goals.readiness.checklist` blob. `goals.readiness` blob retired (marked `_deprecated: true` in DB and fixtures).
+- [x] **A4 — CLAUDE.md §18.1 documents all 20 live tables** (`db58be7`):
+  - Expanded from 8-table list to full 20-table inventory with correct class, source-of-truth, and sync-direction for every table.
+- [x] **Test guard** (`db58be7`): `tests/affordability-scenarios.test.js` updated for new canonical values (hopedFor=£40k, currentSavings=£32,994.45, monthsToReady=4). 189/189 green.
+
+### Track B — Information architecture
+
+- [x] **B0 — Nav reorganised into buyer-journey pillars** (`db58be7`):
+  - Order: Home | Finances | Investments | Areas | Map | House Types | About | Checklists | Outreach | Listings(soon) | Ask(soon) | Data sync | Debug
+- [x] **B1 — Dashboard tiles into 5 labelled bands** (`8e45344`):
+  - Four `<h2 class="band-label">` headings: Goal progress · Affordability · Search · Next steps.
+  - Every tile group has a "see full →" link to the relevant detail page.
+  - `.band-label` CSS rule added to `assets/css/dashboard/base.css`.
+- [x] **B2 — Investments split from Finances** (`8e45344`):
+  - New `pages/investments.html` with all 8 investment chart sections (savings-over-time, monthly-deposits, ISA attribution, ISA stacked-area, dividends+interest, epoch comparison, ticker treemap, realised/unrealised P&L).
+  - New `assets/js/page-investments.js` coordinator.
+  - `pages/finances.html` trimmed to deposit+affordability+costs; replaced investment block with "How are my investments doing? →" cross-link.
+  - `assets/js/page-finances.js` cleaned of investment imports.
+  - Nav: Investments activated (removed `nav-soon`).
+- [x] **B5 — Cross-link pass** (this commit):
+  - `pages/area-detail.html`: footer with "← Back to areas" + "Request a viewing →" (outreach A1).
+  - `pages/about-search.html`: "Browse matching areas →" before the save bar.
+  - `pages/journey.html`: "Email your affordability to a broker →" (outreach A5).
+  - `pages/house-types.html`: "Browse areas →" footer link.
+
+### Pending (separate phases)
+
+- [ ] **B3 — About you consolidation**: migrate debt data from profile blob into `debts_credit_cards`, `debts_student_loans`, `debts_other` tables via MCP UPSERT; extend `tests/supabase-sync.test.js` to assert debts live in `debts_*` tables.
+- [ ] **B4 — Shortlist single source**: `getShortlist()` path currently localStorage-first; making it Supabase-first touches `storage.js` (§16 guard — separate named phase required).
+- [ ] **A4 remaining**: update `pages/data-sync.html` + `page-data-sync.js` to cover all 20 live tables; extend `tests/supabase-sync.test.js` to cover newly documented user-state tables (goals, investments_*, debts_*, readiness_checklist).

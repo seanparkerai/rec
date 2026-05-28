@@ -2,12 +2,7 @@
 // Checked state is persisted in localStorage separately from the canonical data/checklists.json.
 import { loadJSON } from './data-loader.js';
 import { _internal } from './storage.js';
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
-
-const $ = (id) => document.getElementById(id);
+import { esc, byId as $ } from './dom.js';
 
 const STATE_KEY = 'journey-checks'; // namespace handled by storage._internal
 
@@ -25,6 +20,11 @@ function saveState() {
 
 function labelFor(section, item) {
   return section === 'moving' ? (item.task || '') : (item.item || '');
+}
+
+function outreachFor(item) {
+  if (!item.outreachTemplateId) return '';
+  return `<a href="outreach.html?templateId=${item.outreachTemplateId}" data-nav="pages/outreach.html?templateId=${item.outreachTemplateId}" class="journey-outreach-link" aria-label="Open email template for this step">&rarr; Email</a>`;
 }
 
 function metaFor(item) {
@@ -50,6 +50,7 @@ function renderSection(section) {
             <span class="check-title">${esc(label)}</span>
             ${metaFor(item)}
           </span>
+          ${outreachFor(item)}
         </label>
       </li>
     `;

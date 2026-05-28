@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Debug · rec</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 1rem; max-width: 900px; margin: 0 auto; }
+    h2 { margin-top: 2rem; border-bottom: 2px solid #ddd; padding-bottom: 0.25rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: #555; }
+    .row { padding: 0.6rem 0.75rem; border-bottom: 1px solid #eee; display: grid; grid-template-columns: 280px 1fr; gap: 0.5rem; align-items: start; }
+    .label { font-weight: 600; font-size: 0.85rem; }
+    .val { font-family: ui-monospace, monospace; font-size: 0.8rem; word-break: break-all; white-space: pre-wrap; }
+    .ok  { color: #0a6b3a; }
+    .err { color: #b30b0b; }
+    .warn { color: #8a5c00; }
+    .info { color: #1a4fa3; }
+    #error-log { background: #fff5f5; border: 1px solid #f5c6cb; border-radius: 4px; padding: 0.75rem; margin-top: 0.5rem; font-family: ui-monospace, monospace; font-size: 0.78rem; white-space: pre-wrap; word-break: break-all; min-height: 2rem; }
+    #error-log:empty::before { content: '(none so far)'; color: #999; }
+    .section-row { grid-column: 1 / -1; }
+    summary { cursor: pointer; font-size: 0.85rem; color: #333; }
+    details { margin: 0.25rem 0; }
+    details .val { margin-top: 0.25rem; }
+    .badge { display: inline-block; border-radius: 3px; padding: 0 5px; font-size: 0.75rem; font-weight: 600; background: #e8f5e9; color: #1b5e20; margin-left: 4px; }
+    .badge.fail { background: #ffebee; color: #b71c1c; }
+    .badge.warn { background: #fff8e1; color: #7c5900; }
+    #counters { font-size: 0.85rem; margin: 0.5rem 0 1rem; color: #444; }
+    button#refresh { margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Debug diagnostics</h1>
+  <p style="color:#555;font-size:0.9rem">Captures the same errors you'd see in the browser console. Share a screenshot with Claude if something is broken.</p>
+
+  <div id="counters"></div>
+  <button id="refresh">Re-run all checks</button>
+  <button id="copy-report" style="margin-left: 0.5rem">Copy full report</button>
+  <span id="copy-status" style="margin-left: 0.5rem; font-size: 0.85rem; color: #0a6b3a"></span>
+
+  <h2>Runtime errors (window.onerror + unhandledrejection)</h2>
+  <div id="error-log"></div>
+
+  <h2>Supabase client &amp; auth</h2>
+  <div id="out-auth"></div>
+
+  <h2>Database queries</h2>
+  <div id="out-db"></div>
+
+  <h2>Storage helpers (storage.js)</h2>
+  <div id="out-storage"></div>
+
+  <h2>Finance derivation</h2>
+  <div id="out-derive"></div>
+
+  <h2>Module imports — dashboard tiles</h2>
+  <div id="out-modules"></div>
+
+  <h2>Expected DOM elements (dashboard)</h2>
+  <div id="out-dom"></div>
+
+  <h2>CSS custom properties (tokens)</h2>
+  <div id="out-tokens"></div>
+
+  <h2>Network fetches (partials &amp; data)</h2>
+  <div id="out-network"></div>
+
+  <h2>localStorage &amp; quota</h2>
+  <div id="out-localstorage"></div>
+
+  <h2>Performance &amp; environment</h2>
+  <div id="out-perf"></div>
+
+  <script type="module">
+    /* ── Error capture ── */
+    const runtimeErrors = [];
+    const errorLog = document.getElementById('error-log');
+
+    function logRuntimeError(msg) {
+      runtimeErrors.push(msg);
+      errorLog.textContent = runtimeErrors.join('\n\n');
+    }
+
+    window.addEventListener('error', (e) => {
+      logRuntimeError(`[error] ${e.message}\n  ${e.filename}:${e.lineno}:${e.colno}`);
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      const reason = e.reason instanceof Error
+        ? e.reason.message + '\n  ' + (e.reason.stack || '').split('\n').slice(0, 3).join('\n  ')
+        : String(e.reason);
+      logRuntimeError(`[unhandledrejection] ${reason}`);
+    });
+
+    /* ── Helpers ── */
+    let passCount = 0, failCount = 0, warnCount = 0;
+
+    function row(container, label, status, value) {
+      // status: 'ok' | 'err' | 'warn' | 'info'
+      if (status === 'ok') passCount++;
+      else if (status === 'err') failCount++;
+      else if (status === 'warn') warnCount++;
+
+      const div = document.createElement('div');
+      div.className = 'row';
+      const badge = status === 'ok' ? 'OK' : status === 'err' ? 'FAIL' : status === 'warn' ? 'WARN' : 'INFO';
+      div.innerHTML = `<div class="label ${status}">${badge} — ${label}</div><div class="val"></div>`;
+      div.querySelector('.val').textContent = value ?? '';
+      container.appendChild(div);
+    }
+
+    async function check(container, label, fn) {
+      try {
+        const v = await fn();
+        const summary = v === null || v === undefined
+          ? String(v)
+          : (typeof v === 'object' ? JSON.stringify(v).slice(0, 600) : String(v));
+        row(container, label, 'ok', summary);
+        return v;
+      } catch (e) {
+        row(container, label, 'err', e.message + '\n' + (e.stack || '').split('\n').slice(0, 4).join('\n'));
+        return null;
+      }
+    }
+
+    function updateCounters() {
+      document.getElementById('counters').textContent =
+        `Results: ${passCount} passed · ${failCount} failed · ${warnCount} warnings`;
+    }
+
+    /* ── 1. Supabase client & auth ── */
+    const outAuth = document.getElementById('out-auth');
+    let sb = null, session = null, hid = null;
+
+    try {
+      const mod = await import('../assets/js/supabase-client.js');
+      sb = mod.supabase;
+      row(outAuth, 'import supabase-client.js', 'ok', 'loaded; URL=' + (sb?.supabaseUrl ?? 'unknown'));
+    } catch (e) {
+      row(outAuth, 'import supabase-client.js', 'err', e.message);
+    }
+
+    if (sb) {
+      try {
+        const { data: { session: s }, error } = await sb.auth.getSession();
+        if (error) throw error;
+        session = s;
+        if (session) {
+          row(outAuth, 'auth.getSession()', 'ok', `user=${session.user.email}  id=${session.user.id}`);
+          const exp = new Date(session.expires_at * 1000);
+          const expIn = Math.round((exp - Date.now()) / 60000);
+          row(outAuth, 'session expiry', expIn > 5 ? 'ok' : 'warn', `expires ${exp.toISOString()} (in ${expIn} min)`);
+        } else {
+          row(outAuth, 'auth.getSession()', 'warn', 'NO SESSION — sign in first at pages/login.html');
+        }
+      } catch (e) {
+        row(outAuth, 'auth.getSession()', 'err', e.message);
+      }
+    }
+
+    /* ── 2. DB queries ── */
+    const outDb = document.getElementById('out-db');
+
+    if (sb && session) {
+      const uid = session.user.id;
+
+      const { data: hm, error: hmErr } = await sb.from('household_members').select('household_id').eq('user_id', uid);
+      if (hmErr) { row(outDb, 'household_members lookup', 'err', hmErr.message); }
+      else if (!hm?.length) { row(outDb, 'household_members lookup', 'warn', 'No row found for this user'); }
+      else {
+        hid = hm[0].household_id;
+        row(outDb, 'household_members lookup', 'ok', JSON.stringify(hm));
+      }
+
+      if (hid) {
+        const tables = [
+          ['investments_accounts', `select('*').eq('household_id','${hid}')`],
+          ['investments_history',  `select('month,net,deposits').eq('household_id','${hid}').order('month')`],
+          ['goals',                `select('data').eq('household_id','${hid}')`],
+          ['finances',             `select('data').eq('household_id','${hid}')`],
+          ['profile',              `select('data').eq('household_id','${hid}')`],
+          ['criteria',             `select('data').eq('household_id','${hid}')`],
+        ];
+
+        for (const [tbl] of tables) {
+          let q = sb.from(tbl).select('*').eq('household_id', hid);
+          if (tbl === 'investments_history') q = sb.from(tbl).select('month,net,deposits').eq('household_id', hid).order('month');
+          const { data, error } = await q;
+          if (error) {
+            row(outDb, `${tbl}`, 'err', error.message + ' (code=' + error.code + ')');
+          } else if (!data?.length) {
+            row(outDb, `${tbl}`, 'warn', 'Empty — no rows for this household');
+          } else {
+            const preview = tbl === 'investments_history'
+              ? `${data.length} rows; latest=${data.at(-1)?.month}`
+              : JSON.stringify(data).slice(0, 300);
+            row(outDb, `${tbl}`, 'ok', preview);
+          }
+        }
+
+        // RLS self-check: try to read another user's household_members (should return empty)
+        const { data: rlsTest } = await sb.from('household_members').select('household_id').neq('user_id', uid);
+        const rlsOk = !rlsTest?.length;
+        row(outDb, 'RLS isolation (can\'t read other users)', rlsOk ? 'ok' : 'err',
+          rlsOk ? 'returned 0 rows ✓' : `Returned ${rlsTest.length} rows from other users — RLS may be misconfigured`);
+      }
+    } else if (!session) {
+      row(outDb, 'DB queries', 'info', 'Skipped — not authenticated');
+    }
+
+    /* ── 3. Storage helpers ── */
+    const outStorage = document.getElementById('out-storage');
+    let storageInv = null, storageFin = null;
+
+    try {
+      const storage = await import('../assets/js/storage.js');
+
+      storageInv = await check(outStorage, 'getInvestments()', () => storage.getInvestments());
+      await check(outStorage, 'getInvestmentsHistory()', () => storage.getInvestmentsHistory());
+      const goals = await check(outStorage, 'getGoals()', () => storage.getGoals());
+      storageFin  = await check(outStorage, 'getFinances()', () => storage.getFinances());
+      await check(outStorage, 'getProfile()', () => storage.getProfile());
+      await check(outStorage, 'getCriteria()', () => storage.getCriteria());
+
+      // Spot-check key fields
+      if (goals) {
+        const dep = goals?.deposit;
+        row(outStorage, 'goals.deposit fields', dep ? 'ok' : 'warn',
+          dep ? `hopedFor=${dep.hopedFor}  currentSavings=${dep.currentSavings}` : 'goals.deposit is missing');
+      }
+      if (storageFin) {
+        const keys = Object.keys(storageFin);
+        row(outStorage, 'finances() top-level keys', keys.length > 0 ? 'ok' : 'warn', keys.join(', '));
+      }
+    } catch (e) {
+      row(outStorage, 'storage.js import', 'err', e.message);
+    }
+
+    /* ── 4. Finance derivation ── */
+    const outDerive = document.getElementById('out-derive');
+
+    let enriched = null;
+    try {
+      const { deriveFinances } = await import('../assets/js/finance-derive.js');
+      enriched = deriveFinances(storageFin, { investments: storageInv });
+
+      if (!enriched) {
+        row(outDerive, 'deriveFinances()', 'warn', 'returned null/undefined');
+      } else {
+        const s = enriched.savings ?? {};
+        row(outDerive, 'savings.totalSavings', s.totalSavings > 0 ? 'ok' : 'warn', String(s.totalSavings));
+        row(outDerive, 'savings.current (cash)', 'info', String(s.current));
+        row(outDerive, 'savings.isaForDeposit', 'info', String(s.totalSavings - (s.current ?? 0)));
+        row(outDerive, 'savings.monthlyContribution', 'info', String(s.monthlyContribution));
+        row(outDerive, 'savings.savingsGap', 'info', String(s.savingsGap ?? 'n/a'));
+        row(outDerive, 'savings.monthsToSave', 'info', String(s.monthsToSave ?? 'n/a'));
+        row(outDerive, 'income.takeHomeMonthly', 'info', String(enriched.income?.takeHomeMonthly ?? 'n/a'));
+        row(outDerive, 'income.annualBaseSalary', 'info', String(enriched.income?.annualBaseSalary ?? 'n/a'));
+        row(outDerive, 'spare.monthly', 'info', String(enriched.spare?.monthly ?? 'n/a'));
+
+        // Full dump in a collapsible
+        const details = document.createElement('details');
+        details.innerHTML = `<summary>Full deriveFinances() output (click to expand)</summary>`;
+        const pre = document.createElement('div');
+        pre.className = 'val';
+        pre.style.marginTop = '0.5rem';
+        pre.textContent = JSON.stringify(enriched, null, 2).slice(0, 4000);
+        details.appendChild(pre);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'row';
+        wrapper.style.gridColumn = '1 / -1';
+        wrapper.appendChild(details);
+        outDerive.appendChild(wrapper);
+      }
+    } catch (e) {
+      row(outDerive, 'deriveFinances()', 'err', e.message + '\n' + (e.stack || '').split('\n').slice(0, 4).join('\n'));
+    }
+
+    // assessAffordability is a separate engine — not part of deriveFinances output
+    try {
+      const { assessAffordability } = await import('../assets/js/affordability.js');
+      const storageCrit = await (await import('../assets/js/storage.js')).getCriteria();
+      const price = Number(enriched?.goal?.offerTarget ?? enriched?.goal?.targetPropertyPrice ?? 380000);
+      const result = assessAffordability({ price, finances: enriched, criteria: storageCrit });
+      row(outDerive, `assessAffordability(£${price.toLocaleString()}).verdict`, result?.verdict ? 'ok' : 'err',
+        result?.verdict ?? 'null — check finances inputs');
+      if (result) {
+        row(outDerive, 'affordability.maxBorrow', 'info', String(result.maxBorrow ?? 'n/a'));
+        row(outDerive, 'affordability.lti', 'info', String(result.lti ?? 'n/a'));
+        row(outDerive, 'affordability.paymentToIncomePct', 'info',
+          result.paymentToIncomePct != null ? `${result.paymentToIncomePct.toFixed(1)}%` : 'n/a');
+        const verdictStatus = { comfortable: 'ok', stretch: 'warn', tight: 'warn', 'out-of-reach': 'err' };
+        row(outDerive, 'affordability.whyVerdict',
+          result.whyVerdict?.length ? (verdictStatus[result.verdict] ?? 'warn') : 'ok',
+          result.whyVerdict?.join('\n') || 'none — all factors comfortable');
+      }
+    } catch (e) {
+      row(outDerive, 'assessAffordability()', 'err', e.message);
+    }
+
+    /* ── 5. Dashboard tile module imports ── */
+    const outModules = document.getElementById('out-modules');
+
+    const TILE_MODULES = [
+      '../assets/js/dashboard/tile-lede.js',
+      '../assets/js/dashboard/tile-deposit.js',
+      '../assets/js/dashboard/tile-deposit-risk.js',
+      '../assets/js/dashboard/tile-affordability.js',
+      '../assets/js/dashboard/tile-affordability-scenarios.js',
+      '../assets/js/dashboard/tile-money-flow.js',
+      '../assets/js/dashboard/tile-shortlist.js',
+      '../assets/js/dashboard/tile-journey.js',
+      '../assets/js/dashboard/tile-criteria.js',
+      '../assets/js/dashboard/tile-isa-ytd.js',
+      '../assets/js/dashboard/tile-readiness.js',
+      '../assets/js/dashboard/tile-savings-visuals.js',
+    ];
+
+    const OTHER_MODULES = [
+      '../assets/js/finance-derive.js',
+      '../assets/js/affordability.js',
+      '../assets/js/money-flow.js',
+      '../assets/js/savings-velocity.js',
+      '../assets/js/savings-series.js',
+      '../assets/js/deposit-risk.js',
+      '../assets/js/format.js',
+      '../assets/js/dom.js',
+      '../assets/js/storage.js',
+    ];
+
+    for (const path of [...TILE_MODULES, ...OTHER_MODULES]) {
+      const name = path.split('/').pop();
+      try {
+        await import(path);
+        row(outModules, name, 'ok', 'imported successfully');
+      } catch (e) {
+        row(outModules, name, 'err', e.message);
+      }
+    }
+
+    /* ── 6. Expected DOM IDs ── */
+    const outDom = document.getElementById('out-dom');
+
+    // These are the IDs tile modules look up at runtime on index.html / the dashboard
+    const EXPECTED_IDS = [
+      // tile-lede
+      'td-headline', 'td-sub',
+      // tile-deposit
+      'dep-current', 'dep-gap', 'dep-pct', 'dep-bar',
+      // tile-affordability
+      'ta-verdict', 'ta-max', 'ta-ltd',
+      // tile-money-flow
+      'tf-headline', 'tf-chart',
+      // tile-shortlist
+      'shortlist-area',
+      // tile-journey
+      'tj-next-text',
+      // tile-criteria
+      'tc-prose',
+      // tile-isa-ytd
+      'isa-ytd-bar', 'isa-ytd-label',
+      // tile-readiness
+      'readiness-headline', 'readiness-stats', 'readiness-next-text',
+      // tile-deposit-risk
+      'deposit-risk-chart',
+      // tile-savings-visuals
+      'savings-spark-svg', 'scenarios-fan-svg', 'networth-donut-svg', 'withdrawal-readiness',
+    ];
+
+    // We're on debug.html, not index.html — so all will be missing. That's expected.
+    // But we still check so the IDs are documented and easy to verify if copy-pasted.
+    const missingIds = EXPECTED_IDS.filter((id) => !document.getElementById(id));
+    if (missingIds.length === EXPECTED_IDS.length) {
+      row(outDom, 'Expected IDs on dashboard', 'info',
+        `All ${EXPECTED_IDS.length} IDs are absent here (this is debug.html, not index.html — expected).\nIDs: ${EXPECTED_IDS.join(', ')}`);
+    } else {
+      const present = EXPECTED_IDS.filter((id) => document.getElementById(id));
+      row(outDom, 'Present IDs', 'ok', present.join(', '));
+      if (missingIds.length) {
+        row(outDom, 'Missing IDs', 'err', missingIds.join(', '));
+      }
+    }
+
+    /* ── 7. CSS custom properties ── */
+    const outTokens = document.getElementById('out-tokens');
+
+    // Load the main stylesheet so tokens are available, then inspect
+    // We probe tokens by injecting a test element and reading computed styles
+    const TOKEN_CHECKS = [
+      '--pico-primary',
+      '--pico-background-color',
+      '--pico-color',
+      '--space-1',
+      '--space-2',
+      '--space-4',
+      '--accent',
+      '--focus-ring',
+      '--text-base',
+      '--paper',
+      '--ink',
+      '--positive',
+    ];
+
+    const probe = document.createElement('div');
+    probe.style.display = 'none';
+    document.body.appendChild(probe);
+    const cs = getComputedStyle(probe);
+
+    for (const token of TOKEN_CHECKS) {
+      const val = cs.getPropertyValue(token).trim();
+      if (val) {
+        row(outTokens, token, 'ok', val);
+      } else {
+        row(outTokens, token, 'err', `(empty — token not resolved; check tokens.css is loading correctly)`);
+      }
+    }
+    document.body.removeChild(probe);
+
+    /* ── 8. Network fetches ── */
+    const outNetwork = document.getElementById('out-network');
+
+    const FETCH_PATHS = [
+      '../components/nav.html',
+      '../components/header.html',
+      '../components/footer.html',
+      '../data/areas.json',
+      '../data/house-types.json',
+    ];
+
+    for (const path of FETCH_PATHS) {
+      const t0 = performance.now();
+      try {
+        const res = await fetch(path);
+        const ms = Math.round(performance.now() - t0);
+        if (res.ok) {
+          row(outNetwork, path, 'ok', `HTTP ${res.status} · ${ms}ms · Content-Type: ${res.headers.get('content-type') ?? 'unknown'}`);
+        } else {
+          row(outNetwork, path, 'err', `HTTP ${res.status} ${res.statusText} · ${ms}ms`);
+        }
+      } catch (e) {
+        row(outNetwork, path, 'err', e.message);
+      }
+    }
+
+    /* ── 9. localStorage ── */
+    const outLs = document.getElementById('out-localstorage');
+
+    const recKeys = Object.keys(localStorage).filter((k) => k.startsWith('rec:'));
+    row(outLs, 'rec:* keys', recKeys.length > 0 ? 'ok' : 'info',
+      recKeys.length > 0 ? recKeys.join('\n') : '(empty — data not yet cached)');
+
+    // Spot-check each key's JSON validity. rec:theme stores a bare string ('light'/'dark').
+    const BARE_STRING_KEYS = new Set(['rec:theme']);
+    for (const key of recKeys) {
+      const raw = localStorage.getItem(key);
+      if (BARE_STRING_KEYS.has(key)) {
+        row(outLs, `  ${key}`, 'ok', `bare string: "${raw}" · ${raw.length} chars`);
+        continue;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        const age = parsed?.ts ? `age=${Math.round((Date.now() - parsed.ts) / 1000)}s` : 'no timestamp';
+        row(outLs, `  ${key}`, 'ok', `valid JSON · ${age} · ${raw.length} chars`);
+      } catch (e) {
+        row(outLs, `  ${key}`, 'err', 'invalid JSON: ' + e.message);
+      }
+    }
+
+    // localStorage quota estimate
+    try {
+      let total = 0;
+      for (const k of Object.keys(localStorage)) total += (localStorage.getItem(k) || '').length;
+      const pct = ((total / 5_000_000) * 100).toFixed(1);
+      row(outLs, 'localStorage usage estimate', Number(pct) > 80 ? 'warn' : 'ok',
+        `~${(total / 1024).toFixed(1)} KB of ~5 MB (${pct}%)`);
+    } catch (e) {
+      row(outLs, 'localStorage quota', 'err', e.message);
+    }
+
+    /* ── 10. Performance & environment ── */
+    const outPerf = document.getElementById('out-perf');
+
+    row(outPerf, 'User agent', 'info', navigator.userAgent);
+    row(outPerf, 'Origin', 'info', location.origin);
+    row(outPerf, 'Pathname', 'info', location.pathname);
+    row(outPerf, 'Online', navigator.onLine ? 'ok' : 'err', navigator.onLine ? 'yes' : 'OFFLINE');
+
+    const nav = performance.getEntriesByType('navigation')[0];
+    if (nav) {
+      row(outPerf, 'Page load time', 'info', `${Math.round(nav.loadEventEnd - nav.startTime)}ms`);
+      row(outPerf, 'DOM interactive', 'info', `${Math.round(nav.domInteractive - nav.startTime)}ms`);
+      row(outPerf, 'Transfer size', 'info', nav.transferSize > 0 ? `${(nav.transferSize / 1024).toFixed(1)} KB` : '(cached)');
+    }
+
+    const resources = performance.getEntriesByType('resource');
+    const failed = resources.filter((r) => r.responseStatus >= 400 || r.responseEnd === 0);
+    row(outPerf, 'Resources loaded', failed.length ? 'warn' : 'ok',
+      `${resources.length} total · ${failed.length} may have failed\n` +
+      (failed.length ? failed.map((r) => `  ${r.name} (${r.responseStatus})`).join('\n') : ''));
+
+    /* ── Final counters ── */
+    updateCounters();
+    document.getElementById('refresh').addEventListener('click', () => location.reload());
+
+    /* ── Copy full report ── */
+    function buildReport() {
+      const lines = [];
+      lines.push('# rec — debug report');
+      lines.push(`Generated: ${new Date().toISOString()}`);
+      lines.push(`URL: ${location.href}`);
+      lines.push(`UA: ${navigator.userAgent}`);
+      lines.push(`Counters: ${passCount} passed · ${failCount} failed · ${warnCount} warnings`);
+      lines.push('');
+      if (runtimeErrors.length) {
+        lines.push('## Runtime errors');
+        lines.push(runtimeErrors.join('\n\n'));
+        lines.push('');
+      }
+      document.querySelectorAll('h2').forEach((h) => {
+        lines.push(`## ${h.textContent.trim()}`);
+        let next = h.nextElementSibling;
+        while (next && next.tagName !== 'H2') {
+          if (next.id === 'error-log') {
+            if (next.textContent.trim()) lines.push(next.textContent.trim());
+          } else {
+            next.querySelectorAll('.row').forEach((r) => {
+              const label = r.querySelector('.label')?.textContent?.trim() ?? '';
+              const val   = r.querySelector('.val')?.textContent?.trim() ?? '';
+              if (label) lines.push(`- ${label}`);
+              if (val)   lines.push(`    ${val.replace(/\n/g, '\n    ')}`);
+            });
+          }
+          next = next.nextElementSibling;
+        }
+        lines.push('');
+      });
+      return lines.join('\n');
+    }
+
+    document.getElementById('copy-report').addEventListener('click', async () => {
+      const status = document.getElementById('copy-status');
+      const report = buildReport();
+      try {
+        await navigator.clipboard.writeText(report);
+        status.textContent = `Copied (${report.length.toLocaleString()} chars) ✓`;
+      } catch (e) {
+        // Fallback: select a temporary textarea
+        const ta = document.createElement('textarea');
+        ta.value = report;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); status.textContent = `Copied via fallback (${report.length.toLocaleString()} chars) ✓`; }
+        catch (e2) { status.style.color = '#b30b0b'; status.textContent = `Copy failed: ${e2.message}`; }
+        document.body.removeChild(ta);
+      }
+      setTimeout(() => { status.textContent = ''; status.style.color = '#0a6b3a'; }, 4000);
+    });
+  </script>
+</body>
+</html>

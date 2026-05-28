@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css" />
   <link rel="stylesheet" href="../assets/css/base.css" />
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/components/outreach.css" />
 </head>
 <body>
   <div data-include="components/header.html"></div>
@@ -33,6 +34,7 @@
       <span class="fit-dot fit-dot--unknown" id="area-verdict-dot" aria-hidden="true"></span>
       <p class="area-verdict-strip__verdict" id="area-verdict-text">Loading affordability verdict&hellip;</p>
       <p class="area-verdict-strip__num" id="area-verdict-num"></p>
+      <a id="area-outreach-link" href="outreach.html?templateId=A1" class="area-verdict-strip__action" hidden>Draft viewing request &rarr;</a>
     </section>
 
     <dl class="stat-strip" aria-label="Key facts">
@@ -110,10 +112,10 @@
           <h3>Set a price for this area</h3>
           <span class="afford-verdict-pill" id="area-afford-pill">&mdash;</span>
         </header>
-        <p class="afford-price"><span id="area-afford-display">&pound;380,000</span><label for="area-afford-number" class="visually-hidden">Set price</label><input type="number" id="area-afford-number" min="100000" max="2000000" step="5000" value="380000" /></p>
+        <p class="afford-price"><span id="area-afford-display">&mdash;</span><label for="area-afford-number" class="visually-hidden">Set price</label><input type="number" id="area-afford-number" min="100000" max="2000000" step="5000" /></p>
         <div class="afford-slider-row">
           <label for="area-afford-slider">Price slider
-            <input type="range" id="area-afford-slider" class="afford-slider" min="200000" max="800000" step="2000" value="380000" />
+            <input type="range" id="area-afford-slider" class="afford-slider" min="200000" max="800000" step="2000" />
           </label>
         </div>
         <dl class="afford-grid">
@@ -125,6 +127,11 @@
         <ul class="afford-why" id="area-afford-why" aria-live="polite"></ul>
       </div>
     </section>
+
+    <footer class="cell-foot" style="margin-top:var(--space-4);display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2)">
+      <a data-nav="pages/areas.html">&larr; Back to areas</a>
+      <a data-nav="pages/outreach.html?templateId=A1">Request a viewing &rarr;</a>
+    </footer>
   </main>
 
   <div data-include="components/footer.html"></div>

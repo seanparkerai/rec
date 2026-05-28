@@ -1,0 +1,57 @@
+{
+  "trading212ISA": {
+    "accountType": "Stocks & Shares ISA",
+    "provider": "Trading 212",
+    "accountOpened": "2025-05-26",
+    "currentPortfolioValue": 32994.45,
+    "currentValueAsOf": "2026-05-28",
+    "earmarkedFor": "house deposit and purchase costs",
+    "earmarkPct": 100,
+    "strategyEpochs": [
+      {
+        "id": "stockpicker",
+        "label": "Individual UK dividend stocks",
+        "start": "2025-05-26",
+        "end": "2026-01-01"
+      },
+      {
+        "id": "etfCore",
+        "label": "ETF + gold core (VHYL/VUSA/VEVE/VFEM/SGLN)",
+        "start": "2026-01-02",
+        "end": null
+      }
+    ],
+    "_importedHistory": "see data/fixtures/investments.sample.json (redacted — real history in Supabase)",
+    "depositRiskManagement": {
+      "underlyingAssetClass": "equity ETFs + physical gold",
+      "volatilityRisk": "high — 3-6 month timeline means market drop is unhedged",
+      "scenarios": {
+        "down10pct": { "newValue": 29695.01, "depositGapImpact": -3299.45 },
+        "down20pct": { "newValue": 26395.56, "depositGapImpact": -6598.89 }
+      },
+      "recommendation": "consider de-risking 50-100% to Cash ISA or savings account once mortgage application timeline firms up",
+      "advisoryStatus": "active — surface on dashboard"
+    },
+    "withdrawalReadiness": {
+      "seasoningPeriodRecommended": "3 months in current account before mortgage application",
+      "lenderConcern": "deposit must show source paper-trail",
+      "actionRequired": "sell ETFs + transfer to current account at least 3mo before applying"
+    }
+  },
+  "lisa": {
+    "status": "none",
+    "eligibility": {
+      "underAge40": true,
+      "firstTimeBuyer": true,
+      "targetUnderCap": true
+    },
+    "recommendation": "skip — 12-month minimum hold makes it unusable on current timeline",
+    "conditionalAdvice": "if timeline slips past 12 months, open with £1 to start the clock"
+  },
+  "crypto": {
+    "status": "trivial",
+    "excludeFromCalcs": true
+  },
+  "physicalAssets": [],
+  "vanguardOrOther": null
+}
