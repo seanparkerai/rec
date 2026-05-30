@@ -1,0 +1,26 @@
+=== L0 PROBE: Rightmove data source ===
+outcodes: SO20, SO21, SP5, GU34, SP11
+maxDaysSinceAdded: 3
+apify fallback: NOT configured
+
+── SO20 ──────────────────────────────────────────
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+
+── SO21 ──────────────────────────────────────────
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+
+── SP5 ──────────────────────────────────────────
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+
+── GU34 ──────────────────────────────────────────
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+
+── SP11 ──────────────────────────────────────────
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+
+=== SUMMARY ===
+outcodes returning data: 0/5
+total listings (<=3d old) across probed outcodes: 0
+VERDICT: ✗ no route returned data — direct blocked and no Apify fallback configured.
+
+(probe exit code: 0)
