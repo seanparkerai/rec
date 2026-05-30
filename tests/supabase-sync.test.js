@@ -11,6 +11,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const TESTS = [];
 const test = (name, fn) => TESTS.push({ name, fn });
+const skip = (name, reason) => TESTS.push({ name, skip: reason || true });
 
 // ── Offline: snapshot validity ──────────────────────────────────────────────
 
@@ -62,7 +63,7 @@ test('all area files match schema', async () => {
   const files = (await readdir(dir)).filter(f => f.endsWith('.json'));
   const schema = JSON.parse(await readFile(resolve(root, 'data/schema/area.schema.json'), 'utf8'));
 
-  for (const f of files.slice(0, 5)) { // sample first 5
+  for (const f of files) { // validate every area file (was: sample first 5)
     const content = JSON.parse(await readFile(resolve(dir, f), 'utf8'));
     assert(typeof content.id === 'string', `${f}: missing id`);
     assert(typeof content.name === 'string', `${f}: missing name`);
@@ -118,25 +119,25 @@ test('backfill script is present and executable', async () => {
 // ── Online: schema check (MCP required) ──────────────────────────────────────
 // Skipped in this test harness (offline only). Call via claude during sessions.
 
-test('(skipped) schema check — run via MCP in session', () => {
-  // Offline harness cannot call MCP. Claude performs this check at session start
-  // via mcp__supabase__list_tables. Test passes to keep harness green.
-});
-
-// ── Online: content mirror backfill progress (MCP required) ──────────────────
-// This assertion is deferred until after Phase 10C (backfill execution) completes.
-
-test('(skipped) areas mirror row count — pending backfill', () => {
-  // Will be wired up after the 195 areas are pushed to Supabase.
-  // Check: SELECT COUNT(*) FROM areas SHOULD EQUAL 195 (or subset, depending on progress).
-});
+// These require a live Supabase connection (MCP / service-role) and are NOT run by
+// the offline CI harness. Claude runs the equivalent check via mcp__supabase__list_tables
+// and execute_sql at session start/end (CLAUDE.md §8/§18). They are reported as skipped —
+// never counted as passing — so the green total reflects only what was actually verified.
+skip('schema check — run online via MCP in session', 'offline harness cannot call MCP');
+skip('areas mirror row count == repo area files — run online via MCP', 'requires live Supabase');
 
 // ── Runner ──────────────────────────────────────────────────────────────────
 
 let passed = 0;
 let failed = 0;
+let skipped = 0;
 
-for (const { name, fn } of TESTS) {
+for (const { name, fn, skip: skipReason } of TESTS) {
+  if (skipReason) {
+    console.log(`↷ ${name} (skipped: ${typeof skipReason === 'string' ? skipReason : 'n/a'})`);
+    skipped++;
+    continue;
+  }
   try {
     await fn();
     console.log(`✓ ${name}`);
@@ -149,7 +150,7 @@ for (const { name, fn } of TESTS) {
 }
 
 console.log('');
-console.log(`${passed} passed, ${failed} failed`);
+console.log(`${passed} passed, ${failed} failed, ${skipped} skipped`);
 
 if (failed > 0) {
   process.exit(1);

@@ -82,18 +82,18 @@ async function runSyncTests() {
     proc.stdout.on('data', (data) => { output += data.toString(); });
     proc.stderr.on('data', (data) => { output += data.toString(); });
     proc.on('close', (code) => {
-      // Parse output to count pass/fail
-      const match = output.match(/(\d+) passed, (\d+) failed/);
-      if (match) {
-        const [, passed, failed] = match;
-        for (let i = 0; i < parseInt(passed); i++) {
-          results.push({ name: `supabase-sync: (${i + 1}/${passed})`, pass: true });
-        }
-        for (let i = 0; i < parseInt(failed); i++) {
-          results.push({ name: `supabase-sync: (failed ${i + 1}/${failed})`, pass: false, error: 'see above' });
-        }
-      }
-      console.log(output); // print sync test output
+      console.log(output); // print sync test output verbatim
+      // Record ONE honest result based on the child's exit code. Surface the real
+      // passed/failed/skipped numbers in the name; never fabricate per-test lines.
+      const match = output.match(/(\d+) passed, (\d+) failed(?:, (\d+) skipped)?/);
+      const summary = match
+        ? `${match[1]} passed, ${match[2]} failed${match[3] ? `, ${match[3]} skipped` : ''}`
+        : 'no summary parsed';
+      results.push({
+        name: `supabase-sync suite (${summary})`,
+        pass: code === 0,
+        error: code === 0 ? undefined : 'sync suite exited non-zero — see output above',
+      });
       resolve(code);
     });
   });
