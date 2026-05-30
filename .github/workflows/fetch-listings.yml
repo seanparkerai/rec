@@ -1,0 +1,42 @@
+# fetch-listings — v3 L1 listing fetcher.
+# Runs tools/fetch-listings.mjs on a GitHub runner (which has internet, unlike the
+# Claude sandbox). Writes normalised rows into the Supabase `listings` table via
+# the service role. Replaces the throwaway L0 probe workflow.
+#
+# Triggers:
+#   - workflow_dispatch: tap "Run workflow" in the Actions tab (phone-friendly).
+#   - schedule: daily at 07:10 UTC. Comment out the `schedule` block to pause.
+#
+# Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
+# SUPABASE_SERVICE_ROLE_KEY. (The same secrets the L0 probe used.)
+name: fetch-listings
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Fetch + normalise only, do not write'
+        type: boolean
+        default: false
+  schedule:
+    - cron: '10 7 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Fetch listings
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+        run: node tools/fetch-listings.mjs

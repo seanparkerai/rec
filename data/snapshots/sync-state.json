@@ -65,5 +65,11 @@
     "count": 0,
     "last_synced_at": null,
     "_note": "empty — no other debts entered; no app UI yet"
+  },
+  "listings": {
+    "count": 0,
+    "last_synced_at": null,
+    "_class": "live-content",
+    "_note": "v3 L1: fetcher-written live content (NOT git-versioned, NOT one of the 17 tracked git-synced tables). Populated by tools/fetch-listings.mjs via the fetch-listings workflow. Table created (migration listings_l1) 2026-05-30; awaiting first fetch run."
   }
 }

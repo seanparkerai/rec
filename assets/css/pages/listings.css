@@ -1,0 +1,117 @@
+/* pages/listings.css — v3 Live Listings (L1 + L2). Anchor: Linear-dense.
+   Reuses the Areas-page row idiom (.area-row); adds the 5-band listing fit dots,
+   verdict labels, status/price-drop tags, and the explainable "why" expander.
+   No new tokens, no hard-coded hex — all colour derived from existing tokens. */
+
+/* ── Controls bar ─────────────────────────────────────────────────────────── */
+.listings-controls {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-3); margin: 0 0 var(--space-3);
+}
+.listings-summary {
+  margin: 0; font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); color: var(--ink-muted);
+}
+.listings-toggle {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-sm); color: var(--ink-muted);
+  min-height: 44px; /* touch target (§10) */
+  margin: 0;
+}
+.listings-toggle input { margin: 0; }
+
+/* ── List + rows ──────────────────────────────────────────────────────────── */
+.listing-list { list-style: none; margin: 0; padding: 0; }
+.listing-row {
+  display: grid;
+  grid-template-columns: 2rem 0.75rem 1fr auto auto auto;
+  gap: var(--space-3); align-items: start;
+  padding: var(--space-3) var(--space-2);
+  border-bottom: 1px solid var(--hairline);
+}
+.listing-row .area-index { color: var(--ink-subtle); align-self: center; }
+.listing-row .fit-dot { width: 0.75rem; height: 0.75rem; align-self: center; margin-top: 0.15rem; }
+.listing-row .area-row__main { min-width: 0; }
+.listing-row .area-name {
+  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: var(--text-base); font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
+}
+.listing-row .area-place {
+  margin: 0.1rem 0 0; font-size: var(--text-sm); color: var(--ink-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── 5-band listing fit dots (reuses .fit-dot base from tile-shortlist.css;
+   .fit-dot--stretch / --unknown already exist and are intentionally reused). ── */
+.fit-dot--strong   { background: color-mix(in oklch, var(--accent) 90%, var(--paper)); }
+.fit-dot--possible { background: color-mix(in oklch, var(--accent) 55%, var(--paper)); }
+.fit-dot--weak     { background: color-mix(in oklch, var(--ink) 35%, var(--paper)); }
+.fit-dot--reject   { background: var(--paper); border: 1px solid var(--ink-muted); }
+
+/* ── Price + verdict column ───────────────────────────────────────────────── */
+.listing-row .bed-fit {
+  font-family: var(--font-data); font-feature-settings: "tnum"; color: var(--ink);
+  display: inline-flex; flex-direction: column; align-items: flex-end; gap: 0.1rem;
+  white-space: nowrap;
+}
+.verdict {
+  font-size: var(--text-xs); letter-spacing: 0.03em; text-transform: uppercase;
+  font-family: var(--font-body); font-weight: 500;
+}
+.verdict--strong   { color: color-mix(in oklch, var(--accent) 85%, var(--ink)); }
+.verdict--possible { color: color-mix(in oklch, var(--accent) 60%, var(--ink)); }
+.verdict--stretch  { color: var(--ink-muted); }
+.verdict--weak     { color: var(--ink-muted); }
+.verdict--reject   { color: var(--ink-subtle); }
+.verdict--unknown  { color: var(--ink-subtle); }
+
+/* ── Meta + open ──────────────────────────────────────────────────────────── */
+.listing-meta {
+  display: inline-flex; flex-direction: column; align-items: flex-end; gap: 0.1rem;
+  font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-xs); color: var(--ink-muted); white-space: nowrap;
+}
+.listing-open {
+  align-self: center; display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.25rem; min-height: 2.25rem; /* ≥24px target with spacing */
+  color: var(--ink-muted); text-decoration: none; font-size: var(--text-lg);
+  border-radius: var(--rec-radius-sm);
+}
+.listing-open:hover, .listing-open:focus-visible { color: var(--accent); }
+.listing-open--none { visibility: hidden; }
+
+/* ── Tags (status / price drop / new) ─────────────────────────────────────── */
+.listing-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) 0 0; }
+.listing-tag {
+  display: inline-flex; align-items: center; padding: 0.1rem 0.5rem;
+  font-size: var(--text-xs); font-weight: 500; border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--ink) 6%, var(--paper)); color: var(--ink-muted);
+}
+.listing-tag--new  { background: color-mix(in oklch, var(--accent) 18%, var(--paper)); color: color-mix(in oklch, var(--accent) 80%, var(--ink)); }
+.listing-tag--drop { background: color-mix(in oklch, var(--accent) 14%, var(--paper)); color: color-mix(in oklch, var(--accent) 75%, var(--ink)); }
+.listing-tag--under_offer,
+.listing-tag--sstc { background: color-mix(in oklch, var(--ink) 10%, var(--paper)); color: var(--ink-muted); }
+
+/* ── "Why this verdict" expander (the explainability contract, §4) ────────── */
+.listing-why { margin: var(--space-2) 0 0; }
+.listing-why > summary {
+  cursor: pointer; font-size: var(--text-xs); color: var(--ink-muted);
+  list-style-position: inside; min-height: 28px; display: inline-flex; align-items: center;
+}
+.listing-why > summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-why__list { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: 0.2rem; }
+.listing-why__item { display: flex; align-items: baseline; gap: var(--space-2); font-size: var(--text-sm); color: var(--ink); }
+.listing-why__sign { font-family: var(--font-data); width: 1rem; flex: none; }
+.listing-why__item--pos .listing-why__sign { color: color-mix(in oklch, var(--accent) 80%, var(--ink)); }
+.listing-why__item--neg .listing-why__sign { color: color-mix(in oklch, oklch(60% 0.18 30) 60%, var(--ink)); }
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+.listings-empty { list-style: none; padding: var(--space-6) var(--space-3); text-align: center; color: var(--ink-muted); }
+.listings-empty p { margin: 0 0 var(--space-2); }
+.listings-empty__hint { font-size: var(--text-sm); color: var(--ink-subtle); }
+
+/* ── Mobile (§10 mobile-first refinement) ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .listing-row { grid-template-columns: 1.5rem 0.75rem 1fr auto auto; }
+  .listing-meta { display: none; }
+}

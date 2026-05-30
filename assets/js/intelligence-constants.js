@@ -28,3 +28,36 @@ export const LADDER_RANGE = { min: 250_000, max: 500_000, step: 2_000 };
 
 /** Tick marks on the affordability ladder SVG. */
 export const LADDER_TICKS = [250_000, 300_000, 350_000, 400_000, 450_000, 500_000];
+
+// ── Listing fit score (v3 L2) ────────────────────────────────────────────────
+// The listing verdict is a 5-band scale, distinct from the 4-band affordability
+// verdict it consumes. Affordability is a HARD GATE first (out-of-reach ⇒ reject,
+// filtered from the default feed), then a soft signal blended with area/criteria
+// fit (and, from L4, the learned-preference weights). See docs/INTELLIGENCE_RULES.md
+// §"Listing fit". These weights are CALIBRATED and revisable — change them here and
+// in INTELLIGENCE_RULES.md in the same commit.
+
+/** 5-band listing verdict, best→worst. */
+export const LISTING_VERDICTS = ['strong', 'possible', 'stretch', 'weak', 'reject'];
+
+/** Score thresholds (0–1) → verdict band. A gated out-of-reach listing is 'reject'
+ *  regardless of score. */
+export const FIT_BANDS = { strong: 0.75, possible: 0.55, stretch: 0.4, weak: 0.2 };
+
+/** Contribution weights for each fit signal (points added/removed from a 0.5 base,
+ *  before clamping to 0–1). Positive = pushes toward 'strong'; negative possible. */
+export const FIT_WEIGHTS = {
+  affordabilityComfortable: 0.25,
+  affordabilityStretch: 0.10,
+  affordabilityTight: -0.05,
+  bedsIdeal: 0.15,
+  bedsMin: 0.05,
+  bedsBelowMin: -0.30,
+  typePreferred: 0.15,
+  typeAcceptable: 0.0,
+  typeExcluded: -0.40,
+  priceInBudget: 0.10,
+  priceOverBudget: -0.20,
+  lisaEligible: 0.08,
+  epcMeetsMin: 0.05,
+};

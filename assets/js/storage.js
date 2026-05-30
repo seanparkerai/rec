@@ -404,6 +404,29 @@ export async function getReport() {
   return data?.[0] ?? null;
 }
 
+// ── Live listings (v3 L1 — fetcher-written content; public read) ──────────
+// Read-only from the portal: rows are written by tools/fetch-listings.mjs via
+// the service role. listings is the one fetcher-written table (live-content
+// class — see docs/SUPABASE_SYNC.md), so there is no save path here.
+export async function getListings({ limit = 200, status = null } = {}) {
+  const sb = await _initSb();
+  if (!sb) return [];
+  try {
+    let q = sb
+      .from('listings')
+      .select('rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status, lat, lng, image_url, first_seen, last_seen, added_date, update_reason, price_history')
+      .order('first_seen', { ascending: false })
+      .limit(limit);
+    if (status) q = q.eq('status', status);
+    const { data, error } = await q;
+    if (error) throw error;
+    return data ?? [];
+  } catch (e) {
+    console.error('storage: read listings', e.message);
+    return [];
+  }
+}
+
 // ── Auth helpers ───────────────────────────────────────────────────────
 export async function getCurrentUser() {
   const sb = await _initSb();

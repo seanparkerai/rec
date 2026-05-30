@@ -1,0 +1,55 @@
+// tests/listing-fit.test.js — v3 L2 listing fit-score tests.
+// Uses the shared finances/criteria fixtures. Asserts the hard affordability
+// gate, the explainable contributions[] contract, and relative ordering that
+// holds regardless of the exact calibrated thresholds.
+import { scoreListingFit } from '../assets/js/listing-fit.js';
+
+export async function register({ test, assert, assertEqual, fixtures }) {
+  const { finances, criteria } = fixtures;
+
+  const mk = (over = {}) => ({
+    rightmove_id: 't', price: 300000, beds: 3, baths: 2,
+    property_type: 'Detached', epc: null, council_tax: null, ...over,
+  });
+
+  test('listing-fit: out-of-reach price is gated to reject', () => {
+    const r = scoreListingFit({ listing: mk({ price: 3_000_000 }), finances, criteria });
+    assertEqual(r.verdict, 'reject');
+    assertEqual(r.gated, true);
+    assert(r.affordability, 'affordability surfaced even when gated');
+  });
+
+  test('listing-fit: an affordable, in-criteria home is not gated and is scored', () => {
+    const r = scoreListingFit({ listing: mk(), finances, criteria });
+    assertEqual(r.gated, false);
+    assert(['strong', 'possible', 'stretch', 'weak'].includes(r.verdict), `got ${r.verdict}`);
+    assert(typeof r.score === 'number' && r.score >= 0 && r.score <= 1, 'score in 0..1');
+  });
+
+  test('listing-fit: every verdict ships an explainable contributions[]', () => {
+    const r = scoreListingFit({ listing: mk(), finances, criteria });
+    assert(Array.isArray(r.contributions) && r.contributions.length > 0, 'contributions present');
+    for (const c of r.contributions) {
+      assert('signal' in c && 'label' in c && 'delta' in c, 'each contribution names signal/label/delta');
+    }
+  });
+
+  test('listing-fit: an excluded type scores no higher than a preferred type (same price)', () => {
+    const preferred = scoreListingFit({ listing: mk({ property_type: 'Detached' }), finances, criteria });
+    const excluded = scoreListingFit({ listing: mk({ property_type: 'Flat / Apartment' }), finances, criteria });
+    assert(excluded.score <= preferred.score, `excluded ${excluded.score} <= preferred ${preferred.score}`);
+  });
+
+  test('listing-fit: below-minimum beds scores below an ideal-beds home (same price)', () => {
+    const ideal = scoreListingFit({ listing: mk({ beds: 3 }), finances, criteria });
+    const tooSmall = scoreListingFit({ listing: mk({ beds: 1 }), finances, criteria });
+    assert(tooSmall.score < ideal.score, `tooSmall ${tooSmall.score} < ideal ${ideal.score}`);
+  });
+
+  test('listing-fit: learned-preference weights feed through as contributions', () => {
+    const base = scoreListingFit({ listing: mk(), finances, criteria });
+    const boosted = scoreListingFit({ listing: mk(), finances, criteria, learnedPrefs: { 'quiet-edge-of-village': 0.2 } });
+    assert(boosted.score >= base.score, 'positive learned weight does not lower the score');
+    assert(boosted.contributions.some((c) => c.signal.startsWith('learned:')), 'learned contribution surfaced');
+  });
+}
