@@ -1,22 +1,22 @@
 === L0 PROBE: Rightmove data source ===
 outcodes: SO20, SO21, SP5, GU34, SP11
 maxDaysSinceAdded: 3
-apify fallback: NOT configured
+apify fallback: configured
 
 ── SO20 ──────────────────────────────────────────
-  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: no locationIdentifier (outcode did not resolve) — dhrumil actor needs a listUrl
 
 ── SO21 ──────────────────────────────────────────
-  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: no locationIdentifier (outcode did not resolve) — dhrumil actor needs a listUrl
 
 ── SP5 ──────────────────────────────────────────
-  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: no locationIdentifier (outcode did not resolve) — dhrumil actor needs a listUrl
 
 ── GU34 ──────────────────────────────────────────
-  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: no locationIdentifier (outcode did not resolve) — dhrumil actor needs a listUrl
 
 ── SP11 ──────────────────────────────────────────
-  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: APIFY_TOKEN/APIFY_ACTOR_ID not set — cannot use Apify fallback
+  ✗ FAILED: resolve: ok | direct: Unexpected token '<', "<!DOCTYPE "... is not valid JSON | apify: no locationIdentifier (outcode did not resolve) — dhrumil actor needs a listUrl
 
 === SUMMARY ===
 outcodes returning data: 0/5
