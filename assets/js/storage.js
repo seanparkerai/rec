@@ -387,6 +387,23 @@ export function saveShortlist(d)  { writeLocal('shortlist', d); _sbUpsert('short
 export function getDrawnZones()   { return readLocal('zones') ?? null; }
 export function saveDrawnZones(g) { writeLocal('zones', g); _sbUpsert('zones', g); return true; }
 
+// ── Reports (read-only; no localStorage cache needed) ─────────────────────
+// Returns the full row (id, slug, title, data, created_at…) or null.
+// Throws on Supabase error so the caller can show a retry affordance.
+export async function getReport() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return null;
+  const { data, error } = await sb
+    .from('reports')
+    .select('*')
+    .eq('household_id', hid)
+    .eq('status', 'published')
+    .order('created_at', { ascending: false })
+    .limit(1);
+  if (error) throw error;
+  return data?.[0] ?? null;
+}
+
 // ── Auth helpers ───────────────────────────────────────────────────────
 export async function getCurrentUser() {
   const sb = await _initSb();
