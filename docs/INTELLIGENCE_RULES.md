@@ -159,4 +159,35 @@ When deposit-risk thresholds change:
 1. Update verdict logic in `assets/js/deposit-risk.js` `deriveVerdict()`.
 2. Update the table above with rationale.
 3. Update test cases in `tests/deposit-risk.test.js`.
+
+---
+
+## Listing fit (v3 L2)
+
+The **listing** verdict is a 5-band scale — `strong / possible / stretch / weak / reject` —
+distinct from the 4-band **affordability** verdict it consumes. It lives in
+`assets/js/listing-fit.js` (`scoreListingFit`), which **imports** `assessAffordability`
+and never re-implements an affordability number.
+
+**The seam — gate, then signal:**
+1. **Hard gate.** `assessAffordability(price, …)` runs first. `out-of-reach` ⇒ verdict
+   `reject`, `gated:true`. Gated listings are filtered from the default feed (a
+   "show out-of-reach" toggle reveals them). No preference can surface a home you cannot buy.
+2. **Soft signal.** For everything that survives, the affordability band is one weighted
+   input alongside beds / type / price / LISA / EPC fit, and (from L4) the learned-preference weights.
+3. **Output.** A 5-band verdict + a `contributions[]` array built *by construction*, so every
+   verdict can show its working (the anti-black-box contract). Each entry is `{ signal, label, delta }`.
+
+**Score → band (`FIT_BANDS`, 0–1):** strong ≥ 0.75 · possible ≥ 0.55 · stretch ≥ 0.40 ·
+weak ≥ 0.20 · else reject. Base score 0.5, contributions summed, clamped 0–1.
+
+**Contribution weights (`FIT_WEIGHTS`)** — CALIBRATED, revisable:
+affordability comfortable +0.25 / stretch +0.10 / tight -0.05 · beds ideal +0.15 / min +0.05 /
+below-min -0.30 · type preferred +0.15 / acceptable 0 / excluded -0.40 · price in-budget +0.10 /
+over-budget -0.20 · LISA-eligible +0.08 · EPC meets min +0.05.
+
+Constants live in `assets/js/intelligence-constants.js` (`LISTING_VERDICTS`, `FIT_BANDS`,
+`FIT_WEIGHTS`). Change them and this section together. *(v3 L2 — added 2026-05-30.)*
+
+### Maintenance (deposit-risk, cont.)
 4. Commit with `docs: update intelligence rules — deposit-risk thresholds`.
