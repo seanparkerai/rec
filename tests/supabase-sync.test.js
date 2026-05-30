@@ -23,16 +23,17 @@ test('snapshot file exists and is valid JSON', async () => {
   assert(typeof parsed === 'object', 'snapshot must be an object');
 });
 
-test('snapshot includes all 17 tracked tables', async () => {
+test('snapshot includes all 18 tracked tables', async () => {
   const path = resolve(root, 'data/snapshots/sync-state.json');
   const snapshot = JSON.parse(await readFile(path, 'utf8'));
-  // Canonical: 15 user-state + 2 content mirrors = 17 tracked tables.
+  // Canonical: 16 user-state + 2 content mirrors = 18 tracked tables.
   // Source of truth for this list is docs/SUPABASE_SYNC.md §0. Keep in sync.
   const expected = [
     'profile', 'criteria', 'finances', 'goals', 'shortlist', 'zones',
     'journey_checks', 'contacts', 'outreach',
     'readiness_checklist', 'investments_accounts', 'investments_history',
     'debts_credit_cards', 'debts_student_loans', 'debts_other',
+    'listing_reactions',
     'areas', 'house_types',
   ];
   for (const table of expected) {
@@ -55,6 +56,20 @@ test('snapshot v3+ tables have required shape', async () => {
     assert(table in snapshot, `snapshot missing debt table: ${table}`);
     assert('count' in snapshot[table], `snapshot.${table} missing count`);
   }
+});
+
+test('listing_reactions vocabulary is well-formed (v3 L3)', async () => {
+  const mod = await import('../assets/js/listing-reactions.js');
+  // Append-only graded-signal contract: like/pass/reject, only like+reject graded.
+  assert(Array.isArray(mod.REACTIONS) && mod.REACTIONS.length === 3, 'REACTIONS must be the 3-verb set');
+  assert(mod.REACTIONS.includes('like') && mod.REACTIONS.includes('reject'), 'REACTIONS must include like+reject');
+  assert(!mod.GRADED_REACTIONS.includes('pass'), 'pass must not be a graded training signal');
+  assert(mod.REJECT_REASONS.length >= 3 && mod.REJECT_REASONS.every((r) => r.key && r.label),
+    'REJECT_REASONS must be {key,label} chips');
+  // Personal-status lifecycle is distinct from reactions and lives on the shortlist record.
+  assert(mod.PERSONAL_STATUSES.join(',') === 'new,saved,viewed,offered,rejected', 'personal-status lifecycle locked');
+  assert(typeof mod.validateReaction === 'function' && typeof mod.latestPerListing === 'function',
+    'reaction helpers must be exported for storage.js');
 });
 
 // ── Offline: repo content structure ──────────────────────────────────────────

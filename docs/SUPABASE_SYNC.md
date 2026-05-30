@@ -11,25 +11,32 @@ the table in §1 as authoritative — every data type in the app belongs to exac
 
 ## 0. Canonical table inventory (single source of truth)
 
-**Live schema = 20 tables** (verified via `list_tables` 2026-05-30, all RLS-enabled):
+**Live schema = 21 tables** (verified via `list_tables` 2026-05-30, all RLS-enabled):
 
-- **15 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
+- **16 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
   `finances`, `goals`, `shortlist`, `zones`, `journey_checks`, `contacts`, `outreach`,
   `readiness_checklist`, `investments_accounts`, `investments_history`, `debts_credit_cards`,
-  `debts_student_loans`, `debts_other`.
+  `debts_student_loans`, `debts_other`, `listing_reactions`.
 - **2 content mirrors** (source of truth = repo JSON): `areas` (195 rows), `house_types` (15 rows).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.
 
-**17 of the 20 are "tracked"** for the sync contract (15 user-state + 2 content) and appear in
+**18 of the 21 are "tracked"** for the sync contract (16 user-state + 2 content) and appear in
 `data/snapshots/sync-state.json`. Note: `checklists` and `outreach_templates` have **no** mirror
 table — those catalogues are repo-JSON-only. Any other doc, test, or rule that states a different
 count is wrong and must be reconciled to this section.
 
 **v3 L1 addition (2026-05-30):** `listings` — a new **live-content** class (see §1).
-Created by migration `listings_l1`. It is **not** one of the 17 git-tracked sync
+Created by migration `listings_l1`. It is **not** one of the tracked git-synced
 tables and is **not** mirrored to/from repo JSON: it is written exclusively by
 `tools/fetch-listings.mjs` (service role) and changes hourly, so it has no
-review/cite value the way `areas` does. Physical table count is now **22** (21 + `listings`).
+review/cite value the way `areas` does.
+
+**v3 L3 addition (2026-05-30):** `listing_reactions` — a **user-state** table (per household_id),
+but **append-only**: every reaction (like/pass/reject + optional reject reason + `listing_snapshot`)
+is a new row; the latest row per listing is the current reaction. Created by migration
+`listing_reactions_l3`. RLS allows household members to read + insert only (no update/delete). It is
+tracked sync table #18. Physical table count is now **23** (the 21 above + the un-curated `reports`
+table + `listings`).
 
 ---
 
@@ -42,7 +49,8 @@ review/cite value the way `areas` does. Physical table count is now **22** (21 +
 | **Content (per-area)** | `data/areas/<id>.json` | Repo file (git-versioned) | Claude only | App fetches the JSON; Supabase `areas` mirror table answers ad-hoc queries |
 | **Content (catalogues)** | `data/house-types.json`, `data/checklists.json`, `data/outreach-templates.json` | Repo file | Claude only | App fetches the JSON; only `house_types` has a Supabase mirror table — `checklists` / `outreach_templates` are repo-JSON-only (no mirror) |
 | **Index** | `data/areas.json` | Derived from per-area files via `tools/build-areas.mjs` | Build tool | App fetches the JSON; Supabase `areas` mirror table |
-| **Live content (v3)** | `listings` (Supabase only — no repo file) | Supabase (fetcher-written) | `tools/fetch-listings.mjs` via service-role REST UPSERT (`on_conflict=rightmove_id`) | `storage.js#getListings` → listings page. NOT git-versioned; not in the 17 tracked tables |
+| **Live content (v3)** | `listings` (Supabase only — no repo file) | Supabase (fetcher-written) | `tools/fetch-listings.mjs` via service-role REST UPSERT (`on_conflict=rightmove_id`) | `storage.js#getListings` → listings page. NOT git-versioned; not a tracked table |
+| **User state (append-only, v3 L3)** | `listing_reactions` (Supabase only — no repo file) | Supabase (per household_id) | Portal via `storage.js#saveListingReaction` (INSERT — append-only); Claude via MCP `execute_sql` INSERT | `storage.js#getListingReactions` reduces the log to the latest reaction per listing. Tracked table #18 |
 | **Schema** | `supabase/schema.sql` | Migration history applied via MCP | Claude only, via `mcp__supabase__apply_migration` | Supabase project state |
 
 Anything not in this table is either ephemeral UI state (URL params, in-memory only) or a bug —

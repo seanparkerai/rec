@@ -50,6 +50,7 @@ const { register: registerSavingsSeries } = await import('../tests/savings-serie
 const { register: registerOutreachTemplates } = await import('../tests/outreach-templates.test.js');
 const { register: registerListingsNormalise } = await import('../tests/listings-normalise.test.js');
 const { register: registerListingFit } = await import('../tests/listing-fit.test.js');
+const { register: registerListingReactions } = await import('../tests/listing-reactions.test.js');
 const { register: registerDomUtils }                 = await import('../tests/dom-utils.test.js');
 const { register: registerCharacterizationHome }     = await import('../tests/characterization-home.test.js');
 const { register: registerCharacterizationFinances } = await import('../tests/characterization-finances.test.js');
@@ -66,6 +67,7 @@ await registerSavingsSeries({ test, assert, assertEqual, fixtures });
 await registerOutreachTemplates({ test, assert, assertEqual, fixtures });
 await registerListingsNormalise({ test, assert, assertEqual, fixtures });
 await registerListingFit({ test, assert, assertEqual, fixtures });
+await registerListingReactions({ test, assert, assertEqual, fixtures });
 await registerDomUtils({ test, assert, assertEqual });
 await registerCharacterizationHome({ test, assert, assertEqual, fixtures });
 await registerCharacterizationFinances({ test, assert, assertEqual, fixtures });

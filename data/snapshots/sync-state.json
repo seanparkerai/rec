@@ -66,6 +66,12 @@
     "last_synced_at": null,
     "_note": "empty — no other debts entered; no app UI yet"
   },
+  "listing_reactions": {
+    "count": 0,
+    "last_synced_at": null,
+    "_class": "user-state (append-only)",
+    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). Table created (migration listing_reactions_l3) 2026-05-30; no rows yet. Tracked sync table #18 (16 user-state + 2 content)."
+  },
   "listings": {
     "count": 0,
     "last_synced_at": null,

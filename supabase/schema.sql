@@ -304,6 +304,38 @@ DROP POLICY IF EXISTS "sync_log public read" ON sync_log;
 CREATE POLICY "sync_log public read" ON sync_log FOR SELECT USING (true);
 
 -- -----------------------------------------------------------------------
+-- listing_reactions — v3 L3 reaction log (append-only graded preference signal).
+-- One row per reaction event; the latest row per (household_id, listing_id) is the
+-- current reaction. listing_snapshot preserves the listing at reaction time so a
+-- training signal survives the live listing being withdrawn/deleted.
+-- User-state class. RLS: household members read + insert; NO update/delete
+-- (append-only by contract), and so deliberately no updated_at trigger below.
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS listing_reactions (
+  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id     uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  user_id          uuid,                                    -- auth.uid() of the reactor
+  listing_id       text NOT NULL,                           -- listings.rightmove_id (loose ref by design)
+  reaction         text NOT NULL CHECK (reaction IN ('like','pass','reject')),
+  reason           text,                                    -- chip key / free text; meaningful for reject
+  listing_snapshot jsonb,                                   -- listing at reaction time (training durability)
+  created_at       timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE listing_reactions ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "household members can read listing_reactions" ON listing_reactions;
+CREATE POLICY "household members can read listing_reactions"
+  ON listing_reactions FOR SELECT USING (is_household_member(household_id));
+
+DROP POLICY IF EXISTS "household members can insert listing_reactions" ON listing_reactions;
+CREATE POLICY "household members can insert listing_reactions"
+  ON listing_reactions FOR INSERT WITH CHECK (is_household_member(household_id));
+
+CREATE INDEX IF NOT EXISTS idx_listing_reactions_household ON listing_reactions (household_id);
+CREATE INDEX IF NOT EXISTS idx_listing_reactions_listing   ON listing_reactions (household_id, listing_id, created_at DESC);
+
+-- -----------------------------------------------------------------------
 -- updated_at trigger — applied to every data table
 -- DROP TRIGGER IF EXISTS inside a DO block is already idempotent.
 -- -----------------------------------------------------------------------

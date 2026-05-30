@@ -105,6 +105,53 @@
 .listing-why__item--pos .listing-why__sign { color: color-mix(in oklch, var(--accent) 80%, var(--ink)); }
 .listing-why__item--neg .listing-why__sign { color: color-mix(in oklch, oklch(60% 0.18 30) 60%, var(--ink)); }
 
+/* ── Reaction + personal-status controls (L3) ─────────────────────────────── */
+.listing-controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+}
+.listing-react { display: inline-flex; gap: var(--space-2); }
+.listing-react__btn,
+.listing-chip {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 1.2;
+  min-height: 32px; padding: 0.25rem 0.65rem; /* ≥24px target with spacing (§11) */
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink-muted); cursor: pointer;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+.listing-react__btn:hover,
+.listing-chip:hover { color: var(--ink); border-color: var(--ink-muted); }
+.listing-react__btn:focus-visible,
+.listing-chip:focus-visible,
+.listing-status:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+/* Pressed (current) reaction — pair colour with weight so it is not colour-only (§11). */
+.listing-react__btn[aria-pressed="true"] {
+  font-weight: 600; color: var(--paper);
+  background: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border-color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+}
+.listing-chip[aria-pressed="true"] {
+  font-weight: 600; color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border-color: color-mix(in oklch, var(--accent) 60%, var(--paper));
+  background: color-mix(in oklch, var(--accent) 12%, var(--paper));
+}
+
+.listing-reasons { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) 0 0; flex-basis: 100%; }
+.listing-reasons[hidden] { display: none; }
+
+.listing-status-wrap {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-xs); color: var(--ink-muted);
+}
+.listing-status__label { white-space: nowrap; }
+.listing-status {
+  font-family: var(--font-body); font-size: var(--text-xs);
+  min-height: 32px; padding: 0.2rem 0.5rem;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink);
+}
+
 /* ── Empty state ──────────────────────────────────────────────────────────── */
 .listings-empty { list-style: none; padding: var(--space-6) var(--space-3); text-align: center; color: var(--ink-muted); }
 .listings-empty p { margin: 0 0 var(--space-2); }

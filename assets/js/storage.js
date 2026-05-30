@@ -4,6 +4,7 @@
 // Public API is identical to the localStorage-only version; no page changes needed.
 import { loadJSON } from './data-loader.js';
 import { STORAGE_NS } from './config.js';
+import { normaliseReaction, latestPerListing, isPersonalStatus } from './listing-reactions.js';
 
 // ── localStorage helpers ──────────────────────────────────────────────
 const key = (k) => `${STORAGE_NS}:${k}`;
@@ -380,10 +381,70 @@ export async function getAreaDetail(id) { return await loadJSON(`data/areas/${id
 export async function getHouseTypes()   { return await loadJSON('house-types'); }
 
 // Shortlist follows the _get pattern (Supabase-first, localStorage write-through cache).
-export async function getShortlist(opts = {}) {
-  return (await _get('shortlist', 'shortlist', null, opts.onUpdate || null)) ?? [];
+//
+// Record shape (v3 L3): the shortlist row's `data` jsonb is normalised to
+// `{ ids: string[], status: { [id]: personalStatus } }`. The personal-status map
+// (new/saved/viewed/offered/rejected) lives ON this existing record — it is NOT a
+// parallel state machine. Legacy rows stored a bare `string[]`; `_normShortlist`
+// reads both forms so getShortlist() keeps returning a plain id array unchanged.
+function _normShortlist(raw) {
+  if (Array.isArray(raw)) return { ids: raw.filter((x) => typeof x === 'string'), status: {} };
+  if (raw && typeof raw === 'object') {
+    return {
+      ids: Array.isArray(raw.ids) ? raw.ids.filter((x) => typeof x === 'string') : [],
+      status: (raw.status && typeof raw.status === 'object') ? raw.status : {},
+    };
+  }
+  return { ids: [], status: {} };
 }
-export function saveShortlist(d)  { writeLocal('shortlist', d); _sbUpsert('shortlist', d); return true; }
+
+export async function getShortlist(opts = {}) {
+  const onUpdate = opts.onUpdate ? (rec) => opts.onUpdate(_normShortlist(rec).ids) : null;
+  const rec = await _get('shortlist', 'shortlist', null, onUpdate);
+  return _normShortlist(rec).ids;
+}
+
+// saveShortlist(ids) preserves the personal-status map for ids that survive,
+// so toggling the shortlist never wipes a status set on the same record.
+export function saveShortlist(ids) {
+  const arr = Array.isArray(ids) ? ids.filter((x) => typeof x === 'string') : [];
+  const prev = _normShortlist(readLocal('shortlist'));
+  const status = {};
+  for (const id of arr) if (prev.status[id]) status[id] = prev.status[id];
+  const rec = { ids: arr, status };
+  writeLocal('shortlist', rec);
+  _sbUpsert('shortlist', rec);
+  return true;
+}
+
+// Personal-status lifecycle map (id → new/saved/viewed/offered/rejected), read
+// from the same shortlist record.
+export async function getShortlistStatuses(opts = {}) {
+  const onUpdate = opts.onUpdate ? (rec) => opts.onUpdate(_normShortlist(rec).status) : null;
+  const rec = await _get('shortlist', 'shortlist', null, onUpdate);
+  return _normShortlist(rec).status;
+}
+
+// Set (or clear, when status is null/'') the personal status for one id. Setting
+// a status also adds the id to the shortlist, since the status lives on that
+// record. Re-reads the freshest record first so a status change never clobbers
+// shortlist ids set on another device.
+export async function setShortlistStatus(id, status) {
+  if (!id) return false;
+  if (status != null && status !== '' && !isPersonalStatus(status)) {
+    console.error('storage: invalid shortlist status', status);
+    return false;
+  }
+  const rec = _normShortlist((await _sbGet('shortlist')) ?? readLocal('shortlist'));
+  const ids = new Set(rec.ids);
+  const map = { ...rec.status };
+  if (status == null || status === '') { delete map[id]; }
+  else { map[id] = status; ids.add(id); }
+  const next = { ids: [...ids], status: map };
+  writeLocal('shortlist', next);
+  _sbUpsert('shortlist', next);
+  return true;
+}
 export function getDrawnZones()   { return readLocal('zones') ?? null; }
 export function saveDrawnZones(g) { writeLocal('zones', g); _sbUpsert('zones', g); return true; }
 
@@ -424,6 +485,84 @@ export async function getListings({ limit = 200, status = null } = {}) {
   } catch (e) {
     console.error('storage: read listings', e.message);
     return [];
+  }
+}
+
+// ── Listing reactions (v3 L3 — append-only graded preference signal) ───────
+// User-state, household-scoped. Every reaction is a new row (append-only); the
+// latest row per listing is the current reaction. getListingReactions returns a
+// { [listing_id]: { reaction, reason, created_at } } map of the *current*
+// reaction per listing, cached + revalidated like the readiness checklist.
+async function _sbGetReactionRows() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return null;
+  try {
+    const { data, error } = await sb
+      .from('listing_reactions')
+      .select('listing_id, reaction, reason, created_at')
+      .eq('household_id', hid)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data ?? [];
+  } catch (e) {
+    console.error('storage: read listing_reactions', e.message);
+    return null;
+  }
+}
+
+function _reactionsToMap(rows) {
+  const latest = latestPerListing(rows || []);
+  const obj = {};
+  for (const [id, row] of latest) {
+    obj[id] = { reaction: row.reaction, reason: row.reason ?? null, created_at: row.created_at };
+  }
+  return obj;
+}
+
+export async function getListingReactions(opts = {}) {
+  const cached = readLocal('listing-reactions');
+  if (cached !== null) {
+    _sbGetReactionRows().then((rows) => {
+      if (!rows) return;
+      const fresh = _reactionsToMap(rows);
+      if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
+        writeLocal('listing-reactions', fresh);
+        if (opts.onUpdate) opts.onUpdate(fresh);
+      }
+    }).catch(() => {});
+    return cached;
+  }
+  const rows = await _sbGetReactionRows();
+  const map = rows ? _reactionsToMap(rows) : {};
+  if (rows) writeLocal('listing-reactions', map);
+  return map;
+}
+
+export async function saveListingReaction({ listing_id, reaction, reason = null, listing_snapshot = null }) {
+  const norm = normaliseReaction({ listing_id, reaction, reason, listing_snapshot });
+  if (!norm) { console.error('storage: invalid listing reaction', reaction); return false; }
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return false;
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const { error } = await sb.from('listing_reactions').insert({
+      household_id: hid,
+      user_id: session?.user?.id ?? null,
+      listing_id: norm.listing_id,
+      reaction: norm.reaction,
+      reason: norm.reason,
+      listing_snapshot: norm.listing_snapshot,
+    });
+    if (error) throw error;
+    // Optimistically refresh the current-reaction cache so the UI is instant.
+    const cached = readLocal('listing-reactions') ?? {};
+    cached[norm.listing_id] = { reaction: norm.reaction, reason: norm.reason, created_at: norm.created_at };
+    writeLocal('listing-reactions', cached);
+    return true;
+  } catch (e) {
+    console.error('storage: write listing_reactions', e.message);
+    _toast(`Sync error (reactions): ${e.message}`, true);
+    return false;
   }
 }
 

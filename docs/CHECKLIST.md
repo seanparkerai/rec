@@ -37,8 +37,14 @@ Plan: `docs/V3_LISTINGS_PLAN.md`. Build order L0→L6; minimum-lovable = L0–L4
 - [x] **L2 — Fit score**: `assets/js/listing-fit.js` (5-band verdict, affordability hard gate,
       explainable `contributions[]`; imports `assessAffordability`, 7 tests); `FIT_BANDS`/`FIT_WEIGHTS`
       in `intelligence-constants.js` + `INTELLIGENCE_RULES.md` §"Listing fit"; 5-band dots + "why" expander.
-- [ ] **L3 — Reaction log + Layer 1** (next): `listing_reactions` table, reaction UI + reason chips,
-      shortlist personal-status extension.
+- [x] **L3 — Reaction log + Layer 1**: `listing_reactions` table (append-only; migration
+      `listing_reactions_l3` applied — like/pass/reject + reason chips + `listing_snapshot`);
+      `assets/js/listing-reactions.js` (pure vocabulary / validation / latest-per-listing, 9 tests);
+      `storage.js#getListingReactions`/`saveListingReaction`; reaction UI + reject reason chips on
+      each `pages/listings.html` row; shortlist personal-status map (new/saved/viewed/offered/rejected)
+      extended onto the existing shortlist record via `getShortlistStatuses`/`setShortlistStatus`.
+      Also fixed a latent L2 bug: `page-listings.js` imported `el`/`clear` from `dom.js`, which never
+      exported them — added both helpers.
 - [ ] **L4 — Learning + cold start** · [ ] **L5 — Recommendation loop + NBA** · [ ] **L6 — Dossier + workflow**
 
 ---
