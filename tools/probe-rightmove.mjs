@@ -91,10 +91,16 @@ async function resolveOutcodeDirect(outcode) {
         JSON.stringify(Object.keys(json || {})).slice(0, 200)
     );
   }
-  const locationIdentifier = idOf(hit);
+  let locationIdentifier = idOf(hit);
   if (!locationIdentifier) {
     // Surface the real shape so we can lock the field name.
     throw new Error('match has no id field; sample=' + JSON.stringify(hit).slice(0, 300));
+  }
+  // Rightmove search needs the "OUTCODE^nnnn" form. The typeahead often returns
+  // just the numeric id + a separate type — reconstruct the full identifier.
+  if (/^\d+$/.test(locationIdentifier)) {
+    const type = String(hit.type || hit.locationType || hit.locationTypeId || 'OUTCODE').toUpperCase();
+    locationIdentifier = `${type}^${locationIdentifier}`;
   }
   return { locationIdentifier, displayName: txtOf(hit) || outcode };
 }
@@ -133,11 +139,13 @@ async function fetchListingsDirect(locationIdentifier) {
 // resolve the outcode first (the typeahead works from a Codespace's IP even
 // though it's blocked from the Claude sandbox).
 function buildSearchUrl(locationIdentifier) {
+  // PROBE NOTE: no maxDaysSinceAdded here on purpose — we want to confirm the
+  // source returns ANY in-region listings. L1's real fetcher re-adds the 3-day
+  // window for incremental fetches.
   const params = new URLSearchParams({
     searchType: 'SALE',
     locationIdentifier,
     sortType: '6', // newest first
-    maxDaysSinceAdded: String(MAX_DAYS_SINCE_ADDED),
   });
   return `https://www.rightmove.co.uk/property-for-sale/find.html?${params}`;
 }
@@ -168,21 +176,23 @@ async function fetchListingsApify(locationIdentifier) {
   });
   if (!res.ok) throw new Error(`apify HTTP ${res.status}`);
   const items = await res.json();
+  const arr = Array.isArray(items) ? items : [];
   // Field names vary by actor — keep several fallbacks; the probe prints whatever
   // it finds so we can lock the exact mapping for the L1 fetcher from real output.
-  return (Array.isArray(items) ? items : []).map((p) => ({
+  const rows = arr.map((p) => ({
     address: p.displayAddress || p.address || p.title || null,
     price: p.price?.amount ?? p.price ?? p.priceValue ?? null,
     beds: p.bedrooms ?? p.beds ?? null,
     type: p.propertySubType || p.propertyType || p.type || null,
     added: p.firstVisibleDate || p.addedOrReduced || p.addedOn || p.listingUpdate?.listingUpdateDate || null,
   }));
+  return { rows, rawCount: arr.length, rawSample: arr[0] || null };
 }
 
 // --- per-outcode probe -------------------------------------------------------
 
 async function probeOutcode(outcode) {
-  const out = { outcode, route: null, count: 0, inOutcode: 0, wrongRegion: 0, rows: [], error: null };
+  const out = { outcode, route: null, count: 0, inOutcode: 0, wrongRegion: 0, rows: [], rawCount: 0, rawSample: null, error: null };
 
   // Resolve the outcode -> locationIdentifier once. Needed by BOTH routes
   // (the direct _search and the dhrumil actor's listUrl).
@@ -199,6 +209,7 @@ async function probeOutcode(outcode) {
   if (loc) {
     try {
       out.rows = await fetchListingsDirect(loc.locationIdentifier);
+      out.rawCount = out.rows.length;
       out.route = `direct (${loc.locationIdentifier} · ${loc.displayName})`;
     } catch (e) {
       directErr = e.message;
@@ -208,7 +219,10 @@ async function probeOutcode(outcode) {
   // 2) apify fallback (uses the resolved locationIdentifier)
   if (!out.route) {
     try {
-      out.rows = await fetchListingsApify(loc?.locationIdentifier);
+      const res = await fetchListingsApify(loc?.locationIdentifier);
+      out.rows = res.rows;
+      out.rawCount = res.rawCount;
+      out.rawSample = res.rawSample;
       out.route = `apify (${APIFY_ACTOR_ID} · ${loc?.locationIdentifier})`;
     } catch (errApify) {
       out.error =
@@ -238,6 +252,7 @@ async function main() {
   console.log('');
 
   const results = [];
+  let sampleShown = false;
   for (const oc of TEST_OUTCODES) {
     const r = await probeOutcode(oc);
     results.push(r);
@@ -249,7 +264,13 @@ async function main() {
       continue;
     }
     console.log(`  route: ${r.route}`);
+    console.log(`  raw items from source: ${r.rawCount}`);
     console.log(`  results: ${r.count}  (in-outcode: ${r.inOutcode}, wrong-region: ${r.wrongRegion})`);
+    if (!sampleShown && r.rawSample) {
+      sampleShown = true;
+      console.log('  RAW SAMPLE (field names to lock for L1):');
+      console.log('    ' + JSON.stringify(r.rawSample).slice(0, 900));
+    }
     for (const row of r.rows.slice(0, 8)) {
       const flag = row._region === 'in-outcode' ? '' : `  [${row._region}]`;
       console.log(`    • ${row.address ?? '—'} — ${priceFmt(row.price)} — added ${row.added ?? '?'}${flag}`);
@@ -262,21 +283,19 @@ async function main() {
 
   // summary + cadence signal
   console.log('=== SUMMARY ===');
-  const ok = results.filter((r) => !r.error && r.count > 0);
-  const totalNew = ok.reduce((s, r) => s + r.count, 0);
-  console.log(`outcodes returning data: ${ok.length}/${TEST_OUTCODES.length}`);
-  console.log(`total listings (<=${MAX_DAYS_SINCE_ADDED}d old) across probed outcodes: ${totalNew}`);
-  if (ok.length) {
-    const perDay = (totalNew / MAX_DAYS_SINCE_ADDED).toFixed(1);
-    console.log(`≈ new-listings/day across ${ok.length} probed outcodes: ${perDay}`);
-    console.log('  (low/trickle → every-other-day with a 3-day window is plenty; high → daily)');
-  }
+  const withData = results.filter((r) => !r.error && r.rawCount > 0);
+  const totalRaw = results.reduce((s, r) => s + r.rawCount, 0);
+  const totalInRegion = results.reduce((s, r) => s + r.inOutcode, 0);
+  console.log(`outcodes returning ANY listings: ${withData.length}/${TEST_OUTCODES.length}`);
+  console.log(`total raw items across probed outcodes: ${totalRaw}`);
+  console.log(`of which verifiably in-outcode: ${totalInRegion}`);
   const anyWrong = results.some((r) => r.wrongRegion > 0);
   const anyFail = results.some((r) => r.error);
   if (anyWrong) console.log('VERDICT: ✗ wrong-region results seen — do NOT trust this source/route until fixed.');
-  else if (anyFail && !ok.length) console.log('VERDICT: ✗ no route returned data — direct blocked and no Apify fallback configured.');
-  else if (anyFail) console.log('VERDICT: ~ partial — some outcodes failed; review per-outcode errors above.');
-  else console.log('VERDICT: ✓ all probed outcodes returned in-region data — source looks usable for L1.');
+  else if (!withData.length && anyFail) console.log('VERDICT: ✗ no route returned data — see per-outcode errors above.');
+  else if (!withData.length) console.log('VERDICT: ✗ source reachable but returned 0 listings for every outcode — investigate input shape or location ids.');
+  else if (anyFail) console.log('VERDICT: ~ partial — some outcodes returned data, others failed; review above.');
+  else console.log('VERDICT: ✓ source returns in-region listings — usable for L1.');
 }
 
 main().catch((e) => {
