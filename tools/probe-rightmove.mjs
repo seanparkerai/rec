@@ -74,17 +74,29 @@ async function resolveOutcodeDirect(outcode) {
   if (!res.ok) throw new Error(`typeahead HTTP ${res.status}`);
   const json = await res.json();
   // Shape varies; look for an OUTCODE-type match whose display text contains the outcode.
-  const matches = json?.matches || json?.typeAheadLocations || json?.locations || [];
-  const hit = matches.find((m) => {
-    const id = String(m.locationIdentifier || m.identifier || '');
-    const txt = String(m.displayName || m.displayText || m.name || '').toUpperCase();
-    return id.startsWith('OUTCODE') || txt.includes(outcode.toUpperCase());
-  });
-  if (!hit) throw new Error('no outcode match in typeahead payload');
-  return {
-    locationIdentifier: hit.locationIdentifier || hit.identifier,
-    displayName: hit.displayName || hit.displayText || hit.name,
-  };
+  const matches =
+    json?.matches || json?.typeAheadLocations || json?.locations || json?.suggestions || [];
+  // Field names differ across Rightmove endpoints — try all the common ones.
+  const idOf = (m) =>
+    String(m.locationIdentifier || m.identifier || m.id || m.locationId || m.value || '');
+  const txtOf = (m) =>
+    String(m.displayName || m.displayText || m.name || m.label || m.text || '').toUpperCase();
+  const hit =
+    matches.find((m) => idOf(m).toUpperCase().startsWith('OUTCODE')) ||
+    matches.find((m) => txtOf(m).includes(outcode.toUpperCase())) ||
+    matches[0];
+  if (!hit) {
+    throw new Error(
+      'no match in typeahead payload; topkeys=' +
+        JSON.stringify(Object.keys(json || {})).slice(0, 200)
+    );
+  }
+  const locationIdentifier = idOf(hit);
+  if (!locationIdentifier) {
+    // Surface the real shape so we can lock the field name.
+    throw new Error('match has no id field; sample=' + JSON.stringify(hit).slice(0, 300));
+  }
+  return { locationIdentifier, displayName: txtOf(hit) || outcode };
 }
 
 async function fetchListingsDirect(locationIdentifier) {
