@@ -64,6 +64,25 @@ export function mapStatus(raw) {
 }
 
 /**
+ * First floor-plan image URL from a raw source item, or null. Floor plans only
+ * appear on detail-page payloads (`floorplans: [{ url }]` / `floorplan`); the
+ * search-summary payload carries none, so this returns null for those. Pure.
+ */
+export function extractFloorplanUrl(raw) {
+  const fps = raw?.floorplans ?? raw?.floorplan ?? null;
+  if (Array.isArray(fps)) {
+    for (const f of fps) {
+      const u = typeof f === 'string' ? f : (f?.url ?? f?.src);
+      if (u) return String(u);
+    }
+    return null;
+  }
+  if (typeof fps === 'string') return fps;
+  if (fps && (fps.url || fps.src)) return String(fps.url ?? fps.src);
+  return null;
+}
+
+/**
  * Normalise one raw source item into our `listings` row shape.
  * @param {object} raw    a single dataset item from the Apify actor.
  * @param {object} ctx    { outcode, source, now }
@@ -99,6 +118,7 @@ export function normaliseRawListing(raw, { outcode, source = 'rightmove-apify', 
     lat: lat != null ? Number(lat) : null,
     lng: lng != null ? Number(lng) : null,
     image_url: Array.isArray(raw.images) ? (raw.images[0] ?? null) : (raw.image ?? null),
+    floorplan_url: extractFloorplanUrl(raw), // null on summary payloads; set on detail scrapes
     description: raw.description ?? null,
     first_seen: nowIso,
     last_seen: nowIso,

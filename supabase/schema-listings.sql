@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS listings (
   lat              double precision,
   lng              double precision,
   image_url        text,
+  floorplan_url    text,                          -- first floor-plan image (detail scrapes only; null on summary fetch)
   description      text,
   first_seen       timestamptz NOT NULL DEFAULT now(),
   last_seen        timestamptz NOT NULL DEFAULT now(),
@@ -48,6 +49,9 @@ CREATE TABLE IF NOT EXISTS listings (
   raw_json         jsonb NOT NULL,
   updated_at       timestamptz NOT NULL DEFAULT now()
 );
+
+-- Idempotent column adds (so re-running on an existing table picks up new columns).
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS floorplan_url text;
 
 ALTER TABLE listings ENABLE ROW LEVEL SECURITY;
 

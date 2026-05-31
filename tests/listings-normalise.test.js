@@ -9,6 +9,7 @@ import {
   mergePriceHistory,
   parseAddedDate,
   extractOutcodeFromAddress,
+  extractFloorplanUrl,
 } from '../tools/listings-normalise.mjs';
 
 // The exact raw shape captured by the L0 probe (actor dhrumil~rightmove-scraper).
@@ -52,6 +53,21 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(l.price_history.length, 1);
     assertEqual(l.price_history[0].price, 395000);
     assert(l.raw_json === RAW, 'raw_json kept for source-swap safety');
+    assertEqual(l.floorplan_url, null, 'summary payload has no floor plan → null');
+  });
+
+  test('listings/normalise: extractFloorplanUrl pulls the first plan from detail payloads', () => {
+    assertEqual(extractFloorplanUrl({ floorplans: [{ url: 'https://x/fp1.gif' }, { url: 'https://x/fp2.gif' }] }), 'https://x/fp1.gif');
+    assertEqual(extractFloorplanUrl({ floorplans: ['https://x/bare.gif'] }), 'https://x/bare.gif');
+    assertEqual(extractFloorplanUrl({ floorplan: { src: 'https://x/single.png' } }), 'https://x/single.png');
+    assertEqual(extractFloorplanUrl({ floorplan: 'https://x/str.gif' }), 'https://x/str.gif');
+    assertEqual(extractFloorplanUrl(RAW), null, 'no floor plan in the locked summary shape');
+    assertEqual(extractFloorplanUrl({}), null);
+  });
+
+  test('listings/normalise: a detail payload populates floorplan_url', () => {
+    const l = normaliseRawListing({ ...RAW, floorplans: [{ url: 'https://x/fp.gif' }] }, { outcode: 'SO20' });
+    assertEqual(l.floorplan_url, 'https://x/fp.gif');
   });
 
   test('listings/normalise: returns null without an id', () => {

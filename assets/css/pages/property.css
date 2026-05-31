@@ -113,6 +113,20 @@
 .dossier-history__item--reduced .dossier-history__delta { color: color-mix(in oklch, var(--accent) 75%, var(--ink)); }
 .dossier-history__item--increased .dossier-history__delta { color: color-mix(in oklch, oklch(60% 0.18 30) 60%, var(--ink)); }
 
+/* Floor plan — shown at its natural aspect (never cropped), tap to open full size. */
+.dossier-floorplan { display: grid; gap: var(--space-3); }
+.dossier-floorplan__frame {
+  display: block; overflow: hidden;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius);
+  background: color-mix(in oklch, var(--ink) 4%, var(--paper));
+}
+.dossier-floorplan__frame:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.dossier-floorplan__frame.is-broken { display: none; }
+.dossier-floorplan__img {
+  display: block; width: 100%; height: auto; max-height: 34rem;
+  object-fit: contain;
+}
+
 /* Description prose */
 .dossier-prose { display: grid; gap: var(--space-3); }
 .dossier-prose p { margin: 0; font-size: var(--text-base); line-height: 1.6; color: var(--ink); }

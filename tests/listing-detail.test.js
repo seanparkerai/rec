@@ -1,5 +1,5 @@
 // tests/listing-detail.test.js — v3 L6 dossier pure helpers.
-import { galleryImages, priceHistorySeries, netPriceChange } from '../assets/js/listing-detail.js';
+import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from '../assets/js/listing-detail.js';
 
 export async function register({ test, assert, assertEqual }) {
   test('listing-detail: galleryImages reads raw_json.images[].url + dedupes the primary', () => {
@@ -21,6 +21,35 @@ export async function register({ test, assert, assertEqual }) {
   test('listing-detail: galleryImages falls back to image_url when no gallery', () => {
     assertEqual(galleryImages({ image_url: 'https://x/y.jpeg', raw_json: {} }).length, 1);
     assertEqual(galleryImages({ image_url: null, raw_json: { images: [] } }).length, 0);
+  });
+
+  test('listing-detail: floorplanImages reads floorplans[] (objects + bare strings), deduped', () => {
+    const listing = {
+      floorplan_url: 'https://media.rightmove.co.uk/fp0.gif',
+      raw_json: { floorplans: [
+        { url: 'https://media.rightmove.co.uk/fp0.gif', caption: 'Ground floor' }, // dupes typed
+        { url: 'https://media.rightmove.co.uk/fp1.gif' },
+        { src: 'https://media.rightmove.co.uk/fp2.png' },                          // .src variant
+        'https://media.rightmove.co.uk/fp3.jpeg',                                  // bare string
+        { url: '' },                                                               // skipped
+      ] },
+    };
+    const fps = floorplanImages(listing);
+    assertEqual(fps.length, 4, 'typed + 3 distinct, deduped & filtered');
+    assertEqual(fps[0], 'https://media.rightmove.co.uk/fp0.gif', 'typed column first');
+    assert(fps.includes('https://media.rightmove.co.uk/fp2.png'), '.src variant kept');
+    assert(fps.includes('https://media.rightmove.co.uk/fp3.jpeg'), 'bare string kept');
+  });
+
+  test('listing-detail: floorplanImages is empty when the source carried none', () => {
+    assertEqual(floorplanImages({ raw_json: { images: ['https://x/a.jpeg'] } }).length, 0);
+    assertEqual(floorplanImages({ floorplan_url: null, raw_json: {} }).length, 0);
+    assertEqual(floorplanImages(null).length, 0);
+  });
+
+  test('listing-detail: floorplanImages accepts a single raw_json.floorplan', () => {
+    assertEqual(floorplanImages({ raw_json: { floorplan: 'https://x/fp.gif' } })[0], 'https://x/fp.gif');
+    assertEqual(floorplanImages({ raw_json: { floorplan: { url: 'https://x/fp2.gif' } } })[0], 'https://x/fp2.gif');
   });
 
   test('listing-detail: priceHistorySeries sorts, flags listed/reduced, computes delta', () => {
