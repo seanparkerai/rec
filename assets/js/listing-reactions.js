@@ -34,6 +34,99 @@ export const REJECT_REASONS = [
 const REJECT_REASON_KEYS = new Set(REJECT_REASONS.map((r) => r.key));
 
 /**
+ * Optional second-level refinements per primary reject reason — the "further
+ * level of detail" chips revealed beneath an active primary reason. All optional
+ * (selecting none is fine). Keys are short + stable; they namespace under their
+ * parent, so the same sub-key (`schools`, `parking`) can recur under different
+ * parents without colliding.
+ */
+export const REJECT_SUBREASONS = {
+  too_expensive: [
+    { key: 'over_budget', label: 'Over budget' },
+    { key: 'poor_value',  label: 'Poor value for the spec' },
+  ],
+  wrong_area: [
+    { key: 'too_rural', label: 'Too rural' },
+    { key: 'too_urban', label: 'Too built-up' },
+    { key: 'commute',   label: 'Bad commute' },
+    { key: 'schools',   label: 'Schools' },
+    { key: 'flood',     label: 'Flood risk' },
+  ],
+  too_small: [
+    { key: 'beds',      label: 'Too few bedrooms' },
+    { key: 'reception', label: 'Living space too small' },
+    { key: 'plot',      label: 'Plot/garden too small' },
+    { key: 'storage',   label: 'Not enough storage' },
+  ],
+  needs_work: [
+    { key: 'structural', label: 'Structural' },
+    { key: 'cosmetic',   label: 'Cosmetic only' },
+    { key: 'dated',      label: 'Dated but liveable' },
+  ],
+  no_outdoor: [
+    { key: 'no_garden',  label: 'No garden' },
+    { key: 'no_parking', label: 'No parking' },
+  ],
+  poor_layout: [
+    { key: 'bathrooms', label: 'Too few bathrooms' },
+    { key: 'flow',      label: 'Awkward flow' },
+    { key: 'no_storage', label: 'No storage' },
+  ],
+  busy_road: [
+    { key: 'noise',   label: 'Noise' },
+    { key: 'safety',  label: 'Road safety' },
+    { key: 'parking', label: 'Parking' },
+  ],
+  other: [], // free text only
+};
+
+/**
+ * Positive-reason vocabulary for a `like` — the cheapest fix for the negative
+ * signal skew (the model only knows dislikes). A like may carry these so the
+ * model learns WHAT was liked, not merely that something was.
+ */
+export const LIKE_REASONS = [
+  { key: 'great_area',    label: 'Great area' },
+  { key: 'good_value',    label: 'Good value' },
+  { key: 'right_size',    label: 'Right size' },
+  { key: 'good_layout',   label: 'Good layout' },
+  { key: 'move_in_ready', label: 'Move-in ready' },
+  { key: 'outdoor_space', label: 'Outdoor space' },
+  { key: 'character',     label: 'Character' },
+  { key: 'other',         label: 'Other' },
+];
+
+/** Sparse sub-reasons for likes (mirrors REJECT_SUBREASONS; can stay light). */
+export const LIKE_SUBREASONS = {
+  great_area:    [{ key: 'quiet', label: 'Quiet' }, { key: 'connected', label: 'Well connected' }, { key: 'schools', label: 'Good schools' }],
+  right_size:    [{ key: 'beds', label: 'Right bedrooms' }, { key: 'reception', label: 'Great living space' }, { key: 'plot', label: 'Good plot/garden' }],
+  outdoor_space: [{ key: 'garden', label: 'Garden' }, { key: 'parking', label: 'Parking' }],
+};
+
+// Union of every recognised PRIMARY reason key (reject + like). `other` appears
+// in both vocabularies and means the same generic thing in either, so a shared
+// lookup is safe.
+const REASON_KEYS = new Set([...REJECT_REASONS, ...LIKE_REASONS].map((r) => r.key));
+// Parent-key → sub-reason list. Parent keys are disjoint across reject/like
+// (except `other`, empty in both), so the merge never loses entries.
+const SUBREASONS_BY_KEY = { ...REJECT_SUBREASONS, ...LIKE_SUBREASONS };
+
+/** True if `key` is a recognised primary reason key (reject OR like). */
+export function isReasonKey(key) {
+  return REASON_KEYS.has(key);
+}
+
+/** The optional sub-reasons for a primary reason key ([] if none). */
+export function subReasonsFor(key) {
+  return SUBREASONS_BY_KEY[key] || [];
+}
+
+/** True if `detail` is a valid sub-reason of primary reason `parentKey`. */
+export function isSubReasonKey(parentKey, detail) {
+  return subReasonsFor(parentKey).some((s) => s.key === detail);
+}
+
+/**
  * Personal-status lifecycle for a saved property. Lives on the existing
  * shortlist record (NOT a parallel state machine) — see storage.js. Distinct
  * from the reaction vocabulary: a status is the current lifecycle state, a
@@ -64,6 +157,15 @@ export function validateReaction(r) {
   if (r.reason != null) {
     if (typeof r.reason !== 'string' || !r.reason.trim()) throw new Error('reaction.reason, when present, must be a non-empty string');
   }
+  // The structured multi-reason array, when present, must be an array of entries
+  // each carrying a recognised primary reason key.
+  if (r.reasons != null) {
+    if (!Array.isArray(r.reasons)) throw new Error('reaction.reasons, when present, must be an array');
+    for (const entry of r.reasons) {
+      const k = typeof entry === 'string' ? entry : entry?.key;
+      if (!k || !isReasonKey(String(k))) throw new Error(`reaction.reasons contains an unknown reason key: ${k}`);
+    }
+  }
   return true;
 }
 
@@ -73,20 +175,80 @@ export function isRejectReasonKey(key) {
 }
 
 /**
+ * Clean a loose array of `{ key, detail?, note? }` (or bare key strings) into the
+ * validated, de-duplicated reasons shape stored on a reaction. Pure: invalid
+ * entries are DROPPED (never thrown). Unknown primary keys are dropped; a
+ * sub-reason `detail` that doesn't belong to its parent is reset to null; notes
+ * are trimmed and capped. De-dup is by `key::detail` (so two sub-reasons under
+ * one primary survive, but exact repeats collapse).
+ * @param {Array} input
+ * @param {object} [opts] { max, noteMax }
+ * @returns {Array<{key:string, detail:string|null, note:string|null}>}
+ */
+export function normaliseReasons(input, opts = {}) {
+  const max = Number.isFinite(opts.max) ? opts.max : 8;
+  const noteMax = Number.isFinite(opts.noteMax) ? opts.noteMax : 280;
+  if (!Array.isArray(input)) return [];
+  const out = [];
+  const seen = new Set();
+  for (const raw of input) {
+    if (out.length >= max) break;
+    const entry = typeof raw === 'string' ? { key: raw } : raw;
+    if (!entry || typeof entry !== 'object') continue;
+    const key = String(entry.key || '').trim();
+    if (!isReasonKey(key)) continue;
+    let detail = entry.detail == null ? null : String(entry.detail).trim();
+    if (!detail || !isSubReasonKey(key, detail)) detail = null;
+    let note = entry.note == null ? null : String(entry.note).trim();
+    if (!note) note = null;
+    else if (note.length > noteMax) note = note.slice(0, noteMax);
+    const dedup = `${key}::${detail ?? ''}`;
+    if (seen.has(dedup)) continue;
+    seen.add(dedup);
+    out.push({ key, detail, note });
+  }
+  return out;
+}
+
+/** The primary (first) reason key of a reasons array, or null. */
+export function primaryReasonKey(reasons) {
+  const arr = Array.isArray(reasons) ? reasons : [];
+  return arr.length && arr[0]?.key ? String(arr[0].key) : null;
+}
+
+/**
  * Normalise a loose reaction input into the row shape inserted into
- * listing_reactions. `reason` is dropped for non-reject reactions (a reason only
- * applies to a reject). Returns null for an invalid reaction.
- * @param {object} input  { listing_id, reaction, reason?, listing_snapshot? }
+ * listing_reactions. The structured `reasons` array is the source of truth; the
+ * scalar `reason` is dual-written with the PRIMARY reject reason key for
+ * back-compat (and stays null for non-reject — the historical invariant). A
+ * `like` may carry positive `reasons` (the scalar stays null). A legacy reject
+ * carrying only the scalar `reason` synthesises a one-element `reasons` array so
+ * every reject trains through the array-aware engine. Returns null for an invalid
+ * reaction.
+ * @param {object} input  { listing_id, reaction, reason?, reasons?, listing_snapshot? }
  * @param {Date|string} now
  */
 export function normaliseReaction(input, now = new Date()) {
   if (!input || !isReaction(input.reaction) || !input.listing_id) return null;
   const nowIso = now instanceof Date ? now.toISOString() : String(now);
-  const reason = input.reaction === 'reject' && input.reason ? String(input.reason) : null;
+  const rx = input.reaction;
+
+  // Graded reactions carry reasons (reject negatives, like positives); pass none.
+  let reasons = (rx === 'reject' || rx === 'like') ? normaliseReasons(input.reasons) : [];
+  // Back-compat: a legacy reject with only the scalar `reason` → one-element array.
+  if (rx === 'reject' && reasons.length === 0 && input.reason && isReasonKey(String(input.reason))) {
+    reasons = [{ key: String(input.reason), detail: null, note: null }];
+  }
+  // Scalar reason: reject-only (historical invariant), the primary reason key.
+  const reason = rx === 'reject'
+    ? (primaryReasonKey(reasons) || (input.reason && isReasonKey(String(input.reason)) ? String(input.reason) : null))
+    : null;
+
   return {
     listing_id: String(input.listing_id),
-    reaction: input.reaction,
+    reaction: rx,
     reason,
+    reasons,
     listing_snapshot: input.listing_snapshot ?? null,
     created_at: nowIso,
   };

@@ -519,7 +519,7 @@ async function _sbGetReactionRows() {
   try {
     const { data, error } = await sb
       .from('listing_reactions')
-      .select('listing_id, reaction, reason, created_at')
+      .select('listing_id, reaction, reason, reasons, created_at')
       .eq('household_id', hid)
       .order('created_at', { ascending: false });
     if (error) throw error;
@@ -534,7 +534,12 @@ function _reactionsToMap(rows) {
   const latest = latestPerListing(rows || []);
   const obj = {};
   for (const [id, row] of latest) {
-    obj[id] = { reaction: row.reaction, reason: row.reason ?? null, created_at: row.created_at };
+    obj[id] = {
+      reaction: row.reaction,
+      reason: row.reason ?? null,
+      reasons: Array.isArray(row.reasons) ? row.reasons : [],
+      created_at: row.created_at,
+    };
   }
   return obj;
 }
@@ -567,7 +572,7 @@ export async function getReactionLog() {
   try {
     const { data, error } = await sb
       .from('listing_reactions')
-      .select('id, listing_id, reaction, reason, created_at, listing_snapshot')
+      .select('id, listing_id, reaction, reason, reasons, created_at, listing_snapshot')
       .eq('household_id', hid);
     if (error) throw error;
     return data ?? [];
@@ -577,8 +582,8 @@ export async function getReactionLog() {
   }
 }
 
-export async function saveListingReaction({ listing_id, reaction, reason = null, listing_snapshot = null }) {
-  const norm = normaliseReaction({ listing_id, reaction, reason, listing_snapshot });
+export async function saveListingReaction({ listing_id, reaction, reason = null, reasons = null, listing_snapshot = null }) {
+  const norm = normaliseReaction({ listing_id, reaction, reason, reasons, listing_snapshot });
   if (!norm) { console.error('storage: invalid listing reaction', reaction); return false; }
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return false;
@@ -590,12 +595,13 @@ export async function saveListingReaction({ listing_id, reaction, reason = null,
       listing_id: norm.listing_id,
       reaction: norm.reaction,
       reason: norm.reason,
+      reasons: norm.reasons,
       listing_snapshot: norm.listing_snapshot,
     });
     if (error) throw error;
     // Optimistically refresh the current-reaction cache so the UI is instant.
     const cached = readLocal('listing-reactions') ?? {};
-    cached[norm.listing_id] = { reaction: norm.reaction, reason: norm.reason, created_at: norm.created_at };
+    cached[norm.listing_id] = { reaction: norm.reaction, reason: norm.reason, reasons: norm.reasons, created_at: norm.created_at };
     writeLocal('listing-reactions', cached);
     return true;
   } catch (e) {
@@ -688,7 +694,7 @@ export async function recomputeLearnedPreferences({ now } = {}) {
   try {
     const { data, error } = await sb
       .from('listing_reactions')
-      .select('id, listing_id, reaction, created_at, listing_snapshot')
+      .select('id, listing_id, reaction, reason, reasons, created_at, listing_snapshot')
       .eq('household_id', hid);
     if (error) throw error;
     rows = data ?? [];
