@@ -40,7 +40,7 @@
     "locationIdentifier": "POSTCODE^1234501",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:13:50.246Z"
+    "resolvedAt": "2026-05-31T16:41:38.204Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

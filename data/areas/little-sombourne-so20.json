@@ -158,10 +158,10 @@
     }
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^2418",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:12:52.025Z"
+    "locationIdentifier": "POSTCODE^1233779",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:40:54.095Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

@@ -130,10 +130,10 @@
     "https://www.rightmove.co.uk/house-prices/gu34.html"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^1031",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:13:57.687Z"
+    "locationIdentifier": "POSTCODE^356852",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:41:44.552Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

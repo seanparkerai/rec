@@ -136,10 +136,10 @@
     "https://en.wikipedia.org/wiki/Brown_Candover"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^2150",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:13:23.975Z"
+    "locationIdentifier": "POSTCODE^4076940",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:41:18.018Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

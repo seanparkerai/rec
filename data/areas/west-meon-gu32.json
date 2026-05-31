@@ -37,10 +37,10 @@
   "images": [],
   "sources": [],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^1029",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:14:03.310Z"
+    "locationIdentifier": "POSTCODE^355978",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:41:49.181Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

@@ -93,10 +93,10 @@
     "https://www.google.com/maps"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^2441",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:11:34.408Z"
+    "locationIdentifier": "POSTCODE^810098",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:39:52.842Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

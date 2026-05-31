@@ -103,10 +103,10 @@
     "https://www.streetlist.co.uk/gu/gu34"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^1031",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:11:38.731Z"
+    "locationIdentifier": "POSTCODE^1493153",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:39:56.663Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

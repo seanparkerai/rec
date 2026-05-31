@@ -131,10 +131,10 @@
     "https://www.hants.gov.uk/thingstodo/countryside/walking/wherwellchilbolton"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^2418",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:11:55.690Z"
+    "locationIdentifier": "POSTCODE^1595022",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:40:11.548Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

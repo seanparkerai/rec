@@ -151,10 +151,10 @@
     "https://littleplaceinthecountry.com/en/medstead-local-guide"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^1031",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:12:27.868Z"
+    "locationIdentifier": "POSTCODE^3733433",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:40:35.768Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

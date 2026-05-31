@@ -102,10 +102,10 @@
     "https://reports.ofsted.gov.uk/"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^1031",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:11:53.870Z"
+    "locationIdentifier": "POSTCODE^1493104",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:40:10.020Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,

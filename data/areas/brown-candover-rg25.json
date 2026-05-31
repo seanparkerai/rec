@@ -132,10 +132,10 @@
     "https://wikishire.co.uk/wiki/Brown_Candover"
   ],
   "rightmove": {
-    "locationIdentifier": "OUTCODE^2150",
-    "identifierType": "OUTCODE",
-    "identifierQuality": "coarse",
-    "resolvedAt": "2026-05-31T16:11:48.430Z"
+    "locationIdentifier": "POSTCODE^801733",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T16:40:05.109Z"
   },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
