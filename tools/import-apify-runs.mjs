@@ -68,13 +68,20 @@ async function fetchDatasetItems(datasetId) {
 }
 
 // ── Supabase REST (service role) — same shape as the live fetcher ─────────────
+// Chunked: a single in.(…) of ~1,300 ids overflows the request header limit.
 async function restGetExisting(ids) {
-  if (!ids.length) return new Map();
-  const inList = ids.map((i) => `"${i}"`).join(',');
-  const url = `${SUPABASE_URL}/rest/v1/listings?select=rightmove_id,price,price_history,first_seen&rightmove_id=in.(${inList})`;
-  const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
-  if (!res.ok) throw new Error(`GET existing failed: ${res.status} ${await res.text()}`);
-  return new Map((await res.json()).map((r) => [r.rightmove_id, r]));
+  const out = new Map();
+  const CHUNK = 100;
+  for (let i = 0; i < ids.length; i += CHUNK) {
+    const slice = ids.slice(i, i + CHUNK);
+    if (!slice.length) continue;
+    const inList = slice.map((x) => `"${x}"`).join(',');
+    const url = `${SUPABASE_URL}/rest/v1/listings?select=rightmove_id,price,price_history,first_seen&rightmove_id=in.(${inList})`;
+    const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
+    if (!res.ok) throw new Error(`GET existing failed: ${res.status} ${await res.text()}`);
+    for (const r of await res.json()) out.set(r.rightmove_id, r);
+  }
+  return out;
 }
 
 async function restUpsert(rows) {
