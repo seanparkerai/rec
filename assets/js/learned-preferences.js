@@ -125,6 +125,9 @@ export const REASON_SIGNAL_KINDS = {
   good_value:    ['price-band'],
   right_size:    ['beds'],
   good_layout:   ['baths'],
+  kitchen:       [],   // property-intrinsic — not captured (generic positive)
+  light:         [],   // not captured
+  parking:       [],   // not captured
   move_in_ready: [],
   outdoor_space: [],
   character:     ['type'],

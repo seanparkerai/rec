@@ -213,6 +213,28 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
 // Reaction verb → reviewed-card modifier (green "actioned" tint, distinct per verb).
 const REVIEWED_MOD = { like: 'liked', reject: 'rejected', pass: 'passed' };
 
+// Reviewed listings are split by the user's verdict so the end of a session lands
+// on a tidy, consolidated home: Liked (open by default — the thing you care about),
+// then Passed and Rejected (collapsed). Order is intentional.
+const REVIEWED_GROUPS = [
+  { key: 'like',   title: 'Liked',    mod: 'liked',    open: true },
+  { key: 'pass',   title: 'Passed',   mod: 'passed',   open: false },
+  { key: 'reject', title: 'Rejected', mod: 'rejected', open: false },
+];
+
+// One collapsible group (a <li> in the listings <ol>) of reviewed cards.
+function buildReviewedGroup(cfg, rows) {
+  const details = el('details', { class: `reviewed-collapse reviewed-collapse--${cfg.mod}` }, [
+    el('summary', { class: 'reviewed-collapse__summary' }, [
+      el('span', { class: 'reviewed-collapse__title' }, cfg.title),
+      el('span', { class: 'reviewed-collapse__count num' }, String(rows.length)),
+    ]),
+    el('ul', { class: 'listings reviewed-list' }, rows),
+  ]);
+  details.open = cfg.open;
+  return el('li', { class: 'reviewed-collapse-item' }, [details]);
+}
+
 function buildSummary(shown, total, gatedCount) {
   const bits = [`${shown} listing${shown === 1 ? '' : 's'} shown`];
   if (gatedCount) bits.push(`${gatedCount} out of reach (hidden)`);
@@ -518,17 +540,18 @@ async function render() {
     unreviewed.forEach((r) => listEl.appendChild(rowCtx(r, false)));
 
     if (reviewed.length) {
-      // Editing a reviewed card in place (change verb/reasons → Save) re-saves and
-      // keeps it in this section — the smoother UX than bouncing it back to the top.
-      const reviewedUl = el('ul', { class: 'listings reviewed-list' }, reviewed.map((r) => rowCtx(r, true)));
-      const details = el('details', { class: 'reviewed-collapse' }, [
-        el('summary', { class: 'reviewed-collapse__summary' }, [
-          el('span', { class: 'reviewed-collapse__title' }, 'Reviewed'),
-          el('span', { class: 'reviewed-collapse__count num' }, String(reviewed.length)),
-        ]),
-        reviewedUl,
-      ]);
-      listEl.appendChild(el('li', { class: 'reviewed-collapse-item' }, [details]));
+      // Split the reviewed pile by the user's verdict (Liked / Passed / Rejected)
+      // so a finished session lands on a consolidated, scannable split — Liked open,
+      // the rest collapsed. Editing a card in place (change verb → Save) re-saves
+      // and, on the next paint, moves it to the matching group.
+      const byVerb = { like: [], pass: [], reject: [] };
+      for (const r of reviewed) {
+        const verb = reactions[r.listing.rightmove_id]?.reaction;
+        (byVerb[verb] || byVerb.pass).push(rowCtx(r, true));
+      }
+      for (const cfg of REVIEWED_GROUPS) {
+        if (byVerb[cfg.key].length) listEl.appendChild(buildReviewedGroup(cfg, byVerb[cfg.key]));
+      }
     }
 
     if (summaryEl) { clear(summaryEl); summaryEl.appendChild(buildSummary(visible.length, listings.length, includeOOR ? 0 : gated.length)); }

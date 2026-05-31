@@ -90,17 +90,32 @@ export const LIKE_REASONS = [
   { key: 'good_value',    label: 'Good value' },
   { key: 'right_size',    label: 'Right size' },
   { key: 'good_layout',   label: 'Good layout' },
-  { key: 'move_in_ready', label: 'Move-in ready' },
+  { key: 'kitchen',       label: 'Kitchen' },
+  { key: 'light',         label: 'Light & aspect' },
   { key: 'outdoor_space', label: 'Outdoor space' },
+  { key: 'parking',       label: 'Parking' },
+  { key: 'move_in_ready', label: 'Move-in ready' },
   { key: 'character',     label: 'Character' },
   { key: 'other',         label: 'Other' },
 ];
 
-/** Sparse sub-reasons for likes (mirrors REJECT_SUBREASONS; can stay light). */
+/**
+ * Feature-level sub-reasons for likes — the "specifically what makes it a
+ * positive" detail beneath each primary like. Mirrors REJECT_SUBREASONS in shape;
+ * richer here because the positive-feedback loop wants the user to call out the
+ * exact elements they love. Sub-keys namespace under their parent.
+ */
 export const LIKE_SUBREASONS = {
-  great_area:    [{ key: 'quiet', label: 'Quiet' }, { key: 'connected', label: 'Well connected' }, { key: 'schools', label: 'Good schools' }],
-  right_size:    [{ key: 'beds', label: 'Right bedrooms' }, { key: 'reception', label: 'Great living space' }, { key: 'plot', label: 'Good plot/garden' }],
-  outdoor_space: [{ key: 'garden', label: 'Garden' }, { key: 'parking', label: 'Parking' }],
+  great_area:    [{ key: 'quiet', label: 'Quiet' }, { key: 'connected', label: 'Well connected' }, { key: 'schools', label: 'Good schools' }, { key: 'green_space', label: 'Green space' }, { key: 'amenities', label: 'Amenities nearby' }],
+  good_value:    [{ key: 'under_priced', label: 'Priced below similar' }, { key: 'price_drop', label: 'Recent price drop' }, { key: 'space_for_money', label: 'Space for the money' }],
+  right_size:    [{ key: 'beds', label: 'Right bedrooms' }, { key: 'reception', label: 'Great living space' }, { key: 'plot', label: 'Good plot/garden' }, { key: 'storage', label: 'Good storage' }],
+  good_layout:   [{ key: 'open_plan', label: 'Open plan' }, { key: 'separate_rooms', label: 'Separate rooms' }, { key: 'flow', label: 'Good flow' }, { key: 'bathrooms', label: 'Enough bathrooms' }],
+  kitchen:       [{ key: 'modern', label: 'Modern' }, { key: 'large', label: 'Large' }, { key: 'island', label: 'Island' }, { key: 'utility', label: 'Utility room' }],
+  light:         [{ key: 'south_facing', label: 'South-facing' }, { key: 'large_windows', label: 'Large windows' }, { key: 'dual_aspect', label: 'Dual aspect' }],
+  outdoor_space: [{ key: 'garden', label: 'Garden' }, { key: 'patio', label: 'Patio/terrace' }, { key: 'balcony', label: 'Balcony' }],
+  parking:       [{ key: 'driveway', label: 'Driveway' }, { key: 'garage', label: 'Garage' }, { key: 'ev', label: 'EV charging' }],
+  move_in_ready: [{ key: 'modern_finish', label: 'Modern finish' }, { key: 'renovated', label: 'Recently renovated' }, { key: 'new_build', label: 'New build' }],
+  character:     [{ key: 'period', label: 'Period features' }, { key: 'fireplace', label: 'Fireplace' }, { key: 'beams', label: 'Beams' }, { key: 'high_ceilings', label: 'High ceilings' }],
 };
 
 // Union of every recognised PRIMARY reason key (reject + like). `other` appears

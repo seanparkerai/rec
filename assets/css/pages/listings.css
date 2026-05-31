@@ -452,6 +452,27 @@
 }
 .reviewed-list { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: grid; gap: var(--rec-gap); }
 
+/* Per-verdict reviewed groups — count badge + top hairline tinted to the verdict
+   so Liked / Passed / Rejected read at a glance (colour is paired with the text
+   label in the summary, never colour-only). */
+.reviewed-collapse--liked    .reviewed-collapse__count { background: var(--positive); }
+.reviewed-collapse--rejected .reviewed-collapse__count { background: var(--danger); }
+.reviewed-collapse--passed   .reviewed-collapse__count { background: color-mix(in oklch, var(--ink) 45%, var(--paper)); }
+.reviewed-collapse--liked    { border-top-color: color-mix(in oklch, var(--positive) 40%, var(--hairline)); }
+.reviewed-collapse--rejected { border-top-color: color-mix(in oklch, var(--danger) 30%, var(--hairline)); }
+
+/* Read-only "why you liked it" positives — the captured like-reasons surfaced as
+   chips on the consolidated Saved-listings view. */
+.listing-positives { display: flex; flex-wrap: wrap; gap: var(--space-1); margin: var(--space-2) 0 0; }
+.listing-positives__chip {
+  display: inline-flex; align-items: center; line-height: 1.2;
+  font-size: var(--text-xs); font-weight: 600;
+  padding: 0.15rem 0.5rem; border-radius: var(--rec-radius-sm);
+  color: color-mix(in oklch, var(--positive) 80%, var(--ink));
+  background: color-mix(in oklch, var(--positive) 12%, var(--paper));
+  border: 1px solid color-mix(in oklch, var(--positive) 35%, var(--paper));
+}
+
 /* ── Training-progress visual (Stage 5) ────────────────────────────────────── */
 .learning-status--rich { display: block; align-items: stretch; }
 .training { display: grid; gap: var(--space-2); width: 100%; }
