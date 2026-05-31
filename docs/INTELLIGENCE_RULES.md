@@ -198,7 +198,29 @@ state is the `learned_preferences` table (one row/household: `derived` + `overri
 
 **Signals** are extracted symmetrically from a live listing and from a reaction's
 `listing_snapshot` (so we learn on exactly what we score on): `type:<t>`, `beds:<n>` (5+ collapsed),
-`outcode:<oc>`, `area:<id>`, `price-band:<band>` (coarse, market-aligned).
+`baths:<n>` (3+ collapsed), `outcode:<oc>`, `area:<id>`, `price-band:<band>` (coarse, market-aligned).
+`baths` is snapshot-durable (the snapshot already carries `baths`).
+
+**Reason attribution (multi-reason → causal sharpening).** A reaction's `reasons[]`
+(see "Multi-reason feedback" below) are *causal* evidence about WHICH feature drove it.
+`deriveWeights` reads them: the signal **kinds** a reason implicates take the **full**
+recency-weighted contribution; every other kind is multiplied by `UNATTRIBUTED_DISCOUNT`
+(0.35). A reaction with **no reasons** is undiscounted everywhere (backward-compatible —
+the ~88 legacy rows and all no-reason reactions behave exactly as before). The
+liked/rejected **mass** (denominators) always uses the full recency weight `w`; only the
+per-signal numerators are discounted — so an unattributed signal present in every reject
+reaches `P(s|rejected) = d`, and its discrimination/weight is scaled by exactly `d` versus
+the attributed signal (probability shares stay ≤ 1, every reaction contributes its full
+`w` to mass exactly once). Counts (`n`, hence `MIN_SIGNAL_N`/confidence) are untouched —
+the discount applies to mass, not counts.
+
+Reason → implicated signal kinds (`REASON_SIGNAL_KINDS`):
+`too_small→beds` · `wrong_area→outcode,area` · `too_expensive→price-band` ·
+`busy_road→outcode,area` · `poor_layout→baths` · `needs_work / no_outdoor / other → (none,
+generic discount on all)`. Like-reasons mirror this: `great_area→outcode,area` ·
+`good_value→price-band` · `right_size→beds` · `good_layout→baths` · `character→type`.
+A reason mapping to no captured signal still contributes a generic, discounted listing-level
+signal (never silently dropped).
 
 **`deriveWeights(reactions)` algorithm** — three non-negotiable properties:
 1. **Train only on graded reactions** (`like` / `reject`). `pass`, `ignored`, and passive `viewed`
@@ -231,10 +253,33 @@ types, focus outcodes). Learned weights only *add* focus or exclude on a **stron
 (`|weight| ≥ STRONG_FRACTION × MAX_LEARNED_WEIGHT`) — a weak/uncertain weight never removes a class
 (asymmetric caution). Consumed by `tools/fetch-listings.mjs` under `USE_LEARNED=1` to cut paid results.
 
-**Constants (`LEARNED_PREF`, `RECENCY_DAYS`)** — CALIBRATED, revisable; change them and this section
-together:
+**Constants (`LEARNED_PREF`, `RECENCY_DAYS`, `TRAINING_MILESTONES`)** — CALIBRATED, revisable; change
+them and this section together:
 `COLD_START_MIN` 10 graded · `HALF_LIFE_DAYS` 30 · `MAX_LEARNED_WEIGHT` 0.30 · `MIN_SIGNAL_N` 2 ·
-`SMOOTHING` 3 · `STRONG_FRACTION` 0.5 · `RECENCY_DAYS` 14. *(v3 L4 — added 2026-05-31.)*
+`SMOOTHING` 3 · `STRONG_FRACTION` 0.5 · `UNATTRIBUTED_DISCOUNT` 0.35 · `RECENCY_DAYS` 14 ·
+`TRAINING_MILESTONES` { usable 30, solid 80, mature 160 }. *(v3 L4 — added 2026-05-31; reason
+attribution + baths signal + milestones added 2026-05-31.)*
+
+### Multi-reason feedback + training progress (v3 L4 upgrade)
+
+**Reaction reasons** are a structured, multi-select array on each `listing_reactions` row:
+`reasons jsonb` = `[{ key, detail, note }]` (migration `listing_reactions_multi_reason`). `key` is a
+primary reason; `detail` an optional sub-reason (validated against that parent only); `note` optional
+free text. The scalar `reason` column is **dual-written** with the primary (first) key for back-compat
+with the 44 historical single-reason rows and the `latestPerListing` cache shape. A `reject` carries
+negative reasons (`REJECT_REASONS` + `REJECT_SUBREASONS`); a `like` may carry positive reasons
+(`LIKE_REASONS` + `LIKE_SUBREASONS`) — the cheapest fix for the negative-signal skew. `pass` stays
+unlabelled (never carries reasons; never trains). Pure helpers in `listing-reactions.js`
+(`normaliseReasons`, `primaryReasonKey`, `isReasonKey`, `isSubReasonKey`); attribution map +
+`implicatedKinds` in `learned-preferences.js`.
+
+**Training progress (`trainingProgress`).** An honest, balance-aware progress signal (NOT a single
+magic number): graded count vs `TRAINING_MILESTONES`, the like/reject balance, and an *effective*
+strength that is penalised when the signal is one-sided. `strengthPct = volumeProgress × balanceFactor`,
+where `balanceFactor = min(likeShare, rejectShare) / 0.5` (a perfectly balanced 50/50 split scores 1.0;
+the current ~84:4 negative split scores ≈0.09 — surfacing "add more likes" as the real bottleneck).
+Below `COLD_START_MIN` graded → "warming up"; `likeShare < 0.2` → headline guidance is "add more likes".
+Pure core in `learned-preferences.js`; the page only renders it.
 
 ## Recommendation loop (v3 L5)
 

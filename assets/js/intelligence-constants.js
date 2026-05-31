@@ -81,6 +81,13 @@ export const FIT_WEIGHTS = {
 //                   n / (n + SMOOTHING) so thin evidence is discounted.
 //   STRONG_FRACTION a learned weight counts as "strong" (e.g. for narrowing the
 //                   next fetch) only at |weight| ≥ STRONG_FRACTION × MAX.
+//   UNATTRIBUTED_DISCOUNT  when a reaction carries reasons, the signal kinds the
+//                   reasons IMPLICATE get the full recency-weighted contribution;
+//                   the signals they do NOT implicate are discounted by this
+//                   factor. "Wrong area" is strong evidence against the area, weak
+//                   evidence against that home's bed count or price band — so those
+//                   move at 0.35× strength. A reaction with no reasons is undiscounted
+//                   (full contribution to every signal — backward-compatible).
 export const LEARNED_PREF = {
   COLD_START_MIN: 10,
   HALF_LIFE_DAYS: 30,
@@ -88,7 +95,14 @@ export const LEARNED_PREF = {
   MIN_SIGNAL_N: 2,
   SMOOTHING: 3,
   STRONG_FRACTION: 0.5,
+  UNATTRIBUTED_DISCOUNT: 0.35,
 };
+
+/** Named training milestones (graded-reaction counts) for the L4 progress visual.
+ *  Honest thresholds, NOT a magic single number — see docs/INTELLIGENCE_RULES.md.
+ *  usable ≈ first meaningful re-ranking · solid ≈ confident · mature ≈ diminishing
+ *  returns past here. Balance (likes vs rejects) matters more than raw volume. */
+export const TRAINING_MILESTONES = { usable: 30, solid: 80, mature: 160 };
 
 /** Recency window (days) for the "recent / optimal" listing wave: a listing is
  *  recent when added_date ≥ now − RECENCY_DAYS. Drives the cold-start review

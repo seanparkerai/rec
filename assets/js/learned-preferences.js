@@ -49,6 +49,15 @@ function bedBucket(beds) {
   return b >= 5 ? '5+' : String(b);
 }
 
+/** Bath bucket (3+ collapsed to curb sparsity). Snapshot-derivable from `baths`,
+ *  symmetric between a live row and a reaction snapshot (both carry `baths`). */
+function bathBucket(baths) {
+  if (baths == null || baths === '') return null;
+  const b = Number(baths);
+  if (!Number.isFinite(b)) return null;
+  return b >= 3 ? '3+' : String(b);
+}
+
 /**
  * The signals a listing (or reaction snapshot) exhibits. These are the keys the
  * learned-weight map is built from and scored against.
@@ -62,6 +71,8 @@ export function signalsForListing(l) {
   if (t) sigs.push(`type:${t}`);
   const bb = bedBucket(l.beds);
   if (bb != null) sigs.push(`beds:${bb}`);
+  const ba = bathBucket(l.baths);
+  if (ba != null) sigs.push(`baths:${ba}`);
   const oc = norm(l.outcode);
   if (oc) sigs.push(`outcode:${oc}`);
   const a = norm(l.area_id);
@@ -78,11 +89,64 @@ export function describeSignal(signal) {
   switch (kind) {
     case 'type':       return `property type "${val}"`;
     case 'beds':       return `${val}-bed homes`;
+    case 'baths':      return `${val}-bath homes`;
     case 'outcode':    return `the ${val.toUpperCase()} area`;
     case 'area':       return `the ${val} area`;
     case 'price-band': return `the ${val} price band`;
     default:           return signal;
   }
+}
+
+// ── Reason → feature attribution (v3 L4 causal sharpening) ───────────────────
+// A reaction's reasons are CAUSAL information about WHICH feature drove it. A
+// reject tagged "wrong area" is strong evidence against the home's location
+// (outcode/area) but only weak evidence against its bed count or price band — so
+// the location signals take the full contribution and the rest are discounted
+// (UNATTRIBUTED_DISCOUNT). This stops the model conflating "I reject 3-bed homes"
+// with "I rejected homes that happened to be 3-bed".
+//
+// Map: reason key → the signal KINDS it implicates (the prefix before ':' in a
+// signal). A reason that maps to NO captured signal (needs_work, no_outdoor,
+// other — property-intrinsic features we don't snapshot) implicates nothing, so
+// the reaction contributes a generic, discounted listing-level signal to ALL
+// kinds (never silently dropped). Like-reasons map analogously (positive boosts).
+export const REASON_SIGNAL_KINDS = {
+  // reject reasons
+  too_small:     ['beds'],
+  wrong_area:    ['outcode', 'area'],
+  too_expensive: ['price-band'],
+  busy_road:     ['outcode', 'area'],
+  poor_layout:   ['baths'],
+  needs_work:    [],   // property-intrinsic — not captured
+  no_outdoor:    [],   // not captured
+  other:         [],   // generic / free text
+  // like reasons (positive)
+  great_area:    ['outcode', 'area'],
+  good_value:    ['price-band'],
+  right_size:    ['beds'],
+  good_layout:   ['baths'],
+  move_in_ready: [],
+  outdoor_space: [],
+  character:     ['type'],
+};
+
+/**
+ * The set of signal KINDS a reaction's reasons implicate, or `null` when the
+ * reaction carries no reasons (→ caller applies full, undiscounted contribution
+ * to every signal, exactly as a pre-reasons reaction did — backward-compatible).
+ * An empty set means "reasons present but none map to a captured signal" → the
+ * caller discounts ALL signals (generic listing-level evidence).
+ * @param {Array} reasons  [{ key, detail?, note? }]
+ * @returns {Set<string>|null}
+ */
+export function implicatedKinds(reasons) {
+  if (!Array.isArray(reasons) || reasons.length === 0) return null;
+  const kinds = new Set();
+  for (const r of reasons) {
+    const ks = REASON_SIGNAL_KINDS[r?.key];
+    if (ks) for (const k of ks) kinds.add(k);
+  }
+  return kinds;
 }
 
 // ── Recency ──────────────────────────────────────────────────────────────────
@@ -118,15 +182,29 @@ export function isColdStart(reactions, min = LEARNED_PREF.COLD_START_MIN) {
  *   1. Keep only GRADED reactions (like/reject) that carry a snapshot.
  *   2. Below COLD_START_MIN graded reactions ⇒ return {} (honest cold start).
  *   3. Each reaction gets a recency weight 0.5^(ageDays / HALF_LIFE_DAYS).
+ *   3b. REASON ATTRIBUTION. If a reaction carries reasons, the signal kinds those
+ *      reasons IMPLICATE get the full recency weight; every other signal kind is
+ *      multiplied by UNATTRIBUTED_DISCOUNT (d, default 0.35). A reaction with no
+ *      reasons is undiscounted everywhere (unchanged legacy behaviour). The
+ *      liked/rejected MASS (the denominators) always use the FULL recency weight
+ *      `w` — only the per-signal numerators are discounted. So an unattributed
+ *      signal present in every reject reaches P(s|rejected) = d (not 1): its
+ *      discrimination, and thus its weight, is scaled by exactly d versus the
+ *      attributed signal. This keeps probability shares ≤ 1 and consistent
+ *      (every reaction contributes its full `w` to mass exactly once), while
+ *      sharpening the attributed feature and protecting the innocent ones.
  *   4. For each signal s: P(s|liked) and P(s|rejected) are the recency-weighted
- *      shares of the liked / rejected mass that exhibit s. The discrimination
- *      P(s|liked) − P(s|rejected) is the signal's edge — a signal present in
- *      everything cancels to ~0 (so we never just re-learn `criteria`).
+ *      (and attribution-discounted) shares of the liked / rejected mass that
+ *      exhibit s. The discrimination P(s|liked) − P(s|rejected) is the signal's
+ *      edge — a signal present in everything cancels to ~0 (so we never just
+ *      re-learn `criteria`).
  *   5. weight = discrimination × MAX_LEARNED_WEIGHT × confidence(n), where
  *      confidence = n / (n + SMOOTHING). Signals below MIN_SIGNAL_N are dropped.
+ *      (n is the raw reaction COUNT exhibiting s — the discount touches mass, not
+ *      counts, so MIN_SIGNAL_N / confidence are unaffected.)
  *
- * @param {Array} reactions  rows { id, listing_id, reaction, created_at, listing_snapshot }
- * @param {object} [opts]    { now, halfLifeDays, maxWeight, minSignalN, smoothing, coldStartMin }
+ * @param {Array} reactions  rows { id, listing_id, reaction, reasons, created_at, listing_snapshot }
+ * @param {object} [opts]    { now, halfLifeDays, maxWeight, minSignalN, smoothing, coldStartMin, unattributedDiscount }
  * @returns {{ derived: object, meta: object }}
  */
 export function deriveWeights(reactions, opts = {}) {
@@ -136,6 +214,7 @@ export function deriveWeights(reactions, opts = {}) {
   const minN = opts.minSignalN ?? LEARNED_PREF.MIN_SIGNAL_N;
   const smoothing = opts.smoothing ?? LEARNED_PREF.SMOOTHING;
   const coldMin = opts.coldStartMin ?? LEARNED_PREF.COLD_START_MIN;
+  const discount = opts.unattributedDiscount ?? LEARNED_PREF.UNATTRIBUTED_DISCOUNT;
 
   const graded = (Array.isArray(reactions) ? reactions : []).filter(
     (r) => r && GRADED.has(r.reaction) && r.listing_snapshot
@@ -146,6 +225,7 @@ export function deriveWeights(reactions, opts = {}) {
     gradedCount: graded.length,
     decay_basis: 'days',
     half_life_days: halfLife,
+    unattributed_discount: discount,
     computed_at: now.toISOString(),
   };
   if (meta.coldStart) return { derived: {}, meta };
@@ -161,10 +241,16 @@ export function deriveWeights(reactions, opts = {}) {
     if (liked) likedMass += w; else rejectedMass += w;
 
     const id = r.id ?? `${r.listing_id}@${r.created_at}`;
+    // Reason attribution: full weight for implicated signal kinds, discounted for
+    // the rest. `null` ⇒ no reasons ⇒ full weight everywhere (legacy behaviour).
+    const kinds = implicatedKinds(r.reasons);
     for (const s of signalsForListing(r.listing_snapshot)) {
+      const kind = s.slice(0, s.indexOf(':'));
+      const mult = kinds === null ? 1 : (kinds.has(kind) ? 1 : discount);
+      const cw = w * mult;
       let e = acc.get(s);
       if (!e) { e = { likedW: 0, rejectedW: 0, n: 0, n_liked: 0, n_rejected: 0, reaction_ids: new Set() }; acc.set(s, e); }
-      if (liked) { e.likedW += w; e.n_liked += 1; } else { e.rejectedW += w; e.n_rejected += 1; }
+      if (liked) { e.likedW += cw; e.n_liked += 1; } else { e.rejectedW += cw; e.n_rejected += 1; }
       e.n += 1;
       e.reaction_ids.add(id);
     }

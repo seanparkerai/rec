@@ -6,7 +6,7 @@ import {
   signalsForListing, priceBand, isRecent,
   deriveWeights, effectiveWeights, listingLearnedPrefs,
   gradedCount, isColdStart, diversifySelection, listingBucketKey,
-  deriveSearchSpec,
+  deriveSearchSpec, implicatedKinds, REASON_SIGNAL_KINDS,
 } from '../assets/js/learned-preferences.js';
 import { LEARNED_PREF, RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 
@@ -125,6 +125,84 @@ export async function register({ test, assert, assertEqual }) {
     const rs = [...many(11, 'like'), react('like', { property_type: 'Cottage', id: 'c1' }, 1, 'c1')];
     const { derived } = deriveWeights(rs, { now: NOW });
     assert(!('type:cottage' in derived), 'single-occurrence signal dropped');
+  });
+
+  // ── new signal: baths ───────────────────────────────────────────────────────
+  test('learned-prefs: signalsForListing extracts a bucketed baths signal', () => {
+    assert(signalsForListing(snap({ baths: 2 })).includes('baths:2'), 'baths signal');
+    assert(signalsForListing(snap({ baths: 4 })).includes('baths:3+'), 'baths 3+ bucket');
+    assert(!signalsForListing(snap({ baths: null })).some((s) => s.startsWith('baths:')), 'missing baths → no signal');
+  });
+
+  // ── reason-aware causal attribution (v3 L4) ─────────────────────────────────
+  const withReasons = (rows, reasons) => rows.map((r) => ({ ...r, reasons }));
+
+  test('learned-prefs: implicatedKinds maps reasons to signal kinds (null when none)', () => {
+    assert(implicatedKinds([]) === null, 'empty reasons → null (full contribution)');
+    assert(implicatedKinds(null) === null, 'no reasons → null (full contribution)');
+    assert(implicatedKinds([{ key: 'wrong_area' }]).has('outcode'), 'wrong_area → outcode');
+    assert(implicatedKinds([{ key: 'wrong_area' }]).has('area'), 'wrong_area → area');
+    assert(!implicatedKinds([{ key: 'wrong_area' }]).has('beds'), 'wrong_area does not implicate beds');
+    assertEqual(implicatedKinds([{ key: 'other' }]).size, 0, 'unmappable reason → empty set (generic discount)');
+    assert(Array.isArray(REASON_SIGNAL_KINDS.too_small), 'attribution map is exported');
+  });
+
+  test('learned-prefs: wrong_area rejects sharpen outcode/area, NOT beds/price (attribution)', () => {
+    // 14 rejects, all in the same (bad) outcode/area, all 2-bed at the same price.
+    // Tagged "wrong area" ⇒ only outcode/area should earn strong negative weight;
+    // beds/price-band are unattributed and must be discounted to ~0.35× strength.
+    const base = { outcode: 'SP5', area_id: 'cann-sp5', beds: 2, price: 360_000 };
+    const rejects = many(14, 'reject', base);
+    const tagged = withReasons(rejects, [{ key: 'wrong_area', detail: null, note: null }]);
+    const d = deriveWeights(tagged, { now: NOW }).derived;
+
+    const wOutcode = d['outcode:sp5']?.weight ?? 0;
+    const wArea = d['area:cann-sp5']?.weight ?? 0;
+    const wBeds = d['beds:2']?.weight ?? 0;
+    const wPrice = d['price-band:350-400k']?.weight ?? 0;
+
+    assert(wOutcode < -0.15, `outcode strongly negative (${wOutcode})`);
+    assert(wArea < -0.15, `area strongly negative (${wArea})`);
+    // Unattributed signals are heavily suppressed vs the attributed ones.
+    assert(Math.abs(wBeds) < Math.abs(wOutcode) * 0.5, `beds suppressed (${wBeds} vs ${wOutcode})`);
+    assert(Math.abs(wPrice) < Math.abs(wOutcode) * 0.5, `price suppressed (${wPrice} vs ${wOutcode})`);
+  });
+
+  test('learned-prefs: the SAME rejects WITHOUT reasons move all signals equally (back-compat)', () => {
+    const base = { outcode: 'SP5', area_id: 'cann-sp5', beds: 2, price: 360_000 };
+    const d = deriveWeights(many(14, 'reject', base), { now: NOW }).derived;
+    const wOutcode = d['outcode:sp5']?.weight ?? 0;
+    const wBeds = d['beds:2']?.weight ?? 0;
+    assert(wOutcode < -0.15 && wBeds < -0.15, 'all signals negative');
+    assert(Math.abs(wOutcode - wBeds) < 0.01, `equal without attribution (${wOutcode} vs ${wBeds})`);
+  });
+
+  test('learned-prefs: the unattributed discount scales the weight by exactly d', () => {
+    const base = { outcode: 'SP5', area_id: 'cann-sp5', beds: 2, price: 360_000 };
+    const tagged = withReasons(many(14, 'reject', base), [{ key: 'wrong_area' }]);
+    const d = deriveWeights(tagged, { now: NOW }).derived;
+    const wOutcode = d['outcode:sp5'].weight;       // attributed (full)
+    const wBeds = d['beds:2'].weight;                // unattributed (discounted)
+    const expected = wOutcode * LEARNED_PREF.UNATTRIBUTED_DISCOUNT;
+    assert(Math.abs(wBeds - expected) < 0.01, `beds(${wBeds}) ≈ outcode(${wOutcode})×${LEARNED_PREF.UNATTRIBUTED_DISCOUNT} = ${expected}`);
+    // discrimination is scaled by the same factor
+    assert(Math.abs(d['beds:2'].discrimination - d['outcode:sp5'].discrimination * LEARNED_PREF.UNATTRIBUTED_DISCOUNT) < 0.02, 'discrimination scaled by d');
+  });
+
+  test('learned-prefs: a like tagged right_size produces a positive beds weight', () => {
+    const likes = withReasons(many(12, 'like', { beds: 4, outcode: 'GU35' }), [{ key: 'right_size' }]);
+    const rejects = many(12, 'reject', { beds: 2, outcode: 'SP5' });
+    const d = deriveWeights([...likes, ...rejects], { now: NOW }).derived;
+    assert((d['beds:4']?.weight ?? 0) > 0.05, `right_size like lifts beds:4 (${d['beds:4']?.weight})`);
+  });
+
+  test('learned-prefs: guardrail holds — reasons on a pass never train', () => {
+    // A pass carrying reasons (shouldn't happen, but be defensive) is still
+    // unlabelled: it must not cross cold-start or earn any weight.
+    const passes = withReasons(many(30, 'pass', { outcode: 'SP5' }), [{ key: 'wrong_area' }]);
+    const { derived, meta } = deriveWeights(passes, { now: NOW });
+    assertEqual(meta.coldStart, true, 'passes never graduate cold start');
+    assertEqual(Object.keys(derived).length, 0, 'no weights from passes');
   });
 
   // ── override precedence ────────────────────────────────────────────────────
