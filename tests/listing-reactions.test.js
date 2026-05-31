@@ -96,6 +96,23 @@ export async function register({ test, assert, assertEqual }) {
     assert(Array.isArray(LIKE_SUBREASONS.great_area), 'great_area sub-reasons present');
   });
 
+  test('reactions: like vocabulary covers feature-level positives + sub-reasons', () => {
+    // The positive-feedback overhaul adds feature-level like chips so the user can
+    // call out the specific elements they love.
+    for (const k of ['kitchen', 'light', 'parking']) {
+      assert(isReasonKey(k), `${k} is a recognised like reason`);
+      assert(subReasonsFor(k).length > 0, `${k} has feature sub-reasons`);
+    }
+    assert(isSubReasonKey('kitchen', 'island'), 'island is a kitchen sub-reason');
+    assert(!isSubReasonKey('kitchen', 'garden'), 'garden belongs to outdoor_space, not kitchen');
+    const r = normaliseReaction({
+      listing_id: '1', reaction: 'like',
+      reasons: [{ key: 'kitchen', detail: 'island' }, { key: 'light', detail: 'south_facing' }],
+    });
+    assertEqual(r.reasons.length, 2, 'feature positives captured');
+    assert(r.reasons.some((x) => x.key === 'kitchen' && x.detail === 'island'), 'kitchen sub-reason kept');
+  });
+
   // ── normaliseReasons ────────────────────────────────────────────────────────
   test('reactions: normaliseReasons cleans, validates, and de-dups', () => {
     const out = normaliseReasons([
