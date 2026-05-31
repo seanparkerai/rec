@@ -1,7 +1,8 @@
 // page-area-review.js — Step5 area location review coordinator
+// The shared shell (header/nav includes + auth guard) is bootstrapped by
+// components.js, loaded as a separate <script type="module"> in the HTML — this
+// module only owns the page body.
 import { getAreaReviewData, getAreaConfirmations, saveAreaConfirmations } from './storage.js';
-import { initIncludes } from './includes.js';
-import { initAuthGuard } from './auth-guard.js';
 
 // ── Flags ────────────────────────────────────────────────────────────────────
 
@@ -201,9 +202,6 @@ async function handleConfirm(areaId) {
 // ── Boot ──────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', async () => {
-  initIncludes();
-  initAuthGuard();
-
   const listEl = document.getElementById('review-list');
   if (listEl) listEl.innerHTML = '<p class="review-loading">Loading…</p>';
 
