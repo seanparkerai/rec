@@ -14,7 +14,7 @@ import {
 import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listing-fit.js';
 import { effectiveWeights, listingLearnedPrefs, describeSignal } from './learned-preferences.js';
-import { galleryImages, priceHistorySeries, netPriceChange } from './listing-detail.js';
+import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from './listing-detail.js';
 import { REACTIONS, REJECT_REASONS, PERSONAL_STATUSES } from './listing-reactions.js';
 import { url } from './config.js';
 import { el, clear, byId } from './dom.js';
@@ -142,6 +142,31 @@ function buildFacts(listing) {
         el('dd', { class: 'num' }, v),
       ]),
     ])),
+  ]);
+}
+
+// ── Floor plan (its own section — rendered only when the source carried one) ──
+// Floor-plan data only exists on detail-page scrapes; if floorplanImages() is
+// empty this returns null and the section is dropped (filtered out below).
+function buildFloorplan(listing) {
+  const plans = floorplanImages(listing);
+  if (!plans.length) return null;
+  const frames = plans.map((src, idx) => {
+    const img = el('img', {
+      class: 'dossier-floorplan__img', src, loading: 'lazy', decoding: 'async',
+      referrerpolicy: 'no-referrer',
+      alt: plans.length > 1 ? `Floor plan ${idx + 1}` : 'Floor plan',
+    });
+    const frame = el('a', {
+      class: 'dossier-floorplan__frame', href: src, target: '_blank', rel: 'noopener',
+      'aria-label': 'Open floor plan full size',
+    }, [img]);
+    img.addEventListener('error', () => { frame.classList.add('is-broken'); }, { once: true });
+    return frame;
+  });
+  return el('section', { class: 'dossier-section' }, [
+    el('h2', { class: 'dossier-section__label' }, 'Floor plan'),
+    el('div', { class: 'dossier-floorplan' }, frames),
   ]);
 }
 
@@ -310,6 +335,7 @@ async function render() {
       buildGallery(listing),
       buildHeadline(listing, scored),
       buildFacts(listing),
+      buildFloorplan(listing),
       buildWhy(scored),
       buildPriceHistory(listing),
       buildDescription(listing),
