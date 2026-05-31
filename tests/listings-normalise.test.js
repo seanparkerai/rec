@@ -4,6 +4,7 @@
 import {
   normaliseRawListing,
   isInOutcode,
+  matchListingToArea,
   dedupeByRightmoveId,
   mergePriceHistory,
   parseAddedDate,
@@ -107,5 +108,33 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(priceChanged, true);
     assertEqual(price_history.length, 2);
     assertEqual(price_history[1].price, 380000);
+  });
+
+  // ── import/backfill match (tools/import-apify-runs.mjs) ──────────────────────
+  const ALL_AREAS = [
+    { id: 'over-wallop-so20', outcode: 'SO20', lat: 51.1426, lng: -1.5969 },
+    { id: 'romsey-so51',      outcode: 'SO51', lat: 50.9890, lng: -1.4980 },
+  ];
+  const KNOWN = new Set(['SO20', 'SO51']);
+
+  test('listings/import-match: assigns nearest area + its outcode by coordinates', () => {
+    const l = normaliseRawListing(RAW, { outcode: '' }); // unknown target outcode
+    const m = matchListingToArea(l, { areas: ALL_AREAS, knownOutcodes: KNOWN });
+    assert(m.accepted, 'near a known area → accepted');
+    assertEqual(m.outcode, 'SO20');
+    assertEqual(m.area_id, 'over-wallop-so20');
+  });
+
+  test('listings/import-match: address-token fallback when coords missing', () => {
+    const l = { postcode: 'SO51 8AB', lat: null, lng: null };
+    const m = matchListingToArea(l, { areas: ALL_AREAS, knownOutcodes: KNOWN });
+    assert(m.accepted, 'token in a covered outcode → accepted');
+    assertEqual(m.outcode, 'SO51');
+  });
+
+  test('listings/import-match: REJECTS a wrong-region listing', () => {
+    const london = { postcode: null, lat: 51.5072, lng: -0.1276 };
+    const m = matchListingToArea(london, { areas: ALL_AREAS, knownOutcodes: KNOWN });
+    assert(!m.accepted, 'far from every area and no covered token → rejected');
   });
 }
