@@ -40,17 +40,37 @@
   color: color-mix(in oklch, var(--accent) 45%, var(--ink));
   background: color-mix(in oklch, var(--accent) 8%, var(--paper));
 }
+.dossier-gallery:focus-visible { outline: none; }
+
+/* Prev/next arrows over the hero — the primary way to step through photos. */
+.dossier-gallery__nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 2.75rem; height: 2.75rem; display: flex; align-items: center; justify-content: center;
+  padding: 0; cursor: pointer; font-size: var(--text-2xl); line-height: 1;
+  color: var(--ink); background: color-mix(in oklch, var(--paper) 82%, transparent);
+  border: 1px solid var(--hairline); border-radius: 999px;
+  backdrop-filter: blur(6px); transition: background 0.12s, transform 0.12s;
+}
+.dossier-gallery__nav:hover { background: var(--paper); }
+.dossier-gallery__nav:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.dossier-gallery__nav--prev { left: var(--space-2); }
+.dossier-gallery__nav--next { right: var(--space-2); }
+
+/* A tidy wrapping grid of small previews — not one awkward scroll strip. */
 .dossier-gallery__thumbs {
-  display: flex; gap: var(--space-2); overflow-x: auto; padding-bottom: var(--space-1, 0.25rem);
-  scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+  display: grid; gap: var(--space-2);
+  grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+  max-height: 11rem; overflow-y: auto; padding: 1px; /* room for focus ring */
 }
 .dossier-gallery__thumb {
-  flex: 0 0 auto; width: 5rem; height: 3.5rem; padding: 0; cursor: pointer;
+  aspect-ratio: 4 / 3; padding: 0; cursor: pointer;
   border: 2px solid transparent; border-radius: var(--rec-radius-sm); overflow: hidden;
-  background: color-mix(in oklch, var(--ink) 6%, var(--paper)); scroll-snap-align: start;
+  background: color-mix(in oklch, var(--ink) 6%, var(--paper));
+  transition: border-color 0.12s, opacity 0.12s; opacity: 0.7;
 }
 .dossier-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.dossier-gallery__thumb[aria-current="true"] { border-color: var(--accent); }
+.dossier-gallery__thumb:hover { opacity: 1; }
+.dossier-gallery__thumb[aria-current="true"] { border-color: var(--accent); opacity: 1; }
 .dossier-gallery__thumb:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 
 /* ── Headline ─────────────────────────────────────────────────────────────── */

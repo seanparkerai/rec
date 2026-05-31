@@ -32,35 +32,66 @@ const fmtDate = (d) => {
 };
 
 // ── Gallery ──────────────────────────────────────────────────────────────────
+// A hero image with prev/next arrows + keyboard stepping, a counter, and a
+// wrapping row of small previews below (a true grid of thumbnails, not one
+// awkward scroll strip). The active thumb is highlighted and kept in view.
 function buildGallery(listing) {
   const imgs = galleryImages(listing);
   if (!imgs.length) {
     return el('div', { class: 'dossier-gallery dossier-gallery--none', 'aria-hidden': 'true' },
       (listing.property_type || '•').slice(0, 1).toUpperCase());
   }
+
+  let i = 0;
   const mainImg = el('img', {
     class: 'dossier-gallery__main-img', src: imgs[0], alt: listing.title || 'Property photo',
     loading: 'eager', decoding: 'async', referrerpolicy: 'no-referrer',
   });
   const counter = el('span', { class: 'dossier-gallery__count num' }, `1 / ${imgs.length}`);
-  const main = el('div', { class: 'dossier-gallery__main' }, [mainImg, counter]);
+
+  const prev = el('button', { type: 'button', class: 'dossier-gallery__nav dossier-gallery__nav--prev', 'aria-label': 'Previous photo' }, '‹');
+  const next = el('button', { type: 'button', class: 'dossier-gallery__nav dossier-gallery__nav--next', 'aria-label': 'Next photo' }, '›');
+  const multi = imgs.length > 1;
+
+  const main = el('div', { class: 'dossier-gallery__main' },
+    [mainImg, multi ? prev : null, multi ? next : null, counter].filter(Boolean));
   mainImg.addEventListener('error', () => { main.classList.add('is-broken'); }, { once: true });
 
+  let thumbBtns = [];
+  const show = (n) => {
+    i = (n + imgs.length) % imgs.length;
+    mainImg.src = imgs[i];
+    counter.textContent = `${i + 1} / ${imgs.length}`;
+    thumbBtns.forEach((b, idx) => {
+      b.setAttribute('aria-current', String(idx === i));
+      if (idx === i) b.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+  };
+  prev.addEventListener('click', () => show(i - 1));
+  next.addEventListener('click', () => show(i + 1));
+
+  // Keyboard arrows when the gallery (or anything inside it) has focus.
+  const wrap = el('div', { class: 'dossier-gallery', tabindex: '0', role: 'group', 'aria-label': `Photos (${imgs.length})` });
+  if (multi) {
+    wrap.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(i + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); show(i - 1); }
+    });
+  }
+
   let thumbs = null;
-  if (imgs.length > 1) {
-    const btns = imgs.map((src, i) => {
+  if (multi) {
+    thumbBtns = imgs.map((src, idx) => {
       const t = el('img', { src, alt: '', loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer' });
-      const b = el('button', { type: 'button', class: 'dossier-gallery__thumb', 'aria-label': `Photo ${i + 1}`, 'aria-current': String(i === 0) }, [t]);
-      b.addEventListener('click', () => {
-        mainImg.src = src;
-        counter.textContent = `${i + 1} / ${imgs.length}`;
-        thumbs.querySelectorAll('.dossier-gallery__thumb').forEach((x) => x.setAttribute('aria-current', String(x === b)));
-      });
+      const b = el('button', { type: 'button', class: 'dossier-gallery__thumb', 'aria-label': `Photo ${idx + 1}`, 'aria-current': String(idx === 0) }, [t]);
+      b.addEventListener('click', () => show(idx));
       return b;
     });
-    thumbs = el('div', { class: 'dossier-gallery__thumbs', role: 'group', 'aria-label': 'Photos' }, btns);
+    thumbs = el('div', { class: 'dossier-gallery__thumbs', role: 'group', 'aria-label': 'Choose a photo' }, thumbBtns);
   }
-  return el('div', { class: 'dossier-gallery' }, [main, thumbs].filter(Boolean));
+
+  wrap.append(...[main, thumbs].filter(Boolean));
+  return wrap;
 }
 
 // ── Headline ─────────────────────────────────────────────────────────────────
