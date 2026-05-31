@@ -20,7 +20,7 @@ import { PERSONAL_STATUSES } from './listing-reactions.js';
 import { buildReasonPicker } from './listing-reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
-  diversifySelection, listingBucketKey, describeSignal, trainingProgress,
+  diversifySelection, listingBucketKey, describeSignal, trainingProgress, deriveSearchSpec,
 } from './learned-preferences.js';
 import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
 import { url } from './config.js';
@@ -441,6 +441,7 @@ async function render() {
     rightmove_id: l.rightmove_id, title: l.title, address: l.address, outcode: l.outcode,
     area_id: l.area_id, price: l.price, beds: l.beds, baths: l.baths,
     property_type: l.property_type, status: l.status, url: l.url,
+    distance_mi: l.distance_mi ?? null,   // L7.5: lets meta-observations propose a tighter buffer
   });
 
   // Persist ONLY on Save (one clean consolidated row per finished decision). Verb
@@ -493,10 +494,20 @@ async function render() {
   }
 
   // ── conflict prompts (L5) — likes that contradict stated criteria ─────────
+  // area_id → { name, geofenceRadiusMi } for the L7.5 tighten/stop prompts.
+  const areasMeta = {};
+  for (const a of (areas || [])) areasMeta[a.id] = { name: a.name, geofenceRadiusMi: a.geofenceRadiusMi };
+
   function updateConflicts() {
     if (!conflictsEl) return;
     clear(conflictsEl);
-    const conflicts = detectConflicts(reactionLog, criteria, { now: new Date(), dismissals });
+    // L7.5: derive area/outcode prune candidates from the live learned weights so
+    // the "stop searching" prompt only ever appears for a strong-negative signal.
+    const searchSpec = deriveSearchSpec(effective, criteria, { recencyDays: RECENCY_DAYS });
+    const conflicts = detectConflicts(reactionLog, criteria, {
+      now: new Date(), dismissals, areas: areasMeta,
+      pruneCandidates: { areas: searchSpec.dropAreas, outcodes: searchSpec.dropOutcodes },
+    });
     for (const c of conflicts) {
       const dismiss = el('button', { type: 'button', class: 'conflict-prompt__dismiss' }, 'Dismiss for 14 days');
       dismiss.addEventListener('click', async () => {

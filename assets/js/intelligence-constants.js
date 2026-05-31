@@ -128,4 +128,7 @@ export const META_OBS = {
   DISMISS_DAYS: 14,
   SAVED_STALE_DAYS: 7,
   NBA_MAX: 3,
+  // L7.5: only propose tightening a village buffer if it would shrink by at least
+  // this many miles below the farthest liked listing (avoids churny ±0.5mi nudges).
+  TIGHTEN_MARGIN_MI: 1,
 };

@@ -349,6 +349,19 @@ async function main() {
   }
 
   const outcodeMap = await loadOutcodeMap();
+  // L7.5: honour learned prunes (surfaced + accepted upstream; here we just obey).
+  // Areas set active:false are already dropped in loadOutcodeMap; a learned spec may
+  // additionally carry dropAreas / dropOutcodes.
+  const dropAreas = new Set(spec?.dropAreas || []);
+  const dropOutcodes = new Set((spec?.dropOutcodes || []).map((s) => String(s).toUpperCase()));
+  if (dropAreas.size || dropOutcodes.size) {
+    for (const [oc, arr] of [...outcodeMap]) {
+      const kept = arr.filter((v) => !dropAreas.has(v.id));
+      if (dropOutcodes.has(oc) || !kept.length) outcodeMap.delete(oc);
+      else outcodeMap.set(oc, kept);
+    }
+    console.log(`learned prune: -${dropAreas.size} areas · -${dropOutcodes.size} outcodes`);
+  }
   const ALL_ACTIVE = flattenVillages(outcodeMap);          // global geofence index
   // L7.4: build search targets for the chosen mode (outcode|village|cluster), then
   // order by learned focus (by outcode) and cap with FETCH_LIMIT.

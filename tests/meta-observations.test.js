@@ -101,4 +101,47 @@ export async function register({ test, assert, assertEqual }) {
     assert(saved && /2 saved/.test(saved.text), `saved: ${saved && saved.text}`);
     assert(nba.length <= META_OBS.NBA_MAX, 'capped at NBA_MAX');
   });
+
+  // ── L7.5 geofence tuning (surfaced, never silent) ─────────────────────────
+  const likeAt = (areaId, mi, days = 1, id = Math.random().toString(36).slice(2)) => ({
+    id, listing_id: id, reaction: 'like', created_at: ago(days),
+    listing_snapshot: { price: 350_000, beds: 4, property_type: 'Detached', area_id: areaId, distance_mi: mi },
+  });
+  const rejectIn = (areaId, oc, days = 1, id = Math.random().toString(36).slice(2)) => ({
+    id, listing_id: id, reaction: 'reject', created_at: ago(days),
+    listing_snapshot: { price: 350_000, beds: 4, property_type: 'Detached', area_id: areaId, outcode: oc },
+  });
+
+  test('meta-obs: tighten-buffer fires when every like sits well inside a wide buffer', () => {
+    const reactions = [likeAt('wherwell-sp11', 0.8), likeAt('wherwell-sp11', 1.1), likeAt('wherwell-sp11', 0.9)];
+    const areas = { 'wherwell-sp11': { name: 'Wherwell', geofenceRadiusMi: 5 } };
+    const c = detectConflicts(reactions, criteria, { now: NOW, areas }).find((x) => x.kind === 'tighten-buffer');
+    assert(c, 'tighten suggestion raised'); assert(/Tighten Wherwell to ~2 mi/.test(c.suggestion), c && c.suggestion);
+  });
+
+  test('meta-obs: tighten-buffer stays quiet when likes already use the buffer', () => {
+    const reactions = [likeAt('wherwell-sp11', 2.8), likeAt('wherwell-sp11', 2.9), likeAt('wherwell-sp11', 2.7)];
+    const areas = { 'wherwell-sp11': { name: 'Wherwell', geofenceRadiusMi: 3 } };
+    assert(!detectConflicts(reactions, criteria, { now: NOW, areas }).some((x) => x.kind === 'tighten-buffer'), 'no churny nudge');
+  });
+
+  test('meta-obs: stop-searching fires for a prune-candidate area with rejects and no likes', () => {
+    const reactions = [rejectIn('hatherden-sp11', 'SP11'), rejectIn('hatherden-sp11', 'SP11'), rejectIn('hatherden-sp11', 'SP11')];
+    const opts = { now: NOW, areas: { 'hatherden-sp11': { name: 'Hatherden' } }, pruneCandidates: { areas: ['hatherden-sp11'], outcodes: [] } };
+    const c = detectConflicts(reactions, criteria, opts).find((x) => x.kind === 'stop-searching');
+    assert(c, 'prune suggestion raised'); assert(/Stop searching Hatherden/.test(c.suggestion), c && c.suggestion);
+  });
+
+  test('meta-obs: stop-searching NEVER fires where you have also liked', () => {
+    const reactions = [rejectIn('hatherden-sp11', 'SP11'), rejectIn('hatherden-sp11', 'SP11'), rejectIn('hatherden-sp11', 'SP11'), likeAt('hatherden-sp11', 1.2)];
+    const opts = { now: NOW, pruneCandidates: { areas: ['hatherden-sp11'], outcodes: [] } };
+    assert(!detectConflicts(reactions, criteria, opts).some((x) => x.kind === 'stop-searching'), 'a single like protects the area');
+  });
+
+  test('meta-obs: L7.5 prompts honour the dismissal window like every other conflict', () => {
+    const reactions = [rejectIn('hatherden-sp11', 'SP11'), rejectIn('hatherden-sp11', 'SP11'), rejectIn('hatherden-sp11', 'SP11')];
+    const opts = { now: NOW, pruneCandidates: { areas: ['hatherden-sp11'], outcodes: [] } };
+    const dismissals = { 'prune-area:hatherden-sp11': dismissUntil(NOW) };
+    assert(!detectConflicts(reactions, criteria, { ...opts, dismissals }).some((x) => x.kind === 'stop-searching'), 'dismissed stays quiet');
+  });
 }
