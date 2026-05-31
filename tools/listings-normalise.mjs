@@ -33,6 +33,23 @@ export function haversineKm(a, b) {
   return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
+/**
+ * Shared place-name normaliser (L7). Lowercase, strip punctuation, drop the
+ * "saint/st"/"cum" joiners and county suffixes, collapse whitespace. Used by the
+ * geofence's second signal (nameAgrees) AND by tools/verify-area-coords.mjs so
+ * the resolve/verify tooling and the live failsafe normalise names identically.
+ */
+export function normaliseName(s) {
+  return String(s ?? '')
+    .toLowerCase()
+    .replace(/[.,'’`]/g, ' ')
+    .replace(/\b(saint|st)\b/g, ' ')
+    .replace(/\bcum\b/g, ' ')
+    .replace(/\b(hampshire|wiltshire|hants|wilts|dorset|somerset|berkshire|berks|surrey)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 /** Pull a full postcode (outcode + incode) or bare outcode token from an address. */
 export function extractOutcodeFromAddress(address) {
   if (!address) return null;

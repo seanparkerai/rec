@@ -49,6 +49,7 @@ const { register: registerInvestmentPerformance } = await import('../tests/inves
 const { register: registerSavingsSeries } = await import('../tests/savings-series.test.js');
 const { register: registerOutreachTemplates } = await import('../tests/outreach-templates.test.js');
 const { register: registerListingsNormalise } = await import('../tests/listings-normalise.test.js');
+const { register: registerVerifyAreaCoords } = await import('../tests/verify-area-coords.test.js');
 const { register: registerListingFit } = await import('../tests/listing-fit.test.js');
 const { register: registerListingReactions } = await import('../tests/listing-reactions.test.js');
 const { register: registerLearnedPreferences } = await import('../tests/learned-preferences.test.js');
@@ -70,6 +71,7 @@ await registerInvestmentPerformance({ test, assert, assertEqual, fixtures });
 await registerSavingsSeries({ test, assert, assertEqual, fixtures });
 await registerOutreachTemplates({ test, assert, assertEqual, fixtures });
 await registerListingsNormalise({ test, assert, assertEqual, fixtures });
+await registerVerifyAreaCoords({ test, assert, assertEqual, fixtures });
 await registerListingFit({ test, assert, assertEqual, fixtures });
 await registerListingReactions({ test, assert, assertEqual, fixtures });
 await registerLearnedPreferences({ test, assert, assertEqual, fixtures });
