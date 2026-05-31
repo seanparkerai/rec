@@ -65,9 +65,11 @@ const FETCH_LIMIT = Number(process.env.FETCH_LIMIT) || 0;
 const USE_LEARNED = process.env.USE_LEARNED === '1' || process.env.USE_LEARNED === 'true';
 const FOUNDATION_MODE = process.env.FOUNDATION_MODE === '1' || process.env.FOUNDATION_MODE === 'true';
 
-// Foundation mode: 30-day window to capture the full current market.
+// Rightmove only accepts 1/3/7/14 for maxDaysSinceAdded — any other value returns 0 results.
+// Foundation mode: null (omit the param entirely — pull all available listings).
 // Daily mode: 3-day overlap so a missed cron self-heals.
-const MAX_DAYS_SINCE_ADDED = FOUNDATION_MODE ? 30 : (Number(process.env.MAX_DAYS_SINCE_ADDED) || 3);
+const VALID_DAYS = new Set([1, 3, 7, 14]);
+const MAX_DAYS_SINCE_ADDED = FOUNDATION_MODE ? null : (Number(process.env.MAX_DAYS_SINCE_ADDED) || 3);
 
 const RESULTS_PER_OUTCODE = Number(process.env.RESULTS_PER_OUTCODE) || 50;  // cap per target (lower = cheaper on pay-per-event actors)
 // Hard USD spend cap: passed to Apify as maxBudget. PPE actors self-terminate — no overrun possible.
@@ -77,7 +79,7 @@ const APIFY_MAX_BUDGET_USD = Number(process.env.APIFY_MAX_BUDGET_USD) || 25;
 // Never removed, only tightened by the learned spec.
 const BASELINE_PRICE_MAX = 500000;
 const BASELINE_MIN_BEDS = 2;
-const BASELINE_DONT_SHOW = 'retirement,shared_ownership';
+const BASELINE_DONT_SHOW = 'retirement,sharedOwnership';
 const SOURCE = 'rightmove-apify';
 
 const BROWSER_HEADERS = {
@@ -231,13 +233,16 @@ async function resolveLocationId(outcode) {
 // learned `spec` (v3 L4) can only tighten these, never loosen them.
 // opts.days overrides the recency window (used by tests; production passes via spec).
 function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
-  const days = opts.days ?? spec?.recencyDays ?? MAX_DAYS_SINCE_ADDED;
+  const rawDays = opts.days ?? spec?.recencyDays ?? MAX_DAYS_SINCE_ADDED;
+  // Coerce to nearest valid Rightmove value; null = omit (foundation pull — all listings).
+  const days = rawDays == null ? null : (VALID_DAYS.has(Number(rawDays)) ? Number(rawDays) : 14);
+  // locationIdentifier MUST stay outside URLSearchParams — URLSearchParams encodes ^ as %5E
+  // which Rightmove double-decodes to a dead URL returning 0 results. Pass it as a raw literal.
   const params = new URLSearchParams({
     searchType: 'SALE',
-    locationIdentifier,
     sortType: '6',                 // newest first
-    maxDaysSinceAdded: String(days),
   });
+  if (days != null) params.set('maxDaysSinceAdded', String(days));
   // Always-on baseline: hard price cap, minimum beds, excluded categories.
   params.set('maxPrice', String(BASELINE_PRICE_MAX));
   params.set('minBedrooms', String(BASELINE_MIN_BEDS));
@@ -250,7 +255,7 @@ function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   // STATION^) into a tight disk — so a sparse outcode stops returning Andover.
   const radiusMiles = opts.radiusMiles ?? spec?.radiusMiles;
   if (radiusMiles != null) params.set('radius', String(radiusMiles));
-  return `https://www.rightmove.co.uk/property-for-sale/find.html?${params}`;
+  return `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationIdentifier}&${params}`;
 }
 
 // Post-filter normalised listings by the learned spec: drop excluded property

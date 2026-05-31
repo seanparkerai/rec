@@ -67,7 +67,7 @@ export async function register({ test, assert, assertEqual }) {
 
   test('fetch-listings: buildSearchUrl is plain L1 without a spec', () => {
     const url = buildSearchUrl('OUTCODE^123');
-    assert(url.includes('locationIdentifier=OUTCODE%5E123'), 'carries the location id');
+    assert(url.includes('locationIdentifier=OUTCODE^123'), 'carries the location id with literal ^ (not %5E)');
     assert(url.includes('maxDaysSinceAdded=3'), 'default 3-day cron overlap');
     assert(!url.includes('minPrice'), 'no learned price floor without a spec');
     // Baseline params are always present even without a spec.
@@ -75,7 +75,7 @@ export async function register({ test, assert, assertEqual }) {
     assert(url.includes(`minBedrooms=${BASELINE_MIN_BEDS}`), 'baseline min beds always present');
     assert(url.includes('dontShow='), 'dontShow always present');
     assert(url.includes('retirement'), 'retirement excluded');
-    assert(url.includes('shared_ownership'), 'shared_ownership excluded');
+    assert(url.includes('sharedOwnership'), 'sharedOwnership excluded (camelCase)');
   });
 
   test('fetch-listings: dontShow param emitted on every call', () => {
@@ -85,7 +85,7 @@ export async function register({ test, assert, assertEqual }) {
     for (const url of [plain, withSpec, withRadius]) {
       assert(url.includes('dontShow='), `dontShow present in all call forms`);
       assert(url.includes('retirement'), 'retirement always excluded');
-      assert(url.includes('shared_ownership'), 'shared_ownership always excluded');
+      assert(url.includes('sharedOwnership'), 'sharedOwnership always excluded (camelCase)');
     }
   });
 
@@ -129,7 +129,7 @@ export async function register({ test, assert, assertEqual }) {
 
   test('fetch-listings: baseline dont-show constant is well-formed', () => {
     assert(BASELINE_DONT_SHOW.includes('retirement'), 'retirement in BASELINE_DONT_SHOW');
-    assert(BASELINE_DONT_SHOW.includes('shared_ownership'), 'shared_ownership in BASELINE_DONT_SHOW');
+    assert(BASELINE_DONT_SHOW.includes('sharedOwnership'), 'sharedOwnership in BASELINE_DONT_SHOW (camelCase)');
   });
 
   test('fetch-listings: post-filter drops excluded types but keeps undated listings', () => {
