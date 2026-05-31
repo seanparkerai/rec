@@ -16,7 +16,7 @@
 //   GUARDRAIL: train ONLY on like/reject. `pass`, ignored, and passive `viewed`
 //   are UNLABELLED, never negative — training on absence would teach suppression.
 
-import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
+import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from './intelligence-constants.js';
 
 const GRADED = new Set(['like', 'reject']);
 const norm = (s) => String(s || '').trim().toLowerCase();
@@ -173,6 +173,59 @@ export function gradedCount(reactions) {
 /** True while there is too little graded evidence to credit any learned weight. */
 export function isColdStart(reactions, min = LEARNED_PREF.COLD_START_MIN) {
   return gradedCount(reactions) < min;
+}
+
+/**
+ * Honest, balance-aware training-progress summary for the L4 learning UI. Pure —
+ * the page coordinator only renders the returned parts. NOT a single magic number:
+ * effective strength blends VOLUME (graded count vs milestones) with BALANCE
+ * (a one-sided feed is penalised, since the model only learns contrast). With the
+ * household's current ~84:4 negative split this returns a low strength and an
+ * "add more likes" next-action, which is the real bottleneck.
+ *
+ * @param {Array} reactions  reaction objects with a `.reaction` ('like'/'reject'/'pass'/…)
+ * @param {object} [opts] { coldStartMin, milestones }
+ * @returns {{ graded, likes, rejects, likeShare, rejectShare, balanceFactor,
+ *             milestone, volumePct, strengthPct, cold, imbalanced, nextAction }}
+ */
+export function trainingProgress(reactions, opts = {}) {
+  const coldMin = opts.coldStartMin ?? LEARNED_PREF.COLD_START_MIN;
+  const M = opts.milestones ?? TRAINING_MILESTONES;
+  const arr = Array.isArray(reactions) ? reactions : [];
+  let likes = 0;
+  let rejects = 0;
+  for (const r of arr) {
+    if (!r) continue;
+    if (r.reaction === 'like') likes += 1;
+    else if (r.reaction === 'reject') rejects += 1;
+  }
+  const graded = likes + rejects;
+  const likeShare = graded ? likes / graded : 0;
+  const rejectShare = graded ? rejects / graded : 0;
+  // Balance factor: 50/50 → 1.0; fully one-sided → ~0. min(share)/0.5 is symmetric.
+  const balanceFactor = graded ? Math.min(likeShare, rejectShare) / 0.5 : 0;
+  // Volume progress toward "mature" (diminishing returns past there), 0..1.
+  const volumePct = Math.max(0, Math.min(1, graded / M.mature));
+  // Effective strength: volume penalised by imbalance, so a one-sided feed never
+  // reads as "done" however many reactions it has.
+  const strengthPct = Math.round(volumePct * balanceFactor * 100);
+  const cold = graded < coldMin;
+  const imbalanced = graded > 0 && likeShare < 0.2; // the "add more likes" trigger
+
+  let milestone = 'warming-up';
+  if (graded >= M.mature) milestone = 'mature';
+  else if (graded >= M.solid) milestone = 'solid';
+  else if (graded >= M.usable) milestone = 'usable';
+  else if (!cold) milestone = 'learning';
+
+  let nextAction;
+  if (cold) nextAction = `Review ${coldMin - graded} more to start tuning your feed.`;
+  else if (imbalanced) nextAction = 'You’ve told me what you dislike — now like a few you’d actually live in so I can find more like them.';
+  else if (graded < M.usable) nextAction = `Review ${M.usable - graded} more for a meaningful re-rank.`;
+  else if (graded < M.solid) nextAction = 'Solid start — keep reacting to sharpen the ranking.';
+  else nextAction = 'Your feed is tuned — run a fresh fetch to pull more homes like your likes.';
+
+  return { graded, likes, rejects, likeShare, rejectShare, balanceFactor, milestone, volumePct, strengthPct, cold, imbalanced, nextAction };
 }
 
 /**

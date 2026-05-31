@@ -6,9 +6,9 @@ import {
   signalsForListing, priceBand, isRecent,
   deriveWeights, effectiveWeights, listingLearnedPrefs,
   gradedCount, isColdStart, diversifySelection, listingBucketKey,
-  deriveSearchSpec, implicatedKinds, REASON_SIGNAL_KINDS,
+  deriveSearchSpec, implicatedKinds, REASON_SIGNAL_KINDS, trainingProgress,
 } from '../assets/js/learned-preferences.js';
-import { LEARNED_PREF, RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
+import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from '../assets/js/intelligence-constants.js';
 
 export async function register({ test, assert, assertEqual }) {
   const DAY = 86_400_000;
@@ -203,6 +203,40 @@ export async function register({ test, assert, assertEqual }) {
     const { derived, meta } = deriveWeights(passes, { now: NOW });
     assertEqual(meta.coldStart, true, 'passes never graduate cold start');
     assertEqual(Object.keys(derived).length, 0, 'no weights from passes');
+  });
+
+  // ── training progress (balance-aware) ───────────────────────────────────────
+  const reacts = (n, reaction) => Array.from({ length: n }, () => ({ reaction }));
+
+  test('learned-prefs: trainingProgress flags cold start below COLD_START_MIN', () => {
+    const p = trainingProgress(reacts(5, 'like'));
+    assert(p.cold, 'cold');
+    assertEqual(p.graded, 5);
+    assertEqual(p.milestone, 'warming-up');
+    assert(/Review 5 more/.test(p.nextAction), 'guidance counts the gap');
+  });
+
+  test('learned-prefs: trainingProgress penalises a one-sided feed (the real bottleneck)', () => {
+    const p = trainingProgress([...reacts(4, 'like'), ...reacts(80, 'reject')]);
+    assertEqual(p.graded, 84);
+    assert(p.imbalanced, 'flagged imbalanced (<20% likes)');
+    assert(p.likeShare < 0.1, 'tiny like share');
+    assert(p.strengthPct < 20, `effective strength suppressed by imbalance (${p.strengthPct})`);
+    assert(/like a few/.test(p.nextAction), 'headline guidance is add-more-likes');
+  });
+
+  test('learned-prefs: trainingProgress rewards a balanced, mature feed', () => {
+    const p = trainingProgress([...reacts(80, 'like'), ...reacts(80, 'reject')]);
+    assertEqual(p.milestone, 'mature');
+    assert(Math.abs(p.balanceFactor - 1) < 1e-9, 'perfectly balanced → factor 1');
+    assertEqual(p.strengthPct, 100, 'full effective strength');
+    assert(!p.imbalanced, 'not imbalanced');
+  });
+
+  test('learned-prefs: trainingProgress ignores pass (unlabelled)', () => {
+    const p = trainingProgress(reacts(50, 'pass'));
+    assertEqual(p.graded, 0, 'passes are not graded');
+    assertEqual(p.strengthPct, 0);
   });
 
   // ── override precedence ────────────────────────────────────────────────────
