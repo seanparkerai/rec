@@ -19,10 +19,10 @@ import { scoreListingFit } from './listing-fit.js';
 import { PERSONAL_STATUSES } from './listing-reactions.js';
 import { buildReasonPicker } from './listing-reactions-ui.js';
 import {
-  effectiveWeights, listingLearnedPrefs, isRecent, gradedCount, isColdStart,
+  effectiveWeights, listingLearnedPrefs, isRecent,
   diversifySelection, listingBucketKey, describeSignal, trainingProgress,
 } from './learned-preferences.js';
-import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from './intelligence-constants.js';
+import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
 import { url } from './config.js';
 import { el, clear } from './dom.js';
 
