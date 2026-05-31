@@ -150,6 +150,20 @@
           }
         ]
       }
-    }
+    },
+    "rightmove": {
+      "type": "object",
+      "description": "L7.3: the tightest Rightmove locationIdentifier for this village, so an address/town/village/postcode search all resolve to the right area.",
+      "properties": {
+        "locationIdentifier": { "type": "string" },
+        "identifierType": { "type": "string", "enum": ["POSTCODE", "REGION", "OUTCODE", "STATION"] },
+        "identifierQuality": { "type": "string", "enum": ["tight", "coarse"] },
+        "resolvedAt": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "geofenceRadiusMi": { "type": ["number", "null"] },
+    "searchRadiusMi": { "type": ["number", "null"] },
+    "active": { "type": "boolean" }
   }
 }

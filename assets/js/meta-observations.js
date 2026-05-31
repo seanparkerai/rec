@@ -33,6 +33,13 @@ function likeRows(reactions) {
   );
 }
 
+/** Graded REJECT rows with a snapshot — the evidence for an L7.5 prune suggestion. */
+function rejectRows(reactions) {
+  return (Array.isArray(reactions) ? reactions : []).filter(
+    (r) => r && r.reaction === 'reject' && r.listing_snapshot,
+  );
+}
+
 // ── Conflict detection ───────────────────────────────────────────────────────
 
 /**
@@ -103,6 +110,54 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
     push('conflict:below-min-beds', 'below-min-beds', evaluate(small, withBeds, now, cfg),
       `You've liked ${small.length} home${small.length === 1 ? '' : 's'} below your ${minBeds}-bed minimum.`,
       'Lower your bed minimum, or keep it firm.', minBeds);
+  }
+
+  // ── L7.5 geofence tuning — surfaced as recommendations, NEVER silent edits. ──
+  const rejects = rejectRows(reactions);
+  const areasMeta = opts.areas || {};            // { [area_id]: { name, geofenceRadiusMi } }
+
+  // 4. Tighten buffer — every recent LIKE in an area sits well inside its buffer,
+  //    so the buffer could be tightened without losing anything you've wanted. The
+  //    3-condition trigger is reused (the likes are their own "violating" set).
+  const likesByArea = new Map();
+  for (const r of likes) {
+    const id = r.listing_snapshot?.area_id; const d = Number(r.listing_snapshot?.distance_mi);
+    if (!id || !Number.isFinite(d)) continue;
+    if (!likesByArea.has(id)) likesByArea.set(id, []);
+    likesByArea.get(id).push({ ...r, _mi: d });
+  }
+  for (const [areaId, rows] of likesByArea) {
+    const meta = areasMeta[areaId] || {};
+    const radius = Number(meta.geofenceRadiusMi);
+    if (!Number.isFinite(radius)) continue;
+    const maxLiked = Math.max(...rows.map((r) => r._mi));
+    const proposed = Math.max(1, Math.ceil(maxLiked + 0.5));   // snug fit, ≥1mi, leave headroom
+    if (proposed + cfg.TIGHTEN_MARGIN_MI > radius) continue;   // not worth tightening
+    push(`tighten:${areaId}`, 'tighten-buffer', evaluate(rows, rows, now, cfg),
+      `Every home you've liked in ${meta.name || areaId} is within ${maxLiked.toFixed(1)} mi of the village — your search there reaches ${radius} mi.`,
+      `Tighten ${meta.name || areaId} to ~${proposed} mi?`, radius);
+  }
+
+  // 5. Stop searching — an area/outcode you keep rejecting with NO likes, flagged as
+  //    a prune candidate by deriveSearchSpec (strong negative learned weight).
+  const cand = opts.pruneCandidates || { areas: [], outcodes: [] };
+  const likedAreas = new Set(likes.map((r) => r.listing_snapshot?.area_id).filter(Boolean));
+  const likedOutcodes = new Set(likes.map((r) => norm(r.listing_snapshot?.outcode)).filter(Boolean));
+  for (const areaId of cand.areas || []) {
+    if (likedAreas.has(areaId)) continue;                       // never prune somewhere you've liked
+    const bad = rejects.filter((r) => r.listing_snapshot?.area_id === areaId);
+    const name = areasMeta[areaId]?.name || areaId;
+    push(`prune-area:${areaId}`, 'stop-searching', evaluate(bad, bad, now, cfg),
+      `You've passed on ${bad.length} home${bad.length === 1 ? '' : 's'} in ${name} and liked none.`,
+      `Stop searching ${name} (set it aside), or keep it in?`, 0);
+  }
+  for (const oc of cand.outcodes || []) {
+    const ocn = norm(oc);
+    if (likedOutcodes.has(ocn)) continue;
+    const bad = rejects.filter((r) => norm(r.listing_snapshot?.outcode) === ocn);
+    push(`prune-outcode:${ocn}`, 'stop-searching', evaluate(bad, bad, now, cfg),
+      `You've passed on ${bad.length} home${bad.length === 1 ? '' : 's'} in ${String(oc).toUpperCase()} and liked none.`,
+      `Stop searching ${String(oc).toUpperCase()}, or keep it in?`, 0);
   }
 
   return out;

@@ -287,4 +287,18 @@ export async function register({ test, assert, assertEqual }) {
     assert(spec.focusOutcodes.includes('gu35'), 'strong positive outcode focused');
     assert(!spec.focusTypes.includes('cottage'), 'weak learned signal ignored');
   });
+
+  test('learned-prefs: deriveSearchSpec surfaces strong-negative area/outcode prune candidates', () => {
+    const eff = {
+      'area:hatherden-sp11': -LEARNED_PREF.MAX_LEARNED_WEIGHT,   // strong − → drop candidate
+      'outcode:gu35': -LEARNED_PREF.MAX_LEARNED_WEIGHT,          // strong − → drop candidate
+      'area:wherwell-sp11': LEARNED_PREF.MAX_LEARNED_WEIGHT,     // strong + → NOT a drop
+      'area:weak-sp11': -0.02,                                   // weak → ignored
+    };
+    const spec = deriveSearchSpec(eff, {}, { now: NOW });
+    assert(spec.dropAreas.includes('hatherden-sp11'), 'strong negative area is a prune candidate');
+    assert(spec.dropOutcodes.includes('gu35'), 'strong negative outcode is a prune candidate');
+    assert(!spec.dropAreas.includes('wherwell-sp11'), 'a liked area is never a prune candidate');
+    assert(!spec.dropAreas.includes('weak-sp11'), 'weak negative ignored (asymmetric caution)');
+  });
 }

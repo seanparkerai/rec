@@ -444,6 +444,11 @@ export function deriveSearchSpec(effective = {}, criteria = {}, opts = {}) {
   );
   const focusTypes = new Set();
   const focusOutcodes = new Set();
+  // L7.5: prune CANDIDATES — areas/outcodes with a strong NEGATIVE learned weight.
+  // deriveSearchSpec never drops anything itself; these are surfaced as L5
+  // recommendations (meta-observations.detectConflicts) and only act on acceptance.
+  const dropAreas = new Set();
+  const dropOutcodes = new Set();
 
   for (const [sig, weight] of Object.entries(effective)) {
     const w = Number(weight);
@@ -453,8 +458,11 @@ export function deriveSearchSpec(effective = {}, criteria = {}, opts = {}) {
     if (kind === 'type') {
       if (w <= -strong) excludeTypes.add(val);
       else if (w >= strong) focusTypes.add(val);
-    } else if (kind === 'outcode' && w >= strong) {
-      focusOutcodes.add(val);
+    } else if (kind === 'outcode') {
+      if (w >= strong) focusOutcodes.add(val);
+      else if (w <= -strong) dropOutcodes.add(val);
+    } else if (kind === 'area' && w <= -strong) {
+      dropAreas.add(val);
     }
   }
   // A type can't be both focused and excluded — exclusion wins (it's the harder signal).
@@ -468,5 +476,7 @@ export function deriveSearchSpec(effective = {}, criteria = {}, opts = {}) {
     excludeTypes: [...excludeTypes],
     focusTypes: [...focusTypes],
     focusOutcodes: [...focusOutcodes],
+    dropAreas: [...dropAreas],
+    dropOutcodes: [...dropOutcodes],
   };
 }

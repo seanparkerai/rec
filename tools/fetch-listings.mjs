@@ -34,9 +34,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   normaliseRawListing,
   isInOutcode,
+  withinGeofence,
   dedupeByRightmoveId,
   mergePriceHistory,
   haversineKm,
+  MILES_PER_KM,
 } from './listings-normalise.mjs';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
@@ -68,16 +70,102 @@ const BROWSER_HEADERS = {
 async function loadOutcodeMap() {
   const dir = resolve(root, 'data/areas');
   const files = (await readdir(dir)).filter((f) => f.endsWith('.json'));
-  const map = new Map(); // outcode → [{ id, name, lat, lng }]
+  const map = new Map(); // outcode → [{ id, name, outcode, lat, lng, geofenceRadiusKm? }]
   for (const f of files) {
     const a = JSON.parse(await readFile(resolve(dir, f), 'utf8'));
+    if (a.active === false) continue;                       // L7.5 pruning (default active)
     const oc = String(a.postcode || '').toUpperCase().trim();
     const lat = a.coords?.lat, lng = a.coords?.lng;
     if (!oc || lat == null || lng == null) continue;
     if (!map.has(oc)) map.set(oc, []);
-    map.get(oc).push({ id: a.id, name: a.name, lat: Number(lat), lng: Number(lng) });
+    map.get(oc).push({
+      id: a.id, name: a.name, outcode: oc, lat: Number(lat), lng: Number(lng),
+      geofenceRadiusKm: a.geofenceRadiusMi != null ? Number(a.geofenceRadiusMi) / MILES_PER_KM : undefined,
+      searchRadiusMi: a.searchRadiusMi != null ? Number(a.searchRadiusMi) : undefined,
+      rightmove: a.rightmove || undefined,
+    });
   }
   return map;
+}
+
+/** Flatten the outcode map into the global active-village index. The geofence is
+ *  measured GLOBALLY so a listing near a border village in a neighbouring outcode
+ *  is matched/kept correctly rather than wrongly rejected. */
+function flattenVillages(outcodeMap) {
+  const all = [];
+  for (const arr of outcodeMap.values()) for (const v of arr) all.push(v);
+  return all;
+}
+
+const DEFAULT_SEARCH_MI = 3;
+const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 5;   // max disk radius
+const SEARCH_MODE = (process.env.SEARCH_MODE || 'outcode').toLowerCase();
+
+/**
+ * Greedy geometric set-cover: merge villages whose search disks overlap into one
+ * search, so a dense outcode collapses to a few disks and a sparse one becomes
+ * village-tight disks (SP11 → two ~3mi disks around Wherwell + Newton Stacey;
+ * Andover is never fetched). Pure — coordinates only.
+ */
+function clusterVillages(villages, { capMiles = CLUSTER_CAP_MI } = {}) {
+  const remaining = villages.filter((v) => v.lat != null && v.lng != null);
+  const clusters = [];
+  while (remaining.length) {
+    const seed = remaining.shift();
+    const members = [seed];
+    for (let i = remaining.length - 1; i >= 0; i--) {
+      const v = remaining[i];
+      const mi = haversineKm(seed, v) * MILES_PER_KM;
+      // Absorb v if one disk centred on the seed can still cover v + its buffer.
+      if (mi + (v.searchRadiusMi || DEFAULT_SEARCH_MI) <= capMiles) { members.push(v); remaining.splice(i, 1); }
+    }
+    let radius = seed.searchRadiusMi || DEFAULT_SEARCH_MI;
+    for (const m of members) radius = Math.max(radius, haversineKm(seed, m) * MILES_PER_KM + (m.searchRadiusMi || DEFAULT_SEARCH_MI));
+    clusters.push({ center: seed, radiusMiles: Math.min(radius, capMiles), members });
+  }
+  return clusters;
+}
+
+/**
+ * Turn the active villages into Apify search targets for a given mode:
+ *   outcode — one search per outcode (no radius; the cheapest *change*, geofence
+ *             trims spillover). Zero-risk default; works without resolved ids.
+ *   village — one search per active village using its resolved rightmove identifier
+ *             + searchRadiusMi (maximum precision; ~195 small searches).
+ *   cluster — greedy set-cover of overlapping village disks (recommended): few
+ *             searches, each tight. Villages without a tight identifier fall back
+ *             to their outcode identifier (still gains the radius).
+ * Each target: { label, outcode, locationIdentifier|null, radiusMiles|null, areas }.
+ */
+function buildSearchTargets(outcodeMap, mode = SEARCH_MODE) {
+  const villages = flattenVillages(outcodeMap);
+  const idOf = (v) => v.rightmove?.locationIdentifier || null;     // populated by L7.3 resolver
+
+  if (mode === 'village') {
+    return villages.map((v) => ({
+      label: v.id, outcode: v.outcode,
+      locationIdentifier: idOf(v), radiusMiles: idOf(v) ? (v.searchRadiusMi || DEFAULT_SEARCH_MI) : null,
+      areas: [v],
+    }));
+  }
+  if (mode === 'cluster') {
+    const targets = [];
+    // Cluster within each outcode so a cluster's fallback identifier is unambiguous.
+    for (const [oc, arr] of outcodeMap) {
+      for (const c of clusterVillages(arr)) {
+        const id = idOf(c.center);
+        targets.push({
+          label: `${oc}:${c.center.id}+${c.members.length - 1}`, outcode: oc,
+          locationIdentifier: id, radiusMiles: id ? c.radiusMiles : null, areas: c.members,
+        });
+      }
+    }
+    return targets;
+  }
+  // outcode (default)
+  return [...outcodeMap.entries()].map(([oc, arr]) => ({
+    label: oc, outcode: oc, locationIdentifier: null, radiusMiles: null, areas: arr,
+  }));
 }
 
 // ── outcode → Rightmove locationIdentifier (typeahead) ───────────────────────
@@ -106,7 +194,7 @@ async function resolveLocationId(outcode) {
 // Build the Rightmove search URL. A learned `spec` (v3 L4) narrows it: price
 // floor/ceiling and a bed minimum cut the paid result count, and the recency
 // window comes from the spec (14d for an optimised run vs the 3d cron overlap).
-function buildSearchUrl(locationIdentifier, spec = null) {
+function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   const params = new URLSearchParams({
     searchType: 'SALE',
     locationIdentifier,
@@ -116,6 +204,10 @@ function buildSearchUrl(locationIdentifier, spec = null) {
   if (spec?.priceMin) params.set('minPrice', String(spec.priceMin));
   if (spec?.priceMax) params.set('maxPrice', String(spec.priceMax));
   if (spec?.minBeds) params.set('minBedrooms', String(spec.minBeds));
+  // L7.4: a search radius (miles) turns a point identifier (POSTCODE^/REGION^/
+  // STATION^) into a tight disk — so a sparse outcode stops returning Andover.
+  const radiusMiles = opts.radiusMiles ?? spec?.radiusMiles;
+  if (radiusMiles != null) params.set('radius', String(radiusMiles));
   return `https://www.rightmove.co.uk/property-for-sale/find.html?${params}`;
 }
 
@@ -144,13 +236,13 @@ function orderOutcodesByFocus(outcodes, spec) {
 }
 
 // ── Apify actor ──────────────────────────────────────────────────────────────
-async function fetchRawForOutcode(locationIdentifier, spec = null) {
+async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null) {
   if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
   const url =
     `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
     `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
   const input = {
-    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec) }],
+    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles }) }],
     maxItems: RESULTS_PER_OUTCODE,
     monitoringMode: false,
     includePriceHistory: false,
@@ -246,7 +338,7 @@ async function loadSearchSpec() {
 // ── main ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log('=== L1 fetch-listings ===');
-  console.log(`actor: ${APIFY_ACTOR_ID} · maxDaysSinceAdded: ${MAX_DAYS_SINCE_ADDED} · resultsPerOutcode: ${RESULTS_PER_OUTCODE} · fetchLimit: ${FETCH_LIMIT || 'all'} · dry-run: ${DRY_RUN}`);
+  console.log(`actor: ${APIFY_ACTOR_ID} · mode: ${SEARCH_MODE} · maxDaysSinceAdded: ${MAX_DAYS_SINCE_ADDED} · resultsPerTarget: ${RESULTS_PER_OUTCODE} · fetchLimit: ${FETCH_LIMIT || 'all'} · dry-run: ${DRY_RUN}`);
   if (!DRY_RUN && !SERVICE_KEY) throw new Error('SUPABASE_SERVICE_ROLE_KEY required to write (or set DRY_RUN=1)');
 
   const spec = await loadSearchSpec();
@@ -257,37 +349,78 @@ async function main() {
   }
 
   const outcodeMap = await loadOutcodeMap();
-  let outcodes = orderOutcodesByFocus([...outcodeMap.keys()].sort(), spec);
-  if (FETCH_LIMIT) outcodes = outcodes.slice(0, FETCH_LIMIT);
-  console.log(`outcodes: ${outcodes.length} (${outcodes.join(', ')})`);
+  // L7.5: honour learned prunes (surfaced + accepted upstream; here we just obey).
+  // Areas set active:false are already dropped in loadOutcodeMap; a learned spec may
+  // additionally carry dropAreas / dropOutcodes.
+  const dropAreas = new Set(spec?.dropAreas || []);
+  const dropOutcodes = new Set((spec?.dropOutcodes || []).map((s) => String(s).toUpperCase()));
+  if (dropAreas.size || dropOutcodes.size) {
+    for (const [oc, arr] of [...outcodeMap]) {
+      const kept = arr.filter((v) => !dropAreas.has(v.id));
+      if (dropOutcodes.has(oc) || !kept.length) outcodeMap.delete(oc);
+      else outcodeMap.set(oc, kept);
+    }
+    console.log(`learned prune: -${dropAreas.size} areas · -${dropOutcodes.size} outcodes`);
+  }
+  const ALL_ACTIVE = flattenVillages(outcodeMap);          // global geofence index
+  // L7.4: build search targets for the chosen mode (outcode|village|cluster), then
+  // order by learned focus (by outcode) and cap with FETCH_LIMIT.
+  let targets = buildSearchTargets(outcodeMap, SEARCH_MODE);
+  if (spec?.focusOutcodes?.length) {
+    const focus = new Set(spec.focusOutcodes.map((s) => String(s).toUpperCase()));
+    targets = [...targets.filter((t) => focus.has(t.outcode)), ...targets.filter((t) => !focus.has(t.outcode))];
+  }
+  if (FETCH_LIMIT) targets = targets.slice(0, FETCH_LIMIT);
+  console.log(`targets: ${targets.length} (${SEARCH_MODE}) · active villages: ${ALL_ACTIVE.length}`);
 
   const now = new Date();
-  let totalRaw = 0, totalKept = 0, totalRejected = 0, totalWritten = 0, totalPriceChanges = 0;
+  let totalRaw = 0, totalKept = 0, totalRejected = 0, totalFlagged = 0, totalWritten = 0, totalPriceChanges = 0;
 
-  for (const oc of outcodes) {
-    const areas = outcodeMap.get(oc) || [];
+  for (const target of targets) {
+    const oc = target.outcode;
+    const areas = target.areas || [];
     try {
-      const locId = await resolveLocationId(oc);
-      const raw = await fetchRawForOutcode(locId, spec);
+      const locId = target.locationIdentifier || await resolveLocationId(oc);
+      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles);
       totalRaw += raw.length;
 
       const normalised = raw.map((r) => normaliseRawListing(r, { outcode: oc, source: SOURCE, now })).filter(Boolean);
-      const inRegion = normalised.filter((l) => isInOutcode(l, { outcode: oc, areaCoords: areas }));
-      const rejected = normalised.length - inRegion.length;
+
+      // L7: the DECISIVE gate is the coordinate geofence against the GLOBAL active
+      // village set — not the 20km isInOutcode wrong-region guard (kept only as a
+      // diagnostic). Coordinates decide; the listing's own name/postcode text
+      // corroborates. corroborated=false → FLAG for audit, never silently dropped.
+      const geo = normalised.map((l) => ({ l, g: withinGeofence(l, { villages: ALL_ACTIVE }) }));
+      const inBuffer = geo.filter((x) => x.g.pass).map((x) => ({
+        ...x.l,
+        area_id: x.g.area_id,
+        distance_mi: x.g.distance_mi,
+        geofence_pass: true,
+        name_match: x.g.name_match,
+        corroborated: x.g.corroborated,
+        match_source: x.g.name_match !== null ? 'coordinates+name' : 'coordinates',
+      }));
+      const rejected = normalised.length - inBuffer.length;
       totalRejected += rejected;
+      // Diagnostic only: how many of the rejected were also out of the coarse region.
+      const outOfRegion = geo.filter((x) => !x.g.pass && !isInOutcode(x.l, { outcode: oc, areaCoords: areas })).length;
 
       // v3 L4: apply the learned post-filter (excluded types + recency).
-      const onSpec = filterListingsBySpec(inRegion, spec, now);
-      const filteredOut = inRegion.length - onSpec.length;
+      const onSpec = filterListingsBySpec(inBuffer, spec, now);
+      const filteredOut = inBuffer.length - onSpec.length;
 
-      const deduped = dedupeByRightmoveId(onSpec).map((l) => ({ ...l, area_id: assignArea(l, areas) }));
+      const deduped = dedupeByRightmoveId(onSpec);          // area_id already set by the geofence
+      const flagged = deduped.filter((l) => l.corroborated === false).length;
       totalKept += deduped.length;
+      totalFlagged += flagged;
 
-      console.log(`── ${oc} (${locId}): raw ${raw.length} → in-region ${inRegion.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} rejected]` : ''}`);
+      const radiusNote = target.radiusMiles != null ? ` r=${target.radiusMiles.toFixed(1)}mi` : '';
+      console.log(`── ${target.label} (${locId}${radiusNote}): raw ${raw.length} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
 
       if (DRY_RUN) {
         for (const l of deduped.slice(0, 5)) {
-          console.log(`    • ${l.address ?? '—'} — £${(l.price ?? 0).toLocaleString('en-GB')} — ${l.beds ?? '?'}bd ${l.property_type ?? ''} → area ${l.area_id ?? '—'}`);
+          const flag = l.corroborated === false ? ' ⚠' : '';
+          console.log(`    • ${l.address ?? '—'} — £${(l.price ?? 0).toLocaleString('en-GB')} — ${l.beds ?? '?'}bd ${l.property_type ?? ''} → ${l.area_id ?? '—'} (${(l.distance_mi ?? 0).toFixed(1)}mi)${flag}`);
         }
         continue;
       }
@@ -315,12 +448,12 @@ async function main() {
         totalWritten += payload.length;
       }
     } catch (e) {
-      console.log(`── ${oc}: ✗ ${e.message}`);
+      console.log(`── ${target.label}: ✗ ${e.message}`);
     }
   }
 
   console.log('\n=== SUMMARY ===');
-  console.log(`raw ${totalRaw} · kept(in-region,unique) ${totalKept} · rejected ${totalRejected} · written ${totalWritten} · price-changes ${totalPriceChanges}`);
+  console.log(`raw ${totalRaw} · kept(in-buffer,unique) ${totalKept} · out-of-buffer ${totalRejected} · flagged(corroborated=false) ${totalFlagged} · written ${totalWritten} · price-changes ${totalPriceChanges}`);
 }
 
 // Only run when invoked directly (so the orchestrator can be imported safely).
@@ -328,4 +461,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets };

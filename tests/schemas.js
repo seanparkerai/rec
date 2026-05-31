@@ -119,6 +119,15 @@ export function validateAreaDetail(a) {
   if ('images' in a)      check(e, typeOf(a.images) === 'array', 'area.images must be an array');
   if ('transport' in a)   check(e, typeOf(a.transport) === 'object', 'area.transport must be an object');
   if ('prices' in a)      check(e, typeOf(a.prices) === 'object', 'area.prices must be an object');
+  // L7.3 per-village resolution + geofence tuning (all optional).
+  if ('rightmove' in a)        check(e, typeOf(a.rightmove) === 'object', 'area.rightmove must be an object');
+  if (a.rightmove && 'locationIdentifier' in a.rightmove)
+    check(e, typeOf(a.rightmove.locationIdentifier) === 'string', 'area.rightmove.locationIdentifier must be a string');
+  if ('geofenceRadiusMi' in a && a.geofenceRadiusMi != null)
+    check(e, typeOf(a.geofenceRadiusMi) === 'number', 'area.geofenceRadiusMi must be a number or null');
+  if ('searchRadiusMi' in a && a.searchRadiusMi != null)
+    check(e, typeOf(a.searchRadiusMi) === 'number', 'area.searchRadiusMi must be a number or null');
+  if ('active' in a)      check(e, typeOf(a.active) === 'boolean', 'area.active must be a boolean');
   return e;
 }
 

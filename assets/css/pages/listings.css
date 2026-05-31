@@ -127,6 +127,10 @@
 .listing-tag--drop { background: color-mix(in oklch, var(--accent) 14%, var(--paper)); color: color-mix(in oklch, var(--accent) 75%, var(--ink)); }
 .listing-tag--under_offer,
 .listing-tag--sstc { background: color-mix(in oklch, var(--ink) 10%, var(--paper)); color: var(--ink-muted); }
+/* L7 geofence: neutral distance chip + an amber "location unconfirmed" warning
+   (icon + text, never colour alone — §11). */
+.listing-tag--geo  { background: color-mix(in oklch, var(--ink) 8%, var(--paper)); color: var(--ink-muted); font-family: var(--font-data); }
+.listing-tag--warn { background: color-mix(in oklch, oklch(75% 0.15 75) 22%, var(--paper)); color: color-mix(in oklch, oklch(55% 0.16 60) 70%, var(--ink)); }
 
 /* ── "Why this verdict" expander (the explainability contract, §4) ────────── */
 .listing-why { margin: var(--space-2) 0 0; }
@@ -140,6 +144,8 @@
 .listing-why__sign { font-family: var(--font-data); width: 1rem; flex: none; }
 .listing-why__item--pos .listing-why__sign { color: color-mix(in oklch, var(--accent) 80%, var(--ink)); }
 .listing-why__item--neg .listing-why__sign { color: color-mix(in oklch, oklch(60% 0.18 30) 60%, var(--ink)); }
+.listing-why__item--context { color: var(--ink-muted); }
+.listing-why__item--warn { color: color-mix(in oklch, oklch(55% 0.16 60) 70%, var(--ink)); }
 
 /* ── Reaction + personal-status controls (L3) ─────────────────────────────── */
 .listing-controls {

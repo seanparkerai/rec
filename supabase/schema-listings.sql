@@ -53,6 +53,18 @@ CREATE TABLE IF NOT EXISTS listings (
 -- Idempotent column adds (so re-running on an existing table picks up new columns).
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS floorplan_url text;
 
+-- L7 geofence precision. distance_mi/geofence_pass are the coordinate verdict;
+-- name_match/corroborated are the second-signal failsafe (town/postcode text vs
+-- the matched village). corroborated=false means FLAG FOR AUDIT, never auto-drop.
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS distance_mi   double precision; -- to nearest active village centroid
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS geofence_pass boolean;          -- coordinate geofence verdict (precision guarantee)
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS name_match    boolean;          -- second signal agrees with matched village (null = no text)
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS corroborated  boolean;          -- both signals agree; false = flag for audit (not auto-dropped)
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS match_source  text;             -- 'coordinates' | 'coordinates+name'
+CREATE INDEX IF NOT EXISTS idx_listings_geofence ON listings (geofence_pass);
+CREATE INDEX IF NOT EXISTS idx_listings_distance ON listings (distance_mi);
+CREATE INDEX IF NOT EXISTS idx_listings_corrob   ON listings (corroborated);
+
 ALTER TABLE listings ENABLE ROW LEVEL SECURITY;
 
 -- Content: any authenticated (or anon) reader may SELECT. Writes happen only

@@ -487,16 +487,20 @@ export async function getReport() {
 // Read-only from the portal: rows are written by tools/fetch-listings.mjs via
 // the service role. listings is the one fetcher-written table (live-content
 // class — see docs/SUPABASE_SYNC.md), so there is no save path here.
-export async function getListings({ limit = 200, status = null } = {}) {
+export async function getListings({ limit = 200, status = null, includeOutOfArea = false } = {}) {
   const sb = await _initSb();
   if (!sb) return [];
   try {
     let q = sb
       .from('listings')
-      .select('rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status, lat, lng, image_url, first_seen, last_seen, added_date, update_reason, price_history')
+      .select('rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status, lat, lng, image_url, first_seen, last_seen, added_date, update_reason, price_history, distance_mi, geofence_pass, name_match, corroborated, match_source')
       .order('first_seen', { ascending: false })
       .limit(limit);
     if (status) q = q.eq('status', status);
+    // L7: only show listings inside a target-village geofence. Exclude
+    // geofence_pass === false; a null verdict (a not-yet-backfilled row) is
+    // treated as pass so nothing vanishes before the backfill lands.
+    if (!includeOutOfArea) q = q.not('geofence_pass', 'is', false);
     const { data, error } = await q;
     if (error) throw error;
     return data ?? [];
