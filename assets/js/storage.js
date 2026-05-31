@@ -449,6 +449,23 @@ export async function setShortlistStatus(id, status) {
 export function getDrawnZones()   { return readLocal('zones') ?? null; }
 export function saveDrawnZones(g) { writeLocal('zones', g); _sbUpsert('zones', g); return true; }
 
+// ── Reviewed-listings marker (Browse collapse UX, v3 L4) ───────────────────
+// Which listings the user has SAVED/rounded-off in Browse, so reviewed cards can
+// collapse to the bottom "Reviewed (N)" section. Intentionally a LOCAL-ONLY
+// affordance (no Supabase table): it is a per-device UI convenience layered over
+// the append-only reaction log, not authoritative user state. "Reviewed" stays
+// derivable from a Saved consolidated reaction; this just remembers which ids
+// were saved without re-reading the whole log.
+export function getReviewedListings() { return readLocal('reviewed-listings') || []; }
+export function addReviewedListing(id) {
+  if (!id) return getReviewedListings();
+  const set = new Set(getReviewedListings());
+  set.add(String(id));
+  const arr = [...set];
+  writeLocal('reviewed-listings', arr);
+  return arr;
+}
+
 // ── Reports (read-only; no localStorage cache needed) ─────────────────────
 // Returns the full row (id, slug, title, data, created_at…) or null.
 // Throws on Supabase error so the caller can show a retry affordance.

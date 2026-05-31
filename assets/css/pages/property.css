@@ -140,11 +140,16 @@
 .dossier-card__link { font-size: var(--text-sm); font-weight: 500; color: color-mix(in oklch, var(--accent) 80%, var(--ink)); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
 .dossier-card__link:hover, .dossier-card__link:focus-visible { color: var(--accent); }
 
-.dossier-actions__rm {
-  font-size: var(--text-sm); font-weight: 500; text-decoration: none; min-height: 44px;
-  display: inline-flex; align-items: center; color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+/* Stage 6a: prominent Rightmove CTA at the top of the dossier (in the header).
+   A filled primary variant of the shared .btn-rm so it's the most obvious action. */
+.dossier-head__rm { margin-top: var(--space-2); min-height: 44px; }
+.btn-rm--primary {
+  color: var(--paper); font-weight: 600;
+  background: color-mix(in oklch, var(--accent) 82%, var(--ink));
+  border-color: transparent;
 }
-.dossier-actions__rm:hover, .dossier-actions__rm:focus-visible { color: var(--accent); }
+.btn-rm--primary:hover { color: var(--paper); background: var(--accent); border-color: transparent; }
+
 .dossier-actions .listing-react { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
 .dossier-actions .listing-react__btn { min-height: 44px; }
 .dossier-actions .listing-status-wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }

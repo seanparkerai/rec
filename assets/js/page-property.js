@@ -15,13 +15,13 @@ import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listing-fit.js';
 import { effectiveWeights, listingLearnedPrefs, describeSignal } from './learned-preferences.js';
 import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from './listing-detail.js';
-import { REACTIONS, REJECT_REASONS, PERSONAL_STATUSES } from './listing-reactions.js';
+import { PERSONAL_STATUSES } from './listing-reactions.js';
+import { buildReasonPicker } from './listing-reactions-ui.js';
 import { url } from './config.js';
 import { el, clear, byId } from './dom.js';
 
 const VERDICT_LABELS = { strong: 'Strong match', possible: 'Possible match', stretch: 'Stretch', weak: 'Weak match', reject: 'Reject', unknown: 'Unscored' };
 const STATUS_LABELS = { live: 'For sale', under_offer: 'Under offer', sstc: 'Sold STC', withdrawn: 'Withdrawn' };
-const REACTION_LABELS = { like: 'Like', pass: 'Pass', reject: 'Reject' };
 const PERSONAL_STATUS_LABELS = { new: 'New', saved: 'Saved', viewed: 'Viewed', offered: 'Offered', rejected: 'Rejected' };
 
 const fmtPrice = (n) => (n == null ? '—' : '£' + Math.round(n).toLocaleString('en-GB'));
@@ -116,6 +116,10 @@ function buildHeadline(listing, scored) {
     el('h1', { class: 'dossier-head__title' }, listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
     placeBits.length ? el('p', { class: 'dossier-head__place' }, placeBits.join(' · ')) : null,
     tags.length ? el('div', { class: 'listing-tags' }, tags) : null,
+    // Stage 6a: the external Rightmove link as the most obvious action, up top.
+    listing.url
+      ? el('a', { class: 'dossier-head__rm btn-rm btn-rm--primary', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
+      : null,
   ].filter(Boolean));
 }
 
@@ -244,30 +248,11 @@ function buildAreaCard(area) {
   ].filter(Boolean));
 }
 
-// ── Actions (reactions + status + Rightmove) ─────────────────────────────────
-function buildActions(listing, current, onReact, onStatus) {
-  const btns = REACTIONS.map((rx) => el('button', {
-    type: 'button', class: 'listing-react__btn', 'data-react': rx, 'aria-pressed': String(current?.reaction === rx),
-  }, REACTION_LABELS[rx]));
-  const chips = REJECT_REASONS.map((r) => el('button', {
-    type: 'button', class: 'listing-chip', 'data-reason': r.key,
-    'aria-pressed': String(current?.reaction === 'reject' && current?.reason === r.key),
-  }, r.label));
-  const reasons = el('div', { class: 'listing-reasons', role: 'group', 'aria-label': 'Why reject?' }, chips);
-  reasons.hidden = current?.reaction !== 'reject';
-  const group = el('div', { class: 'listing-react', role: 'group', 'aria-label': 'Your reaction' }, btns);
-  const setPressed = (rx) => btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.react === rx)));
-  group.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-react]'); if (!b) return;
-    setPressed(b.dataset.react); reasons.hidden = b.dataset.react !== 'reject';
-    onReact(b.dataset.react, null);
-  });
-  reasons.addEventListener('click', (e) => {
-    const c = e.target.closest('[data-reason]'); if (!c) return;
-    chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
-    setPressed('reject'); onReact('reject', c.dataset.reason);
-  });
-
+// ── Actions (multi-reason picker + Save + status) ────────────────────────────
+// The Rightmove link now lives prominently in the dossier header (buildHeadline),
+// not buried here. The shared picker gives the same multi-select reasons +
+// sub-reasons + Save as the listings surfaces.
+function buildActions(listing, current, onSave, onStatus) {
   const sel = el('select', { class: 'listing-status', 'aria-label': 'Personal status' }, [
     el('option', { value: '' }, 'No status'),
     ...PERSONAL_STATUSES.map((s) => el('option', { value: s, selected: current?.status === s }, PERSONAL_STATUS_LABELS[s])),
@@ -276,10 +261,9 @@ function buildActions(listing, current, onReact, onStatus) {
 
   return el('div', { class: 'dossier-actions' }, [
     el('p', { class: 'dossier-card__label' }, 'Your call'),
-    el('div', { class: 'listing-react-wrap' }, [group, reasons]),
+    buildReasonPicker({ variant: 'dossier', current, onSave }),
     el('label', { class: 'listing-status-wrap' }, [el('span', { class: 'listing-status__label' }, 'Status'), sel]),
-    listing.url ? el('a', { class: 'dossier-actions__rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗') : null,
-  ].filter(Boolean));
+  ]);
 }
 
 function notFound(mount, msg) {
@@ -312,7 +296,7 @@ async function render() {
 
   const current = {
     reaction: reactions[listing.rightmove_id]?.reaction || null,
-    reason: reactions[listing.rightmove_id]?.reason || null,
+    reasons: reactions[listing.rightmove_id]?.reasons || [],
     status: statuses[listing.rightmove_id] || '',
   };
   const snapshotOf = (l) => ({
@@ -321,8 +305,9 @@ async function render() {
     property_type: l.property_type, status: l.status, url: l.url,
   });
   let retrainTimer = null;
-  const onReact = async (rx, reason) => {
-    await saveListingReaction({ listing_id: listing.rightmove_id, reaction: rx, reason, listing_snapshot: snapshotOf(listing) });
+  // Persist on Save (the consolidated decision) — one clean append-only row.
+  const onSave = async ({ reaction, reasons }) => {
+    await saveListingReaction({ listing_id: listing.rightmove_id, reaction, reasons, listing_snapshot: snapshotOf(listing) });
     if (retrainTimer) clearTimeout(retrainTimer);
     retrainTimer = setTimeout(() => { recomputeLearnedPreferences({ now: new Date() }).catch(() => {}); }, 1500);
   };
@@ -341,7 +326,7 @@ async function render() {
       buildDescription(listing),
     ].filter(Boolean)),
     el('aside', { class: 'dossier__rail' }, [
-      buildActions(listing, current, onReact, onStatus),
+      buildActions(listing, current, onSave, onStatus),
       buildAreaCard(area),
     ].filter(Boolean)),
   ]));

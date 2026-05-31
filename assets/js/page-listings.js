@@ -11,20 +11,23 @@ import {
   getShortlistStatuses, setShortlistStatus,
   getLearnedPreferences, recomputeLearnedPreferences,
   getReactionLog, dismissConflict,
+  getReviewedListings, addReviewedListing,
 } from './storage.js';
 import { detectConflicts, dismissUntil } from './meta-observations.js';
 import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listing-fit.js';
-import { REACTIONS, REJECT_REASONS, PERSONAL_STATUSES } from './listing-reactions.js';
+import { PERSONAL_STATUSES } from './listing-reactions.js';
+import { buildReasonPicker } from './listing-reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent, gradedCount, isColdStart,
-  diversifySelection, listingBucketKey, describeSignal,
+  diversifySelection, listingBucketKey, describeSignal, trainingProgress,
 } from './learned-preferences.js';
-import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
+import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from './intelligence-constants.js';
 import { url } from './config.js';
 import { el, clear } from './dom.js';
 
-const REACTION_LABELS = { like: 'Like', pass: 'Pass', reject: 'Reject' };
+const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}`;
+
 const PERSONAL_STATUS_LABELS = {
   new: 'New', saved: 'Saved', viewed: 'Viewed', offered: 'Offered', rejected: 'Rejected',
 };
@@ -94,48 +97,6 @@ function buildWhy(scored) {
   ]);
 }
 
-// Reaction controls: one-tap like/pass/reject, with reason chips revealed on
-// reject. Reactions are append-only (L3) — each tap logs a row; the latest wins.
-function buildReactions(listing, current, onReact) {
-  const btns = REACTIONS.map((rx) =>
-    el('button', {
-      type: 'button', class: 'listing-react__btn', 'data-react': rx,
-      'aria-pressed': String(current?.reaction === rx),
-    }, REACTION_LABELS[rx]));
-
-  const chips = REJECT_REASONS.map((r) =>
-    el('button', {
-      type: 'button', class: 'listing-chip', 'data-reason': r.key,
-      'aria-pressed': String(current?.reaction === 'reject' && current?.reason === r.key),
-    }, r.label));
-
-  const reasonsRow = el('div', { class: 'listing-reasons', role: 'group', 'aria-label': 'Why reject?' }, chips);
-  reasonsRow.hidden = current?.reaction !== 'reject';
-
-  const group = el('div', { class: 'listing-react', role: 'group', 'aria-label': 'Your reaction' }, btns);
-  const setPressed = (rx) => btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.react === rx)));
-
-  group.addEventListener('click', async (e) => {
-    const btn = e.target.closest('[data-react]');
-    if (!btn) return;
-    const rx = btn.dataset.react;
-    setPressed(rx);
-    reasonsRow.hidden = rx !== 'reject';
-    // Log the reaction immediately; a reject's reason is an optional refinement.
-    await onReact(rx, null);
-  });
-
-  reasonsRow.addEventListener('click', async (e) => {
-    const chip = e.target.closest('[data-reason]');
-    if (!chip) return;
-    chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
-    setPressed('reject');
-    await onReact('reject', chip.dataset.reason);
-  });
-
-  return el('div', { class: 'listing-react-wrap' }, [group, reasonsRow]);
-}
-
 // Personal-status select (lives on the shortlist record, not a parallel machine).
 function buildStatus(listing, current, onStatus) {
   const sel = el('select', { class: 'listing-status', 'aria-label': 'Personal status' }, [
@@ -151,17 +112,31 @@ function buildStatus(listing, current, onStatus) {
 
 // Shared media well with graceful fallback: a broken/blocked image swaps to a
 // monogram so a card never shows a stretched or empty box. `base` is the BEM block.
-function buildMedia(listing, base) {
+// When `href` is given (Stage 6b), the media is a keyboard-accessible link that
+// opens OUR dossier (distinct from the external Rightmove button) — the whole
+// image becomes the affordance, not a bare click handler on an <img>.
+function buildMedia(listing, base, href) {
+  const title = listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`;
   const monogram = () => el('div', { class: `${base} ${base}--none`, 'aria-hidden': 'true' },
     (listing.property_type || '•').slice(0, 1).toUpperCase());
-  if (!listing.image_url) return monogram();
-  const img = el('img', {
-    class: `${base}__img`, src: listing.image_url, alt: '',
-    loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
-  });
-  const wrap = el('div', { class: base }, [img]);
-  img.addEventListener('error', () => wrap.replaceWith(monogram()), { once: true });
-  return wrap;
+  const inner = listing.image_url
+    ? (() => {
+        const img = el('img', {
+          class: `${base}__img`, src: listing.image_url, alt: '',
+          loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
+        });
+        const box = el('div', { class: base }, [img]);
+        // Replace only the inner box on error; any wrapping link stays in place.
+        img.addEventListener('error', () => box.replaceWith(monogram()), { once: true });
+        return box;
+      })()
+    : monogram();
+  function wrapLink(node) {
+    return el('a', {
+      class: `${base}-link`, href, 'aria-label': `Open dossier for ${title}`,
+    }, [node]);
+  }
+  return href ? wrapLink(inner) : inner;
 }
 
 function metaLine(listing) {
@@ -190,25 +165,32 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
   if (listing.update_reason === 'new') tags.push(el('span', { class: 'listing-tag listing-tag--new' }, 'New'));
   const tagRow = tags.length ? el('div', { class: 'listing-tags' }, tags) : null;
 
-  const controls = ctx.onReact
+  const controls = ctx.onSave
     ? el('div', { class: 'listing-controls' }, [
-        buildReactions(listing, ctx.reaction, (rx, reason) => ctx.onReact(listing, rx, reason)),
+        buildReasonPicker({
+          variant: 'row',
+          current: ctx.reaction,
+          onSave: (d) => ctx.onSave(listing, d),
+        }),
         buildStatus(listing, ctx.status, (status) => ctx.onStatus(listing, status)),
       ])
     : null;
 
+  // Stage 6b: the external Rightmove link as a clear button, visually distinct
+  // from the image-link (which opens OUR dossier).
   const open = listing.url
-    ? el('a', { class: 'listing-card__open', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
+    ? el('a', { class: 'listing-card__rm btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
     : null;
 
   const content = el('div', { class: 'listing-card__content' }, [
     el('div', { class: 'listing-card__head' }, [
       el('span', { class: `fit-dot fit-dot--${verdict}`, 'aria-hidden': 'true' }),
       el('span', { class: `verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
+      ctx.reviewed ? el('span', { class: 'listing-card__reviewed-tag' }, '✓ Reviewed') : null,
       el('span', { class: 'listing-card__price num' }, fmtPrice(listing.price)),
-    ]),
+    ].filter(Boolean)),
     el('p', { class: 'listing-card__title' }, [
-      el('a', { class: 'listing-card__title-link', href: `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}` },
+      el('a', { class: 'listing-card__title-link', href: dossierHref(listing) },
         listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
     ]),
     el('p', { class: 'listing-card__place' }, placeBits.join(' · ')),
@@ -219,11 +201,17 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
     open,
   ].filter(Boolean));
 
-  return el('li', { class: 'listing-card', 'data-id': listing.rightmove_id }, [
-    buildMedia(listing, 'listing-media'),
+  const reviewedClass = ctx.reviewed
+    ? ` listing-card--reviewed listing-card--${REVIEWED_MOD[ctx.reaction?.reaction] || 'reviewed'}`
+    : '';
+  return el('li', { class: `listing-card${reviewedClass}`, 'data-id': listing.rightmove_id }, [
+    buildMedia(listing, 'listing-media', dossierHref(listing)),
     content,
   ]);
 }
+
+// Reaction verb → reviewed-card modifier (green "actioned" tint, distinct per verb).
+const REVIEWED_MOD = { like: 'liked', reject: 'rejected', pass: 'passed' };
 
 function buildSummary(shown, total, gatedCount) {
   const bits = [`${shown} listing${shown === 1 ? '' : 's'} shown`];
@@ -250,31 +238,65 @@ function buildDeckProgress(done, total) {
   ]);
 }
 
-function buildDeckReactions(onReact) {
-  const like = el('button', { type: 'button', class: 'deck-react__btn deck-react__btn--like' }, 'Like');
-  const pass = el('button', { type: 'button', class: 'deck-react__btn deck-react__btn--pass' }, 'Pass');
-  const reject = el('button', { type: 'button', class: 'deck-react__btn deck-react__btn--reject' }, 'Reject');
-  const chips = REJECT_REASONS.map((r) => el('button', { type: 'button', class: 'listing-chip', 'data-reason': r.key }, r.label));
-  const reasons = el('div', { class: 'listing-reasons deck-reasons', role: 'group', 'aria-label': 'Why reject? (a tagged reason trains far better)' }, chips);
-  reasons.hidden = true;
+// ── Training-progress visual (Stage 5) ──────────────────────────────────────
+// An honest, balance-aware answer to "how close am I to a well-trained model?".
+// A segmented milestone bar shows VOLUME reached; the % + balance meter show
+// EFFECTIVE strength (penalised when the signal is one-sided). NOT one magic
+// number — the parts are shown side by side. All math is pure (trainingProgress).
+const MILESTONE_SEGMENTS = [
+  { key: 'warming-up', label: 'Warming up' },
+  { key: 'usable', label: 'Usable' },
+  { key: 'solid', label: 'Solid' },
+  { key: 'mature', label: 'Mature' },
+];
+const MILESTONE_INDEX = { 'warming-up': 0, learning: 0, usable: 1, solid: 2, mature: 3 };
+const MILESTONE_LABEL = { 'warming-up': 'Warming up', learning: 'Learning', usable: 'Usable', solid: 'Solid', mature: 'Mature' };
 
-  like.addEventListener('click', () => onReact('like', null));
-  pass.addEventListener('click', () => onReact('pass', null));
-  reject.addEventListener('click', () => { reasons.hidden = false; reject.setAttribute('aria-pressed', 'true'); });
-  reasons.addEventListener('click', (e) => {
-    const c = e.target.closest('[data-reason]');
-    if (c) onReact('reject', c.dataset.reason);
-  });
+function buildTrainingProgress(p, deckDone, deckTotal) {
+  const reached = MILESTONE_INDEX[p.milestone] ?? 0;
+  const segs = MILESTONE_SEGMENTS.map((s, i) => el('span', {
+    class: `training-seg${i <= reached ? ' training-seg--on' : ''}${i === reached ? ' training-seg--current' : ''}`,
+  }, el('span', { class: 'training-seg__label' }, s.label)));
+  const bar = el('div', {
+    class: 'training-bar', role: 'progressbar',
+    'aria-valuenow': String(p.strengthPct), 'aria-valuemin': '0', 'aria-valuemax': '100',
+    'aria-label': `Training strength ${p.strengthPct}% — milestone ${p.milestone}`,
+  }, segs);
 
-  return el('div', { class: 'deck-react-wrap' }, [
-    el('div', { class: 'deck-react', role: 'group', 'aria-label': 'Your reaction' }, [like, pass, reject]),
-    reasons,
+  const total = p.likes + p.rejects;
+  const likePct = total ? Math.round((p.likes / total) * 100) : 0;
+  const likeFill = el('span', { class: 'training-balance__likes' });
+  likeFill.style.width = `${likePct}%`;
+  const balance = el('div', { class: 'training-balance' }, [
+    el('div', { class: 'training-balance__track', 'aria-hidden': 'true' }, [likeFill]),
+    el('p', { class: 'training-balance__label num' }, total
+      ? `${p.likes} like${p.likes === 1 ? '' : 's'} · ${p.rejects} reject${p.rejects === 1 ? '' : 's'}`
+      : 'No graded reactions yet'),
   ]);
+
+  const headline = p.cold
+    ? `Warming up — ${p.graded} of ${LEARNED_PREF.COLD_START_MIN} graded reactions`
+    : `${MILESTONE_LABEL[p.milestone]} · ${p.graded} graded · ${p.strengthPct}% trained`;
+
+  const reviewedLine = deckTotal
+    ? el('p', { class: 'training__reviewed num' }, `≈${deckDone} reviewed of ${deckTotal} recent`)
+    : null;
+
+  return el('div', { class: 'training' }, [
+    el('div', { class: 'training__head' }, [
+      el('span', { class: `learning-status__dot${p.cold ? '' : ' learning-status__dot--on'}`, 'aria-hidden': 'true' }),
+      el('span', { class: 'training__headline' }, headline),
+    ]),
+    bar,
+    balance,
+    el('p', { class: `training__next${p.imbalanced ? ' training__next--alert' : ''}` }, p.nextAction),
+    reviewedLine,
+  ].filter(Boolean));
 }
 
-function buildDeckCard(listing, scored, area, onReact) {
+function buildDeckCard(listing, scored, area, handlers) {
   const verdict = scored?.verdict || 'unknown';
-  const media = buildMedia(listing, 'deck-media');
+  const media = buildMedia(listing, 'deck-media', dossierHref(listing));
 
   const tags = [];
   if (listing.status && listing.status !== 'live') tags.push(el('span', { class: `listing-tag listing-tag--${listing.status}` }, STATUS_LABELS[listing.status] || listing.status));
@@ -304,9 +326,15 @@ function buildDeckCard(listing, scored, area, onReact) {
     el('p', { class: 'deck-card__meta num' }, metaBits.join(' · ')),
     tags.length ? el('div', { class: 'listing-tags' }, tags) : null,
     buildWhy(scored),
-    el('a', { class: 'deck-card__open', href: `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}` }, 'Full details →'),
-    listing.url ? el('a', { class: 'deck-card__open', href: listing.url, target: '_blank', rel: 'noopener' }, 'Open on Rightmove ↗') : null,
-    buildDeckReactions(onReact),
+    el('div', { class: 'deck-card__links' }, [
+      el('a', { class: 'deck-card__open', href: dossierHref(listing) }, 'Full details →'),
+      listing.url ? el('a', { class: 'deck-card__rm btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗') : null,
+    ].filter(Boolean)),
+    buildReasonPicker({
+      variant: 'deck',
+      current: handlers.current || null,
+      onSave: (d) => handlers.onSave(d),
+    }),
   ].filter(Boolean));
 
   return el('article', { class: 'deck-card', 'data-id': listing.rightmove_id }, [media, body]);
@@ -344,6 +372,16 @@ async function render() {
     ? scoreListingFit({ listing: l, finances, criteria, area: areaOf(l), learnedPrefs: listingLearnedPrefs(l, effective) })
     : { verdict: 'unknown', score: 0, gated: false, contributions: [] });
 
+  // Reviewed set (Stage 4 Browse collapse). "Reviewed" = the user pressed Save on
+  // the property. Seeded from the local marker store UNION the ids that already
+  // carry a reaction at load (pre-existing decisions read as reviewed), then grown
+  // by each Save. Local-only affordance over the append-only log.
+  const reviewedSet = new Set([
+    ...getReviewedListings().map(String),
+    ...Object.keys(reactions || {}).map(String),
+  ]);
+  const isReviewed = (id) => reviewedSet.has(String(id));
+
   // Snapshot the listing at reaction time so the training signal survives the
   // live row being withdrawn/deleted (L3 durability).
   const snapshotOf = (l) => ({
@@ -351,12 +389,25 @@ async function render() {
     area_id: l.area_id, price: l.price, beds: l.beds, baths: l.baths,
     property_type: l.property_type, status: l.status, url: l.url,
   });
-  const onReact = async (listing, reaction, reason) => {
+
+  // Persist ONLY on Save (one clean consolidated row per finished decision). Verb
+  // taps in the picker stay local — writing them too would double-count in the
+  // full-log training (deriveWeights reads every row) and a no-reasons verb row
+  // would dilute the attributed Save row. Append-only + snapshot-durable intact.
+  const onSave = async (listing, { reaction, reasons }) => {
     const ok = await saveListingReaction({
-      listing_id: listing.rightmove_id, reaction, reason, listing_snapshot: snapshotOf(listing),
+      listing_id: listing.rightmove_id, reaction, reasons, listing_snapshot: snapshotOf(listing),
     });
-    if (ok) reactions[listing.rightmove_id] = { reaction, reason: reason ?? null, created_at: new Date().toISOString() };
-    return ok;
+    if (!ok) return false;
+    reactions[listing.rightmove_id] = {
+      reaction,
+      reason: reaction === 'reject' ? (reasons?.[0]?.key ?? null) : null,
+      reasons: reasons || [],
+      created_at: new Date().toISOString(),
+    };
+    reviewedSet.add(String(listing.rightmove_id));
+    addReviewedListing(listing.rightmove_id);
+    return true;
   };
   const onStatus = async (listing, status) => {
     const ok = await setShortlistStatus(listing.rightmove_id, status);
@@ -370,25 +421,21 @@ async function render() {
     listings.filter((l) => isRecent(l, now) && !scoreOf(l).gated),
     listingBucketKey,
   );
-  const gradedLocal = () => Object.values(reactions).filter((r) => r && (r.reaction === 'like' || r.reaction === 'reject')).length;
-
-  // ── learning state / training feedback ──────────────────────────────────
+  // ── learning state / training feedback (Stage 5 rich, balance-aware) ──────
+  const deckDoneCount = () => deckOrder.filter((l) => isReviewed(l.rightmove_id)).length;
   function updateLearning() {
     if (!learningEl) return;
     if (!listings.length) { learningEl.hidden = true; return; }
-    const g = gradedLocal();
-    const sigCount = Object.values(effective).filter((w) => w).length;
-    const cold = g < LEARNED_PREF.COLD_START_MIN;
+    const p = trainingProgress(Object.values(reactions));
     clear(learningEl);
     learningEl.hidden = false;
-    learningEl.classList.toggle('learning-status--cold', cold);
-    learningEl.appendChild(el('span', { class: `learning-status__dot${cold ? '' : ' learning-status__dot--on'}`, 'aria-hidden': 'true' }));
-    learningEl.appendChild(el('span', {}, cold
-      ? `Learning your taste — react to listings to train your feed (${g}/${LEARNED_PREF.COLD_START_MIN} graded so far).`
-      : `Trained on ${g} reaction${g === 1 ? '' : 's'} · ${sigCount} learned signal${sigCount === 1 ? '' : 's'} now shaping your feed.`));
+    learningEl.classList.add('learning-status--rich');
+    learningEl.classList.toggle('learning-status--cold', p.cold);
+    learningEl.classList.toggle('training--imbalanced', p.imbalanced);
+    learningEl.appendChild(buildTrainingProgress(p, deckDoneCount(), deckOrder.length));
   }
   function updateReviewCount() {
-    const n = deckOrder.filter((l) => !reactions[l.rightmove_id]).length;
+    const n = deckOrder.filter((l) => !isReviewed(l.rightmove_id)).length;
     if (reviewCountEl) { reviewCountEl.hidden = n === 0; reviewCountEl.textContent = n ? ` ${n}` : ''; }
   }
 
@@ -457,28 +504,54 @@ async function render() {
     visible.sort((a, b) =>
       (b.scored.score - a.scored.score) ||
       (new Date(b.listing.first_seen) - new Date(a.listing.first_seen)));
-    visible.forEach((r, i) => listEl.appendChild(buildRow(r.listing, i, r.scored, r.area, {
+
+    // Stage 4: partition into still-to-review (top, fit-ranked) and reviewed
+    // (collapsed at the bottom). Reviewed = a Saved consolidated decision.
+    const rowCtx = (r, reviewed) => buildRow(r.listing, 0, r.scored, r.area, {
       reaction: reactions[r.listing.rightmove_id] || null,
       status: statuses[r.listing.rightmove_id] || '',
-      onReact, onStatus,
-    })));
+      reviewed, onSave, onStatus,
+    });
+    const unreviewed = visible.filter((r) => !isReviewed(r.listing.rightmove_id));
+    const reviewed = visible.filter((r) => isReviewed(r.listing.rightmove_id));
+
+    unreviewed.forEach((r) => listEl.appendChild(rowCtx(r, false)));
+
+    if (reviewed.length) {
+      // Editing a reviewed card in place (change verb/reasons → Save) re-saves and
+      // keeps it in this section — the smoother UX than bouncing it back to the top.
+      const reviewedUl = el('ul', { class: 'listings reviewed-list' }, reviewed.map((r) => rowCtx(r, true)));
+      const details = el('details', { class: 'reviewed-collapse' }, [
+        el('summary', { class: 'reviewed-collapse__summary' }, [
+          el('span', { class: 'reviewed-collapse__title' }, 'Reviewed'),
+          el('span', { class: 'reviewed-collapse__count num' }, String(reviewed.length)),
+        ]),
+        reviewedUl,
+      ]);
+      listEl.appendChild(el('li', { class: 'reviewed-collapse-item' }, [details]));
+    }
+
     if (summaryEl) { clear(summaryEl); summaryEl.appendChild(buildSummary(visible.length, listings.length, includeOOR ? 0 : gated.length)); }
   }
 
   // ── Review mode (the deck) ──────────────────────────────────────────────
-  const deckOnReact = async (rx, reason) => {
-    const cur = deckOrder.find((l) => !reactions[l.rightmove_id]);
-    if (!cur) return;
-    await onReact(cur, rx, reason);
+  // Save consolidates the decision (verb + reasons) and advances to the next
+  // un-reviewed card, so the deck reviews the recent wave one finished decision
+  // at a time.
+  const deckOnSave = async (cur, d) => {
+    const ok = await onSave(cur, d);
+    if (!ok) return false;
     paintDeck();
     updateReviewCount();
+    updateLearning();
     scheduleRetrain();
+    return true;
   };
   function paintDeck() {
     if (!deckEl) return;
     clear(deckEl);
     const total = deckOrder.length;
-    const done = deckOrder.filter((l) => reactions[l.rightmove_id]).length;
+    const done = deckOrder.filter((l) => isReviewed(l.rightmove_id)).length;
     deckEl.appendChild(buildDeckProgress(done, total));
     if (!total) {
       deckEl.appendChild(el('div', { class: 'deck-done' }, [
@@ -487,7 +560,7 @@ async function render() {
       ]));
       return;
     }
-    const next = deckOrder.find((l) => !reactions[l.rightmove_id]);
+    const next = deckOrder.find((l) => !isReviewed(l.rightmove_id));
     if (!next) {
       deckEl.appendChild(el('div', { class: 'deck-done' }, [
         el('p', { class: 'deck-done__title' }, `All ${total} reviewed — your taste is trained.`),
@@ -498,7 +571,10 @@ async function render() {
       if (goto) goto.addEventListener('click', () => setMode('browse'));
       return;
     }
-    deckEl.appendChild(buildDeckCard(next, scoreOf(next), areaOf(next), deckOnReact));
+    deckEl.appendChild(buildDeckCard(next, scoreOf(next), areaOf(next), {
+      current: reactions[next.rightmove_id] || null,
+      onSave: (d) => deckOnSave(next, d),
+    }));
   }
 
   // ── Mode switching ──────────────────────────────────────────────────────
