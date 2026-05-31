@@ -117,9 +117,8 @@ export const REASON_SIGNAL_KINDS = {
   too_expensive: ['price-band'],
   busy_road:     ['outcode', 'area'],
   poor_layout:   ['baths'],
-  needs_work:    [],   // property-intrinsic — not captured
-  no_outdoor:    [],   // not captured
-  other:         [],   // generic / free text
+  needs_work:    ['type'],   // work-intensity correlates with property type/age
+  no_outdoor:    [],         // not captured as listing attribute
   // like reasons (positive)
   great_area:    ['outcode', 'area'],
   good_value:    ['price-band'],
@@ -128,7 +127,7 @@ export const REASON_SIGNAL_KINDS = {
   kitchen:       [],   // property-intrinsic — not captured (generic positive)
   light:         [],   // not captured
   parking:       [],   // not captured
-  move_in_ready: [],
+  move_in_ready: ['type'],   // new builds / modern stock cluster by type
   outdoor_space: [],
   character:     ['type'],
 };

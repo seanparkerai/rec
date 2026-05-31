@@ -37,14 +37,14 @@ export async function register({ test, assert, assertEqual }) {
     assert(!isReaction('offered'), 'a status is not a reaction');
   });
 
-  test('reactions: reject reason chips are well-formed and include other', () => {
+  test('reactions: reject reason chips are well-formed', () => {
     assert(REJECT_REASONS.length >= 3, 'need a useful set of reject reasons');
     for (const r of REJECT_REASONS) {
       assert(typeof r.key === 'string' && r.key, 'chip needs a key');
       assert(typeof r.label === 'string' && r.label, 'chip needs a label');
     }
     assert(isRejectReasonKey('too_expensive'), 'known chip key');
-    assert(isRejectReasonKey('other'), 'other is a valid chip key');
+    assert(!isRejectReasonKey('other'), 'other removed from vocabulary');
     assert(!isRejectReasonKey('nope'), 'unknown chip key rejected');
   });
 
@@ -90,7 +90,6 @@ export async function register({ test, assert, assertEqual }) {
     assert(isSubReasonKey('too_small', 'beds'), 'beds is a too_small sub-reason');
     assert(!isSubReasonKey('too_small', 'commute'), 'commute belongs to wrong_area, not too_small');
     assert(isSubReasonKey('wrong_area', 'commute'), 'commute is a wrong_area sub-reason');
-    assertEqual(subReasonsFor('other').length, 0, 'other has no sub-reasons');
     // like sub-reasons exist where defined
     assert(isSubReasonKey('right_size', 'beds'), 'like right_size has a beds sub-reason');
     assert(Array.isArray(LIKE_SUBREASONS.great_area), 'great_area sub-reasons present');
