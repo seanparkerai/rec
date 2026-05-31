@@ -101,14 +101,5 @@
       "label": "Hampshire County Council parish information",
       "url": "https://www.hants.gov.uk/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800675",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:45.177Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

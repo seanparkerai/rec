@@ -173,14 +173,5 @@
       "title": "The Cart and Horses, Kings Worthy",
       "url": "https://www.thecartandhorses-kingsworthy.co.uk/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801190",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:47.591Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

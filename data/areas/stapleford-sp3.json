@@ -1,17 +1,17 @@
 {
-  "id": "upper-wield-gu35",
-  "name": "Upper Wield",
-  "village": "Upper Wield",
-  "town": "Winchester",
-  "county": "Hampshire",
-  "postcode": "GU35",
-  "hubCity": "Guildford",
+  "id": "stapleford-sp3",
+  "name": "Stapleford",
+  "village": "Stapleford",
+  "town": "Salisbury",
+  "county": "Wiltshire",
+  "postcode": "SP3",
+  "hubCity": "Salisbury",
   "regionDir": "",
   "settlementType": "",
-  "subRegion": "Winchester",
+  "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1113,
-    "lng": -1.0242
+    "lat": 51.0953,
+    "lng": -1.9428
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
@@ -35,14 +35,5 @@
   "nearestStation": null,
   "primarySupermarket": null,
   "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1685108",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:45.456Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  "sources": []
 }

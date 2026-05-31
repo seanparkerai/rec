@@ -1,17 +1,17 @@
 {
-  "id": "abbotstone-so21",
+  "id": "abbotstone-so24",
   "name": "Abbotstone",
   "village": "Abbotstone",
   "town": "Winchester",
   "county": "Hampshire",
-  "postcode": "SO21",
+  "postcode": "SO24",
   "hubCity": "Southampton",
   "regionDir": "North",
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0852,
-    "lng": -1.1773
+    "lat": 51.1073,
+    "lng": -1.1971
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
@@ -100,14 +100,5 @@
       "label": "Google Maps — Abbotstone to Winchester",
       "url": "https://www.google.com/maps/dir/Abbotstone/Winchester"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1389530",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:36.670Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

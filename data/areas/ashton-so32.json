@@ -96,14 +96,5 @@
       "label": "Google Maps — Ashton (SO32) to Southampton",
       "url": "https://www.google.com/maps/dir/Ashton+SO32/Southampton"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^802982",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:40.713Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

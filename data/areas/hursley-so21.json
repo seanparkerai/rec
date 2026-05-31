@@ -101,14 +101,5 @@
       "label": "National Rail journey/station information",
       "url": "https://www.nationalrail.co.uk/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1233855",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:43.859Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

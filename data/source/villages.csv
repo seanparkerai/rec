@@ -13,9 +13,9 @@ Hampshire,Andover,Middle Wallop,SO20
 Hampshire,Andover,Over Wallop,SO20
 Hampshire,Andover,Newton Stacey,SP11
 Hampshire,Andover,Wherwell,SP11
-Hampshire,Basingstoke,Wield,GU35
-Hampshire,Basingstoke,Brown Candover,RG25
-Hampshire,Basingstoke,Farley Mount,RG25
+Hampshire,Winchester,Wield,SO24
+Hampshire,Winchester,Brown Candover,SO24
+Hampshire,Winchester,Farley Mount,SO21
 Hampshire,Basingstoke,Preston Candover,RG25
 Hampshire,Farnham,Bordon,GU35
 Hampshire,Petersfield,Bordean,GU32
@@ -60,18 +60,18 @@ Hampshire,Waterlooville,Hambledon,PO7
 Hampshire,Winchester,East Meon,GU32
 Hampshire,Winchester,West Meon,GU32
 Hampshire,Winchester,Bentworth,GU34
-Hampshire,Winchester,Upper Wield,GU35
+Hampshire,Winchester,Upper Wield,SO24
 Hampshire,Winchester,Ashley,SO20
 Hampshire,Winchester,Brook,SO20
 Hampshire,Winchester,Chilbolton Down,SO20
 Hampshire,Winchester,Houghton,SO20
 Hampshire,Winchester,King's Somborne,SO20
 Hampshire,Winchester,Little Sombourne,SO20
-Hampshire,Winchester,Shootash,SO20
+Hampshire,Romsey,Shootash,SO51
 Hampshire,Winchester,Stockbridge,SO20
 Hampshire,Winchester,Totford,SO20
 Hampshire,Winchester,Up Somborne,SO20
-Hampshire,Winchester,Abbotstone,SO21
+Hampshire,Winchester,Abbotstone,SO24
 Hampshire,Winchester,Avington,SO21
 Hampshire,Winchester,Barton Stacey,SO21
 Hampshire,Winchester,Baybridge,SO21
@@ -100,7 +100,7 @@ Hampshire,Winchester,Wonston,SO21
 Hampshire,Winchester,Worthy Down,SO21
 Hampshire,Winchester,Littleton,SO22
 Hampshire,Winchester,Kings Worthy,SO23
-Hampshire,Winchester,Avington Park,SO24
+Hampshire,Winchester,Avington Park,SO21
 Hampshire,Winchester,Beauworth,SO24
 Hampshire,Winchester,Bighton,SO24
 Hampshire,Winchester,Bishop's Sutton,SO24
@@ -131,7 +131,7 @@ Wiltshire,Salisbury,Great Wishford,SP2
 Wiltshire,Salisbury,Little Wishford,SP2
 Wiltshire,Salisbury,Netherhampton,SP2
 Wiltshire,Salisbury,South Newton,SP2
-Wiltshire,Salisbury,Stapleford,SP2
+Wiltshire,Salisbury,Stapleford,SP3
 Wiltshire,Salisbury,Stoford,SP2
 Wiltshire,Salisbury,Wilton,SP2
 Wiltshire,Salisbury,Chilmark,SP3

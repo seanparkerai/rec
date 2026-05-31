@@ -62,7 +62,7 @@
   ],
   "records": [
     {
-      "id": "abbotstone-so21",
+      "id": "abbotstone-so24",
       "name": "Abbotstone",
       "outcode": "SO21",
       "coords": {
@@ -154,7 +154,7 @@
       }
     },
     {
-      "id": "avington-park-so24",
+      "id": "avington-park-so21",
       "name": "Avington Park",
       "outcode": "SO24",
       "coords": {
@@ -798,7 +798,7 @@
       }
     },
     {
-      "id": "brown-candover-rg25",
+      "id": "brown-candover-so24",
       "name": "Brown Candover",
       "outcode": "RG25",
       "coords": {
@@ -1614,7 +1614,7 @@
       }
     },
     {
-      "id": "farley-mount-rg25",
+      "id": "farley-mount-so21",
       "name": "Farley Mount",
       "outcode": "RG25",
       "coords": {
@@ -3384,7 +3384,7 @@
       }
     },
     {
-      "id": "shootash-so20",
+      "id": "shootash-so51",
       "name": "Shootash",
       "outcode": "SO20",
       "coords": {
@@ -3614,7 +3614,7 @@
       }
     },
     {
-      "id": "stapleford-sp2",
+      "id": "stapleford-sp3",
       "name": "Stapleford",
       "outcode": "SP2",
       "coords": {
@@ -4099,7 +4099,7 @@
       }
     },
     {
-      "id": "upper-wield-gu35",
+      "id": "upper-wield-so24",
       "name": "Upper Wield",
       "outcode": "GU35",
       "coords": {
@@ -4402,7 +4402,7 @@
       }
     },
     {
-      "id": "wield-gu35",
+      "id": "wield-so24",
       "name": "Wield",
       "outcode": "GU35",
       "coords": {

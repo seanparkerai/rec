@@ -1,14 +1,14 @@
 {
-  "id": "wield-gu35",
+  "id": "wield-so24",
   "name": "Wield",
   "village": "Wield",
-  "town": "Basingstoke",
+  "town": "Winchester",
   "county": "Hampshire",
-  "postcode": "GU35",
-  "hubCity": "Guildford",
-  "regionDir": "",
-  "settlementType": "",
-  "subRegion": "Basingstoke",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
   "coords": {
     "lat": 51.1138,
     "lng": -1.0259
@@ -117,14 +117,5 @@
     "https://files.ofsted.gov.uk/v1/file/50209502",
     "https://www.thetrainline.com/stations/alton",
     "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo"
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4112083",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:54.927Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

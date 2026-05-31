@@ -1,17 +1,17 @@
 {
-  "id": "shootash-so20",
+  "id": "shootash-so51",
   "name": "Shootash",
   "village": "Shootash",
-  "town": "Winchester",
+  "town": "Romsey",
   "county": "Hampshire",
-  "postcode": "SO20",
+  "postcode": "SO51",
   "hubCity": "Southampton",
   "regionDir": "North",
   "settlementType": "Non-City",
-  "subRegion": "Winchester",
+  "subRegion": "Romsey",
   "coords": {
-    "lat": 51.0328,
-    "lng": -1.4872
+    "lat": 50.9998,
+    "lng": -1.548
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
@@ -35,14 +35,5 @@
   "nearestStation": null,
   "primarySupermarket": null,
   "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^805656",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:23.899Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  "sources": []
 }

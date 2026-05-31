@@ -134,14 +134,5 @@
       "label": "National Rail — Petersfield station",
       "url": "https://www.nationalrail.co.uk/stations/petersfield/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^685776",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:39.293Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

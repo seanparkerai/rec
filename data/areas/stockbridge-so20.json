@@ -136,14 +136,5 @@
       "label": "Google Maps — Stockbridge to Winchester",
       "url": "https://www.google.com/maps/dir/Stockbridge,+Hampshire/Winchester"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1389324",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:33.270Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

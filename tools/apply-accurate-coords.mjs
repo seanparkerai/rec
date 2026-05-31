@@ -34,7 +34,6 @@ const ACCURATE_COORDS = {
   'middle-wallop-so20':     { lat: 51.1434, lng: -1.5651 },
   'nether-wallop-so20':     { lat: 51.1370, lng: -1.5580 },
   'over-wallop-so20':       { lat: 51.1479, lng: -1.5632 },
-  'shootash-so20':          { lat: 51.0328, lng: -1.4872 },
   'stockbridge-so20':       { lat: 51.1120, lng: -1.4914 },
   'totford-so20':           { lat: 51.0921, lng: -1.4543 },
   'up-somborne-so20':       { lat: 51.0726, lng: -1.4840 },
@@ -44,7 +43,7 @@ const ACCURATE_COORDS = {
   'wherwell-sp11':          { lat: 51.1624, lng: -1.4756 },
 
   // ── Hampshire SO21 – Winchester rural ─────────────────────────────────────
-  'abbotstone-so21':        { lat: 51.0852, lng: -1.1773 },
+  'avington-park-so21':     { lat: 51.0903, lng: -1.2107 },
   'avington-so21':          { lat: 51.0912, lng: -1.2142 },
   'barton-stacey-so21':     { lat: 51.1549, lng: -1.3708 },
   'baybridge-so21':         { lat: 51.0481, lng: -1.2500 },
@@ -64,6 +63,7 @@ const ACCURATE_COORDS = {
   'owlsbury-so21':          { lat: 51.0503, lng: -1.2932 },
   'silkstead-so21':         { lat: 51.0357, lng: -1.3296 },
   'south-wonston-so21':     { lat: 51.1032, lng: -1.2790 },
+  'farley-mount-so21':      { lat: 51.0513, lng: -1.3823 },
   'sparsholt-so21':         { lat: 51.0641, lng: -1.3697 },
   'stoke-charity-so21':     { lat: 51.1358, lng: -1.2801 },
   'sutton-scotney-so21':    { lat: 51.1373, lng: -1.2830 },
@@ -79,7 +79,7 @@ const ACCURATE_COORDS = {
   'kings-worthy-so23':      { lat: 51.0824, lng: -1.3010 },
 
   // ── Hampshire SO24 – Alresford / Petersfield NW ───────────────────────────
-  'avington-park-so24':     { lat: 51.0903, lng: -1.2107 },
+  'abbotstone-so24':        { lat: 51.1073, lng: -1.1971 },
   'beauworth-so24':         { lat: 51.0490, lng: -1.1688 },
   'bighton-so24':           { lat: 51.0737, lng: -1.1453 },
   'bishop-s-sutton-so24':   { lat: 51.0585, lng: -1.1483 },
@@ -97,6 +97,9 @@ const ACCURATE_COORDS = {
   'shorley-so24':           { lat: 51.0567, lng: -1.1270 },
   'standon-so24':           { lat: 51.0458, lng: -1.1660 },
   'tichborne-so24':         { lat: 51.0637, lng: -1.1530 },
+  'brown-candover-so24':    { lat: 51.1500, lng: -1.1744 },
+  'upper-wield-so24':       { lat: 51.1113, lng: -1.0242 },
+  'wield-so24':             { lat: 51.1138, lng: -1.0259 },
   'west-tisted-so24':       { lat: 51.0610, lng: -1.0771 },
 
   // ── Hampshire SO32 – Bishops Waltham ──────────────────────────────────────
@@ -126,6 +129,7 @@ const ACCURATE_COORDS = {
   'michelmersh-so51':       { lat: 51.0097, lng: -1.4963 },
   'pucknall-so51':          { lat: 50.9903, lng: -1.4950 },
   'sherfield-english-so51': { lat: 50.9818, lng: -1.5524 },
+  'shootash-so51':          { lat: 50.9998, lng: -1.5480 },
   'timsbury-so51':          { lat: 51.0122, lng: -1.4943 },
 
   // ── Hampshire SO16 ────────────────────────────────────────────────────────
@@ -166,12 +170,8 @@ const ACCURATE_COORDS = {
 
   // ── Hampshire GU35 – Bordon / Headley ────────────────────────────────────
   'bordon-gu35':            { lat: 51.1076, lng: -0.8631 },
-  'upper-wield-gu35':       { lat: 51.1113, lng: -1.0242 },
-  'wield-gu35':             { lat: 51.1138, lng: -1.0259 },
 
   // ── Hampshire RG25 – Basingstoke rural ────────────────────────────────────
-  'brown-candover-rg25':    { lat: 51.1521, lng: -1.1527 },
-  'farley-mount-rg25':      { lat: 51.0513, lng: -1.3823 },
   'preston-candover-rg25':  { lat: 51.1703, lng: -1.1237 },
 
   // ── Hampshire PO7 ─────────────────────────────────────────────────────────
@@ -201,7 +201,6 @@ const ACCURATE_COORDS = {
   'little-wishford-sp2':    { lat: 51.0498, lng: -1.8572 },
   'netherhampton-sp2':      { lat: 51.0658, lng: -1.8373 },
   'south-newton-sp2':       { lat: 51.0573, lng: -1.8530 },
-  'stapleford-sp2':         { lat: 51.0953, lng: -1.9428 },
   'stoford-sp2':            { lat: 51.0433, lng: -1.8612 },
   'wilton-sp2':             { lat: 51.0754, lng: -1.8591 },
 
@@ -209,6 +208,7 @@ const ACCURATE_COORDS = {
   'chilmark-sp3':           { lat: 51.0821, lng: -1.9847 },
   'dinton-sp3':             { lat: 51.0798, lng: -1.9472 },
   'lake-sp3':               { lat: 51.0971, lng: -1.9413 },
+  'stapleford-sp3':         { lat: 51.0953, lng: -1.9428 },
   'lower-chicksgrove-sp3':  { lat: 51.0727, lng: -1.9933 },
   'sutton-mandeville-sp3':  { lat: 51.0625, lng: -1.9741 },
   'tisbury-sp3':            { lat: 51.0641, lng: -2.0743 },

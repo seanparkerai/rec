@@ -95,14 +95,5 @@
       "label": "OpenStreetMap Bighton area",
       "url": "https://www.openstreetmap.org/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801523",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:49.249Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

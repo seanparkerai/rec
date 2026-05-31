@@ -101,14 +101,5 @@
       "label": "The Burgate School",
       "url": "https://www.theburgate.com/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^805743",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:59.189Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

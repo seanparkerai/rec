@@ -18,7 +18,7 @@ export async function register({ test, assert, assertEqual }) {
   // Snapshot factory.
   const snap = (over = {}) => ({
     rightmove_id: over.id || 'x', property_type: 'Detached', beds: 3,
-    outcode: 'SO21', area_id: 'abbotstone-so21', price: 350_000, ...over,
+    outcode: 'SO24', area_id: 'abbotstone-so24', price: 350_000, ...over,
   });
   const react = (reaction, over = {}, days = 1, id = Math.random().toString(36).slice(2)) => ({
     id, listing_id: over.id || id, reaction, created_at: ago(days),
@@ -34,8 +34,8 @@ export async function register({ test, assert, assertEqual }) {
     const sigs = signalsForListing(snap());
     assert(sigs.includes('type:detached'), 'type signal');
     assert(sigs.includes('beds:3'), 'beds signal');
-    assert(sigs.includes('outcode:so21'), 'outcode signal');
-    assert(sigs.includes('area:abbotstone-so21'), 'area signal');
+    assert(sigs.includes('outcode:so24'), 'outcode signal');
+    assert(sigs.includes('area:abbotstone-so24'), 'area signal');
     assert(sigs.includes('price-band:350-400k'), 'price-band signal');
   });
 
@@ -249,10 +249,10 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   test('learned-prefs: listingLearnedPrefs selects only the signals a listing has', () => {
-    const eff = { 'type:detached': 0.2, 'type:flat': -0.3, 'outcode:so21': 0.1 };
+    const eff = { 'type:detached': 0.2, 'type:flat': -0.3, 'outcode:so24': 0.1 };
     const prefs = listingLearnedPrefs(snap(), eff);
     assertEqual(prefs['type:detached'], 0.2);
-    assertEqual(prefs['outcode:so21'], 0.1);
+    assertEqual(prefs['outcode:so24'], 0.1);
     assert(!('type:flat' in prefs), 'unrelated signal excluded');
   });
 

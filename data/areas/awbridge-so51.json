@@ -93,14 +93,5 @@
       "label": "Awbridge Primary School",
       "url": "https://www.awbridge.hants.sch.uk/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^805605",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:43.650Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

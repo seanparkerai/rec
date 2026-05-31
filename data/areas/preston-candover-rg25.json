@@ -134,14 +134,5 @@
     "https://camra.org.uk/pubs/purefoy-arms-preston-candover-179309",
     "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo",
     "https://en.wikipedia.org/wiki/Brown_Candover"
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4076940",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:18.018Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

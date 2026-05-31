@@ -1,14 +1,14 @@
 {
   "id": "flexcombe-gu32",
   "name": "Flexcombe",
-  "village": "",
-  "town": "Liss",
+  "village": "Flexcombe",
+  "town": "Petersfield",
   "county": "Hampshire",
   "postcode": "GU32",
-  "hubCity": "",
+  "hubCity": "Guildford",
   "regionDir": "",
   "settlementType": "",
-  "subRegion": "",
+  "subRegion": "Petersfield",
   "coords": {
     "lat": 51.0228,
     "lng": -0.9456
@@ -149,14 +149,5 @@
       "label": "East Hants DC — Council Tax 2026/27 (Liss parish)",
       "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^356091",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:33.904Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

@@ -121,14 +121,5 @@
     "https://www.streetcheck.co.uk/postcode/gu343nx",
     "https://www.primelocation.com/for-sale/houses/privett/filmore-hill/",
     "https://en.wikipedia.org/wiki/Privett_(disambiguation)"
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^356774",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:32.794Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

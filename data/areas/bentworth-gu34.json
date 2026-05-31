@@ -102,14 +102,5 @@
       "label": "National Rail — Alton station",
       "url": "https://www.nationalrail.co.uk/stations/alton/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595407",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:48.605Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

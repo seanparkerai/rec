@@ -127,14 +127,5 @@
     "https://files.ofsted.gov.uk/v1/file/50221039",
     "https://www.thetrainline.com/train-times/andover-to-london-waterloo",
     "https://www.testvalley.gov.uk/benefitsandcounciltax/counciltax/council-tax-charges"
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800259",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:13.460Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

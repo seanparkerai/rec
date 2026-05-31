@@ -151,14 +151,5 @@
       "label": "East Hants DC — Council Tax 2026/27 (Steep parish)",
       "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1492956",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:32.014Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

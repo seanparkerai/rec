@@ -102,14 +102,5 @@
       "label": "National Rail — Winchester station",
       "url": "https://www.nationalrail.co.uk/stations/winchester/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4355206",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:50.691Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

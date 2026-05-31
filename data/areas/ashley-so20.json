@@ -125,14 +125,5 @@
       "label": "Bossington Estate (local context)",
       "url": "https://www.bossingtonestate.com/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800194",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:39.753Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

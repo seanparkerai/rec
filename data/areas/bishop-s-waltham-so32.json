@@ -111,14 +111,5 @@
       "label": "Bishop’s Waltham Infant School",
       "url": "https://www.bwschool.org.uk/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595670",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:51.212Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

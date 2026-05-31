@@ -133,14 +133,5 @@
     "https://www.themayfly.co.uk/",
     "https://www.thetrainline.com/train-times/andover-to-london-waterloo",
     "https://www.testvalley.gov.uk/benefitsandcounciltax/counciltax/council-tax-charges"
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1596875",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:52.631Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

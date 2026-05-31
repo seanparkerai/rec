@@ -101,14 +101,5 @@
       "label": "OpenStreetMap SO24 area",
       "url": "https://www.openstreetmap.org/"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801544",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:02.442Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

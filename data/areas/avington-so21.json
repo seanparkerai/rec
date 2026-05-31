@@ -100,14 +100,5 @@
       "label": "Rightmove House Prices SO21",
       "url": "https://www.rightmove.co.uk/house-prices/SO21.html"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4342348",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:42.796Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

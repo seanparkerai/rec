@@ -1,14 +1,14 @@
 {
-  "id": "farley-mount-rg25",
+  "id": "farley-mount-so21",
   "name": "Farley Mount",
   "village": "Farley Mount",
-  "town": "Basingstoke",
+  "town": "Winchester",
   "county": "Hampshire",
-  "postcode": "RG25",
-  "hubCity": "Reading",
-  "regionDir": "South",
-  "settlementType": "Outlier",
-  "subRegion": "Basingstoke",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
   "coords": {
     "lat": 51.0513,
     "lng": -1.3823
@@ -89,14 +89,5 @@
       "label": "Visit Hampshire — Farley Mount Monument",
       "url": "https://www.visit-hampshire.co.uk/things-to-do/farley-mount-monument-p1414861"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4511249",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:31.432Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

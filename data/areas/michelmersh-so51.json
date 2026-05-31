@@ -156,14 +156,5 @@
       "title": "Trainline — Romsey to London Waterloo",
       "url": "https://www.thetrainline.com/train-times/romsey-to-london-waterloo"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^805649",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:41:03.723Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

@@ -1,10 +1,10 @@
 {
-  "id": "avington-park-so24",
+  "id": "avington-park-so21",
   "name": "Avington Park",
   "village": "Avington Park",
   "town": "Winchester",
   "county": "Hampshire",
-  "postcode": "SO24",
+  "postcode": "SO21",
   "hubCity": "Southampton",
   "regionDir": "North",
   "settlementType": "Non-City",
@@ -101,14 +101,5 @@
       "label": "Rightmove House Prices SO24",
       "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
     }
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1389516",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:39:41.672Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

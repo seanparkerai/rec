@@ -91,14 +91,5 @@
     "https://www.rightmove.co.uk/house-prices/SP2.html",
     "https://www.nationalrail.co.uk/stations/salisbury/",
     "https://www.google.com/maps"
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808282",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:05.972Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

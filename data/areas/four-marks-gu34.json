@@ -149,14 +149,5 @@
     "https://www.rightmove.co.uk/house-prices/gu34.html",
     "https://parentview.ofsted.gov.uk/parent-view-results/survey/result/12039/17",
     "https://littleplaceinthecountry.com/en/medstead-local-guide"
-  ],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^3733433",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-05-31T16:40:35.768Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  ]
 }

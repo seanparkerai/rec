@@ -312,16 +312,16 @@
     "councilTaxBand": "D"
   },
   {
-    "id": "wield-gu35",
+    "id": "wield-so24",
     "name": "Wield",
     "village": "Wield",
-    "town": "Basingstoke",
+    "town": "Winchester",
     "county": "Hampshire",
-    "postcode": "GU35",
-    "hubCity": "Guildford",
-    "regionDir": "",
-    "settlementType": "",
-    "subRegion": "Basingstoke",
+    "postcode": "SO24",
+    "hubCity": "Southampton",
+    "regionDir": "North",
+    "settlementType": "Non-City",
+    "subRegion": "Winchester",
     "coords": {
       "lat": 51.1138,
       "lng": -1.0259
@@ -333,19 +333,19 @@
     "councilTaxBand": null
   },
   {
-    "id": "brown-candover-rg25",
+    "id": "brown-candover-so24",
     "name": "Brown Candover",
     "village": "Brown Candover",
-    "town": "Basingstoke",
+    "town": "Winchester",
     "county": "Hampshire",
-    "postcode": "RG25",
-    "hubCity": "Reading",
-    "regionDir": "South",
-    "settlementType": "Outlier",
-    "subRegion": "Basingstoke",
+    "postcode": "SO24",
+    "hubCity": "Southampton",
+    "regionDir": "North",
+    "settlementType": "Non-City",
+    "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1521,
-      "lng": -1.1527
+      "lat": 51.15,
+      "lng": -1.1744
     },
     "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
@@ -354,16 +354,16 @@
     "councilTaxBand": null
   },
   {
-    "id": "farley-mount-rg25",
+    "id": "farley-mount-so21",
     "name": "Farley Mount",
     "village": "Farley Mount",
-    "town": "Basingstoke",
+    "town": "Winchester",
     "county": "Hampshire",
-    "postcode": "RG25",
-    "hubCity": "Reading",
-    "regionDir": "South",
-    "settlementType": "Outlier",
-    "subRegion": "Basingstoke",
+    "postcode": "SO21",
+    "hubCity": "Southampton",
+    "regionDir": "North",
+    "settlementType": "Non-City",
+    "subRegion": "Winchester",
     "coords": {
       "lat": 51.0513,
       "lng": -1.3823
@@ -475,7 +475,7 @@
     },
     "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
-    "status": "directory",
+    "status": "researched",
     "priceSummary": null,
     "councilTaxBand": null
   },
@@ -1299,15 +1299,15 @@
     "councilTaxBand": null
   },
   {
-    "id": "upper-wield-gu35",
+    "id": "upper-wield-so24",
     "name": "Upper Wield",
     "village": "Upper Wield",
     "town": "Winchester",
     "county": "Hampshire",
-    "postcode": "GU35",
-    "hubCity": "Guildford",
-    "regionDir": "",
-    "settlementType": "",
+    "postcode": "SO24",
+    "hubCity": "Southampton",
+    "regionDir": "North",
+    "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
       "lat": 51.1113,
@@ -1452,19 +1452,19 @@
     "councilTaxBand": null
   },
   {
-    "id": "shootash-so20",
+    "id": "shootash-so51",
     "name": "Shootash",
     "village": "Shootash",
-    "town": "Winchester",
+    "town": "Romsey",
     "county": "Hampshire",
-    "postcode": "SO20",
+    "postcode": "SO51",
     "hubCity": "Southampton",
     "regionDir": "North",
     "settlementType": "Non-City",
-    "subRegion": "Winchester",
+    "subRegion": "Romsey",
     "coords": {
-      "lat": 51.0328,
-      "lng": -1.4872
+      "lat": 50.9998,
+      "lng": -1.548
     },
     "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
@@ -1536,19 +1536,19 @@
     "councilTaxBand": null
   },
   {
-    "id": "abbotstone-so21",
+    "id": "abbotstone-so24",
     "name": "Abbotstone",
     "village": "Abbotstone",
     "town": "Winchester",
     "county": "Hampshire",
-    "postcode": "SO21",
+    "postcode": "SO24",
     "hubCity": "Southampton",
     "regionDir": "North",
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0852,
-      "lng": -1.1773
+      "lat": 51.1073,
+      "lng": -1.1971
     },
     "coordsSource": "os-opendata:place-centre",
     "houseTypeIds": [],
@@ -2181,12 +2181,12 @@
     "councilTaxBand": "D"
   },
   {
-    "id": "avington-park-so24",
+    "id": "avington-park-so21",
     "name": "Avington Park",
     "village": "Avington Park",
     "town": "Winchester",
     "county": "Hampshire",
-    "postcode": "SO24",
+    "postcode": "SO21",
     "hubCity": "Southampton",
     "regionDir": "North",
     "settlementType": "Non-City",
@@ -2832,12 +2832,12 @@
     "councilTaxBand": null
   },
   {
-    "id": "stapleford-sp2",
+    "id": "stapleford-sp3",
     "name": "Stapleford",
     "village": "Stapleford",
     "town": "Salisbury",
     "county": "Wiltshire",
-    "postcode": "SP2",
+    "postcode": "SP3",
     "hubCity": "Salisbury",
     "regionDir": "",
     "settlementType": "",
