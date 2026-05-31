@@ -50,6 +50,80 @@ export function normaliseName(s) {
     .trim();
 }
 
+// ── Geofence (L7): the DECISIVE precision test ───────────────────────────────
+// Distinct from the 20km IN_OUTCODE_RADIUS_KM wrong-REGION guard above — this is
+// the per-village buffer that decides whether a listing is actually in one of the
+// ~190 target villages, not merely somewhere in the right postal district. The
+// verdict is driven by COORDINATES (nearest active village centroid); a second,
+// independent signal — the listing's own town/postcode text vs the matched
+// village — CORROBORATES it. Disagreements are RECORDED (corroborated=false) so
+// they can be flagged for audit — never silently dropped, never silently trusted.
+export const GEOFENCE_RADIUS_KM = 4.8;          // ≈3 miles; per-village overridable
+export const MILES_PER_KM = 0.621371;
+
+/**
+ * Nearest active village to a listing, by coordinates only (no address-token
+ * shortcut — the token branch is exactly what let in-outcode-but-wrong-village
+ * listings through). @returns {{ area_id, km, village }}.
+ */
+export function nearestVillage(listing, villages = []) {
+  if (listing?.lat == null || listing?.lng == null) return { area_id: null, km: Infinity, village: null };
+  let best = null, bestKm = Infinity;
+  const here = { lat: Number(listing.lat), lng: Number(listing.lng) };
+  for (const v of villages) {
+    const km = haversineKm(here, v);
+    if (km < bestKm) { bestKm = km; best = v; }
+  }
+  return { area_id: best?.id ?? null, km: bestKm, village: best };
+}
+
+/**
+ * Second signal. Compares the listing's own town/displayAddress/postcode text to
+ * the matched village's name + outcode. Returns true (agrees), false (contradicts
+ * — e.g. coords say Wherwell but the text says "Andover"), or null (no usable text
+ * — fall back to coordinates alone, but mark it). Pure.
+ */
+export function nameAgrees(listing, village) {
+  if (!village) return null;
+  const hay = normaliseName([listing?.town, listing?.displayAddress, listing?.address]
+    .filter(Boolean).join(' '));
+  const oc = String(listing?.postcode ?? listing?.outcode ?? '').toUpperCase().match(/^[A-Z]{1,2}\d[A-Z\d]?/)?.[0] ?? null;
+  if (!hay && !oc) return null;
+  const wantName = normaliseName(village.name);
+  const wantOc = String(village.outcode ?? '').toUpperCase() || null;
+  const nameHit = wantName && hay ? hay.includes(wantName) : null;
+  const ocHit = wantOc && oc ? oc === wantOc : null;
+  // Contradiction only when we have a signal AND it disagrees on BOTH available axes.
+  if (nameHit === false && (ocHit === false || ocHit === null)) return false;
+  if (ocHit === false && nameHit === null) return false;
+  if (nameHit || ocHit) return true;
+  return null;
+}
+
+/**
+ * Decisive accept test: within the (per-village or default) buffer of the nearest
+ * ACTIVE village. Listings without coordinates are REJECTED. The name signal
+ * corroborates but never overrides the coordinate verdict; a contradiction is
+ * recorded via corroborated=false for downstream flagging.
+ * @param {object} listing  needs .lat/.lng; optionally .town/.address/.postcode.
+ * @param {object} opts     { villages:[{id,name,outcode,lat,lng,geofenceRadiusKm?}], radiusKm }
+ * @returns {{ pass, km, distance_mi, area_id, name_match, corroborated }}
+ */
+export function withinGeofence(listing, { villages = [], radiusKm = GEOFENCE_RADIUS_KM } = {}) {
+  const { km, village, area_id } = nearestVillage(listing, villages);
+  if (!Number.isFinite(km)) {
+    return { pass: false, km: null, distance_mi: null, area_id: null, name_match: null, corroborated: false };
+  }
+  const r = village?.geofenceRadiusKm ?? radiusKm;        // per-village override (L7.3)
+  const pass = km <= r;
+  const name_match = nameAgrees(listing, village);         // true | false | null (no text)
+  // corroborated = within buffer AND the name signal does not contradict. A null
+  // name_match (no text) is treated as "not contradicted" so coordinate-only
+  // listings still pass — but the absence is recorded via name_match=null.
+  const corroborated = pass && name_match !== false;
+  return { pass, km, distance_mi: km * MILES_PER_KM, area_id, name_match, corroborated };
+}
+
 /** Pull a full postcode (outcode + incode) or bare outcode token from an address. */
 export function extractOutcodeFromAddress(address) {
   if (!address) return null;

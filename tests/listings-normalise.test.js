@@ -10,6 +10,9 @@ import {
   parseAddedDate,
   extractOutcodeFromAddress,
   extractFloorplanUrl,
+  withinGeofence,
+  nearestVillage,
+  nameAgrees,
 } from '../tools/listings-normalise.mjs';
 
 // The exact raw shape captured by the L0 probe (actor dhrumil~rightmove-scraper).
@@ -152,5 +155,67 @@ export async function register({ test, assert, assertEqual }) {
     const london = { postcode: null, lat: 51.5072, lng: -0.1276 };
     const m = matchListingToArea(london, { areas: ALL_AREAS, knownOutcodes: KNOWN });
     assert(!m.accepted, 'far from every area and no covered token → rejected');
+  });
+
+  // ── L7 geofence: the decisive precision test (regression guard for the bug) ──
+  const SP11_VILLAGES = [
+    { id: 'wherwell-sp11', name: 'Wherwell', outcode: 'SP11', lat: 51.145, lng: -1.468 },
+    { id: 'newton-stacey-sp11', name: 'Newton Stacey', outcode: 'SP11', lat: 51.156, lng: -1.420 },
+  ];
+
+  test('geofence: ACCEPTS a listing at a target village centre', () => {
+    const r = withinGeofence({ lat: 51.145, lng: -1.468 }, { villages: SP11_VILLAGES });
+    assert(r.pass, 'Wherwell-centre accepted');
+    assert(r.distance_mi < 0.2, 'distance ≈ 0');
+    assertEqual(r.area_id, 'wherwell-sp11');
+  });
+
+  test('geofence: REJECTS a town north of Andover (the original leak)', () => {
+    const hatherden = { lat: 51.247, lng: -1.514 };   // SP11, ~7mi N of Wherwell
+    const r = withinGeofence(hatherden, { villages: SP11_VILLAGES });
+    assert(!r.pass, 'Andover-fringe SP11 listing rejected');
+    assert(r.distance_mi > 3, 'comfortably outside the 3mi buffer');
+  });
+
+  test('geofence: REJECTS a listing with no coordinates (no token shortcut)', () => {
+    const r = withinGeofence({ lat: null, lng: null, postcode: 'SP11 7AA' }, { villages: SP11_VILLAGES });
+    assert(!r.pass, 'no coords → rejected even with a matching outcode token');
+    assertEqual(r.area_id, null);
+  });
+
+  test('geofence: nearestVillage picks the closer of two targets', () => {
+    const near = nearestVillage({ lat: 51.156, lng: -1.421 }, SP11_VILLAGES);
+    assertEqual(near.area_id, 'newton-stacey-sp11');
+  });
+
+  test('geofence: per-village override tightens the buffer', () => {
+    const v = [{ id: 'x', name: 'X', outcode: 'SP11', lat: 51.145, lng: -1.468, geofenceRadiusKm: 1.61 }]; // 1mi
+    const twoMiNorth = { lat: 51.145 + 0.029, lng: -1.468 };
+    assert(!withinGeofence(twoMiNorth, { villages: v }).pass, '2mi rejected under a 1mi override');
+    assert(withinGeofence({ lat: 51.145, lng: -1.468 }, { villages: v }).pass, 'centre still accepted');
+  });
+
+  // ── Second-signal (failsafe) corroboration ──
+  test('corroboration: in-buffer AND name agrees → corroborated=true', () => {
+    const r = withinGeofence({ lat: 51.145, lng: -1.468, town: 'Wherwell', postcode: 'SP11 7JX' }, { villages: SP11_VILLAGES });
+    assert(r.pass && r.name_match === true && r.corroborated === true);
+  });
+
+  test('corroboration: in-buffer but text says Andover → pass holds, corroborated=false (FLAG, not drop)', () => {
+    // coords still inside Wherwell's buffer, but the address text contradicts it.
+    const r = withinGeofence({ lat: 51.16, lng: -1.47, town: 'Andover', postcode: 'SP10 2AB' }, { villages: SP11_VILLAGES });
+    assert(r.name_match === false, 'text contradicts the matched village');
+    assert(r.corroborated === false, 'disagreement recorded for audit');
+    assert(r.pass === true, 'pass is coordinate-driven — row is flagged, never silently dropped');
+  });
+
+  test('corroboration: coordinate-only listing (no text) → name_match=null, still usable', () => {
+    const r = withinGeofence({ lat: 51.145, lng: -1.468 }, { villages: SP11_VILLAGES });
+    assert(r.pass === true && r.name_match === null && r.corroborated === true,
+      'no text is treated as not-contradicted, but the absence is recorded via name_match=null');
+  });
+
+  test('corroboration: nameAgrees returns null when there is nothing to check', () => {
+    assertEqual(nameAgrees({}, SP11_VILLAGES[0]), null);
   });
 }
