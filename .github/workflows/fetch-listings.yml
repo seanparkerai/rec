@@ -1,14 +1,19 @@
 # fetch-listings — v3 L1 listing fetcher.
 # Runs tools/fetch-listings.mjs on a GitHub runner (which has internet, unlike the
 # Claude sandbox). Writes normalised rows into the Supabase `listings` table via
-# the service role. Replaces the throwaway L0 probe workflow.
+# the service role.
 #
 # Triggers:
 #   - workflow_dispatch: tap "Run workflow" in the Actions tab (phone-friendly).
-#   - schedule: daily at 07:10 UTC. Comment out the `schedule` block to pause.
+#   - schedule: daily at 06:00 UTC (24-hour recency window, MAX_DAYS_SINCE_ADDED=1).
+#     Comment out the `schedule` block to pause.
 #
 # Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
-# SUPABASE_SERVICE_ROLE_KEY. (The same secrets the L0 probe used.)
+# SUPABASE_SERVICE_ROLE_KEY.
+#
+# Cost guardrail: APIFY_MAX_BUDGET_USD (default 25) is passed to the actor as
+# maxBudget — Apify self-terminates at the cap. No overrun is possible on PPE actors.
+# Daily top-up (24h, cluster): ~50 results → ~$0.10/run. Foundation (14d): ~$4 worst-case.
 name: fetch-listings
 
 on:
@@ -18,8 +23,12 @@ on:
         description: 'Fetch + normalise only, do not write'
         type: boolean
         default: false
+      foundation_mode:
+        description: 'Foundation pull (14-day backfill). ALWAYS dry-run first to review projected cost before enabling writes.'
+        type: boolean
+        default: false
       search_mode:
-        description: 'Search granularity (L7.4): outcode (whole districts), village (per-village disks), or cluster (recommended — few tight disks covering all villages)'
+        description: 'Search granularity: outcode (whole districts), village (per-village disks), or cluster (recommended)'
         type: choice
         default: cluster
         options:
@@ -38,10 +47,13 @@ on:
         description: 'Cluster disk cap (miles). Lower = tighter/less paid noise but more searches. 5≈69, 7≈43, 9≈34 searches.'
         type: string
         default: '7'
+      apify_budget_usd:
+        description: 'Hard USD spend cap passed to Apify actor. Actor self-terminates at this limit.'
+        type: string
+        default: '25'
   schedule:
-    - cron: '10 7 * * *'
-  # Pushing a change to THIS file kicks off one immediate run (used to roll out the
-  # cluster default once resolve-areas has resolved every village to a tight id).
+    - cron: '0 6 * * *'
+  # Pushing a change to THIS file on main kicks off one immediate run.
   push:
     branches: [main]
     paths:
@@ -65,9 +77,13 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
-          # All 195 villages now resolve to a tight identifier, so cluster is the
-          # default for BOTH manual dispatch and the scheduled/push run — tight
-          # village disks instead of whole districts. Override per-dispatch if needed.
+          # foundation_mode overrides the recency window to 14 days in the fetcher.
+          # Scheduled runs always use the 24h window (MAX_DAYS_SINCE_ADDED=1).
+          FOUNDATION_MODE: ${{ inputs.foundation_mode && '1' || '0' }}
+          MAX_DAYS_SINCE_ADDED: '1'
+          # Hard spend cap: actor self-terminates at this USD limit (PPE — no overrun).
+          # Dispatch can override; scheduled runs use the hardcoded default of $25.
+          APIFY_MAX_BUDGET_USD: ${{ inputs.apify_budget_usd || '25' }}
           SEARCH_MODE: ${{ inputs.search_mode || 'cluster' }}
           FETCH_LIMIT: ${{ inputs.fetch_limit || '0' }}
           RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '50' }}
