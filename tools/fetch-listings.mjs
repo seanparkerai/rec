@@ -81,6 +81,8 @@ async function loadOutcodeMap() {
     map.get(oc).push({
       id: a.id, name: a.name, outcode: oc, lat: Number(lat), lng: Number(lng),
       geofenceRadiusKm: a.geofenceRadiusMi != null ? Number(a.geofenceRadiusMi) / MILES_PER_KM : undefined,
+      searchRadiusMi: a.searchRadiusMi != null ? Number(a.searchRadiusMi) : undefined,
+      rightmove: a.rightmove || undefined,
     });
   }
   return map;
@@ -93,6 +95,77 @@ function flattenVillages(outcodeMap) {
   const all = [];
   for (const arr of outcodeMap.values()) for (const v of arr) all.push(v);
   return all;
+}
+
+const DEFAULT_SEARCH_MI = 3;
+const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 5;   // max disk radius
+const SEARCH_MODE = (process.env.SEARCH_MODE || 'outcode').toLowerCase();
+
+/**
+ * Greedy geometric set-cover: merge villages whose search disks overlap into one
+ * search, so a dense outcode collapses to a few disks and a sparse one becomes
+ * village-tight disks (SP11 → two ~3mi disks around Wherwell + Newton Stacey;
+ * Andover is never fetched). Pure — coordinates only.
+ */
+function clusterVillages(villages, { capMiles = CLUSTER_CAP_MI } = {}) {
+  const remaining = villages.filter((v) => v.lat != null && v.lng != null);
+  const clusters = [];
+  while (remaining.length) {
+    const seed = remaining.shift();
+    const members = [seed];
+    for (let i = remaining.length - 1; i >= 0; i--) {
+      const v = remaining[i];
+      const mi = haversineKm(seed, v) * MILES_PER_KM;
+      // Absorb v if one disk centred on the seed can still cover v + its buffer.
+      if (mi + (v.searchRadiusMi || DEFAULT_SEARCH_MI) <= capMiles) { members.push(v); remaining.splice(i, 1); }
+    }
+    let radius = seed.searchRadiusMi || DEFAULT_SEARCH_MI;
+    for (const m of members) radius = Math.max(radius, haversineKm(seed, m) * MILES_PER_KM + (m.searchRadiusMi || DEFAULT_SEARCH_MI));
+    clusters.push({ center: seed, radiusMiles: Math.min(radius, capMiles), members });
+  }
+  return clusters;
+}
+
+/**
+ * Turn the active villages into Apify search targets for a given mode:
+ *   outcode — one search per outcode (no radius; the cheapest *change*, geofence
+ *             trims spillover). Zero-risk default; works without resolved ids.
+ *   village — one search per active village using its resolved rightmove identifier
+ *             + searchRadiusMi (maximum precision; ~195 small searches).
+ *   cluster — greedy set-cover of overlapping village disks (recommended): few
+ *             searches, each tight. Villages without a tight identifier fall back
+ *             to their outcode identifier (still gains the radius).
+ * Each target: { label, outcode, locationIdentifier|null, radiusMiles|null, areas }.
+ */
+function buildSearchTargets(outcodeMap, mode = SEARCH_MODE) {
+  const villages = flattenVillages(outcodeMap);
+  const idOf = (v) => v.rightmove?.locationIdentifier || null;     // populated by L7.3 resolver
+
+  if (mode === 'village') {
+    return villages.map((v) => ({
+      label: v.id, outcode: v.outcode,
+      locationIdentifier: idOf(v), radiusMiles: idOf(v) ? (v.searchRadiusMi || DEFAULT_SEARCH_MI) : null,
+      areas: [v],
+    }));
+  }
+  if (mode === 'cluster') {
+    const targets = [];
+    // Cluster within each outcode so a cluster's fallback identifier is unambiguous.
+    for (const [oc, arr] of outcodeMap) {
+      for (const c of clusterVillages(arr)) {
+        const id = idOf(c.center);
+        targets.push({
+          label: `${oc}:${c.center.id}+${c.members.length - 1}`, outcode: oc,
+          locationIdentifier: id, radiusMiles: id ? c.radiusMiles : null, areas: c.members,
+        });
+      }
+    }
+    return targets;
+  }
+  // outcode (default)
+  return [...outcodeMap.entries()].map(([oc, arr]) => ({
+    label: oc, outcode: oc, locationIdentifier: null, radiusMiles: null, areas: arr,
+  }));
 }
 
 // ── outcode → Rightmove locationIdentifier (typeahead) ───────────────────────
@@ -121,7 +194,7 @@ async function resolveLocationId(outcode) {
 // Build the Rightmove search URL. A learned `spec` (v3 L4) narrows it: price
 // floor/ceiling and a bed minimum cut the paid result count, and the recency
 // window comes from the spec (14d for an optimised run vs the 3d cron overlap).
-function buildSearchUrl(locationIdentifier, spec = null) {
+function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   const params = new URLSearchParams({
     searchType: 'SALE',
     locationIdentifier,
@@ -131,6 +204,10 @@ function buildSearchUrl(locationIdentifier, spec = null) {
   if (spec?.priceMin) params.set('minPrice', String(spec.priceMin));
   if (spec?.priceMax) params.set('maxPrice', String(spec.priceMax));
   if (spec?.minBeds) params.set('minBedrooms', String(spec.minBeds));
+  // L7.4: a search radius (miles) turns a point identifier (POSTCODE^/REGION^/
+  // STATION^) into a tight disk — so a sparse outcode stops returning Andover.
+  const radiusMiles = opts.radiusMiles ?? spec?.radiusMiles;
+  if (radiusMiles != null) params.set('radius', String(radiusMiles));
   return `https://www.rightmove.co.uk/property-for-sale/find.html?${params}`;
 }
 
@@ -159,13 +236,13 @@ function orderOutcodesByFocus(outcodes, spec) {
 }
 
 // ── Apify actor ──────────────────────────────────────────────────────────────
-async function fetchRawForOutcode(locationIdentifier, spec = null) {
+async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null) {
   if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
   const url =
     `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
     `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
   const input = {
-    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec) }],
+    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles }) }],
     maxItems: RESULTS_PER_OUTCODE,
     monitoringMode: false,
     includePriceHistory: false,
@@ -261,7 +338,7 @@ async function loadSearchSpec() {
 // ── main ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log('=== L1 fetch-listings ===');
-  console.log(`actor: ${APIFY_ACTOR_ID} · maxDaysSinceAdded: ${MAX_DAYS_SINCE_ADDED} · resultsPerOutcode: ${RESULTS_PER_OUTCODE} · fetchLimit: ${FETCH_LIMIT || 'all'} · dry-run: ${DRY_RUN}`);
+  console.log(`actor: ${APIFY_ACTOR_ID} · mode: ${SEARCH_MODE} · maxDaysSinceAdded: ${MAX_DAYS_SINCE_ADDED} · resultsPerTarget: ${RESULTS_PER_OUTCODE} · fetchLimit: ${FETCH_LIMIT || 'all'} · dry-run: ${DRY_RUN}`);
   if (!DRY_RUN && !SERVICE_KEY) throw new Error('SUPABASE_SERVICE_ROLE_KEY required to write (or set DRY_RUN=1)');
 
   const spec = await loadSearchSpec();
@@ -273,18 +350,25 @@ async function main() {
 
   const outcodeMap = await loadOutcodeMap();
   const ALL_ACTIVE = flattenVillages(outcodeMap);          // global geofence index
-  let outcodes = orderOutcodesByFocus([...outcodeMap.keys()].sort(), spec);
-  if (FETCH_LIMIT) outcodes = outcodes.slice(0, FETCH_LIMIT);
-  console.log(`outcodes: ${outcodes.length} · active villages: ${ALL_ACTIVE.length} (${outcodes.join(', ')})`);
+  // L7.4: build search targets for the chosen mode (outcode|village|cluster), then
+  // order by learned focus (by outcode) and cap with FETCH_LIMIT.
+  let targets = buildSearchTargets(outcodeMap, SEARCH_MODE);
+  if (spec?.focusOutcodes?.length) {
+    const focus = new Set(spec.focusOutcodes.map((s) => String(s).toUpperCase()));
+    targets = [...targets.filter((t) => focus.has(t.outcode)), ...targets.filter((t) => !focus.has(t.outcode))];
+  }
+  if (FETCH_LIMIT) targets = targets.slice(0, FETCH_LIMIT);
+  console.log(`targets: ${targets.length} (${SEARCH_MODE}) · active villages: ${ALL_ACTIVE.length}`);
 
   const now = new Date();
   let totalRaw = 0, totalKept = 0, totalRejected = 0, totalFlagged = 0, totalWritten = 0, totalPriceChanges = 0;
 
-  for (const oc of outcodes) {
-    const areas = outcodeMap.get(oc) || [];
+  for (const target of targets) {
+    const oc = target.outcode;
+    const areas = target.areas || [];
     try {
-      const locId = await resolveLocationId(oc);
-      const raw = await fetchRawForOutcode(locId, spec);
+      const locId = target.locationIdentifier || await resolveLocationId(oc);
+      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles);
       totalRaw += raw.length;
 
       const normalised = raw.map((r) => normaliseRawListing(r, { outcode: oc, source: SOURCE, now })).filter(Boolean);
@@ -317,7 +401,8 @@ async function main() {
       totalKept += deduped.length;
       totalFlagged += flagged;
 
-      console.log(`── ${oc} (${locId}): raw ${raw.length} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
+      const radiusNote = target.radiusMiles != null ? ` r=${target.radiusMiles.toFixed(1)}mi` : '';
+      console.log(`── ${target.label} (${locId}${radiusNote}): raw ${raw.length} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
 
       if (DRY_RUN) {
         for (const l of deduped.slice(0, 5)) {
@@ -350,7 +435,7 @@ async function main() {
         totalWritten += payload.length;
       }
     } catch (e) {
-      console.log(`── ${oc}: ✗ ${e.message}`);
+      console.log(`── ${target.label}: ✗ ${e.message}`);
     }
   }
 
@@ -363,4 +448,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets };

@@ -2,10 +2,51 @@
 // Only the PURE pieces are exercised (no network): the learned search-spec is
 // threaded into the Rightmove URL, the post-filter drops excluded types and
 // stale listings, and learned-favourite outcodes are processed first.
-import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus } from '../tools/fetch-listings.mjs';
+import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets } from '../tools/fetch-listings.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-05-31T00:00:00Z');
+
+  // ── L7.4: radius + clustered search targets ──
+  test('fetch-listings: buildSearchUrl adds a radius when given one', () => {
+    const url = buildSearchUrl('POSTCODE^123', null, { radiusMiles: 3 });
+    assert(url.includes('radius=3'), 'radius disk applied');
+    const plain = buildSearchUrl('OUTCODE^1');
+    assert(!plain.includes('radius='), 'no radius without one (outcode mode)');
+  });
+
+  test('fetch-listings: clusterVillages merges nearby villages, separates far ones', () => {
+    const villages = [
+      { id: 'a', lat: 51.10, lng: -1.50 },
+      { id: 'b', lat: 51.105, lng: -1.50 },   // ~0.35mi from a → same cluster
+      { id: 'z', lat: 51.40, lng: -1.10 },    // ~25mi away → its own cluster
+    ];
+    const clusters = clusterVillages(villages, { capMiles: 5 });
+    assertEqual(clusters.length, 2, 'a+b cluster, z alone');
+    const big = clusters.find((c) => c.members.length === 2);
+    assert(big && big.radiusMiles <= 5, 'cluster radius capped');
+  });
+
+  test('fetch-listings: buildSearchTargets modes produce the right shapes', () => {
+    const map = new Map([
+      ['SP11', [
+        { id: 'wherwell-sp11', name: 'Wherwell', outcode: 'SP11', lat: 51.162, lng: -1.476, searchRadiusMi: 3, rightmove: { locationIdentifier: 'POSTCODE^1' } },
+        { id: 'newton-stacey-sp11', name: 'Newton Stacey', outcode: 'SP11', lat: 51.177, lng: -1.454 },  // unresolved
+      ]],
+    ]);
+    const oc = buildSearchTargets(map, 'outcode');
+    assertEqual(oc.length, 1); assertEqual(oc[0].radiusMiles, null);
+
+    const village = buildSearchTargets(map, 'village');
+    assertEqual(village.length, 2);
+    const resolved = village.find((t) => t.label === 'wherwell-sp11');
+    assertEqual(resolved.locationIdentifier, 'POSTCODE^1'); assertEqual(resolved.radiusMiles, 3);
+    const unresolved = village.find((t) => t.label === 'newton-stacey-sp11');
+    assertEqual(unresolved.locationIdentifier, null);   // falls back to outcode resolve at fetch time
+
+    const cluster = buildSearchTargets(map, 'cluster');
+    assert(cluster.length >= 1 && cluster.every((t) => t.outcode === 'SP11'), 'clusters carry their outcode');
+  });
 
   test('fetch-listings: buildSearchUrl is plain L1 without a spec', () => {
     const url = buildSearchUrl('OUTCODE^123');

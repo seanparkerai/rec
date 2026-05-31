@@ -18,12 +18,20 @@ on:
         description: 'Fetch + normalise only, do not write'
         type: boolean
         default: false
+      search_mode:
+        description: 'Search granularity (L7.4): outcode (whole districts), village (per-village disks), or cluster (recommended — few tight disks covering all villages)'
+        type: choice
+        default: cluster
+        options:
+          - cluster
+          - outcode
+          - village
       fetch_limit:
-        description: 'Max outcodes to process (0 = all 24). Set 1 for a cheap validation run.'
+        description: 'Max search targets to process (0 = all). Set 1 for a cheap validation run.'
         type: string
         default: '0'
-      results_per_outcode:
-        description: 'Max listings per outcode (lower = cheaper on pay-per-event actors)'
+      results_per_target:
+        description: 'Max listings per search target (lower = cheaper on pay-per-event actors)'
         type: string
         default: '50'
   schedule:
@@ -47,6 +55,11 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          # Manual dispatch defaults to cluster (the input default); the scheduled
+          # run (no inputs) stays on the zero-risk outcode mode — the geofence
+          # already trims spillover — until tools/resolve-areas.mjs has populated
+          # per-village identifiers, after which cluster can be made the cron default.
+          SEARCH_MODE: ${{ inputs.search_mode || 'outcode' }}
           FETCH_LIMIT: ${{ inputs.fetch_limit || '0' }}
-          RESULTS_PER_OUTCODE: ${{ inputs.results_per_outcode || '50' }}
+          RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '50' }}
         run: node tools/fetch-listings.mjs
