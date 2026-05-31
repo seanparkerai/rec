@@ -66,6 +66,12 @@ Plan: `docs/V3_LISTINGS_PLAN.md`. Build order L0→L6; minimum-lovable = L0–L4
       get/save/recompute. Conflict-prompt banner on the listings page ("Adjust criteria" /
       "Dismiss 14 days"); NBA strip above the dashboard bento (`tile-nba.js` + `tile-nba.css`
       appended to the `dashboard.css` import shell). INTELLIGENCE_RULES §"Recommendation loop". 237/237 green.
+- [x] **Listings front-end overhaul** (2026-05-31): browse rows rebuilt as editorial **media cards**
+      — cover-cropped `image_url` photo (all 1298 listings have one; `media.rightmove.co.uk`) with a
+      monogram fallback on load error + `referrerpolicy="no-referrer"`, generous spacing, clear
+      hierarchy (verdict · price · title · meta · tags · why · reactions), no squashed grid column.
+      Hairline cards (not shadow-grid, DESIGN.md §3), mobile-first (photo top → left ≥640px), tokens
+      only. Deck reuses the shared `buildMedia` fallback. 237/237 green.
 - [ ] **L6 — Dossier + workflow**
 
 ---

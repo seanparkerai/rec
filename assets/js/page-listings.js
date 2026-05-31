@@ -149,17 +149,37 @@ function buildStatus(listing, current, onStatus) {
   ]);
 }
 
+// Shared media well with graceful fallback: a broken/blocked image swaps to a
+// monogram so a card never shows a stretched or empty box. `base` is the BEM block.
+function buildMedia(listing, base) {
+  const monogram = () => el('div', { class: `${base} ${base}--none`, 'aria-hidden': 'true' },
+    (listing.property_type || '•').slice(0, 1).toUpperCase());
+  if (!listing.image_url) return monogram();
+  const img = el('img', {
+    class: `${base}__img`, src: listing.image_url, alt: '',
+    loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
+  });
+  const wrap = el('div', { class: base }, [img]);
+  img.addEventListener('error', () => wrap.replaceWith(monogram()), { once: true });
+  return wrap;
+}
+
+function metaLine(listing) {
+  return [
+    listing.beds != null ? `${listing.beds} bed` : '',
+    listing.baths != null ? `${listing.baths} bath` : '',
+    listing.property_type || '',
+    fmtAgo(listing.added_date || listing.first_seen),
+  ].filter(Boolean).join(' · ');
+}
+
 function buildRow(listing, idx, scored, area, ctx = {}) {
   const verdict = scored?.verdict || 'unknown';
-  const dot = el('span', { class: `fit-dot fit-dot--${verdict}`, 'aria-hidden': 'true' });
-
-  const title = el('p', { class: 'area-name' }, listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`);
 
   const placeBits = [];
   if (listing.address) placeBits.push(listing.address);
   else if (area?.name) placeBits.push(area.name);
   if (listing.outcode) placeBits.push(listing.outcode);
-  const place = el('p', { class: 'area-place' }, placeBits.join(' · '));
 
   const tags = [];
   if (listing.status && listing.status !== 'live') {
@@ -177,25 +197,28 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
       ])
     : null;
 
-  const main = el('div', { class: 'area-row__main' }, [title, place, tagRow, buildWhy(scored), controls].filter(Boolean));
-
-  const price = el('span', { class: 'bed-fit' }, [
-    el('span', { class: `bed-fit-type verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
-    el('span', { class: 'num' }, fmtPrice(listing.price)),
-  ]);
-
-  const meta = el('span', { class: 'listing-meta' }, [
-    el('span', { class: 'listing-meta__beds num' }, listing.beds != null ? `${listing.beds} bed` : '—'),
-    el('span', { class: 'listing-meta__age' }, fmtAgo(listing.added_date || listing.first_seen)),
-  ]);
-
   const open = listing.url
-    ? el('a', { class: 'listing-open', href: listing.url, target: '_blank', rel: 'noopener', 'aria-label': 'Open on Rightmove' }, '↗')
-    : el('span', { class: 'listing-open listing-open--none' }, '');
+    ? el('a', { class: 'listing-card__open', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
+    : null;
 
-  return el('li', { class: 'area-row listing-row', 'data-id': listing.rightmove_id }, [
-    el('span', { class: 'area-index num' }, String(idx + 1).padStart(3, '0')),
-    dot, main, price, meta, open,
+  const content = el('div', { class: 'listing-card__content' }, [
+    el('div', { class: 'listing-card__head' }, [
+      el('span', { class: `fit-dot fit-dot--${verdict}`, 'aria-hidden': 'true' }),
+      el('span', { class: `verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
+      el('span', { class: 'listing-card__price num' }, fmtPrice(listing.price)),
+    ]),
+    el('p', { class: 'listing-card__title' }, listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
+    el('p', { class: 'listing-card__place' }, placeBits.join(' · ')),
+    el('p', { class: 'listing-card__meta num' }, metaLine(listing)),
+    tagRow,
+    buildWhy(scored),
+    controls,
+    open,
+  ].filter(Boolean));
+
+  return el('li', { class: 'listing-card', 'data-id': listing.rightmove_id }, [
+    buildMedia(listing, 'listing-media'),
+    content,
   ]);
 }
 
@@ -248,9 +271,7 @@ function buildDeckReactions(onReact) {
 
 function buildDeckCard(listing, scored, area, onReact) {
   const verdict = scored?.verdict || 'unknown';
-  const media = listing.image_url
-    ? el('div', { class: 'deck-media' }, [el('img', { class: 'deck-media__img', src: listing.image_url, alt: '', loading: 'lazy' })])
-    : el('div', { class: 'deck-media deck-media--none', 'aria-hidden': 'true' }, (listing.property_type || '•').slice(0, 1));
+  const media = buildMedia(listing, 'deck-media');
 
   const tags = [];
   if (listing.status && listing.status !== 'live') tags.push(el('span', { class: `listing-tag listing-tag--${listing.status}` }, STATUS_LABELS[listing.status] || listing.status));
