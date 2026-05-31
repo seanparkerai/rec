@@ -740,6 +740,7 @@ async function triggerWorkflow(foundationMode, dryRun) {
     inputs: {
       dry_run:         String(dryRun),
       foundation_mode: String(foundationMode),
+      search_mode:     'outcode',
     },
   };
   fetchLog(`Triggering ${foundationMode ? 'foundation' : 'daily'} fetch (dry_run=${dryRun})…`, 'info');
