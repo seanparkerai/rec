@@ -493,7 +493,7 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
   try {
     let q = sb
       .from('listings')
-      .select('rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status, lat, lng, image_url, first_seen, last_seen, added_date, update_reason, price_history, distance_mi, geofence_pass, name_match, corroborated, match_source')
+      .select('rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status, lat, lng, image_url, description, first_seen, last_seen, added_date, update_reason, price_history, distance_mi, geofence_pass, name_match, corroborated, match_source')
       .order('first_seen', { ascending: false })
       .limit(limit);
     if (status) q = q.eq('status', status);

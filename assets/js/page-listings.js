@@ -21,6 +21,7 @@ import { buildReasonPicker } from './listing-reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
   diversifySelection, listingBucketKey, describeSignal, trainingProgress, deriveSearchSpec,
+  inferOutdoorSpace, inferParking,
 } from './learned-preferences.js';
 import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
 import { url } from './config.js';
@@ -453,8 +454,11 @@ async function render() {
     area_id: l.area_id, price: l.price, beds: l.beds, baths: l.baths,
     property_type: l.property_type, status: l.status, url: l.url,
     distance_mi: l.distance_mi ?? null,   // L7.5: lets meta-observations propose a tighter buffer
-    outdoor_space: l.outdoor_space ?? null,   // null until fetcher provides; captured for future signal
-    has_parking:   l.has_parking   ?? null,
+    // Outdoor/parking aren't structured feed fields — prefer a structured value if
+    // one ever appears, else conservatively infer from the description (null when
+    // ambiguous, so no guessed value enters the training set).
+    outdoor_space: l.outdoor_space ?? inferOutdoorSpace(l.description),
+    has_parking:   l.has_parking   ?? inferParking(l.description),
   });
 
   // Persist ONLY on Save (one clean consolidated row per finished decision). Verb
@@ -492,7 +496,9 @@ async function render() {
   const deckDoneCount = () => deckOrder.filter((l) => isReviewed(l.rightmove_id)).length;
   function updateLearning() {
     if (!learningEl) return;
-    if (!listings.length) { learningEl.hidden = true; return; }
+    // In review mode the deck renders its own training widget (paintDeck), so the
+    // top-of-page copy is suppressed to avoid showing two identical widgets.
+    if (!listings.length || mode === 'review') { learningEl.hidden = true; return; }
     const p = trainingProgress(Object.values(reactions));
     clear(learningEl);
     learningEl.hidden = false;
@@ -666,6 +672,7 @@ async function render() {
     if (deckEl) deckEl.hidden = !review;
     if (browseOnly) browseOnly.hidden = review;
     if (review) { if (summaryEl) clear(summaryEl); paintDeck(); } else { paint(); }
+    updateLearning(); // re-evaluates the mode guard (hides the top widget in review)
   }
   modeBtns.forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
   if (showOOR) showOOR.addEventListener('change', () => { if (mode === 'browse') paint(); });

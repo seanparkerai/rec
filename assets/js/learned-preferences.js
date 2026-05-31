@@ -14,11 +14,13 @@
 //            Layer 2 surface as recommendations (L5), never resolved silently.
 //
 //   GUARDRAIL: cold-start (gradedCount) counts only like/reject. Passes are
-//   UNLABELLED for graduation but carry a small weak-negative contribution
-//   (PASS_WEIGHT × UNATTRIBUTED_DISCOUNT) once cold-start is cleared — they can
-//   only deepen existing graded signal, never create new signal keys alone.
-//   `viewed`/`offered` personal status applies VIEWED_MULTIPLIER to the matching
-//   reaction's recency weight so real decisions outweigh casual likes.
+//   UNLABELLED for graduation but, once cold-start is cleared, apply a small
+//   LOCAL weak-negative penalty (PASS_WEIGHT-scaled, capped) to the discrimination
+//   of signals that ALREADY carry graded evidence — they can never create a new
+//   signal and never touch the shared denominator, so a pass on one listing can't
+//   dilute an unrelated reject. `viewed`/`offered` personal status applies
+//   VIEWED_MULTIPLIER to the matching reaction's recency weight so real decisions
+//   outweigh casual likes.
 
 import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from './intelligence-constants.js';
 
@@ -84,9 +86,50 @@ export function signalsForListing(l) {
   if (a) sigs.push(`area:${a}`);
   const pb = priceBand(l.price);
   if (pb) sigs.push(`price-band:${pb}`);
-  if (l.outdoor_space != null) sigs.push(`outdoor:${l.outdoor_space ? 'yes' : 'no'}`);
-  if (l.has_parking != null) sigs.push(`parking:${l.has_parking ? 'yes' : 'no'}`);
+  // Outdoor / parking: a stored boolean (set on the snapshot at reaction time)
+  // wins; otherwise infer from the description so a LIVE row scores on the same
+  // feature it was LEARNED from (symmetry). Inference abstains (null) when unclear.
+  const outdoor = l.outdoor_space ?? inferOutdoorSpace(l.description);
+  if (outdoor != null) sigs.push(`outdoor:${outdoor ? 'yes' : 'no'}`);
+  const parking = l.has_parking ?? inferParking(l.description);
+  if (parking != null) sigs.push(`parking:${parking ? 'yes' : 'no'}`);
   return sigs;
+}
+
+// ── Feature inference from free text (conservative, abstaining) ──────────────
+// outdoor_space / has_parking are not structured fields in the Rightmove feed.
+// Rather than leave the signal permanently dead, infer it from the listing
+// description — but ABSTAIN (return null → no signal emitted) whenever the text
+// is ambiguous, so the training set never gains a guessed value. Strategy: strip
+// explicit negations, test for a positive mention on the remainder (presence of
+// ANY outdoor feature ⇒ "has outdoor space"); if only a negation remains ⇒ false;
+// otherwise ⇒ null. Pure + unit-tested in tests/learned-preferences.test.js.
+
+const OUTDOOR_NEG = /\bno\s+(?:private\s+|rear\s+|front\s+|outside\s+)?(?:garden|outdoor\s+space|outside\s+space)\b|\bwithout\s+(?:a\s+|an\s+)?garden\b/gi;
+const OUTDOOR_POS = /\b(?:garden|patio|terrace|balcony|courtyard|outdoor\s+space|outside\s+space|decking)\b/i;
+const PARKING_NEG = /\bno\s+(?:allocated\s+|off-?street\s+|private\s+)?parking\b|\bno\s+garage\b|\bno\s+driveway\b|\bstreet\s+parking\s+only\b|\bpermit(?:\s+parking)?\s+only\b/gi;
+const PARKING_POS = /\b(?:driveway|garage|off-?street\s+parking|allocated\s+parking|private\s+parking|parking\s+space|car\s*port|residents'?\s+parking)\b/i;
+
+/** Infer "has outdoor space" from description text. true | false | null (abstain). */
+export function inferOutdoorSpace(text) {
+  if (!text || typeof text !== 'string') return null;
+  const neg = OUTDOOR_NEG.test(text);
+  OUTDOOR_NEG.lastIndex = 0; // reset the /g regex between calls
+  const cleaned = text.replace(OUTDOOR_NEG, ' ');
+  OUTDOOR_NEG.lastIndex = 0;
+  if (OUTDOOR_POS.test(cleaned)) return true;
+  return neg ? false : null;
+}
+
+/** Infer "has parking" from description text. true | false | null (abstain). */
+export function inferParking(text) {
+  if (!text || typeof text !== 'string') return null;
+  const neg = PARKING_NEG.test(text);
+  PARKING_NEG.lastIndex = 0;
+  const cleaned = text.replace(PARKING_NEG, ' ');
+  PARKING_NEG.lastIndex = 0;
+  if (PARKING_POS.test(cleaned)) return true;
+  return neg ? false : null;
 }
 
 /** Human-readable label for a learned signal key (for the "Why this verdict" UI). */
@@ -115,10 +158,11 @@ export function describeSignal(signal) {
 // with "I rejected homes that happened to be 3-bed".
 //
 // Map: reason key → the signal KINDS it implicates (the prefix before ':' in a
-// signal). A reason that maps to NO captured signal (needs_work, no_outdoor,
-// other — property-intrinsic features we don't snapshot) implicates nothing, so
-// the reaction contributes a generic, discounted listing-level signal to ALL
-// kinds (never silently dropped). Like-reasons map analogously (positive boosts).
+// signal). A reason that maps to an EMPTY list (e.g. kitchen, light — features we
+// don't snapshot) implicates nothing, so the reaction contributes a generic,
+// discounted listing-level signal to ALL kinds (never silently dropped).
+// Sub-reasons can ADD kinds via SUBREASON_SIGNAL_KINDS. Like-reasons map
+// analogously (positive boosts).
 export const REASON_SIGNAL_KINDS = {
   // reject reasons
   too_small:     ['beds'],
@@ -401,7 +445,7 @@ export function deriveWeights(reactions, opts = {}) {
 
   let likedMass = 0;
   let rejectedMass = 0;
-  const acc = new Map(); // signal → { likedW, rejectedW, n, n_liked, n_rejected, reaction_ids:Set }
+  const acc = new Map(); // signal → { likedW, rejectedW, passMass, n, n_liked, n_rejected, n_pass, reaction_ids:Set }
 
   for (const r of graded) {
     const ageDays = Math.max(0, (now.getTime() - new Date(r.created_at).getTime()) / 86_400_000);
@@ -420,35 +464,43 @@ export function deriveWeights(reactions, opts = {}) {
       const mult = kinds === null ? 1 : (kinds.has(kind) ? 1 : discount);
       const cw = w * mult;
       let e = acc.get(s);
-      if (!e) { e = { likedW: 0, rejectedW: 0, n: 0, n_liked: 0, n_rejected: 0, reaction_ids: new Set() }; acc.set(s, e); }
+      if (!e) { e = { likedW: 0, rejectedW: 0, passMass: 0, n: 0, n_liked: 0, n_rejected: 0, n_pass: 0, reaction_ids: new Set() }; acc.set(s, e); }
       if (liked) { e.likedW += cw; e.n_liked += 1; } else { e.rejectedW += cw; e.n_rejected += 1; }
       e.n += 1;
       e.reaction_ids.add(id);
     }
   }
 
-  // Passes: weak rejected signal — can only deepen existing signal, never create
-  // new signal keys (n is not incremented, so MIN_SIGNAL_N guards still apply).
+  // Passes are WEAK NEGATIVE evidence, applied as a LOCAL per-signal penalty — not
+  // through the shared rejected denominator (which would let a pass on listing A
+  // dilute an unrelated strong reject on B). A pass only touches signals that
+  // already carry graded evidence (never creates a signal, never crosses cold
+  // start) and only nudges that signal's discrimination DOWN (toward rejected),
+  // bounded by passWeight and by the graded-only confidence(n).
   for (const r of passes) {
     const ageDays = Math.max(0, (now.getTime() - new Date(r.created_at).getTime()) / 86_400_000);
     const passW = Math.pow(0.5, ageDays / halfLife) * passWeight;
-    rejectedMass += passW;
     const id = r.id ?? `${r.listing_id}@${r.created_at}`;
     for (const s of signalsForListing(r.listing_snapshot)) {
-      const cw = passW * discount; // always unattributed — passes carry no reasons
       const e = acc.get(s);
       if (!e) continue; // no graded evidence for this signal — skip
-      e.rejectedW += cw;
+      e.passMass += passW;
+      e.n_pass += 1;
       e.reaction_ids.add(id);
     }
   }
 
+  const gradedMass = likedMass + rejectedMass; // local penalty scale (graded-only)
   const derived = {};
   for (const [s, e] of acc) {
     if (e.n < minN) continue;
     const pLiked = likedMass > 0 ? e.likedW / likedMass : 0;
     const pRejected = rejectedMass > 0 ? e.rejectedW / rejectedMass : 0;
-    const discrimination = pLiked - pRejected; // −1 … 1
+    // Pass penalty: this signal's recency-weighted pass mass as a share of the
+    // graded mass, capped at half the discrimination range so weak passes can
+    // never dominate genuine graded evidence. Always subtractive (toward reject).
+    const passPenalty = gradedMass > 0 ? Math.min(e.passMass / gradedMass, 0.5) : 0;
+    const discrimination = Math.max(-1, Math.min(1, pLiked - pRejected - passPenalty));
     const confidence = e.n / (e.n + smoothing);
     const weight = round3(discrimination * maxW * confidence);
     if (Math.abs(weight) < 0.01) continue; // not worth surfacing
@@ -458,6 +510,7 @@ export function deriveWeights(reactions, opts = {}) {
       n: e.n,
       n_liked: e.n_liked,
       n_rejected: e.n_rejected,
+      n_pass: e.n_pass,
       discrimination: round3(discrimination),
       confidence: round3(confidence),
     };

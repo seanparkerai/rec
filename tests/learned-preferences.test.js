@@ -7,6 +7,7 @@ import {
   deriveWeights, effectiveWeights, listingLearnedPrefs,
   gradedCount, isColdStart, diversifySelection, listingBucketKey,
   deriveSearchSpec, implicatedKinds, REASON_SIGNAL_KINDS, SUBREASON_SIGNAL_KINDS, trainingProgress,
+  inferOutdoorSpace, inferParking,
 } from '../assets/js/learned-preferences.js';
 import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from '../assets/js/intelligence-constants.js';
 
@@ -234,6 +235,19 @@ export async function register({ test, assert, assertEqual }) {
     assert(!signalsForListing(snap()).some((s) => s.startsWith('parking:')), 'null has_parking → no signal');
   });
 
+  test('learned-prefs: signalsForListing infers outdoor/parking from description (live↔snapshot symmetry)', () => {
+    // A live listings row carries `description` but no outdoor_space/has_parking
+    // column; it must score on the same signal its snapshot was trained on.
+    const live = { property_type: 'Detached', beds: 3, outcode: 'SO24', price: 350_000,
+      description: 'A lovely home with a large rear garden and a private driveway.' };
+    const sigs = signalsForListing(live);
+    assert(sigs.includes('outdoor:yes'), 'garden in description → outdoor:yes');
+    assert(sigs.includes('parking:yes'), 'driveway in description → parking:yes');
+    // A stored boolean still wins over the description (snapshot path).
+    assert(signalsForListing({ ...live, outdoor_space: false }).includes('outdoor:no'),
+      'stored boolean overrides description inference');
+  });
+
   // ── pass weak-negative (once cold-start cleared) ────────────────────────────
   test('learned-prefs: passes on a liked signal dampen its positive weight', () => {
     // Mathematically: passes add passW to rejectedMass but only passW*discount to
@@ -254,6 +268,36 @@ export async function register({ test, assert, assertEqual }) {
     const { derived, meta } = deriveWeights(many(30, 'pass'), { now: NOW });
     assertEqual(meta.coldStart, true, 'passes do not count toward cold start');
     assertEqual(Object.keys(derived).length, 0, 'no signal created by passes alone');
+  });
+
+  test('learned-prefs: passes on listing A never dilute an unrelated reject on B', () => {
+    // The contamination guard: passes apply a LOCAL penalty only, so a real reject
+    // of type:flat must score IDENTICALLY whether or not 200 unrelated detached
+    // listings were passed. (A shared rejected denominator would have diluted it.)
+    const likes   = many(10, 'like',   { property_type: 'Detached' });
+    const rejects = many(4,  'reject', { property_type: 'Flat' });
+    const passes  = many(200, 'pass',  { property_type: 'Detached' });
+    const wWithout = deriveWeights([...likes, ...rejects],          { now: NOW }).derived['type:flat']?.weight ?? 0;
+    const wWith    = deriveWeights([...likes, ...rejects, ...passes], { now: NOW }).derived['type:flat']?.weight ?? 0;
+    assert(wWithout < -0.01, 'flat is genuinely rejected');
+    assertEqual(wWith, wWithout, 'unrelated passes leave the flat rejection untouched');
+  });
+
+  // ── feature inference from description text (conservative, abstaining) ───────
+  test('learned-prefs: inferOutdoorSpace detects gardens, abstains when unclear', () => {
+    assertEqual(inferOutdoorSpace('Lovely home with a large rear garden'), true, 'garden → true');
+    assertEqual(inferOutdoorSpace('Apartment with no garden'), false, 'no garden → false');
+    assertEqual(inferOutdoorSpace('No garden but a lovely patio'), true, 'patio still counts as outdoor');
+    assertEqual(inferOutdoorSpace('A bright two-bed flat near the station'), null, 'no mention → abstain');
+    assertEqual(inferOutdoorSpace(null), null, 'no text → abstain');
+  });
+
+  test('learned-prefs: inferParking detects driveways/garages, abstains when unclear', () => {
+    assertEqual(inferParking('Detached house with driveway and garage'), true, 'driveway → true');
+    assertEqual(inferParking('Flat with no allocated parking'), false, 'no allocated parking → false');
+    assertEqual(inferParking('Street parking only in this area'), false, 'street parking only → false');
+    assertEqual(inferParking('No garage, but a generous driveway'), true, 'driveway overrides no garage');
+    assertEqual(inferParking('Charming cottage with open views'), null, 'no mention → abstain');
   });
 
   // ── viewed / offered multiplier ─────────────────────────────────────────────
