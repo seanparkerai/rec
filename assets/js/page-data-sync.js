@@ -645,6 +645,134 @@ $$;`;
 });
 
 
+// ── Fetch listings (§03) ──────────────────────────────────────────
+const GH_PAT_KEY = 'rec:gh-pat';
+const GH_REPO    = 'seanparkerai/rec';
+const GH_WF_FILE = 'fetch-listings.yml';
+const GH_REF     = 'main';
+
+function loadGhPat()  { try { return localStorage.getItem(GH_PAT_KEY) || ''; } catch { return ''; } }
+function saveGhPat(t) { try { localStorage.setItem(GH_PAT_KEY, t); } catch {} }
+function clearGhPat() { try { localStorage.removeItem(GH_PAT_KEY); } catch {} }
+
+function renderTokenBar() {
+  const pat = loadGhPat();
+  const inputRow     = byId('fetch-token-input-row');
+  const connectedRow = byId('fetch-token-connected');
+  const hint         = document.querySelector('.fetch-token-hint');
+  if (pat) {
+    if (inputRow)     inputRow.hidden     = true;
+    if (connectedRow) connectedRow.hidden = false;
+    if (hint)         hint.hidden         = true;
+  } else {
+    if (inputRow)     inputRow.hidden     = false;
+    if (connectedRow) connectedRow.hidden = true;
+    if (hint)         hint.hidden         = false;
+  }
+}
+
+on(byId('btn-save-token'), 'click', () => {
+  const val = (byId('input-gh-token')?.value || '').trim();
+  if (!val.startsWith('ghp_') && !val.startsWith('github_pat_')) {
+    alert('Enter a valid GitHub PAT (starts with ghp_ or github_pat_).');
+    return;
+  }
+  saveGhPat(val);
+  byId('input-gh-token').value = '';
+  renderTokenBar();
+});
+
+on(byId('btn-clear-token'), 'click', () => {
+  clearGhPat();
+  renderTokenBar();
+});
+
+function fetchLog(msg, type = 'info') {
+  const log = byId('fetch-log');
+  if (!log) return;
+  log.classList.add('visible');
+  const span = document.createElement('span');
+  span.className = `fetch-log-line ${type}`;
+  span.textContent = msg;
+  log.appendChild(span);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function triggerWorkflow(foundationMode, dryRun) {
+  const pat = loadGhPat();
+  if (!pat) { alert('Save a GitHub PAT first (§03 above).'); return; }
+  const url = `https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WF_FILE}/dispatches`;
+  const body = {
+    ref: GH_REF,
+    inputs: {
+      dry_run:         String(dryRun),
+      foundation_mode: String(foundationMode),
+    },
+  };
+  fetchLog(`Triggering ${foundationMode ? 'foundation' : 'daily'} fetch (dry_run=${dryRun})…`, 'info');
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${pat}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+      body: JSON.stringify(body),
+    });
+    if (res.status === 204) {
+      fetchLog('Workflow dispatched. Check GitHub Actions for progress.', 'ok');
+    } else {
+      const text = await res.text().catch(() => res.status);
+      fetchLog(`GitHub API error ${res.status}: ${text}`, 'err');
+    }
+  } catch (e) {
+    fetchLog(`Network error: ${e.message}`, 'err');
+  }
+}
+
+// ── Daily fetch dialog ────────────────────────────────────────────
+const dailyDialog = /** @type {HTMLDialogElement|null} */ (byId('dialog-fetch-daily'));
+
+on(byId('btn-fetch-daily'), 'click', () => {
+  if (!loadGhPat()) { alert('Save a GitHub PAT first (§03 above).'); return; }
+  dailyDialog?.showModal();
+});
+on(byId('btn-dialog-daily-cancel'),  'click', () => dailyDialog?.close());
+on(byId('btn-dialog-daily-confirm'), 'click', () => {
+  dailyDialog?.close();
+  triggerWorkflow(false, false);
+});
+dailyDialog?.addEventListener('click', (e) => { if (e.target === dailyDialog) dailyDialog.close(); });
+
+// ── Foundation dry-run (no dialog — just dispatch with dry_run=true) ─
+on(byId('btn-fetch-foundation-dry'), 'click', () => {
+  if (!loadGhPat()) { alert('Save a GitHub PAT first (§03 above).'); return; }
+  triggerWorkflow(true, true);
+});
+
+// ── Foundation live dialog ────────────────────────────────────────
+const foundationDialog = /** @type {HTMLDialogElement|null} */ (byId('dialog-fetch-foundation-live'));
+const ackCheck         = /** @type {HTMLInputElement|null}  */ (byId('chk-foundation-ack'));
+const confirmBtn       = byId('btn-dialog-foundation-confirm');
+
+on(byId('btn-fetch-foundation-live'), 'click', () => {
+  if (!loadGhPat()) { alert('Save a GitHub PAT first (§03 above).'); return; }
+  if (ackCheck) ackCheck.checked = false;
+  if (confirmBtn) confirmBtn.disabled = true;
+  foundationDialog?.showModal();
+});
+ackCheck?.addEventListener('change', () => {
+  if (confirmBtn) confirmBtn.disabled = !ackCheck?.checked;
+});
+on(byId('btn-dialog-foundation-cancel'),  'click', () => foundationDialog?.close());
+on(byId('btn-dialog-foundation-confirm'), 'click', () => {
+  foundationDialog?.close();
+  triggerWorkflow(true, false);
+});
+foundationDialog?.addEventListener('click', (e) => { if (e.target === foundationDialog) foundationDialog.close(); });
+
 // ── Boot ───────────────────────────────────────────────────────────
 document.addEventListener('shell:ready', async () => {
   refreshStatus();
@@ -676,4 +804,5 @@ document.addEventListener('shell:ready', async () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   updateRemoveButtons();
+  renderTokenBar();
 });

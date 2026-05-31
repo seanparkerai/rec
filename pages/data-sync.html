@@ -251,9 +251,110 @@
 
     </div><!-- /sync-grid -->
 
-    <!-- ── 3. Data Viewer ────────────────────────────────────────── -->
+    <!-- ── 3. Fetch listings ──────────────────────────────────────── -->
     <div class="section-head">
       <span class="section-num">03</span>
+      <h2 class="section-title">Fetch listings</h2>
+    </div>
+
+    <!-- GitHub token config bar -->
+    <div class="fetch-token-bar" id="fetch-token-bar">
+      <span class="fetch-token-label">GitHub token</span>
+      <div class="fetch-token-input-row" id="fetch-token-input-row">
+        <input type="password" id="input-gh-token" placeholder="ghp_…" autocomplete="off" spellcheck="false" aria-label="GitHub Personal Access Token" />
+        <button type="button" id="btn-save-token">Save</button>
+      </div>
+      <p class="fetch-token-hint">PAT needs <code>workflow</code> scope. Stored in this browser only — never sent to Supabase.</p>
+      <div class="fetch-token-connected" id="fetch-token-connected" hidden>
+        <span class="fetch-token-connected-label">PAT saved</span>
+        <button type="button" id="btn-clear-token" class="outline secondary" style="font-size:var(--text-xs);padding:var(--space-1) var(--space-3);min-height:32px">Forget</button>
+      </div>
+    </div>
+
+    <div class="fetch-cost-grid">
+
+      <!-- Daily top-up -->
+      <div class="fetch-cost-card">
+        <span class="fetch-cost-mode">Daily top-up · 24h window</span>
+        <p class="fetch-cost-headline">Fetch new listings</p>
+        <p class="fetch-cost-detail">
+          ~40 cluster targets × 50 max results = 2,000 worst-case<br>
+          <strong>Typical (24h): ~$0.04–0.10</strong> · Hard cap: $25
+        </p>
+        <div class="fetch-btn-stack">
+          <button type="button" id="btn-fetch-daily">Fetch new listings…</button>
+        </div>
+      </div>
+
+      <!-- Foundation pull -->
+      <div class="fetch-cost-card fetch-cost-card--caution">
+        <span class="fetch-cost-mode">Foundation pull · 14-day backfill · one-time</span>
+        <p class="fetch-cost-headline">Foundation pull</p>
+        <p class="fetch-cost-detail">
+          14 days × ~40 targets × 50 max = 2,000 worst-case results<br>
+          <strong>Realistic: ~$1.20 · Worst case: ~$4.00</strong> · Hard cap: $25
+        </p>
+        <div class="fetch-dry-note">Dry-run preview runs first — no spend until you confirm live</div>
+        <div class="fetch-btn-stack">
+          <button type="button" id="btn-fetch-foundation-dry" class="outline secondary">Dry-run preview</button>
+          <button type="button" id="btn-fetch-foundation-live">Live pull…</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="fetch-log" id="fetch-log" role="log" aria-live="polite"></div>
+
+    <!-- ── Daily confirm dialog ─────────────────────────────────── -->
+    <dialog id="dialog-fetch-daily" class="fetch-dialog">
+      <header class="dialog-head">
+        <h3 class="dialog-title">Fetch new listings</h3>
+      </header>
+      <div class="dialog-body">
+        <p class="dialog-desc">Trigger a 24-hour top-up via GitHub Actions. Apify will self-terminate at the spend cap.</p>
+        <dl class="dialog-cost">
+          <dt>Mode</dt>             <dd>Daily · 24h window</dd>
+          <dt>Cluster targets</dt>  <dd>~40</dd>
+          <dt>Max results</dt>      <dd>2,000 worst case</dd>
+          <dt>Typical spend</dt>    <dd>~$0.04–$0.10</dd>
+          <dt>Hard spend cap</dt>   <dd>$25.00</dd>
+        </dl>
+      </div>
+      <footer class="dialog-foot">
+        <button type="button" id="btn-dialog-daily-cancel" class="outline secondary">Cancel</button>
+        <button type="button" id="btn-dialog-daily-confirm">Confirm fetch</button>
+      </footer>
+    </dialog>
+
+    <!-- ── Foundation confirm dialog ───────────────────────────── -->
+    <dialog id="dialog-fetch-foundation-live" class="fetch-dialog fetch-dialog--caution">
+      <header class="dialog-head">
+        <h3 class="dialog-title">Foundation pull — live</h3>
+      </header>
+      <div class="dialog-body">
+        <p class="dialog-desc">14-day backfill across all active areas. This spends real Apify budget. Run the dry-run preview first to see projected targets.</p>
+        <dl class="dialog-cost">
+          <dt>Mode</dt>             <dd>Foundation · 14d window</dd>
+          <dt>Cluster targets</dt>  <dd>~40</dd>
+          <dt>Max results</dt>      <dd>2,000 worst case</dd>
+          <dt>Realistic spend</dt>  <dd>~$1.20</dd>
+          <dt>Worst case</dt>       <dd>~$4.00</dd>
+          <dt>Hard spend cap</dt>   <dd>$25.00</dd>
+        </dl>
+        <label class="dialog-ack">
+          <input type="checkbox" id="chk-foundation-ack" />
+          I have reviewed the dry-run output and confirm this spend
+        </label>
+      </div>
+      <footer class="dialog-foot">
+        <button type="button" id="btn-dialog-foundation-cancel" class="outline secondary">Cancel</button>
+        <button type="button" id="btn-dialog-foundation-confirm" disabled>Confirm live pull</button>
+      </footer>
+    </dialog>
+
+    <!-- ── 4. Data Viewer ────────────────────────────────────────── -->
+    <div class="section-head">
+      <span class="section-num">04</span>
       <h2 class="section-title">Data Viewer</h2>
     </div>
 
@@ -265,9 +366,9 @@
       <!-- populated by JS -->
     </div>
 
-    <!-- ── 4. Schema Status ──────────────────────────────────────── -->
+    <!-- ── 5. Schema Status ──────────────────────────────────────── -->
     <div class="section-head">
-      <span class="section-num">04</span>
+      <span class="section-num">05</span>
       <h2 class="section-title">Schema Status</h2>
     </div>
 
@@ -287,9 +388,9 @@
       </div>
     </div>
 
-    <!-- ── 5. Configuration ──────────────────────────────────────── -->
+    <!-- ── 6. Configuration ──────────────────────────────────────── -->
     <div class="section-head">
-      <span class="section-num">05</span>
+      <span class="section-num">06</span>
       <h2 class="section-title">Configuration</h2>
     </div>
 
