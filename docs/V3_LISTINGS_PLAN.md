@@ -1,6 +1,6 @@
 # v3 — Live Listings architecture & build plan
 
-> Status as of 2026-05-31: **L0–L5 done.** L6 pending.
+> Status as of 2026-05-31: **L0–L6 done** (L6 = dossier only; outreach join deferred by request).
 > Checklist mirror: `docs/CHECKLIST.md` (v3 section). Rule constants:
 > `docs/INTELLIGENCE_RULES.md` §"Listing fit". Sync class: `docs/SUPABASE_SYNC.md` §1.
 
@@ -89,9 +89,10 @@ Four committed decisions (do not relitigate without new evidence):
   dismissal) + an NBA strip above the dashboard tiles. Pure core `assets/js/meta-observations.js`;
   dismissals on `learned_preferences.dismissals`; documented in `INTELLIGENCE_RULES.md
   §"Recommendation loop"`.
-- L6: `pages/property.html` dossier + `property_outreach` join (extends the outreach
-  renderer; dual lifecycle timelines never merged). Per user priority, L6 (bookings/
-  outreach) is lower priority than the listings/learning core (L1–L4).
+- L6: `pages/property.html` dossier (built 2026-05-31 — gallery, fit "why", price history, area
+  context, reaction/status). The `property_outreach` join is **deferred by request** (outreach left
+  out entirely for now). Per user priority, L6 (bookings/outreach) is lower priority than the
+  listings/learning core (L1–L4).
 
 ## Failure modes to keep in view
 Apify abandonment → our-schema indirection swaps source in one file. Silent wrong-region

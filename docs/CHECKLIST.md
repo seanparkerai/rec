@@ -72,7 +72,17 @@ Plan: `docs/V3_LISTINGS_PLAN.md`. Build order L0→L6; minimum-lovable = L0–L4
       hierarchy (verdict · price · title · meta · tags · why · reactions), no squashed grid column.
       Hairline cards (not shadow-grid, DESIGN.md §3), mobile-first (photo top → left ≥640px), tokens
       only. Deck reuses the shared `buildMedia` fallback. 237/237 green.
-- [ ] **L6 — Dossier + workflow**
+- [x] **L6 — Dossier page** (2026-05-31): `pages/property.html` + `assets/js/page-property.js` +
+      `assets/css/pages/property.css` — a per-listing dossier (`?id=<rightmove_id>`): photo gallery
+      (raw_json.images[], thumb strip, fallback), headline + fit verdict, key facts (omits the
+      null tenure/EPC/council-tax rows), an OPEN "why this verdict", price history, area-context
+      card (→ area-detail), full description, and reaction + personal-status controls. **Outreach
+      intentionally excluded** (no `property_outreach` join). Pure core `assets/js/listing-detail.js`
+      (galleryImages / priceHistorySeries / netPriceChange, 6 tests). `storage.js#getListing`.
+      Listing cards + deck link in via the title / "Full details →". Anchor: Stripe-docs + Linear-dense.
+      **Also fixed a latent L1 bug:** `pages/listings.css` was never imported by the `dashboard.css`
+      shell (so the whole listings page rendered unstyled) — added `@import 'pages/listings.css'`
+      and `pages/property.css`. 243/243 green.
 
 ---
 

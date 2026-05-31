@@ -489,6 +489,25 @@ export async function getListings({ limit = 200, status = null } = {}) {
   }
 }
 
+// A single listing by rightmove_id (all columns incl. raw_json + price_history)
+// for the v3 L6 dossier. Returns null if not found.
+export async function getListing(rightmoveId) {
+  const sb = await _initSb();
+  if (!sb || !rightmoveId) return null;
+  try {
+    const { data, error } = await sb
+      .from('listings')
+      .select('*')
+      .eq('rightmove_id', String(rightmoveId))
+      .limit(1);
+    if (error) throw error;
+    return data?.[0] ?? null;
+  } catch (e) {
+    console.error('storage: read listing', e.message);
+    return null;
+  }
+}
+
 // ── Listing reactions (v3 L3 — append-only graded preference signal) ───────
 // User-state, household-scoped. Every reaction is a new row (append-only); the
 // latest row per listing is the current reaction. getListingReactions returns a

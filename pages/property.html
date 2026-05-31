@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Property · rec</title>
+  <meta name="description" content="A full dossier for a single listing — photos, fit, price history, and area context." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://media.rightmove.co.uk" crossorigin />
+  <link rel="dns-prefetch" href="https://media.rightmove.co.uk" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container" data-property>
+    <p class="loading">Loading property…</p>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-property.js"></script>
+</body>
+</html>

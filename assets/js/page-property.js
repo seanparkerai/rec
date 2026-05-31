@@ -1,0 +1,294 @@
+// page-property.js — v3 L6 per-listing dossier coordinator.
+// Renders a single listing (?id=<rightmove_id>) as a considered, reading-first
+// dossier: photo gallery, headline + fit verdict, key facts (only the ones we
+// actually have — tenure/EPC/council-tax aren't in the source payload, so their
+// rows are omitted rather than shown empty), an OPEN "why this verdict", price
+// history, area context, the full description, and the reaction/status controls.
+// No outreach — that lives elsewhere and is intentionally not joined here.
+import {
+  getListing, getFinances, getCriteria, getAreas,
+  getListingReactions, saveListingReaction,
+  getShortlistStatuses, setShortlistStatus,
+  getLearnedPreferences, recomputeLearnedPreferences,
+} from './storage.js';
+import { deriveFinances } from './finance-derive.js';
+import { scoreListingFit } from './listing-fit.js';
+import { effectiveWeights, listingLearnedPrefs, describeSignal } from './learned-preferences.js';
+import { galleryImages, priceHistorySeries, netPriceChange } from './listing-detail.js';
+import { REACTIONS, REJECT_REASONS, PERSONAL_STATUSES } from './listing-reactions.js';
+import { url } from './config.js';
+import { el, clear, byId } from './dom.js';
+
+const VERDICT_LABELS = { strong: 'Strong match', possible: 'Possible match', stretch: 'Stretch', weak: 'Weak match', reject: 'Reject', unknown: 'Unscored' };
+const STATUS_LABELS = { live: 'For sale', under_offer: 'Under offer', sstc: 'Sold STC', withdrawn: 'Withdrawn' };
+const REACTION_LABELS = { like: 'Like', pass: 'Pass', reject: 'Reject' };
+const PERSONAL_STATUS_LABELS = { new: 'New', saved: 'Saved', viewed: 'Viewed', offered: 'Offered', rejected: 'Rejected' };
+
+const fmtPrice = (n) => (n == null ? '—' : '£' + Math.round(n).toLocaleString('en-GB'));
+const fmtDate = (d) => {
+  if (!d) return '';
+  const dt = new Date(d);
+  return isNaN(dt) ? '' : dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+};
+
+// ── Gallery ──────────────────────────────────────────────────────────────────
+function buildGallery(listing) {
+  const imgs = galleryImages(listing);
+  if (!imgs.length) {
+    return el('div', { class: 'dossier-gallery dossier-gallery--none', 'aria-hidden': 'true' },
+      (listing.property_type || '•').slice(0, 1).toUpperCase());
+  }
+  const mainImg = el('img', {
+    class: 'dossier-gallery__main-img', src: imgs[0], alt: listing.title || 'Property photo',
+    loading: 'eager', decoding: 'async', referrerpolicy: 'no-referrer',
+  });
+  const counter = el('span', { class: 'dossier-gallery__count num' }, `1 / ${imgs.length}`);
+  const main = el('div', { class: 'dossier-gallery__main' }, [mainImg, counter]);
+  mainImg.addEventListener('error', () => { main.classList.add('is-broken'); }, { once: true });
+
+  let thumbs = null;
+  if (imgs.length > 1) {
+    const btns = imgs.map((src, i) => {
+      const t = el('img', { src, alt: '', loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer' });
+      const b = el('button', { type: 'button', class: 'dossier-gallery__thumb', 'aria-label': `Photo ${i + 1}`, 'aria-current': String(i === 0) }, [t]);
+      b.addEventListener('click', () => {
+        mainImg.src = src;
+        counter.textContent = `${i + 1} / ${imgs.length}`;
+        thumbs.querySelectorAll('.dossier-gallery__thumb').forEach((x) => x.setAttribute('aria-current', String(x === b)));
+      });
+      return b;
+    });
+    thumbs = el('div', { class: 'dossier-gallery__thumbs', role: 'group', 'aria-label': 'Photos' }, btns);
+  }
+  return el('div', { class: 'dossier-gallery' }, [main, thumbs].filter(Boolean));
+}
+
+// ── Headline ─────────────────────────────────────────────────────────────────
+function buildHeadline(listing, scored) {
+  const verdict = scored?.verdict || 'unknown';
+  const placeBits = [];
+  if (listing.address) placeBits.push(listing.address);
+  if (listing.outcode) placeBits.push(listing.outcode);
+
+  const tags = [];
+  if (listing.status && listing.status !== 'live') tags.push(el('span', { class: `listing-tag listing-tag--${listing.status}` }, STATUS_LABELS[listing.status] || listing.status));
+  const series = priceHistorySeries(listing.price_history);
+  const net = netPriceChange(series);
+  if (net < 0) tags.push(el('span', { class: 'listing-tag listing-tag--drop' }, `↓ ${fmtPrice(-net)} since listed`));
+
+  return el('header', { class: 'dossier-head' }, [
+    el('div', { class: 'dossier-head__verdict' }, [
+      el('span', { class: `fit-dot fit-dot--${verdict}`, 'aria-hidden': 'true' }),
+      el('span', { class: `verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
+    ]),
+    el('p', { class: 'dossier-head__price num' }, fmtPrice(listing.price)),
+    el('h1', { class: 'dossier-head__title' }, listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
+    placeBits.length ? el('p', { class: 'dossier-head__place' }, placeBits.join(' · ')) : null,
+    tags.length ? el('div', { class: 'listing-tags' }, tags) : null,
+  ].filter(Boolean));
+}
+
+// ── Key facts (only the fields we actually have) ─────────────────────────────
+function buildFacts(listing) {
+  const rows = [
+    ['Price', fmtPrice(listing.price)],
+    ['Bedrooms', listing.beds != null ? String(listing.beds) : null],
+    ['Bathrooms', listing.baths != null ? String(listing.baths) : null],
+    ['Type', listing.property_type],
+    ['Status', STATUS_LABELS[listing.status] || listing.status],
+    ['Listed', fmtDate(listing.added_date)],
+    ['Outcode', listing.outcode],
+    ['Tenure', listing.tenure],          // null in the source payload → omitted
+    ['EPC', listing.epc],                // null → omitted
+    ['Council tax', listing.council_tax],// null → omitted
+  ].filter(([, v]) => v != null && v !== '');
+
+  return el('section', { class: 'dossier-section' }, [
+    el('h2', { class: 'dossier-section__label' }, 'Key facts'),
+    el('dl', { class: 'dossier-facts' }, rows.flatMap(([k, v]) => [
+      el('div', { class: 'dossier-facts__row' }, [
+        el('dt', {}, k),
+        el('dd', { class: 'num' }, v),
+      ]),
+    ])),
+  ]);
+}
+
+// ── Fit "why" (open, not collapsed — this is the dossier) ─────────────────────
+function buildWhy(scored) {
+  const items = (scored.contributions || []).slice().sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta)).map((c) => {
+    let label = c.label;
+    if (typeof c.signal === 'string' && c.signal.startsWith('learned:')) {
+      label = `${c.delta > 0 ? 'You tend to like' : 'You tend to pass on'} ${describeSignal(c.signal.slice('learned:'.length))}`;
+    }
+    return el('li', { class: `listing-why__item listing-why__item--${c.delta > 0 ? 'pos' : 'neg'}` }, [
+      el('span', { class: 'listing-why__sign', 'aria-hidden': 'true' }, c.delta > 0 ? '＋' : '－'),
+      el('span', { class: 'listing-why__label' }, label),
+    ]);
+  });
+  if (!items.length) items.push(el('li', { class: 'listing-why__item' }, 'No distinguishing signals — a neutral fit.'));
+  return el('section', { class: 'dossier-section' }, [
+    el('h2', { class: 'dossier-section__label' }, 'Why this verdict'),
+    scored.affordability?.headline ? el('p', { class: 'dossier-why__afford' }, scored.affordability.headline) : null,
+    el('ul', { class: 'listing-why__list' }, items),
+  ].filter(Boolean));
+}
+
+// ── Price history ─────────────────────────────────────────────────────────────
+function buildPriceHistory(listing) {
+  const series = priceHistorySeries(listing.price_history);
+  let body;
+  if (series.length <= 1) {
+    const only = series[0];
+    body = el('p', { class: 'dossier-muted' }, only
+      ? `Listed at ${fmtPrice(only.price)}${only.date ? ` on ${fmtDate(only.date)}` : ''} — no changes recorded since.`
+      : 'No price history recorded yet.');
+  } else {
+    body = el('ol', { class: 'dossier-history' }, series.slice().reverse().map((p) => {
+      const sign = p.kind === 'reduced' ? '↓' : p.kind === 'increased' ? '↑' : '•';
+      const deltaTxt = p.kind === 'listed' ? 'Listed'
+        : `${sign} ${fmtPrice(Math.abs(p.delta))} (${(p.pct * 100).toFixed(1)}%)`;
+      return el('li', { class: `dossier-history__item dossier-history__item--${p.kind}` }, [
+        el('span', { class: 'dossier-history__date' }, fmtDate(p.date)),
+        el('span', { class: 'dossier-history__price num' }, fmtPrice(p.price)),
+        el('span', { class: 'dossier-history__delta' }, deltaTxt),
+      ]);
+    }));
+  }
+  return el('section', { class: 'dossier-section' }, [
+    el('h2', { class: 'dossier-section__label' }, 'Price history'),
+    body,
+  ]);
+}
+
+// ── Description ──────────────────────────────────────────────────────────────
+function buildDescription(listing) {
+  if (!listing.description) return null;
+  const paras = String(listing.description).split(/\n{2,}|\r\n\r\n/).map((s) => s.trim()).filter(Boolean);
+  return el('section', { class: 'dossier-section' }, [
+    el('h2', { class: 'dossier-section__label' }, 'Description'),
+    el('div', { class: 'dossier-prose' }, (paras.length ? paras : [String(listing.description)]).map((p) => el('p', {}, p))),
+  ]);
+}
+
+// ── Area context ─────────────────────────────────────────────────────────────
+function buildAreaCard(area) {
+  if (!area) return null;
+  const facts = [];
+  if (area.councilTaxBand) facts.push(['Council tax band', area.councilTaxBand]);
+  if (area.priceSummary?.avgDetached) facts.push(['Avg detached', fmtPrice(area.priceSummary.avgDetached)]);
+  if (area.nearestStation) facts.push(['Nearest station', area.nearestStation]);
+  return el('div', { class: 'dossier-card' }, [
+    el('h2', { class: 'dossier-card__label' }, 'Area'),
+    el('p', { class: 'dossier-card__name' }, area.name || area.id),
+    facts.length ? el('dl', { class: 'dossier-facts dossier-facts--tight' }, facts.flatMap(([k, v]) => [
+      el('div', { class: 'dossier-facts__row' }, [el('dt', {}, k), el('dd', { class: 'num' }, v)]),
+    ])) : null,
+    el('a', { class: 'dossier-card__link', href: `${url('pages/area-detail.html')}?id=${encodeURIComponent(area.id)}` }, `Explore ${area.name || 'this area'} →`),
+  ].filter(Boolean));
+}
+
+// ── Actions (reactions + status + Rightmove) ─────────────────────────────────
+function buildActions(listing, current, onReact, onStatus) {
+  const btns = REACTIONS.map((rx) => el('button', {
+    type: 'button', class: 'listing-react__btn', 'data-react': rx, 'aria-pressed': String(current?.reaction === rx),
+  }, REACTION_LABELS[rx]));
+  const chips = REJECT_REASONS.map((r) => el('button', {
+    type: 'button', class: 'listing-chip', 'data-reason': r.key,
+    'aria-pressed': String(current?.reaction === 'reject' && current?.reason === r.key),
+  }, r.label));
+  const reasons = el('div', { class: 'listing-reasons', role: 'group', 'aria-label': 'Why reject?' }, chips);
+  reasons.hidden = current?.reaction !== 'reject';
+  const group = el('div', { class: 'listing-react', role: 'group', 'aria-label': 'Your reaction' }, btns);
+  const setPressed = (rx) => btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.react === rx)));
+  group.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-react]'); if (!b) return;
+    setPressed(b.dataset.react); reasons.hidden = b.dataset.react !== 'reject';
+    onReact(b.dataset.react, null);
+  });
+  reasons.addEventListener('click', (e) => {
+    const c = e.target.closest('[data-reason]'); if (!c) return;
+    chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+    setPressed('reject'); onReact('reject', c.dataset.reason);
+  });
+
+  const sel = el('select', { class: 'listing-status', 'aria-label': 'Personal status' }, [
+    el('option', { value: '' }, 'No status'),
+    ...PERSONAL_STATUSES.map((s) => el('option', { value: s, selected: current?.status === s }, PERSONAL_STATUS_LABELS[s])),
+  ]);
+  sel.addEventListener('change', () => onStatus(sel.value || null));
+
+  return el('div', { class: 'dossier-actions' }, [
+    el('p', { class: 'dossier-card__label' }, 'Your call'),
+    el('div', { class: 'listing-react-wrap' }, [group, reasons]),
+    el('label', { class: 'listing-status-wrap' }, [el('span', { class: 'listing-status__label' }, 'Status'), sel]),
+    listing.url ? el('a', { class: 'dossier-actions__rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗') : null,
+  ].filter(Boolean));
+}
+
+function notFound(mount, msg) {
+  clear(mount);
+  mount.appendChild(el('div', { class: 'dossier-empty' }, [
+    el('p', { class: 'dossier-empty__title' }, msg || 'Listing not found'),
+    el('p', { class: 'dossier-muted' }, 'It may have been withdrawn, or the link is out of date.'),
+    el('a', { class: 'dossier-back', href: url('pages/listings.html') }, '← Back to listings'),
+  ]));
+}
+
+async function render() {
+  const mount = document.querySelector('[data-property]') || byId('main');
+  if (!mount) return;
+  const id = new URLSearchParams(location.search).get('id');
+  if (!id) { notFound(mount, 'No listing specified'); return; }
+
+  const listing = await getListing(id);
+  if (!listing) { notFound(mount, 'Listing not found'); return; }
+
+  const [rawFinances, criteria, areas, reactions, statuses, learned] = await Promise.all([
+    getFinances(), getCriteria(), getAreas(), getListingReactions(), getShortlistStatuses(), getLearnedPreferences(),
+  ]);
+  const finances = rawFinances ? deriveFinances(rawFinances) : null;
+  const area = (areas || []).find((a) => a.id === listing.area_id) || null;
+  const effective = effectiveWeights(learned?.derived || {}, learned?.overrides || {});
+  const scored = finances
+    ? scoreListingFit({ listing, finances, criteria, area, learnedPrefs: listingLearnedPrefs(listing, effective) })
+    : { verdict: 'unknown', score: 0, gated: false, contributions: [] };
+
+  const current = {
+    reaction: reactions[listing.rightmove_id]?.reaction || null,
+    reason: reactions[listing.rightmove_id]?.reason || null,
+    status: statuses[listing.rightmove_id] || '',
+  };
+  const snapshotOf = (l) => ({
+    rightmove_id: l.rightmove_id, title: l.title, address: l.address, outcode: l.outcode,
+    area_id: l.area_id, price: l.price, beds: l.beds, baths: l.baths,
+    property_type: l.property_type, status: l.status, url: l.url,
+  });
+  let retrainTimer = null;
+  const onReact = async (rx, reason) => {
+    await saveListingReaction({ listing_id: listing.rightmove_id, reaction: rx, reason, listing_snapshot: snapshotOf(listing) });
+    if (retrainTimer) clearTimeout(retrainTimer);
+    retrainTimer = setTimeout(() => { recomputeLearnedPreferences({ now: new Date() }).catch(() => {}); }, 1500);
+  };
+  const onStatus = (status) => setShortlistStatus(listing.rightmove_id, status);
+
+  clear(mount);
+  mount.appendChild(el('a', { class: 'dossier-back', href: url('pages/listings.html') }, '← Back to listings'));
+  mount.appendChild(el('div', { class: 'dossier' }, [
+    el('div', { class: 'dossier__main' }, [
+      buildGallery(listing),
+      buildHeadline(listing, scored),
+      buildFacts(listing),
+      buildWhy(scored),
+      buildPriceHistory(listing),
+      buildDescription(listing),
+    ].filter(Boolean)),
+    el('aside', { class: 'dossier__rail' }, [
+      buildActions(listing, current, onReact, onStatus),
+      buildAreaCard(area),
+    ].filter(Boolean)),
+  ]));
+  document.title = `${listing.title || 'Property'} · rec`;
+}
+
+render();

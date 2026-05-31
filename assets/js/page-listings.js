@@ -207,7 +207,10 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
       el('span', { class: `verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
       el('span', { class: 'listing-card__price num' }, fmtPrice(listing.price)),
     ]),
-    el('p', { class: 'listing-card__title' }, listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
+    el('p', { class: 'listing-card__title' }, [
+      el('a', { class: 'listing-card__title-link', href: `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}` },
+        listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
+    ]),
     el('p', { class: 'listing-card__place' }, placeBits.join(' · ')),
     el('p', { class: 'listing-card__meta num' }, metaLine(listing)),
     tagRow,
@@ -301,6 +304,7 @@ function buildDeckCard(listing, scored, area, onReact) {
     el('p', { class: 'deck-card__meta num' }, metaBits.join(' · ')),
     tags.length ? el('div', { class: 'listing-tags' }, tags) : null,
     buildWhy(scored),
+    el('a', { class: 'deck-card__open', href: `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}` }, 'Full details →'),
     listing.url ? el('a', { class: 'deck-card__open', href: listing.url, target: '_blank', rel: 'noopener' }, 'Open on Rightmove ↗') : null,
     buildDeckReactions(onReact),
   ].filter(Boolean));
