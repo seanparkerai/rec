@@ -28,6 +28,13 @@ import { el, clear } from './dom.js';
 
 const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}`;
 
+const mapBtn = (listing) => {
+  if (listing.lat == null || listing.lng == null) return null;
+  const a = el('a', { class: 'btn-map', href: `https://maps.google.com/?q=${listing.lat},${listing.lng}`, target: '_blank', rel: 'noopener', 'aria-label': 'Open location in Google Maps' });
+  a.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M8 1.5C5.515 1.5 3.5 3.515 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5C12.5 3.515 10.485 1.5 8 1.5zm0 6.25A1.75 1.75 0 1 1 8 4.25a1.75 1.75 0 0 1 0 3.5z" fill="currentColor"/></svg>`;
+  return a;
+};
+
 const PERSONAL_STATUS_LABELS = {
   new: 'New', saved: 'Saved', viewed: 'Viewed', offered: 'Offered', rejected: 'Rejected',
 };
@@ -208,8 +215,11 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
 
   // Stage 6b: the external Rightmove link as a clear button, visually distinct
   // from the image-link (which opens OUR dossier).
-  const open = listing.url
+  const rmLink = listing.url
     ? el('a', { class: 'listing-card__rm btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
+    : null;
+  const cardLinks = (rmLink || mapBtn(listing))
+    ? el('div', { class: 'listing-card__links' }, [rmLink, mapBtn(listing)].filter(Boolean))
     : null;
 
   const content = el('div', { class: 'listing-card__content' }, [
@@ -228,7 +238,7 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
     tagRow,
     buildWhy(scored, listing, area),
     controls,
-    open,
+    cardLinks,
   ].filter(Boolean));
 
   const reviewedClass = ctx.reviewed
@@ -382,6 +392,7 @@ function buildDeckCard(listing, scored, area, handlers) {
     el('div', { class: 'deck-card__links' }, [
       el('a', { class: 'deck-card__open', href: dossierHref(listing) }, 'Full details →'),
       listing.url ? el('a', { class: 'deck-card__rm btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗') : null,
+      mapBtn(listing),
     ].filter(Boolean)),
     buildReasonPicker({
       variant: 'deck',
