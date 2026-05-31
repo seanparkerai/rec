@@ -34,8 +34,18 @@ on:
         description: 'Max listings per search target (lower = cheaper on pay-per-event actors)'
         type: string
         default: '50'
+      cluster_cap_mi:
+        description: 'Cluster disk cap (miles). Lower = tighter/less paid noise but more searches. 5≈69, 7≈43, 9≈34 searches.'
+        type: string
+        default: '7'
   schedule:
     - cron: '10 7 * * *'
+  # Pushing a change to THIS file kicks off one immediate run (used to roll out the
+  # cluster default once resolve-areas has resolved every village to a tight id).
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fetch-listings.yml'
 
 permissions:
   contents: read
@@ -55,11 +65,11 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
-          # Manual dispatch defaults to cluster (the input default); the scheduled
-          # run (no inputs) stays on the zero-risk outcode mode — the geofence
-          # already trims spillover — until tools/resolve-areas.mjs has populated
-          # per-village identifiers, after which cluster can be made the cron default.
-          SEARCH_MODE: ${{ inputs.search_mode || 'outcode' }}
+          # All 195 villages now resolve to a tight identifier, so cluster is the
+          # default for BOTH manual dispatch and the scheduled/push run — tight
+          # village disks instead of whole districts. Override per-dispatch if needed.
+          SEARCH_MODE: ${{ inputs.search_mode || 'cluster' }}
           FETCH_LIMIT: ${{ inputs.fetch_limit || '0' }}
           RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '50' }}
+          CLUSTER_CAP_MI: ${{ inputs.cluster_cap_mi || '7' }}
         run: node tools/fetch-listings.mjs

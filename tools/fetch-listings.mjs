@@ -98,7 +98,7 @@ function flattenVillages(outcodeMap) {
 }
 
 const DEFAULT_SEARCH_MI = 3;
-const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 5;   // max disk radius
+const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 7;   // max disk radius (mi); lower = tighter/cheaper-per-result but more runs
 const SEARCH_MODE = (process.env.SEARCH_MODE || 'outcode').toLowerCase();
 
 /**
