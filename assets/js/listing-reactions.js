@@ -28,7 +28,6 @@ export const REJECT_REASONS = [
   { key: 'no_outdoor',    label: 'No outdoor space' },
   { key: 'poor_layout',   label: 'Poor layout' },
   { key: 'busy_road',     label: 'Busy road / location' },
-  { key: 'other',         label: 'Other' },
 ];
 
 const REJECT_REASON_KEYS = new Set(REJECT_REASONS.map((r) => r.key));
@@ -77,7 +76,6 @@ export const REJECT_SUBREASONS = {
     { key: 'safety',  label: 'Road safety' },
     { key: 'parking', label: 'Parking' },
   ],
-  other: [], // free text only
 };
 
 /**
@@ -96,7 +94,6 @@ export const LIKE_REASONS = [
   { key: 'parking',       label: 'Parking' },
   { key: 'move_in_ready', label: 'Move-in ready' },
   { key: 'character',     label: 'Character' },
-  { key: 'other',         label: 'Other' },
 ];
 
 /**
