@@ -1,0 +1,15 @@
+/* dashboard/tile-shortlist.css — shortlist fit dots. */
+
+.fit-dot {
+  display: inline-block; width: 0.7rem; height: 0.7rem;
+  border-radius: 50%; flex-shrink: 0; vertical-align: middle;
+}
+.fit-dot--comfortable  { background: color-mix(in oklch, var(--accent) 80%, var(--paper)); }
+.fit-dot--stretch      { background: color-mix(in oklch, var(--accent) 40%, var(--paper));
+                         border: 1px solid color-mix(in oklch, var(--accent) 60%, transparent); }
+.fit-dot--tight        { background: color-mix(in oklch, var(--ink) 30%, var(--paper)); }
+.fit-dot--out-of-reach { background: var(--paper); border: 1px solid var(--ink-muted); }
+.fit-dot--unknown      { background: transparent; border: 1px dashed var(--ink-subtle); }
+.tile-shortlist .shortlist-list li {
+  grid-template-columns: 1.75rem 0.7rem 1fr auto;
+}

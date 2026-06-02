@@ -1,0 +1,114 @@
+{
+  "id": "bradley-gu34",
+  "name": "Bradley",
+  "village": "Bradley",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Alton",
+  "coords": {
+    "lat": 51.1274,
+    "lng": -1.0927
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Bradley is a small civil parish and hamlet of around 200 residents in the Basingstoke and Deane district, on the chalk uplands between Alton and Basingstoke. The Royal Mail post town is Alresford and the postal district is GU35 rather than GU34, although the seed data places it under Alton; Basingstoke is about six and a half miles north, Alton five and a half miles south-east. The village was first recorded in a charter of Edward the Elder dated 909, was held with Overton at Domesday, and later passed through several manorial families. The parish covers 975 acres at a high point of 170 m and contains no separate hamlets. Bradley is small enough to have no shop, school or pub, and most daily needs are met by car, either north to Basingstoke or south to Alton or Alresford. The Grade II*-listed Church of All Saints anchors the village.",
+  "character": "Tightly compact estate-influenced hamlet with seven Grade II buildings (large farmhouses and a K6 telephone box) plus the Grade II* All Saints church, set among arable fields and small copses. No through-road of any size; access via narrow chalk lanes. Building stock is mostly listed farmhouses with a small handful of post-war additions; planning regime is tight.",
+  "amenities": [
+    "All Saints Church (Grade II*)",
+    "K6 telephone box (Grade II listed)",
+    "Active parish meeting",
+    "Nearest shop and post office: Preston Candover or Old Alresford (~3 mi)"
+  ],
+  "schools": [
+    {
+      "name": "Preston Candover Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "3.0 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo (via Alton)",
+        "time": "1h 13m + drive",
+        "mode": "drive + train",
+        "source": "https://www.thetrainline.com/stations/alton"
+      },
+      {
+        "to": "London Waterloo (via Basingstoke)",
+        "time": "~50m + drive",
+        "mode": "drive + train (faster Basingstoke route)",
+        "source": "https://www.nationalrail.co.uk/"
+      }
+    ],
+    "nearestStation": "Alton (~6 mi) or Basingstoke (~7 mi)",
+    "roads": "B3046 ~1 mi; A339 ~3 mi; A31 ~5 mi; M3 J7 (Basingstoke) ~9 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu34.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking the Candover chalk lanes",
+    "Visiting All Saints Church (Grade II*)",
+    "Preston Candover village shop and pub (3 mi)",
+    "Hattingley Valley Wines (~4 mi)",
+    "Lasham Gliding Club (~5 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "Purefoy Arms, Preston Candover",
+      "type": "Country pub",
+      "notes": "Nearest pub of note; mains around £18–£28",
+      "url": "https://thepurefoyarms.co.uk/"
+    }
+  ],
+  "pros": [
+    "Quiet chalk-country position equidistant from Basingstoke and Alton",
+    "Grade II* church and high concentration of listed buildings",
+    "Tight planning regime preserves rural character",
+    "Faster trains available from Basingstoke (under an hour to Waterloo)"
+  ],
+  "cons": [
+    "No shop, school, pub or station within the parish",
+    "Royal Mail post town is Alresford though seed data lists Alton",
+    "Limited listed-property stock; turnover is rare",
+    "Mobile signal patchy on lower chalk lanes"
+  ],
+  "whoItSuits": "Buyers willing to commit fully to a car-dependent life among a few dozen households, and to source most of their amenities from Preston Candover, Old Alresford or Basingstoke. Strong fit for retirees and remote workers wanting an unusually unspoilt chalk-down setting; weaker fit for first-time buyers, who will struggle on price and choice given the size of the listed-property stock. Note that the postal district appears as GU35 on the Wikipedia infobox and the seed data tags this record as GU34 — buyers should verify the precise postcode against the property.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (~6 mi)",
+  "primarySupermarket": "Waitrose, Alresford (~5 mi) or Sainsbury's, Alton (~6 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Bradley,_Hampshire",
+    "https://search.savills.com/list/houses-for-sale/england/hampshire/bradley/so24",
+    "https://www.hamptons.co.uk/estate-agents/bradley",
+    "https://www.rightmove.co.uk/house-prices/gu34.html",
+    "https://www.thetrainline.com/stations/alton",
+    "https://www.streetlist.co.uk/gu/gu34"
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^1493153",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:14:05.255Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Report · rec</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Analysis</p>
+      <h1>Value Report</h1>
+      <p class="lead">Your personalised Goldilocks value analysis — areas, affordability, and timing, live from the database.</p>
+    </header>
+
+    <div id="report-root">
+      <div id="report-loading" class="report-skeleton" aria-busy="true" aria-label="Loading report…">
+        <div class="skel-hero"></div>
+        <div class="skel-line"></div>
+        <div class="skel-line skel-line--short"></div>
+        <div class="skel-line"></div>
+        <div class="skel-line skel-line--short"></div>
+      </div>
+
+      <div id="report-error" hidden>
+        <div class="report-state-box">
+          <p id="report-error-msg" class="report-state-msg">Failed to load report.</p>
+          <button id="btn-retry" class="outline">Retry</button>
+        </div>
+      </div>
+
+      <div id="report-empty" hidden>
+        <div class="report-state-box">
+          <p class="report-state-msg">No published report yet. Your analyst will generate one and it will appear here automatically.</p>
+        </div>
+      </div>
+
+      <div id="report-content" hidden></div>
+    </div>
+  </main>
+
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-report.js"></script>
+</body>
+</html>

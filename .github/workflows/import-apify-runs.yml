@@ -1,0 +1,43 @@
+# import-apify-runs — one-off backfill of the Supabase `listings` table from
+# EXISTING Apify dataset items (already-paid-for results of prior actor runs).
+# Reading a dataset is a storage read, not an actor run, so this does NOT incur
+# the pay-per-event actor charge. Use this to recover listings that earlier
+# ad-hoc / probe runs scraped but never ingested.
+#
+# Trigger: workflow_dispatch only (manual). No schedule — this is a recovery job.
+# Requires the same repo secrets as fetch-listings: APIFY_TOKEN, APIFY_ACTOR_ID,
+# SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
+name: import-apify-runs
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Fetch + normalise only, do not write'
+        type: boolean
+        default: false
+      runs_limit:
+        description: 'How many recent SUCCEEDED actor runs to scan'
+        type: string
+        default: '25'
+
+permissions:
+  contents: read
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Import existing Apify dataset items
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          IMPORT_RUNS_LIMIT: ${{ inputs.runs_limit || '25' }}
+        run: node tools/import-apify-runs.mjs

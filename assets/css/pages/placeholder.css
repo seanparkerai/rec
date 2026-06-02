@@ -1,0 +1,107 @@
+/* pages/placeholder.css — Phase 5 placeholder pages + nav "(soon)" chips. */
+
+/* Nav "(soon)" chip — small mono superscript, muted ink. */
+.site-nav .nav-soon { display: inline-flex; align-items: baseline; gap: 0.4em; }
+.site-nav .nav-soon__chip {
+  font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: 0.65em; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-muted); font-weight: 500;
+  padding: 0.05em 0.4em; border-radius: 99px;
+  border: 1px solid var(--hairline); background: var(--paper);
+  vertical-align: middle;
+}
+.site-nav .nav-soon[aria-current="page"] .nav-soon__chip { border-color: var(--accent); color: var(--accent-ink, var(--ink)); }
+
+/* Placeholder page surfaces */
+.placeholder-illus {
+  margin: var(--space-6) 0 var(--space-6);
+  padding: var(--space-12) var(--space-6);
+  background: color-mix(in oklch, var(--accent) 8%, var(--paper));
+  border: 1px dashed color-mix(in oklch, var(--accent) 30%, var(--hairline));
+  border-radius: var(--rec-radius);
+  display: grid; place-items: center;
+}
+.placeholder-illus__caption {
+  margin: 0; font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.placeholder-card {
+  margin: var(--space-6) 0;
+  padding: var(--space-5);
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius);
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.placeholder-card h2 {
+  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.012em;
+}
+.placeholder-list { margin: 0; padding-left: 1.2rem; display: grid; gap: var(--space-2); font-size: var(--text-base); line-height: 1.5; }
+.placeholder-list li { color: var(--ink); }
+.placeholder-list code {
+  font-family: var(--font-data); font-size: 0.9em;
+  background: color-mix(in oklch, var(--ink) 4%, var(--paper));
+  padding: 0.05em 0.35em; border-radius: var(--rec-radius-sm);
+}
+
+.placeholder-grid {
+  display: grid; gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+@container (min-width: 720px) { .placeholder-grid { grid-template-columns: repeat(3, 1fr); } }
+.placeholder-tile {
+  margin: 0; padding: var(--space-4);
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--ink) 2%, var(--paper));
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.placeholder-tile h3 { margin: 0; font-size: var(--text-base); font-weight: 600; }
+.placeholder-tile p { margin: 0; font-size: var(--text-sm); line-height: 1.45; color: var(--ink); }
+.placeholder-tile .num {
+  font-family: var(--font-data); color: var(--ink);
+  background: var(--paper); padding: 0.1em 0.4em; border-radius: var(--rec-radius-sm);
+  border: 1px solid var(--hairline); font-size: 0.9em;
+}
+
+.placeholder-rows {
+  border-top: 1px solid var(--hairline);
+  margin: 0; padding: 0; list-style: none;
+}
+.placeholder-rows .is-placeholder {
+  pointer-events: none; opacity: 0.75;
+  border-bottom: 1px solid var(--hairline);
+  padding: var(--space-3) var(--space-2);
+  display: grid; gap: var(--space-3); align-items: center;
+}
+
+.placeholder-cta {
+  align-self: flex-start;
+  padding: 0 var(--space-4); min-height: 44px;
+  font-family: var(--font-body); font-size: var(--text-sm);
+  background: color-mix(in oklch, var(--ink) 4%, var(--paper));
+  color: var(--ink-muted);
+  border: 1px dashed var(--hairline-strong); border-radius: var(--rec-radius-sm);
+  cursor: not-allowed;
+}
+
+.placeholder-foot {
+  margin: var(--space-8) 0 var(--space-12);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--hairline);
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.placeholder-foot__note { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+.placeholder-foot__note a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+.ask-chips {
+  list-style: none; margin: var(--space-3) 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: var(--space-2);
+}
+.ask-chips li { margin: 0; }
+.ask-chip {
+  display: inline-block; padding: 0.4rem 0.75rem;
+  font-family: var(--font-data); font-size: var(--text-sm);
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+}

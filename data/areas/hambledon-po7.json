@@ -1,0 +1,147 @@
+{
+  "id": "hambledon-po7",
+  "name": "Hambledon",
+  "village": "Hambledon",
+  "town": "Waterlooville",
+  "county": "Hampshire",
+  "postcode": "PO7",
+  "hubCity": "Portsmouth",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Waterlooville",
+  "coords": {
+    "lat": 50.886,
+    "lng": -1.0713
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "A village of ~1,000 residents in the Winchester district, set on chalk downland inside the South Downs National Park at the southern end of the Meon Valley. Famed as the \"cradle of cricket\" — the Hambledon Club at nearby Broadhalfpenny Down was central to the sport's 18th-century development.",
+  "character": "Linear downland village, 69 listed buildings, Saxon-origin Grade I church; quietly affluent, history-conscious, families and downsizers.",
+  "amenities": [
+    "Two village shops",
+    "Pub (the Bat and Ball Inn at Broadhalfpenny Down acts as a cricket museum)",
+    "Parish church",
+    "Hambledon Primary (Ofsted Outstanding)",
+    "Active cricket club at Ridge Meadow"
+  ],
+  "schools": [
+    {
+      "name": "Hambledon Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": "Outstanding (2024)",
+      "distance": "In village",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116012"
+    },
+    {
+      "name": "The Cowplain School",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": "Good (2023)",
+      "distance": "~5 miles",
+      "url": "https://reports.ofsted.gov.uk/provider/23/136432"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Portsmouth Harbour",
+        "mode": "Drive",
+        "typical": "~35–45 min",
+        "notes": "A32/A27 route dependent"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~30–35 min",
+        "notes": "A32 northbound"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train (from Petersfield)",
+        "typical": "~1h + ~20 min drive to station",
+        "notes": "No station in Hambledon"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "PO7 prices are generally lower than South Downs prime villages, but Hambledon tends to command a local premium.",
+    "average": "£390,218",
+    "detached": "£620,144",
+    "semiDetached": "£373,980",
+    "terraced": "£309,443",
+    "flat": "£183,522",
+    "asOf": "2026-04",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/PO7.html"
+  },
+  "thingsToDo": [
+    "South Downs Way walking",
+    "Broadhalfpenny Down cricket heritage trail",
+    "Meon Valley cycling/walking"
+  ],
+  "placesToEat": [
+    "The Bat and Ball Inn",
+    "The Vine at Hambledon"
+  ],
+  "pros": [
+    "Outstanding primary school",
+    "Inside the National Park (planning protections)",
+    "Strong community + sporting fabric",
+    "Denmead nearby for full supermarket shop"
+  ],
+  "cons": [
+    "No station — Petersfield or Rowlands Castle for trains",
+    "Tight planning regime limits extensions/alterations",
+    "Premium for SDNP postcodes"
+  ],
+  "whoItSuits": [
+    "Families chasing the primary school and the National Park setting",
+    "Cricket-loving second-homers and retirees"
+  ],
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Hambledon, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Hambledon,_Hampshire"
+    },
+    {
+      "label": "Hambledon Parish Council — Cricket Club",
+      "url": "https://www.hambledon-pc.gov.uk/Cricket/Cricket_Club.aspx"
+    },
+    {
+      "label": "Visit South East England — Hambledon",
+      "url": "https://www.visitsoutheastengland.com/places-to-visit/hambledon-p1272711"
+    },
+    {
+      "label": "Ofsted — Hambledon Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116012"
+    },
+    {
+      "label": "Ofsted — The Cowplain School",
+      "url": "https://reports.ofsted.gov.uk/provider/23/136432"
+    },
+    {
+      "label": "Rightmove House Prices PO7",
+      "url": "https://www.rightmove.co.uk/house-prices/PO7.html"
+    },
+    {
+      "label": "National Rail — Petersfield station",
+      "url": "https://www.nationalrail.co.uk/stations/petersfield/"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^685776",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:14:46.332Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

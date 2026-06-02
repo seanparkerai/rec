@@ -1,0 +1,172 @@
+{
+  "id": "morestead-so21",
+  "name": "Morestead",
+  "village": "Morestead",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.0428,
+    "lng": -1.2752
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": {
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": null,
+  "overview": "Morestead is a tiny former civil parish — now part of Owslebury parish — set on rising downland inside the South Downs National Park about three miles south-east of Winchester city centre. The historic parish covered around 1,701 acres and had just 96 residents at the 1931 census before being merged into Owslebury in 1932. The 12th-century parish church (no known dedication), with parts dating from around 1150 and a font from about 1200, sits at the lane junction at the heart of the hamlet, beside the former rectory built in the mid-1830s. The Roman road from Portchester to Winchester forms the main village street. Morestead is predominantly a farming community, with racehorse training stables, and is in the benefice of the South Downs Gateway Churches with Twyford, Owslebury and Colden Common. There is no shop, school or pub in the hamlet itself.",
+  "character": "Dispersed downland farming hamlet of fewer than thirty households: a parish church, a couple of working farms, the old rectory and a thin scatter of brick-and-flint cottages and 20th-century houses along Morestead Road and Fawley Lane. Strictly inside the South Downs National Park, so planning is tightly controlled.",
+  "amenities": [
+    "12th-century Parish Church (Morestead Hill)",
+    "Racehorse training stables within the parish",
+    "Nearest pub and shop: Twyford (1.5 mi) or Owslebury (1.7 mi)",
+    "Twyford St Mary's CofE Primary School (1.6 mi) and village hall",
+    "Marwell Zoo (2 mi)",
+    "Full retail and GP at Winchester (3 mi)"
+  ],
+  "schools": [
+    {
+      "name": "Twyford St Mary's Church of England Primary School",
+      "phase": "Primary",
+      "type": "State (Voluntary Aided)",
+      "ofsted": "Good (2023)",
+      "distance": "1.6 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116307"
+    },
+    {
+      "name": "Owslebury Primary School",
+      "phase": "Primary",
+      "type": "State (Community)",
+      "ofsted": "Good (2022)",
+      "distance": "1.7 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+    },
+    {
+      "name": "Kings' School, Winchester",
+      "phase": "Secondary",
+      "type": "State (Comprehensive)",
+      "ofsted": "Good (2023)",
+      "distance": "3.5 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/23/136451"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 4m (fastest) / 1h 23m (average)",
+        "mode": "drive to Winchester (3 mi) + direct train (SWR)",
+        "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      },
+      {
+        "to": "Southampton (by road)",
+        "time": "~25m",
+        "mode": "drive (B2177/M3 J11)",
+        "source": "https://www.google.com/maps"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~10m",
+        "mode": "drive (B3404)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Winchester (3.0 mi)",
+    "roads": "B3404 (Morestead Road); B2177 ~1 mi; M3 J11 ~3 mi; A31 ~3 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 712724,
+    "avgDetached": 1058605,
+    "avgSemi": 541803,
+    "avgTerraced": 488613,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so21.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking St Catherine's Hill and Twyford Down (2 mi)",
+    "Marwell Zoo (2 mi)",
+    "South Downs National Park footpaths on the doorstep",
+    "Itchen Way along the river toward Winchester",
+    "Hinton Ampner gardens (National Trust, 5 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Phoenix, Twyford",
+      "type": "Village pub",
+      "notes": "1.5 mi north; full menu and rooms",
+      "url": "https://www.thephoenixtwyford.co.uk/"
+    },
+    {
+      "name": "The Ship Inn, Owslebury",
+      "type": "Country pub with rooms",
+      "notes": "1.7 mi south-east in Owslebury",
+      "url": "https://whatpub.com/pubs/HAS/00337/ship-inn-owslebury"
+    }
+  ],
+  "pros": [
+    "Three miles to Winchester station and the direct Waterloo line",
+    "Inside the South Downs National Park — strong landscape protection",
+    "Two Good village primaries within 1.7 miles and a Good catchment secondary in Winchester",
+    "Twyford Down and Marwell Zoo both on the doorstep",
+    "Genuine farming-hamlet quiet, very few cars except local"
+  ],
+  "cons": [
+    "No shop, pub or school in the hamlet itself — full car dependency",
+    "SO21 detached average over £1m; small market means listings are rare and dear",
+    "Single-track lanes are narrow and dim — winter driving is slower",
+    "National Park planning restricts development",
+    "Very limited public transport"
+  ],
+  "whoItSuits": "Best for a buyer who wants National Park quiet within ten minutes of a mainline station and a market town, and accepts there are no facilities in the lane. For a solo £64k first-time buyer at £400k, freehold listings are typically out of reach in Morestead itself — the much larger village of Twyford (1.5 mi north, same SO21) has more terraced and semi stock and gives you a Good primary, pubs and a station within walking distance, with Owslebury (1.7 mi) cheaper still for the same downs setting. If you'd rather chase budget than National Park status, Colden Common (3 mi south) is the obvious next stop.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (3.0 mi)",
+  "primarySupermarket": "Sainsbury's, Middle Brook Street, Winchester (3.0 mi); Co-op, Twyford (1.5 mi)",
+  "images": [],
+  "sources": [
+    {
+      "title": "Wikipedia — Morestead",
+      "url": "https://en.wikipedia.org/wiki/Morestead"
+    },
+    {
+      "title": "British History Online — Parishes: Morestead",
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp329-330"
+    },
+    {
+      "title": "South Downs Gateway Churches",
+      "url": "https://www.sdgateway.org.uk/"
+    },
+    {
+      "title": "Ofsted — Owslebury Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+    },
+    {
+      "title": "Rightmove — SO21 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/so21.html"
+    },
+    {
+      "title": "Trainline — Winchester to London Waterloo",
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^800358",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:15:12.078Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

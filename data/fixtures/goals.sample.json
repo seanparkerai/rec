@@ -1,0 +1,36 @@
+{
+  "_SAMPLE": "SYNTHETIC SAMPLE DATA — fictional placeholder values for tests and fresh-install fallback ONLY. NOT real user data; do not analyse or cite. Real user-state lives only in Supabase.",
+  "timeline": {
+    "horizon": "sample target",
+    "type": "soft target",
+    "confidence": "flexible"
+  },
+  "target": {
+    "propertyPriceBand": "sample band",
+    "engineAutoCalibrate": true,
+    "currentSystemCentre": 340000,
+    "note": "engine drives final number"
+  },
+  "deposit": {
+    "hopedFor": 40000,
+    "currentSavings": 25000,
+    "gapToHoped": 15000,
+    "engineAutoCalibrate": true,
+    "fundingSource": "ISA (sample)",
+    "giftedDepositPortion": 0
+  },
+  "mortgage": {
+    "termPreference": "no-preference, engine defaults to 5-year-fix",
+    "lengthPreference": "no-preference, engine defaults to 30-years",
+    "comparisonsToOffer": ["25y", "30y", "35y", "40y"]
+  },
+  "readiness": {
+    "_status": "retired — items now live in readiness_checklist table",
+    "_deprecated": true
+  },
+  "softFields": {
+    "biggestConcern": null,
+    "visionStatement": null,
+    "_status": "deferred — schema in place, populate later"
+  }
+}

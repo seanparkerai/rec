@@ -1,0 +1,164 @@
+{
+  "id": "steep-marsh-gu32",
+  "name": "Steep Marsh",
+  "village": "Steep Marsh",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 50.9971,
+    "lng": -0.9653
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "A small dispersed village in the civil parish of Steep, East Hampshire district, set in the South Downs National Park about two miles north of Petersfield. Steep Marsh is the marshy lower-lying ground east of Steep village proper, drained by the Ashford Stream and reached by a network of narrow lanes off the A272. The settlement is not a single nucleus: it is a string of period cottages, farmhouses and converted barns including Steep Marsh Farm Cottages, Brickyard Cottages and the cluster at Nine Acres. Day-to-day services are at Steep village (CofE primary, The Harrow Inn, Bedales School, All Saints Church) or in Petersfield itself, which is in walking range at 1.3–1.6 miles. The village historically had a condensed-milk factory and watercress beds drawing on the Ashford Stream; today it is overwhelmingly residential and agricultural.",
+  "character": "Dispersed marshland-edge settlement with period cottages and converted farm buildings; mature gardens, lots of trees, no central village green. Working countryside rather than chocolate-box; planning protections via both SDNP and the Steep Conservation Area apply.",
+  "amenities": [
+    "Steep Marsh Farm Cottages and Brickyard Cottages",
+    "Ashford Stream watercourse and footpaths",
+    "(at Steep village ~0.7 mi:) The Harrow Inn",
+    "The Cricketers Inn (Steep)",
+    "Steep CofE VC Primary School",
+    "All Saints Church, Steep (12th century)",
+    "Edward Barnsley Workshop"
+  ],
+  "schools": [
+    {
+      "name": "Steep Church of England Voluntary Controlled Primary School",
+      "phase": "Primary",
+      "ofsted": "Good quality of education; Outstanding behaviour and early years (Oct 2024)",
+      "distance": "0.7–0.9 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116319"
+    },
+    {
+      "name": "Bedales School",
+      "phase": "Independent (3–18, boarding and day)",
+      "ofsted": null,
+      "distance": "0.8 mi",
+      "url": "https://www.bedales.org.uk/"
+    },
+    {
+      "name": "Churcher's College",
+      "phase": "Independent (3–18)",
+      "ofsted": null,
+      "distance": "1.2 mi",
+      "url": "https://www.churcherscollege.com/"
+    },
+    {
+      "name": "The Petersfield School",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "2.3 mi",
+      "url": "https://www.tps.hants.sch.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 2m – 1h 17m direct",
+        "mode": "drive/cycle to Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+      },
+      {
+        "to": "Portsmouth Harbour",
+        "time": "~30m",
+        "mode": "Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield"
+      }
+    ],
+    "nearestStation": "Petersfield (1.3 mi)",
+    "roads": "A272 (Petersfield–Winchester) at the south of the parish; A3 (London–Portsmouth) ~2 mi east at Petersfield"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32-2bp.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hangers Way walking onto Shoulder of Mutton Hill",
+    "Ashford Hangers National Nature Reserve",
+    "Edward Thomas Poet's Stone walk",
+    "Petersfield Heath (lake, model boats, Petersfield Museum)",
+    "Cycling on the lanes between Steep, Steep Marsh and Sheet"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Harrow Inn",
+      "type": "Traditional pub",
+      "notes": "16th-century Grade II listed; cask ale from the barrel; ploughman's only; cash, no Wi-Fi",
+      "url": "https://www.theharrowinnsteep.co.uk/"
+    },
+    {
+      "name": "The Cricketers Inn",
+      "type": "Country pub with rooms",
+      "notes": "Pub in Steep village, dining and accommodation",
+      "url": "https://www.thecricketerssteep.co.uk/"
+    }
+  ],
+  "pros": [
+    "Petersfield station only 1.3 miles — among the easier hamlet-to-mainline distances in the GU32 area",
+    "Inside the South Downs National Park",
+    "Catchment Steep CofE Primary rated Good with Outstanding behaviour (Oct 2024)",
+    "Strong independent-school cluster on the doorstep (Bedales, Churcher's)",
+    "Ashford Hangers and Hangers Way for walking direct from the door"
+  ],
+  "cons": [
+    "No shop, school or pub within the Steep Marsh boundary itself",
+    "Some lanes are subject to flooding from the Ashford Stream after heavy rain",
+    "Older stock often on oil heating and private drainage",
+    "Strict SDNP planning regime + Steep Conservation Area constrain alterations",
+    "Open-market turnover is thin: low single-digit annual sales per postcode unit"
+  ],
+  "whoItSuits": "Households wanting period or barn-conversion stock in the South Downs with walking distance to Petersfield station, and willing to absorb the practicalities of marshland-edge property (drainage, occasional flooding, septic systems). Strong overlap with Bedales families. Less suited to first-time buyers — entry pricing here sits with Steep proper rather than with the wider Petersfield average.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (1.3 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (~1.8 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Steep Marsh",
+      "url": "https://en.wikipedia.org/wiki/Steep_Marsh"
+    },
+    {
+      "label": "Wikipedia — Steep, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Steep,_Hampshire"
+    },
+    {
+      "label": "Ofsted — Steep CofE VC Primary",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116319"
+    },
+    {
+      "label": "The Harrow Inn",
+      "url": "https://www.theharrowinnsteep.co.uk/about.html"
+    },
+    {
+      "label": "South Western Railway — Petersfield to London Waterloo",
+      "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (Steep parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^1492956",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:15:38.648Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

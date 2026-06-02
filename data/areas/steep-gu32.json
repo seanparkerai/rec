@@ -1,0 +1,175 @@
+{
+  "id": "steep-gu32",
+  "name": "Steep",
+  "village": "Steep",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.0042,
+    "lng": -0.9697
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "A village and civil parish in the East Hampshire district, about 1.4 miles north of Petersfield and just inside the western edge of the South Downs National Park, at the foot of the wooded slopes of Stoner Hill and Wheatham Hill. Steep is notable for two things. First, Bedales School (founded 1893 in Lindfield, moved here in 1900) — a co-educational boarding and day independent school with a progressive ethos, which from the early 20th century drew a community of artists, craftsmen and writers to the village: Edward Thomas the war poet lived here from 1906 to 1916, and Alec Guinness, Stanley Spencer, Ernest Gimson and Edward Barnsley all had connections. Second, The Harrow Inn — a 17th-century Grade II listed pub on CAMRA's National Inventory of Historic Pub Interiors, run by the same family since 1932 and serving cask beer drawn straight from the barrel. Population at the 2011 census was 1,391 (civil parish). The Church of All Saints dates from around 1125.",
+  "character": "Genuinely literary, slightly bohemian downland village with deep Arts and Crafts roots; mix of period cottages, larger Arts-and-Crafts and Edwardian houses (some by W. F. Unsworth), Bedales-influenced modernist commissions, and 20th-century infill. Strong cultural fabric — Edward Thomas associations, Bedales archive, Edward Barnsley Workshop, village film society founded by Alec Guinness's legacy.",
+  "amenities": [
+    "Bedales School (independent, 3–18, ~760 pupils)",
+    "Steep CofE Voluntary Controlled Primary School",
+    "The Harrow Inn (Grade II listed, CAMRA National Inventory)",
+    "The Cricketers Inn",
+    "All Saints Church (12th century, Grade II* listed)",
+    "Edward Barnsley Workshop (Arts and Crafts furniture)",
+    "Steep Village Hall (film society, talks)",
+    "Eight-court floodlit tennis club and adjoining cricket ground",
+    "Poet's Stone (Edward Thomas memorial) on Shoulder of Mutton Hill"
+  ],
+  "schools": [
+    {
+      "name": "Steep Church of England Voluntary Controlled Primary School",
+      "phase": "Primary",
+      "ofsted": "Good quality of education; Outstanding behaviour and early years (Oct 2024 inspection, no overall grade under new framework)",
+      "distance": "in village",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116319"
+    },
+    {
+      "name": "Bedales School",
+      "phase": "Independent (3–18, boarding and day)",
+      "ofsted": null,
+      "distance": "in village",
+      "url": "https://www.bedales.org.uk/"
+    },
+    {
+      "name": "The Petersfield School",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "2.5 mi",
+      "url": "https://www.tps.hants.sch.uk/"
+    },
+    {
+      "name": "Churcher's College",
+      "phase": "Independent (3–18)",
+      "ofsted": null,
+      "distance": "1.7 mi",
+      "url": "https://www.churcherscollege.com/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 2m – 1h 17m direct",
+        "mode": "walk/cycle/drive to Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+      },
+      {
+        "to": "Portsmouth Harbour",
+        "time": "~30m",
+        "mode": "Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield"
+      }
+    ],
+    "nearestStation": "Petersfield (1.6 mi)",
+    "roads": "A3 (London–Portsmouth) ~2 mi east at Petersfield; A272 (Winchester–Midhurst) at south of the parish"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hangers Way walk to Shoulder of Mutton Hill and the Poet's Stone",
+    "Edward Thomas literary trail (Berryfield Cottage, The Red House, Yew Tree Cottages)",
+    "Edward Barnsley Workshop tours",
+    "Steep village film society and talks",
+    "Bedales Arts (public concerts and theatre productions)",
+    "Cycling on Sustrans NCR 22 between Petersfield and the Hangers"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Harrow Inn",
+      "type": "Traditional pub",
+      "notes": "16th-century Grade II listed, cask ale from the barrel, ploughman's and home-cooked lunches, cash only, no Wi-Fi",
+      "url": "https://www.theharrowinnsteep.co.uk/"
+    },
+    {
+      "name": "The Cricketers Inn",
+      "type": "Pub with rooms",
+      "notes": "Country pub in the village, dining and rooms",
+      "url": "https://www.thecricketerssteep.co.uk/"
+    }
+  ],
+  "pros": [
+    "Petersfield station only 1.6 miles — close enough to walk/cycle for the direct London Waterloo train",
+    "Steep CofE Primary Good (2024) with Outstanding behaviour and early years",
+    "Bedales School on the doorstep for the independent route",
+    "Inside the South Downs National Park, with the Ashford Hangers reserve and Hangers Way walking at the back door",
+    "Strong cultural fabric: literary heritage, Arts and Crafts architecture, active village hall"
+  ],
+  "cons": [
+    "Property pricing reflects the postcode, the Bedales effect and the SDNP setting — entry level is meaningfully above the wider Petersfield average",
+    "Stock is dominated by period or larger houses; very limited starter / smaller-cottage supply",
+    "Strict planning regime (SDNP, conservation area, multiple listed buildings)",
+    "Some lanes are narrow with poor pavements; rural visibility on the A272 approach is challenging",
+    "Bedales drop-off and pick-up traffic loads the village lanes at term-time peaks"
+  ],
+  "whoItSuits": "Buyers committed to Bedales for the independent route, or to Steep CofE Primary plus The Petersfield School / Churcher's, who also want the walking-distance link to the main-line station. Also strong for cultural-and-creative households drawn by the Edward Thomas / Edward Barnsley / Bedales-Arts ecosystem, and for those who can absorb the SDNP planning regime in return for the landscape. Less suited to first-time buyers seeking lower entry pricing — for that, Sheet, Liss or Bordon are better-value alternatives in the same commuter belt.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (1.6 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (~2 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Steep, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Steep,_Hampshire"
+    },
+    {
+      "label": "Wikipedia — Bedales School",
+      "url": "https://en.wikipedia.org/wiki/Bedales_School"
+    },
+    {
+      "label": "Wikipedia — The Harrow, Steep",
+      "url": "https://en.wikipedia.org/wiki/The_Harrow,_Steep"
+    },
+    {
+      "label": "Ofsted — Steep CofE VC Primary",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116319"
+    },
+    {
+      "label": "The Harrow Inn",
+      "url": "https://www.theharrowinnsteep.co.uk/about.html"
+    },
+    {
+      "label": "Edward Thomas in Steep (Slow Travel UK)",
+      "url": "https://www.slow-travel.uk/post/finding-the-poetry-of-edward-thomas-in-the-hampshire-village-of-steep"
+    },
+    {
+      "label": "South Western Railway — Petersfield to London Waterloo",
+      "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (Steep parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^4688022",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:15:38.006Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

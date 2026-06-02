@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Area Review · rec</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/pages/area-review.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Location quality</p>
+      <h1>Area Review</h1>
+      <p class="lead">Verify that each area's search target is correct and flag any problems before running a listing pull.</p>
+    </header>
+
+    <div class="review-toolbar">
+      <div class="review-counts" id="review-counts" aria-live="polite">Loading…</div>
+      <div class="review-filters" role="group" aria-label="Filter areas">
+        <button class="review-filter active" data-filter="all" type="button">All</button>
+        <button class="review-filter" data-filter="problems" type="button">Problems</button>
+        <button class="review-filter" data-filter="confirmed" type="button">Confirmed</button>
+      </div>
+    </div>
+
+    <div id="review-list" class="review-list" aria-live="polite" aria-label="Area list">
+      <p class="review-loading">Loading areas…</p>
+    </div>
+  </main>
+
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-area-review.js"></script>
+</body>
+</html>

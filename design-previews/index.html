@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design previews · rec</title>
+<!-- ISOLATED launcher for the design-preview files. Whole /design-previews/ folder is safe to delete. -->
+<style>
+  :root{font-family:ui-sans-serif,system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0}
+  body{background:#0f1115;color:#e7e7ea;padding:clamp(16px,4vw,48px);line-height:1.5}
+  h1{font-size:clamp(22px,3vw,32px);letter-spacing:-.02em}
+  p.lead{color:#9a9aa6;max-width:64ch;margin:8px 0 28px}
+  h2.grouphd{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:#7c7c8a;margin:36px 0 14px;font-weight:700}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));max-width:1120px}
+  .v{border:1px solid #262833;border-radius:16px;padding:20px;background:#161922}
+  .v h3{font-size:16px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .v .tag{font-size:12.5px;color:#7c7c8a;margin-bottom:14px;min-height:34px}
+  .v a{display:block;text-decoration:none;color:#e7e7ea;border:1px solid #2e3140;border-radius:10px;padding:10px 14px;margin-top:8px;font-weight:600;transition:.15s}
+  .v a:hover{border-color:#5b5bd6;background:#1d2030}
+  .v a span{float:right;color:#7c7c8a}
+  .note{margin-top:36px;color:#7c7c8a;font-size:13px;max-width:64ch}
+  .swatch{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle}
+  .new{font-size:10px;font-weight:700;letter-spacing:.06em;color:#1fb597;border:1px solid #1fb59755;border-radius:999px;padding:2px 8px}
+</style>
+</head>
+<body>
+  <h1>Design previews</h1>
+  <p class="lead">Independent UI directions for the home and listings pages, each a standalone file filled with dummy data. Nothing here touches the live app or the database — delete the <code>design-previews/</code> folder to remove them all.</p>
+
+  <h2 class="grouphd">Soft family — expanded &amp; content-rich (no emoji)</h2>
+  <div class="grid">
+    <div class="v">
+      <h3><span class="swatch" style="background:#5b5bd6"></span>Variant D — Soft · Editorial <span class="new">NEW</span></h3>
+      <p class="tag">Long-form, reading-width with a sticky summary rail · serif headings · framed sections</p>
+      <a href="variant-d-home.html">Home <span>&rarr;</span></a>
+      <a href="variant-d-listings.html">Listings <span>&rarr;</span></a>
+    </div>
+    <div class="v">
+      <h3><span class="swatch" style="background:#5b5bd6"></span>Variant E — Soft · Workspace <span class="new">NEW</span></h3>
+      <p class="tag">Wealth-dashboard with sidebar nav, breakdown tables, an affordability matrix &amp; an analytics listings table</p>
+      <a href="variant-e-home.html">Home <span>&rarr;</span></a>
+      <a href="variant-e-listings.html">Listings <span>&rarr;</span></a>
+    </div>
+    <div class="v">
+      <h3><span class="swatch" style="background:#5b5bd6"></span>Variant F — Soft · Magazine <span class="new">NEW</span></h3>
+      <p class="tag">Editorial magazine with a feature hero, spotlights, insights &amp; image-forward listing features</p>
+      <a href="variant-f-home.html">Home <span>&rarr;</span></a>
+      <a href="variant-f-listings.html">Listings <span>&rarr;</span></a>
+    </div>
+  </div>
+
+  <h2 class="grouphd">Original three directions</h2>
+  <div class="grid">
+    <div class="v">
+      <h3><span class="swatch" style="background:#7a2e1e"></span>Variant A — Broadsheet</h3>
+      <p class="tag">Warm cream/ink editorial · serif display · magazine calm</p>
+      <a href="variant-a-home.html">Home <span>&rarr;</span></a>
+      <a href="variant-a-listings.html">Listings <span>&rarr;</span></a>
+    </div>
+    <div class="v">
+      <h3><span class="swatch" style="background:#3ddc91"></span>Variant B — Console</h3>
+      <p class="tag">Dark, data-dense terminal / Bloomberg feel · mono numerals</p>
+      <a href="variant-b-home.html">Home <span>&rarr;</span></a>
+      <a href="variant-b-listings.html">Listings <span>&rarr;</span></a>
+    </div>
+    <div class="v">
+      <h3><span class="swatch" style="background:#5b5bd6"></span>Variant C — Soft (original)</h3>
+      <p class="tag">Light, friendly fintech-app feel · rounded · single soft accent</p>
+      <a href="variant-c-home.html">Home <span>&rarr;</span></a>
+      <a href="variant-c-listings.html">Listings <span>&rarr;</span></a>
+    </div>
+  </div>
+
+  <p class="note">Self-contained HTML + inline CSS/JS. Web fonts load from Google Fonts CDN for fidelity; everything else is local to each file. No app assets, no Supabase, no shared partials. Variants D/E/F share Variant C’s colour palette and clean fintech feel, expanded into more content with proper line icons in place of emoji.</p>
+</body>
+</html>

@@ -1,0 +1,162 @@
+{
+  "id": "flexcombe-gu32",
+  "name": "Flexcombe",
+  "village": "Flexcombe",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.0228,
+    "lng": -0.9456
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "A two-house place (Wikipedia's description) in the civil parish of Liss, East Hampshire district. The settlement is effectively Flexcombe Farm and a small courtyard of barn conversions at Flexcombe Farm Cottages, off Flexcombe Lane between Liss and Stodham. It sits inside the South Downs National Park, immediately west of the A3 bypass and a few miles north of Petersfield. The seed CSV records the postcode as GU32; Wikipedia, Royal Mail and Liss-area address listings confirm the post town is LISS and the postcode district is GU33 — the GU32 entry in the seed is an error, corrected here. Day-to-day services are at Liss (~2 mi south-east) for primary school, station, shops and pubs, and Petersfield for the wider shopping and rail offer.",
+  "character": "Single-courtyard rural settlement of converted farm buildings in a working-farm setting, surrounded by chalk-clay countryside and the SDNP's hangers landscape. Effectively a private courtyard rather than a village — no shared public realm beyond the farm track.",
+  "amenities": [
+    "Flexcombe Farm Cottages (courtyard of barn conversions)",
+    "Flexcombe Lane footpath access onto the South Downs",
+    "(at Liss ~2 mi:) Liss Forest village shop and post office",
+    "Liss Triangle shops and cafés",
+    "Liss Sports Pavilion",
+    "Riverside walks along Caker Stream"
+  ],
+  "schools": [
+    {
+      "name": "Liss Infant School",
+      "phase": "Primary (infant)",
+      "ofsted": "Good",
+      "distance": "0.9 mi",
+      "url": "https://www.lissinfant.hants.sch.uk/"
+    },
+    {
+      "name": "Liss Junior School",
+      "phase": "Primary (junior)",
+      "ofsted": "Good",
+      "distance": "2.0 mi",
+      "url": "https://www.lissjunior.hants.sch.uk/"
+    },
+    {
+      "name": "Churcher's College",
+      "phase": "Independent (3–18)",
+      "ofsted": null,
+      "distance": "2.1 mi",
+      "url": "https://www.churcherscollege.com/"
+    },
+    {
+      "name": "Bohunt School (Liphook)",
+      "phase": "Secondary (state)",
+      "ofsted": "Outstanding",
+      "distance": "4.0 mi",
+      "url": "https://www.bohunt.hants.sch.uk/"
+    }
+  ],
+  "transport": {
+    "nearestStation": "Liss (1.6 mi)",
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "~1h 10m",
+        "mode": "drive to Liss + direct South Western Railway (Portsmouth Direct line)",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/liss"
+      },
+      {
+        "to": "Petersfield",
+        "time": "5m",
+        "mode": "South Western Railway (one stop)",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/liss"
+      }
+    ],
+    "roads": "Immediately west of the A3 (London–Portsmouth) at the Liss/Stodham junction; B3006 north-west to Selborne and Alton"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu33-6lh.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Hangers Way and Shipwrights Way long-distance trails",
+    "Walking onto Stoner Hill and Wheatham Hill",
+    "Cycling on quiet lanes around Liss Forest",
+    "Liss Riverside walks (Caker Stream)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Jolly Drover",
+      "type": "Pub and restaurant",
+      "notes": "Country pub on the London Road at West Liss",
+      "url": "https://thejollydrover.com/"
+    },
+    {
+      "name": "The Spread Eagle",
+      "type": "Village pub",
+      "notes": "Pub in central Liss",
+      "url": "https://www.thespreadeagleliss.co.uk/"
+    }
+  ],
+  "pros": [
+    "Liss station within 2 miles for direct London Waterloo trains",
+    "Inside the South Downs National Park",
+    "Bohunt School at Liphook (4 mi) is a state secondary rated Outstanding",
+    "Courtyard format gives a small, manageable scheme rather than an isolated single property",
+    "A3 access immediately to the east for road journeys to London or Portsmouth"
+  ],
+  "cons": [
+    "Functionally a courtyard of a handful of houses — no village identity, no shop, no pub on site",
+    "Adjacency to the A3 means some background road noise",
+    "Open-market turnover is essentially nil in most years (~3 sales in three years recorded at GU33 6LH)",
+    "Liss itself is a long linear village, not a market town — for a full town offer, Petersfield is the destination",
+    "Listed-building and SDNP planning constraints on most stock"
+  ],
+  "whoItSuits": "Buyers seeking a specific high-spec barn conversion or modern courtyard property in a National Park setting, with main-line rail within two miles and A3 access on the doorstep. Likely a downsizer, country-second-home or rural-working-from-home household rather than a first-time buyer — sale prices recorded at the courtyard are in the £700k+ range. Not for buyers wanting a sociable village with pubs, shops and a school on foot.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Liss (1.6 mi)",
+  "primarySupermarket": "Tesco Petersfield, Bedford Road (~3.5 mi); Waitrose Petersfield (~4 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Flexcombe",
+      "url": "https://en.wikipedia.org/wiki/Flexcombe"
+    },
+    {
+      "label": "Streetcheck — Flexcombe Lane GU33 6LH",
+      "url": "https://www.streetcheck.co.uk/postcode/gu336lh"
+    },
+    {
+      "label": "Check My Postcode — GU33 6LJ (Flexcombe Farm Cottages)",
+      "url": "https://checkmypostcode.uk/gu336lj"
+    },
+    {
+      "label": "South Western Railway — Liss",
+      "url": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/liss"
+    },
+    {
+      "label": "Homes Estate Agents — Flexcombe Lane listing",
+      "url": "https://homesea.co.uk/property-for-sale/liss/flexcombe-lane-flexcombe-liss-hampshire-gu33-6lh/"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (Liss parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^356091",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:14:41.369Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

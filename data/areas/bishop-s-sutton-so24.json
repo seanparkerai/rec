@@ -1,0 +1,115 @@
+{
+  "id": "bishop-s-sutton-so24",
+  "name": "Bishop's Sutton",
+  "village": "Bishop's Sutton",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.0585,
+    "lng": -1.1483
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Bishop’s Sutton is a village immediately east of New Alresford on the A31, within the Winchester district of Hampshire. Historically it developed as an agricultural and route-side settlement connected to the Alresford market hinterland. Today it offers a practical village base with quick access to Alresford services, Winchester employment and South Downs countryside.",
+  "character": "Linear village form with mixed housing, road connectivity and close ties to Alresford.",
+  "amenities": [
+    "Village primary school and church/parish facilities.",
+    "Local pubs/eateries and convenience options in village or adjacent Alresford.",
+    "Extensive shopping, healthcare and rail connections via Winchester or Alton corridors."
+  ],
+  "schools": [
+    {
+      "name": "Bishop’s Sutton Primary School",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "In village",
+      "url": "https://www.bishopssutton.hants.sch.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~1-2 miles",
+      "url": "https://www.perins.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~15-25 min",
+        "notes": "Direct A31 access westbound"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Rail (from Winchester/Alton)",
+        "typical": "~1h to 1h15 + station access",
+        "notes": "Use Winchester or Alton stations depending on preference"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO24 values are influenced by Alresford demand and South Downs proximity, with family houses and period homes often priced above county averages.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Walk/cycle routes toward the South Downs and Itchen Valley",
+    "Alresford town centre, shops and watercress-line attractions nearby"
+  ],
+  "placesToEat": [
+    "The Ship Inn / local pubs in Bishop’s Sutton-Alresford area",
+    "Cafés and restaurants in New Alresford"
+  ],
+  "pros": [
+    "Excellent access to Alresford while retaining village setting",
+    "Strong road link to Winchester via A31"
+  ],
+  "cons": [
+    "A31 proximity can affect noise for some properties",
+    "Rail requires drive/bus to a station"
+  ],
+  "whoItSuits": "Good for families and professionals who want village-scale living with quick access to Alresford schools/services and straightforward commuting links to Winchester and London routes.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Bishop’s Sutton",
+      "url": "https://en.wikipedia.org/wiki/Bishop%27s_Sutton"
+    },
+    {
+      "label": "Bishop’s Sutton Primary School",
+      "url": "https://www.bishopssutton.hants.sch.uk/"
+    },
+    {
+      "label": "Rightmove House Prices SO24",
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+    },
+    {
+      "label": "National Rail — Winchester station",
+      "url": "https://www.nationalrail.co.uk/stations/winchester/"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^4355206",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:13:59.653Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

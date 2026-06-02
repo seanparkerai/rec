@@ -1,0 +1,45 @@
+/* dashboard/tile-card.css — tile base, loading states, bento column spans. */
+
+.tile-card {
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--rec-radius);
+  padding: var(--space-6);
+  display: flex; flex-direction: column; gap: var(--space-4);
+  min-width: 0;
+}
+.tile-card .tile-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: var(--space-3); margin: 0;
+}
+.tile-card .tile-head h2 {
+  margin: 0; font-size: var(--text-lg); font-weight: 600;
+  font-family: var(--font-body); letter-spacing: -0.01em;
+}
+.tile-card .tile-head .num { color: var(--ink-muted); font-size: var(--text-sm); font-family: var(--font-data); }
+.tile-head-action { font-size: var(--text-sm); color: var(--ink); text-decoration: none; font-weight: 500; white-space: nowrap; }
+.tile-head-action:hover,
+.tile-head-action:focus-visible { color: var(--accent); }
+
+/* Loading placeholders: dimmed, italic, animated ellipsis (motion-gated). */
+[data-loading="true"] { color: var(--ink-subtle); font-style: italic; }
+[data-loading="true"]::after {
+  content: "…"; display: inline-block; margin-left: 0.15em;
+  animation: rec-loading-dots 1.4s steps(4, end) infinite;
+}
+@keyframes rec-loading-dots { 0%, 20% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  [data-loading="true"]::after { animation: none; }
+}
+
+@container (min-width: 720px) {
+  .bento          { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .tile-deposit   { grid-column: span 12; }
+  .tile-afford    { grid-column: span 12; }
+  .tile-flow      { grid-column: span 12; }
+  .tile-shortlist { grid-column: span 12; }
+  .tile-journey   { grid-column: span 12; }
+  .tile-criteria  { grid-column: span 12; }
+  .tile-ask       { grid-column: span 12; }
+  .tile-deposit .ring { width: 11rem; height: 11rem; }
+}

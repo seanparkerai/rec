@@ -1,0 +1,68 @@
+# resolve-areas — L7.3 per-village Rightmove resolution.
+# (rev2: wideSearch reverse-geocode + retry/backoff so rural villages resolve to a
+#  tight POSTCODE rather than falling back to a coarse outcode.)
+# Runs tools/resolve-areas.mjs on a GitHub runner (which has internet + the repo
+# secrets, unlike the Claude sandbox). For every active area it resolves the
+# tightest Rightmove locationIdentifier (so an address / town / village / postcode
+# all land on the right area), writes it + default radii into data/areas/<id>.json,
+# mirrors to the Supabase `areas` table, and commits the result back to main.
+#
+# Triggers:
+#   - push to main touching THIS file (so adding/editing it kicks off one run),
+#   - workflow_dispatch (re-run any time from the Actions tab).
+#
+# Requires repo secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (for the mirror).
+# Rightmove typeahead + postcodes.io are public; no secret needed for resolution.
+name: resolve-areas
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/resolve-areas.yml'
+
+permissions:
+  contents: write
+
+# Never run two resolution jobs at once (they both push to main).
+concurrency:
+  group: resolve-areas
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Resolve per-village Rightmove identifiers
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node tools/resolve-areas.mjs --write
+
+      - name: Commit resolved identifiers back to main
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/areas/ data/source/area-resolution.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit (resolution produced no diff)."
+          else
+            git commit -m "L7.3: resolve per-village Rightmove identifiers (CI) [skip ci]"
+            git push
+          fi
+
+      - name: Resolution summary
+        if: always()
+        run: |
+          echo "### Resolution report" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f data/source/area-resolution.json ]; then
+            node -e 'const r=require("./data/source/area-resolution.json");console.log(`- tight: ${r.tight}\n- coarse: ${r.coarse}\n- unresolved: ${r.unresolved}\n- coarse list: ${(r.coarseList||[]).join(", ")||"none"}`)' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No report produced." >> "$GITHUB_STEP_SUMMARY"
+          fi

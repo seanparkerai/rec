@@ -1,0 +1,4589 @@
+{
+  "generatedAt": "2026-05-31T14:56:36.490Z",
+  "online": false,
+  "counts": {
+    "areas": 195,
+    "corroborated": 195,
+    "hardFlagged": 0,
+    "nameUnconfirmed": 0,
+    "duplicateVillageRecords": 6
+  },
+  "hardFlagged": [],
+  "nameUnconfirmed": [],
+  "duplicateVillageRecords": [
+    {
+      "id": "colemore-gu32",
+      "name": "Colemore",
+      "outcode": "GU32",
+      "notes": [
+        "duplicate_village_record:colemore-gu34"
+      ]
+    },
+    {
+      "id": "colemore-gu34",
+      "name": "Colemore",
+      "outcode": "GU34",
+      "notes": [
+        "duplicate_village_record:colemore-gu32"
+      ]
+    },
+    {
+      "id": "flexcombe-gu32",
+      "name": "Flexcombe",
+      "outcode": "GU32",
+      "notes": [
+        "duplicate_village_record:flexcombe-gu33"
+      ]
+    },
+    {
+      "id": "flexcombe-gu33",
+      "name": "Flexcombe",
+      "outcode": "GU33",
+      "notes": [
+        "duplicate_village_record:flexcombe-gu32"
+      ]
+    },
+    {
+      "id": "froxfield-green-gu32",
+      "name": "Froxfield Green",
+      "outcode": "GU32",
+      "notes": [
+        "duplicate_village_record:froxfield-green-gu34"
+      ]
+    },
+    {
+      "id": "froxfield-green-gu34",
+      "name": "Froxfield Green",
+      "outcode": "GU34",
+      "notes": [
+        "duplicate_village_record:froxfield-green-gu32"
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "abbotstone-so24",
+      "name": "Abbotstone",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0852,
+        "lng": -1.1773
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.65,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 1.32,
+        "nameInList": true,
+        "matchedVillage": "Abbotstone",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "alderbury-sp5",
+      "name": "Alderbury",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.027,
+        "lng": -1.7537
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.02,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 5.97,
+        "nameInList": true,
+        "matchedVillage": "Alderbury",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ashley-so20",
+      "name": "Ashley",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0826,
+        "lng": -1.4933
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.94,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 3.94,
+        "nameInList": true,
+        "matchedVillage": "Ashley",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ashton-so32",
+      "name": "Ashton",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9651,
+        "lng": -1.1682
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.41,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 3.41,
+        "nameInList": true,
+        "matchedVillage": "Ashton",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "avington-park-so21",
+      "name": "Avington Park",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0903,
+        "lng": -1.2107
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.54,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 3.54,
+        "nameInList": true,
+        "matchedVillage": "Avington Park",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "avington-so21",
+      "name": "Avington",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0912,
+        "lng": -1.2142
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.26,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 3.79,
+        "nameInList": true,
+        "matchedVillage": "Avington",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "awbridge-so51",
+      "name": "Awbridge",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 51.0099,
+        "lng": -1.5256
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.02,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 3.02,
+        "nameInList": true,
+        "matchedVillage": "Awbridge",
+        "matchedTown": "Romsey",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "barford-st-martin-sp5",
+      "name": "Barford St Martin",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0779,
+        "lng": -1.963
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 11.26,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 1.34,
+        "nameInList": true,
+        "matchedVillage": "Barford St Martin",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "barton-stacey-so21",
+      "name": "Barton Stacey",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1549,
+        "lng": -1.3708
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 10.17,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 9.34,
+        "nameInList": true,
+        "matchedVillage": "Barton Stacey",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "baybridge-so21",
+      "name": "Baybridge",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0481,
+        "lng": -1.25
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.6,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 4.19,
+        "nameInList": true,
+        "matchedVillage": "Baybridge",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "beauworth-so24",
+      "name": "Beauworth",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.049,
+        "lng": -1.1688
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.6,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 4.6,
+        "nameInList": true,
+        "matchedVillage": "Beauworth",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "beech-gu34",
+      "name": "Beech",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.146,
+        "lng": -1.0878
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.67,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 7.67,
+        "nameInList": true,
+        "matchedVillage": "Beech",
+        "matchedTown": "Alton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bemerton-sp2",
+      "name": "Bemerton",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0726,
+        "lng": -1.8222
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.71,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 1.71,
+        "nameInList": true,
+        "matchedVillage": "Bemerton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bentworth-gu34",
+      "name": "Bentworth",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.1399,
+        "lng": -1.0995
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.54,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 6.97,
+        "nameInList": true,
+        "matchedVillage": "Bentworth",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bighton-so24",
+      "name": "Bighton",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0737,
+        "lng": -1.1453
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.08,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 2.08,
+        "nameInList": true,
+        "matchedVillage": "Bighton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bishop-s-sutton-so24",
+      "name": "Bishop's Sutton",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0585,
+        "lng": -1.1483
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.6,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 3.6,
+        "nameInList": true,
+        "matchedVillage": "Bishop's Sutton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bishop-s-waltham-so32",
+      "name": "Bishop's Waltham",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9573,
+        "lng": -1.216
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.52,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 0.52,
+        "nameInList": true,
+        "matchedVillage": "Bishop's Waltham",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bishopdown-sp1",
+      "name": "Bishopdown",
+      "outcode": "SP1",
+      "coords": {
+        "lat": 51.0958,
+        "lng": -1.778
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.51,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 2.51,
+        "nameInList": true,
+        "matchedVillage": "Bishopdown",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bishopstone-sp5",
+      "name": "Bishopstone",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0113,
+        "lng": -1.8547
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.31,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 1.31,
+        "nameInList": true,
+        "matchedVillage": "Bishopstone",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bordean-gu32",
+      "name": "Bordean",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 51.0056,
+        "lng": -1.0041
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.56,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 4.56,
+        "nameInList": true,
+        "matchedVillage": "Bordean",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bordon-gu35",
+      "name": "Bordon",
+      "outcode": "GU35",
+      "coords": {
+        "lat": 51.1076,
+        "lng": -0.8631
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.83,
+        "nearestCentroid": "GU35",
+        "nearestCentroidKm": 0.83,
+        "nameInList": true,
+        "matchedVillage": "Bordon",
+        "matchedTown": "Farnham",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bossington-so20",
+      "name": "Bossington",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0862,
+        "lng": -1.4794
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.63,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 3.63,
+        "nameInList": true,
+        "matchedVillage": "Bossington",
+        "matchedTown": "Stockbridge",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bowerchalke-sp5",
+      "name": "Bowerchalke",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0174,
+        "lng": -1.972
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.07,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 7.43,
+        "nameInList": true,
+        "matchedVillage": "Bowerchalke",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bradley-gu34",
+      "name": "Bradley",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.1274,
+        "lng": -1.0927
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.36,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 6.27,
+        "nameInList": true,
+        "matchedVillage": "Bradley",
+        "matchedTown": "Alton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "braishfield-so51",
+      "name": "Braishfield",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 51.0247,
+        "lng": -1.4877
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.03,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 4.03,
+        "nameInList": true,
+        "matchedVillage": "Braishfield",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bramdean-so24",
+      "name": "Bramdean",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0531,
+        "lng": -1.114
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.21,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 5.21,
+        "nameInList": true,
+        "matchedVillage": "Bramdean",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "bramshaw-so43",
+      "name": "Bramshaw",
+      "outcode": "SO43",
+      "coords": {
+        "lat": 50.9663,
+        "lng": -1.5809
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 10.05,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 6.33,
+        "nameInList": true,
+        "matchedVillage": "Bramshaw",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "breamore-sp6",
+      "name": "Breamore",
+      "outcode": "SP6",
+      "coords": {
+        "lat": 50.9561,
+        "lng": -1.7961
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.02,
+        "nearestCentroid": "SP6",
+        "nearestCentroidKm": 3.02,
+        "nameInList": true,
+        "matchedVillage": "Breamore",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "broad-chalke-sp5",
+      "name": "Broad Chalke",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0176,
+        "lng": -1.9631
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.47,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 7.27,
+        "nameInList": true,
+        "matchedVillage": "Broad Chalke",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "brockwood-park-so24",
+      "name": "Brockwood Park",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0463,
+        "lng": -1.107
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.11,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 6.11,
+        "nameInList": true,
+        "matchedVillage": "Brockwood Park",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "brook-so20",
+      "name": "Brook",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0931,
+        "lng": -1.4747
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.99,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 2.99,
+        "nameInList": true,
+        "matchedVillage": "Brook",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "broughton-so20",
+      "name": "Broughton",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0795,
+        "lng": -1.5277
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.99,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 4.99,
+        "nameInList": true,
+        "matchedVillage": "Broughton",
+        "matchedTown": "Stockbridge",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "brown-candover-so24",
+      "name": "Brown Candover",
+      "outcode": "RG25",
+      "coords": {
+        "lat": 51.1521,
+        "lng": -1.1527
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 12.79,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 6.92,
+        "nameInList": true,
+        "matchedVillage": "Brown Candover",
+        "matchedTown": "Basingstoke",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "burcombe-sp2",
+      "name": "Burcombe",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0762,
+        "lng": -1.8771
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.04,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 3.04,
+        "nameInList": true,
+        "matchedVillage": "Burcombe",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "charlton-all-saints-sp5",
+      "name": "Charlton All Saints",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9812,
+        "lng": -1.8009
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.63,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 4.63,
+        "nameInList": true,
+        "matchedVillage": "Charlton All Saints",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "charlwood-gu34",
+      "name": "Charlwood",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0775,
+        "lng": -0.9846
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.96,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 7.96,
+        "nameInList": true,
+        "matchedVillage": "Charlwood",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "charlwood-so24",
+      "name": "Charlwood",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0732,
+        "lng": -1.0879
+      },
+      "flags": [],
+      "notes": [
+        "list_outcode_differs:GU34"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.37,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 5.37,
+        "nameInList": true,
+        "matchedVillage": "Charlwood",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "cheriton-so24",
+      "name": "Cheriton",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0471,
+        "lng": -1.1659
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.79,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 4.79,
+        "nameInList": true,
+        "matchedVillage": "Cheriton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "chidden-gu34",
+      "name": "Chidden",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.04,
+        "lng": -1.0199
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 12.47,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 6.87,
+        "nameInList": true,
+        "matchedVillage": "Chidden",
+        "matchedTown": "Alton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "chilbolton-down-so20",
+      "name": "Chilbolton Down",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.1315,
+        "lng": -1.4649
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.36,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 2.36,
+        "nameInList": true,
+        "matchedVillage": "Chilbolton Down",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "chilbolton-so20",
+      "name": "Chilbolton",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.1329,
+        "lng": -1.4554
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.99,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 2.99,
+        "nameInList": true,
+        "matchedVillage": "Chilbolton",
+        "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "chilcomb-so21",
+      "name": "Chilcomb",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0574,
+        "lng": -1.2805
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.38,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 1.82,
+        "nameInList": true,
+        "matchedVillage": "Chilcomb",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "chillworth-so16",
+      "name": "Chillworth",
+      "outcode": "SO16",
+      "coords": {
+        "lat": 50.9529,
+        "lng": -1.4274
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.14,
+        "nearestCentroid": "SO16",
+        "nearestCentroidKm": 2.14,
+        "nameInList": true,
+        "matchedVillage": "Chillworth",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "chilmark-sp3",
+      "name": "Chilmark",
+      "outcode": "SP3",
+      "coords": {
+        "lat": 51.0821,
+        "lng": -1.9847
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.77,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 2.77,
+        "nameInList": true,
+        "matchedVillage": "Chilmark",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "colden-common-so21",
+      "name": "Colden Common",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0174,
+        "lng": -1.2923
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.43,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 5.15,
+        "nameInList": true,
+        "matchedVillage": "Colden Common",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "colemore-gu32",
+      "name": "Colemore",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 51.0547,
+        "lng": -1.0506
+      },
+      "flags": [],
+      "notes": [
+        "list_outcode_differs:GU34",
+        "duplicate_village_record:colemore-gu34"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 9.56,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 8.59,
+        "nameInList": true,
+        "matchedVillage": "Colemore",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "colemore-gu34",
+      "name": "Colemore",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0547,
+        "lng": -1.0506
+      },
+      "flags": [],
+      "notes": [
+        "duplicate_village_record:colemore-gu32"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 11.65,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 8.59,
+        "nameInList": true,
+        "matchedVillage": "Colemore",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "compton-so21",
+      "name": "Compton",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0421,
+        "lng": -1.317
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.85,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 2.47,
+        "nameInList": true,
+        "matchedVillage": "Compton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "coombe-bissett-sp5",
+      "name": "Coombe Bissett",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0106,
+        "lng": -1.8195
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.07,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 3.07,
+        "nameInList": true,
+        "matchedVillage": "Coombe Bissett",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "coombe-gu32",
+      "name": "Coombe",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 50.9901,
+        "lng": -0.9907
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.98,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 3.98,
+        "nameInList": true,
+        "matchedVillage": "Coombe",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "crawley-so21",
+      "name": "Crawley",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0692,
+        "lng": -1.3576
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.08,
+        "nearestCentroid": "SO22",
+        "nearestCentroidKm": 1.35,
+        "nameInList": true,
+        "matchedVillage": "Crawley",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "dean-land-sp5",
+      "name": "Dean Land",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0048,
+        "lng": -1.8878
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.02,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 2.02,
+        "nameInList": true,
+        "matchedVillage": "Dean Land",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "dinton-sp3",
+      "name": "Dinton",
+      "outcode": "SP3",
+      "coords": {
+        "lat": 51.0798,
+        "lng": -1.9472
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.29,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 0.29,
+        "nameInList": true,
+        "matchedVillage": "Dinton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "downton-sp5",
+      "name": "Downton",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.993,
+        "lng": -1.7826
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.47,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 5.47,
+        "nameInList": true,
+        "matchedVillage": "Downton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "droxford-so32",
+      "name": "Droxford",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9598,
+        "lng": -1.1703
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.08,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 3.08,
+        "nameInList": true,
+        "matchedVillage": "Droxford",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "dunbridge-so51",
+      "name": "Dunbridge",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 50.9952,
+        "lng": -1.5122
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.21,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 1.21,
+        "nameInList": true,
+        "matchedVillage": "Dunbridge",
+        "matchedTown": "Romsey",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "dundridge-so32",
+      "name": "Dundridge",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9413,
+        "lng": -1.1952
+      },
+      "flags": [],
+      "notes": [
+        "list_outcode_differs:SO51"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.8,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 1.8,
+        "nameInList": true,
+        "matchedVillage": "Dunbridge",
+        "matchedTown": "Romsey",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "east-dean-sp5",
+      "name": "East Dean",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9933,
+        "lng": -1.875
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.29,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 1.29,
+        "nameInList": true,
+        "matchedVillage": "East Dean",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "east-grimstead-sp5",
+      "name": "East Grimstead",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0213,
+        "lng": -1.8348
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.95,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 2.95,
+        "nameInList": true,
+        "matchedVillage": "East Grimstead",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "east-meon-gu32",
+      "name": "East Meon",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 50.9977,
+        "lng": -1.008
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.9,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 4.9,
+        "nameInList": true,
+        "matchedVillage": "East Meon",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "east-stratton-so21",
+      "name": "East Stratton",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1237,
+        "lng": -1.2157
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 5.4,
+        "nameInList": true,
+        "matchedVillage": "East Stratton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "east-tisted-gu34",
+      "name": "East Tisted",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0808,
+        "lng": -1.0443
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.88,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 8.15,
+        "nameInList": true,
+        "matchedVillage": "East Tisted",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "east-tytherely-sp5",
+      "name": "East Tytherely",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9947,
+        "lng": -1.601
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:18.1km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 18.13,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 7.24,
+        "nameInList": true,
+        "matchedVillage": "East Tytherely",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "easton-so21",
+      "name": "Easton",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0753,
+        "lng": -1.2698
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.11,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 2.11,
+        "nameInList": true,
+        "matchedVillage": "Easton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ebbesbourne-wake-sp5",
+      "name": "Ebbesbourne Wake",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.009,
+        "lng": -1.9847
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.78,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 8.58,
+        "nameInList": true,
+        "matchedVillage": "Ebbesbourne Wake",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ebble-sp5",
+      "name": "Ebble",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9818,
+        "lng": -1.8718
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.19,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 2.19,
+        "nameInList": true,
+        "matchedVillage": "Ebble",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "embley-so51",
+      "name": "Embley",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 51.0051,
+        "lng": -1.4972
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.79,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 1.79,
+        "nameInList": true,
+        "matchedVillage": "Embley",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "farley-mount-so21",
+      "name": "Farley Mount",
+      "outcode": "RG25",
+      "coords": {
+        "lat": 51.0513,
+        "lng": -1.3823
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:23.0km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 22.99,
+        "nearestCentroid": "SO22",
+        "nearestCentroidKm": 3.17,
+        "nameInList": true,
+        "matchedVillage": "Farley Mount",
+        "matchedTown": "Basingstoke",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "farley-sp5",
+      "name": "Farley",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.003,
+        "lng": -1.747
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.91,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 7.91,
+        "nameInList": true,
+        "matchedVillage": "Farley",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "filmore-hill-gu34",
+      "name": "Filmore Hill",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0937,
+        "lng": -1.0265
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.02,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 7.02,
+        "nameInList": true,
+        "matchedVillage": "Filmore Hill",
+        "matchedTown": "Alton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "firsdown-sp5",
+      "name": "Firsdown",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0178,
+        "lng": -1.767
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.8,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 6.6,
+        "nameInList": true,
+        "matchedVillage": "Firsdown",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "flexcombe-gu32",
+      "name": "Flexcombe",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 51.0228,
+        "lng": -0.9456
+      },
+      "flags": [],
+      "notes": [
+        "duplicate_village_record:flexcombe-gu33"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.03,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 2.03,
+        "nameInList": true,
+        "matchedVillage": "Flexcombe",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "flexcombe-gu33",
+      "name": "Flexcombe",
+      "outcode": "GU33",
+      "coords": {
+        "lat": 51.0228,
+        "lng": -0.9456
+      },
+      "flags": [],
+      "notes": [
+        "list_outcode_differs:GU32",
+        "duplicate_village_record:flexcombe-gu32"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": null,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 2.03,
+        "nameInList": true,
+        "matchedVillage": "Flexcombe",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ford-sp4",
+      "name": "Ford",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1089,
+        "lng": -1.8001
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.03,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 3.81,
+        "nameInList": true,
+        "matchedVillage": "Ford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "four-marks-gu34",
+      "name": "Four Marks",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.1006,
+        "lng": -1.0438
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.07,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 7.07,
+        "nameInList": true,
+        "matchedVillage": "Four Marks",
+        "matchedTown": "Alton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "froxfield-green-gu32",
+      "name": "Froxfield Green",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 51.0344,
+        "lng": -0.9763
+      },
+      "flags": [],
+      "notes": [
+        "list_outcode_differs:GU34",
+        "duplicate_village_record:froxfield-green-gu34"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.18,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 4.18,
+        "nameInList": true,
+        "matchedVillage": "Froxfield Green",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "froxfield-green-gu34",
+      "name": "Froxfield Green",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0344,
+        "lng": -0.9763
+      },
+      "flags": [],
+      "notes": [
+        "duplicate_village_record:froxfield-green-gu32"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 12.74,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 4.18,
+        "nameInList": true,
+        "matchedVillage": "Froxfield Green",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "gomeldon-sp4",
+      "name": "Gomeldon",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1174,
+        "lng": -1.7682
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.03,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 5,
+        "nameInList": true,
+        "matchedVillage": "Gomeldon",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "great-wishford-sp2",
+      "name": "Great Wishford",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0628,
+        "lng": -1.8721
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.25,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 2.25,
+        "nameInList": true,
+        "matchedVillage": "Great Wishford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "hambledon-po7",
+      "name": "Hambledon",
+      "outcode": "PO7",
+      "coords": {
+        "lat": 50.886,
+        "lng": -1.0713
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.95,
+        "nearestCentroid": "PO7",
+        "nearestCentroidKm": 2.95,
+        "nameInList": true,
+        "matchedVillage": "Hambledon",
+        "matchedTown": "Waterlooville",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "hampworth-sp5",
+      "name": "Hampworth",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9775,
+        "lng": -1.665
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 13.88,
+        "nearestCentroid": "SP6",
+        "nearestCentroidKm": 10.46,
+        "nameInList": true,
+        "matchedVillage": "Hampworth",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "high-cross-gu32",
+      "name": "High Cross",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 50.9852,
+        "lng": -0.999
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.74,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 4.74,
+        "nameInList": true,
+        "matchedVillage": "High Cross",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "hinton-ampner-so24",
+      "name": "Hinton Ampner",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.056,
+        "lng": -1.1482
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.87,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 3.87,
+        "nameInList": true,
+        "matchedVillage": "Hinton Ampner",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "homington-sp5",
+      "name": "Homington",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0113,
+        "lng": -1.8435
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.71,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 1.71,
+        "nameInList": true,
+        "matchedVillage": "Homington",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "houghton-so20",
+      "name": "Houghton",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.054,
+        "lng": -1.488
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.12,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 7.12,
+        "nameInList": true,
+        "matchedVillage": "Houghton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "hursley-so21",
+      "name": "Hursley",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0123,
+        "lng": -1.376
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.77,
+        "nearestCentroid": "SO22",
+        "nearestCentroidKm": 6.15,
+        "nameInList": true,
+        "matchedVillage": "Hursley",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "itchen-abbas-so21",
+      "name": "Itchen Abbas",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0933,
+        "lng": -1.2356
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.94,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 4.94,
+        "nameInList": true,
+        "matchedVillage": "Itchen Abbas",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "kilmeston-so24",
+      "name": "Kilmeston",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.046,
+        "lng": -1.1629
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.9,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 4.9,
+        "nameInList": true,
+        "matchedVillage": "Kilmeston",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "kimbridge-so51",
+      "name": "Kimbridge",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 50.9888,
+        "lng": -1.5173
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.35,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 1.35,
+        "nameInList": true,
+        "matchedVillage": "Kimbridge",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "king-s-somborne-so20",
+      "name": "King's Somborne",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0622,
+        "lng": -1.4762
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.29,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 6.29,
+        "nameInList": true,
+        "matchedVillage": "King's Somborne",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "kings-worthy-so23",
+      "name": "Kings Worthy",
+      "outcode": "SO23",
+      "coords": {
+        "lat": 51.0824,
+        "lng": -1.301
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.18,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 0.83,
+        "nameInList": true,
+        "matchedVillage": "Kings Worthy",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "kitwood-so24",
+      "name": "Kitwood",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0618,
+        "lng": -1.131
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.73,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 3.73,
+        "nameInList": true,
+        "matchedVillage": "Kitwood",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lake-sp3",
+      "name": "Lake",
+      "outcode": "SP3",
+      "coords": {
+        "lat": 51.0971,
+        "lng": -1.9413
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.7,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 1.7,
+        "nameInList": true,
+        "matchedVillage": "Lake",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "landford-sp5",
+      "name": "Landford",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9749,
+        "lng": -1.6478
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:15.1km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 15.11,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 10.6,
+        "nameInList": true,
+        "matchedVillage": "Landford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lane-end-so21",
+      "name": "Lane End",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0398,
+        "lng": -1.2683
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.5,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 3.64,
+        "nameInList": true,
+        "matchedVillage": "Lane End",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lanford-wood-sp5",
+      "name": "Lanford Wood",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9898,
+        "lng": -1.6599
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:14.0km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 14.05,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 11.33,
+        "nameInList": true,
+        "matchedVillage": "Lanford Wood",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "leckford-so20",
+      "name": "Leckford",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.1263,
+        "lng": -1.4913
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.92,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 0.92,
+        "nameInList": true,
+        "matchedVillage": "Leckford",
+        "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "little-durnford-sp4",
+      "name": "Little Durnford",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1553,
+        "lng": -1.7789
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.75,
+        "nearestCentroid": "SP4",
+        "nearestCentroidKm": 1.75,
+        "nameInList": true,
+        "matchedVillage": "Little Durnford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "little-langford-sp4",
+      "name": "Little Langford",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1246,
+        "lng": -1.8789
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.56,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 6.61,
+        "nameInList": true,
+        "matchedVillage": "Little Langford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "little-sombourne-so20",
+      "name": "Little Sombourne",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0737,
+        "lng": -1.473
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.08,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 5.08,
+        "nameInList": true,
+        "matchedVillage": "Little Sombourne",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "little-wishford-sp2",
+      "name": "Little Wishford",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0498,
+        "lng": -1.8572
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.81,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 1.81,
+        "nameInList": true,
+        "matchedVillage": "Little Wishford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "littleton-so22",
+      "name": "Littleton",
+      "outcode": "SO22",
+      "coords": {
+        "lat": 51.0749,
+        "lng": -1.3328
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.44,
+        "nearestCentroid": "SO22",
+        "nearestCentroidKm": 1.44,
+        "nameInList": true,
+        "matchedVillage": "Littleton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lockerley-so51",
+      "name": "Lockerley",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 51.0011,
+        "lng": -1.5439
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.48,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 3.48,
+        "nameInList": true,
+        "matchedVillage": "Lockerley",
+        "matchedTown": "Romsey",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "longstock-so20",
+      "name": "Longstock",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.1131,
+        "lng": -1.4941
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.59,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 0.59,
+        "nameInList": true,
+        "matchedVillage": "Longstock",
+        "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lover-sp5",
+      "name": "Lover",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.99,
+        "lng": -1.7474
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.96,
+        "nearestCentroid": "SP6",
+        "nearestCentroidKm": 7.5,
+        "nameInList": true,
+        "matchedVillage": "Lover",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lower-bullington-so21",
+      "name": "Lower Bullington",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1428,
+        "lng": -1.3047
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.55,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 7.55,
+        "nameInList": true,
+        "matchedVillage": "Lower Bullington",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lower-chicksgrove-sp3",
+      "name": "Lower Chicksgrove",
+      "outcode": "SP3",
+      "coords": {
+        "lat": 51.0727,
+        "lng": -1.9933
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.53,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 3.53,
+        "nameInList": true,
+        "matchedVillage": "Lower Chicksgrove",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "lyndhurst-so43",
+      "name": "Lyndhurst",
+      "outcode": "SO43",
+      "coords": {
+        "lat": 50.876,
+        "lng": -1.5761
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.08,
+        "nearestCentroid": "SO43",
+        "nearestCentroidKm": 0.08,
+        "nameInList": true,
+        "matchedVillage": "Lyndhurst",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "mead-end-sp5",
+      "name": "Mead End",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9798,
+        "lng": -1.7598
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.36,
+        "nearestCentroid": "SP6",
+        "nearestCentroidKm": 6.11,
+        "nameInList": true,
+        "matchedVillage": "Mead End",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "medstead-gu34",
+      "name": "Medstead",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.1008,
+        "lng": -1.055
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.59,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 7.43,
+        "nameInList": true,
+        "matchedVillage": "Medstead",
+        "matchedTown": "Alton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "meonstoke-so32",
+      "name": "Meonstoke",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9595,
+        "lng": -1.19
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.77,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 1.77,
+        "nameInList": true,
+        "matchedVillage": "Meonstoke",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "micheldever-so21",
+      "name": "Micheldever",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1202,
+        "lng": -1.2329
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.87,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 6.1,
+        "nameInList": true,
+        "matchedVillage": "Micheldever",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "michelmersh-so51",
+      "name": "Michelmersh",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 51.0097,
+        "lng": -1.4963
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.3,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 2.3,
+        "nameInList": true,
+        "matchedVillage": "Michelmersh",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "middle-wallop-so20",
+      "name": "Middle Wallop",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.1434,
+        "lng": -1.5651
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.89,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 5.89,
+        "nameInList": true,
+        "matchedVillage": "Middle Wallop",
+        "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "middle-winterslow-sp5",
+      "name": "Middle Winterslow",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0139,
+        "lng": -1.682
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 12.55,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 10.26,
+        "nameInList": true,
+        "matchedVillage": "Middle Winterslow",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "middle-woodford-sp4",
+      "name": "Middle Woodford",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1448,
+        "lng": -1.7839
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.92,
+        "nearestCentroid": "SP4",
+        "nearestCentroidKm": 2.92,
+        "nameInList": true,
+        "matchedVillage": "Middle Woodford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "monkwood-gu34",
+      "name": "Monkwood",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0841,
+        "lng": -1.033
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.17,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 8.17,
+        "nameInList": true,
+        "matchedVillage": "Monkwood",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "morestead-so21",
+      "name": "Morestead",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0428,
+        "lng": -1.2752
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.98,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 3.06,
+        "nameInList": true,
+        "matchedVillage": "Morestead",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "nether-wallop-so20",
+      "name": "Nether Wallop",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.137,
+        "lng": -1.558
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.13,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 5.13,
+        "nameInList": true,
+        "matchedVillage": "Nether Wallop",
+        "matchedTown": "Stockbridge",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "netherhampton-sp2",
+      "name": "Netherhampton",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0658,
+        "lng": -1.8373
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.46,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 0.46,
+        "nameInList": true,
+        "matchedVillage": "Netherhampton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "newton-stacey-sp11",
+      "name": "Newton Stacey",
+      "outcode": "SP11",
+      "coords": {
+        "lat": 51.177,
+        "lng": -1.4537
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.54,
+        "nearestCentroid": "SP11",
+        "nearestCentroidKm": 3.54,
+        "nameInList": true,
+        "matchedVillage": "Newton Stacey",
+        "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "newtown-sp5",
+      "name": "Newtown",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9873,
+        "lng": -1.7612
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.06,
+        "nearestCentroid": "SP6",
+        "nearestCentroidKm": 6.85,
+        "nameInList": true,
+        "matchedVillage": "Newtown",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "northington-so24",
+      "name": "Northington",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0985,
+        "lng": -1.1672
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.07,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 1.07,
+        "nameInList": true,
+        "matchedVillage": "Northington",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "nunton-sp5",
+      "name": "Nunton",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0049,
+        "lng": -1.7914
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.83,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 4.83,
+        "nameInList": true,
+        "matchedVillage": "Nunton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "odstock-sp5",
+      "name": "Odstock",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0216,
+        "lng": -1.8108
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.2,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 4.2,
+        "nameInList": true,
+        "matchedVillage": "Odstock",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "old-alresford-so24",
+      "name": "Old Alresford",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.094,
+        "lng": -1.1692
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.78,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 0.78,
+        "nameInList": true,
+        "matchedVillage": "Old Alresford",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "otterbourne-so21",
+      "name": "Otterbourne",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0119,
+        "lng": -1.3495
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.82,
+        "nearestCentroid": "SO22",
+        "nearestCentroidKm": 5.71,
+        "nameInList": true,
+        "matchedVillage": "Otterbourne",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "over-wallop-so20",
+      "name": "Over Wallop",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.1479,
+        "lng": -1.5632
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.04,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 6.04,
+        "nameInList": true,
+        "matchedVillage": "Over Wallop",
+        "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ovington-so24",
+      "name": "Ovington",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0813,
+        "lng": -1.1995
+      },
+      "flags": [],
+      "notes": [
+        "list_outcode_differs:SO21"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.92,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 2.92,
+        "nameInList": true,
+        "matchedVillage": "Avington",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "owlsbury-so21",
+      "name": "Owlsbury",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0503,
+        "lng": -1.2932
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.79,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 1.64,
+        "nameInList": true,
+        "matchedVillage": "Owlsbury",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "pitton-sp5",
+      "name": "Pitton",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0897,
+        "lng": -1.693
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:15.4km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 15.36,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 7.11,
+        "nameInList": true,
+        "matchedVillage": "Pitton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "plaitford-green-sp5",
+      "name": "Plaitford Green",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.984,
+        "lng": -1.6373
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:15.7km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 15.69,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 9.77,
+        "nameInList": true,
+        "matchedVillage": "Plaitford Green",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "porton-down-sp4",
+      "name": "Porton Down",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1305,
+        "lng": -1.7463
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.11,
+        "nearestCentroid": "SP4",
+        "nearestCentroidKm": 5.11,
+        "nameInList": true,
+        "matchedVillage": "Porton Down",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "preshaw-so32",
+      "name": "Preshaw",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9781,
+        "lng": -1.192
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.15,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 3.15,
+        "nameInList": true,
+        "matchedVillage": "Preshaw",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "preston-candover-rg25",
+      "name": "Preston Candover",
+      "outcode": "RG25",
+      "coords": {
+        "lat": 51.1703,
+        "lng": -1.1237
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 12.7,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 9.28,
+        "nameInList": true,
+        "matchedVillage": "Preston Candover",
+        "matchedTown": "Basingstoke",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "privett-gu34",
+      "name": "Privett",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0622,
+        "lng": -1.0234
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 10.16,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 8.68,
+        "nameInList": true,
+        "matchedVillage": "Privett",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "pucknall-so51",
+      "name": "Pucknall",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 50.9903,
+        "lng": -1.495
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.25,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 0.25,
+        "nameInList": true,
+        "matchedVillage": "Pucknall",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "redlynch-sp5",
+      "name": "Redlynch",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9902,
+        "lng": -1.7321
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 9.02,
+        "nearestCentroid": "SP6",
+        "nearestCentroidKm": 8.03,
+        "nameInList": true,
+        "matchedVillage": "Redlynch",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ridge-sp5",
+      "name": "Ridge",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9998,
+        "lng": -1.75
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.7,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 7.7,
+        "nameInList": true,
+        "matchedVillage": "Ridge",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ropley-so24",
+      "name": "Ropley",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0479,
+        "lng": -1.1068
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.98,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 5.98,
+        "nameInList": true,
+        "matchedVillage": "Ropley",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "selborne-gu34",
+      "name": "Selborne",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0889,
+        "lng": -0.946
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.05,
+        "nearestCentroid": "GU35",
+        "nearestCentroidKm": 6.42,
+        "nameInList": true,
+        "matchedVillage": "Selborne",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "sherfield-english-so51",
+      "name": "Sherfield English",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 50.9818,
+        "lng": -1.5524
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.89,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 3.89,
+        "nameInList": true,
+        "matchedVillage": "Sherfield English",
+        "matchedTown": "Romsey",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "sherrington-ba12",
+      "name": "Sherrington",
+      "outcode": "BA12",
+      "coords": {
+        "lat": 51.1687,
+        "lng": -2.1
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.88,
+        "nearestCentroid": "BA12",
+        "nearestCentroidKm": 6.88,
+        "nameInList": true,
+        "matchedVillage": "Sherrington",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "shootash-so51",
+      "name": "Shootash",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0328,
+        "lng": -1.4872
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 9.48,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 4.93,
+        "nameInList": true,
+        "matchedVillage": "Shootash",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "shorley-so24",
+      "name": "Shorley",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0567,
+        "lng": -1.127
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.36,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 4.36,
+        "nameInList": true,
+        "matchedVillage": "Shorley",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "silkstead-so21",
+      "name": "Silkstead",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0357,
+        "lng": -1.3296
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.83,
+        "nearestCentroid": "SO22",
+        "nearestCentroidKm": 3.14,
+        "nameInList": true,
+        "matchedVillage": "Silkstead",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "soberton-heath-so32",
+      "name": "Soberton Heath",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.958,
+        "lng": -1.1836
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.13,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 2.13,
+        "nameInList": true,
+        "matchedVillage": "Soberton Heath",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "soberton-so32",
+      "name": "Soberton",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9597,
+        "lng": -1.1835
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.2,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 2.2,
+        "nameInList": true,
+        "matchedVillage": "Soberton",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "south-newton-sp2",
+      "name": "South Newton",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0573,
+        "lng": -1.853
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.05,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 1.05,
+        "nameInList": true,
+        "matchedVillage": "South Newton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "south-wonston-so21",
+      "name": "South Wonston",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1032,
+        "lng": -1.279
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.46,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 3.46,
+        "nameInList": true,
+        "matchedVillage": "South Wonston",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "southwick-po17",
+      "name": "Southwick",
+      "outcode": "PO17",
+      "coords": {
+        "lat": 50.8843,
+        "lng": -1.1651
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.24,
+        "nearestCentroid": "PO17",
+        "nearestCentroidKm": 2.24,
+        "nameInList": true,
+        "matchedVillage": "Southwick",
+        "matchedTown": "Portsmouth",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "sparsholt-so21",
+      "name": "Sparsholt",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0641,
+        "lng": -1.3697
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.02,
+        "nearestCentroid": "SO22",
+        "nearestCentroidKm": 2.01,
+        "nameInList": true,
+        "matchedVillage": "Sparsholt",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "standon-so24",
+      "name": "Standon",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0458,
+        "lng": -1.166
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.93,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 4.93,
+        "nameInList": true,
+        "matchedVillage": "Standon",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "stapleford-sp3",
+      "name": "Stapleford",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0953,
+        "lng": -1.9428
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.08,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 1.49,
+        "nameInList": true,
+        "matchedVillage": "Stapleford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "steep-gu32",
+      "name": "Steep",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 51.0042,
+        "lng": -0.9697
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.15,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 2.15,
+        "nameInList": true,
+        "matchedVillage": "Steep",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "steep-marsh-gu32",
+      "name": "Steep Marsh",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 50.9971,
+        "lng": -0.9653
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.04,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 2.04,
+        "nameInList": true,
+        "matchedVillage": "Steep Marsh",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "steeple-langford-sp4",
+      "name": "Steeple Langford",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1601,
+        "lng": -1.894
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.97,
+        "nearestCentroid": "SP4",
+        "nearestCentroidKm": 7.97,
+        "nameInList": true,
+        "matchedVillage": "Steeple Langford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "stockbridge-so20",
+      "name": "Stockbridge",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.112,
+        "lng": -1.4914
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.67,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 0.67,
+        "nameInList": true,
+        "matchedVillage": "Stockbridge",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "stoford-sp2",
+      "name": "Stoford",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0433,
+        "lng": -1.8612
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.55,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 2.55,
+        "nameInList": true,
+        "matchedVillage": "Stoford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "stoke-charity-so21",
+      "name": "Stoke Charity",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1358,
+        "lng": -1.2801
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.9,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 6.9,
+        "nameInList": true,
+        "matchedVillage": "Stoke Charity",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "stratford-sub-castle-sp1",
+      "name": "Stratford-sub-Castle",
+      "outcode": "SP1",
+      "coords": {
+        "lat": 51.0877,
+        "lng": -1.8143
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.1,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 2.1,
+        "nameInList": true,
+        "matchedVillage": "Stratford-sub-Castle",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "stroud-gu32",
+      "name": "Stroud",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 51.0017,
+        "lng": -0.9578
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.37,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 1.37,
+        "nameInList": true,
+        "matchedVillage": "Stroud",
+        "matchedTown": "Petersfield",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "sutton-mandeville-sp3",
+      "name": "Sutton Mandeville",
+      "outcode": "SP3",
+      "coords": {
+        "lat": 51.0625,
+        "lng": -1.9741
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.97,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 2.97,
+        "nameInList": true,
+        "matchedVillage": "Sutton Mandeville",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "sutton-scotney-so21",
+      "name": "Sutton Scotney",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1373,
+        "lng": -1.283
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.03,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 7.03,
+        "nameInList": true,
+        "matchedVillage": "Sutton Scotney",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "swanmore-so32",
+      "name": "Swanmore",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9556,
+        "lng": -1.2195
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 0.54,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 0.54,
+        "nameInList": true,
+        "matchedVillage": "Swanmore",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "tichborne-so24",
+      "name": "Tichborne",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.0637,
+        "lng": -1.153
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.97,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 2.97,
+        "nameInList": true,
+        "matchedVillage": "Tichborne",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "timsbury-so51",
+      "name": "Timsbury",
+      "outcode": "SO51",
+      "coords": {
+        "lat": 51.0122,
+        "lng": -1.4943
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.59,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 2.59,
+        "nameInList": true,
+        "matchedVillage": "Timsbury",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "tisbury-sp3",
+      "name": "Tisbury",
+      "outcode": "SP3",
+      "coords": {
+        "lat": 51.0641,
+        "lng": -2.0743
+      },
+      "flags": [],
+      "notes": [
+        "list_outcode_differs:SO51"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 9.25,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 9.25,
+        "nameInList": true,
+        "matchedVillage": "Timsbury",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "totford-so20",
+      "name": "Totford",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0921,
+        "lng": -1.4543
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.85,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 3.85,
+        "nameInList": true,
+        "matchedVillage": "Totford",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "twyford-so21",
+      "name": "Twyford",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0092,
+        "lng": -1.3197
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.45,
+        "nearestCentroid": "SO23",
+        "nearestCentroidKm": 6.07,
+        "nameInList": true,
+        "matchedVillage": "Twyford",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "ugford-sp4",
+      "name": "Ugford",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.0741,
+        "lng": -1.8313
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 11.33,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 1.48,
+        "nameInList": true,
+        "matchedVillage": "Ugford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "up-somborne-so20",
+      "name": "Up Somborne",
+      "outcode": "SO20",
+      "coords": {
+        "lat": 51.0726,
+        "lng": -1.484
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.07,
+        "nearestCentroid": "SO20",
+        "nearestCentroidKm": 5.07,
+        "nameInList": true,
+        "matchedVillage": "Up Somborne",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "upham-so32",
+      "name": "Upham",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9672,
+        "lng": -1.211
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.59,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 1.59,
+        "nameInList": true,
+        "matchedVillage": "Upham",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "upper-farringdon-gu34",
+      "name": "Upper Farringdon",
+      "outcode": "GU34",
+      "coords": {
+        "lat": 51.0793,
+        "lng": -0.9896
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 7.79,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 7.79,
+        "nameInList": true,
+        "matchedVillage": "Upper Farringdon",
+        "matchedTown": "Alton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "upper-wield-so24",
+      "name": "Upper Wield",
+      "outcode": "GU35",
+      "coords": {
+        "lat": 51.1113,
+        "lng": -1.0242
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 11.19,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 5.29,
+        "nameInList": true,
+        "matchedVillage": "Upper Wield",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "upper-woodford-sp4",
+      "name": "Upper Woodford",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.147,
+        "lng": -1.7823
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.67,
+        "nearestCentroid": "SP4",
+        "nearestCentroidKm": 2.67,
+        "nameInList": true,
+        "matchedVillage": "Upper Woodford",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "waltham-chase-so32",
+      "name": "Waltham Chase",
+      "outcode": "SO32",
+      "coords": {
+        "lat": 50.9675,
+        "lng": -1.2077
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.65,
+        "nearestCentroid": "SO32",
+        "nearestCentroidKm": 1.65,
+        "nameInList": true,
+        "matchedVillage": "Waltham Chase",
+        "matchedTown": "Southampton",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "west-dean-sp5",
+      "name": "West Dean",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 50.9924,
+        "lng": -1.844
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.4,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 1.4,
+        "nameInList": true,
+        "matchedVillage": "West Dean",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "west-grimstead-sp5",
+      "name": "West Grimstead",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0151,
+        "lng": -1.8597
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 1.68,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 1.68,
+        "nameInList": true,
+        "matchedVillage": "West Grimstead",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "west-meon-gu32",
+      "name": "West Meon",
+      "outcode": "GU32",
+      "coords": {
+        "lat": 51.0057,
+        "lng": -1.0169
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.45,
+        "nearestCentroid": "GU32",
+        "nearestCentroidKm": 5.45,
+        "nameInList": true,
+        "matchedVillage": "West Meon",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "west-stratton-so21",
+      "name": "West Stratton",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.1338,
+        "lng": -1.2213
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 8.54,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 6.48,
+        "nameInList": true,
+        "matchedVillage": "West Stratton",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "west-tisted-so24",
+      "name": "West Tisted",
+      "outcode": "SO24",
+      "coords": {
+        "lat": 51.061,
+        "lng": -1.0771
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 6.63,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 6.63,
+        "nameInList": true,
+        "matchedVillage": "West Tisted",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "west-tytherely-sp5",
+      "name": "West Tytherely",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0038,
+        "lng": -1.6057
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:17.8km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 17.8,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 7.71,
+        "nameInList": true,
+        "matchedVillage": "West Tytherely",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "west-winterslow-sp5",
+      "name": "West Winterslow",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0126,
+        "lng": -1.6831
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 12.46,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 10.3,
+        "nameInList": true,
+        "matchedVillage": "West Winterslow",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "wherwell-sp11",
+      "name": "Wherwell",
+      "outcode": "SP11",
+      "coords": {
+        "lat": 51.1624,
+        "lng": -1.4756
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 3.51,
+        "nearestCentroid": "SP11",
+        "nearestCentroidKm": 3.51,
+        "nameInList": true,
+        "matchedVillage": "Wherwell",
+        "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "whiteparish-sp5",
+      "name": "Whiteparish",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0231,
+        "lng": -1.6443
+      },
+      "flags": [],
+      "notes": [
+        "coords_distant:15.3km"
+      ],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 15.31,
+        "nearestCentroid": "SO51",
+        "nearestCentroidKm": 10.92,
+        "nameInList": true,
+        "matchedVillage": "Whiteparish",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "whitsbury-sp6",
+      "name": "Whitsbury",
+      "outcode": "SP6",
+      "coords": {
+        "lat": 50.9627,
+        "lng": -1.8198
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 4.19,
+        "nearestCentroid": "SP6",
+        "nearestCentroidKm": 4.19,
+        "nameInList": true,
+        "matchedVillage": "Whitsbury",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "wield-so24",
+      "name": "Wield",
+      "outcode": "GU35",
+      "coords": {
+        "lat": 51.1138,
+        "lng": -1.0259
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 11.3,
+        "nearestCentroid": "GU34",
+        "nearestCentroidKm": 5.15,
+        "nameInList": true,
+        "matchedVillage": "Wield",
+        "matchedTown": "Basingstoke",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "wilton-sp2",
+      "name": "Wilton",
+      "outcode": "SP2",
+      "coords": {
+        "lat": 51.0754,
+        "lng": -1.8591
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2,
+        "nearestCentroid": "SP2",
+        "nearestCentroidKm": 2,
+        "nameInList": true,
+        "matchedVillage": "Wilton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "winterbourne-earls-sp4",
+      "name": "Winterbourne Earls",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1243,
+        "lng": -1.7693
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.26,
+        "nearestCentroid": "SP4",
+        "nearestCentroidKm": 5.26,
+        "nameInList": true,
+        "matchedVillage": "Winterbourne Earls",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "winterbourne-gunner-sp4",
+      "name": "Winterbourne Gunner",
+      "outcode": "SP4",
+      "coords": {
+        "lat": 51.1213,
+        "lng": -1.764
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 5.65,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 5.51,
+        "nameInList": true,
+        "matchedVillage": "Winterbourne Gunner",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "witherington-sp5",
+      "name": "Witherington",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0048,
+        "lng": -1.8898
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.15,
+        "nearestCentroid": "SP5",
+        "nearestCentroidKm": 2.15,
+        "nameInList": true,
+        "matchedVillage": "Witherington",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "wonston-so21",
+      "name": "Wonston",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0993,
+        "lng": -1.2871
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.85,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 2.85,
+        "nameInList": true,
+        "matchedVillage": "Wonston",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "woodminton-sp5",
+      "name": "Woodminton",
+      "outcode": "SP5",
+      "coords": {
+        "lat": 51.0099,
+        "lng": -2.0001
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 9.86,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 8.89,
+        "nameInList": true,
+        "matchedVillage": "Woodminton",
+        "matchedTown": "Salisbury",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "worthy-down-so21",
+      "name": "Worthy Down",
+      "outcode": "SO21",
+      "coords": {
+        "lat": 51.0943,
+        "lng": -1.2977
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": true,
+        "coordsSource": "os-opendata:place-centre",
+        "ownCentroidKm": 2.15,
+        "nearestCentroid": "SO21",
+        "nearestCentroidKm": 2.15,
+        "nameInList": true,
+        "matchedVillage": "Worthy Down",
+        "matchedTown": "Winchester",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    }
+  ]
+}

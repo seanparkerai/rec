@@ -1,0 +1,36 @@
+/* dashboard.css — @import shell. anchor: Linear-dense.
+   All rules live in the files below; this file is loaded by every page
+   via <link rel="stylesheet" href="../assets/css/dashboard.css">.
+   HTML files are unchanged. */
+
+/* Shared base utilities */
+@import 'dashboard/base.css';
+
+/* Dashboard tile components */
+@import 'dashboard/tile-card.css';
+@import 'dashboard/tile-deposit.css';
+@import 'dashboard/tile-affordability.css';
+@import 'dashboard/tile-money-flow.css';
+@import 'dashboard/tile-shortlist.css';
+@import 'dashboard/tile-journey.css';
+@import 'dashboard/tile-criteria.css';
+@import 'dashboard/tile-ask.css';
+@import 'dashboard/tile-extended.css';
+@import 'dashboard/tile-v3-visuals.css';
+@import 'dashboard/tile-nba.css';
+
+/* Page-specific styles */
+@import 'pages/areas.css';
+@import 'pages/area-detail.css';
+@import 'pages/finances.css';
+@import 'pages/journey.css';
+@import 'pages/house-types.css';
+@import 'pages/map.css';
+@import 'pages/finances-widgets.css';
+@import 'pages/areas-rows.css';
+@import 'pages/shared.css';
+@import 'pages/placeholder.css';
+@import 'pages/finances-charts.css';
+@import 'pages/report.css';
+@import 'pages/listings.css';
+@import 'pages/property.css';

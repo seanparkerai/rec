@@ -1,0 +1,162 @@
+{
+  "id": "four-marks-gu34",
+  "name": "Four Marks",
+  "village": "Four Marks",
+  "town": "Alton",
+  "county": "Hampshire",
+  "postcode": "GU34",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Alton",
+  "coords": {
+    "lat": 51.1006,
+    "lng": -1.0438
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
+  "overview": "Four Marks is a village and civil parish of around 4,800 residents in the East Hampshire district, sitting astride the A31 road four and a half miles south-west of Alton on the high chalk ridge at 630 ft above sea level. The name records a Saxon-era boundary point where four parishes (Ropley, Medstead, Chawton and Farringdon) met; until the turnpike was driven through in 1753, the only settlement was the Windmill Inn and a few cottages. The parish was created in 1932 and has grown rapidly since the 1980s as developers acquired plots between the older hamlets of Hawthorn and Soldridge. The village shares Medstead and Four Marks railway station — at 644 ft, the highest standard-gauge station in southern England — with neighbouring Medstead, but the line is the preserved Watercress Line and does not run commuter services; commuters drive four miles to Alton for direct Waterloo trains. The St Swithun's Way long-distance footpath crosses the southern fringe of the village.",
+  "character": "Recent-build commuter village layered over a Saxon boundary; the older cores at Hawthorn and Lymington Bottom retain a few period cottages but most of the modern parish is densely-packed late-20th and 21st-century estate housing, a marked contrast to neighbouring Medstead. Council Tax Band D charge for the parish in 2026/27 is £2,316.05 (East Hampshire local-authority data).",
+  "amenities": [
+    "Four Marks Co-op and small Tesco Express",
+    "Medstead and Four Marks station (Watercress Line, heritage only)",
+    "Triple fff Brewery taproom (Lymington Bottom Road)",
+    "Several cafés, hairdressers, wine merchant, florist, pharmacy",
+    "Two GP surgeries within parish",
+    "Four Marks Recreation Ground (football, cricket, tennis, bowls, BMX)",
+    "Four Marks Church of England Primary School",
+    "Church of the Good Shepherd",
+    "Hattingley Valley Wines (within parish, sparkling-wine producer)"
+  ],
+  "schools": [
+    {
+      "name": "Four Marks Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "0.4 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Medstead Church of England Primary School",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "1.8 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116300"
+    },
+    {
+      "name": "Amery Hill School, Alton",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "4.6 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Alton School (independent)",
+      "phase": "Through-school",
+      "ofsted": null,
+      "distance": "4.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 13m",
+        "mode": "drive to Alton + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/stations/alton"
+      },
+      {
+        "to": "London Waterloo (fastest)",
+        "time": "1h 6m",
+        "mode": "drive + train",
+        "source": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~25m",
+        "mode": "drive (A31)",
+        "source": "https://www.nationalrail.co.uk/"
+      }
+    ],
+    "nearestStation": "Alton (4.4 mi)",
+    "roads": "A31 (through village); A32 ~4 mi; A3 ~10 mi; M3 J9 ~14 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 534986,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu34.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Riding the Watercress Line (Alresford–Alton steam railway)",
+    "St Swithun's Way walking (Winchester to Farnham)",
+    "Pilgrim's Way long-distance path",
+    "Hattingley Valley Wines vineyard tours and tastings",
+    "Triple fff Brewery taproom evenings",
+    "Four Marks Recreation Ground (cricket, tennis, bowls, BMX)",
+    "Jane Austen's House Museum, Chawton (3 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "Triple fff Brewery Taproom",
+      "type": "Brewery taproom",
+      "notes": "On-site brewery selling Moondance pale ale and Goldfinger lager; rustic bar",
+      "url": "https://triplefff.com/"
+    },
+    {
+      "name": "Hattingley Valley Wines (cellar door)",
+      "type": "Vineyard tasting",
+      "notes": "English sparkling wine producer with tours and tastings",
+      "url": "https://hattingleyvalley.com/"
+    },
+    {
+      "name": "Windmill Inn, Four Marks",
+      "type": "Village pub",
+      "notes": "On the original A31 turnpike site",
+      "url": "https://www.windmill-fourmarks.co.uk/"
+    }
+  ],
+  "pros": [
+    "Full village amenity set (shops, GP, schools, pubs, brewery, vineyard)",
+    "On the A31 corridor between Alton and Winchester",
+    "Direct Waterloo trains from Alton in just over an hour",
+    "Cheaper per-square-foot than Medstead or Chawton given housing mix"
+  ],
+  "cons": [
+    "A31 traffic runs through the village and is often heavy",
+    "Late-20th-century estate density loses the chalk-village look",
+    "Watercress Line is heritage only — no commuter service from village station",
+    "Recent development has been controversial locally"
+  ],
+  "whoItSuits": "Practical buyers prioritising amenities, schools and A31 access over picture-postcard character — particularly first-time buyers and growing families who would be priced out of Medstead, Bentworth or Beech. The mix of modern estate stock, two primaries within walking distance, a recreation ground with multiple sports and a small but real shopping parade makes it one of the more livable smaller villages in GU34. Less suitable for buyers chasing chalk-cottage aesthetics or planning to commute daily without a car: Alton station is a four-mile drive, and the Watercress Line is heritage, not transport.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (4.4 mi)",
+  "primarySupermarket": "Sainsbury's, Draymans Way, Alton (4.5 mi); Co-op within village",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Four_Marks",
+    "https://watercressline.co.uk/visit/what-to-see/medstead-four-marks/",
+    "https://en.wikipedia.org/wiki/Medstead_and_Four_Marks_railway_station",
+    "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf",
+    "https://www.thetrainline.com/stations/alton",
+    "https://www.rightmove.co.uk/house-prices/gu34.html",
+    "https://parentview.ofsted.gov.uk/parent-view-results/survey/result/12039/17",
+    "https://littleplaceinthecountry.com/en/medstead-local-guide"
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^3733433",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:14:42.998Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

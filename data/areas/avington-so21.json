@@ -1,0 +1,113 @@
+{
+  "id": "avington-so21",
+  "name": "Avington",
+  "village": "Avington",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.0912,
+    "lng": -1.2142
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Avington is a small village in the Itchen Valley, northeast of Winchester, on the River Itchen corridor. The settlement is closely associated with Avington Park and estate history, and historically formed its own parish before later administrative merger. Today it reads as a highly rural, low-density village with strong landscape and heritage identity.",
+  "character": "Historic river-valley village character with estate influence and limited modern commercial core.",
+  "amenities": [
+    "Avington Estate/Park setting and countryside access",
+    "Nearby services in New Alresford and Winchester"
+  ],
+  "schools": [
+    {
+      "name": "St Swithun Wells Catholic Primary School, Chandlers Ford",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~8-10 miles",
+      "url": "https://www.stswithunwells.org.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~6-8 miles",
+      "url": "https://www.perins.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~15 min",
+        "notes": "nearest city and station"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train (from Winchester)",
+        "typical": "~1h rail + drive to station",
+        "notes": "no station in village"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO21 values are generally supported by Winchester-commuter demand and constrained village supply.",
+    "asOf": "2026-04",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walk and cycle in the Itchen Valley",
+    "Visit nearby Avington Park landscapes (access permitting)"
+  ],
+  "placesToEat": [
+    "Restaurants/pubs in Alresford and Winchester catchment"
+  ],
+  "pros": [
+    "Strong heritage setting",
+    "Convenient reach to Winchester"
+  ],
+  "cons": [
+    "Limited village-centre facilities",
+    "Car reliance for most day-to-day needs"
+  ],
+  "whoItSuits": "Suited to buyers who prioritise river-valley heritage setting and Winchester access over local high-street convenience.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Avington, Hampshire",
+      "url": "https://en.wikipedia.org/wiki/Avington%2C_Hampshire"
+    },
+    {
+      "label": "Wikipedia — Itchen Valley",
+      "url": "https://en.wikipedia.org/wiki/Itchen_Valley"
+    },
+    {
+      "label": "Avington Estate",
+      "url": "https://www.avington.com/"
+    },
+    {
+      "label": "Rightmove House Prices SO21",
+      "url": "https://www.rightmove.co.uk/house-prices/SO21.html"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^4342348",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:13:52.838Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

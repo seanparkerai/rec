@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Variant F · Soft Magazine · Home</title>
+<!-- ISOLATED DESIGN PREVIEW — dummy data only, no app assets, no database. Safe to delete. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f4f4fb;--card:#ffffff;--ink:#1c1b2e;--soft:#6b6a85;--faint:#a3a2bb;--line:#ecebf6;
+    --brand:#5b5bd6;--brand-soft:#ececfb;--brand-ink:#3f3fb0;--violet:#8a6bf0;
+    --mint:#1fb597;--mint-soft:#e3f7f2;--coral:#f2766b;--coral-soft:#fdeceb;--amber:#e8a13a;--amber-soft:#fbf1e1;
+    --r:22px;--r-sm:14px;--r-pill:999px;
+    --sh:0 1px 2px rgba(28,27,46,.04),0 8px 24px -12px rgba(28,27,46,.12);
+    --sh-lg:0 3px 6px rgba(28,27,46,.05),0 24px 48px -18px rgba(91,91,214,.26);
+    --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .num{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  h1,h2,h3,.display{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.08;letter-spacing:-.01em;font-optical-sizing:auto}
+  a{color:var(--brand);text-decoration:none;font-weight:600}
+  .ic{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.18em;flex:0 0 auto}
+  .shell{max-width:1240px;margin:0 auto;padding:0 var(--s6)}
+
+  .appbar{position:sticky;top:0;z-index:30;background:rgba(244,244,251,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .appbar .shell{display:flex;align-items:center;gap:var(--s5);height:66px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+  .brand .mark{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--violet));box-shadow:var(--sh)}
+  .appbar nav{display:none;gap:2px;margin-left:var(--s4)}@media(min-width:880px){.appbar nav{display:flex}}
+  .appbar nav a{color:var(--soft);font-weight:600;font-size:14.5px;padding:8px 14px;border-radius:var(--r-pill)}
+  .appbar nav a[aria-current]{color:var(--brand-ink);background:var(--brand-soft)}
+  .avatar{margin-left:auto;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f2766b,#e8a13a);display:grid;place-content:center;color:#fff;font-weight:700;font-size:14px}
+
+  .issue{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:var(--s3);padding:var(--s10) 0 var(--s5);border-bottom:1px solid var(--line)}
+  .issue .l{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  .issue .d{color:var(--faint);font-weight:600;font-size:13px}
+
+  .mag{display:grid;grid-template-columns:1fr;gap:var(--s6);padding:var(--s8) 0 var(--s16)}
+  @media(min-width:880px){.mag{grid-template-columns:repeat(12,1fr)}}
+  .feature{grid-column:1/-1}
+  @media(min-width:880px){.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c4{grid-column:span 4}.c8{grid-column:span 8}.c3{grid-column:span 3}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:var(--s8)}
+  .sec-label{display:flex;align-items:center;gap:8px;color:var(--brand);font-weight:700;font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:var(--s4)}
+
+  /* hero lead story */
+  .lead-story{background:linear-gradient(140deg,#5b5bd6,#7b5bf0 55%,#9a6bf0);color:#fff;border:0;box-shadow:var(--sh-lg);position:relative;overflow:hidden}
+  .lead-story::after{content:"";position:absolute;right:-80px;top:-80px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .lead-story .sec-label{color:rgba(255,255,255,.78)}
+  .lead-grid{display:grid;grid-template-columns:1fr;gap:var(--s8);align-items:center;position:relative;z-index:1}
+  @media(min-width:620px){.lead-grid{grid-template-columns:1fr auto}}
+  .lead-story h1{color:#fff;font-size:clamp(30px,4.5vw,46px);font-weight:500;max-width:16ch}
+  .lead-story .stand{color:rgba(255,255,255,.86);font-size:18px;margin:var(--s4) 0 var(--s6);max-width:46ch}
+  .lead-story .stand b{color:#fff;font-weight:700}
+  .scen{display:flex;gap:var(--s2);flex-wrap:wrap}
+  .scen button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:var(--r-pill);padding:9px 16px;font-weight:600;font-size:13.5px;cursor:pointer;font-family:inherit}
+  .scen button[aria-pressed=true]{background:#fff;color:var(--brand-ink)}
+  .ring{position:relative;width:188px;height:188px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .v{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .ring .v b{font-size:52px;font-weight:800}.ring .v span{font-size:13px;opacity:.82;font-weight:600;display:block;margin-top:-6px}
+  .ring-cap{margin-top:var(--s4);text-align:center;color:rgba(255,255,255,.86);font-weight:600;font-size:14px}
+
+  /* stat stories */
+  .statcard .big{font-family:"Fraunces";font-size:clamp(34px,4vw,46px);font-weight:600;letter-spacing:-.02em}
+  .statcard h3{font-size:21px;margin:var(--s2) 0 var(--s2)}
+  .statcard p{color:var(--soft);font-size:15px}
+  .statcard .chip{display:inline-flex;align-items:center;gap:6px;border-radius:var(--r-pill);font-weight:700;font-size:12.5px;padding:4px 12px;margin-top:var(--s4)}
+  .chip.ok{background:var(--mint-soft);color:#0e6d59}.chip.info{background:var(--brand-soft);color:var(--brand-ink)}.chip.warn{background:var(--amber-soft);color:#a96b12}
+
+  /* money story */
+  .moneystory h2{font-size:clamp(24px,3vw,30px)}
+  .moneystory .dek{color:var(--soft);font-size:16.5px;max-width:62ch;margin:var(--s3) 0 var(--s6)}
+  .flowrow{display:grid;grid-template-columns:1fr;gap:var(--s6)}
+  @media(min-width:560px){.flowrow{grid-template-columns:1fr 1fr}}
+  .flowrow h4{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:700;margin-bottom:var(--s3);display:flex;justify-content:space-between}
+  .flowrow h4 span{color:var(--soft)}
+  .stack{display:flex;height:20px;border-radius:var(--r-pill);overflow:hidden;background:var(--line)}
+  .stack i{display:block;height:100%}
+  .lg{display:flex;gap:var(--s4);flex-wrap:wrap;margin-top:var(--s5);font-size:14px;color:var(--soft);font-weight:600}
+  .lg i{width:11px;height:11px;border-radius:4px;display:inline-block;margin-right:7px;vertical-align:middle}
+  .lg b{color:var(--ink)}
+
+  /* spotlight area */
+  .spotlight{padding:0;overflow:hidden;display:flex;flex-direction:column}
+  .spot-img{aspect-ratio:16/9;position:relative}
+  .spot-img svg{width:100%;height:100%;display:block}
+  .spot-badge{position:absolute;top:var(--s4);left:var(--s4);background:rgba(255,255,255,.92);color:var(--brand-ink);border-radius:var(--r-pill);font-weight:700;font-size:13px;padding:5px 14px;display:flex;align-items:center;gap:7px}
+  .spot-body{padding:var(--s8)}
+  .spot-body .sec-label{color:var(--mint)}
+  .spot-body h2{font-size:30px}
+  .spot-body p{color:var(--soft);font-size:16px;margin:var(--s3) 0 var(--s5)}
+  .spot-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);border-top:1px solid var(--line);padding-top:var(--s5)}
+  .spot-stats .k{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+  .spot-stats .v{font-family:"Fraunces";font-size:24px;font-weight:600;margin-top:2px}
+
+  /* insights */
+  .insights .sec-label{color:var(--amber)}
+  .insight{display:flex;gap:var(--s4);padding:var(--s5) 0;border-bottom:1px solid var(--line)}
+  .insight:last-child{border-bottom:0;padding-bottom:0}
+  .insight .ic-wrap{width:44px;height:44px;border-radius:13px;flex:0 0 auto;display:grid;place-content:center;color:#fff}
+  .insight .t{font-weight:700;font-size:16px}
+  .insight .d{color:var(--soft);font-size:14.5px;margin-top:2px}
+
+  /* fresh listings */
+  .fresh .sec-label{color:var(--brand)}
+  .fresh-grid{display:grid;grid-template-columns:1fr;gap:var(--s5)}
+  @media(min-width:560px){.fresh-grid{grid-template-columns:repeat(3,1fr)}}
+  .mini{border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;background:var(--card);transition:transform .15s,box-shadow .15s}
+  .mini:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}
+  .mini .img{aspect-ratio:4/3;position:relative}.mini .img svg{width:100%;height:100%;display:block}
+  .mini .vt{position:absolute;bottom:8px;left:8px;border-radius:var(--r-pill);font-size:11.5px;font-weight:700;padding:3px 10px}
+  .vt.strong{background:var(--mint);color:#fff}.vt.good{background:var(--brand);color:#fff}
+  .mini .b{padding:var(--s4)}
+  .mini .pr{font-weight:800;font-size:18px}
+  .mini .nm{font-weight:600;font-size:14px;margin-top:2px}
+  .mini .ad{color:var(--faint);font-size:12.5px;font-weight:600}
+
+  /* journey stepper */
+  .journey .sec-label{color:var(--mint)}
+  .steps{display:flex;gap:var(--s4);overflow-x:auto;padding-bottom:var(--s2);scroll-snap-type:x mandatory}
+  .step{flex:0 0 200px;scroll-snap-align:start;border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s5);background:var(--card)}
+  .step .n{width:30px;height:30px;border-radius:50%;display:grid;place-content:center;font-weight:800;font-size:14px;border:2px solid var(--line);color:var(--faint)}
+  .step.done .n{background:var(--mint);border-color:var(--mint);color:#fff}
+  .step.active .n{border-color:var(--brand);color:var(--brand)}
+  .step .t{font-weight:700;margin-top:var(--s3)}
+  .step .d{color:var(--soft);font-size:13.5px;margin-top:2px}
+  .step .badge{display:inline-block;margin-top:var(--s3);font-size:11.5px;font-weight:700;border-radius:var(--r-pill);padding:2px 10px}
+  .badge.prog{background:var(--amber-soft);color:#a96b12}.badge.todo{background:var(--bg);color:var(--soft);border:1px solid var(--line)}.badge.done{background:var(--mint-soft);color:#0e6d59}
+
+  /* ask */
+  .askcard{background:var(--ink);color:#fff;border:0}
+  .askcard .sec-label{color:var(--violet)}
+  .askcard h2{color:#fff;font-size:28px}
+  .askcard p{color:rgba(255,255,255,.72);max-width:56ch;margin:var(--s2) 0 var(--s5)}
+  .ask{display:flex;gap:var(--s2);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:var(--r-pill);padding:6px 6px 6px var(--s5);align-items:center}
+  .ask input{flex:1;border:0;background:transparent;color:#fff;font-family:inherit;font-size:16px;padding:11px 0}
+  .ask input::placeholder{color:rgba(255,255,255,.55)}.ask input:focus{outline:none}
+  .ask button{border:0;background:var(--brand);color:#fff;border-radius:var(--r-pill);padding:12px 22px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px}
+
+  footer{border-top:1px solid var(--line);padding:var(--s10) 0;color:var(--faint);font-size:13.5px}
+  footer .shell{display:flex;flex-wrap:wrap;gap:var(--s4);justify-content:space-between}
+  .preview-flag{position:fixed;top:76px;right:14px;background:var(--ink);color:#fff;border-radius:var(--r-pill);font-size:11px;padding:5px 13px;z-index:50;font-weight:700;opacity:.92}
+  *:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}.mini:hover{transform:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M4 16l4.5-5L12 13l6-7"/><path d="M16 6h2.5v2.5"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M16 11h4v4h-4a2 2 0 0 1 0-4Z"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L4.5 9.7l5.9-.9Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-train" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="13" rx="3.5"/><path d="M6 11h12"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M9 21l2-3M15 21l-2-3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l8 8"/><path d="M16 15l2.5 2.5"/></symbol>
+</svg>
+
+<div class="preview-flag">PREVIEW · F · dummy data</div>
+
+<div class="appbar"><div class="shell">
+  <span class="brand"><span class="mark"></span>rec</span>
+  <nav>
+    <a href="#" aria-current="page">Home</a><a href="variant-f-listings.html">Listings</a>
+    <a href="#">Areas</a><a href="#">Finances</a><a href="#">Journey</a><a href="#">Map</a>
+  </nav>
+  <span class="avatar">L</span>
+</div></div>
+
+<div class="shell">
+  <div class="issue"><span class="l">Your search · This week</span><span class="d">Tuesday, 2 June 2026 · Hampshire &amp; Wiltshire</span></div>
+
+  <div class="mag">
+    <!-- LEAD STORY -->
+    <section class="card lead-story feature">
+      <p class="sec-label">The headline</p>
+      <div class="lead-grid">
+        <div>
+          <h1>You’re nearly there — and the date is holding steady.</h1>
+          <p class="stand">Your deposit reached <b>69%</b> of target this month. At your current pace you’re on course for a <b>Spring 2027</b> move, comfortably inside budget.</p>
+          <div class="scen" role="group" aria-label="Scenarios">
+            <button aria-pressed="true" data-eta="Oct 2027">Baseline</button>
+            <button aria-pressed="false" data-eta="Aug 2027">Add £200</button>
+            <button aria-pressed="false" data-eta="May 2027">Add £500</button>
+          </div>
+        </div>
+        <div>
+          <div class="ring">
+            <svg width="188" height="188" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="11"/>
+              <circle cx="60" cy="60" r="52" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" pathLength="100" stroke-dasharray="69 100"/>
+            </svg>
+            <div class="v"><b class="num">69%</b><span>of £85,000</span></div>
+          </div>
+          <p class="ring-cap">£58,400 saved · target by <b id="eta">Oct 2027</b></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAT STORIES -->
+    <section class="card statcard c4">
+      <p class="sec-label"><svg class="ic"><use href="#i-wallet"/></svg> By the numbers</p>
+      <div class="big num">£66.4k</div>
+      <h3>Your effective deposit</h3>
+      <p>Counting the LISA bonus and investments, you could bring about £8,000 more than your savings balance suggests.</p>
+      <span class="chip ok">Includes £2,680 bonus</span>
+    </section>
+    <section class="card statcard c4">
+      <p class="sec-label"><svg class="ic"><use href="#i-spark"/></svg> Affordability</p>
+      <div class="big num">£430k</div>
+      <h3>Comfortably within reach</h3>
+      <p>You can take on a mortgage up to around £430,000 without crowding out the rest of your budget.</p>
+      <span class="chip info">Stretch beyond £465k</span>
+    </section>
+    <section class="card statcard c4">
+      <p class="sec-label"><svg class="ic"><use href="#i-check"/></svg> The plan</p>
+      <div class="big num">16 mo</div>
+      <h3>To a ready-to-offer state</h3>
+      <p>Three steps remain. The biggest lever is nudging your monthly saving up by a couple of hundred pounds.</p>
+      <span class="chip warn">1 action due soon</span>
+    </section>
+
+    <!-- MONEY STORY -->
+    <section class="card moneystory c7">
+      <p class="sec-label"><svg class="ic"><use href="#i-wallet"/></svg> Your money story</p>
+      <h2>What changes the day you get the keys</h2>
+      <p class="dek">Today you save aggressively. After the move, the mortgage steps into most of that space — but you keep saving, and you hold on to a £470 monthly buffer.</p>
+      <div class="flowrow">
+        <div>
+          <h4>Today <span class="num">£5,400 in</span></h4>
+          <div class="stack"><i style="width:39%;background:var(--brand)"></i><i style="width:30%;background:var(--mint)"></i><i style="width:31%;background:var(--amber)"></i></div>
+        </div>
+        <div>
+          <h4>After the move <span class="num">£5,400 in</span></h4>
+          <div class="stack"><i style="width:33%;background:var(--coral)"></i><i style="width:18%;background:var(--brand)"></i><i style="width:9%;background:var(--mint)"></i><i style="width:31%;background:var(--amber)"></i></div>
+        </div>
+      </div>
+      <div class="lg">
+        <span><i style="background:var(--coral)"></i>Mortgage <b>£1,780</b></span>
+        <span><i style="background:var(--brand)"></i>Essentials <b>£2,100</b></span>
+        <span><i style="background:var(--amber)"></i>Lifestyle <b>£1,650</b></span>
+        <span><i style="background:var(--mint)"></i>Saving <b>£400</b></span>
+      </div>
+    </section>
+
+    <!-- INSIGHTS -->
+    <section class="card insights c5">
+      <p class="sec-label"><svg class="ic"><use href="#i-bulb"/></svg> Worth knowing</p>
+      <div class="insight"><span class="ic-wrap" style="background:var(--brand)"><svg class="ic"><use href="#i-spark"/></svg></span><div><div class="t">A half-point rate rise costs ~£95/mo</div><div class="d">At the £425k level. You’d still sit inside your comfortable band.</div></div></div>
+      <div class="insight"><span class="ic-wrap" style="background:var(--mint)"><svg class="ic"><use href="#i-wallet"/></svg></span><div><div class="t">Your LISA bonus is £2,680 so far</div><div class="d">A free 25% top-up — keep contributing up to the £4,000 annual cap.</div></div></div>
+      <div class="insight"><span class="ic-wrap" style="background:var(--amber)"><svg class="ic"><use href="#i-check"/></svg></span><div><div class="t">Allow three months to sell your S&amp;S ISA</div><div class="d">Factor it into any completion date so funds are liquid in time.</div></div></div>
+    </section>
+
+    <!-- SPOTLIGHT AREA -->
+    <section class="card spotlight c5">
+      <div class="spot-img"><svg viewBox="0 0 480 270"><rect width="480" height="270" fill="#ececfb"/><rect y="170" width="480" height="100" fill="#d7d6f5"/><path d="M40 170 L40 120 L70 100 L100 120 L100 170Z" fill="#b9b8ee"/><path d="M120 170 L120 110 L150 90 L180 110 L180 170Z" fill="#c6c5f0"/><rect x="210" y="120" width="70" height="50" fill="#b9b8ee"/><path d="M205 120 L245 95 L285 120Z" fill="#a9a8e8"/><rect x="320" y="130" width="60" height="40" fill="#c6c5f0"/><circle cx="420" cy="50" r="22" fill="#fff" opacity=".6"/><path d="M0 230 Q120 215 240 228 T480 224" fill="none" stroke="#1fb597" stroke-width="3" opacity=".5"/></svg>
+        <span class="spot-badge"><svg class="ic"><use href="#i-star"/></svg> Top of your shortlist</span>
+      </div>
+      <div class="spot-body">
+        <p class="sec-label"><svg class="ic"><use href="#i-pin"/></svg> Spotlight</p>
+        <h2>Romsey</h2>
+        <p>A handsome Test-valley market town with a mainline station, strong primaries and a genuine high street — the most complete fit for everything you’ve described. Fit score 92.</p>
+        <div class="spot-stats">
+          <div><div class="k">Avg 3-bed</div><div class="v num">£415k</div></div>
+          <div><div class="k">To station</div><div class="v num">0.5 mi</div></div>
+          <div><div class="k">Fit</div><div class="v num">92</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FRESH LISTINGS -->
+    <section class="card fresh feature">
+      <p class="sec-label"><svg class="ic"><use href="#i-key"/></svg> Fresh on the market <a href="variant-f-listings.html" style="margin-left:auto;font-family:'Plus Jakarta Sans'">See all 7 <svg class="ic"><use href="#i-arrow"/></svg></a></p>
+      <div class="fresh-grid">
+        <article class="mini"><div class="img"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#ececfb"/><path d="M50 175 L160 90 L270 175 V210 H50Z" fill="#d7d6f5"/><rect x="138" y="145" width="44" height="65" fill="#5b5bd6" opacity=".42"/></svg><span class="vt strong">Strong · 92</span></div><div class="b"><div class="pr num">£410,000</div><div class="nm">3-bed semi-detached</div><div class="ad">Cherville Street, Romsey</div></div></article>
+        <article class="mini"><div class="img"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#e3f7f2"/><path d="M55 180 L160 95 L265 180 V210 H55Z" fill="#c6ece2"/><rect x="120" y="150" width="38" height="60" fill="#1fb597" opacity=".4"/></svg><span class="vt strong">Strong · 88</span></div><div class="b"><div class="pr num">£389,950</div><div class="nm">3-bed end-terrace</div><div class="ad">West Street, Wilton</div></div></article>
+        <article class="mini"><div class="img"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#ececfb"/><rect x="92" y="112" width="136" height="98" fill="#d7d6f5"/><path d="M82 112 L160 66 L238 112Z" fill="#b9b8ee"/></svg><span class="vt good">Good · 79</span></div><div class="b"><div class="pr num">£325,000</div><div class="nm">2-bed Victorian terrace</div><div class="ad">Milford Hill, Salisbury</div></div></article>
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section class="card journey feature">
+      <p class="sec-label"><svg class="ic"><use href="#i-check"/></svg> Your journey</p>
+      <div class="steps">
+        <div class="step done"><span class="n"><svg class="ic"><use href="#i-check"/></svg></span><div class="t">Joint budget</div><p class="d">£425k with a 20% deposit target.</p><span class="badge done">Done</span></div>
+        <div class="step done"><span class="n"><svg class="ic"><use href="#i-check"/></svg></span><div class="t">Mortgage in principle</div><p class="d">Secured in March.</p><span class="badge done">Done</span></div>
+        <div class="step done"><span class="n"><svg class="ic"><use href="#i-check"/></svg></span><div class="t">Shortlist a solicitor</div><p class="d">Two conveyancers quoted.</p><span class="badge done">Done</span></div>
+        <div class="step active"><span class="n">4</span><div class="t">Deposit to 75%</div><p class="d">~3 months at current rate.</p><span class="badge prog">In progress</span></div>
+        <div class="step"><span class="n">5</span><div class="t">Book viewings</div><p class="d">Top three areas this autumn.</p><span class="badge todo">To do</span></div>
+      </div>
+    </section>
+
+    <!-- ASK -->
+    <section class="card askcard feature">
+      <p class="sec-label"><svg class="ic"><use href="#i-bulb"/></svg> Ask</p>
+      <h2>Have a question about your search?</h2>
+      <p>Ask in plain English and get an answer grounded in your finances and criteria — “Can we still afford Romsey if rates rise to 5.5%?”</p>
+      <form class="ask" onsubmit="return false">
+        <input type="text" placeholder="Type your question…" aria-label="Ask a question" />
+        <button type="submit">Ask <svg class="ic"><use href="#i-arrow"/></svg></button>
+      </form>
+    </section>
+  </div>
+</div>
+
+<footer><div class="shell"><span>rec · isolated design preview</span><span>No live data was used · Variant F</span></div></footer>
+<script>
+  const btns=[...document.querySelectorAll('.scen button')];const eta=document.getElementById('eta');
+  btns.forEach(b=>b.addEventListener('click',()=>{btns.forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');if(eta)eta.textContent=b.dataset.eta;}));
+</script>
+</body>
+</html>

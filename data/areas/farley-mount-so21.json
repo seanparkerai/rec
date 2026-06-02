@@ -1,0 +1,102 @@
+{
+  "id": "farley-mount-so21",
+  "name": "Farley Mount",
+  "village": "Farley Mount",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.0513,
+    "lng": -1.3823
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Farley Mount is a hill and country park west of Winchester rather than a conventional residential village, and the current RG25/Basingstoke seed appears mismatched with that geography. Existing references point to Farley Mount monument and country park context, while postcode/location references in the record indicate likely source-data error. This record should remain flagged for dataset correction before full residential profiling.",
+  "character": "Non-residential country-park / downland landmark context; not a normal village-centre settlement profile.",
+  "amenities": [
+    "Country-park style open land and waymarked walking routes",
+    "Primary day-to-day amenities accessed in Winchester/Sparsholt/Stockbridge corridor",
+    "Rural lanes and viewpoints are the core local draw"
+  ],
+  "schools": [
+    {
+      "name": "Sparsholt College area schools cluster (nearest practical options)",
+      "phase": "Mixed catchment",
+      "type": "State/Independent mix",
+      "ofsted": null,
+      "distance": "~4-8 miles depending on school",
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~20-30 min",
+        "notes": "Via rural routes toward A272/A34"
+      },
+      {
+        "to": "Basingstoke",
+        "mode": "Drive",
+        "typical": "~35-50 min",
+        "notes": "Route choice via A303/A34"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "RG25 values vary widely; homes around the Farley Mount hinterland are sparse and typically benchmarked against nearby Winchester-rural markets.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/RG25.html"
+  },
+  "thingsToDo": [
+    "Walk to Farley Mount monument viewpoints",
+    "Cycle/ride routes across surrounding downland"
+  ],
+  "placesToEat": [
+    "Destination pubs in Sparsholt, Stockbridge and Winchester outskirts"
+  ],
+  "pros": [
+    "Exceptional countryside and views",
+    "Distinctive landmark setting"
+  ],
+  "cons": [
+    "Not a conventional service village",
+    "High dependence on private transport"
+  ],
+  "whoItSuits": "Not currently suitable for normal residential area comparison until the underlying seed entry is corrected (likely intended settlement differs).",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Farley Mount",
+      "url": "https://en.wikipedia.org/wiki/Farley_Mount"
+    },
+    {
+      "label": "Hampshire County Council — Farley Mount Country Park",
+      "url": "https://www.hants.gov.uk/thingstodo/countryside/finder/farleymount"
+    },
+    {
+      "label": "Visit Hampshire — Farley Mount Monument",
+      "url": "https://www.visit-hampshire.co.uk/things-to-do/farley-mount-monument-p1414861"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^4511249",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:14:38.341Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

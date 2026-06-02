@@ -1,0 +1,41 @@
+{
+  "_SAMPLE": "SYNTHETIC SAMPLE DATA — fictional placeholder values for tests and fresh-install fallback ONLY. NOT real user data; do not analyse or cite. Real user-state lives only in Supabase.",
+  "trading212ISA": {
+    "accountType": "Stocks & Shares ISA",
+    "provider": "Example Broker",
+    "accountOpened": "2025-01-01",
+    "currentPortfolioValue": 25000,
+    "currentValueAsOf": "2026-01-31",
+    "earmarkedFor": "house deposit and purchase costs",
+    "earmarkPct": 100,
+    "strategyEpochs": [
+      { "id": "stockpicker", "label": "Phase 1 (sample)", "start": "2025-01-01", "end": "2025-12-31" },
+      { "id": "etfCore", "label": "Phase 2 — diversified ETF core (sample)", "start": "2026-01-01", "end": null }
+    ],
+    "_importedHistory": "redacted — real history in Supabase",
+    "depositRiskManagement": {
+      "underlyingAssetClass": "equity ETFs (sample)",
+      "volatilityRisk": "high — a short timeline means a market drop is unhedged",
+      "scenarios": {
+        "down10pct": { "newValue": 22500, "depositGapImpact": -2500 },
+        "down20pct": { "newValue": 20000, "depositGapImpact": -5000 }
+      },
+      "recommendation": "consider de-risking 50-100% to a Cash ISA or savings account once the mortgage timeline firms up",
+      "advisoryStatus": "active — surface on dashboard"
+    },
+    "withdrawalReadiness": {
+      "seasoningPeriodRecommended": "3 months in current account before mortgage application",
+      "lenderConcern": "deposit must show source paper-trail",
+      "actionRequired": "move funds to a current account at least 3mo before applying"
+    }
+  },
+  "lisa": {
+    "status": "none",
+    "eligibility": { "underAge40": true, "firstTimeBuyer": true, "targetUnderCap": true },
+    "recommendation": "skip — 12-month minimum hold makes it unusable on current timeline",
+    "conditionalAdvice": "if timeline slips past 12 months, open with £1 to start the clock"
+  },
+  "crypto": { "status": "trivial", "excludeFromCalcs": true },
+  "physicalAssets": [],
+  "vanguardOrOther": null
+}

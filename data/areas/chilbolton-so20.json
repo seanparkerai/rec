@@ -1,0 +1,142 @@
+{
+  "id": "chilbolton-so20",
+  "name": "Chilbolton",
+  "village": "Chilbolton",
+  "town": "Andover",
+  "county": "Hampshire",
+  "postcode": "SO20",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Andover",
+  "coords": {
+    "lat": 51.1329,
+    "lng": -1.4554
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
+  "overview": "Chilbolton is a village and civil parish of around 1,000 residents in the Test Valley district, four miles south of Andover and roughly four and a half miles north-east of Stockbridge, set in the upper valley of the River Test on chalk-stream country framed by Chilbolton Down and Cow Common. The 12th-century parish church of St Mary the Less sits on the site of an earlier wooden church and is unusual for its low tower. The village is best known nationally for the Chilbolton Observatory on the disused RAF Chilbolton airfield, a research facility for atmospheric science, radio communications and astronomy whose 25-metre steerable parabolic antenna has been a Test Valley landmark since 1967. Chilbolton Cow Common, north-west of the village, is a designated Site of Special Scientific Interest; West Down is a Site Important for Nature Conservation. The village has its own gliding/flying club at Chilbolton airfield.",
+  "character": "Quietly affluent chalk-stream village: traditional thatched and brick-and-flint cottages along Stockbridge Road and Drove Road, with newer detached infill on the village fringes. Building stock dates from the 17th century onwards. Designated 'within Special Landscape Area' under Test Valley local plan.",
+  "amenities": [
+    "Chilbolton Village Tea Room, Stores and Post Office",
+    "The Abbots Mitre (village pub)",
+    "Chilbolton Village Hall",
+    "Memorial playing field",
+    "Chilbolton Flying Club (airfield)",
+    "Church of St Mary-the-Less (12th century)",
+    "Chilbolton Observatory (STFC research site)",
+    "Chilbolton Cow Common SSSI"
+  ],
+  "schools": [
+    {
+      "name": "Wherwell Primary School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "1.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Test Valley School / Danebury School, Stockbridge",
+      "phase": "Secondary",
+      "ofsted": "Inadequate (2022)",
+      "distance": "4.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Sparsholt College Hampshire (further education)",
+      "phase": "Further",
+      "ofsted": null,
+      "distance": "8.0 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 10m",
+        "mode": "drive + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/train-times/andover-to-london-waterloo"
+      },
+      {
+        "to": "London Waterloo (fastest)",
+        "time": "1h 2m",
+        "mode": "drive + train",
+        "source": "https://www.thetrainline.com/train-times/andover-to-london-waterloo"
+      }
+    ],
+    "nearestStation": "Andover (4.0 mi)",
+    "roads": "A3057 ~1 mi; A303 (Andover) ~4 mi; A30 (Stockbridge) ~4 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so20.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Walking Chilbolton Cow Common SSSI",
+    "Wherwell–Chilbolton riverside trail (Hampshire CC)",
+    "Test Way long-distance footpath",
+    "Chilbolton Observatory open days (occasional)",
+    "Trout/grayling fishing on Test beats",
+    "Houghton Down chalk grassland (5 mi)",
+    "Danebury Hill Fort (6 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Abbots Mitre",
+      "type": "Village pub",
+      "notes": "Traditional country freehouse in the centre of the village",
+      "url": "https://www.theabbotsmitre.co.uk/"
+    },
+    {
+      "name": "Chilbolton Village Tea Room",
+      "type": "Tea room / café",
+      "notes": "Combined with stores and post office",
+      "url": "https://www.chilboltonparish.gov.uk/"
+    }
+  ],
+  "pros": [
+    "Full village amenity set (pub, shop, post office, tea room, hall)",
+    "Andover station 4 mi for direct Waterloo trains in 1h 2-10m",
+    "River Test fishing and chalk-stream walks on the doorstep",
+    "Cow Common SSSI provides protected open space"
+  ],
+  "cons": [
+    "Secondary catchment (Test Valley / Danebury School) rated Inadequate in 2022",
+    "Observatory antennae visible above the village (not for all tastes)",
+    "Tourist traffic on the Wherwell-Chilbolton lane in summer",
+    "Limited evening bus services back from Andover"
+  ],
+  "whoItSuits": "Buyers prioritising chalk-stream amenity, an intact village offering with a working post office and pub, and a manageable drive to a mainline station for direct Waterloo services. Particularly suited to anglers, walkers and those interested in the science culture around the Observatory — Chilbolton has a slightly more outward-looking feel than the more cloistered villages further south. Families with secondary-age children should weigh the current Ofsted Inadequate rating at the catchment secondary school; many local families opt for Test Valley independents or grammar routes via Andover.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Andover (4.0 mi)",
+  "primarySupermarket": "Sainsbury's, Andover (4.5 mi); Waitrose, Stockbridge (5.0 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Chilbolton",
+    "https://en.wikipedia.org/wiki/Chilbolton_Observatory",
+    "https://www.chilboltonparish.gov.uk/about-chilbolton/",
+    "https://www.chilbolton.stfc.ac.uk/",
+    "https://www.thetrainline.com/train-times/andover-to-london-waterloo",
+    "https://en.wikipedia.org/wiki/Test_Valley_School",
+    "https://www.testvalley.gov.uk/benefitsandcounciltax/counciltax/council-tax-charges",
+    "https://www.hants.gov.uk/thingstodo/countryside/walking/wherwellchilbolton"
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^1595022",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:14:18.138Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

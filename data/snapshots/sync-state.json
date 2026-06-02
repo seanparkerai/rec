@@ -1,0 +1,94 @@
+{
+  "profile": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "criteria": {
+    "last_synced_at": "2026-05-28T21:51:28Z",
+    "_note": "2026-05-28 overhaul A1: removed budget.offerTarget (D2 — canonical lives in finances.goal.offerTarget)"
+  },
+  "finances": {
+    "last_synced_at": "2026-05-28T21:51:22Z",
+    "_note": "2026-05-28 overhaul A1: removed goal.targetSavingsRange (single canonical deposit target)"
+  },
+  "shortlist": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "zones": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "journey_checks": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "contacts": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "outreach": {
+    "last_synced_at": "2026-05-25T21:44:00Z"
+  },
+  "areas": {
+    "count": 191,
+    "last_synced_at": "2026-05-31T19:28:52.163Z",
+    "_note": "2026-05-31 Step1: deactivated colemore-gu34, flexcombe-gu33, froxfield-green-gu34 (duplicate Rightmove identifiers); migrated flexcombe-gu33 research content into flexcombe-gu32 (canonical GU32 ID)"
+  },
+  "house_types": {
+    "count": 15,
+    "last_synced_at": "2026-05-26T10:51:53.837Z"
+  },
+  "goals": {
+    "last_synced_at": "2026-05-28T21:51:27Z",
+    "_note": "2026-05-28 overhaul A1+A3: deposit.hopedFor set to the canonical target; gapToHoped recomputed; readiness.checklist blob retired (D4 — source is now readiness_checklist table)"
+  },
+  "readiness_checklist": {
+    "count": 13,
+    "last_synced_at": "2026-05-26T21:57:00Z"
+  },
+  "investments_accounts": {
+    "count": 1,
+    "last_synced_at": "2026-05-28T18:00:45Z",
+    "_note": "2026-05-28: portfolio snapshot updated (figures live in Supabase)"
+  },
+  "investments_history": {
+    "count": 13,
+    "last_synced_at": "2026-05-28T20:00:00Z",
+    "_note": "2026-05-28: monthly net figures corrected; 2026-03 zero-activity row inserted (ISA annual reset month)"
+  },
+  "debts_credit_cards": {
+    "count": 1,
+    "last_synced_at": "2026-06-02T19:42:15Z",
+    "_note": "2026-06-02: 1 row present (entered via MCP); no app UI yet"
+  },
+  "debts_student_loans": {
+    "count": 0,
+    "last_synced_at": null,
+    "_note": "empty — no student loan debt entered; no app UI yet"
+  },
+  "debts_other": {
+    "count": 0,
+    "last_synced_at": null,
+    "_note": "empty — no other debts entered; no app UI yet"
+  },
+  "listing_reactions": {
+    "count": 0,
+    "last_synced_at": null,
+    "_class": "user-state (append-only)",
+    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). Table created (migration listing_reactions_l3) 2026-05-30; no rows yet. Tracked sync table #18 (16 user-state + 2 content)."
+  },
+  "learned_preferences": {
+    "count": 0,
+    "last_synced_at": null,
+    "_class": "user-state",
+    "_note": "v3 L4/L5: distilled preference weights, one row/household (derived = Layer 2 from the reaction log; overrides = Layer 3 manual/AI; dismissals = L5 conflict-prompt quiet-until map, added by migration learned_preferences_dismissals_l5). Table created (migration learned_preferences_l4) 2026-05-31; no rows yet (recomputed once reactions exist). Tracked sync table #19 (17 user-state + 2 content)."
+  },
+  "area_confirmations": {
+    "count": 191,
+    "last_synced_at": "2026-05-31T19:28:52.163Z",
+    "_class": "user-state",
+    "_note": "v3 Step5: per-household area location review confirmations blob ({ confirmed: { areaId: isoTimestamp } }). Table created (migration area_confirmations_step5) 2026-05-31; no rows yet. Tracked sync table #20 (18 user-state + 2 content)."
+  },
+  "listings": {
+    "count": 1298,
+    "last_synced_at": "2026-05-31T02:07:30.988Z",
+    "_class": "live-content",
+    "_note": "v3 L1: fetcher-written live content (NOT git-versioned, NOT one of the 19 tracked git-synced tables). Backfilled 2026-05-31 with 1298 real listings via tools/import-apify-runs.mjs (storage read of already-paid Apify datasets, no new spend) across 12 outcodes; 0 unmatched, 0 out-of-region."
+  }
+}

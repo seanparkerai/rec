@@ -1,0 +1,113 @@
+{
+  "id": "abbotstone-so24",
+  "name": "Abbotstone",
+  "village": "Abbotstone",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.1073,
+    "lng": -1.1971
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Abbotstone is a tiny rural hamlet east of Winchester, set among rolling downland near the Avington and Itchen Valley area. Historically it formed part of a wider agricultural landscape linked to nearby estates and farms rather than a nucleated village centre. Today it remains sparsely settled, with most day-to-day services accessed in Alresford or Winchester while residents value seclusion and dark-sky countryside.",
+  "character": "Very small hamlet character with scattered homes, farm buildings and quiet lanes.",
+  "amenities": [
+    "Immediate amenities are limited to rural rights of way and nearby country lanes.",
+    "Most shopping, healthcare and banking are in Alresford and Winchester.",
+    "Nearby village halls, churches and pubs in surrounding SO21/SO24 settlements provide community options."
+  ],
+  "schools": [
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~4-5 miles",
+      "url": "https://www.perins.net/"
+    },
+    {
+      "name": "Sun Hill Infant School, Alresford",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~4-5 miles",
+      "url": "https://www.sunhillinfantschool.co.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~20-25 min",
+        "notes": "A31/Avington approach roads depending on exact address"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "typical": "~40-50 min",
+        "notes": "Via M3/M27 links from Winchester corridor"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO21 values are typically above wider Hampshire averages, with individual hamlet homes trading infrequently and often at a premium for land and setting.",
+    "asOf": "2026-05",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walk local rights-of-way and medieval landscape sites"
+  ],
+  "placesToEat": [
+    "Country pubs in nearby Itchen Valley/Alresford villages"
+  ],
+  "pros": [
+    "Very quiet rural environment",
+    "Close to Alresford/Winchester by car"
+  ],
+  "cons": [
+    "No walkable village-centre services",
+    "Car dependency is high"
+  ],
+  "whoItSuits": "Best for buyers seeking a very quiet rural hamlet base and who are comfortable driving for schools, shops and rail.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Abbotstone",
+      "url": "https://en.wikipedia.org/wiki/Abbotstone"
+    },
+    {
+      "label": "Wikipedia — Itchen Stoke and Ovington",
+      "url": "https://en.wikipedia.org/wiki/Itchen_Stoke_and_Ovington"
+    },
+    {
+      "label": "Hampshire Field Club (Abbotstone medieval village paper)",
+      "url": "https://www.hantsfieldclub.org.uk/publications/hampshirestudies/digital/1970s/vol28/Sanderson.pdf"
+    },
+    {
+      "label": "Google Maps — Abbotstone to Winchester",
+      "url": "https://www.google.com/maps/dir/Abbotstone/Winchester"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^801725",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:13:48.809Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

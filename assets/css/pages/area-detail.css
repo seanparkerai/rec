@@ -1,0 +1,27 @@
+/* pages/area-detail.css — area detail page layout. */
+
+.back-link { margin: 0 0 var(--space-3); font-size: var(--text-sm); }
+.back-link a { color: var(--pico-muted-color); text-decoration: none; }
+.back-link a:hover { color: var(--accent); }
+
+.area-detail-village { margin: 0 0 var(--space-1); font-size: var(--text-sm); }
+
+.proscons { display: grid; gap: var(--space-4); grid-template-columns: 1fr 1fr; }
+.proscons h3 { margin-top: 0; font-size: var(--text-base); }
+@media (max-width: 600px) { .proscons { grid-template-columns: 1fr; } }
+
+.image-gallery {
+  display: grid; gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.image-gallery figure { margin: 0; }
+.image-gallery img {
+  width: 100%; height: 160px; object-fit: cover;
+  border-radius: var(--rec-radius-sm);
+  border: 1px solid var(--pico-muted-border-color);
+}
+.image-gallery figcaption {
+  margin-top: var(--space-1); font-size: var(--text-xs); color: var(--pico-muted-color);
+}
+
+#btn-star.is-starred { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }

@@ -1,0 +1,146 @@
+{
+  "id": "wherwell-sp11",
+  "name": "Wherwell",
+  "village": "Wherwell",
+  "town": "Andover",
+  "county": "Hampshire",
+  "postcode": "SP11",
+  "hubCity": "Salisbury",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Andover",
+  "coords": {
+    "lat": 51.1624,
+    "lng": -1.4756
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": "D",
+  "overview": "Wherwell is a thatched village of around 500 residents on the banks of the upper River Test, three miles south of Andover in the Test Valley district. The village shows some of the most consistently surviving straw-thatching in southern England — black-and-white timber-framed cottages along Church Street and Winchester Street whose thatch sweeps almost to the ground and curls over the casement windows. The village owes its preserved appearance to long single-estate ownership: the Wherwell Estate has held most of the surrounding land and many of the cottages since the 19th century, and continues to manage the river beats and arable acreage as a working sporting estate. The parish church of St Peter and Holy Cross was rebuilt in 1856 by Henry Woodyer on the site of an earlier 12th-century church, retaining 11th-century fragments. The White Lion Inn (1611) and the Mayfly nearby at Fullerton are the village's anchor hospitality. Harewood Forest — the largest contiguous woodland in Hampshire — wraps the village to the east.",
+  "character": "Pure thatched estate village in conservation area: chocolate-box visual identity, working sporting tradition, deliberately tourist-aware. Building stock is overwhelmingly 16th–17th-century timber-frame with thatch, with a small number of Georgian and Victorian additions. Tight planning constraints under Test Valley local plan and the estate's own oversight.",
+  "amenities": [
+    "The White Lion Inn (oak-beamed coaching inn, 1611)",
+    "Church of St Peter and Holy Cross (1856 rebuild on 12th-century foundations)",
+    "Village hall",
+    "Wherwell Primary School",
+    "Wherwell Estate offices",
+    "Active village community newsletter",
+    "Riverside footpath access to Test"
+  ],
+  "schools": [
+    {
+      "name": "Wherwell Primary School",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "0.2 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Test Valley School / Danebury School, Stockbridge",
+      "phase": "Secondary",
+      "ofsted": "Inadequate (2022)",
+      "distance": "5.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    },
+    {
+      "name": "Harrow Way Community School, Andover",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "3.5 mi",
+      "url": "https://reports.ofsted.gov.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 10m",
+        "mode": "drive + direct train (South Western Railway)",
+        "source": "https://www.thetrainline.com/train-times/andover-to-london-waterloo"
+      },
+      {
+        "to": "London Waterloo (fastest)",
+        "time": "1h 2m",
+        "mode": "drive + train",
+        "source": "https://www.thetrainline.com/train-times/andover-to-london-waterloo"
+      },
+      {
+        "to": "Winchester (by road)",
+        "time": "~25m",
+        "mode": "drive (A3057 / A303)",
+        "source": "https://www.nationalrail.co.uk/"
+      }
+    ],
+    "nearestStation": "Andover (3.0 mi)",
+    "roads": "A303 ~1 mi; A3057 (through village); A34 ~3 mi"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/sp11.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Wherwell-to-Chilbolton riverside trail (Hampshire CC)",
+    "Harewood Forest circular walks (largest woodland in Hampshire)",
+    "Trout and grayling fishing on Wherwell Estate beats",
+    "Test Way long-distance footpath",
+    "The Mayfly riverside pub at Fullerton (1 mi)",
+    "Andover Museum of the Iron Age (3 mi)",
+    "Danebury Hill Fort (6 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The White Lion",
+      "type": "Village coaching inn",
+      "notes": "Oak-beamed 1611 inn at the centre of the village; pub food and rooms",
+      "url": "https://www.whitelionwherwell.co.uk/"
+    },
+    {
+      "name": "The Mayfly, Fullerton",
+      "type": "Riverside pub",
+      "notes": "Test-side pub in adjacent Wherwell parish, mains around £16–£24",
+      "url": "https://www.themayfly.co.uk/"
+    }
+  ],
+  "pros": [
+    "Outstanding visual character — one of England's best-preserved thatched villages",
+    "Andover station 3 mi for direct Waterloo trains in 1h 2-10m",
+    "Walking and fishing on the doorstep; Harewood Forest immediately east",
+    "Working primary school in the village"
+  ],
+  "cons": [
+    "House prices reflect the postcard appeal — heritage premium",
+    "Thatch maintenance cycle ~25–35 years (£15–30k per re-thatching)",
+    "Tourist traffic on the A3057 through-route in summer",
+    "Secondary catchment school (Stockbridge) rated Inadequate in 2022"
+  ],
+  "whoItSuits": "Buyers willing to pay for one of the most consistently preserved thatched chalk-stream villages in England, and to accept the ongoing maintenance cost and tourist footfall that come with it. The village offers a rare combination — a working primary school, a 1611 inn, walking and fishing on the doorstep, and a direct Waterloo train from a station three miles away. Particularly suited to anglers, walkers, weekending households and downsizers from south-east commuter towns. Less suited to buyers needing the secondary catchment school or wanting absolute quiet during peak tourist months.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Andover (3.0 mi)",
+  "primarySupermarket": "Sainsbury's, Andover (3.5 mi); Waitrose, Stockbridge (6.0 mi)",
+  "images": [],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Wherwell",
+    "https://www.wherwellestate.co.uk/fishing",
+    "https://www.hants.gov.uk/thingstodo/countryside/walking/wherwellchilbolton",
+    "https://www.whitelionwherwell.co.uk/",
+    "https://www.themayfly.co.uk/",
+    "https://www.thetrainline.com/train-times/andover-to-london-waterloo",
+    "https://www.testvalley.gov.uk/benefitsandcounciltax/counciltax/council-tax-charges"
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^1596875",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:15:58.544Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

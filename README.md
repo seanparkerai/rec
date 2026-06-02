@@ -1,0 +1,56 @@
+# rec — Property Search Dashboard (Hampshire & Wiltshire)
+
+A clean, single-source web dashboard for organising a **house purchase** in and around
+**Hampshire and Wiltshire, UK**. It brings a buyer profile, an areas directory with research-backed
+town/village profiles, characteristic house-types, a savings/affordability view, and an interactive
+map of search areas together in one calm, readable place.
+
+It is a **zero-build static web app** (plain HTML/CSS/JS, libraries via CDN). Editable **content**
+(areas, house-types, templates) is JSON in the repo; all **personal/user state** lives only in a
+private, access-controlled Supabase database — never committed to the repo.
+
+## ✨ View live site
+
+**Live:** https://seanparkerai.github.io/rec/ — auto-deploys from `main` via GitHub Actions.
+
+## Run it locally
+
+The app loads shared partials and JSON via `fetch()`, so it must be served over **HTTP** (opening the
+HTML file directly won't work). From the repo root:
+
+```bash
+python3 -m http.server 8000
+# then open http://localhost:8000/
+```
+
+## Tests
+
+`node tools/run-intelligence-tests.mjs` runs the unified test harness. Browser-side smoke checks
+(no horizontal scroll, no inline styles, page reachability) live at
+`http://localhost:8000/tests/tests.html`. Run before each commit.
+
+## Tech
+
+Pico CSS + design tokens · vanilla-JS fetch-injected partials · Chart.js · Leaflet + Leaflet-Geoman ·
+**Supabase** (Postgres + Auth) behind a `storage.js` abstraction · `localStorage` write-through cache
+for instant renders. No build step.
+
+## Data & privacy
+
+- **Content** (areas, house-types, checklists, outreach templates) → editable JSON in the repo, the
+  canonical source, mirrored to Supabase for query access.
+- **User state** (buyer profile, preferences, savings, shortlist, map zones, journey, contacts) →
+  stored **only** in a private Supabase Postgres database, protected by Row Level Security so only
+  authenticated household members can read it. It is **never** stored in the repo.
+
+First-time Supabase setup is guided by [`pages/setup.html`](pages/setup.html). The schema lives in
+[`supabase/schema.sql`](supabase/schema.sql); only `assets/js/storage.js` (data) and
+`assets/js/auth-guard.js` (sessions) talk to Supabase directly.
+
+## Project docs
+
+- `docs/PLAN.md` — the master development plan.
+- `docs/CHECKLIST.md` — live progress tracker.
+- `docs/CONTEXT.md` — research context (UK buying process, tech choices, regional info).
+- `docs/AREAS.md` — master list of towns/villages.
+- `CLAUDE.md` — operating rules for AI-assisted development.

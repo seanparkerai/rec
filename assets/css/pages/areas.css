@@ -1,0 +1,84 @@
+/* pages/areas.css — filter bar + areas editorial list. */
+
+/* ---- Filter bar (used on Areas page) ---- */
+.filter-bar { margin-bottom: var(--space-4); }
+.filter-row {
+  display: grid; gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+.filter-row + .filter-row { margin-top: var(--space-3); }
+.filter-row-end {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+.filter-field { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; }
+.filter-field > span { font-size: var(--text-xs); color: var(--pico-muted-color); }
+.filter-field input,
+.filter-field select { margin: 0; min-height: 44px; }
+.check-row { display: inline-flex; align-items: center; gap: var(--space-2); margin: 0; min-height: 44px; }
+.check-row input { margin: 0; width: 1.1rem; height: 1.1rem; }
+
+@media (max-width: 480px) {
+  .filter-row-end { grid-template-columns: 1fr; }
+}
+
+.result-summary { margin: 0 0 var(--space-3); color: var(--pico-muted-color); font-size: var(--text-sm); }
+
+/* ---- Areas: editorial list view (anchor: Linear-dense) ------------- */
+.area-list {
+  display: flex; flex-direction: column;
+  margin: 0; padding: 0; list-style: none;
+  border-top: 1px solid var(--hairline);
+}
+.area-row {
+  display: grid; gap: var(--space-3);
+  grid-template-columns: 2.5rem 1fr auto auto;
+  align-items: center;
+  padding: var(--space-4) var(--space-2);
+  border-bottom: 1px solid var(--hairline);
+}
+@media (max-width: 480px) {
+  .area-row { grid-template-columns: 2rem 1fr auto; }
+  .area-row .area-meta { display: none; }
+}
+.area-row .area-index {
+  font-family: var(--font-data); font-size: var(--text-xs);
+  color: var(--ink-subtle); font-feature-settings: "tnum";
+  align-self: start; padding-top: 0.2rem;
+}
+.area-row .area-name {
+  margin: 0; font-size: var(--text-lg); font-weight: 500;
+  font-family: var(--font-display); font-optical-sizing: auto;
+  letter-spacing: -0.005em; line-height: 1.2;
+}
+.area-row .area-name a { color: var(--ink); text-decoration: none; }
+.area-row .area-name a:hover { color: var(--accent); }
+.area-row .area-place {
+  margin: 0.1rem 0 0; font-size: var(--text-sm); color: var(--ink-muted);
+  display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: baseline;
+}
+.area-row .area-place .sep { color: var(--ink-subtle); }
+.area-row .area-meta {
+  font-family: var(--font-data); font-size: var(--text-xs);
+  letter-spacing: 0.04em; color: var(--ink-muted);
+  text-transform: uppercase;
+}
+.badge-status {
+  display: inline-flex; align-items: center;
+  font-size: var(--text-xs); letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.15rem 0.5rem; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-ink);
+  border: 1px solid color-mix(in oklch, var(--accent) 30%, var(--paper));
+  margin-left: var(--space-2);
+}
+
+.star-btn {
+  width: 44px; height: 44px; min-width: 44px;
+  background: transparent; border: 1px solid var(--hairline);
+  border-radius: var(--rec-radius-sm);
+  font-size: 1.4rem; line-height: 1; padding: 0; margin: 0;
+  color: var(--ink-muted); cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.star-btn:hover { color: var(--accent); border-color: var(--accent); }
+.star-btn.is-starred { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }

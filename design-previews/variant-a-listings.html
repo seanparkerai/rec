@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Variant A · Broadsheet · Listings</title>
+<!-- ISOLATED DESIGN PREVIEW — dummy data only, no app assets, no database. Safe to delete. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Newsreader:ital,opsz@0,6..72;1,6..72&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f6f1e7;--paper-2:#efe8da;--ink:#211d18;--ink-soft:#5c554a;
+    --rule:#d8cfbd;--accent:#7a2e1e;--accent-2:#3f5d4a;--gold:#9a7b35;
+    --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s6:1.5rem;--s8:2rem;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;
+    font-size:clamp(1rem,.95rem + .3vw,1.125rem);line-height:1.5;
+    background-image:radial-gradient(circle at 1px 1px,rgba(33,29,24,.035) 1px,transparent 0);background-size:22px 22px}
+  .num,.price,time{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  h1,h2,h3,.display{font-family:"Fraunces",serif;font-weight:500;line-height:1.05}
+  a{color:var(--accent)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--s4)}
+  header.mast{border-bottom:3px double var(--ink);margin-top:var(--s4)}
+  .mast-top{display:flex;justify-content:space-between;font-family:"IBM Plex Mono";font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft);padding-bottom:var(--s2)}
+  .mast h1{font-size:clamp(2.2rem,5vw,4rem);text-align:center;font-weight:600;padding:var(--s2) 0}
+  nav.sub{display:flex;gap:var(--s4);justify-content:center;flex-wrap:wrap;font-family:"IBM Plex Mono";
+    font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;padding:var(--s3) 0;border-top:1px solid var(--rule)}
+  nav.sub a{color:var(--ink);text-decoration:none}
+  nav.sub a[aria-current]{color:var(--accent);border-bottom:2px solid var(--accent)}
+
+  .intro{padding:var(--s6) 0;border-bottom:1px solid var(--rule);max-width:62ch}
+  .intro p{font-style:italic;font-size:1.15rem;color:var(--ink-soft)}
+
+  /* controls */
+  .controls{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center;padding:var(--s4) 0;border-bottom:2px solid var(--ink)}
+  .modes{display:flex;border:1px solid var(--ink)}
+  .modes button{font-family:"IBM Plex Mono";font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;
+    background:transparent;border:0;padding:var(--s2) var(--s4);cursor:pointer;border-right:1px solid var(--ink)}
+  .modes button:last-child{border-right:0}
+  .modes button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+  .controls input[type=search],.controls select{font-family:"Newsreader";font-style:italic;
+    background:var(--paper);border:1px solid var(--rule);padding:var(--s2) var(--s3);font-size:.95rem}
+  .controls input[type=search]{flex:1;min-width:200px}
+  .toggle{font-style:italic;color:var(--ink-soft);font-size:.9rem;display:flex;align-items:center;gap:6px}
+  .summary{font-family:"IBM Plex Mono";font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;
+    color:var(--ink-soft);padding:var(--s4) 0;border-bottom:1px solid var(--rule)}
+
+  /* listing rows — newspaper classifieds */
+  .list{list-style:none}
+  .row{display:grid;grid-template-columns:1fr;gap:0;padding:var(--s6) 0;border-bottom:1px solid var(--rule)}
+  @media(min-width:720px){.row{grid-template-columns:200px 1fr 200px;gap:var(--s6);align-items:start}}
+  .photo{aspect-ratio:4/3;background:var(--paper-2);border:1px solid var(--rule);position:relative;overflow:hidden}
+  .photo::after{content:attr(data-cap);position:absolute;left:0;bottom:0;right:0;
+    font-family:"IBM Plex Mono";font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;
+    background:rgba(33,29,24,.78);color:var(--paper);padding:3px 6px}
+  .photo svg{width:100%;height:100%}
+  .body h2{font-size:1.7rem;margin-bottom:var(--s1)}
+  .body .addr{font-style:italic;color:var(--ink-soft);margin-bottom:var(--s3)}
+  .specs{display:flex;gap:var(--s4);flex-wrap:wrap;font-family:"IBM Plex Mono";font-size:.78rem;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:var(--s2) 0;margin-bottom:var(--s3)}
+  .specs b{color:var(--ink)}
+  details.why{margin-top:var(--s2)}
+  details.why summary{font-family:"IBM Plex Mono";font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;
+    cursor:pointer;color:var(--accent)}
+  .reasons{display:flex;gap:var(--s6);flex-wrap:wrap;margin-top:var(--s3)}
+  .reasons ul{list-style:none}
+  .reasons li{font-size:.92rem;padding:2px 0;padding-left:1.1em;position:relative;font-style:italic}
+  .reasons .for li::before{content:"+";position:absolute;left:0;color:var(--accent-2);font-style:normal;font-family:"IBM Plex Mono"}
+  .reasons .against li::before{content:"\2212";position:absolute;left:0;color:var(--accent);font-style:normal;font-family:"IBM Plex Mono"}
+  .reasons h4{font-family:"IBM Plex Mono";font-size:.66rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-soft);margin-bottom:var(--s1)}
+
+  /* verdict rail */
+  .rail{text-align:right;border-left:1px solid var(--rule);padding-left:var(--s4)}
+  @media(max-width:719px){.rail{text-align:left;border-left:0;padding-left:0;margin-top:var(--s4);display:flex;justify-content:space-between;align-items:baseline}}
+  .price-big{font-family:"IBM Plex Mono";font-size:2rem;font-weight:500;letter-spacing:-.03em}
+  .ppm{font-style:italic;color:var(--ink-soft);font-size:.88rem}
+  .verdict-tag{display:inline-block;margin-top:var(--s3);font-family:"IBM Plex Mono";font-size:.68rem;
+    text-transform:uppercase;letter-spacing:.12em;padding:var(--s1) var(--s2);border:1px solid currentColor}
+  .v-strong{color:var(--accent-2)}.v-good{color:var(--gold)}.v-stretch{color:var(--accent)}.v-oor{color:var(--ink-soft)}
+  .fit{font-family:"Fraunces";font-size:2.6rem;font-weight:600;line-height:1;margin-top:var(--s2)}
+  .fit small{font-family:"IBM Plex Mono";font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-soft);display:block}
+  .row[data-oor=true]{opacity:.55}
+
+  footer.foot{border-top:3px double var(--ink);text-align:center;padding:var(--s8) 0;
+    font-family:"IBM Plex Mono";font-size:.7rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-soft)}
+  .preview-flag{position:fixed;bottom:10px;right:10px;background:var(--ink);color:var(--paper);
+    font-family:"IBM Plex Mono";font-size:.6rem;padding:4px 8px;letter-spacing:.1em;z-index:50;opacity:.85}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="preview-flag">PREVIEW · VARIANT A · DUMMY DATA</div>
+<div class="wrap">
+  <header class="mast">
+    <div class="mast-top"><span>Property · Classifieds</span><span>2 June 2026</span><span>Ranked by fit</span></div>
+    <h1>On the Market</h1>
+    <nav class="sub">
+      <a href="variant-a-home.html">Home</a><a href="#" aria-current="page">Listings</a>
+      <a href="#">Areas</a><a href="#">Finances</a><a href="#">Journey</a><a href="#">Map</a>
+    </nav>
+  </header>
+
+  <section class="intro">
+    <p>Properties on the market across your five shortlisted areas, ranked by fit. Affordability is a hard gate — homes beyond reach are folded away unless you ask for them.</p>
+  </section>
+
+  <section class="controls">
+    <div class="modes" role="group" aria-label="View mode">
+      <button aria-pressed="true">Browse</button><button aria-pressed="false">Review · 4</button>
+    </div>
+    <input type="search" placeholder="Search address, postcode, area or type…" aria-label="Search" />
+    <label class="toggle"><span>Sort</span>
+      <select aria-label="Sort"><option>Best fit</option><option>Price ↑</option><option>Price ↓</option><option>Newest</option></select></label>
+    <label class="toggle"><input type="checkbox" id="oor" /> Show out-of-reach</label>
+  </section>
+
+  <p class="summary" id="summary">Showing 6 of 7 · 1 folded as out-of-reach</p>
+
+  <ol class="list" id="list">
+    <!-- 1 -->
+    <li class="row" data-oor="false">
+      <div class="photo" data-cap="Romsey · added 1 day ago"><svg viewBox="0 0 200 150"><rect width="200" height="150" fill="#efe8da"/><path d="M30 95 L100 45 L170 95 V130 H30 Z" fill="#d8cfbd"/><path d="M30 95 L100 45 L170 95" fill="none" stroke="#5c554a" stroke-width="2"/><rect x="85" y="100" width="30" height="30" fill="#7a2e1e" opacity=".5"/></svg></div>
+      <div class="body">
+        <h2>3-bed semi-detached house</h2>
+        <p class="addr">Cherville Street, Romsey, SO51</p>
+        <div class="specs"><span><b>3</b> beds</span><span><b>1</b> bath</span><span><b>0.4mi</b> station</span><span>EPC <b>C</b></span><span>Garden</span></div>
+        <details class="why"><summary>Why this verdict →</summary>
+          <div class="reasons">
+            <div class="for"><h4>Counts for</h4><ul><li>£15k under budget</li><li>In top shortlisted area</li><li>Walk to mainline station</li><li>3 beds + garden as briefed</li></ul></div>
+            <div class="against"><h4>Counts against</h4><ul><li>Single bathroom</li><li>No off-street parking</li></ul></div>
+          </div>
+        </details>
+      </div>
+      <div class="rail"><div class="price-big">£410,000</div><div class="ppm">≈ £1,710/mo</div>
+        <div class="fit">92<small>fit score</small></div><span class="verdict-tag v-strong">Strong fit</span></div>
+    </li>
+    <!-- 2 -->
+    <li class="row" data-oor="false">
+      <div class="photo" data-cap="Tisbury · added 2 days ago"><svg viewBox="0 0 200 150"><rect width="200" height="150" fill="#efe8da"/><path d="M40 100 L100 55 L160 100 V128 H40 Z" fill="#d8cfbd"/><rect x="70" y="105" width="22" height="23" fill="#3f5d4a" opacity=".5"/><rect x="110" y="105" width="22" height="23" fill="#9a7b35" opacity=".5"/></svg></div>
+      <div class="body">
+        <h2>3-bed semi-detached cottage</h2>
+        <p class="addr">Station Road, Tisbury, SP3</p>
+        <div class="specs"><span><b>3</b> beds</span><span><b>2</b> baths</span><span><b>0.3mi</b> rail</span><span>EPC <b>D</b></span><span>Garden</span></div>
+        <details class="why"><summary>Why this verdict →</summary>
+          <div class="reasons">
+            <div class="for"><h4>Counts for</h4><ul><li>£60k under budget</li><li>Direct rail to Waterloo</li><li>Two bathrooms</li></ul></div>
+            <div class="against"><h4>Counts against</h4><ul><li>Lower EPC (period stone)</li><li>Smaller village amenities</li></ul></div>
+          </div>
+        </details>
+      </div>
+      <div class="rail"><div class="price-big">£365,000</div><div class="ppm">≈ £1,520/mo</div>
+        <div class="fit">85<small>fit score</small></div><span class="verdict-tag v-strong">Strong fit</span></div>
+    </li>
+    <!-- 3 -->
+    <li class="row" data-oor="false">
+      <div class="photo" data-cap="Salisbury · added 3 days ago"><svg viewBox="0 0 200 150"><rect width="200" height="150" fill="#efe8da"/><rect x="50" y="60" width="100" height="68" fill="#d8cfbd"/><path d="M45 60 L100 35 L155 60 Z" fill="#5c554a" opacity=".4"/><rect x="90" y="95" width="20" height="33" fill="#7a2e1e" opacity=".5"/></svg></div>
+      <div class="body">
+        <h2>2-bed Victorian terrace</h2>
+        <p class="addr">Milford Hill, Salisbury, SP1</p>
+        <div class="specs"><span><b>2</b> beds</span><span><b>1</b> bath</span><span><b>0.6mi</b> centre</span><span>EPC <b>D</b></span><span>Courtyard</span></div>
+        <details class="why"><summary>Why this verdict →</summary>
+          <div class="reasons">
+            <div class="for"><h4>Counts for</h4><ul><li>Well under budget</li><li>Walkable to cathedral &amp; station</li><li>Period features</li></ul></div>
+            <div class="against"><h4>Counts against</h4><ul><li>Only 2 beds vs 3 briefed</li><li>Courtyard, not garden</li></ul></div>
+          </div>
+        </details>
+      </div>
+      <div class="rail"><div class="price-big">£325,000</div><div class="ppm">≈ £1,360/mo</div>
+        <div class="fit">79<small>fit score</small></div><span class="verdict-tag v-good">Good fit</span></div>
+    </li>
+    <!-- 4 -->
+    <li class="row" data-oor="false">
+      <div class="photo" data-cap="Wilton · added 4 days ago"><svg viewBox="0 0 200 150"><rect width="200" height="150" fill="#efe8da"/><path d="M35 98 L100 50 L165 98 V128 H35 Z" fill="#d8cfbd"/><rect x="88" y="103" width="24" height="25" fill="#3f5d4a" opacity=".5"/></svg></div>
+      <div class="body">
+        <h2>3-bed end-of-terrace</h2>
+        <p class="addr">West Street, Wilton, SP2</p>
+        <div class="specs"><span><b>3</b> beds</span><span><b>1</b> bath</span><span><b>3mi</b> Salisbury</span><span>EPC <b>C</b></span><span>Garden</span></div>
+        <details class="why"><summary>Why this verdict →</summary>
+          <div class="reasons">
+            <div class="for"><h4>Counts for</h4><ul><li>£35k under budget</li><li>3 beds + garden</li><li>Good primary catchment</li></ul></div>
+            <div class="against"><h4>Counts against</h4><ul><li>Bus to station, no walk</li><li>Busy West Street frontage</li></ul></div>
+          </div>
+        </details>
+      </div>
+      <div class="rail"><div class="price-big">£389,950</div><div class="ppm">≈ £1,620/mo</div>
+        <div class="fit">88<small>fit score</small></div><span class="verdict-tag v-strong">Strong fit</span></div>
+    </li>
+    <!-- 5 stretch -->
+    <li class="row" data-oor="false">
+      <div class="photo" data-cap="Whiteparish · added 5 days ago"><svg viewBox="0 0 200 150"><rect width="200" height="150" fill="#efe8da"/><path d="M30 100 L100 48 L170 100 V130 H30 Z" fill="#d8cfbd"/><rect x="85" y="105" width="30" height="25" fill="#9a7b35" opacity=".5"/></svg></div>
+      <div class="body">
+        <h2>3-bed period cottage</h2>
+        <p class="addr">The Street, Whiteparish, SP5</p>
+        <div class="specs"><span><b>3</b> beds</span><span><b>2</b> baths</span><span><b>7mi</b> Romsey</span><span>EPC <b>E</b></span><span>Large garden</span></div>
+        <details class="why"><summary>Why this verdict →</summary>
+          <div class="reasons">
+            <div class="for"><h4>Counts for</h4><ul><li>Large garden &amp; character</li><li>Two bathrooms</li></ul></div>
+            <div class="against"><h4>Counts against</h4><ul><li>£20k over comfortable band</li><li>Low EPC, oil heating</li><li>No station within walking</li></ul></div>
+          </div>
+        </details>
+      </div>
+      <div class="rail"><div class="price-big">£445,000</div><div class="ppm">≈ £1,920/mo</div>
+        <div class="fit">71<small>fit score</small></div><span class="verdict-tag v-stretch">Stretch</span></div>
+    </li>
+    <!-- 6 stretch -->
+    <li class="row" data-oor="false">
+      <div class="photo" data-cap="Stockbridge · added 6 days ago"><svg viewBox="0 0 200 150"><rect width="200" height="150" fill="#efe8da"/><rect x="48" y="58" width="104" height="70" fill="#d8cfbd"/><path d="M43 58 L100 33 L157 58 Z" fill="#5c554a" opacity=".4"/></svg></div>
+      <div class="body">
+        <h2>3-bed flint cottage</h2>
+        <p class="addr">High Street, Stockbridge, SO20</p>
+        <div class="specs"><span><b>3</b> beds</span><span><b>1</b> bath</span><span><b>8mi</b> station</span><span>EPC <b>D</b></span><span>Garden</span></div>
+        <details class="why"><summary>Why this verdict →</summary>
+          <div class="reasons">
+            <div class="for"><h4>Counts for</h4><ul><li>Sought-after high street</li><li>Test valley, fishing town</li></ul></div>
+            <div class="against"><h4>Counts against</h4><ul><li>£50k over comfortable band</li><li>No nearby rail</li></ul></div>
+          </div>
+        </details>
+      </div>
+      <div class="rail"><div class="price-big">£475,000</div><div class="ppm">≈ £2,050/mo</div>
+        <div class="fit">66<small>fit score</small></div><span class="verdict-tag v-stretch">Stretch</span></div>
+    </li>
+    <!-- 7 OOR (hidden by default) -->
+    <li class="row" data-oor="true" hidden>
+      <div class="photo" data-cap="Alresford · out of reach"><svg viewBox="0 0 200 150"><rect width="200" height="150" fill="#efe8da"/><path d="M25 102 L100 45 L175 102 V132 H25 Z" fill="#d8cfbd"/><rect x="60" y="108" width="24" height="24" fill="#7a2e1e" opacity=".4"/><rect x="116" y="108" width="24" height="24" fill="#7a2e1e" opacity=".4"/></svg></div>
+      <div class="body">
+        <h2>4-bed detached house</h2>
+        <p class="addr">Sun Lane, Alresford, SO24</p>
+        <div class="specs"><span><b>4</b> beds</span><span><b>2</b> baths</span><span><b>1mi</b> Watercress Line</span><span>EPC <b>C</b></span><span>Double garage</span></div>
+        <details class="why"><summary>Why this verdict →</summary>
+          <div class="reasons">
+            <div class="for"><h4>Counts for</h4><ul><li>Premium Georgian town</li><li>Four beds, garage</li></ul></div>
+            <div class="against"><h4>Counts against</h4><ul><li>£200k over budget — hard gate</li><li>Monthly cost beyond affordability</li></ul></div>
+          </div>
+        </details>
+      </div>
+      <div class="rail"><div class="price-big">£625,000</div><div class="ppm">≈ £2,690/mo</div>
+        <div class="fit" style="color:var(--ink-soft)">—<small>out of reach</small></div><span class="verdict-tag v-oor">Out of reach</span></div>
+    </li>
+  </ol>
+
+  <footer class="foot">On the Market · An isolated design preview · No live data was used</footer>
+</div>
+<script>
+  // Out-of-reach toggle reveals the gated row — cosmetic only.
+  const oor=document.getElementById('oor');
+  const hidden=document.querySelector('.row[data-oor="true"]');
+  const summary=document.getElementById('summary');
+  oor.addEventListener('change',()=>{
+    if(oor.checked){hidden.hidden=false;summary.textContent='Showing 7 of 7 · including 1 out-of-reach';}
+    else{hidden.hidden=true;summary.textContent='Showing 6 of 7 · 1 folded as out-of-reach';}
+  });
+</script>
+</body>
+</html>

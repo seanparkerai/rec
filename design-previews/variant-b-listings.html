@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Variant B · Console · Listings</title>
+<!-- ISOLATED DESIGN PREVIEW — dummy data only, no app assets, no database. Safe to delete. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b0e0d;--panel:#111614;--panel-2:#161d1a;--line:#243029;--line-soft:#1a2320;
+    --txt:#dfeae4;--dim:#7d8f86;--mut:#4f5e57;
+    --em:#3ddc91;--em-dim:#1f7a52;--amber:#f0b429;--red:#ff5d5d;--blue:#5db3ff;
+    --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s6:24px;--s8:32px;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--txt);font-family:"Space Grotesk",system-ui,sans-serif;font-size:14px;line-height:1.45;
+    background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);background-size:48px 48px}
+  .mono,.num{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+  h1,h2,h3{font-weight:600;letter-spacing:-.01em}
+  a{color:var(--em);text-decoration:none}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 var(--s4)}
+  .topbar{display:flex;align-items:center;gap:var(--s4);padding:var(--s3) var(--s4);border-bottom:1px solid var(--line);
+    position:sticky;top:0;background:rgba(11,14,13,.85);backdrop-filter:blur(8px);z-index:20}
+  .logo{font-family:"JetBrains Mono";font-weight:700;letter-spacing:.12em;color:var(--em)}.logo::before{content:"▱ ";color:var(--em-dim)}
+  .topbar nav{display:flex;gap:var(--s1);flex:1;flex-wrap:wrap}
+  .topbar nav a{font-family:"JetBrains Mono";font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);padding:var(--s1) var(--s3);border:1px solid transparent}
+  .topbar nav a[aria-current]{color:var(--em);border-color:var(--line);background:var(--panel)}
+  .ticker{font-family:"JetBrains Mono";font-size:11px;color:var(--mut);white-space:nowrap}.ticker b{color:var(--em)}
+
+  .head{padding:var(--s6) 0 var(--s4);border-bottom:1px solid var(--line)}
+  .head h1{font-size:clamp(20px,2vw,30px)}
+  .head .sub{color:var(--dim);font-size:13px;margin-top:4px;max-width:80ch}
+
+  /* control bar */
+  .controls{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;padding:var(--s3) 0;border-bottom:1px solid var(--line);position:sticky;top:49px;background:rgba(11,14,13,.9);backdrop-filter:blur(6px);z-index:10}
+  .modes{display:flex;border:1px solid var(--line)}
+  .modes button{font-family:"JetBrains Mono";font-size:11px;text-transform:uppercase;letter-spacing:.08em;background:transparent;border:0;color:var(--dim);padding:var(--s2) var(--s3);cursor:pointer;border-right:1px solid var(--line)}
+  .modes button:last-child{border-right:0}.modes button[aria-pressed=true]{background:var(--em);color:var(--bg)}
+  .controls input[type=search],.controls select{font-family:"JetBrains Mono";font-size:12px;background:var(--panel);border:1px solid var(--line);color:var(--txt);padding:var(--s2)}
+  .controls input[type=search]{flex:1;min-width:180px}
+  .controls input[type=search]::placeholder{color:var(--mut)}
+  .tog{font-family:"JetBrains Mono";font-size:11px;color:var(--dim);display:flex;align-items:center;gap:5px}
+  .summary{font-family:"JetBrains Mono";font-size:11px;color:var(--mut);padding:var(--s3) 0;letter-spacing:.04em}
+
+  /* table-dense listings */
+  .list{list-style:none;border:1px solid var(--line)}
+  .row{display:grid;grid-template-columns:64px 1fr;gap:var(--s3);padding:var(--s3);border-bottom:1px solid var(--line);background:var(--panel);align-items:start}
+  @media(min-width:760px){.row{grid-template-columns:96px 1fr 150px 96px}}
+  .row:hover{background:var(--panel-2)}
+  .row[data-oor=true]{opacity:.5}
+  .thumb{aspect-ratio:1;background:var(--bg);border:1px solid var(--line);position:relative;overflow:hidden}
+  .thumb svg{width:100%;height:100%}
+  .thumb .age{position:absolute;left:0;bottom:0;font-family:"JetBrains Mono";font-size:8px;background:rgba(0,0,0,.6);color:var(--em);padding:1px 3px}
+  .info h2{font-size:15px;font-weight:600}
+  .info .addr{font-family:"JetBrains Mono";font-size:11px;color:var(--dim);margin:2px 0 6px}
+  .tags{display:flex;gap:var(--s1);flex-wrap:wrap;font-family:"JetBrains Mono";font-size:10px}
+  .tags span{border:1px solid var(--line);color:var(--dim);padding:1px 6px}
+  .tags span.k{color:var(--txt)}
+  details.why summary{font-family:"JetBrains Mono";font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--em);cursor:pointer;margin-top:var(--s2)}
+  .reasons{display:flex;gap:var(--s6);flex-wrap:wrap;margin-top:var(--s2);font-family:"JetBrains Mono";font-size:11px}
+  .reasons ul{list-style:none}.reasons li{padding:2px 0;padding-left:14px;position:relative;color:var(--dim)}
+  .reasons .for li::before{content:"+";position:absolute;left:0;color:var(--em)}
+  .reasons .against li::before{content:"\2212";position:absolute;left:0;color:var(--red)}
+
+  .price-cell{font-family:"JetBrains Mono";text-align:right}
+  @media(max-width:759px){.price-cell{text-align:left;display:flex;justify-content:space-between;align-items:baseline;grid-column:1/-1}}
+  .price-cell .p{font-size:20px;font-weight:500}.price-cell .pm{font-size:11px;color:var(--dim)}
+  .delta{font-size:11px;margin-top:4px}.delta.under{color:var(--em)}.delta.over{color:var(--red)}
+
+  .verdict-cell{text-align:right}
+  @media(max-width:759px){.verdict-cell{text-align:left;grid-column:1/-1;display:flex;align-items:center;gap:var(--s3)}}
+  .fit{font-family:"JetBrains Mono";font-size:30px;font-weight:500;line-height:1}
+  .fit.strong{color:var(--em)}.fit.good{color:var(--blue)}.fit.stretch{color:var(--amber)}.fit.oor{color:var(--mut)}
+  .vbadge{font-family:"JetBrains Mono";font-size:9px;text-transform:uppercase;letter-spacing:.1em;border:1px solid currentColor;padding:1px 5px;display:inline-block;margin-top:4px}
+
+  footer{border-top:1px solid var(--line);padding:var(--s6) 0;text-align:center;font-family:"JetBrains Mono";font-size:11px;color:var(--mut)}
+  .preview-flag{position:fixed;bottom:8px;right:8px;background:var(--em);color:var(--bg);font-family:"JetBrains Mono";font-size:10px;padding:3px 7px;z-index:50;font-weight:700}
+  *:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="preview-flag">PREVIEW · B · DUMMY</div>
+<div class="topbar">
+  <span class="logo">REC.OS</span>
+  <nav><a href="variant-b-home.html">Home</a><a href="#" aria-current="page">Listings</a><a href="#">Areas</a><a href="#">Finances</a><a href="#">Journey</a><a href="#">Map</a></nav>
+  <span class="ticker">FEED <b>7</b> · NEW_24H <b>1</b> · REVIEW <b>4</b></span>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <h1>Live feed</h1>
+    <p class="sub">// properties on market across 5 shortlisted areas, ranked by fit. affordability = hard gate; out_of_reach rows folded unless requested. open why_verdict for the scoring trace.</p>
+  </div>
+
+  <div class="controls">
+    <div class="modes" role="group" aria-label="mode"><button aria-pressed="true">browse</button><button aria-pressed="false">review·4</button></div>
+    <input type="search" placeholder="grep address / postcode / area / type…" aria-label="search" />
+    <select aria-label="sort"><option>sort: best_fit</option><option>price ↑</option><option>price ↓</option><option>newest</option></select>
+    <select aria-label="beds"><option>beds: any</option><option>2+</option><option>3+</option><option>4+</option></select>
+    <label class="tog"><input type="checkbox" id="oor" /> show_oor</label>
+  </div>
+
+  <p class="summary" id="summary">$ 6 of 7 rows · 1 gated [out_of_reach] · sort=best_fit</p>
+
+  <ol class="list" id="list">
+    <li class="row" data-oor="false">
+      <div class="thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0b0e0d"/><path d="M15 60 L50 30 L85 60 V85 H15Z" fill="#161d1a" stroke="#243029"/><rect x="42" y="62" width="16" height="23" fill="#1f7a52"/></svg><span class="age">1d</span></div>
+      <div class="info"><h2>3-bed semi-detached house</h2><p class="addr">Cherville Street, Romsey · SO51</p>
+        <div class="tags"><span class="k">3 bed</span><span class="k">1 bath</span><span>0.4mi rail</span><span>EPC C</span><span>garden</span></div>
+        <details class="why"><summary>why_verdict →</summary><div class="reasons">
+          <div class="for"><ul><li>£15k under budget</li><li>top shortlisted area</li><li>walk to mainline</li><li>3 bed + garden</li></ul></div>
+          <div class="against"><ul><li>single bathroom</li><li>no parking</li></ul></div></div></details>
+      </div>
+      <div class="price-cell"><div class="p">£410,000</div><div class="pm">£1,710/mo</div><div class="delta under">−£15k vs budget</div></div>
+      <div class="verdict-cell"><div class="fit strong">92</div><span class="vbadge" style="color:var(--em)">strong</span></div>
+    </li>
+
+    <li class="row" data-oor="false">
+      <div class="thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0b0e0d"/><path d="M20 62 L50 35 L80 62 V85 H20Z" fill="#161d1a" stroke="#243029"/><rect x="34" y="64" width="13" height="21" fill="#1f7a52"/><rect x="55" y="64" width="13" height="21" fill="#f0b429" opacity=".4"/></svg><span class="age">2d</span></div>
+      <div class="info"><h2>3-bed semi-detached cottage</h2><p class="addr">Station Road, Tisbury · SP3</p>
+        <div class="tags"><span class="k">3 bed</span><span class="k">2 bath</span><span>0.3mi rail</span><span>EPC D</span><span>garden</span></div>
+        <details class="why"><summary>why_verdict →</summary><div class="reasons">
+          <div class="for"><ul><li>£60k under budget</li><li>direct rail to Waterloo</li><li>two bathrooms</li></ul></div>
+          <div class="against"><ul><li>lower EPC (stone)</li><li>smaller amenities</li></ul></div></div></details>
+      </div>
+      <div class="price-cell"><div class="p">£365,000</div><div class="pm">£1,520/mo</div><div class="delta under">−£60k vs budget</div></div>
+      <div class="verdict-cell"><div class="fit strong">85</div><span class="vbadge" style="color:var(--em)">strong</span></div>
+    </li>
+
+    <li class="row" data-oor="false">
+      <div class="thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0b0e0d"/><path d="M18 60 L50 32 L82 60 V85 H18Z" fill="#161d1a" stroke="#243029"/><rect x="44" y="62" width="14" height="23" fill="#1f7a52"/></svg><span class="age">4d</span></div>
+      <div class="info"><h2>3-bed end-of-terrace</h2><p class="addr">West Street, Wilton · SP2</p>
+        <div class="tags"><span class="k">3 bed</span><span class="k">1 bath</span><span>3mi Salisbury</span><span>EPC C</span><span>garden</span></div>
+        <details class="why"><summary>why_verdict →</summary><div class="reasons">
+          <div class="for"><ul><li>£35k under budget</li><li>3 bed + garden</li><li>good primary catchment</li></ul></div>
+          <div class="against"><ul><li>bus to station</li><li>busy frontage</li></ul></div></div></details>
+      </div>
+      <div class="price-cell"><div class="p">£389,950</div><div class="pm">£1,620/mo</div><div class="delta under">−£35k vs budget</div></div>
+      <div class="verdict-cell"><div class="fit strong">88</div><span class="vbadge" style="color:var(--em)">strong</span></div>
+    </li>
+
+    <li class="row" data-oor="false">
+      <div class="thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0b0e0d"/><rect x="28" y="42" width="44" height="43" fill="#161d1a" stroke="#243029"/><path d="M24 42 L50 26 L76 42Z" fill="#243029"/><rect x="44" y="62" width="13" height="23" fill="#5db3ff" opacity=".4"/></svg><span class="age">3d</span></div>
+      <div class="info"><h2>2-bed Victorian terrace</h2><p class="addr">Milford Hill, Salisbury · SP1</p>
+        <div class="tags"><span class="k">2 bed</span><span class="k">1 bath</span><span>0.6mi centre</span><span>EPC D</span><span>courtyard</span></div>
+        <details class="why"><summary>why_verdict →</summary><div class="reasons">
+          <div class="for"><ul><li>well under budget</li><li>walk to cathedral + rail</li><li>period features</li></ul></div>
+          <div class="against"><ul><li>only 2 beds vs 3</li><li>courtyard not garden</li></ul></div></div></details>
+      </div>
+      <div class="price-cell"><div class="p">£325,000</div><div class="pm">£1,360/mo</div><div class="delta under">−£100k vs budget</div></div>
+      <div class="verdict-cell"><div class="fit good">79</div><span class="vbadge" style="color:var(--blue)">good</span></div>
+    </li>
+
+    <li class="row" data-oor="false">
+      <div class="thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0b0e0d"/><path d="M14 62 L50 30 L86 62 V85 H14Z" fill="#161d1a" stroke="#243029"/><rect x="42" y="64" width="16" height="21" fill="#f0b429" opacity=".45"/></svg><span class="age">5d</span></div>
+      <div class="info"><h2>3-bed period cottage</h2><p class="addr">The Street, Whiteparish · SP5</p>
+        <div class="tags"><span class="k">3 bed</span><span class="k">2 bath</span><span>7mi Romsey</span><span>EPC E</span><span>large garden</span></div>
+        <details class="why"><summary>why_verdict →</summary><div class="reasons">
+          <div class="for"><ul><li>large garden + character</li><li>two bathrooms</li></ul></div>
+          <div class="against"><ul><li>£20k over comfortable band</li><li>low EPC, oil heat</li><li>no station walk</li></ul></div></div></details>
+      </div>
+      <div class="price-cell"><div class="p">£445,000</div><div class="pm">£1,920/mo</div><div class="delta over">+£20k over budget</div></div>
+      <div class="verdict-cell"><div class="fit stretch">71</div><span class="vbadge" style="color:var(--amber)">stretch</span></div>
+    </li>
+
+    <li class="row" data-oor="false">
+      <div class="thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0b0e0d"/><rect x="26" y="44" width="48" height="41" fill="#161d1a" stroke="#243029"/><path d="M22 44 L50 26 L78 44Z" fill="#243029"/></svg><span class="age">6d</span></div>
+      <div class="info"><h2>3-bed flint cottage</h2><p class="addr">High Street, Stockbridge · SO20</p>
+        <div class="tags"><span class="k">3 bed</span><span class="k">1 bath</span><span>8mi rail</span><span>EPC D</span><span>garden</span></div>
+        <details class="why"><summary>why_verdict →</summary><div class="reasons">
+          <div class="for"><ul><li>sought-after high street</li><li>test valley town</li></ul></div>
+          <div class="against"><ul><li>£50k over comfortable band</li><li>no nearby rail</li></ul></div></div></details>
+      </div>
+      <div class="price-cell"><div class="p">£475,000</div><div class="pm">£2,050/mo</div><div class="delta over">+£50k over budget</div></div>
+      <div class="verdict-cell"><div class="fit stretch">66</div><span class="vbadge" style="color:var(--amber)">stretch</span></div>
+    </li>
+
+    <li class="row" data-oor="true" hidden>
+      <div class="thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0b0e0d"/><path d="M10 64 L50 28 L90 64 V85 H10Z" fill="#161d1a" stroke="#243029"/><rect x="30" y="66" width="14" height="19" fill="#ff5d5d" opacity=".35"/><rect x="56" y="66" width="14" height="19" fill="#ff5d5d" opacity=".35"/></svg><span class="age">2d</span></div>
+      <div class="info"><h2>4-bed detached house</h2><p class="addr">Sun Lane, Alresford · SO24</p>
+        <div class="tags"><span class="k">4 bed</span><span class="k">2 bath</span><span>1mi line</span><span>EPC C</span><span>garage</span></div>
+        <details class="why"><summary>why_verdict →</summary><div class="reasons">
+          <div class="for"><ul><li>premium georgian town</li><li>4 beds + garage</li></ul></div>
+          <div class="against"><ul><li>£200k over budget — HARD GATE</li><li>monthly beyond affordability</li></ul></div></div></details>
+      </div>
+      <div class="price-cell"><div class="p">£625,000</div><div class="pm">£2,690/mo</div><div class="delta over">+£200k over budget</div></div>
+      <div class="verdict-cell"><div class="fit oor">—</div><span class="vbadge" style="color:var(--mut)">out_of_reach</span></div>
+    </li>
+  </ol>
+</div>
+<footer>REC.OS · isolated design preview · no live data was used · rev preview-b</footer>
+<script>
+  const oor=document.getElementById('oor');const hidden=document.querySelector('.row[data-oor="true"]');const summary=document.getElementById('summary');
+  oor.addEventListener('change',()=>{
+    hidden.hidden=!oor.checked;
+    summary.textContent=oor.checked?'$ 7 of 7 rows · incl 1 [out_of_reach] · sort=best_fit':'$ 6 of 7 rows · 1 gated [out_of_reach] · sort=best_fit';
+  });
+</script>
+</body>
+</html>

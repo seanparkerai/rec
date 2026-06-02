@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Variant A · Broadsheet · Home</title>
+<!-- ISOLATED DESIGN PREVIEW — dummy data only, no app assets, no database. Safe to delete. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Newsreader:ital,opsz@0,6..72;1,6..72&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f6f1e7; --paper-2:#efe8da; --ink:#211d18; --ink-soft:#5c554a;
+    --rule:#d8cfbd; --accent:#7a2e1e; --accent-2:#3f5d4a; --gold:#9a7b35;
+    --pos:#3f5d4a; --neg:#7a2e1e;
+    --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s6:1.5rem;--s8:2rem;--s12:3rem;
+  }
+  *{box-sizing:border-box;margin:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;
+    font-size:clamp(1rem,.95rem + .3vw,1.125rem);line-height:1.55;
+    background-image:radial-gradient(circle at 1px 1px,rgba(33,29,24,.035) 1px,transparent 0);background-size:22px 22px}
+  .num,.stat,time,.price{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  h1,h2,h3,.display{font-family:"Fraunces",serif;font-weight:500;line-height:1.05;letter-spacing:-.01em}
+  a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--s4)}
+
+  /* Masthead */
+  header.mast{border-bottom:3px double var(--ink);margin-top:var(--s4)}
+  .mast-top{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;
+    letter-spacing:.18em;color:var(--ink-soft);padding-bottom:var(--s2)}
+  .mast h1{font-size:clamp(2.6rem,6vw,5rem);text-align:center;font-weight:600;
+    padding:var(--s2) 0 var(--s1);font-optical-sizing:auto}
+  .mast .kicker{text-align:center;font-style:italic;color:var(--ink-soft);
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:var(--s2) 0;margin-bottom:0;font-size:1.05rem}
+  nav.sub{display:flex;gap:var(--s4);justify-content:center;flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;
+    letter-spacing:.14em;padding:var(--s3) 0;border-bottom:1px solid var(--rule)}
+  nav.sub a{color:var(--ink);text-decoration:none}
+  nav.sub a[aria-current]{color:var(--accent);border-bottom:2px solid var(--accent)}
+
+  .lede{padding:var(--s8) 0 var(--s6);border-bottom:1px solid var(--rule);text-align:center}
+  .lede .drop{font-size:clamp(1.3rem,1rem + 1.4vw,1.9rem);font-style:italic;max-width:44ch;margin:0 auto}
+  .lede .drop b{font-style:normal;background:linear-gradient(transparent 62%,#e9dcb6 0)}
+  .lede dl{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--s8);margin-top:var(--s6)}
+  .lede dt{font-family:"IBM Plex Mono",monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-soft)}
+  .lede dd{font-family:"Fraunces",serif;font-size:1.8rem;font-weight:500;margin-top:var(--s1)}
+
+  /* Editorial grid */
+  .grid{display:grid;grid-template-columns:1fr;gap:0;padding:var(--s6) 0}
+  @media(min-width:768px){.grid{grid-template-columns:repeat(12,1fr);column-gap:var(--s8);row-gap:0}}
+  .col{padding:var(--s6) 0;border-bottom:1px solid var(--rule)}
+  @media(min-width:768px){
+    .col{padding:var(--s8) var(--s6);border-bottom:1px solid var(--rule)}
+    .c-lead{grid-column:1/8;border-right:1px solid var(--rule)}
+    .c-side{grid-column:8/13}
+    .c-half{grid-column:span 6}
+    .c-half:nth-child(odd){border-right:1px solid var(--rule)}
+    .c-full{grid-column:1/13}
+  }
+  .section-tag{font-family:"IBM Plex Mono",monospace;font-size:.66rem;text-transform:uppercase;
+    letter-spacing:.2em;color:var(--accent);border-top:2px solid var(--accent);
+    display:inline-block;padding-top:var(--s1);margin-bottom:var(--s3)}
+  .col h2{font-size:clamp(1.6rem,1.2rem + 1.2vw,2.4rem);margin-bottom:var(--s3)}
+  .col h3{font-size:1.15rem;font-weight:600}
+  .byline{font-style:italic;color:var(--ink-soft);font-size:.95rem;margin-bottom:var(--s4)}
+
+  /* Deposit ring */
+  .ring-row{display:flex;gap:var(--s6);align-items:center;flex-wrap:wrap}
+  .ring{position:relative;width:150px;height:150px;flex:0 0 auto}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .v{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .ring .v b{font-family:"Fraunces";font-size:2.2rem;font-weight:600}
+  .ring .v span{font-family:"IBM Plex Mono";font-size:.66rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-soft);display:block}
+  .arc-stats{flex:1;min-width:180px}
+  .arc-stats div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--rule);padding:var(--s2) 0}
+  .arc-stats dt{color:var(--ink-soft);font-style:italic}
+  .arc-stats dd{font-family:"IBM Plex Mono";font-weight:500}
+  .eta{margin-top:var(--s4);font-style:italic;font-size:1.1rem;border-left:3px solid var(--accent);padding-left:var(--s3)}
+
+  .chips{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s4)}
+  .chip{font-family:"IBM Plex Mono";font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
+    border:1px solid var(--ink);padding:var(--s1) var(--s3);background:transparent;cursor:pointer;border-radius:0}
+  .chip[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+
+  /* spark */
+  .spark{width:100%;height:60px;margin-top:var(--s4)}
+  .spark path{fill:none;stroke:var(--accent-2);stroke-width:2}
+  .spark .fill{fill:rgba(63,93,74,.12);stroke:none}
+
+  /* Readiness ledger */
+  .ledger div{display:flex;justify-content:space-between;align-items:baseline;
+    padding:var(--s2) 0;border-bottom:1px dotted var(--rule)}
+  .ledger dt{font-style:italic}
+  .ledger dd{font-family:"IBM Plex Mono";font-size:1.2rem;font-weight:500}
+  .ledger dd small{color:var(--ink-soft);font-size:.7rem}
+
+  /* money flow bars */
+  .flowbar{display:flex;height:30px;border:1px solid var(--ink);margin:var(--s2) 0;overflow:hidden}
+  .flowbar i{display:block;height:100%}
+  .flowbar i:nth-child(1){background:var(--accent-2)}
+  .flowbar i:nth-child(2){background:var(--gold)}
+  .flowbar i:nth-child(3){background:var(--accent);opacity:.7}
+  .flowbar i:nth-child(4){background:repeating-linear-gradient(45deg,var(--ink) 0 2px,transparent 2px 6px)}
+  .legend{display:flex;gap:var(--s4);flex-wrap:wrap;font-size:.85rem;color:var(--ink-soft);font-style:italic;margin-top:var(--s2)}
+  .legend b{font-family:"IBM Plex Mono";font-style:normal;color:var(--ink);font-size:.8rem}
+  .legend i{width:10px;height:10px;display:inline-block;margin-right:4px}
+
+  /* affordability ladder */
+  .ladder{display:flex;flex-direction:column;gap:var(--s1);margin:var(--s4) 0}
+  .ladder .rung{display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:var(--s3);font-size:.9rem}
+  .ladder .bar{height:14px;background:var(--paper-2);border:1px solid var(--rule);position:relative}
+  .ladder .bar i{position:absolute;inset:0 auto 0 0;background:var(--accent-2)}
+  .ladder .rung.over .bar i{background:var(--accent)}
+  .ladder .price{font-family:"IBM Plex Mono"}
+  .verdict{font-style:italic;font-size:1.15rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:var(--s3) 0;margin-bottom:var(--s4)}
+  .verdict b{font-style:normal;color:var(--accent-2)}
+
+  /* shortlist */
+  .shortlist{list-style:none}
+  .shortlist li{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3);
+    padding:var(--s3) 0;border-bottom:1px solid var(--rule)}
+  .shortlist .nm{font-family:"Fraunces";font-size:1.2rem;font-weight:500}
+  .shortlist .meta{font-style:italic;color:var(--ink-soft);font-size:.9rem}
+  .shortlist .score{font-family:"IBM Plex Mono";font-size:1.1rem}
+
+  /* criteria spec strip */
+  .spec{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:var(--s4)}
+  @media(min-width:480px){.spec{grid-template-columns:repeat(4,1fr)}}
+  .spec div{border:1px solid var(--rule);border-right:0;border-bottom:0;padding:var(--s3)}
+  .spec div:last-child{border-right:1px solid var(--rule)}
+  .spec dt{font-family:"IBM Plex Mono";font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-soft)}
+  .spec dd{font-family:"Fraunces";font-size:1.3rem;margin-top:2px}
+
+  /* journey */
+  .track{list-style:none;counter-reset:j}
+  .track li{counter-increment:j;display:flex;gap:var(--s3);padding:var(--s3) 0;border-bottom:1px dotted var(--rule);align-items:baseline}
+  .track li::before{content:counter(j,decimal-leading-zero);font-family:"IBM Plex Mono";color:var(--ink-soft);font-size:.8rem}
+  .track li.done{color:var(--ink-soft)}
+  .track li.done .t{text-decoration:line-through}
+  .track .t{flex:1;font-style:italic}
+  .track .tick{font-family:"IBM Plex Mono";font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}
+  .track li.done .tick{color:var(--accent-2)}
+
+  .ask{display:flex;gap:var(--s2);border:2px solid var(--ink);padding:var(--s2)}
+  .ask input{flex:1;border:0;background:transparent;font-family:"Newsreader";font-style:italic;font-size:1.05rem;padding:var(--s2)}
+  .ask input:focus{outline:none}
+  .ask button{font-family:"IBM Plex Mono";text-transform:uppercase;font-size:.72rem;letter-spacing:.1em;border:0;background:var(--ink);color:var(--paper);padding:0 var(--s4);cursor:pointer}
+
+  footer.foot{border-top:3px double var(--ink);text-align:center;padding:var(--s8) 0;
+    font-family:"IBM Plex Mono";font-size:.7rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-soft)}
+  .preview-flag{position:fixed;bottom:10px;right:10px;background:var(--ink);color:var(--paper);
+    font-family:"IBM Plex Mono";font-size:.6rem;padding:4px 8px;letter-spacing:.1em;z-index:50;opacity:.85}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="preview-flag">PREVIEW · VARIANT A · DUMMY DATA</div>
+<div class="wrap">
+  <header class="mast">
+    <div class="mast-top"><span>Hampshire &amp; Wiltshire</span><span>Tuesday · 2 June 2026</span><span>Property search</span></div>
+    <h1>The Relocation</h1>
+    <p class="kicker">A standing account of where your move to the countryside actually stands</p>
+    <nav class="sub">
+      <a href="#" aria-current="page">Home</a><a href="variant-a-listings.html">Listings</a>
+      <a href="#">Areas</a><a href="#">Finances</a><a href="#">Journey</a><a href="#">Map</a>
+    </nav>
+  </header>
+
+  <section class="lede">
+    <p class="drop">You are <b>69% of the way</b> to your deposit, comfortably inside budget, with a realistic move window of <b>Spring 2027</b>.</p>
+    <dl>
+      <div><dt>Budget</dt><dd class="num">£425k</dd></div>
+      <div><dt>Deposit</dt><dd class="num">£58.4k</dd></div>
+      <div><dt>Bedrooms</dt><dd class="num">3+</dd></div>
+      <div><dt>Window</dt><dd>Spring ’27</dd></div>
+    </dl>
+  </section>
+
+  <div class="grid">
+    <!-- DEPOSIT -->
+    <article class="col c-lead">
+      <span class="section-tag">Goal progress</span>
+      <h2>The deposit story</h2>
+      <p class="byline">Saving £1,650 a month · ISA contributions £3,200 YTD</p>
+      <div class="ring-row">
+        <div class="ring">
+          <svg width="150" height="150" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#d8cfbd" stroke-width="10"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#7a2e1e" stroke-width="10"
+              stroke-linecap="butt" pathLength="100" stroke-dasharray="69 100"/>
+          </svg>
+          <div class="v"><b>69</b><span>per cent</span></div>
+        </div>
+        <dl class="arc-stats">
+          <div><dt>Saved</dt><dd>£58,400</dd></div>
+          <div><dt>Target (20%)</dt><dd>£85,000</dd></div>
+          <div><dt>Per month</dt><dd>£1,650</dd></div>
+          <div><dt>Shortfall</dt><dd>£26,600</dd></div>
+        </dl>
+      </div>
+      <p class="eta">At the present rate you reach target in <b>16 months</b> — comfortably ahead of your Spring 2027 window.</p>
+      <div class="chips" role="group" aria-label="Scenarios">
+        <button class="chip" aria-pressed="true" data-eta="16 months">Baseline</button>
+        <button class="chip" aria-pressed="false" data-eta="14 months">+£200/mo</button>
+        <button class="chip" aria-pressed="false" data-eta="11 months">+£500/mo</button>
+        <button class="chip" aria-pressed="false" data-eta="13 months">+£5k windfall</button>
+      </div>
+      <svg class="spark" viewBox="0 0 280 60" preserveAspectRatio="none" aria-label="Savings, last 12 months">
+        <path class="fill" d="M0,52 L20,50 L48,46 L76,44 L104,38 L132,36 L160,30 L188,26 L216,20 L244,15 L280,8 L280,60 L0,60 Z"/>
+        <path d="M0,52 L20,50 L48,46 L76,44 L104,38 L132,36 L160,30 L188,26 L216,20 L244,15 L280,8"/>
+      </svg>
+    </article>
+
+    <!-- READINESS / WITHDRAWAL -->
+    <aside class="col c-side">
+      <span class="section-tag">Readiness</span>
+      <h2>Right now</h2>
+      <dl class="ledger">
+        <div><dt>At baseline</dt><dd>16 <small>mo</small></dd></div>
+        <div><dt>+£200/mo</dt><dd>14 <small>mo</small></dd></div>
+        <div><dt>+£500/mo</dt><dd>11 <small>mo</small></dd></div>
+      </dl>
+      <p class="eta" style="border-color:var(--accent-2)">Next action — book a mortgage-in-principle refresh before viewings resume.</p>
+      <h3 style="margin-top:var(--s6)">Withdrawal &amp; seasoning</h3>
+      <div class="flowbar" style="height:20px"><i style="width:74%"></i><i style="width:26%;background:var(--paper-2)"></i></div>
+      <p class="byline" style="margin-top:var(--s2)">LISA funds seasoned 9 of 12 months — eligible to withdraw penalty-free from March 2027.</p>
+    </aside>
+
+    <!-- AFFORDABILITY -->
+    <article class="col c-half">
+      <span class="section-tag">Affordability</span>
+      <h2>What you can take on</h2>
+      <p class="verdict">Comfortable up to <b>£430,000</b>; a stretch beyond £465,000 on current income.</p>
+      <div class="ladder">
+        <div class="rung"><span>£325,000</span><div class="bar"><i style="width:55%"></i></div><span class="price">£1,430/mo</span></div>
+        <div class="rung"><span>£390,000</span><div class="bar"><i style="width:72%"></i></div><span class="price">£1,690/mo</span></div>
+        <div class="rung"><span>£425,000</span><div class="bar"><i style="width:84%"></i></div><span class="price">£1,820/mo</span></div>
+        <div class="rung over"><span>£499,000</span><div class="bar"><i style="width:100%"></i></div><span class="price">£2,140/mo</span></div>
+      </div>
+      <p class="byline">Based on 4.6% fixed · 30-year term · 4.5× joint income.</p>
+    </article>
+
+    <!-- MONEY FLOW -->
+    <article class="col c-half">
+      <span class="section-tag">Money-flow</span>
+      <h2>Where it goes</h2>
+      <h3>Today — £5,400/mo income</h3>
+      <div class="flowbar"><i style="width:39%"></i><i style="width:30%"></i><i style="width:31%"></i></div>
+      <h3 style="margin-top:var(--s4)">After move</h3>
+      <div class="flowbar"><i style="width:33%"></i><i style="width:18%"></i><i style="width:22%"></i><i style="width:27%"></i></div>
+      <ul class="legend" style="list-style:none">
+        <li><i style="background:var(--accent-2)"></i>Essentials <b>£2,100</b></li>
+        <li><i style="background:var(--gold)"></i>Saving <b>£1,650</b></li>
+        <li><i style="background:var(--accent);opacity:.7"></i>Lifestyle <b>£1,650</b></li>
+      </ul>
+    </article>
+
+    <!-- SHORTLIST -->
+    <article class="col c-half">
+      <span class="section-tag">Search</span>
+      <h2>Your shortlist <span class="num" style="font-size:1rem;color:var(--ink-soft)">· 5 areas</span></h2>
+      <ul class="shortlist">
+        <li><span><span class="nm">Romsey</span><br><span class="meta">market town · 0.5mi station · good schools</span></span><span class="score">92</span></li>
+        <li><span><span class="nm">Alresford</span><br><span class="meta">Georgian · watercress · pricey</span></span><span class="score">88</span></li>
+        <li><span><span class="nm">Wilton</span><br><span class="meta">village edge · close to Salisbury</span></span><span class="score">85</span></li>
+        <li><span><span class="nm">Tisbury</span><br><span class="meta">rail to Waterloo · Nadder valley</span></span><span class="score">81</span></li>
+        <li><span><span class="nm">Downton</span><br><span class="meta">affordable · riverside · family</span></span><span class="score">79</span></li>
+      </ul>
+    </article>
+
+    <!-- CRITERIA -->
+    <article class="col c-half">
+      <span class="section-tag">Brief</span>
+      <h2>What you’re looking for</h2>
+      <p class="byline">A 3-bed period or semi within 40 minutes of a mainline station, garden essential, in a town or large village with good primaries.</p>
+      <dl class="spec">
+        <div><dt>Beds</dt><dd>3+</dd></div>
+        <div><dt>Type</dt><dd>Semi / terrace</dd></div>
+        <div><dt>Outdoor</dt><dd>Garden</dd></div>
+        <div><dt>Commute</dt><dd>≤40 min</dd></div>
+      </dl>
+    </article>
+
+    <!-- JOURNEY -->
+    <article class="col c-half">
+      <span class="section-tag">Next steps</span>
+      <h2>The checklist</h2>
+      <ul class="track">
+        <li class="done"><span class="t">Agree a joint budget</span><span class="tick">Done</span></li>
+        <li class="done"><span class="t">Mortgage in principle</span><span class="tick">Done</span></li>
+        <li class="done"><span class="t">Shortlist a solicitor</span><span class="tick">Done</span></li>
+        <li><span class="t">Refresh deposit to 75%</span><span class="tick" style="color:var(--gold)">In progress</span></li>
+        <li><span class="t">Book autumn viewings</span><span class="tick">To do</span></li>
+      </ul>
+    </article>
+
+    <!-- ASK -->
+    <article class="col c-full">
+      <span class="section-tag">Ask</span>
+      <h2>Put a question to your search</h2>
+      <form class="ask" onsubmit="return false">
+        <input type="text" placeholder="e.g. Can we afford Romsey if rates rise to 5.5%?" aria-label="Ask" />
+        <button type="submit">Ask</button>
+      </form>
+      <p class="byline" style="margin-top:var(--s3)">Preview only — answers would draw on your live finances and criteria.</p>
+    </article>
+  </div>
+
+  <footer class="foot">The Relocation · An isolated design preview · No live data was used</footer>
+</div>
+<script>
+  // Scenario chips rewrite the ETA line — purely cosmetic, dummy values.
+  const chips=[...document.querySelectorAll('.chip')];
+  const eta=document.querySelector('.eta b');
+  chips.forEach(c=>c.addEventListener('click',()=>{
+    chips.forEach(x=>x.setAttribute('aria-pressed','false'));
+    c.setAttribute('aria-pressed','true');
+    if(eta) eta.textContent=c.dataset.eta;
+  }));
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+/* pages/map.css — map page layout + Leaflet theming. */
+
+.map-layout {
+  display: grid; gap: var(--space-4);
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+}
+@media (max-width: 800px) {
+  .map-layout { display: block; }
+  .map-card { height: calc(100svh - 12rem); }
+}
+
+.map-card { padding: 0; overflow: hidden; gap: 0; }
+.map-canvas {
+  height: 65dvh; min-height: 400px; width: 100%;
+  border-radius: var(--rec-radius);
+  background: var(--paper-2);
+}
+.leaflet-container { font-family: var(--font-body); background: var(--paper-2); }
+.leaflet-popup-content-wrapper {
+  background: var(--paper); color: var(--ink);
+  border-radius: var(--rec-radius-sm);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--rec-shadow);
+}
+.leaflet-popup-tip { background: var(--paper); border: 1px solid var(--hairline); }
+.leaflet-popup-content { font-size: var(--text-sm); margin: var(--space-3) var(--space-4); line-height: 1.4; }
+.leaflet-popup-content strong { font-family: var(--font-display); font-weight: 500; font-size: var(--text-base); }
+.leaflet-popup-content a { color: var(--accent-ink); text-decoration: none; }
+.leaflet-popup-content a:hover { text-decoration: underline; }
+.leaflet-popup-close-button { color: var(--ink-muted) !important; }
+.leaflet-control-attribution { background: color-mix(in oklch, var(--paper) 85%, transparent) !important; color: var(--ink-muted) !important; font-size: 10px !important; }
+.leaflet-control-attribution a { color: var(--ink-muted) !important; }
+.leaflet-bar a { background: var(--paper) !important; color: var(--ink) !important; border-color: var(--hairline) !important; }
+.leaflet-bar a:hover { background: var(--paper-2) !important; }
+
+/* Geofence-layer toggle, sat inline with the page-head actions. Generous padding
+   keeps the hit area comfortable (WCAG 2.2 SC 2.5.8). */
+.map-toggle {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm); color: var(--ink-muted);
+  cursor: pointer; user-select: none;
+}
+.map-toggle input { accent-color: var(--accent); inline-size: 1.1rem; block-size: 1.1rem; margin: 0; }
+
+@media (max-width: 800px) {
+  .map-canvas { height: 100%; min-height: 0; border-radius: 0; }
+}
+
+/* Bottom-sheet primitive (.sheet / .sheet--map) now lives in components/sheet.css */
+
+@media (max-width: 800px) {
+  /* Hide the desktop top-of-card stat tiles strip on mobile so the map can breathe */
+  .map-page-tiles { display: none; }
+  /* Tighten the page-head on the map page on mobile so the map dominates */
+  body:has(.map-canvas) .page-head { margin-bottom: var(--space-3); }
+  body:has(.map-canvas) .page-head h1 { font-size: var(--text-xl); }
+  body:has(.map-canvas) .page-head .lead { display: none; }
+  body:has(.map-canvas) .page-head .eyebrow { display: none; }
+}
+
+/* ---- Home dashboard: journey progress widget ---- */
+.journey-row + .journey-row { margin-top: var(--space-3); }
+.journey-row-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem; font-size: var(--text-sm); }

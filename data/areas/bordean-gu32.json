@@ -1,0 +1,146 @@
+{
+  "id": "bordean-gu32",
+  "name": "Bordean",
+  "village": "Bordean",
+  "town": "Petersfield",
+  "county": "Hampshire",
+  "postcode": "GU32",
+  "hubCity": "Guildford",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Petersfield",
+  "coords": {
+    "lat": 51.0056,
+    "lng": -1.0041
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "A small linear hamlet in the East Hampshire district, sat astride the A272 about one mile north-west of Langrish and 3.5 miles west of Petersfield, on the western edge of the South Downs National Park. Bordean lies within the civil parish of Langrish, which was carved out of the larger East Meon ancient parish in 1894 (taking Langrish, Ramsdean and part of Bordean with it). Settlement is genuinely thin — a row of cottages, Lower Bordean Farmhouse (Grade II listed) and Bordean House — set in chalk-downland farmland with Hen Wood and the Sir Williams Hill ridge to the south. Day-to-day services are at Langrish (primary school, pub, parish church) and Petersfield (rail, market town shops, hospital). The area is genuinely rural: no village shop, no school in Bordean itself, no bus to count on after dark.",
+  "character": "Open downland farmland with scattered period farmhouses and cottages, much of it Grade II listed. Quietly affluent owner-occupiers, working farms, and several converted barns. Inside the South Downs National Park, so any meaningful extension or rebuild will need a planning case made in NPPF terms.",
+  "amenities": [
+    "Bordean House (private estate, occasional events)",
+    "Lower Bordean Farmhouse (Grade II listed, 1620 origins)",
+    "A272 corridor for road access east–west",
+    "Footpaths onto Sir Williams Hill and Hen Wood"
+  ],
+  "schools": [
+    {
+      "name": "Langrish Primary School",
+      "phase": "Primary",
+      "ofsted": "Outstanding (Oct 2019)",
+      "distance": "1.4 mi",
+      "url": "https://www.langrish.hants.sch.uk/"
+    },
+    {
+      "name": "The Petersfield School",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "3.7 mi",
+      "url": "https://www.tps.hants.sch.uk/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "1h 2m – 1h 17m direct",
+        "mode": "drive to Petersfield + direct South Western Railway (Portsmouth Direct line)",
+        "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+      },
+      {
+        "to": "Portsmouth Harbour",
+        "time": "~30m",
+        "mode": "drive to Petersfield + direct South Western Railway",
+        "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield"
+      }
+    ],
+    "nearestStation": "Petersfield (3.2 mi)",
+    "roads": "A272 (east to Petersfield/A3, west to West Meon) runs through; A3 (London–Portsmouth) 3 mi east at Petersfield"
+  },
+  "prices": {
+    "avgSold12Mo": null,
+    "avgDetached": null,
+    "avgSemi": null,
+    "avgTerraced": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/gu32.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "South Downs Way walking from Old Winchester Hill / Butser",
+    "Hen Wood and Sir Williams Hill walks",
+    "Langrish House Hotel grounds and dining",
+    "Petersfield Heath and Petersfield Museum (Edward Thomas archive)"
+  ],
+  "placesToEat": [
+    {
+      "name": "Langrish House",
+      "type": "Country house hotel and restaurant",
+      "notes": "17th-century manor hotel in Langrish, 1 mi south-east",
+      "url": "https://www.langrishhouse.co.uk/"
+    },
+    {
+      "name": "The Trooper Inn",
+      "type": "Pub with rooms",
+      "notes": "17th-century inn at High Cross, ~3 mi north-east",
+      "url": "https://www.trooperinn.com/"
+    }
+  ],
+  "pros": [
+    "Inside the South Downs National Park — strong landscape protection",
+    "Catchment Langrish Primary rated Outstanding at last inspection (2019)",
+    "Petersfield station with direct trains to London Waterloo within 5 miles",
+    "Genuine rural seclusion within an hour's drive of Portsmouth, Winchester and Chichester",
+    "A272 corridor location keeps access reasonably easy"
+  ],
+  "cons": [
+    "Hamlet only — no shop, no school, no pub in Bordean itself; everything is in Langrish, East Meon or Petersfield",
+    "A272 carries fast through-traffic — properties on it suffer road noise",
+    "Open-market turnover is very thin (single-figure listings per year)",
+    "Tight South Downs planning regime constrains extension or new build",
+    "No buses you can rely on at night; car is essentially compulsory"
+  ],
+  "whoItSuits": "Buyers wanting a Grade II listed farmhouse or barn conversion in the South Downs and willing to absorb the cost of countryside life (oil heating, septic drainage, slower broadband in some lanes, long drives to anything). Empty-nesters and country-house buyers dominate the market here. Less suited to first-time buyers, who will find the stock thin and priced for the listed-building country market rather than the lower end of the Petersfield area.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (3.2 mi)",
+  "primarySupermarket": "Waitrose Petersfield, Lavant Street (3.5 mi)",
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Bordean",
+      "url": "https://en.wikipedia.org/wiki/Bordean"
+    },
+    {
+      "label": "British Listed Buildings — Bordean House and Lower Bordean Farmhouse",
+      "url": "https://britishlistedbuildings.co.uk/101179131-bordean-house-langrish"
+    },
+    {
+      "label": "British History Online — East Meon parish (Bordean tithing)",
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp64-75"
+    },
+    {
+      "label": "Langrish Primary School",
+      "url": "https://www.langrish.hants.sch.uk/"
+    },
+    {
+      "label": "South Western Railway — Petersfield to London Waterloo",
+      "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+    },
+    {
+      "label": "East Hants DC — Council Tax 2026/27 (Langrish parish)",
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^1492917",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:14:02.376Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

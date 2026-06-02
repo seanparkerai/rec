@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Variant D · Soft Editorial · Listings</title>
+<!-- ISOLATED DESIGN PREVIEW — dummy data only, no app assets, no database. Safe to delete. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f4f4fb;--card:#ffffff;--ink:#1c1b2e;--soft:#6b6a85;--faint:#a3a2bb;--line:#ecebf6;
+    --brand:#5b5bd6;--brand-soft:#ececfb;--brand-ink:#3f3fb0;
+    --mint:#1fb597;--mint-soft:#e3f7f2;--coral:#f2766b;--coral-soft:#fdeceb;--amber:#e8a13a;--amber-soft:#fbf1e1;
+    --r:20px;--r-sm:14px;--r-pill:999px;
+    --sh:0 1px 2px rgba(28,27,46,.04),0 8px 24px -12px rgba(28,27,46,.12);
+    --sh-lg:0 2px 4px rgba(28,27,46,.04),0 18px 40px -16px rgba(91,91,214,.22);
+    --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .num{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.1;letter-spacing:-.01em;font-optical-sizing:auto}
+  a{color:var(--brand);text-decoration:none;font-weight:600}
+  .ic{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.18em;flex:0 0 auto}
+  .shell{max-width:1160px;margin:0 auto;padding:0 var(--s6)}
+
+  .appbar{position:sticky;top:0;z-index:30;background:rgba(244,244,251,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .appbar .shell{display:flex;align-items:center;gap:var(--s5);height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+  .brand .mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--brand),#8a6bf0);box-shadow:var(--sh)}
+  .appbar nav{display:none;gap:2px;margin-left:var(--s4)}@media(min-width:860px){.appbar nav{display:flex}}
+  .appbar nav a{color:var(--soft);font-weight:600;font-size:14.5px;padding:8px 14px;border-radius:var(--r-pill)}
+  .appbar nav a[aria-current]{color:var(--brand-ink);background:var(--brand-soft)}
+  .avatar{margin-left:auto;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f2766b,#e8a13a);display:grid;place-content:center;color:#fff;font-weight:700;font-size:14px}
+
+  .open{padding:var(--s16) 0 var(--s8);border-bottom:1px solid var(--line)}
+  .open .kicker{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .open h1{font-size:clamp(34px,5.5vw,52px);font-weight:500;margin:var(--s4) 0 var(--s5)}
+  .open .stand{font-size:19px;color:var(--soft);max-width:64ch}
+  .open .stand b{color:var(--ink);font-weight:600}
+
+  /* controls */
+  .controls{position:sticky;top:64px;z-index:20;background:rgba(244,244,251,.9);backdrop-filter:blur(10px);
+    display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center;padding:var(--s5) 0;border-bottom:1px solid var(--line)}
+  .modes{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:var(--r-pill);padding:4px;box-shadow:var(--sh)}
+  .modes button{border:0;background:transparent;font-family:inherit;font-weight:700;font-size:14px;color:var(--soft);border-radius:var(--r-pill);padding:9px 18px;cursor:pointer;display:flex;align-items:center;gap:7px}
+  .modes button[aria-pressed=true]{background:var(--brand);color:#fff}
+  .modes .cnt{background:var(--coral);color:#fff;border-radius:var(--r-pill);font-size:11px;padding:1px 8px}
+  .search{flex:1;min-width:220px;display:flex;align-items:center;gap:var(--s2);background:var(--card);border:1px solid var(--line);border-radius:var(--r-pill);padding:10px 16px;box-shadow:var(--sh);color:var(--soft)}
+  .search input{border:0;background:transparent;font-family:inherit;font-size:15px;flex:1;color:var(--ink)}.search input:focus{outline:none}
+  .chip-f{background:var(--card);border:1px solid var(--line);border-radius:var(--r-pill);padding:10px 16px;font-weight:600;font-size:14px;color:var(--soft);cursor:pointer;box-shadow:var(--sh);font-family:inherit;display:flex;align-items:center;gap:7px}
+  .chip-f[aria-pressed=true]{background:var(--brand-soft);color:var(--brand-ink);border-color:var(--brand-soft)}
+  .summary{color:var(--soft);font-size:14.5px;font-weight:600;padding:var(--s6) 0 var(--s2)}
+  .summary b{color:var(--ink)}
+
+  /* editorial entries */
+  .list{list-style:none;padding-bottom:var(--s16)}
+  .entry{display:grid;grid-template-columns:1fr;gap:var(--s6);padding:var(--s10) 0;border-bottom:1px solid var(--line)}
+  @media(min-width:760px){.entry{grid-template-columns:300px 1fr;gap:var(--s8)}}
+  .entry[data-oor=true]{opacity:.62}
+  .media{position:relative}
+  .photo{aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+  .photo svg{width:100%;height:100%;display:block}
+  .ribbon{position:absolute;top:var(--s3);left:var(--s3);background:rgba(28,27,46,.72);color:#fff;border-radius:var(--r-pill);font-size:12px;font-weight:700;padding:4px 12px;backdrop-filter:blur(4px)}
+  .fav{position:absolute;top:var(--s3);right:var(--s3);width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);border:0;display:grid;place-content:center;cursor:pointer;color:var(--soft);box-shadow:var(--sh)}
+  .media .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+  .media .strip span{aspect-ratio:4/3;border-radius:9px;overflow:hidden}
+  .media .strip svg{width:100%;height:100%;display:block}
+
+  .body .toprow{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s5);flex-wrap:wrap}
+  .vtag{display:inline-flex;align-items:center;gap:7px;border-radius:var(--r-pill);font-size:13px;font-weight:700;padding:5px 14px}
+  .v-strong{background:var(--mint-soft);color:#0e6d59}.v-good{background:var(--brand-soft);color:var(--brand-ink)}
+  .v-stretch{background:var(--amber-soft);color:#a96b12}.v-oor{background:#eceaf0;color:#6b6a85}
+  .price{text-align:right}
+  .price .p{font-size:30px;font-weight:800;letter-spacing:-.03em}
+  .price .pm{color:var(--soft);font-size:14px;font-weight:600}
+  .body h2{font-size:25px;margin:var(--s4) 0 2px}
+  .addr{color:var(--soft);font-weight:600;display:flex;align-items:center;gap:7px}
+  .dek{font-size:16.5px;color:var(--ink);margin:var(--s4) 0;max-width:64ch}
+  .specs{display:flex;flex-wrap:wrap;gap:var(--s4) var(--s6);padding:var(--s4) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:var(--s5)}
+  .specs span{display:flex;align-items:center;gap:8px;color:var(--soft);font-weight:600;font-size:14.5px}
+  .specs span b{color:var(--ink)}
+  .specs .ic{color:var(--brand)}
+
+  .assess{display:grid;grid-template-columns:1fr;gap:var(--s5)}
+  @media(min-width:560px){.assess{grid-template-columns:1fr 1fr}}
+  .assess h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);font-weight:700;margin-bottom:var(--s3);display:flex;align-items:center;gap:7px}
+  .assess ul{list-style:none;display:flex;flex-direction:column;gap:var(--s2)}
+  .assess li{font-size:15px;color:var(--soft);padding-left:26px;position:relative;line-height:1.5}
+  .assess .for h4{color:#0e6d59}.assess .against h4{color:#b14b40}
+  .assess .for li::before{content:"";position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;background:var(--mint-soft);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231fb597' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+  .assess .against li::before{content:"";position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;background:var(--coral-soft);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23f2766b' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+  .note{margin-top:var(--s5);background:var(--bg);border-radius:var(--r-sm);padding:var(--s4) var(--s5);border-left:3px solid var(--brand)}
+  .note .h{display:flex;align-items:center;gap:8px;color:var(--brand-ink);font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+  .note p{color:var(--ink);font-size:15px;line-height:1.55}
+  .actions{display:flex;gap:var(--s3);margin-top:var(--s5);flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--r-pill);padding:11px 20px;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+  .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+  footer{border-top:1px solid var(--line);padding:var(--s10) 0;color:var(--faint);font-size:13.5px}
+  footer .shell{display:flex;flex-wrap:wrap;gap:var(--s4);justify-content:space-between}
+  .preview-flag{position:fixed;top:74px;right:14px;background:var(--ink);color:#fff;border-radius:var(--r-pill);font-size:11px;padding:5px 13px;z-index:50;font-weight:700;opacity:.92}
+  *:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 17v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4M3 14h18M4 17v3M20 17v3M7 11V9h4v2"/></symbol>
+  <symbol id="i-bath" viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3Z"/><path d="M6 12V6a1.8 1.8 0 0 1 3.2-1.2"/><path d="M7 19l-1 2M18 19l1 2"/></symbol>
+  <symbol id="i-train" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="13" rx="3.5"/><path d="M6 11h12"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M9 21l2-3M15 21l-2-3"/></symbol>
+  <symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 3 7 11h3l-3 5h4v5h2v-5h4l-3-5h3l-5-8Z"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M4 14l1.6-5.2A2 2 0 0 1 7.5 7.4h9a2 2 0 0 1 1.9 1.4L20 14"/><rect x="3" y="14" width="18" height="4.5" rx="1.6"/><circle cx="7.5" cy="18.5" r="1.4"/><circle cx="16.5" cy="18.5" r="1.4"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="5" r="1.8"/><path d="M13 8l-1.5 4 2.5 2v6M11.5 12 8 13.5M14 14l3 1.5"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6l1-7Z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h7M15 17h5"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="13" cy="17" r="2"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="M14 6l4 4"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 4h14v16l-3-2-2 2-2-2-2 2-2-2-3 2V4Z"/><path d="M9 9h6M9 13h4"/></symbol>
+</svg>
+
+<div class="preview-flag">PREVIEW · D · dummy data</div>
+
+<div class="appbar"><div class="shell">
+  <span class="brand"><span class="mark"></span>rec</span>
+  <nav>
+    <a href="variant-d-home.html">Home</a><a href="#" aria-current="page">Listings</a>
+    <a href="#">Areas</a><a href="#">Finances</a><a href="#">Journey</a><a href="#">Map</a>
+  </nav>
+  <span class="avatar">L</span>
+</div></div>
+
+<div class="shell">
+  <header class="open">
+    <p class="kicker"><svg class="ic"><use href="#i-home"/></svg> Seven homes across your areas</p>
+    <h1>The market, read for you.</h1>
+    <p class="stand">Every property on the market across your five shortlisted areas, written up and ranked by how well it fits your budget, your brief, and the place itself. Affordability is a hard gate — homes beyond reach are tucked away until you ask for them.</p>
+  </header>
+
+  <div class="controls">
+    <div class="modes" role="group" aria-label="View mode">
+      <button aria-pressed="true">Browse</button>
+      <button aria-pressed="false">To review <span class="cnt">4</span></button>
+    </div>
+    <span class="search"><svg class="ic"><use href="#i-search"/></svg><input type="search" placeholder="Search address, postcode, area or type…" aria-label="Search listings" /></span>
+    <button class="chip-f" aria-pressed="false"><svg class="ic"><use href="#i-sliders"/></svg> Best fit</button>
+    <button class="chip-f" aria-pressed="false">3+ beds</button>
+    <button class="chip-f" id="oorChip" aria-pressed="false">Show out-of-reach</button>
+  </div>
+
+  <p class="summary" id="summary">Showing <b>6 of 7</b> homes · 1 tucked away as out-of-reach</p>
+
+  <ol class="list" id="list">
+    <!-- 1 -->
+    <li class="entry" data-oor="false">
+      <div class="media">
+        <div class="photo"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#ececfb"/><path d="M40 175 L160 80 L280 175 V210 H40Z" fill="#d7d6f5"/><path d="M40 175 L160 80 L280 175" fill="none" stroke="#5b5bd6" stroke-width="3.5"/><rect x="138" y="140" width="44" height="70" fill="#5b5bd6" opacity=".42"/><rect x="80" y="150" width="34" height="34" fill="#fff" opacity=".7"/><rect x="206" y="150" width="34" height="34" fill="#fff" opacity=".7"/><circle cx="280" cy="48" r="20" fill="#fff" opacity=".6"/></svg></div>
+        <span class="ribbon">New · listed yesterday</span>
+        <button class="fav" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+        <div class="strip"><span><svg viewBox="0 0 80 60"><rect width="80" height="60" fill="#d7d6f5"/></svg></span><span><svg viewBox="0 0 80 60"><rect width="80" height="60" fill="#e3f7f2"/></svg></span><span><svg viewBox="0 0 80 60"><rect width="80" height="60" fill="#ececfb"/></svg></span></div>
+      </div>
+      <div class="body">
+        <div class="toprow"><span class="vtag v-strong"><svg class="ic"><use href="#i-check"/></svg> Strong fit · 92</span><div class="price"><div class="p num">£410,000</div><div class="pm num">≈ £1,710/mo · £15k under budget</div></div></div>
+        <h2>Three-bedroom semi-detached house</h2>
+        <p class="addr"><svg class="ic"><use href="#i-pin"/></svg> Cherville Street, Romsey · SO51</p>
+        <p class="dek">About as close to your brief as the current market gets: a well-kept semi a short walk from Romsey’s mainline station, with a proper garden and a primary school in catchment. The single bathroom is the only obvious compromise.</p>
+        <div class="specs">
+          <span><svg class="ic"><use href="#i-bed"/></svg> <b>3</b> beds</span>
+          <span><svg class="ic"><use href="#i-bath"/></svg> <b>1</b> bath</span>
+          <span><svg class="ic"><use href="#i-train"/></svg> <b>0.4 mi</b> station</span>
+          <span><svg class="ic"><use href="#i-tree"/></svg> Garden</span>
+          <span><svg class="ic"><use href="#i-bolt"/></svg> EPC <b>C</b></span>
+        </div>
+        <div class="assess">
+          <div class="for"><h4>What counts for it</h4><ul><li>£15,000 under your budget, comfortably affordable</li><li>Top-ranked shortlisted area</li><li>Walkable to a mainline station</li><li>Three beds and a garden, exactly as briefed</li></ul></div>
+          <div class="against"><h4>What counts against</h4><ul><li>Only one bathroom for three bedrooms</li><li>No off-street parking</li></ul></div>
+        </div>
+        <div class="note"><div class="h"><svg class="ic"><use href="#i-note"/></svg> Editor’s note</div><p>The strongest all-rounder on the list. If the single bathroom is liveable for you, this is the one to view first.</p></div>
+        <div class="actions"><span class="btn primary">View details <svg class="ic"><use href="#i-arrow"/></svg></span><span class="btn"><svg class="ic"><use href="#i-heart"/></svg> Save</span></div>
+      </div>
+    </li>
+
+    <!-- 2 -->
+    <li class="entry" data-oor="false">
+      <div class="media">
+        <div class="photo"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#e3f7f2"/><path d="M55 180 L160 90 L265 180 V210 H55Z" fill="#c6ece2"/><rect x="110" y="148" width="38" height="62" fill="#1fb597" opacity=".4"/><rect x="178" y="148" width="38" height="62" fill="#e8a13a" opacity=".34"/></svg></div>
+        <span class="ribbon">Listed 2 days ago</span>
+        <button class="fav" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+      </div>
+      <div class="body">
+        <div class="toprow"><span class="vtag v-strong"><svg class="ic"><use href="#i-check"/></svg> Strong fit · 85</span><div class="price"><div class="p num">£365,000</div><div class="pm num">≈ £1,520/mo · £60k under budget</div></div></div>
+        <h2>Three-bedroom semi-detached cottage</h2>
+        <p class="addr"><svg class="ic"><use href="#i-pin"/></svg> Station Road, Tisbury · SP3</p>
+        <p class="dek">A character stone cottage moments from a station with direct trains to London Waterloo — unusual for somewhere this rural. Two bathrooms and well within budget; the trade-off is a lower energy rating typical of period stone.</p>
+        <div class="specs">
+          <span><svg class="ic"><use href="#i-bed"/></svg> <b>3</b> beds</span>
+          <span><svg class="ic"><use href="#i-bath"/></svg> <b>2</b> baths</span>
+          <span><svg class="ic"><use href="#i-train"/></svg> <b>0.3 mi</b> rail</span>
+          <span><svg class="ic"><use href="#i-tree"/></svg> Garden</span>
+          <span><svg class="ic"><use href="#i-bolt"/></svg> EPC <b>D</b></span>
+        </div>
+        <div class="assess">
+          <div class="for"><h4>What counts for it</h4><ul><li>£60,000 under budget — real headroom</li><li>Direct rail to London Waterloo</li><li>Two bathrooms</li><li>Genuine period character</li></ul></div>
+          <div class="against"><h4>What counts against</h4><ul><li>Lower EPC; expect higher heating costs</li><li>Smaller village for day-to-day amenities</li></ul></div>
+        </div>
+        <div class="note"><div class="h"><svg class="ic"><use href="#i-note"/></svg> Editor’s note</div><p>The commuter’s pick. Budget headroom here could absorb a sensible insulation upgrade.</p></div>
+        <div class="actions"><span class="btn primary">View details <svg class="ic"><use href="#i-arrow"/></svg></span><span class="btn"><svg class="ic"><use href="#i-heart"/></svg> Save</span></div>
+      </div>
+    </li>
+
+    <!-- 3 -->
+    <li class="entry" data-oor="false">
+      <div class="media">
+        <div class="photo"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#ececfb"/><path d="M45 178 L160 82 L275 178 V210 H45Z" fill="#d7d6f5"/><rect x="140" y="145" width="40" height="65" fill="#5b5bd6" opacity=".42"/></svg></div>
+        <span class="ribbon">Listed 4 days ago</span>
+        <button class="fav" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+      </div>
+      <div class="body">
+        <div class="toprow"><span class="vtag v-strong"><svg class="ic"><use href="#i-check"/></svg> Strong fit · 88</span><div class="price"><div class="p num">£389,950</div><div class="pm num">≈ £1,620/mo · £35k under budget</div></div></div>
+        <h2>Three-bedroom end-of-terrace</h2>
+        <p class="addr"><svg class="ic"><use href="#i-pin"/></svg> West Street, Wilton · SP2</p>
+        <p class="dek">Good value for the space, on the edge of Wilton with quick access to Salisbury and a well-regarded primary in catchment. The West Street frontage can be busy, and it’s a bus rather than a walk to the station.</p>
+        <div class="specs">
+          <span><svg class="ic"><use href="#i-bed"/></svg> <b>3</b> beds</span>
+          <span><svg class="ic"><use href="#i-bath"/></svg> <b>1</b> bath</span>
+          <span><svg class="ic"><use href="#i-car"/></svg> <b>3 mi</b> Salisbury</span>
+          <span><svg class="ic"><use href="#i-tree"/></svg> Garden</span>
+          <span><svg class="ic"><use href="#i-bolt"/></svg> EPC <b>C</b></span>
+        </div>
+        <div class="assess">
+          <div class="for"><h4>What counts for it</h4><ul><li>£35,000 under budget</li><li>Three beds and a garden as briefed</li><li>Good primary-school catchment</li></ul></div>
+          <div class="against"><h4>What counts against</h4><ul><li>Bus to the station, not walkable</li><li>Busy road frontage</li></ul></div>
+        </div>
+        <div class="actions"><span class="btn primary">View details <svg class="ic"><use href="#i-arrow"/></svg></span><span class="btn"><svg class="ic"><use href="#i-heart"/></svg> Save</span></div>
+      </div>
+    </li>
+
+    <!-- 4 good -->
+    <li class="entry" data-oor="false">
+      <div class="media">
+        <div class="photo"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#ececfb"/><rect x="92" y="112" width="136" height="98" fill="#d7d6f5"/><path d="M82 112 L160 66 L238 112Z" fill="#b9b8ee"/><rect x="146" y="160" width="28" height="50" fill="#5b5bd6" opacity=".42"/></svg></div>
+        <span class="ribbon">Listed 3 days ago</span>
+        <button class="fav" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+      </div>
+      <div class="body">
+        <div class="toprow"><span class="vtag v-good">Good fit · 79</span><div class="price"><div class="p num">£325,000</div><div class="pm num">≈ £1,360/mo · £100k under budget</div></div></div>
+        <h2>Two-bedroom Victorian terrace</h2>
+        <p class="addr"><svg class="ic"><use href="#i-pin"/></svg> Milford Hill, Salisbury · SP1</p>
+        <p class="dek">A pretty period terrace within walking distance of Salisbury’s cathedral and station, full of character and very affordable. It scores lower only because it’s two beds against your three, with a courtyard rather than a garden.</p>
+        <div class="specs">
+          <span><svg class="ic"><use href="#i-bed"/></svg> <b>2</b> beds</span>
+          <span><svg class="ic"><use href="#i-bath"/></svg> <b>1</b> bath</span>
+          <span><svg class="ic"><use href="#i-walk"/></svg> <b>0.6 mi</b> centre</span>
+          <span><svg class="ic"><use href="#i-bolt"/></svg> EPC <b>D</b></span>
+        </div>
+        <div class="assess">
+          <div class="for"><h4>What counts for it</h4><ul><li>Well under budget with room to renovate</li><li>Walk to cathedral and station</li><li>Characterful period features</li></ul></div>
+          <div class="against"><h4>What counts against</h4><ul><li>Two beds against a three-bed brief</li><li>Courtyard, not a garden</li></ul></div>
+        </div>
+        <div class="actions"><span class="btn primary">View details <svg class="ic"><use href="#i-arrow"/></svg></span><span class="btn"><svg class="ic"><use href="#i-heart"/></svg> Save</span></div>
+      </div>
+    </li>
+
+    <!-- 5 stretch -->
+    <li class="entry" data-oor="false">
+      <div class="media">
+        <div class="photo"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#fbf1e1"/><path d="M40 182 L160 80 L280 182 V210 H40Z" fill="#f3e3c4"/><rect x="138" y="148" width="44" height="62" fill="#e8a13a" opacity=".4"/></svg></div>
+        <span class="ribbon">Listed 5 days ago</span>
+        <button class="fav" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+      </div>
+      <div class="body">
+        <div class="toprow"><span class="vtag v-stretch">Stretch · 71</span><div class="price"><div class="p num">£445,000</div><div class="pm num">≈ £1,920/mo · £20k over budget</div></div></div>
+        <h2>Three-bedroom period cottage</h2>
+        <p class="addr"><svg class="ic"><use href="#i-pin"/></svg> The Street, Whiteparish · SP5</p>
+        <p class="dek">A characterful cottage with a large garden and two bathrooms, but it sits above your comfortable band and carries the running costs of an older, oil-heated home with no station within walking distance.</p>
+        <div class="specs">
+          <span><svg class="ic"><use href="#i-bed"/></svg> <b>3</b> beds</span>
+          <span><svg class="ic"><use href="#i-bath"/></svg> <b>2</b> baths</span>
+          <span><svg class="ic"><use href="#i-car"/></svg> <b>7 mi</b> Romsey</span>
+          <span><svg class="ic"><use href="#i-tree"/></svg> Large garden</span>
+          <span><svg class="ic"><use href="#i-bolt"/></svg> EPC <b>E</b></span>
+        </div>
+        <div class="assess">
+          <div class="for"><h4>What counts for it</h4><ul><li>Large garden and real character</li><li>Two bathrooms</li></ul></div>
+          <div class="against"><h4>What counts against</h4><ul><li>£20,000 over your comfortable band</li><li>Low EPC and oil heating</li><li>No station within walking distance</li></ul></div>
+        </div>
+        <div class="actions"><span class="btn primary">View details <svg class="ic"><use href="#i-arrow"/></svg></span><span class="btn"><svg class="ic"><use href="#i-heart"/></svg> Save</span></div>
+      </div>
+    </li>
+
+    <!-- 6 stretch -->
+    <li class="entry" data-oor="false">
+      <div class="media">
+        <div class="photo"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#fbf1e1"/><rect x="94" y="115" width="132" height="95" fill="#f3e3c4"/><path d="M84 115 L160 68 L236 115Z" fill="#e9d3a0"/></svg></div>
+        <span class="ribbon">Listed 6 days ago</span>
+        <button class="fav" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+      </div>
+      <div class="body">
+        <div class="toprow"><span class="vtag v-stretch">Stretch · 66</span><div class="price"><div class="p num">£475,000</div><div class="pm num">≈ £2,050/mo · £50k over budget</div></div></div>
+        <h2>Three-bedroom flint cottage</h2>
+        <p class="addr"><svg class="ic"><use href="#i-pin"/></svg> High Street, Stockbridge · SO20</p>
+        <p class="dek">A sought-after address in a famous Test-valley fishing town. Lovely, but priced well above your band and a fair drive from the nearest rail.</p>
+        <div class="specs">
+          <span><svg class="ic"><use href="#i-bed"/></svg> <b>3</b> beds</span>
+          <span><svg class="ic"><use href="#i-bath"/></svg> <b>1</b> bath</span>
+          <span><svg class="ic"><use href="#i-car"/></svg> <b>8 mi</b> station</span>
+          <span><svg class="ic"><use href="#i-tree"/></svg> Garden</span>
+          <span><svg class="ic"><use href="#i-bolt"/></svg> EPC <b>D</b></span>
+        </div>
+        <div class="assess">
+          <div class="for"><h4>What counts for it</h4><ul><li>Highly sought-after high street</li><li>Characterful Test-valley town</li></ul></div>
+          <div class="against"><h4>What counts against</h4><ul><li>£50,000 over your comfortable band</li><li>No nearby rail connection</li></ul></div>
+        </div>
+        <div class="actions"><span class="btn primary">View details <svg class="ic"><use href="#i-arrow"/></svg></span><span class="btn"><svg class="ic"><use href="#i-heart"/></svg> Save</span></div>
+      </div>
+    </li>
+
+    <!-- 7 OOR -->
+    <li class="entry" data-oor="true" hidden>
+      <div class="media">
+        <div class="photo"><svg viewBox="0 0 320 240"><rect width="320" height="240" fill="#eceaf0"/><path d="M30 184 L160 74 L290 184 V210 H30Z" fill="#dcdae6"/><rect x="98" y="150" width="40" height="60" fill="#9a99b3" opacity=".5"/><rect x="182" y="150" width="40" height="60" fill="#9a99b3" opacity=".5"/></svg></div>
+        <span class="ribbon">Out of reach</span>
+        <button class="fav" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+      </div>
+      <div class="body">
+        <div class="toprow"><span class="vtag v-oor">Out of reach</span><div class="price"><div class="p num">£625,000</div><div class="pm num">≈ £2,690/mo · £200k over budget</div></div></div>
+        <h2>Four-bedroom detached house</h2>
+        <p class="addr"><svg class="ic"><use href="#i-pin"/></svg> Sun Lane, Alresford · SO24</p>
+        <p class="dek">A genuinely lovely four-bed in a premium Georgian town — but £200,000 beyond budget, which trips the hard affordability gate. Shown only because you asked to see out-of-reach homes.</p>
+        <div class="specs">
+          <span><svg class="ic"><use href="#i-bed"/></svg> <b>4</b> beds</span>
+          <span><svg class="ic"><use href="#i-bath"/></svg> <b>2</b> baths</span>
+          <span><svg class="ic"><use href="#i-train"/></svg> <b>1 mi</b> line</span>
+          <span><svg class="ic"><use href="#i-car"/></svg> Garage</span>
+          <span><svg class="ic"><use href="#i-bolt"/></svg> EPC <b>C</b></span>
+        </div>
+        <div class="assess">
+          <div class="for"><h4>What counts for it</h4><ul><li>Premium Georgian town</li><li>Four beds and a double garage</li></ul></div>
+          <div class="against"><h4>What counts against</h4><ul><li>£200,000 over budget — hard gate</li><li>Monthly cost beyond affordability</li></ul></div>
+        </div>
+        <div class="actions"><span class="btn">View anyway <svg class="ic"><use href="#i-arrow"/></svg></span></div>
+      </div>
+    </li>
+  </ol>
+</div>
+
+<footer><div class="shell"><span>rec · isolated design preview</span><span>No live data was used · Variant D</span></div></footer>
+<script>
+  const chip=document.getElementById('oorChip');const hidden=document.querySelector('.entry[data-oor="true"]');const summary=document.getElementById('summary');
+  chip.addEventListener('click',()=>{
+    const on=chip.getAttribute('aria-pressed')!=='true';
+    chip.setAttribute('aria-pressed',on?'true':'false');hidden.hidden=!on;
+    summary.innerHTML=on?'Showing <b>7 of 7</b> homes · including 1 out-of-reach':'Showing <b>6 of 7</b> homes · 1 tucked away as out-of-reach';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+{
+  "id": "littleton-so22",
+  "name": "Littleton",
+  "village": "Littleton",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO22",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.0749,
+    "lng": -1.3328
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": {
+    "avgDetached": 920528,
+    "avgSemi": 593316,
+    "avgTerraced": 518049,
+    "avgFlat": null,
+    "asOf": "2026-05"
+  },
+  "councilTaxBand": "D",
+  "overview": "Littleton is a village in the joint civil parish of Littleton and Harestock (population 3,577 at the 2011 Census), three miles north-west of Winchester city centre on the downs between the B3420 (the old Roman road to Cirencester) and the B3049 Stockbridge road. Half a dozen of its houses date from the fifteenth and sixteenth centuries — some are Hampshire Hall houses — clustered around the medieval St Catherine's church and the old parsonage. The bulk of the village dates from the early twentieth century, with a village hall built in 1920 as a memorial to residents killed in the First World War. Littleton holds around 450 homes and 2,800 electors across the joint parish (Harestock to the south-east is the newer settlement). It sits inside the Winchester gap zone and just outside the South Downs National Park to the south.",
+  "character": "Genuine 'open' village with two centres: an older lane (Main Road and Andover Road) of brick-and-flint and 1920s–1930s cottages around St Catherine's church and the village hall, plus a tighter ribbon of post-war and recent-build housing toward Harestock. Quiet but well-equipped, with extensive sports and recreational facilities.",
+  "amenities": [
+    "Running Horse Inn (Main Road, gastro pub with rooms)",
+    "St Catherine's Church (Church of England)",
+    "Littleton Village Hall (1920, war memorial)",
+    "Littleton Recreation Ground, tennis, cricket and football",
+    "Annual Littleton and Harestock Show",
+    "Harestock garage and small shops on the southern end (1 mi)",
+    "Wyke Mark and Andover Road local convenience shops",
+    "Sparsholt College Hampshire (3 mi) — land-based further education",
+    "Full Winchester high street, Cathedral and Sainsbury's (3 mi)"
+  ],
+  "schools": [
+    {
+      "name": "Harestock Primary School",
+      "phase": "Primary",
+      "type": "State (Community)",
+      "ofsted": "Good (2023)",
+      "distance": "0.9 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116241"
+    },
+    {
+      "name": "Henry Beaufort School",
+      "phase": "Secondary",
+      "type": "State (Comprehensive)",
+      "ofsted": "Good (2023)",
+      "distance": "1.1 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+    },
+    {
+      "name": "Peter Symonds College (16-18)",
+      "phase": "Sixth Form",
+      "type": "State (Sixth-form college)",
+      "ofsted": "Outstanding (2019)",
+      "distance": "2.5 mi",
+      "url": "https://reports.ofsted.gov.uk/provider/22/130688"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "London Waterloo",
+        "time": "56m (fastest) / 1h 23m (average)",
+        "mode": "drive to Winchester + direct train (SWR)",
+        "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      },
+      {
+        "to": "Southampton Central",
+        "time": "15m",
+        "mode": "train from Winchester (SWR)",
+        "source": "https://www.thetrainline.com/train-times/winchester-to-southampton-central"
+      },
+      {
+        "to": "Basingstoke",
+        "time": "~25m",
+        "mode": "drive (M3)",
+        "source": "https://www.google.com/maps"
+      }
+    ],
+    "nearestStation": "Winchester (3.0 mi)",
+    "roads": "B3420 (Roman road, parish edge); B3049 (Stockbridge Road, parish edge); A34/M3 J9 ~3 mi"
+  },
+  "prices": {
+    "avgSold12Mo": 640807,
+    "avgDetached": 920528,
+    "avgSemi": 593316,
+    "avgTerraced": 518049,
+    "avgBungalow": null,
+    "avgFlat": null,
+    "source": "https://www.rightmove.co.uk/house-prices/so22.html",
+    "asOf": "2026-05"
+  },
+  "thingsToDo": [
+    "Littleton and Harestock Show (September)",
+    "Walking on the Roman road (B3420) and around Crab Wood SSSI",
+    "Farley Mount Country Park (3 mi)",
+    "Hillier Garden Centre, Sir Harold Hillier Gardens (8 mi)",
+    "Sparsholt College open days and equestrian centre",
+    "Winchester Cathedral and the city Christmas market (3 mi)"
+  ],
+  "placesToEat": [
+    {
+      "name": "The Running Horse Inn",
+      "type": "Gastropub with rooms",
+      "notes": "Village pub on Main Road; lunch, dinner and rooms",
+      "url": "https://www.runninghorseinn.co.uk/"
+    },
+    {
+      "name": "Café Monde, Harestock",
+      "type": "Independent café",
+      "notes": "Local café at the Harestock end of the parish",
+      "url": "https://www.facebook.com/cafemondeharestock/"
+    }
+  ],
+  "pros": [
+    "Good Ofsted primary and Good catchment secondary (Henry Beaufort) inside the parish",
+    "Three miles from Winchester station and the direct Waterloo line",
+    "Mix of older brick-and-flint and inter-war housing; not pure estate",
+    "Active village life — show, hall, recreation ground, multiple groups",
+    "Outstanding sixth-form (Peter Symonds) is one bus or a short drive away"
+  ],
+  "cons": [
+    "SO22 detached stock averages £920k — well above budget; terraced stock pushes £500k",
+    "B3420 and B3049 are busy commuter routes at peak",
+    "No mainline station within the village — Winchester drive or bus needed",
+    "Recent new-build pressure on the Harestock side has shaped local feeling",
+    "Some streets feel suburban rather than rural"
+  ],
+  "whoItSuits": "Strong fit for a solo first-time buyer who wants Winchester convenience without buying inside the city — Henry Beaufort and Harestock primary are both Good and inside walking distance, and you keep direct trains to Waterloo. Realistically, only terraces and the cheaper end of semis will come into the £400k budget here; everything detached is over £900k. For prettier-but-pricier look at Sparsholt or Crawley (SO21); for cheaper similar commute, South Wonston (SO21) or Sutton Scotney further up the A34.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (3.0 mi)",
+  "primarySupermarket": "Sainsbury's, Middle Brook Street, Winchester (3.0 mi); Waitrose, Stockbridge Road, Winchester (2.5 mi)",
+  "images": [],
+  "sources": [
+    {
+      "title": "Wikipedia — Littleton and Harestock",
+      "url": "https://en.wikipedia.org/wiki/Littleton_and_Harestock"
+    },
+    {
+      "title": "Littleton and Harestock Parish Council",
+      "url": "https://lhpc.org.uk/about-2/"
+    },
+    {
+      "title": "Ofsted — Harestock Primary School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116241"
+    },
+    {
+      "title": "Ofsted — Henry Beaufort School",
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+    },
+    {
+      "title": "Rightmove — SO22 house prices",
+      "url": "https://www.rightmove.co.uk/house-prices/so22.html"
+    },
+    {
+      "title": "Trainline — Winchester to London Waterloo",
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^1595223",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:15:01.507Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}

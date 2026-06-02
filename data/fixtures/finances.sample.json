@@ -1,0 +1,124 @@
+{
+  "_SAMPLE": "SYNTHETIC SAMPLE DATA — fictional placeholder values for tests and fresh-install fallback ONLY. This is NOT real user data; do not analyse, cite, or treat it as anyone's actual finances. Real user-state lives only in Supabase (see docs/SUPABASE_SYNC.md).",
+  "currency": "GBP",
+  "firstTimeBuyer": true,
+  "income": {
+    "annualGrossBase": 60000,
+    "monthlyNetTakeHome": 3000,
+    "taxCode": "1257L",
+    "taxPeriodCurrent": 1,
+    "mostRecentPayslipDate": "2026-01-31",
+    "payslipReference": "0000",
+    "niNumber": "AB123456C",
+    "employerNI": 600,
+    "deductions": {
+      "payeTax": 800,
+      "nationalInsurance": 250,
+      "employeePension": 150,
+      "studentLoanPlan1": 0
+    },
+    "benefitsInKind": [
+      { "name": "Sample benefit", "monthlyValue": 5 }
+    ],
+    "annualBonus": 2000,
+    "bonus": {
+      "structure": "discretionary",
+      "schedule": "no fixed schedule",
+      "lastReceived": { "amount": 2000, "date": "2025-06" },
+      "rolling3YearAverage": null,
+      "expectedAnnualised": 2000,
+      "confidence": "medium-low",
+      "lenderTreatment": "expect 0-50% counted on first application until 2-3 year history"
+    },
+    "equityCompensation": null,
+    "sideIncome": {
+      "active": false,
+      "sources": [],
+      "note": "investment gains held in ISA — not income"
+    },
+    "payRise": {
+      "scenario": "received",
+      "confidence": "actual",
+      "newSalary": 60000,
+      "previousSalary": 58000,
+      "receivedDate": "2026-01",
+      "risePct": 3.45,
+      "monthlyNetDeltaEstimate": 60
+    }
+  },
+  "outgoings": {
+    "householdContribution": {
+      "amount": 400,
+      "recipient": "family",
+      "postMoveValue": 0,
+      "note": "informal arrangement, will appear on bank statements"
+    },
+    "subscriptions": {
+      "softwareAI": {
+        "total": 40,
+        "itemised": false,
+        "note": "aggregate software tools"
+      }
+    },
+    "creditCardPayment": {
+      "amount": 10,
+      "provider": "Example Bank",
+      "note": "minimum payment, balance being carried until cleared pre-mortgage"
+    },
+    "carCosts": { "active": false, "_note": "no car currently" },
+    "charitableGiving": { "active": false }
+  },
+  "goal": {
+    "targetDeposit": 40000,
+    "targetPropertyPrice": 350000,
+    "offerTarget": 330000,
+    "depositPct": 10,
+    "movingWindow": "sample window"
+  },
+  "savings": {
+    "current": 0,
+    "monthlyContribution": 1500,
+    "history": [],
+    "_note": "All liquid savings live in trading212ISA (data/fixtures/investments.sample.json). This field is cash held OUTSIDE investment accounts — currently zero."
+  },
+  "mortgage": {
+    "targetMax": 300000,
+    "ratePctAssumed": 5.0,
+    "termYears": 30,
+    "ltvRange": "90–95%",
+    "monthlyPaymentRange": { "min": 1400, "max": 1700 },
+    "estimatedMonthlyPayment": 1600,
+    "fixedRatePref": "2-year",
+    "feesWillingness": { "min": 0, "max": 1500 }
+  },
+  "oneTimeCosts": [
+    { "item": "Stamp Duty", "cost": 2500, "notes": "illustrative SDLT estimate", "category": "sdlt" },
+    { "item": "Solicitor / Conveyancing", "cost": 1200, "notes": "Including searches", "category": "legal" },
+    { "item": "Survey / Valuation", "cost": 500, "notes": "HomeBuyer (Level 2)", "category": "legal" },
+    { "item": "Removals", "cost": 0, "notes": "DIY or minimal", "category": "removal" },
+    { "item": "Contingency Buffer", "cost": 0, "notes": "For unexpected", "category": "contingency" },
+    { "item": "Mortgage Arrangement Fees", "cost": 0, "notes": "Reduce where possible", "category": "legal" }
+  ],
+  "ongoingBills": [
+    { "item": "Phone Bill", "annual": 480, "monthly": 40 },
+    { "item": "Council Tax", "annual": 1800, "monthly": 150 },
+    { "item": "Gas & Electricity", "annual": 1560, "monthly": 130 },
+    { "item": "Water", "annual": 360, "monthly": 30 },
+    { "item": "Internet & Broadband", "annual": 420, "monthly": 35 },
+    { "item": "Buildings Insurance (& contents)", "annual": 360, "monthly": 30 }
+  ],
+  "expenses": [
+    { "item": "Food & Shopping", "annual": 3000, "monthly": 250, "weekly": 58 },
+    { "item": "Transport", "annual": 1200, "monthly": 100, "weekly": 23 },
+    { "item": "Leisure", "annual": 1800, "monthly": 150, "weekly": 35 }
+  ],
+  "shoppingList": [
+    { "category": "Kitchen Basics", "cost": 200, "items": "sample home-setup estimate" },
+    { "category": "Appliances", "cost": 1000, "items": "sample home-setup estimate" },
+    { "category": "Furniture", "cost": 1500, "items": "sample home-setup estimate" }
+  ],
+  "giftCards": [
+    { "source": "Retailer A", "amount": 50, "expiry": "2028" },
+    { "source": "Retailer B", "amount": 25, "expiry": "" }
+  ]
+}

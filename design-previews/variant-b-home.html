@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Variant B · Console · Home</title>
+<!-- ISOLATED DESIGN PREVIEW — dummy data only, no app assets, no database. Safe to delete. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b0e0d;--panel:#111614;--panel-2:#161d1a;--line:#243029;--line-soft:#1a2320;
+    --txt:#dfeae4;--dim:#7d8f86;--mut:#4f5e57;
+    --em:#3ddc91;--em-dim:#1f7a52;--amber:#f0b429;--red:#ff5d5d;--blue:#5db3ff;
+    --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s6:24px;--s8:32px;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--txt);font-family:"Space Grotesk",system-ui,sans-serif;
+    font-size:14px;line-height:1.45;
+    background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+    background-size:48px 48px}
+  .mono,.num,b.n{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+  h1,h2,h3{font-weight:600;letter-spacing:-.01em}
+  a{color:var(--em);text-decoration:none}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 var(--s4)}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;gap:var(--s4);padding:var(--s3) var(--s4);
+    border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(11,14,13,.85);
+    backdrop-filter:blur(8px);z-index:20}
+  .logo{font-family:"JetBrains Mono";font-weight:700;letter-spacing:.12em;color:var(--em)}
+  .logo::before{content:"▱ ";color:var(--em-dim)}
+  .topbar nav{display:flex;gap:var(--s1);flex:1;flex-wrap:wrap}
+  .topbar nav a{font-family:"JetBrains Mono";font-size:12px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--dim);padding:var(--s1) var(--s3);border:1px solid transparent}
+  .topbar nav a[aria-current]{color:var(--em);border-color:var(--line);background:var(--panel)}
+  .ticker{font-family:"JetBrains Mono";font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden}
+  .ticker b{color:var(--em)}.ticker .d{color:var(--red)}
+
+  /* page head strip */
+  .head{display:flex;flex-wrap:wrap;gap:var(--s4);align-items:flex-end;justify-content:space-between;
+    padding:var(--s6) 0 var(--s4);border-bottom:1px solid var(--line)}
+  .head h1{font-size:clamp(20px,2vw,30px)}
+  .head .sub{color:var(--dim);font-size:13px;margin-top:2px}
+  .head .kpis{display:flex;gap:var(--s6);flex-wrap:wrap}
+  .kpi{text-align:right}
+  .kpi .l{font-family:"JetBrains Mono";font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--mut)}
+  .kpi .v{font-family:"JetBrains Mono";font-size:22px;font-weight:500}
+  .kpi .v.up{color:var(--em)}.kpi .v.warn{color:var(--amber)}
+
+  /* bento */
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s3);padding:var(--s4) 0 var(--s8)}
+  .panel{background:var(--panel);border:1px solid var(--line);grid-column:span 12;position:relative}
+  .panel::before{content:"";position:absolute;top:-1px;left:-1px;width:8px;height:8px;border-top:1px solid var(--em-dim);border-left:1px solid var(--em-dim)}
+  .panel::after{content:"";position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-bottom:1px solid var(--em-dim);border-right:1px solid var(--em-dim)}
+  @media(min-width:760px){
+    .c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c3{grid-column:span 3}
+  }
+  .ph{display:flex;justify-content:space-between;align-items:center;padding:var(--s3) var(--s4);
+    border-bottom:1px solid var(--line);background:var(--panel-2)}
+  .ph h2{font-family:"JetBrains Mono";font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--dim);font-weight:500}
+  .ph .tag{font-family:"JetBrains Mono";font-size:10px;color:var(--em);border:1px solid var(--em-dim);padding:1px 6px}
+  .ph .tag.warn{color:var(--amber);border-color:var(--amber)}
+  .pb{padding:var(--s4)}
+  .band{grid-column:1/-1;font-family:"JetBrains Mono";font-size:10px;text-transform:uppercase;letter-spacing:.2em;
+    color:var(--mut);padding:var(--s4) 0 var(--s1);border-bottom:1px dashed var(--line)}
+
+  .big{font-family:"JetBrains Mono";font-size:34px;font-weight:500;line-height:1}
+  .big small{font-size:13px;color:var(--dim)}
+  .dim{color:var(--dim)}.muted{color:var(--mut)}
+
+  /* deposit gauge */
+  .gauge{display:flex;gap:var(--s6);align-items:center;flex-wrap:wrap}
+  .ring{position:relative;width:128px;height:128px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .v{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font-family:"JetBrains Mono"}
+  .ring .v b{font-size:30px;color:var(--em)}.ring .v span{font-size:9px;color:var(--mut);letter-spacing:.16em;text-transform:uppercase}
+  table.kv{width:100%;border-collapse:collapse;font-family:"JetBrains Mono";font-size:13px}
+  table.kv td{padding:5px 0;border-bottom:1px solid var(--line-soft)}
+  table.kv td:last-child{text-align:right;color:var(--txt)}
+  table.kv td:first-child{color:var(--dim)}
+
+  .chips{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s4)}
+  .chip{font-family:"JetBrains Mono";font-size:11px;background:var(--panel-2);border:1px solid var(--line);
+    color:var(--dim);padding:var(--s1) var(--s3);cursor:pointer}
+  .chip[aria-pressed=true]{color:var(--bg);background:var(--em);border-color:var(--em)}
+
+  .spark{width:100%;height:54px;margin-top:var(--s3)}
+  .spark path.l{fill:none;stroke:var(--em);stroke-width:1.5}
+  .spark path.f{fill:rgba(61,220,145,.08);stroke:none}
+
+  /* readiness rows */
+  .rows{font-family:"JetBrains Mono";font-size:13px}
+  .rows .r{display:flex;justify-content:space-between;padding:var(--s2) 0;border-bottom:1px solid var(--line-soft)}
+  .rows .r .bar{flex:1;height:6px;background:var(--line);margin:0 var(--s3);align-self:center;position:relative}
+  .rows .r .bar i{position:absolute;inset:0 auto 0 0;background:var(--em);height:100%}
+  .next{margin-top:var(--s3);font-size:12px;color:var(--amber);border-left:2px solid var(--amber);padding-left:var(--s3)}
+
+  /* flow */
+  .flow h3{font-family:"JetBrains Mono";font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin:var(--s3) 0 var(--s1)}
+  .stack{display:flex;height:26px;border:1px solid var(--line)}
+  .stack i{display:block;height:100%}
+  .lg{display:flex;gap:var(--s4);flex-wrap:wrap;font-family:"JetBrains Mono";font-size:11px;color:var(--dim);margin-top:var(--s2)}
+  .lg i{width:9px;height:9px;display:inline-block;margin-right:5px}
+  .lg b{color:var(--txt)}
+
+  /* ladder */
+  .ladder{font-family:"JetBrains Mono";font-size:12px}
+  .ladder .r{display:grid;grid-template-columns:84px 1fr 78px;gap:var(--s3);align-items:center;padding:var(--s1) 0}
+  .ladder .bar{height:12px;background:var(--line);position:relative}
+  .ladder .bar i{position:absolute;inset:0 auto 0 0;background:var(--em-dim);height:100%}
+  .ladder .r.over .bar i{background:var(--red);opacity:.6}
+  .verdict{font-family:"JetBrains Mono";font-size:13px;padding:var(--s2) 0;color:var(--em)}
+
+  /* shortlist */
+  .sl{list-style:none;font-family:"JetBrains Mono";font-size:13px}
+  .sl li{display:grid;grid-template-columns:1fr auto auto;gap:var(--s3);align-items:center;
+    padding:var(--s2) 0;border-bottom:1px solid var(--line-soft)}
+  .sl .nm{color:var(--txt)}.sl .mt{color:var(--mut);font-size:11px}
+  .sl .sc{color:var(--em)}
+  .delta{font-size:11px}.delta.up{color:var(--em)}.delta.dn{color:var(--red)}
+
+  /* spec grid */
+  .spec{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  @media(min-width:480px){.spec{grid-template-columns:repeat(4,1fr)}}
+  .spec div{background:var(--panel);padding:var(--s3)}
+  .spec dt{font-family:"JetBrains Mono";font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--mut)}
+  .spec dd{font-family:"JetBrains Mono";font-size:18px;margin-top:3px}
+
+  /* journey */
+  .trk{list-style:none;font-family:"JetBrains Mono";font-size:13px}
+  .trk li{display:flex;gap:var(--s3);align-items:center;padding:var(--s2) 0;border-bottom:1px solid var(--line-soft)}
+  .trk .box{width:14px;height:14px;border:1px solid var(--mut);flex:0 0 auto;display:grid;place-content:center;font-size:10px}
+  .trk li.done .box{background:var(--em);border-color:var(--em);color:var(--bg)}
+  .trk li.done .t{color:var(--dim);text-decoration:line-through}
+  .trk .t{flex:1}.trk .s{color:var(--amber);font-size:11px}
+
+  .ask{display:flex;border:1px solid var(--line);background:var(--bg)}
+  .ask span{font-family:"JetBrains Mono";color:var(--em);padding:var(--s3);border-right:1px solid var(--line)}
+  .ask input{flex:1;background:transparent;border:0;color:var(--txt);font-family:"JetBrains Mono";font-size:13px;padding:var(--s3)}
+  .ask input:focus{outline:none}
+  .blink{animation:bl 1s steps(2) infinite}@keyframes bl{50%{opacity:0}}
+
+  footer{border-top:1px solid var(--line);padding:var(--s6) 0;text-align:center;
+    font-family:"JetBrains Mono";font-size:11px;color:var(--mut)}
+  .preview-flag{position:fixed;bottom:8px;right:8px;background:var(--em);color:var(--bg);
+    font-family:"JetBrains Mono";font-size:10px;padding:3px 7px;z-index:50;font-weight:700}
+  *:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){.blink{animation:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="preview-flag">PREVIEW · B · DUMMY</div>
+<div class="topbar">
+  <span class="logo">REC.OS</span>
+  <nav>
+    <a href="#" aria-current="page">Home</a><a href="variant-b-listings.html">Listings</a>
+    <a href="#">Areas</a><a href="#">Finances</a><a href="#">Journey</a><a href="#">Map</a>
+  </nav>
+  <span class="ticker">DEPOSIT <b>69%</b> · RATE <span class="d">4.60%</span> · ETA <b>16mo</b> · BUDGET £425K</span>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <div><h1>Search console</h1><p class="sub">Hampshire &amp; Wiltshire · property search · session 2 Jun 2026</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="l">Effective deposit</div><div class="v up">£66.4k</div></div>
+      <div class="kpi"><div class="l">To target</div><div class="v warn">£18.6k</div></div>
+      <div class="kpi"><div class="l">Max comfortable</div><div class="v">£430k</div></div>
+    </div>
+  </div>
+
+  <div class="bento">
+    <div class="band">// goal_progress</div>
+
+    <!-- deposit -->
+    <section class="panel c5">
+      <div class="ph"><h2>deposit.story</h2><span class="tag">ON TRACK</span></div>
+      <div class="pb">
+        <div class="gauge">
+          <div class="ring">
+            <svg width="128" height="128" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="#243029" stroke-width="8"/>
+              <circle cx="60" cy="60" r="52" fill="none" stroke="#3ddc91" stroke-width="8" pathLength="100" stroke-dasharray="69 100"/>
+            </svg>
+            <div class="v"><b>69</b><span>percent</span></div>
+          </div>
+          <table class="kv">
+            <tr><td>saved</td><td>£58,400</td></tr>
+            <tr><td>target_20pct</td><td>£85,000</td></tr>
+            <tr><td>monthly</td><td>£1,650</td></tr>
+            <tr><td>isa_ytd</td><td>£3,200</td></tr>
+            <tr><td>shortfall</td><td style="color:var(--amber)">£26,600</td></tr>
+          </table>
+        </div>
+        <div class="chips" role="group" aria-label="scenarios">
+          <button class="chip" aria-pressed="true" data-eta="16">baseline</button>
+          <button class="chip" aria-pressed="false" data-eta="14">+£200/mo</button>
+          <button class="chip" aria-pressed="false" data-eta="11">+£500/mo</button>
+          <button class="chip" aria-pressed="false" data-eta="13">+£5k</button>
+        </div>
+        <svg class="spark" viewBox="0 0 300 54" preserveAspectRatio="none">
+          <path class="f" d="M0,48 L30,46 L60,42 L90,40 L120,34 L150,32 L180,26 L210,22 L240,16 L270,11 L300,5 L300,54 L0,54Z"/>
+          <path class="l" d="M0,48 L30,46 L60,42 L90,40 L120,34 L150,32 L180,26 L210,22 L240,16 L270,11 L300,5"/>
+        </svg>
+        <p class="dim mono" style="font-size:11px;margin-top:6px">// trailing 12mo · target hit in <b style="color:var(--em)" id="eta">16</b> months</p>
+      </div>
+    </section>
+
+    <!-- readiness -->
+    <section class="panel c4">
+      <div class="ph"><h2>readiness.now</h2><span class="tag">3 scenarios</span></div>
+      <div class="pb">
+        <div class="big" style="margin-bottom:var(--s3)">16<small> months to target</small></div>
+        <div class="rows">
+          <div class="r"><span class="dim">baseline</span><span class="bar"><i style="width:60%"></i></span><span>16mo</span></div>
+          <div class="r"><span class="dim">+£200/mo</span><span class="bar"><i style="width:74%"></i></span><span>14mo</span></div>
+          <div class="r"><span class="dim">+£500/mo</span><span class="bar"><i style="width:92%"></i></span><span>11mo</span></div>
+        </div>
+        <p class="next">NEXT → refresh mortgage-in-principle before autumn viewings</p>
+      </div>
+    </section>
+
+    <!-- net worth -->
+    <section class="panel c3">
+      <div class="ph"><h2>eff.deposit</h2></div>
+      <div class="pb">
+        <table class="kv">
+          <tr><td>cash</td><td>£42,000</td></tr>
+          <tr><td>lisa</td><td>£13,400</td></tr>
+          <tr><td>↳ bonus</td><td style="color:var(--em)">£2,680</td></tr>
+          <tr><td>s&amp;s_isa</td><td>£8,000</td></tr>
+          <tr><td>prem_bonds</td><td>£3,000</td></tr>
+        </table>
+        <div class="big" style="margin-top:var(--s3)">£66.4k<small> total</small></div>
+      </div>
+    </section>
+
+    <div class="band">// affordability</div>
+
+    <!-- afford -->
+    <section class="panel c6">
+      <div class="ph"><h2>affordability.ladder</h2><span class="tag">4.6% · 30y</span></div>
+      <div class="pb">
+        <p class="verdict">▸ comfortable ≤ £430,000 · stretch > £465,000</p>
+        <div class="ladder">
+          <div class="r"><span class="dim">£325,000</span><span class="bar"><i style="width:55%"></i></span><span>£1,430/mo</span></div>
+          <div class="r"><span class="dim">£390,000</span><span class="bar"><i style="width:72%"></i></span><span>£1,690/mo</span></div>
+          <div class="r"><span class="dim">£425,000</span><span class="bar"><i style="width:84%"></i></span><span>£1,820/mo</span></div>
+          <div class="r over"><span class="dim">£499,000</span><span class="bar"><i style="width:100%"></i></span><span>£2,140/mo</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- flow -->
+    <section class="panel c6">
+      <div class="ph"><h2>money.flow</h2><span class="tag warn">£470 buffer</span></div>
+      <div class="pb flow">
+        <h3>today · £5,400 in</h3>
+        <div class="stack"><i style="width:39%;background:var(--blue)"></i><i style="width:30%;background:var(--em)"></i><i style="width:31%;background:var(--amber)"></i></div>
+        <h3>after_move</h3>
+        <div class="stack"><i style="width:33%;background:var(--red);opacity:.7"></i><i style="width:18%;background:var(--blue)"></i><i style="width:22%;background:var(--amber)"></i><i style="width:27%;background:var(--em-dim)"></i></div>
+        <div class="lg">
+          <span><i style="background:var(--blue)"></i>Essentials <b>£2,100</b></span>
+          <span><i style="background:var(--em)"></i>Saving <b>£1,650</b></span>
+          <span><i style="background:var(--amber)"></i>Lifestyle <b>£1,650</b></span>
+          <span><i style="background:var(--red);opacity:.7"></i>Mortgage <b>£1,780</b></span>
+        </div>
+      </div>
+    </section>
+
+    <div class="band">// search</div>
+
+    <!-- shortlist -->
+    <section class="panel c7">
+      <div class="ph"><h2>shortlist.areas</h2><span class="tag">5 tracked</span></div>
+      <div class="pb">
+        <ul class="sl">
+          <li><span><span class="nm">Romsey</span> <span class="mt">market town · 0.5mi rail</span></span><span class="delta up">▲2</span><span class="sc">92</span></li>
+          <li><span><span class="nm">Alresford</span> <span class="mt">georgian · watercress</span></span><span class="delta dn">▼1</span><span class="sc">88</span></li>
+          <li><span><span class="nm">Wilton</span> <span class="mt">village · nr Salisbury</span></span><span class="delta up">▲3</span><span class="sc">85</span></li>
+          <li><span><span class="nm">Tisbury</span> <span class="mt">rail to Waterloo</span></span><span class="delta up">▲1</span><span class="sc">81</span></li>
+          <li><span><span class="nm">Downton</span> <span class="mt">affordable · riverside</span></span><span class="delta dn">▼2</span><span class="sc">79</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- criteria -->
+    <section class="panel c5">
+      <div class="ph"><h2>criteria.brief</h2><a href="#" style="font-family:'JetBrains Mono';font-size:11px">edit →</a></div>
+      <div class="pb">
+        <p class="dim mono" style="font-size:12px;margin-bottom:var(--s3)">3-bed period/semi · ≤40min mainline · garden required · town or large village · good primaries</p>
+        <dl class="spec">
+          <div><dt>beds</dt><dd>3+</dd></div>
+          <div><dt>type</dt><dd>semi</dd></div>
+          <div><dt>outdoor</dt><dd>garden</dd></div>
+          <div><dt>commute</dt><dd>≤40m</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <div class="band">// next_steps</div>
+
+    <!-- journey -->
+    <section class="panel c6">
+      <div class="ph"><h2>journey.checklist</h2><span class="tag">3/5</span></div>
+      <div class="pb">
+        <ul class="trk">
+          <li class="done"><span class="box">✓</span><span class="t">agree_joint_budget</span></li>
+          <li class="done"><span class="box">✓</span><span class="t">mortgage_in_principle</span></li>
+          <li class="done"><span class="box">✓</span><span class="t">shortlist_solicitor</span></li>
+          <li><span class="box"></span><span class="t">deposit_to_75pct</span><span class="s">in_progress</span></li>
+          <li><span class="box"></span><span class="t">book_autumn_viewings</span><span class="s">todo</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ask -->
+    <section class="panel c6">
+      <div class="ph"><h2>ask.query</h2><span class="tag">beta</span></div>
+      <div class="pb">
+        <form class="ask" onsubmit="return false">
+          <span>&gt;_</span>
+          <input type="text" placeholder="query your search… (e.g. afford Romsey at 5.5% rate?)" aria-label="ask" />
+        </form>
+        <p class="dim mono" style="font-size:11px;margin-top:8px">// preview · would resolve against live finances<span class="blink">█</span></p>
+      </div>
+    </section>
+  </div>
+</div>
+<footer>REC.OS · isolated design preview · no live data was used · rev preview-b</footer>
+<script>
+  const chips=[...document.querySelectorAll('.chip')];const eta=document.getElementById('eta');
+  chips.forEach(c=>c.addEventListener('click',()=>{
+    chips.forEach(x=>x.setAttribute('aria-pressed','false'));c.setAttribute('aria-pressed','true');
+    if(eta)eta.textContent=c.dataset.eta;
+  }));
+</script>
+</body>
+</html>

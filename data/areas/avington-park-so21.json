@@ -1,0 +1,114 @@
+{
+  "id": "avington-park-so21",
+  "name": "Avington Park",
+  "village": "Avington Park",
+  "town": "Winchester",
+  "county": "Hampshire",
+  "postcode": "SO21",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Winchester",
+  "coords": {
+    "lat": 51.0903,
+    "lng": -1.2107
+  },
+  "coordsSource": "os-opendata:place-centre",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "overview": "Avington Park is a historic country-house and estate landscape east of Winchester, centred on Avington House and parkland by the River Itchen. It functions more as an estate locality than a conventional village high street, with residential appeal tied to heritage setting, open land and proximity to Winchester/Alresford.",
+  "character": "Country-estate landscape character with heritage architecture and low-density residential context.",
+  "amenities": [
+    "Avington Park/House historic setting",
+    "Countryside and golf/leisure context nearby",
+    "Nearby services in Alresford and Winchester"
+  ],
+  "schools": [
+    {
+      "name": "Sun Hill Infant School, Alresford",
+      "phase": "Primary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~4-6 miles",
+      "url": "https://www.sunhillinfantschool.co.uk/"
+    },
+    {
+      "name": "Perins School, Alresford",
+      "phase": "Secondary",
+      "type": "State",
+      "ofsted": null,
+      "distance": "~4-6 miles",
+      "url": "https://www.perins.net/"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "typical": "~15–20 min",
+        "notes": "nearest major station/services"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train (from Winchester)",
+        "typical": "~1h rail + drive to station",
+        "notes": "no station at Avington Park"
+      }
+    ]
+  },
+  "prices": {
+    "summary": "SO24 values are typically influenced by Alresford/Winchester catchment demand and heritage village stock.",
+    "asOf": "2026-04",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Estate and countryside walks (where public access applies)",
+    "Golf/leisure at nearby Avington facilities"
+  ],
+  "placesToEat": [
+    "Pubs and dining options in Alresford/Winchester area"
+  ],
+  "pros": [
+    "Distinctive heritage setting",
+    "Good access to Winchester/Alresford by car"
+  ],
+  "cons": [
+    "Not a full-service settlement",
+    "Car dependence for everyday needs"
+  ],
+  "whoItSuits": "Best for buyers wanting a heritage estate environment and rural calm, while relying on nearby towns for schools, shops and rail.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "label": "Wikipedia — Avington Park",
+      "url": "https://en.wikipedia.org/wiki/Avington_Park"
+    },
+    {
+      "label": "Parks & Gardens UK — Avington Park",
+      "url": "https://www.parksandgardens.org/places/avington-park"
+    },
+    {
+      "label": "Avington Park Golf",
+      "url": "https://www.avingtongolf.co.uk/"
+    },
+    {
+      "label": "Rightmove House Prices SO24",
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+    }
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^1389516",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-05-31T20:13:52.181Z"
+  },
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true
+}
