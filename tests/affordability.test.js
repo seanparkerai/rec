@@ -92,6 +92,22 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(r.depositGapToTier, 17_000);
   });
 
+  await test('affordability: deposit gap when LTV is above every tier (idx -1)', () => {
+    // Deposit < 5% ⇒ LTV > 95% ⇒ above all LTV_TIERS (findIndex returns -1). The gap
+    // must target the top 95% tier (5% = £20,000), not wrongly report £0.
+    const r = assessAffordability({
+      price: 400_000,
+      finances: {
+        income: { annualBaseSalary: 50_000, takeHomeMonthly: 3_000, totalMonthly: 3_000 },
+        goal: { targetDeposit: 10_000 },
+        savings: { totalSavings: 10_000 },
+        mortgage: { ratePctAssumed: 5, termYears: 30 },
+      },
+      criteria: {},
+    });
+    assertEqual(r.depositGapToTier, 10_000); // £20,000 (5%) − £10,000 held
+  });
+
   // --- Parity with the old siloed calculators (Phase 4a acceptance) -----------
 
   await test('affordability: SDLT / monthlyPI / LTV / lisaEligible match underlying calcs at offer target', () => {

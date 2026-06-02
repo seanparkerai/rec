@@ -2,8 +2,9 @@
 
 A clean, single-source web dashboard for organising a **house purchase** in and around
 **Hampshire and Wiltshire, UK**. It brings a buyer profile, an areas directory with research-backed
-town/village profiles, characteristic house-types, a savings/affordability view, and an interactive
-map of search areas together in one calm, readable place.
+town/village profiles, characteristic house-types, a savings/affordability view, an interactive
+map of search areas, and a **live property-listings feed that learns your taste** together in one
+calm, readable place.
 
 It is a **zero-build static web app** (plain HTML/CSS/JS, libraries via CDN). Editable **content**
 (areas, house-types, templates) is JSON in the repo; all **personal/user state** lives only in a
@@ -46,6 +47,33 @@ for instant renders. No build step.
 First-time Supabase setup is guided by [`pages/setup.html`](pages/setup.html). The schema lives in
 [`supabase/schema.sql`](supabase/schema.sql); only `assets/js/storage.js` (data) and
 `assets/js/auth-guard.js` (sessions) talk to Supabase directly.
+
+## 🧠 Self-learning feed
+
+The Live Listings feed sharpens the more you use it. Every reaction you give a property —
+**like**, **pass** or **reject**, each with optional structured reasons (*wrong area*,
+*great value*, *no parking*, …) — is appended to an **immutable reaction log**
+(`listing_reactions`, append-only), so the record of *why* a home worked for you or didn't is
+never overwritten.
+
+From that log the app distils a **signal → weight** map (`learned_preferences`) that is:
+
+- **Base-rate calibrated** — a signal only earns weight if it actually *discriminates* within the
+  homes you've been shown, so the model never just re-learns your stated criteria.
+- **Recency-decayed** — older reactions fade (a half-life), so your taste is allowed to move.
+- **Reason-attributed** — a reject tagged *“wrong area”* sharpens the location signal and barely
+  touches bed-count or price, instead of blaming every feature equally.
+- **Traceable & honest** — every weight records the exact reactions that produced it, and
+  cold-start / balance handling means a one-sided feed reads as *“needs more likes”* rather than
+  false confidence.
+
+Those weights then **re-rank** the feed best-fit-first, seed a diversified **cold-start deck**
+before there is enough data, and **narrow the next (paid) listings fetch** so the search pulls
+fewer, better homes. Manual or AI **overrides** can pin a weight, and any conflict between what you
+said and what the data shows is surfaced as a recommendation — never resolved silently. The logic
+is pure and unit-tested in [`assets/js/learned-preferences.js`](assets/js/learned-preferences.js)
+(scored by [`assets/js/listing-fit.js`](assets/js/listing-fit.js)); the learned state lives only in
+Supabase, recomputed from the reaction log.
 
 ## Project docs
 

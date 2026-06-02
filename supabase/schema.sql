@@ -36,12 +36,12 @@ ALTER TABLE household_members ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "household members can read membership" ON household_members;
 CREATE POLICY "household members can read membership"
   ON household_members FOR SELECT
-  USING (user_id = auth.uid() OR is_household_member(household_id));
+  USING (user_id = (select auth.uid()) OR is_household_member(household_id));
 
 DROP POLICY IF EXISTS "users can insert their own membership" ON household_members;
 CREATE POLICY "users can insert their own membership"
   ON household_members FOR INSERT
-  WITH CHECK (user_id = auth.uid());
+  WITH CHECK (user_id = (select auth.uid()));
 
 -- -----------------------------------------------------------------------
 -- Helper: is_household_member()
@@ -53,11 +53,12 @@ RETURNS boolean
 LANGUAGE sql
 SECURITY DEFINER
 STABLE
+SET search_path = ''
 AS $$
   SELECT EXISTS (
-    SELECT 1 FROM household_members
+    SELECT 1 FROM public.household_members
     WHERE household_id = p_household_id
-      AND user_id = auth.uid()
+      AND user_id = (select auth.uid())
   );
 $$;
 
@@ -391,8 +392,8 @@ CREATE POLICY "household members manage area_confirmations"
 -- DROP TRIGGER IF EXISTS inside a DO block is already idempotent.
 -- -----------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION touch_updated_at()
-RETURNS trigger LANGUAGE plpgsql AS $$
-BEGIN NEW.updated_at = now(); RETURN NEW; END;
+RETURNS trigger LANGUAGE plpgsql SET search_path = '' AS $$
+BEGIN NEW.updated_at = pg_catalog.now(); RETURN NEW; END;
 $$;
 
 DO $$
@@ -413,5 +414,15 @@ BEGIN
   END LOOP;
 END;
 $$;
+
+-- -----------------------------------------------------------------------
+-- Covering indexes for foreign keys (perf advisor 0001_unindexed_foreign_keys)
+-- -----------------------------------------------------------------------
+CREATE INDEX IF NOT EXISTS idx_debts_credit_cards_household   ON debts_credit_cards (household_id);
+CREATE INDEX IF NOT EXISTS idx_debts_other_household          ON debts_other (household_id);
+CREATE INDEX IF NOT EXISTS idx_debts_student_loans_household  ON debts_student_loans (household_id);
+CREATE INDEX IF NOT EXISTS idx_household_members_user         ON household_members (user_id);
+CREATE INDEX IF NOT EXISTS idx_investments_accounts_household ON investments_accounts (household_id);
+CREATE INDEX IF NOT EXISTS idx_investments_history_account    ON investments_history (account_id);
 
 COMMIT;

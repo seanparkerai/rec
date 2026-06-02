@@ -69,8 +69,9 @@ function depositGapToNextTier(price, currentDeposit) {
   if (!price || price <= 0) return null;
   const ltvPct = calcLTV(price - currentDeposit, price);
   const idx = LTV_TIERS.findIndex((t) => ltvPct <= t);
-  if (idx <= 0) return 0;
-  const nextTier = LTV_TIERS[idx - 1];
+  if (idx === 0) return 0; // already at/below the cheapest tier — no better tier to reach
+  // idx === -1 ⇒ LTV sits above every tier (deposit < 5%); the next reachable tier is the top one.
+  const nextTier = idx === -1 ? LTV_TIERS[LTV_TIERS.length - 1] : LTV_TIERS[idx - 1];
   // Avoid float drift from (1 - tier/100): use integer arithmetic.
   const requiredDeposit = Math.ceil((price * (100 - nextTier)) / 100);
   return Math.max(0, requiredDeposit - currentDeposit);
