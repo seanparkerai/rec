@@ -26,9 +26,9 @@
     "last_synced_at": "2026-05-25T21:44:00Z"
   },
   "areas": {
-    "count": 191,
-    "last_synced_at": "2026-06-03T22:29:16.629Z",
-    "_note": "count = directory INDEX entries (data/areas.json), built from data/source/villages.csv (191 villages). The per-area files (data/areas/*.json) AND the Supabase areas mirror are 195: the 4 extra are deactivated duplicate-Rightmove / merged variants intentionally kept out of the index — charlwood-so24, colemore-gu32, flexcombe-gu33, froxfield-green-gu32 (flexcombe-gu33 research merged into the canonical flexcombe-gu32). Guarded by tests/areas-index-sync.test.js. (Corrected 2026-06-03: the prior note's gu34 ids were stale.) 2026-06-03: 100 areas down-synced from Supabase (DB was source for this run); repo now 191 researched + 1 partial (lane-end-so21) + 3 directory (ebble-sp5, newtown-sp5, worthy-down-so21 — not yet researched in Supabase)."
+    "count": 192,
+    "last_synced_at": "2026-06-03T23:08:53Z",
+    "_note": "count = directory INDEX entries (data/areas.json), built from data/source/villages.csv (192 villages). The per-area files (data/areas/*.json) AND the Supabase areas mirror are 196: the 4 extra are deactivated duplicate-Rightmove / merged variants intentionally kept out of the index — charlwood-so24, colemore-gu32, flexcombe-gu33, froxfield-green-gu32 (flexcombe-gu33 research merged into the canonical flexcombe-gu32). Guarded by tests/areas-index-sync.test.js. (Corrected 2026-06-03: the prior note's gu34 ids were stale.) 2026-06-03: 100 areas down-synced from Supabase (DB was source for this run); repo now 192 researched + 1 partial (lane-end-so21) + 3 directory (ebble-sp5, newtown-sp5, worthy-down-so21 — not yet researched in Supabase). 2026-06-03: added whiteley-po15 (researched)."
   },
   "house_types": {
     "count": 15,

@@ -1,0 +1,385 @@
+{
+  "id": "whiteley-po15",
+  "name": "Whiteley",
+  "village": "Whiteley",
+  "town": "Fareham",
+  "county": "Hampshire",
+  "postcode": "PO15",
+  "hubCity": "",
+  "regionDir": "",
+  "settlementType": "",
+  "subRegion": "Fareham",
+  "coords": {
+    "lat": 50.8809,
+    "lng": -1.2524
+  },
+  "coordsSource": "web-research",
+  "houseTypeIds": [],
+  "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
+  "overview": "Whiteley is a planned community on the southern edge of Hampshire, sitting just north of Junction 9 of the M27 between Southampton and Portsmouth and roughly five miles from Fareham. The area was identified in the 1980s as a South Hampshire growth sector built on former farmland and coppice; Solent Business Park came first in the mid-1980s, followed by residential neighbourhoods constructed steadily through the 1990s, with the village now totalling around 3,000–3,500 original homes. The settlement straddles two council districts — Fareham Borough to the south and west, and the City of Winchester to the north and east — and is currently expanding significantly through the North Whiteley development, which is adding up to 3,500 further homes, new schools and community facilities into the early 2030s. Housing stock is overwhelmingly modern: a mix of detached family homes, semis, terraces and apartments arranged around landscaped estates with extensive retained woodland, green space and a network of footpaths and cycle tracks. Residents are drawn by the M27 access, the large Whiteley Shopping Centre, the Outstanding-rated primary school and the abundant green surroundings, with the village functioning as a commuter base for both Solent cities.",
+  "character": "A modern, green and family-oriented new-build community built around woodland and a major retail and leisure centre, with a suburban, car-friendly and well-ordered feel rather than that of a historic village.",
+  "amenities": [
+    {
+      "name": "Tesco Extra (Whiteley Village)",
+      "type": "supermarket",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "Marks & Spencer (Whiteley Shopping Centre)",
+      "type": "supermarket",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "The Whiteley Surgery (Meon Health Practice)",
+      "type": "gp",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "{my}dentist, Yew Tree Drive",
+      "type": "dentist",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "Boots Pharmacy (Whiteley Shopping Centre)",
+      "type": "pharmacy",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "HJ Everett Chemist (at Whiteley Surgery)",
+      "type": "pharmacy",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "Meadowside Leisure Centre",
+      "type": "leisure-centre",
+      "walkMins": 15,
+      "driveMins": 5
+    },
+    {
+      "name": "Rock Up Whiteley (indoor climbing)",
+      "type": "gym",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "Whiteley Pastures / village park & football pitch",
+      "type": "park",
+      "walkMins": 10,
+      "driveMins": null
+    },
+    {
+      "name": "Swanwick Lakes Nature Reserve",
+      "type": "park",
+      "walkMins": null,
+      "driveMins": 8
+    },
+    {
+      "name": "Post Office (in Co-operative Food)",
+      "type": "post-office",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "Waterstones (Whiteley Shopping Centre)",
+      "type": "library",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "Parson's Collar Pub & Kitchen (Solent Hotel)",
+      "type": "pub",
+      "walkMins": null,
+      "driveMins": 5
+    },
+    {
+      "name": "Cineworld Whiteley",
+      "type": "cinema",
+      "walkMins": null,
+      "driveMins": 5
+    }
+  ],
+  "schools": [
+    {
+      "name": "Whiteley Primary School",
+      "type": "primary",
+      "ofstedRating": "Outstanding",
+      "distanceMiles": 0.3
+    },
+    {
+      "name": "Curbridge Meadows Primary School (Whiteley Meadows)",
+      "type": "primary",
+      "ofstedRating": "Good",
+      "distanceMiles": 1.2
+    },
+    {
+      "name": "The Henry Cort Community College",
+      "type": "secondary",
+      "ofstedRating": "Requires Improvement",
+      "distanceMiles": 2.5
+    },
+    {
+      "name": "Brookfield Community School",
+      "type": "secondary",
+      "ofstedRating": "Good",
+      "distanceMiles": 2.5
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "destination": "Southampton",
+        "method": "car",
+        "durationMins": 20,
+        "notes": "via M27 westbound from J9"
+      },
+      {
+        "destination": "Southampton",
+        "method": "train",
+        "durationMins": 20,
+        "notes": "South Western Railway from Swanwick (Park Gate), ~17–20 min direct"
+      },
+      {
+        "destination": "Portsmouth",
+        "method": "car",
+        "durationMins": 25,
+        "notes": "via M27 eastbound"
+      },
+      {
+        "destination": "Portsmouth",
+        "method": "train",
+        "durationMins": 33,
+        "notes": "from Swanwick, ~31–33 min"
+      },
+      {
+        "destination": "Fareham",
+        "method": "car",
+        "durationMins": 12,
+        "notes": "approx 5 miles via A27/local roads"
+      },
+      {
+        "destination": "Winchester",
+        "method": "car",
+        "durationMins": 30,
+        "notes": "via M27/M3"
+      },
+      {
+        "destination": "Winchester",
+        "method": "train",
+        "durationMins": 20,
+        "notes": "from Botley station to the north (London Waterloo–Portsmouth line via Eastleigh)"
+      },
+      {
+        "destination": "London Waterloo",
+        "method": "train",
+        "durationMins": 93,
+        "notes": "fastest ~1hr 33min; direct SWR services from Swanwick ~2hr 10min, or change at Fareham/Southampton ~1hr 58min"
+      },
+      {
+        "destination": "London",
+        "method": "car",
+        "durationMins": 102,
+        "notes": "approx 77 miles, ~1hr 42min via M27/M3/M25"
+      }
+    ]
+  },
+  "prices": {
+    "detached": {
+      "low": 380000,
+      "high": 830000,
+      "median": 470000
+    },
+    "semiDetached": {
+      "low": 250000,
+      "high": 385000,
+      "median": 330000
+    },
+    "terraced": {
+      "low": 270000,
+      "high": 350000,
+      "median": 290000
+    },
+    "flat": {
+      "low": 200000,
+      "high": 280000,
+      "median": 230000
+    },
+    "overall": {
+      "low": 200000,
+      "high": 830000,
+      "median": 357000
+    }
+  },
+  "thingsToDo": [
+    "Whiteley Shopping Centre — open-air retail and leisure complex with ~58 shops (M&S, Next, Primark, TK Maxx, Boots), restaurants, cafes and a Cineworld multiplex cinema",
+    "Cineworld Whiteley — multi-screen cinema within the shopping centre",
+    "Rock Up Whiteley — indoor climbing centre at the shopping centre, family-friendly",
+    "Meadowside Leisure Centre — sports hall, fitness suite, football/cricket pitches and tennis courts",
+    "Swanwick Lakes Nature Reserve — Hampshire & Isle of Wight Wildlife Trust reserve with lakes and woodland trails nearby",
+    "Whiteley Pastures & retained woodland — extensive green spaces, footpaths and cycle tracks through and around the village",
+    "Solent Hotel & Spa — country-house-style hotel with spa, set in mature woodland near the M27",
+    "Local play areas, a skate park and a golf club within the wider Whiteley area"
+  ],
+  "placesToEat": [
+    {
+      "name": "Nando's Whiteley",
+      "type": "restaurant",
+      "priceRange": "££"
+    },
+    {
+      "name": "Wagamama Whiteley",
+      "type": "restaurant",
+      "priceRange": "££"
+    },
+    {
+      "name": "Pizza Express",
+      "type": "restaurant",
+      "priceRange": "££"
+    },
+    {
+      "name": "Five Guys",
+      "type": "restaurant",
+      "priceRange": "££"
+    },
+    {
+      "name": "Prezzo",
+      "type": "restaurant",
+      "priceRange": "££"
+    },
+    {
+      "name": "Dean's Diner",
+      "type": "restaurant",
+      "priceRange": "££"
+    },
+    {
+      "name": "Montagu's (independent bistro)",
+      "type": "restaurant",
+      "priceRange": "££"
+    },
+    {
+      "name": "Parson's Collar Pub & Kitchen (Solent Hotel)",
+      "type": "pub",
+      "priceRange": "££"
+    },
+    {
+      "name": "Caffè Nero",
+      "type": "cafe",
+      "priceRange": "£"
+    },
+    {
+      "name": "Subway",
+      "type": "takeaway",
+      "priceRange": "£"
+    },
+    {
+      "name": "Burger King",
+      "type": "takeaway",
+      "priceRange": "£"
+    }
+  ],
+  "pros": [
+    "Whiteley Primary School is rated Outstanding by Ofsted (July 2024), a strong draw for families",
+    "Immediate access to the Whiteley Shopping Centre with ~58 stores, restaurants, a Cineworld cinema and free initial parking — a rare on-the-doorstep retail/leisure hub",
+    "Excellent road links via Junction 9 of the M27, putting Southampton (~20 min) and Portsmouth (~25 min) within easy driving distance",
+    "Two nearby rail stations (Swanwick to the south, Botley to the north) give fast trains to Southampton (~20 min), Portsmouth (~33 min) and Winchester (~20 min)",
+    "Modern, energy-efficient housing stock set within extensive retained woodland, green spaces and a connected network of footpaths and cycle tracks",
+    "Comprehensive local healthcare on site — Whiteley Surgery (Meon Health Practice), an adjoining pharmacy and a {my}dentist practice on Yew Tree Drive",
+    "Meadowside Leisure Centre and Rock Up climbing centre provide sport and family leisure within walking/short drive distance"
+  ],
+  "cons": [
+    "As a largely car-oriented new-build estate it lacks the historic character, period housing and organic high street of an older village",
+    "Direct London Waterloo trains from Swanwick are limited and slow (~2hr 10min); the quicker ~1hr 58min option requires changing, so London commuting is awkward",
+    "Ongoing large-scale North Whiteley construction (up to 3,500 new homes into the early 2030s) brings building disruption, traffic pressure and reported infrastructure shortfalls",
+    "The catchment secondary, The Henry Cort Community College, is rated Requires Improvement (2023)",
+    "Parking at the Whiteley Surgery is acknowledged by the practice as very limited, with tightened yellow-line restrictions on surrounding roads",
+    "The M27 J9 and shopping-centre car parks can become congested, particularly at peak shopping periods and weekends",
+    "Split administration between Fareham Borough and Winchester City councils can complicate local services and council tax arrangements depending on the exact address"
+  ],
+  "whoItSuits": "Whiteley suits families and professional couples who prioritise modern, low-maintenance housing, good local schools and convenient amenities over period character. It works especially well for commuters driving or training into Southampton, Portsmouth or Fareham, and for households who value having shopping, dining, leisure, healthcare and green space all within a short distance. Its demographic skews young and family-oriented, reflecting its origins as a planned community.",
+  "broadbandMedianMbps": null,
+  "nearestStation": null,
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/po15.html",
+      "title": "House Prices in PO15 — Rightmove",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/131420",
+      "title": "Whiteley Primary School — Ofsted report (Outstanding, July 2024)",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://snobe.co.uk/schools/henry-cort-community-college",
+      "title": "The Henry Cort Community College — Ofsted (Requires Improvement)",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Brookfield_Community_School,_Fareham",
+      "title": "Brookfield Community School, Fareham — Wikipedia (Ofsted Good, March 2025)",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://myjourneyhampshire.com/moving-home/north-whiteley/train/",
+      "title": "Train — My Journey Hampshire (North Whiteley typical rail times)",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://www.rome2rio.com/s/London/Whiteley",
+      "title": "London to Whiteley travel options — Rome2Rio",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Whiteley",
+      "title": "Whiteley — Wikipedia",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://fareham.gov.uk/leisure/tourism/whats_here/whiteley.aspx",
+      "title": "Whiteley — Fareham Borough Council (development history)",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://grokipedia.com/page/Whiteley",
+      "title": "Whiteley — Grokipedia (coordinates, demographics, North Whiteley)",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://www.whiteley.news/guide/whiteley-shopping-centre",
+      "title": "Whiteley Shopping Centre — Whiteley Guide",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://www.meonhealthpractice.co.uk/location/the-whiteley-surgery/",
+      "title": "The Whiteley Surgery — Meon Health Practice",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://www.tripadvisor.com/Restaurants-g503847-Whiteley_Fareham_Hampshire_England.html",
+      "title": "Restaurants in Whiteley — Tripadvisor",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://chartersestateagents.co.uk/whiteley-area-guide/",
+      "title": "Whiteley Area Guide — Charters Estate Agents",
+      "accessedAt": "2026-06-04"
+    },
+    {
+      "url": "https://www.crestnicholson.com/developments/hampshire/curbridge-meadows",
+      "title": "Curbridge Meadows, Whiteley — Crest Nicholson (Good-rated primary on development)",
+      "accessedAt": "2026-06-04"
+    }
+  ]
+}

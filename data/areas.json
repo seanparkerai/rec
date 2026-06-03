@@ -450,6 +450,30 @@
     "active": true
   },
   {
+    "id": "whiteley-po15",
+    "name": "Whiteley",
+    "village": "Whiteley",
+    "town": "Fareham",
+    "county": "Hampshire",
+    "postcode": "PO15",
+    "hubCity": "",
+    "regionDir": "",
+    "settlementType": "",
+    "subRegion": "Fareham",
+    "coords": {
+      "lat": 50.8809,
+      "lng": -1.2524
+    },
+    "coordsSource": "web-research",
+    "houseTypeIds": [],
+    "status": "researched",
+    "priceSummary": null,
+    "councilTaxBand": null,
+    "geofenceRadiusMi": 3,
+    "searchRadiusMi": 3,
+    "active": true
+  },
+  {
     "id": "bordon-gu35",
     "name": "Bordon",
     "village": "Bordon",
