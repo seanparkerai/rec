@@ -578,7 +578,7 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   `searchRadiusMi`) in 191 detail files — benign, value-identical, pre-existing; left for a future
   normalization sweep.
 - [ ] **P7 — Large controller & CSS decomposition** (one checkpoint each):
-  - [ ] P7a `page-data-sync.js` · [ ] P7b `page-listings.js` · [ ] P7c `learned-preferences.js`
+  - [x] P7a `page-data-sync.js` → `data-sync/diff.js` (sortJson/jsonEq/diffData/formatTs/flattenToRows + 20 tests) · [ ] P7b `page-listings.js` · [ ] P7c `learned-preferences.js`
   - [ ] P7d `page-report.js` · [ ] P7e `page-criteria.js` · [ ] P7f `page-property.js`
   - [ ] P7g `pages/data-sync.css` · [ ] P7h `pages/listings.css` (dashboard.css = append imports only)
 - [ ] **P8 — `storage.js` modularization** 🔒: split into `storage/core.js` + `storage/<domain>.js`
