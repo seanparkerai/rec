@@ -14,10 +14,10 @@
 //     coordinator appends one final row carrying the full reasons array. The
 //     latest-per-listing reducer naturally makes that row the current reaction,
 //     and the coordinator marks the property reviewed (Stage 4).
-import { el } from './dom.js';
+import { el } from '../dom.js';
 import {
   REACTIONS, REJECT_REASONS, LIKE_REASONS, subReasonsFor,
-} from './listing-reactions.js';
+} from './reactions.js';
 
 const REACTION_LABELS = { like: 'Like', pass: 'Pass', reject: 'Reject' };
 

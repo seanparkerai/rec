@@ -20,7 +20,7 @@ import {
   normaliseReasons,
   primaryReasonKey,
   latestPerListing,
-} from '../assets/js/listing-reactions.js';
+} from '../assets/js/listings/reactions.js';
 
 export async function register({ test, assert, assertEqual }) {
   test('reactions: vocabulary is locked (like/pass/reject)', () => {

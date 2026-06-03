@@ -11,13 +11,13 @@ import {
   getListingRatings, setListingRating,
 } from './storage.js';
 import { deriveFinances } from './finance-derive.js';
-import { scoreListingFit } from './listing-fit.js';
+import { scoreListingFit } from './listings/fit.js';
 import { effectiveWeights, listingLearnedPrefs } from './learned-preferences.js';
-import { latestPerListing, LIKE_REASONS, LIKE_SUBREASONS } from './listing-reactions.js';
-import { buildReasonPicker } from './listing-reactions-ui.js';
-import { createListingsControls } from './listings-controls.js';
-import { buildRatingControl } from './listing-rating-ui.js';
-import { wireReturnTracking, restoreListFocus } from './listing-nav.js';
+import { latestPerListing, LIKE_REASONS, LIKE_SUBREASONS } from './listings/reactions.js';
+import { buildReasonPicker } from './listings/reactions-ui.js';
+import { createListingsControls } from './listings/controls.js';
+import { buildRatingControl } from './listings/rating-ui.js';
+import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
 import { url } from './config.js';
 import { el, clear } from './dom.js';
 

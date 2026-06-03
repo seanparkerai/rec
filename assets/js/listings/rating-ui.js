@@ -3,7 +3,7 @@
 // <select> (accessible, compact, keyboard-native); "—" clears the rating. The
 // rating is stored on the shortlist row (storage.setListingRating) and feeds the
 // fit score as a positive-only nudge (listing-fit.js).
-import { el } from './dom.js';
+import { el } from '../dom.js';
 
 /**
  * @param {object} opts

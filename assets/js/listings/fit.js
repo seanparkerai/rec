@@ -13,8 +13,8 @@
 //      CONSTRUCTION, so every verdict can show its working (the anti-black-box
 //      contract).
 
-import { assessAffordability } from './affordability.js';
-import { LISTING_VERDICTS, FIT_BANDS, FIT_WEIGHTS } from './intelligence-constants.js';
+import { assessAffordability } from '../affordability.js';
+import { LISTING_VERDICTS, FIT_BANDS, FIT_WEIGHTS } from '../intelligence-constants.js';
 
 const norm = (s) => String(s || '').trim().toLowerCase();
 

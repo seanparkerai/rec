@@ -72,7 +72,7 @@ before there is enough data, and **narrow the next (paid) listings fetch** so th
 fewer, better homes. Manual or AI **overrides** can pin a weight, and any conflict between what you
 said and what the data shows is surfaced as a recommendation — never resolved silently. The logic
 is pure and unit-tested in [`assets/js/learned-preferences.js`](assets/js/learned-preferences.js)
-(scored by [`assets/js/listing-fit.js`](assets/js/listing-fit.js)); the learned state lives only in
+(scored by [`assets/js/listings/fit.js`](assets/js/listings/fit.js)); the learned state lives only in
 Supabase, recomputed from the reaction log.
 
 ## Project docs

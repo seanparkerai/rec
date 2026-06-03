@@ -555,9 +555,15 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   `page-data-sync.js` is the sole current exception; `storage.js` + `auth-guard.js` are the sanctioned
   importers and are intentionally outside the scanned families. Node-only (not wired into `tests.html`).
   Harness 398/398 (+4).
-- [ ] **P5 — `listings/` folderization:** move the 9 `listing*.js` → `assets/js/listings/` (drop prefix);
-  atomic import rewrite incl. `dashboard/tile-nba.js`, the 3 pages + bootstraps, and the test files;
-  temporary re-export shim at `assets/js/listing-reactions.js` so `storage.js` (§16) is untouched until P8.
+- [x] **P5 — `listings/` folderization:** moved the 9 `listing*.js` → `assets/js/listings/` with dropped
+  prefixes (`detail`/`fit`/`flags`/`nav`/`rating-ui`/`reactions-ui`/`reactions`/`controls`/`fetch`). Atomic
+  import rewrite: the 4 moved files' internals (`../dom`, `../affordability`, `../intelligence-constants`,
+  sibling `./reactions`); 26 specifiers across the 3 pages (`page-listings`/`page-property`/
+  `page-saved-listings`) + `dashboard/tile-nba.js` + 7 test files; and the broken `README.md` link. HTML
+  bootstraps needed no change (they load the `page-*.js` coordinators, not the modules). Temporary
+  re-export shim at `assets/js/listing-reactions.js` (`export * from './listings/reactions.js'`) keeps
+  `storage.js` (§16) untouched until P8 — it is the SOLE remaining old-flat-path importer (grep-verified).
+  Harness 398/398. (Plan/archive doc prose still names the old flat paths — left as historical record.)
 - [ ] **P6 — areas-index source-of-truth guard:** run `build-areas.mjs`, observe the count; **verify
   intent before re-adding the 4 deactivated areas** (`charlwood-so24`, `colemore-gu32`, `flexcombe-gu33`,
   `froxfield-green-gu32`); add `tests/areas-index-sync.test.js` (rebuild == committed index). Refresh

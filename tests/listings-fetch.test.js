@@ -1,8 +1,8 @@
 // listings-fetch.test.js — unit tests for the "Pull listings" dispatch logic
-// (assets/js/listings-fetch.js). Covers the pure helpers only; the DOM wiring in
+// (assets/js/listings/fetch.js). Covers the pure helpers only; the DOM wiring in
 // wireListingsFetch() is exercised by hand / the browser harness.
 
-import { buildDispatchBody, windowLabel, isValidPat } from '../assets/js/listings-fetch.js';
+import { buildDispatchBody, windowLabel, isValidPat } from '../assets/js/listings/fetch.js';
 
 export async function register({ test, assert, assertEqual }) {
   await test('listings-fetch: 24hr button maps to maxDaysSinceAdded=1', () => {

@@ -13,7 +13,7 @@
 // Re-pulling the same window is always safe: dedup is guaranteed downstream by
 // the `rightmove_id` UNIQUE constraint + UPSERT merge, independent of timing.
 
-import { byId, el } from './dom.js';
+import { byId, el } from '../dom.js';
 
 const GH_PAT_KEY = 'rec:gh-pat';
 const GH_REPO    = 'seanparkerai/rec';

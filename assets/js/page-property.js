@@ -13,13 +13,13 @@ import {
   getListingRatings, setListingRating,
 } from './storage.js';
 import { deriveFinances } from './finance-derive.js';
-import { scoreListingFit } from './listing-fit.js';
+import { scoreListingFit } from './listings/fit.js';
 import { effectiveWeights, listingLearnedPrefs, describeSignal } from './learned-preferences.js';
-import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from './listing-detail.js';
-import { PERSONAL_STATUSES } from './listing-reactions.js';
-import { buildReasonPicker } from './listing-reactions-ui.js';
-import { buildRatingControl } from './listing-rating-ui.js';
-import { backTargetFrom } from './listing-nav.js';
+import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from './listings/detail.js';
+import { PERSONAL_STATUSES } from './listings/reactions.js';
+import { buildReasonPicker } from './listings/reactions-ui.js';
+import { buildRatingControl } from './listings/rating-ui.js';
+import { backTargetFrom } from './listings/nav.js';
 import { url } from './config.js';
 import { el, clear, byId } from './dom.js';
 

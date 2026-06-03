@@ -2,7 +2,7 @@
 // Asserts the HIDE tier (auction, over-55 / retirement) and the FLAG tier (new
 // build, condition red-flags), plus the conservative guards that stop a benign
 // phrase from tripping a hide.
-import { classifyListing, HIDE_LABELS } from '../assets/js/listing-flags.js';
+import { classifyListing, HIDE_LABELS } from '../assets/js/listings/flags.js';
 
 export async function register({ test, assert, assertEqual }) {
   const mk = (over = {}) => ({ rightmove_id: 'x', title: '', description: '', ...over });

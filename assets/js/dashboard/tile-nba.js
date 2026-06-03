@@ -8,7 +8,7 @@ import {
   getFinances, getCriteria, getLearnedPreferences,
 } from '../storage.js';
 import { deriveFinances } from '../finance-derive.js';
-import { scoreListingFit } from '../listing-fit.js';
+import { scoreListingFit } from '../listings/fit.js';
 import { effectiveWeights, listingLearnedPrefs } from '../learned-preferences.js';
 import { computeNextBestActions } from '../meta-observations.js';
 import { url } from '../config.js';

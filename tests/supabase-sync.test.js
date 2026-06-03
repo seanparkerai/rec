@@ -59,7 +59,7 @@ test('snapshot v3+ tables have required shape', async () => {
 });
 
 test('listing_reactions vocabulary is well-formed (v3 L3)', async () => {
-  const mod = await import('../assets/js/listing-reactions.js');
+  const mod = await import('../assets/js/listings/reactions.js');
   // Append-only graded-signal contract: like/pass/reject, only like+reject graded.
   assert(Array.isArray(mod.REACTIONS) && mod.REACTIONS.length === 3, 'REACTIONS must be the 3-verb set');
   assert(mod.REACTIONS.includes('like') && mod.REACTIONS.includes('reject'), 'REACTIONS must include like+reject');

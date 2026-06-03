@@ -14,14 +14,14 @@ import {
   getReviewedListings, addReviewedListing,
   getListingRatings,
 } from './storage.js';
-import { createListingsControls } from './listings-controls.js';
-import { wireReturnTracking, restoreListFocus } from './listing-nav.js';
+import { createListingsControls } from './listings/controls.js';
+import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
 import { detectConflicts, dismissUntil } from './meta-observations.js';
 import { deriveFinances } from './finance-derive.js';
-import { scoreListingFit } from './listing-fit.js';
-import { classifyListing, HIDE_LABELS } from './listing-flags.js';
-import { PERSONAL_STATUSES } from './listing-reactions.js';
-import { buildReasonPicker } from './listing-reactions-ui.js';
+import { scoreListingFit } from './listings/fit.js';
+import { classifyListing, HIDE_LABELS } from './listings/flags.js';
+import { PERSONAL_STATUSES } from './listings/reactions.js';
+import { buildReasonPicker } from './listings/reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
   diversifySelection, listingBucketKey, describeSignal, trainingProgress, deriveSearchSpec,
@@ -30,7 +30,7 @@ import {
 import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
 import { url } from './config.js';
 import { el, clear } from './dom.js';
-import { wireListingsFetch } from './listings-fetch.js';
+import { wireListingsFetch } from './listings/fetch.js';
 
 const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}&from=listings`;
 
