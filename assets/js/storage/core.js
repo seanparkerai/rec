@@ -1,0 +1,216 @@
+// storage/core.js (REFACTOR P8): shared storage infrastructure split from storage.js.
+// localStorage cache, Supabase bootstrap + cached household_id, toast, _sbGet/_sbUpsert,
+// the _get/_save read pattern, _normShortlist, auth helpers (getCurrentUser/signOut), _internal.
+// Siblings import the helpers exported at the foot; storage.js re-exports the 3 public names.
+import { loadJSON } from '../data-loader.js';
+import { STORAGE_NS } from '../config.js';
+
+// ── localStorage helpers ──────────────────────────────────────────────
+const key = (k) => `${STORAGE_NS}:${k}`;
+
+function readLocal(k) {
+  try { const v = localStorage.getItem(key(k)); return v ? JSON.parse(v) : null; }
+  catch { return null; }
+}
+function writeLocal(k, v) {
+  try { localStorage.setItem(key(k), JSON.stringify(v)); return true; }
+  catch { return false; }
+}
+function removeLocal(k) { try { localStorage.removeItem(key(k)); } catch { /* ignore */ } }
+
+// ── Supabase bootstrap ────────────────────────────────────────────────
+// Lazily imported so the site works before supabase-client.js is created.
+let _sb = null;          // supabase client | undefined (not available)
+let _hid = null;         // cached household_id string | null
+let _sbInitP = null;     // single in-flight init promise
+
+async function _initSb() {
+  if (_sbInitP) return _sbInitP;
+  _sbInitP = (async () => {
+    try {
+      const mod = await import('../supabase-client.js');
+      _sb = mod.supabase;
+    } catch {
+      _sb = undefined; // not configured yet
+    }
+    return _sb;
+  })();
+  return _sbInitP;
+}
+
+async function _getHid() {
+  if (_hid) return _hid;
+  const sb = await _initSb();
+  if (!sb) return null;
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return null;
+    const { data } = await sb
+      .from('household_members')
+      .select('household_id')
+      .eq('user_id', session.user.id)
+      .limit(1);
+    _hid = data?.[0]?.household_id ?? null;
+  } catch { _hid = null; }
+  return _hid;
+}
+
+// Invalidate cached household_id on auth state change (sign out / sign in).
+_initSb().then((sb) => {
+  if (!sb) return;
+  sb.auth.onAuthStateChange(() => { _hid = null; });
+});
+
+// ── Toast (minimal, CSS-classless, non-intrusive) ─────────────────────
+// Appends a small banner to the page; respects prefers-reduced-motion.
+let _toastEl = null;
+function _toast(msg, isError = false) {
+  if (!_toastEl) {
+    _toastEl = document.createElement('div');
+    _toastEl.setAttribute('role', 'status');
+    _toastEl.setAttribute('aria-live', 'polite');
+    Object.assign(_toastEl.style, {
+      position: 'fixed',
+      bottom: 'max(1rem, env(safe-area-inset-bottom))',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      background: 'var(--ink, #111)',
+      color: 'var(--paper, #fff)',
+      padding: '0.5rem 1.25rem',
+      borderRadius: 'var(--rec-radius-sm, 8px)',
+      fontFamily: 'var(--font-body, sans-serif)',
+      fontSize: '0.85rem',
+      zIndex: '9999',
+      pointerEvents: 'none',
+      opacity: '0',
+      transition: 'opacity 0.2s',
+    });
+    document.body?.appendChild(_toastEl);
+  }
+  _toastEl.textContent = msg;
+  _toastEl.style.background = isError ? 'oklch(42% 0.18 25)' : 'var(--ink, #111)';
+  _toastEl.style.opacity = '1';
+  clearTimeout(_toastEl._timer);
+  _toastEl._timer = setTimeout(() => { _toastEl.style.opacity = '0'; }, 3500);
+}
+
+// ── Supabase read/upsert helpers ──────────────────────────────────────
+async function _sbGet(table) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return null;
+  try {
+    const { data, error } = await sb
+      .from(table)
+      .select('data')
+      .eq('household_id', hid)
+      .limit(1);
+    if (error) throw error;
+    return data?.[0]?.data ?? null;
+  } catch (e) {
+    console.error(`storage: read ${table}`, e.message);
+    return null;
+  }
+}
+
+async function _sbUpsert(table, value) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return;
+  try {
+    const { error } = await sb
+      .from(table)
+      .upsert(
+        { household_id: hid, data: value, updated_at: new Date().toISOString() },
+        { onConflict: 'household_id' }
+      );
+    if (error) throw error;
+  } catch (e) {
+    console.error(`storage: write ${table}`, e.message);
+    _toast(`Sync error (${table}): ${e.message}`, true);
+  }
+}
+
+// ── Read pattern ──────────────────────────────────────────────────────
+// Resolution order (per CLAUDE.md §18: Supabase is source of truth for user state):
+//   1. localStorage cache — returned immediately, revalidated against Supabase in background.
+//   2. Supabase row       — awaited synchronously on first visit (no cache yet).
+//   3. JSON seed file     — used only when both cache and Supabase are empty (true first install).
+//                           Written to cache so the JSON file is never re-read after first use.
+//
+// onUpdate(fresh) fires when background revalidation finds a divergent Supabase row,
+// so consumers can re-render with fresh data without a page reload.
+async function _get(lsKey, table, fallbackJson, onUpdate) {
+  const cached = readLocal(lsKey);
+
+  if (cached !== null) {
+    // Fast path. Kick off revalidation; return cache immediately.
+    _sbGet(table).then((fresh) => {
+      if (fresh === null) return;
+      if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
+        writeLocal(lsKey, fresh);
+        if (onUpdate) onUpdate(fresh);
+      }
+    }).catch(() => { /* ignore */ });
+    return cached;
+  }
+
+  // No cache. Try Supabase synchronously.
+  const fresh = await _sbGet(table);
+  if (fresh !== null) {
+    writeLocal(lsKey, fresh);
+    return fresh;
+  }
+
+  // Neither cache nor Supabase has data. Seed from the JSON file (one-time only —
+  // we write it into the cache so this branch only runs on the true first install).
+  if (fallbackJson) {
+    const seed = await loadJSON(fallbackJson);
+    if (seed) writeLocal(lsKey, seed);
+    return seed;
+  }
+
+  return null;
+}
+
+async function _save(lsKey, table, value) {
+  writeLocal(lsKey, value);
+  _sbUpsert(table, value); // fire-and-forget; errors logged + toasted
+  return true;
+}
+
+function _normShortlist(raw) {
+  if (Array.isArray(raw)) return { ids: raw.filter((x) => typeof x === 'string'), status: {}, ratings: {} };
+  if (raw && typeof raw === 'object') {
+    return {
+      ids: Array.isArray(raw.ids) ? raw.ids.filter((x) => typeof x === 'string') : [],
+      status: (raw.status && typeof raw.status === 'object') ? raw.status : {},
+      ratings: (raw.ratings && typeof raw.ratings === 'object') ? raw.ratings : {},
+    };
+  }
+  return { ids: [], status: {}, ratings: {} };
+}
+// ── Auth helpers ───────────────────────────────────────────────────────
+export async function getCurrentUser() {
+  const sb = await _initSb();
+  if (!sb) return null;
+  const { data: { session } } = await sb.auth.getSession();
+  return session?.user ?? null;
+}
+
+export async function signOut() {
+  const sb = await _initSb();
+  if (!sb) return;
+  _hid = null;
+  await sb.auth.signOut();
+}
+// ── _internal — preserved for page-journey.js compatibility ──────────
+// writeLocal is enhanced: for 'journey-checks', also syncs to Supabase.
+const _writeLocalEnhanced = (k, v) => {
+  writeLocal(k, v);
+  if (k === 'journey-checks') _sbUpsert('journey_checks', v);
+  return true;
+};
+
+export const _internal = { key, readLocal, writeLocal: _writeLocalEnhanced, removeLocal };
+
+// Internal helpers shared with sibling storage modules (not part of the public surface).
+export { readLocal, writeLocal, removeLocal, _initSb, _getHid, _toast, _sbGet, _sbUpsert, _get, _save, _normShortlist };

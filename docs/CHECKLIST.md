@@ -581,9 +581,14 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   - [x] P7a `page-data-sync.js` → `data-sync/diff.js` (sortJson/jsonEq/diffData/formatTs/flattenToRows + 20 tests) · [x] P7b `page-listings.js` → `listings/format.js` (fmtPrice/fmtAgo/lastPriceDrop + 8 tests) · [x] P7c `learned-preferences.js` → `learned-preferences/{signals,weights,search}.js` behind a re-export shim (18-export surface preserved; existing tests cover it)
   - [x] P7d `page-report.js` → `report/format.js` (gbp/fmtDate/fmtPct/feasBadge/confBadge + 6 tests) · [x] P7e `page-criteria.js` → `criteria/form.js` (gbp + list/field view builders + setNestedValue + 6 tests) · [x] P7f `page-property.js` → imports `fmtPrice`/`fmtDate` from `listings/format.js` (`fmtPrice` was a duplicate; `fmtDate` moved there) + the 3 verdict/status/personal-status label maps from new `listings/labels.js`, **de-duplicating** them with `page-listings.js` (verified byte-identical before merging). `mapBtn` left per-page (the two versions differ). +5 tests (`fmtDate` + label-coverage tied to `PERSONAL_STATUSES`). Harness 447/447.
   - [x] P7g `pages/data-sync.css` → ordered `@import` shell over `pages/data-sync/{state,tools,guide,fetch}.css` (867 lines split 4 ways; concat byte-identical → cascade preserved); linked directly by `data-sync.html`, not dashboard.css (§19 corrected). · [x] P7h `pages/listings.css` → ordered `@import` shell over `pages/listings/{controls,cards,states,widgets}.css` (649 lines split 4 ways, concat byte-identical → cascade preserved); dashboard.css line 35 untouched (still imports the shell, so no §16 edit).
-- [ ] **P8 — `storage.js` modularization** 🔒: split into `storage/core.js` + `storage/<domain>.js`
-  behind a re-export shim (45-export surface preserved); reroute `page-data-sync.js`; remove the P5 shim.
-  *(Approval required.)*
+- [x] **P8 — `storage.js` modularization** 🔒: split the 845-line `storage.js` into `storage/core.js`
+  (infra: localStorage cache, Supabase bootstrap, toast, `_sbGet/_sbUpsert`, `_get/_save`, `_normShortlist`,
+  auth, `_internal`) + `storage/{user-state,listings,outreach}.js`, behind a re-export shim — runtime
+  surface verified at **exactly 45** names; bodies moved byte-identically via `sed`. Removed the P5
+  `listing-reactions.js` shim (3 consumers now import `listings/reactions.js` directly). **Kept**
+  `page-data-sync.js`'s direct raw-Supabase access (owner-approved): it is the admin console that
+  legitimately needs generic table ops, so it remains the documented P4 import-guard exception — no
+  reroute. Harness 447/447.
 - [ ] **P9 — `finances.js` modularization** 🔒: split calculators into `finances/calc-*.js` behind a
   re-export shim (10-export surface preserved). *(Approval required.)*
 - [ ] **P10 — CI smoke check + close-out** 🔒: asset/link smoke check in CI; final docs sweep; tick
