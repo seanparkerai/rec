@@ -71,6 +71,7 @@ const { register: registerImportLayer } = await import('../tests/import-layer.te
 const { register: registerAreasIndexSync } = await import('../tests/areas-index-sync.test.js');
 const { register: registerDataSyncDiff } = await import('../tests/data-sync-diff.test.js');
 const { register: registerListingsFormat } = await import('../tests/listings-format.test.js');
+const { register: registerListingsLabels } = await import('../tests/listings-labels.test.js');
 const { register: registerReportFormat } = await import('../tests/report-format.test.js');
 const { register: registerCriteriaForm } = await import('../tests/criteria-form.test.js');
 
@@ -106,6 +107,7 @@ await registerImportLayer({ test, assert, assertEqual });
 await registerAreasIndexSync({ test, assert, assertEqual });
 await registerDataSyncDiff({ test, assert, assertEqual });
 await registerListingsFormat({ test, assert, assertEqual });
+await registerListingsLabels({ test, assert, assertEqual });
 await registerReportFormat({ test, assert, assertEqual });
 await registerCriteriaForm({ test, assert, assertEqual });
 

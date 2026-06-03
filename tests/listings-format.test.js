@@ -1,5 +1,6 @@
-// listings-format.test.js — pure formatters extracted from page-listings.js (REFACTOR P7b).
-import { fmtPrice, fmtAgo, lastPriceDrop } from '../assets/js/listings/format.js';
+// listings-format.test.js — pure formatters in ./listings/format.js: fmtPrice/fmtAgo/
+// lastPriceDrop (extracted from page-listings.js, P7b) + fmtDate (page-property.js, P7f).
+import { fmtPrice, fmtAgo, lastPriceDrop, fmtDate } from '../assets/js/listings/format.js';
 
 export async function register({ test, assert, assertEqual }) {
   // ── fmtPrice ──────────────────────────────────────────────────────
@@ -42,5 +43,18 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(lastPriceDrop({}), null);
     assertEqual(lastPriceDrop({ price_history: [{ price: 100 }] }), null);
     assertEqual(lastPriceDrop({ price_history: [{ price: null }, { price: 100 }] }), null);
+  });
+
+  // ── fmtDate (absolute en-GB; TZ-robust via local-time Date construction) ──
+  test('listings/format: fmtDate is empty for falsy / invalid input', () => {
+    assertEqual(fmtDate(''), '');
+    assertEqual(fmtDate(null), '');
+    assertEqual(fmtDate(undefined), '');
+    assertEqual(fmtDate('not-a-date'), '');
+  });
+  test('listings/format: fmtDate renders "D Mon YYYY" en-GB', () => {
+    assertEqual(fmtDate(new Date(2026, 5, 5)), '5 Jun 2026');   // local June 5
+    assertEqual(fmtDate(new Date(2026, 0, 1)), '1 Jan 2026');   // local Jan 1
+    assertEqual(fmtDate('2026-06-05T12:00:00'), '5 Jun 2026');  // local-time string, midday
   });
 }

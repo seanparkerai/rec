@@ -20,6 +20,8 @@ import { PERSONAL_STATUSES } from './listings/reactions.js';
 import { buildReasonPicker } from './listings/reactions-ui.js';
 import { buildRatingControl } from './listings/rating-ui.js';
 import { backTargetFrom } from './listings/nav.js';
+import { fmtPrice, fmtDate } from './listings/format.js';
+import { VERDICT_LABELS, STATUS_LABELS, PERSONAL_STATUS_LABELS } from './listings/labels.js';
 import { url } from './config.js';
 import { el, clear, byId } from './dom.js';
 
@@ -32,16 +34,8 @@ const mapBtn = (listing) => {
   return a;
 };
 
-const VERDICT_LABELS = { strong: 'Strong match', possible: 'Possible match', stretch: 'Stretch', weak: 'Weak match', reject: 'Reject', unknown: 'Unscored' };
-const STATUS_LABELS = { live: 'For sale', under_offer: 'Under offer', sstc: 'Sold STC', withdrawn: 'Withdrawn' };
-const PERSONAL_STATUS_LABELS = { new: 'New', saved: 'Saved', viewed: 'Viewed', offered: 'Offered', rejected: 'Rejected' };
-
-const fmtPrice = (n) => (n == null ? '—' : '£' + Math.round(n).toLocaleString('en-GB'));
-const fmtDate = (d) => {
-  if (!d) return '';
-  const dt = new Date(d);
-  return isNaN(dt) ? '' : dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-};
+// VERDICT / STATUS / PERSONAL_STATUS labels now live in ./listings/labels.js;
+// fmtPrice / fmtDate now live in ./listings/format.js (all imported above).
 
 // ── Gallery ──────────────────────────────────────────────────────────────────
 // A hero image with prev/next arrows + keyboard stepping, a counter, and a

@@ -29,3 +29,11 @@ export function lastPriceDrop(listing) {
   if (prev != null && now != null && now < prev) return prev - now;
   return null;
 }
+
+// Absolute en-GB date, e.g. "5 Jun 2026" (extracted from page-property.js, P7f).
+// Empty string for falsy or unparseable input.
+export function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  return isNaN(dt) ? '' : dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}

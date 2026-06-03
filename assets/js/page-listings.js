@@ -32,6 +32,7 @@ import { url } from './config.js';
 import { el, clear } from './dom.js';
 import { wireListingsFetch } from './listings/fetch.js';
 import { fmtPrice, fmtAgo, lastPriceDrop } from './listings/format.js';
+import { VERDICT_LABELS, STATUS_LABELS, PERSONAL_STATUS_LABELS } from './listings/labels.js';
 
 const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}&from=listings`;
 
@@ -42,25 +43,7 @@ const mapBtn = (listing) => {
   return a;
 };
 
-const PERSONAL_STATUS_LABELS = {
-  new: 'New', saved: 'Saved', viewed: 'Viewed', offered: 'Offered', rejected: 'Rejected',
-};
-
-const VERDICT_LABELS = {
-  strong: 'Strong match',
-  possible: 'Possible match',
-  stretch: 'Stretch',
-  weak: 'Weak match',
-  reject: 'Reject',
-  unknown: 'Unscored',
-};
-
-const STATUS_LABELS = {
-  live: 'For sale',
-  under_offer: 'Under offer',
-  sstc: 'Sold STC',
-  withdrawn: 'Withdrawn',
-};
+// VERDICT / STATUS / PERSONAL_STATUS labels now live in ./listings/labels.js (imported above).
 
 // fmtPrice / fmtAgo / lastPriceDrop now live in ./listings/format.js (imported above).
 
