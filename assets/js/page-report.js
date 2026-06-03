@@ -1,19 +1,9 @@
 // page-report.js — value-analysis report: fetch live from Supabase and render.
 import { getReport } from './storage.js';
 import { esc } from './dom.js';
+import { gbp, fmtDate, fmtPct, feasBadge, confBadge } from './report/format.js';
 
-// ── Formatters ────────────────────────────────────────────────────────────────
-const gbp = (n) => n == null
-  ? '—'
-  : new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(n);
-
-const fmtDate = (s) => {
-  if (!s) return '—';
-  try { return new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); }
-  catch { return String(s); }
-};
-
-const fmtPct = (n) => n == null ? '—' : `${Number(n).toFixed(1)}%`;
+// Formatters (gbp / fmtDate / fmtPct) now live in ./report/format.js (imported above).
 
 // ── Sort / filter state (village ranking) ─────────────────────────────────────
 let _allRankRows    = [];
@@ -21,27 +11,7 @@ let _filteredRows   = [];
 let _sortCol        = 'composite';
 let _sortDir        = -1;   // -1 = descending, 1 = ascending
 
-// ── Badge helpers ─────────────────────────────────────────────────────────────
-function feasBadge(f) {
-  const map = {
-    realistic:    ['report-badge--realistic', 'Realistic'],
-    stretch:      ['report-badge--stretch',   'Stretch'],
-    out_of_reach: ['report-badge--outofreach','Out of reach'],
-  };
-  const [cls, label] = map[f] ?? ['', esc(f ?? '—')];
-  return `<span class="report-badge ${cls}">${label}</span>`;
-}
-
-function confBadge(c) {
-  const map = {
-    high:   'report-badge--conf-high',
-    medium: 'report-badge--conf-med',
-    low:    'report-badge--conf-low',
-  };
-  const cls   = map[c] ?? '';
-  const label = c ? String(c).charAt(0).toUpperCase() + String(c).slice(1) : '—';
-  return `<span class="report-badge ${cls}">${label}</span>`;
-}
+// Badge helpers (feasBadge / confBadge) now live in ./report/format.js (imported above).
 
 // ── Section renderers ─────────────────────────────────────────────────────────
 
