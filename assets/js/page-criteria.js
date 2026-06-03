@@ -2,10 +2,9 @@
 import { getCriteria, saveCriteria, _internal } from './storage.js';
 import { loadJSON } from './data-loader.js';
 import { esc, byId } from './dom.js';
+import { gbp, listView, listEdit, fieldView, fieldEdit, setNestedValue } from './criteria/form.js';
 
-const gbp = (n) => new Intl.NumberFormat('en-GB', {
-  style: 'currency', currency: 'GBP', maximumFractionDigits: 0,
-}).format(n || 0);
+// gbp / list+field view builders / setNestedValue now live in ./criteria/form.js (imported above).
 
 const ROOT = document.querySelector('[data-page="criteria"]') || document;
 const $ = (id) => byId(id, ROOT);
@@ -15,40 +14,7 @@ let current = null;
 let baseline = null;
 let editing = false;
 
-function listView(arr) {
-  if (!arr?.length) return '<p class="muted mb-0">None.</p>';
-  return `<ul class="mini-list">${arr.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
-}
-
-function listEdit(arr, fieldId) {
-  const items = (arr || []).map((x, i) => `
-    <li class="edit-row">
-      <span>${esc(x)}</span>
-      <button type="button" class="outline secondary chip-x" data-remove="${fieldId}" data-index="${i}" aria-label="Remove">×</button>
-    </li>
-  `).join('');
-  return `
-    <ul class="edit-list" id="list-${fieldId}">${items}</ul>
-    <div class="row add-row">
-      <input type="text" id="add-${fieldId}" placeholder="Add…" />
-      <button type="button" data-add="${fieldId}">Add</button>
-    </div>
-  `;
-}
-
-function fieldView(label, value, type = 'text') {
-  let display = value;
-  if (type === 'currency' && typeof value === 'number') display = gbp(value);
-  return `<div class="field-view"><dt>${esc(label)}</dt><dd>${display ? esc(String(display)) : '<span class="muted">—</span>'}</dd></div>`;
-}
-
-function fieldEdit(label, name, value, type = 'text') {
-  const id = `f-${name}`;
-  const input = type === 'textarea'
-    ? `<textarea id="${id}" name="${name}" rows="3">${esc(value)}</textarea>`
-    : `<input type="${type}" id="${id}" name="${name}" value="${esc(value)}" />`;
-  return `<div class="field-edit"><label for="${id}">${esc(label)}</label>${input}</div>`;
-}
+// list+field view builders now live in ./criteria/form.js (imported above).
 
 function renderTiles() {
   $('tile-max-price').textContent = gbp(current?.budget?.max || 0);
@@ -355,14 +321,7 @@ function collectForm() {
   return next;
 }
 
-function setNestedValue(obj, path, val) {
-  const keys = path.split('.');
-  let current = obj;
-  for (let i = 0; i < keys.length - 1; i++) {
-    current = current[keys[i]];
-  }
-  current[keys[keys.length - 1]] = val;
-}
+// setNestedValue now lives in ./criteria/form.js (imported above).
 
 function enterEdit() {
   baseline = JSON.parse(JSON.stringify(current));
