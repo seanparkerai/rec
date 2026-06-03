@@ -358,7 +358,10 @@ dashboard/          ← per-tile CSS partials
 pages/              ← per-page CSS partials (imported by dashboard.css)
   areas.css, area-detail.css, area-review.css, areas-rows.css, finances.css,
   finances-widgets.css, finances-charts.css, journey.css, house-types.css, map.css,
-  listings.css, property.css, report.css, shared.css, placeholder.css, data-sync.css
+  listings.css, property.css, report.css, shared.css, placeholder.css
+pages/data-sync/    ← split from data-sync.css (P7g): state/tools/guide/fetch.css.
+                      data-sync.css is now an @import shell linked DIRECTLY by
+                      pages/data-sync.html (NOT via dashboard.css).
 components/         ← reusable component CSS
   card.css, chip.css, dialog.css, field.css, filter-sheet.css, finance-stage.css,
   outreach.css, save-bar.css, segmented.css, sheet.css, table.css, tile.css, toc.css
