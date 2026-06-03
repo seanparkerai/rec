@@ -513,3 +513,54 @@ All tests 189/189 green before each push.
   - `tests/supabase-sync.test.js`: test 2 now requires all 17 tables; test 3 split into "with-data" vs "debt-table" assertions.
   - 189/189 tests green.
 - [ ] **B4 — Shortlist single source**: `getShortlist()` path currently localStorage-first; making it Supabase-first touches `storage.js` (§16 guard — separate named phase required).
+
+---
+
+## REFACTOR CHECKLIST (consolidation pass — 2026-06)
+
+Tracks the P0–P10 consolidation refactor (smaller single-purpose modules behind unchanged public
+import paths; storage boundary self-policed; areas index guarded; docs reconciled to the live
+25-table schema). Resume spine: tick an item **only** after its checkpoint is committed **and**
+pushed green. Every checkpoint commit carries a `[REFACTOR P<n>: …]` tag, so
+`git log --oneline | grep REFACTOR` reconstructs progress even if a box is unticked.
+🔒 = touches a §16 guarded file → its own approved plan. This is a **second, complementary** pass —
+distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHECKLIST.md`.
+
+**Baseline (P0):** harness green at `481cd75` — `366/366 passed` (incl. supabase-sync offline suite:
+9 passed / 0 failed / 2 skipped). Live DB confirmed: 25 tables, all RLS-enabled. Working branch:
+`main` (owner decision this session, overriding the default feature branch).
+
+- [x] **P0 — Safety net & baseline:** characterization tests for the `storage.js` offline cache
+  contract (`tests/characterization-storage.test.js`) + the `finances.js` pure calculators
+  (`tests/characterization-finances-calc.test.js`); both wired into `run-intelligence-tests.mjs`;
+  this checklist added. Page coordinators (`page-data-sync/listings/report/criteria/property`) are
+  DOM-coupled with no jsdom → no synthetic pin now; their pure logic is extracted **test-first** in P7.
+- [ ] **P1 — CI safety gate** 🔒 (`.github/workflows/*`): `ci.yml` runs the harness on push/PR;
+  `pages.yml` deploy made `needs: test`. *(Approval required.)*
+- [ ] **P2 — Documentation reconciliation** (docs only): correct `CLAUDE.md §18.1`/§8/§6 to the live
+  **25 tables / 20 tracked** (18 user-state + 2 content + 3 system + `listings` + `reports`); update
+  `SUPABASE_SYNC.md`; refresh the §19 CSS/module map (`components/` layer, added `pages/` sheets, `fonts.css`).
+- [ ] **P3 — Dead code & orphans:** `supabase-types.ts` → JSDoc `assets/js/types.js` (+ `git rm` the `.ts`);
+  archive orphan tools (`enrich-batch-01`, `apply-accurate-coords`, `geocode-areas`, `geocode-per-area`)
+  to `tools/archive/`. Keep `migrate-areas.mjs` (still referenced by `area-status.mjs`).
+- [ ] **P4 — Import-layer guard** (`tests/import-layer.test.js`): no page/tile/section/outreach module
+  imports `supabase-client` except documented exceptions; `page-data-sync.js` (sole current violator)
+  listed as a temporary exception, removed after the P8 reroute.
+- [ ] **P5 — `listings/` folderization:** move the 9 `listing*.js` → `assets/js/listings/` (drop prefix);
+  atomic import rewrite incl. `dashboard/tile-nba.js`, the 3 pages + bootstraps, and the test files;
+  temporary re-export shim at `assets/js/listing-reactions.js` so `storage.js` (§16) is untouched until P8.
+- [ ] **P6 — areas-index source-of-truth guard:** run `build-areas.mjs`, observe the count; **verify
+  intent before re-adding the 4 deactivated areas** (`charlwood-so24`, `colemore-gu32`, `flexcombe-gu33`,
+  `froxfield-green-gu32`); add `tests/areas-index-sync.test.js` (rebuild == committed index). Refresh
+  `sync-state.json` high-water marks (incl. `listing_reactions` 250, `learned_preferences` 1).
+- [ ] **P7 — Large controller & CSS decomposition** (one checkpoint each):
+  - [ ] P7a `page-data-sync.js` · [ ] P7b `page-listings.js` · [ ] P7c `learned-preferences.js`
+  - [ ] P7d `page-report.js` · [ ] P7e `page-criteria.js` · [ ] P7f `page-property.js`
+  - [ ] P7g `pages/data-sync.css` · [ ] P7h `pages/listings.css` (dashboard.css = append imports only)
+- [ ] **P8 — `storage.js` modularization** 🔒: split into `storage/core.js` + `storage/<domain>.js`
+  behind a re-export shim (45-export surface preserved); reroute `page-data-sync.js`; remove the P5 shim.
+  *(Approval required.)*
+- [ ] **P9 — `finances.js` modularization** 🔒: split calculators into `finances/calc-*.js` behind a
+  re-export shim (10-export surface preserved). *(Approval required.)*
+- [ ] **P10 — CI smoke check + close-out** 🔒: asset/link smoke check in CI; final docs sweep; tick
+  remaining items. *(Approval required.)*
