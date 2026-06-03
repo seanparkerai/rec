@@ -207,7 +207,7 @@ The following files are **never touched** by feature work. Modifying any of them
 - `assets/js/storage.js` + `assets/js/storage/*.js` — Supabase-backed storage layer (see §17). `storage.js` is a re-export shim (P8) over `storage/{core,user-state,listings,outreach}.js`. **Extend, do not rewrite.**
 - `assets/js/config.js` — base-URL + `url()` helpers.
 - `assets/js/data-loader.js` — JSON loader.
-- `assets/js/finances.js` — finance calculators. **Extend, do not rewrite.**
+- `assets/js/finances.js` + `assets/js/finances/calc-*.js` — finance calculators; `finances.js` is a re-export shim (P9) over `finances/calc-{purchase,lisa,savings,outlay}.js`. **Extend, do not rewrite.**
 - `assets/css/dashboard.css` — `@import` entry shell (order-sensitive); extend by appending imports only.
 - `data/schema/area.schema.json` — per-area schema.
 - `.github/workflows/*` — CI / deploy pipelines.
@@ -335,7 +335,7 @@ UPSERT them to Supabase; there is nothing to mirror to. If a mirror is wanted, a
 ## 19. Module layout
 
 The JS/CSS is split into small single-purpose modules (post 2026-05 refactor): flat utilities and
-calculators in `assets/js/`, tile modules in `assets/js/dashboard/`, finance sections in
+calculators in `assets/js/`, tile modules in `assets/js/dashboard/`, finance sections + calculators in
 `assets/js/finances/`, the storage layer in `assets/js/storage/`, outreach modules in `assets/js/outreach/`, and thin `page-*.js` coordinators
 (one per page). Rather than maintain a hand-written list here (which rots), get the **current** map
 on demand:

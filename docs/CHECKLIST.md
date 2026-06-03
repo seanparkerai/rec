@@ -589,7 +589,10 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   `page-data-sync.js`'s direct raw-Supabase access (owner-approved): it is the admin console that
   legitimately needs generic table ops, so it remains the documented P4 import-guard exception — no
   reroute. Harness 447/447.
-- [ ] **P9 — `finances.js` modularization** 🔒: split calculators into `finances/calc-*.js` behind a
-  re-export shim (10-export surface preserved). *(Approval required.)*
+- [x] **P9 — `finances.js` modularization** 🔒: split the 10 pure calculators into
+  `finances/calc-{purchase,lisa,savings,outlay}.js` (purchase = SDLT/mortgage/LTV, lisa, savings =
+  progress/months/projection, outlay = total/breakdown; outlay reuses `calcSDLT` from purchase) behind a
+  re-export shim — runtime surface verified at **exactly 10** names; bodies moved byte-identically via
+  `sed`. Updated CLAUDE.md §16/§19. Harness 447/447.
 - [ ] **P10 — CI smoke check + close-out** 🔒: asset/link smoke check in CI; final docs sweep; tick
   remaining items. *(Approval required.)*
