@@ -362,6 +362,8 @@ pages/              ← per-page CSS partials (imported by dashboard.css)
 pages/data-sync/    ← split from data-sync.css (P7g): state/tools/guide/fetch.css.
                       data-sync.css is now an @import shell linked DIRECTLY by
                       pages/data-sync.html (NOT via dashboard.css).
+pages/listings/     ← split from listings.css (P7h): controls/cards/states/widgets.css
+                      (listings.css stays an @import shell, still dashboard-imported).
 components/         ← reusable component CSS
   card.css, chip.css, dialog.css, field.css, filter-sheet.css, finance-stage.css,
   outreach.css, save-bar.css, segmented.css, sheet.css, table.css, tile.css, toc.css

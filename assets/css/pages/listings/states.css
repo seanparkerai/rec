@@ -1,0 +1,156 @@
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+.listings-empty { list-style: none; padding: var(--space-6) var(--space-3); text-align: center; color: var(--ink-muted); }
+.listings-empty p { margin: 0 0 var(--space-2); }
+.listings-empty__hint { font-size: var(--text-sm); color: var(--ink-subtle); }
+
+/* ── Learning status banner (L4) ──────────────────────────────────────────── */
+.learning-status {
+  display: flex; align-items: center; gap: var(--space-2);
+  margin: 0 0 var(--space-3); padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm); color: var(--ink-muted);
+  background: color-mix(in oklch, var(--accent) 5%, var(--paper));
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+}
+.learning-status--cold { background: color-mix(in oklch, var(--ink) 4%, var(--paper)); }
+.learning-status__dot {
+  width: 0.6rem; height: 0.6rem; border-radius: 50%; flex: none;
+  background: var(--paper); border: 1px solid var(--ink-muted);
+}
+.learning-status__dot--on { background: var(--accent); border-color: var(--accent); }
+
+/* ── Conflict prompts (L5) — likes that contradict stated criteria ────────── */
+.conflict-prompts:empty { display: none; }
+.conflict-prompts { display: grid; gap: var(--space-2); margin: 0 0 var(--space-3); }
+.conflict-prompt {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-3); padding: var(--space-3);
+  border: 1px solid color-mix(in oklch, var(--accent) 30%, var(--hairline));
+  border-left: 3px solid var(--accent);
+  border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--accent) 6%, var(--paper));
+}
+.conflict-prompt__body { min-width: 0; }
+.conflict-prompt__msg { margin: 0; font-size: var(--text-sm); font-weight: 500; color: var(--ink); }
+.conflict-prompt__hint { margin: 0.15rem 0 0; font-size: var(--text-xs); color: var(--ink-muted); }
+.conflict-prompt__actions { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.conflict-prompt__adjust {
+  font-size: var(--text-sm); font-weight: 500; white-space: nowrap;
+  color: color-mix(in oklch, var(--accent) 80%, var(--ink)); text-decoration: none;
+  min-height: 44px; display: inline-flex; align-items: center;
+}
+.conflict-prompt__adjust:hover, .conflict-prompt__adjust:focus-visible { color: var(--accent); }
+.conflict-prompt__dismiss {
+  font-family: var(--font-body); font-size: var(--text-xs);
+  min-height: 44px; padding: 0.25rem 0.65rem; cursor: pointer;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink-muted);
+}
+.conflict-prompt__dismiss:hover { color: var(--ink); border-color: var(--ink-muted); }
+.conflict-prompt__dismiss:focus-visible, .conflict-prompt__adjust:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+/* ── Browse / Review segmented control (L4) ───────────────────────────────── */
+.listings-modes { display: inline-flex; gap: 0; border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm); overflow: hidden; }
+.listings-mode {
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
+  min-height: 44px; padding: 0.4rem 0.9rem; /* §10 touch target */
+  background: var(--paper); color: var(--ink-muted);
+  border: 0; border-right: 1px solid var(--hairline); cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.listings-mode:last-child { border-right: 0; }
+.listings-mode:hover { color: var(--ink); }
+.listings-mode:focus-visible { outline: var(--focus-ring); outline-offset: -2px; }
+.listings-mode[aria-pressed="true"] {
+  color: var(--paper); font-weight: 600;
+  background: color-mix(in oklch, var(--accent) 80%, var(--ink));
+}
+.listings-mode__count { font-feature-settings: "tnum"; }
+.listings-toggle[hidden] { display: none; }
+
+/* ── Review deck (L4 cold-start triage) — Linear-dense single-card flow ────── */
+.review-deck[hidden] { display: none; }
+.review-deck { margin: 0; }
+
+.deck-progress { margin: 0 0 var(--space-3); }
+.deck-progress__bar {
+  height: 0.4rem; border-radius: 999px; overflow: hidden;
+  background: color-mix(in oklch, var(--ink) 8%, var(--paper));
+}
+.deck-progress__fill {
+  display: block; height: 100%; border-radius: 999px;
+  background: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  transition: width 0.2s ease-out;
+}
+.deck-progress__label {
+  margin: var(--space-2) 0 0; font-family: var(--font-data);
+  font-size: var(--text-xs); color: var(--ink-muted);
+}
+
+.deck-card {
+  display: grid; grid-template-columns: 1fr; gap: 0;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius); overflow: hidden;
+  background: var(--paper);
+}
+.deck-media { aspect-ratio: 4 / 3; background: color-mix(in oklch, var(--ink) 6%, var(--paper)); }
+.deck-media__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.deck-media--none {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: var(--text-2xl);
+  color: color-mix(in oklch, var(--accent) 40%, var(--ink)); text-transform: uppercase;
+}
+.deck-card__body { padding: var(--space-4); display: grid; gap: var(--space-2); }
+.deck-card__head { display: flex; align-items: center; gap: var(--space-2); }
+.deck-card__head .fit-dot { width: 0.75rem; height: 0.75rem; }
+.deck-card__price { margin-left: auto; font-family: var(--font-data); font-feature-settings: "tnum"; font-size: var(--text-lg); color: var(--ink); }
+.deck-card__title {
+  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
+}
+.deck-card__place { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+.deck-card__meta { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-subtle); }
+.deck-card__open { font-size: var(--text-sm); color: var(--ink-muted); text-decoration: none; width: max-content; }
+.deck-card__open:hover, .deck-card__open:focus-visible { color: var(--accent); }
+
+/* Deck reaction bar — big thumb-friendly targets for fast en-masse triage. */
+.deck-react-wrap { margin: var(--space-2) 0 0; display: grid; gap: var(--space-2); }
+.deck-react { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.deck-react__btn {
+  font-family: var(--font-body); font-size: var(--text-base); font-weight: 500;
+  min-height: 48px; padding: 0.6rem; cursor: pointer;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink);
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.deck-react__btn:hover { border-color: var(--ink-muted); }
+.deck-react__btn:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.deck-react__btn--like:hover { background: color-mix(in oklch, var(--accent) 14%, var(--paper)); border-color: var(--accent); }
+.deck-react__btn--reject[aria-pressed="true"] {
+  font-weight: 600;
+  border-color: color-mix(in oklch, oklch(60% 0.18 30) 50%, var(--hairline));
+  background: color-mix(in oklch, oklch(60% 0.18 30) 10%, var(--paper));
+}
+.deck-reasons { margin: 0; }
+
+.deck-done { padding: var(--space-6) var(--space-3); text-align: center; }
+.deck-done__title { margin: 0 0 var(--space-2); font-family: var(--font-display); font-size: var(--text-lg); color: var(--ink); }
+.deck-done__hint { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--ink-muted); }
+.deck-done__browse {
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
+  min-height: 44px; padding: 0.4rem 1rem; cursor: pointer;
+  color: var(--paper); border: 0; border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--accent) 80%, var(--ink));
+}
+.deck-done__browse:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+/* Desktop: constrain the deck to a comfortable reading column with side media. */
+@media (min-width: 768px) {
+  .review-deck { max-width: 42rem; }
+  .deck-card { grid-template-columns: 16rem 1fr; }
+  .deck-media { aspect-ratio: auto; height: 100%; min-height: 16rem; }
+}
+
+/* ── Mobile (§10 mobile-first refinement) ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .listings-controls { gap: var(--space-2); }
+}
+

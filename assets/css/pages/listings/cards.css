@@ -1,0 +1,198 @@
+/* ── List + media cards (overhauled) ──────────────────────────────────────────
+   Editorial media rows: a cover-cropped photo + a generously-spaced content
+   column. Hairline-bordered (NOT shadow-floated SaaS cards per DESIGN.md §3).
+   Mobile-first: photo on top, stacking; ≥640px the photo moves to the left. ── */
+.listing-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+
+.listing-card {
+  display: grid;
+  grid-template-columns: 1fr;          /* mobile-first: media above content */
+  border: 1px solid var(--hairline);
+  border-radius: var(--rec-radius);
+  overflow: hidden;
+  background: var(--paper);
+  /* Keep a card clear of the sticky header when scrolled/focused into view on
+     return from a dossier (§11 Focus Not Obscured). */
+  scroll-margin-top: calc(var(--header-h, 4rem) + var(--space-3));
+}
+
+/* Brief highlight on the card you came back to (paired with focus, not colour-only). */
+.listing-card--returned { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .listing-card--returned { transition: outline-color 0.4s ease; }
+}
+
+/* Media well — fixed aspect, cover-cropped, so an image is never squashed. */
+.listing-media,
+.listing-media--none { aspect-ratio: 16 / 10; overflow: hidden; }
+.listing-media { background: color-mix(in oklch, var(--ink) 6%, var(--paper)); }
+.listing-media__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.listing-media--none {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: var(--text-2xl);
+  color: color-mix(in oklch, var(--accent) 45%, var(--ink));
+  background: color-mix(in oklch, var(--accent) 8%, var(--paper));
+}
+
+.listing-card__content {
+  min-width: 0; padding: var(--space-4);
+  display: grid; gap: var(--space-2); align-content: start;
+}
+.listing-card__head { display: flex; align-items: center; gap: var(--space-2); }
+.listing-card__head .fit-dot { width: 0.75rem; height: 0.75rem; flex: none; }
+.listing-card__price {
+  margin-left: auto; font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-lg); font-weight: 500; color: var(--ink); white-space: nowrap;
+}
+.listing-card__title {
+  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
+}
+.listing-card__title-link { color: inherit; text-decoration: none; }
+.listing-card__title-link:hover { color: var(--accent); }
+.listing-card__title-link:focus-visible { outline: var(--focus-ring); outline-offset: 2px; border-radius: 2px; }
+.listing-card__place { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+.listing-card__meta { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-subtle); }
+.listing-card__open {
+  width: max-content; min-height: 44px; display: inline-flex; align-items: center;
+  font-size: var(--text-sm); font-weight: 500; text-decoration: none;
+  color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+}
+.listing-card__open:hover { color: var(--accent); }
+.listing-card__open:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+/* Desktop: photo to the left, content to the right (horizontal media row). */
+@media (min-width: 640px) {
+  .listing-card { grid-template-columns: 18rem 1fr; }
+  .listing-media, .listing-media--none { aspect-ratio: auto; height: 100%; min-height: 13.5rem; }
+}
+
+/* ── 5-band listing fit dots (reuses .fit-dot base from tile-shortlist.css;
+   .fit-dot--stretch / --unknown already exist and are intentionally reused). ── */
+.fit-dot--strong   { background: color-mix(in oklch, var(--accent) 90%, var(--paper)); }
+.fit-dot--possible { background: color-mix(in oklch, var(--accent) 55%, var(--paper)); }
+.fit-dot--weak     { background: color-mix(in oklch, var(--ink) 35%, var(--paper)); }
+.fit-dot--reject   { background: var(--paper); border: 1px solid var(--ink-muted); }
+
+/* ── Verdict label (shared with the review deck) ──────────────────────────── */
+.verdict {
+  font-size: var(--text-xs); letter-spacing: 0.03em; text-transform: uppercase;
+  font-family: var(--font-body); font-weight: 500;
+}
+.verdict--strong   { color: color-mix(in oklch, var(--accent) 85%, var(--ink)); }
+.verdict--possible { color: color-mix(in oklch, var(--accent) 60%, var(--ink)); }
+.verdict--stretch  { color: var(--ink-muted); }
+.verdict--weak     { color: var(--ink-muted); }
+.verdict--reject   { color: var(--ink-subtle); }
+.verdict--unknown  { color: var(--ink-subtle); }
+
+/* ── Tags (status / price drop / new) ─────────────────────────────────────── */
+.listing-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) 0 0; }
+.listing-tag {
+  display: inline-flex; align-items: center; padding: 0.1rem 0.5rem;
+  font-size: var(--text-xs); font-weight: 500; border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--ink) 6%, var(--paper)); color: var(--ink-muted);
+}
+.listing-tag--new  { background: color-mix(in oklch, var(--accent) 18%, var(--paper)); color: color-mix(in oklch, var(--accent) 80%, var(--ink)); }
+.listing-tag--drop { background: color-mix(in oklch, var(--accent) 14%, var(--paper)); color: color-mix(in oklch, var(--accent) 75%, var(--ink)); }
+.listing-tag--under_offer,
+.listing-tag--sstc { background: color-mix(in oklch, var(--ink) 10%, var(--paper)); color: var(--ink-muted); }
+/* L7 geofence: neutral distance chip + an amber "location unconfirmed" warning
+   (icon + text, never colour alone — §11). */
+.listing-tag--geo  { background: color-mix(in oklch, var(--ink) 8%, var(--paper)); color: var(--ink-muted); font-family: var(--font-data); }
+.listing-tag--warn { background: color-mix(in oklch, oklch(75% 0.15 75) 22%, var(--paper)); color: color-mix(in oklch, oklch(55% 0.16 60) 70%, var(--ink)); }
+
+/* Post-fetch classifier chips (listing-flags.js). FLAG = a judgement-call signal
+   kept visible (new build / condition red-flag); HIDDEN = a normally-hidden junk
+   row (auction / over-55) surfaced via the "Show hidden" toggle. Both carry a text
+   label / icon, never colour alone (§11). */
+.listing-tag--flag   { background: color-mix(in oklch, oklch(72% 0.12 250) 18%, var(--paper)); color: color-mix(in oklch, oklch(45% 0.14 255) 78%, var(--ink)); }
+.listing-tag--hidden { background: color-mix(in oklch, var(--ink) 12%, var(--paper)); color: var(--ink-muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+/* ── "Why this verdict" expander (the explainability contract, §4) ────────── */
+.listing-why { margin: var(--space-2) 0 0; }
+.listing-why > summary {
+  cursor: pointer; font-size: var(--text-xs); color: var(--ink-muted);
+  list-style-position: inside; min-height: 28px; display: inline-flex; align-items: center;
+}
+.listing-why > summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-why__list { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: 0.2rem; }
+.listing-why__item { display: flex; align-items: baseline; gap: var(--space-2); font-size: var(--text-sm); color: var(--ink); }
+.listing-why__sign { font-family: var(--font-data); width: 1rem; flex: none; }
+.listing-why__item--pos .listing-why__sign { color: color-mix(in oklch, var(--accent) 80%, var(--ink)); }
+.listing-why__item--neg .listing-why__sign { color: color-mix(in oklch, oklch(60% 0.18 30) 60%, var(--ink)); }
+.listing-why__item--context { color: var(--ink-muted); }
+.listing-why__item--warn { color: color-mix(in oklch, oklch(55% 0.16 60) 70%, var(--ink)); }
+
+/* ── Reaction + personal-status controls (L3) ─────────────────────────────── */
+/* A calm vertical stack: the verbs/reasons/save picker, then the single secondary
+   control (status on the feed, priority on Saved) set off by a hairline. Reads far
+   tidier than the old wrap-and-float row. */
+.listing-controls {
+  display: flex; flex-direction: column; align-items: stretch; gap: var(--space-3);
+  margin: var(--space-3) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--hairline);
+}
+.listing-controls > .reaction-picker--row { width: 100%; }
+.listing-controls > .listing-status-wrap,
+.listing-controls > .listing-rating-wrap {
+  align-self: flex-start; padding-top: var(--space-3); border-top: 1px solid var(--hairline);
+}
+.listing-react { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
+/* Row-variant verbs read as proper buttons (comfortable 40px target, §10/§11). */
+.reaction-picker--row .listing-react__btn { min-height: 40px; padding: 0.4rem 0.95rem; font-size: var(--text-sm); }
+.listing-react__btn,
+.listing-chip {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 1.2;
+  min-height: 32px; padding: 0.25rem 0.65rem; /* ≥24px target with spacing (§11) */
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink-muted); cursor: pointer;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+.listing-react__btn:hover,
+.listing-chip:hover { color: var(--ink); border-color: var(--ink-muted); }
+.listing-react__btn:focus-visible,
+.listing-chip:focus-visible,
+.listing-status:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+/* Pressed (current) reaction — pair colour with weight so it is not colour-only (§11). */
+.listing-react__btn[aria-pressed="true"] {
+  font-weight: 600; color: var(--paper);
+  background: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border-color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+}
+.listing-chip[aria-pressed="true"] {
+  font-weight: 600; color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border-color: color-mix(in oklch, var(--accent) 60%, var(--paper));
+  background: color-mix(in oklch, var(--accent) 12%, var(--paper));
+}
+
+.listing-reasons { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) 0 0; flex-basis: 100%; }
+.listing-reasons[hidden] { display: none; }
+
+.listing-status-wrap {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-xs); color: var(--ink-muted);
+}
+.listing-status__label { white-space: nowrap; }
+.listing-status {
+  font-family: var(--font-body); font-size: var(--text-xs);
+  min-height: 32px; padding: 0.2rem 0.5rem;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink);
+}
+
+/* 1–10 priority rating (shared by Saved cards and the dossier). Same compact
+   idiom as the status select. */
+.listing-rating-wrap {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-xs); color: var(--ink-muted); margin: 0;
+}
+.listing-rating__label { white-space: nowrap; }
+.listing-rating {
+  font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-xs); min-height: 32px; padding: 0.2rem 0.5rem;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+  background: var(--paper); color: var(--ink);
+}
+.listing-rating:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+

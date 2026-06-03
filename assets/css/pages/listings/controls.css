@@ -1,0 +1,112 @@
+/* pages/listings.css — v3 Live Listings (L1 + L2). Anchor: Linear-dense.
+   Reuses the Areas-page row idiom (.area-row); adds the 5-band listing fit dots,
+   verdict labels, status/price-drop tags, and the explainable "why" expander.
+   No new tokens, no hard-coded hex — all colour derived from existing tokens. */
+
+/* ── Controls bar ─────────────────────────────────────────────────────────── */
+.listings-controls {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-3); margin: 0 0 var(--space-3);
+}
+.listings-summary {
+  margin: 0; font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); color: var(--ink-muted);
+}
+/* Review-pipeline breakdown: to review · liked · passed · rejected · gated.
+   The bold count sits in full ink so the numbers read first; the still-to-review
+   segment stays full ink (the actionable one), the rest fade to muted. */
+.listings-summary__seg { white-space: nowrap; }
+.listings-summary__seg--review { color: var(--ink); }
+.listings-summary__n { font-weight: 600; color: var(--ink); }
+.listings-summary__sep { margin: 0 var(--space-1); color: var(--hairline-strong); }
+.listings-toggle {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-sm); color: var(--ink-muted);
+  min-height: 44px; /* touch target (§10) */
+  margin: 0;
+}
+.listings-toggle input { margin: 0; }
+.listings-actions { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+
+/* ── Search / sort / filter bar (shared with Saved; mobile-first) ──────────── */
+.listings-filter {
+  flex-basis: 100%; width: 100%;
+  display: flex; flex-direction: column; gap: var(--space-2);
+  margin: var(--space-1) 0 0;
+}
+.listings-filter[hidden] { display: none; }
+.listings-filter__search {
+  width: 100%; min-height: 44px; margin: 0;
+  font-size: var(--text-sm);
+}
+.listings-filter__facets {
+  display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-2);
+}
+.listings-filter__field {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  margin: 0; flex: 1 1 8rem; min-width: 0;
+}
+.listings-filter__label {
+  font-size: var(--text-xs); color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.listings-filter__field select { min-height: 44px; margin: 0; font-size: var(--text-sm); }
+.listings-filter__clear { flex: 0 0 auto; min-height: 44px; margin: 0; }
+
+@media (min-width: 768px) {
+  .listings-filter__field { flex: 0 1 11rem; }
+}
+
+/* "Pull listings" — trigger the fetch-listings workflow with an explicit Rightmove
+   recency window (24h or 3 days). The static site holds no actions:write token, so
+   the click dispatches the workflow via the user's saved GitHub PAT (see
+   listings-fetch.js). Dedup is guaranteed downstream, so re-pulling is always safe. */
+/* Confirm-before-fetch dialog footer: buttons inline-right, not stacked full-width. */
+.confirm-dialog .dialog-foot { display: flex; justify-content: flex-end; gap: var(--space-3); }
+.confirm-dialog .dialog-foot button { margin: 0; min-height: 44px; width: auto; }
+
+.listings-fetch-group { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
+.listings-fetch-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 44px; padding: 0.4rem 0.9rem; /* full 44px touch target (§10) */
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
+  color: var(--paper); cursor: pointer;
+  background: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border: 1px solid color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border-radius: var(--rec-radius-sm);
+  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+}
+.listings-fetch-btn:hover { background: var(--accent); border-color: var(--accent); }
+.listings-fetch-btn:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listings-fetch-btn:disabled { opacity: 0.55; cursor: progress; }
+
+/* Status line + token box wrap onto their own full-width row beneath the controls. */
+.listings-fetch-status {
+  flex-basis: 100%; width: 100%; margin: var(--space-1) 0 0;
+  font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); color: var(--ink-muted);
+}
+.listings-fetch-status[hidden] { display: none; }
+.listings-fetch-status.is-ok  { color: var(--positive); }
+.listings-fetch-status.is-err { color: var(--danger); }
+
+.listings-fetch-token {
+  flex-basis: 100%; width: 100%; margin: var(--space-2) 0 0; padding: var(--space-3);
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+}
+.listings-fetch-token[hidden] { display: none; }
+.listings-fetch-token > label {
+  display: block; margin: 0 0 var(--space-2);
+  font-size: var(--text-sm); color: var(--ink);
+}
+.listings-fetch-token-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.listings-fetch-token-row input {
+  flex: 1 1 16rem; min-height: 44px; margin: 0;
+  font-family: var(--font-data); font-size: var(--text-sm);
+}
+.listings-fetch-token-row button {
+  min-height: 44px; margin: 0; padding: 0.4rem 0.9rem;
+  font-size: var(--text-sm); white-space: nowrap;
+}
+.listings-fetch-token-hint { margin: var(--space-2) 0 0; font-size: var(--text-xs); color: var(--ink-muted); }
+

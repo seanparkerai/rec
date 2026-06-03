@@ -1,0 +1,183 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   v3 L4 upgrade — multi-reason picker, Save, reviewed/collapse, training visual,
+   Rightmove buttons, clickable media. (Stripe-docs anchor: calm, precise.)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Shared reaction picker (browse rows + dossier; deck variant below) ────── */
+.reaction-picker { display: grid; gap: var(--space-2); }
+.reaction-picker .listing-reasons[hidden] { display: none; }
+.listing-reason { display: grid; gap: var(--space-1); }
+
+/* Sub-reason chips read as visually secondary: smaller, tinted, indented. */
+.listing-subreasons {
+  display: flex; flex-wrap: wrap; gap: var(--space-1);
+  margin: 0 0 var(--space-1) var(--space-3);
+  padding-left: var(--space-2);
+  border-left: 2px solid color-mix(in oklch, var(--accent) 25%, var(--hairline));
+}
+.listing-subchip {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 1.1;
+  min-height: 28px; padding: 0.15rem 0.5rem; cursor: pointer;
+  border: 1px dashed var(--hairline); border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--ink) 2%, var(--paper)); color: var(--ink-subtle);
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+.listing-subchip:hover { color: var(--ink); border-color: var(--ink-muted); }
+.listing-subchip:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-subchip[aria-pressed="true"] {
+  font-weight: 600; border-style: solid;
+  color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border-color: color-mix(in oklch, var(--accent) 55%, var(--paper));
+  background: color-mix(in oklch, var(--accent) 12%, var(--paper));
+}
+
+/* Save — the unmistakable primary action that consolidates the decision. */
+.listing-save-row { margin: var(--space-1) 0 0; }
+.listing-save, .deck-save {
+  font-family: var(--font-body); font-weight: 600; font-size: var(--text-sm);
+  min-height: 40px; padding: 0.4rem 1.1rem; cursor: pointer;
+  color: var(--paper); border: 1px solid transparent; border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--accent) 82%, var(--ink));
+  transition: background 0.12s, opacity 0.12s;
+}
+.deck-save { width: 100%; min-height: 48px; font-size: var(--text-base); }
+.listing-save:hover, .deck-save:hover { background: var(--accent); }
+.listing-save:focus-visible, .deck-save:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-save[disabled], .deck-save[disabled] {
+  background: color-mix(in oklch, var(--ink) 12%, var(--paper));
+  color: var(--ink-subtle); cursor: not-allowed;
+}
+.reaction-picker.is-saved .listing-save,
+.reaction-picker.is-saved .deck-save {
+  background: var(--positive);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--positive) 60%, var(--ink));
+}
+
+/* ── Rightmove buttons (Stage 6 — clear, external, distinct from dossier) ──── */
+.btn-rm {
+  display: inline-flex; align-items: center; gap: 0.25rem; width: max-content;
+  min-height: 40px; padding: 0.35rem 0.9rem;
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  color: color-mix(in oklch, var(--accent) 85%, var(--ink));
+  border: 1px solid color-mix(in oklch, var(--accent) 45%, var(--hairline));
+  border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--accent) 8%, var(--paper));
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.btn-rm:hover { background: color-mix(in oklch, var(--accent) 16%, var(--paper)); border-color: var(--accent); color: var(--accent); }
+.btn-rm:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-card__rm { margin-top: var(--space-1); }
+.listing-card__links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-1); }
+.btn-map {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; min-height: 40px; flex-shrink: 0;
+  color: var(--ink-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-radius-sm);
+  background: transparent;
+  text-decoration: none;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.btn-map:hover { background: color-mix(in oklch, var(--accent) 8%, var(--paper)); border-color: var(--accent); color: var(--accent); }
+.btn-map:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .btn-map { transition: none; } }
+.deck-card__links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+
+/* ── Clickable media → our dossier (keyboard-accessible link) ──────────────── */
+.listing-media-link, .deck-media-link { display: block; height: 100%; cursor: pointer; outline-offset: -2px; position: relative; }
+.listing-media-link:focus-visible, .deck-media-link:focus-visible { outline: var(--focus-ring); }
+.listing-media-link:hover .listing-media__img,
+.deck-media-link:hover .deck-media__img { opacity: 0.92; transition: opacity 0.15s; }
+
+/* ── Reviewed card state (Stage 4) — green = actioned, with a ✓ + reaction tint ─ */
+.listing-card--reviewed { border-left: 3px solid var(--positive); }
+.listing-card--liked    { background: color-mix(in oklch, var(--positive) 6%, var(--paper)); }
+.listing-card--rejected { background: color-mix(in oklch, var(--danger) 5%, var(--paper)); }
+.listing-card--passed   { background: color-mix(in oklch, var(--ink) 3%, var(--paper)); }
+.listing-card__reviewed-tag {
+  display: inline-flex; align-items: center; gap: 0.2rem;
+  font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.02em;
+  color: color-mix(in oklch, var(--positive) 72%, var(--ink));
+}
+
+/* Collapsed "Reviewed (N)" section pinned at the bottom of the list. */
+.reviewed-collapse-item { list-style: none; }
+.reviewed-collapse {
+  margin-top: var(--space-4); border-top: 1px solid var(--hairline); padding-top: var(--space-3);
+}
+.reviewed-collapse__summary {
+  display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer;
+  min-height: 44px; font-family: var(--font-body); font-weight: 600; color: var(--ink-muted);
+  list-style-position: inside;
+}
+.reviewed-collapse__summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.reviewed-collapse__count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 1.5rem; height: 1.5rem; padding: 0 0.4rem;
+  font-size: var(--text-xs); font-feature-settings: "tnum";
+  color: var(--paper); background: var(--positive); border-radius: 999px;
+}
+.reviewed-list { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: grid; gap: var(--rec-gap); }
+
+/* Per-verdict reviewed groups — count badge + top hairline tinted to the verdict
+   so Liked / Passed / Rejected read at a glance (colour is paired with the text
+   label in the summary, never colour-only). */
+.reviewed-collapse--liked    .reviewed-collapse__count { background: var(--positive); }
+.reviewed-collapse--rejected .reviewed-collapse__count { background: var(--danger); }
+.reviewed-collapse--passed   .reviewed-collapse__count { background: color-mix(in oklch, var(--ink) 45%, var(--paper)); }
+.reviewed-collapse--liked    { border-top-color: color-mix(in oklch, var(--positive) 40%, var(--hairline)); }
+.reviewed-collapse--rejected { border-top-color: color-mix(in oklch, var(--danger) 30%, var(--hairline)); }
+
+/* Read-only "why you liked it" positives — the captured like-reasons surfaced as
+   chips on the consolidated Saved-listings view. */
+.listing-positives { display: flex; flex-wrap: wrap; gap: var(--space-1); margin: var(--space-2) 0 0; }
+.listing-positives__chip {
+  display: inline-flex; align-items: center; line-height: 1.2;
+  font-size: var(--text-xs); font-weight: 600;
+  padding: 0.15rem 0.5rem; border-radius: var(--rec-radius-sm);
+  color: color-mix(in oklch, var(--positive) 80%, var(--ink));
+  background: color-mix(in oklch, var(--positive) 12%, var(--paper));
+  border: 1px solid color-mix(in oklch, var(--positive) 35%, var(--paper));
+}
+
+/* ── Training-progress visual (Stage 5) ────────────────────────────────────── */
+.learning-status--rich { display: block; align-items: stretch; }
+.training { display: grid; gap: var(--space-2); width: 100%; }
+.training__head { display: flex; align-items: center; gap: var(--space-2); }
+.training__headline { font-size: var(--text-sm); font-weight: 600; color: var(--ink); }
+.training-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+.training-seg {
+  position: relative; min-height: 1.5rem; border-radius: var(--rec-radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in oklch, var(--ink) 8%, var(--paper));
+  border: 1px solid transparent;
+}
+.training-seg--on { background: color-mix(in oklch, var(--accent) 30%, var(--paper)); }
+.training-seg--current { border-color: var(--accent); background: color-mix(in oklch, var(--accent) 55%, var(--paper)); }
+.training-seg__label {
+  font-size: 0.62rem; letter-spacing: 0.02em; text-transform: uppercase; font-weight: 600;
+  color: var(--ink-muted);
+}
+.training-seg--current .training-seg__label { color: color-mix(in oklch, var(--accent) 85%, var(--ink)); }
+.training-balance { display: grid; gap: 0.2rem; }
+.training-balance__track {
+  height: 0.45rem; border-radius: 999px; overflow: hidden;
+  background: color-mix(in oklch, var(--danger) 30%, var(--paper));
+}
+.training-balance__likes { display: block; height: 100%; background: var(--positive); border-radius: 999px; transition: width 0.25s ease-out; }
+.training-balance__label { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-muted); }
+.training__next { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+.training__next--alert {
+  font-weight: 500; color: color-mix(in oklch, var(--accent) 70%, var(--ink));
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--accent); border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--accent) 7%, var(--paper));
+}
+.training__reviewed { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-subtle); }
+
+@media (prefers-reduced-motion: reduce) {
+  .training-balance__likes,
+  .listing-media-link:hover .listing-media__img,
+  .deck-media-link:hover .deck-media__img { transition: none; }
+}
