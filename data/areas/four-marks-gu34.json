@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": "D",
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Four Marks is a village and civil parish of around 4,800 residents in the East Hampshire district, sitting astride the A31 road four and a half miles south-west of Alton on the high chalk ridge at 630 ft above sea level. The name records a Saxon-era boundary point where four parishes (Ropley, Medstead, Chawton and Farringdon) met; until the turnpike was driven through in 1753, the only settlement was the Windmill Inn and a few cottages. The parish was created in 1932 and has grown rapidly since the 1980s as developers acquired plots between the older hamlets of Hawthorn and Soldridge. The village shares Medstead and Four Marks railway station — at 644 ft, the highest standard-gauge station in southern England — with neighbouring Medstead, but the line is the preserved Watercress Line and does not run commuter services; commuters drive four miles to Alton for direct Waterloo trains. The St Swithun's Way long-distance footpath crosses the southern fringe of the village.",
   "character": "Recent-build commuter village layered over a Saxon boundary; the older cores at Hawthorn and Lymington Bottom retain a few period cottages but most of the modern parish is densely-packed late-20th and 21st-century estate housing, a marked contrast to neighbouring Medstead. Council Tax Band D charge for the parish in 2026/27 is £2,316.05 (East Hampshire local-authority data).",
   "amenities": [
@@ -155,8 +158,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:54.946Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Awbridge is a small Test Valley village and civil parish about three miles north-west of Romsey, near the River Test. It has a traditional Hampshire village profile, with scattered housing, village facilities and strong access to surrounding countryside. The location balances rural character with relatively quick links to Romsey and Southampton employment centres.",
   "character": "Traditional village/parish character with quiet lanes and community-led local life.",
   "amenities": [
@@ -99,8 +102,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:04.758Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

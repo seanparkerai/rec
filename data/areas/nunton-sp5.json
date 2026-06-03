@@ -15,34 +15,114 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809980",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:36.215Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Nunton is a small village about 2.5-3.3 miles south of Salisbury in Wiltshire, part of Odstock civil parish since 1934, with the small village of Bodenham just to the east. It sits in the Ebble/Avon valley countryside close to the city, with the Church of St Andrew at its heart and the Longford Park estate to the south of Bodenham. Despite its small size it retains a farm shop, pub and church.",
+  "character": "A quiet, well-kept valley village close to Salisbury, with a farm shop and pub giving it more amenities than many of its size.",
+  "amenities": [
+    "Village pub",
+    "Farm shop",
+    "Church of St Andrew",
+    "The Orchard sheltered housing (22 bungalows)",
+    "Bus stop with regular services to Salisbury",
+    "Close to Salisbury District Hospital",
+    "Longford Park estate nearby"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in Salisbury / Coombe Bissett area",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2-3 miles"
+    },
+    {
+      "url": null,
+      "name": "Secondary/grammar schools in Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~3 miles",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Regular buses into the city centre",
+        "typical": "~15-20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "~1h 25m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable small village close to Salisbury; period cottages and family homes in a quiet valley setting, with limited supply. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walks in the Ebble and Avon valleys",
+    "The village pub and farm shop",
+    "Church of St Andrew",
+    "Easy trips into Salisbury",
+    "Longford Park estate countryside nearby"
+  ],
+  "placesToEat": [
+    "Village pub, Nunton",
+    "Farm shop cafe/produce",
+    "Wide choice in Salisbury"
+  ],
+  "pros": [
+    "Farm shop, pub and church retained in a small village",
+    "Quiet valley setting only ~3 miles from Salisbury",
+    "Regular buses into the city",
+    "Close to Salisbury District Hospital"
+  ],
+  "cons": [
+    "No school within the village (rely on Salisbury area)",
+    "No railway station; rely on Salisbury",
+    "Small with limited shopping beyond the farm shop"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, well-served small village within easy reach of Salisbury and the hospital.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~3 miles)",
+  "primarySupermarket": "Nunton farm shop; supermarkets in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Nunton",
+      "label": "Nunton - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Odstock",
+      "label": "Odstock - Wikipedia (parish incl. Nunton)"
+    },
+    {
+      "url": "https://www.wiltshire.gov.uk/housing-sheltered-the-orchard",
+      "label": "The Orchard Sheltered Housing, Nunton - Wiltshire Council"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:36.215Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809980"
+  }
 }

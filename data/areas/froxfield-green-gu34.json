@@ -15,34 +15,107 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1666382",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:56.150Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Froxfield Green is a small hilltop village about 3 miles north-west of Petersfield, just north of the A272, in the civil parish of Froxfield and Privett (parish population 929 at the 2021 census). It lies wholly within the South Downs National Park and the East Hampshire Area of Outstanding Natural Beauty, on high ground overlooking the East Hampshire Hangers. The settlement is scattered across the parish alongside the hamlets of High Cross and Privett.",
+  "character": "A quiet, high and rural village of period cottages and farmsteads spread along narrow lanes, with sweeping downland views and a strong walking-country feel.",
+  "amenities": [
+    "Froxfield Village Hall at High Cross (community events venue)",
+    "Froxfield Church of England Primary and Pre-School",
+    "St Peter on the Green church (1884) and St Peter's, High Cross (1862)",
+    "No village shop or supermarket - everyday shopping is in Petersfield (~3 miles)"
+  ],
+  "schools": [
+    {
+      "url": "https://froxfield.hants.sch.uk/",
+      "name": "Froxfield Church of England Primary and Pre-School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1 mile"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "notes": "About 3 miles via the A272; nearest town for shops and the railway station",
+        "typical": "~10 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Petersfield on South Western Railway; fastest services about 1h 2m",
+        "typical": "~65 min"
+      },
+      {
+        "to": "Portsmouth",
+        "mode": "Train",
+        "notes": "Direct from Petersfield on the Portsmouth Direct line",
+        "typical": "~30 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing is predominantly period cottages, converted farm buildings and detached houses, with low transaction volumes given the small size of the village; the South Downs National Park and AONB setting supports premium values relative to nearby towns. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/GU32.html"
+  },
+  "thingsToDo": [
+    "Walking in the East Hampshire Hangers and wider South Downs National Park (e.g. the Froxfield Green to Langrish circular)",
+    "Exploring the scheduled Froxfield Entrenchments earthworks west and south of the village",
+    "Visiting the two historic parish churches"
+  ],
+  "placesToEat": [
+    "The Trooper Inn (on the nearby Alton road)",
+    "The White Horse, also known as the 'Pub With No Name', at Priors Dean a short drive north - one of the highest pubs in Hampshire"
+  ],
+  "pros": [
+    "Set entirely within the South Downs National Park with excellent walking on the doorstep",
+    "Good-rated village Church of England primary school",
+    "Direct trains to London Waterloo and Portsmouth from Petersfield, about 3 miles away"
+  ],
+  "cons": [
+    "Very limited amenities in the village itself - no shop or supermarket, so a car is essential",
+    "Rural, high and exposed; reliant on Petersfield for most services",
+    "Some parts of the village are affected by A272 traffic noise"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, high-set South Downs village with superb walking and a strong village primary school, who are happy to drive to Petersfield for shops and the station.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Froxfield_Green",
+      "label": "Wikipedia - Froxfield Green"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Froxfield_and_Privett",
+      "label": "Wikipedia - Froxfield and Privett (parish & 2021 population)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116289",
+      "label": "Ofsted - Froxfield CE Primary and Pre-School (URN 116289, Good, Mar 2024)"
+    },
+    {
+      "url": "https://www.get-information-schools.service.gov.uk/Establishments/Establishment/Details/116289",
+      "label": "GOV.UK Get Information About Schools - Froxfield CE Primary"
+    },
+    {
+      "url": "https://www.froxfieldvillagehall.co.uk/village-information",
+      "label": "Froxfield Village Hall - village information"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:56.150Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1666382"
+  }
 }

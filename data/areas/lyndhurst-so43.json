@@ -15,34 +15,120 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^804328",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:23.679Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Lyndhurst is the largest village in the New Forest and its 'capital', a civil parish in the New Forest National Park about nine miles south-west of Southampton, with a population of around 3,029 (2011 census). It became the administrative heart of the Forest after William the Conqueror made it a royal hunting ground, and the Queen's/King's House at the top of the High Street still holds the ancient Verderers' Court and the Forestry Commission headquarters. The Gothic church of St Michael and All Angels has a 49-metre spire and the grave of Alice Liddell, inspiration for Alice in Wonderland.",
+  "character": "A bustling, tourist-focused New Forest village with a busy independent High Street, surrounded by open forest where ponies roam, and steeped in royal and literary history.",
+  "amenities": [
+    "Long High Street of independent shops, boutiques and galleries",
+    "Budgens supermarket and petrol station",
+    "Many pubs, cafes, tea rooms, restaurants and hotels",
+    "New Forest Heritage Centre and Museum (Visitor Information Centre)",
+    "Queen's/King's House and Verderers' Court",
+    "Primary school",
+    "New Forest District Council offices",
+    "Ferrari/Maserati dealership",
+    "Large pay-and-display car parks"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Lyndhurst Infant / local primary provision",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (off the High Street)"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in the New Forest (e.g. Brockenhurst College for sixth form)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "varies"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "~9 miles via A35/M27",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Brockenhurst or Ashurst (New Forest) stations",
+        "typical": "~1h 35m"
+      },
+      {
+        "to": "Brockenhurst (nearest station)",
+        "mode": "Drive",
+        "notes": "~4 miles",
+        "typical": "~10 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A premium New Forest location; period and character homes near open forest command high values, supported by tourism, amenities and the National Park setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO43.html"
+  },
+  "thingsToDo": [
+    "New Forest Heritage Centre and Museum",
+    "St Michael and All Angels Church and Alice Liddell's grave",
+    "Walks from Bolton's Bench into the open forest",
+    "Shopping and dining on the High Street",
+    "Pony-spotting and cycling in the National Park"
+  ],
+  "placesToEat": [
+    "High Street pubs, cafes and tea rooms",
+    "The Crown Manor House Hotel",
+    "Numerous restaurants and the nearby Bank/Emery Down/Swan Green pubs"
+  ],
+  "pros": [
+    "Largest village in the New Forest with full amenities and a supermarket",
+    "Surrounded by open forest and superb walking/cycling",
+    "Rich history (Verderers' Court, royal connections, Alice Liddell)",
+    "Strong tourism and dining scene"
+  ],
+  "cons": [
+    "No railway station in the village (Brockenhurst/Ashurst nearest)",
+    "Heavy tourist traffic and parking pressure in season",
+    "Premium house prices"
+  ],
+  "whoItSuits": "Buyers wanting a lively, amenity-rich New Forest village at the heart of the National Park, who accept tourist bustle and premium prices.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Ashurst (New Forest) or Brockenhurst (~3-4 miles)",
+  "primarySupermarket": "Budgens, Lyndhurst High Street",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Lyndhurst,_Hampshire",
+      "label": "Lyndhurst, Hampshire - Wikipedia"
+    },
+    {
+      "url": "https://www.visit-hampshire.co.uk/explore/towns/lyndhurst",
+      "label": "Visit Hampshire - Lyndhurst"
+    },
+    {
+      "url": "https://www.new-forest-national-park.com/lyndhurst/",
+      "label": "New Forest National Park - Lyndhurst"
+    },
+    {
+      "url": "https://www.newforestheritage.org.uk/visit-us",
+      "label": "New Forest Heritage Centre"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:23.679Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^804328"
+  }
 }

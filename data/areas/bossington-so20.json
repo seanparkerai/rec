@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Bossington is a very small village and civil parish in Test Valley, near Houghton and Stockbridge, set beside River Test country. Historic references note a medieval settlement history and listed buildings including St James church and Bossington House. Today it is a tiny, low-density rural settlement with strong estate and landscape character rather than a service village.",
   "character": "Exclusive, low-density hamlet/parish feel with estate land, fishing heritage and minimal through-traffic outside local lanes.",
   "amenities": [
@@ -131,8 +134,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:14.475Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

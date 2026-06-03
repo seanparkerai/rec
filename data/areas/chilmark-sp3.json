@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808865",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:34.218Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Chilmark is a pretty, historic village of around 150 houses in the Nadder Valley, about 11 miles west of Salisbury, straddling the B3089 within the Cranborne Chase National Landscape. It is famous for Chilmark Stone, a buttery limestone quarried locally from medieval times until the 1930s and used to build Salisbury Cathedral; many of the village's cottages and houses are built from it. A stream runs through the village to join the River Nadder, and the parish includes the hamlets of Mooray, Portash and Ridge.",
+  "character": "A quintessential, peaceful Wiltshire stone village in the Nadder Valley, with a thriving community supporting its pub, school and church.",
+  "amenities": [
+    "The Black Dog (village pub, licensed since the 15th century)",
+    "Chilmark CofE Primary School",
+    "Church of St Margaret of Antioch (13th century, Grade II*)",
+    "Reading room",
+    "Cricket club",
+    "Stream through the village",
+    "Tisbury (3 miles) for shops, station, surgeries and leisure centre"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Chilmark and Fonthill Bishop CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Tisbury/Wilton/Salisbury area",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3-11 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~11 miles via B3089/A36",
+        "typical": "~30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Tisbury station (~3 miles)",
+        "typical": "~1h 50m"
+      },
+      {
+        "to": "Shaftesbury",
+        "mode": "Drive",
+        "notes": "Nearby market town",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after Nadder Valley village; characterful Chilmark-stone cottages and houses with strong heritage appeal command good values. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "The Black Dog pub",
+    "Church of St Margaret of Antioch and its listed chest tombs",
+    "Walks in the Nadder Valley and Cranborne Chase",
+    "Exploring the historic Chilmark stone quarries and Fonthill estate",
+    "Cricket at the village club"
+  ],
+  "placesToEat": [
+    "The Black Dog, Chilmark",
+    "The Compasses Inn at nearby Chicksgrove",
+    "The Beckford Arms (Fonthill) nearby"
+  ],
+  "pros": [
+    "Beautiful, historic Chilmark-stone village in Cranborne Chase",
+    "Retains pub, primary school, church and cricket club",
+    "Tisbury's amenities and mainline station just 3 miles away",
+    "Easy A303 access"
+  ],
+  "cons": [
+    "No village shop (rely on Tisbury)",
+    "No railway station in the village",
+    "Quiet and rural; limited public transport"
+  ],
+  "whoItSuits": "Buyers wanting a characterful Nadder Valley stone village with a pub and school, close to Tisbury's amenities and rail.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury (~3 miles)",
+  "primarySupermarket": "Shops in Tisbury (~3 miles)",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Chilmark,_Wiltshire",
+      "label": "Chilmark, Wiltshire - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/tisbury-nadder-valley/chilmark/",
+      "label": "H&W White - Chilmark"
+    },
+    {
+      "url": "https://blackdogchilmark.com/",
+      "label": "The Black Dog, Chilmark"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Chilmark",
+      "label": "Chilmark - Wikishire"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:34.218Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808865"
+  }
 }

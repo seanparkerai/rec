@@ -24,6 +24,9 @@
     "asOf": "2026-05"
   },
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Lane End is a tiny hamlet of barely a dozen cottages on Longwood Dean Lane, in the Longwood valley between the villages of Owslebury and Kilmeston, in the City of Winchester district. Set at around 112 m on a chalk fold of the South Downs National Park about five miles south-east of Winchester and roughly five miles south-west of New Alresford, it has no shop, pub, school or church of its own. The cluster takes its name from the road end — a Hampshire convention for hamlets at the head of a lane. Properties are spread thinly along the lane, mostly converted farm buildings, cottages and one or two larger homes; the area falls within the Owslebury civil parish for governance and the South Downs National Park for planning. The post town is Winchester but the nearest day-to-day services are at Owslebury, half a mile west.",
   "character": "Dispersed downland hamlet inside the South Downs National Park: a handful of brick, flint and tile-hung properties (some Victorian estate cottages, some 20th-century barn conversions) on a narrow single-track lane. SDNP planning policy strictly limits new build and the lane has no through traffic, which preserves both the quiet and the absence of facilities.",
   "amenities": [
@@ -162,8 +165,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:11.818Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

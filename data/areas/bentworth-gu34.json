@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Bentworth is a substantial village and civil parish in East Hampshire, west of Alton in the GU34 area. It has medieval roots, a notable church heritage and a long-established agricultural setting on higher ground. Modern Bentworth combines historic lanes and period property with active parish life and access to Alton’s rail and shopping services.",
   "character": "Historic hill village with period homes, parish facilities and a strong rural landscape setting.",
   "amenities": [
@@ -108,8 +111,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:09.471Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

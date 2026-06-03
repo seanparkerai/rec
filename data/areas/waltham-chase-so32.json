@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1704083",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:12.996Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Waltham Chase is a semi-rural village in the Winchester district of Hampshire, in the upper Hamble valley about 8-10 miles south-east of Winchester and neighbouring the town of Bishop's Waltham. It sits within the civil parish of Shedfield, with around 2,380 residents in the village. Once a forest where the Bishops of Waltham hunted game, it developed its own identity in the 19th century and now has a primary school, two pubs, a village store and the Waltham Chase Meadows SSSI on its eastern edge.",
+  "character": "A friendly, community-minded semi-rural village with everyday amenities and protected meadows nearby, within easy reach of Bishop's Waltham.",
+  "amenities": [
+    "Village store with Post Office",
+    "Two public houses including The Black Dog",
+    "St John the Baptist CofE Primary School",
+    "Village hall used by many clubs and societies",
+    "Recreation ground and park areas",
+    "Hairdresser and local garages",
+    "Waltham Chase Meadows SSSI (unimproved neutral pasture)"
+  ],
+  "schools": [
+    {
+      "url": "https://www.stjohnthebaptistprimary.co.uk/",
+      "name": "St John the Baptist CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Solomons Lane, SO32 2LY)"
+    },
+    {
+      "url": "https://www.swanmore-school.co.uk/",
+      "name": "Swanmore College (secondary)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~2 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~8-10 miles via B2177/A334",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "~12 miles",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Botley or Winchester stations",
+        "typical": "~1h 15m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A mix of period and modern family housing in a semi-rural setting; popular with families for the primary school and Swanmore College catchment. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Walks at Waltham Chase Meadows SSSI",
+    "Recreation ground and village green spaces",
+    "Easy access to Bishop's Waltham's shops and palace ruins",
+    "Countryside walks in the Hamble valley"
+  ],
+  "placesToEat": [
+    "The Black Dog (Winchester Road)",
+    "Second village pub",
+    "Eateries in nearby Bishop's Waltham"
+  ],
+  "pros": [
+    "Primary school and Swanmore College catchment for families",
+    "Village store, pubs and village hall retained",
+    "Protected SSSI meadows on the doorstep",
+    "Close to Bishop's Waltham town amenities"
+  ],
+  "cons": [
+    "No railway station; car-dependent commuting",
+    "Lies along the busy Winchester Road (B2177)",
+    "Larger shopping requires Bishop's Waltham or beyond"
+  ],
+  "whoItSuits": "Families wanting an affordable, well-served semi-rural Hampshire village with good schooling near Bishop's Waltham.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Botley (~5 miles)",
+  "primarySupermarket": "Village store; supermarkets in Bishop's Waltham",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Waltham_Chase",
+      "label": "Waltham Chase - Wikipedia"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116314",
+      "label": "St John the Baptist CofE Primary School - GOV.UK"
+    },
+    {
+      "url": "https://walthamchase.wordpress.com/local-information/businesses/",
+      "label": "Waltham Chase Village website - Businesses & Shops"
+    },
+    {
+      "url": "https://www.inapub.co.uk/venues/the-black-dog/waltham-chase/so322lx/56178",
+      "label": "The Black Dog, Waltham Chase"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:12.996Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1704083"
+  }
 }

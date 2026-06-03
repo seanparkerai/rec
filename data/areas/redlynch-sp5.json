@@ -15,34 +15,116 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1390543",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:47.129Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Redlynch is a village and large parish on the northern edge of the New Forest National Park in south Wiltshire, a few miles south-east of Salisbury and close to Downton. The parish takes in several settlements including Woodfalls, Lover and Morgan's Vale, and has a primary school, two pubs and a village hall (originally built in 1922 as the church hall at Lover). It offers a peaceful rural lifestyle with the New Forest and Salisbury both within easy reach.",
+  "character": "A sought-after, spread-out New Forest-fringe village of traditional cottages and family homes, valued for countryside tranquillity with everyday amenities close by.",
+  "amenities": [
+    "Primary school (Morgan's Vale and Woodfalls CofE Primary)",
+    "Two pubs: the Kings Head (Redlynch) and the Woodfalls Inn (Woodfalls)",
+    "Village shop and nearby farm shops",
+    "Redlynch Village Hall (near Lover)",
+    "Restaurant",
+    "New Forest National Park on the doorstep"
+  ],
+  "schools": [
+    {
+      "url": "https://www.morgansvale-woodfalls.wilts.sch.uk/",
+      "name": "Morgan's Vale and Woodfalls CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in parish (Morgans Vale Road, SP5 2HU)"
+    },
+    {
+      "url": "https://www.trafalgarschool.com/",
+      "name": "The Trafalgar School at Downton (secondary)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "Via Downton and the A338",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "~1h 30m"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via M27",
+        "typical": "~30 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable New Forest-edge village with everything from cottages to Grade II listed and larger detached homes; values supported by the National Park setting and Downton/Salisbury access. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking and cycling in the New Forest National Park",
+    "Local pubs and farm shops",
+    "Riding and country pursuits in the surrounding area",
+    "Nearby Breamore House and the Avon Valley"
+  ],
+  "placesToEat": [
+    "The Kings Head, Redlynch",
+    "The Woodfalls Inn",
+    "Village restaurant"
+  ],
+  "pros": [
+    "On the edge of the New Forest National Park",
+    "Retains primary school, pubs and village hall",
+    "Quiet rural lifestyle with Salisbury within reach",
+    "Good road links to Southampton via the M27"
+  ],
+  "cons": [
+    "Spread-out parish; amenities are dispersed across settlements",
+    "No railway station; rely on Salisbury",
+    "Car-dependent for secondary schooling and larger shops"
+  ],
+  "whoItSuits": "Buyers wanting a tranquil New Forest-fringe village with a primary school and pubs, within reach of Salisbury and the coast.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~8 miles)",
+  "primarySupermarket": "Village shop; supermarkets in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://wikishire.co.uk/wiki/Redlynch,_Wiltshire",
+      "label": "Redlynch - Wikishire"
+    },
+    {
+      "url": "https://search.savills.com/property-detail/gbwnrewnl250057l",
+      "label": "Savills - Redlynch village description"
+    },
+    {
+      "url": "https://spencersproperty.co.uk/property-sales/redlynch-salisbury-29605156/",
+      "label": "Spencers - Redlynch village amenities"
+    },
+    {
+      "url": "https://www.goodschoolsguide.co.uk/local-authority/wiltshire-council",
+      "label": "Good Schools Guide - Morgan's Vale and Woodfalls Primary listing"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:47.129Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1390543"
+  }
 }

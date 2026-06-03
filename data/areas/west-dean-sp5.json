@@ -15,34 +15,107 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810573",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:13.641Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "West Dean is a small village and civil parish on the River Dun in south-east Wiltshire, straddling the Wiltshire/Hampshire border about 7 miles east of Salisbury and a similar distance north-west of Romsey. It has Saxon and Domesday origins (recorded as Deone in 880 and Duene in 1086) and a Roman villa site on the county boundary. Unusually for a village of around 110 households, it has its own station - Dean, on the Wessex Main Line - whose platforms straddle the Wiltshire/Hampshire boundary, with hourly trains towards Salisbury, Romsey and Southampton.",
+  "character": "A quiet, scattered border village strung along the River Dun and the railway, ringed by farmland and the large Bentley Wood, with a distinct away-from-it-all feel.",
+  "amenities": [
+    "No shop, Post Office or pub remaining in the village",
+    "Retains St Mary's Church, the village hall and Dean railway station",
+    "Nearest pub and primary school in neighbouring West Tytherley",
+    "Main shopping in Salisbury or Romsey"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "West Tytherley CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 miles (Hampshire; serves West Dean children)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "Hourly South Western Railway service from Dean station in the village",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Southampton Central",
+        "mode": "Train",
+        "notes": "From Dean station via Romsey",
+        "typical": "~35 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 7 miles by road",
+        "typical": "~15 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A small village of roughly 110 households, mostly cottages and houses, where the in-village railway station is a notable draw; sales are relatively infrequent. Use the SP5 sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking and wildlife in Bentley Wood (notable for butterflies)",
+    "Borbach Chantry, a Grade I-listed 1333 chapel in the care of the Churches Conservation Trust",
+    "Riverside walks along the River Dun and over Dean Hill",
+    "The Clarendon Way long-distance path nearby"
+  ],
+  "placesToEat": [
+    "The Black Horse, West Tytherley (~2 miles)"
+  ],
+  "pros": [
+    "Rare in-village railway station with direct Salisbury and Southampton trains",
+    "Deeply rural border setting with Bentley Wood on the doorstep",
+    "Historic church and chantry; quiet, low-traffic lanes"
+  ],
+  "cons": [
+    "No shop, pub or primary school within the village",
+    "Car needed for most day-to-day amenities",
+    "Small housing stock; services split across two counties"
+  ],
+  "whoItSuits": "Rail commuters and lovers of quiet countryside who want a village with its own station and are happy to travel for shops and schooling.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Dean",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/West_Dean,_Wiltshire",
+      "label": "West Dean, Wiltshire - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Dean_railway_station",
+      "label": "Dean railway station - Wikipedia"
+    },
+    {
+      "url": "https://clarendoncofe.org/churches/westdean/",
+      "label": "West Dean - The Clarendon Churches"
+    },
+    {
+      "url": "https://apps.wiltshire.gov.uk/communityhistory/Community/Index/235",
+      "label": "West Dean - Wiltshire Community History"
+    },
+    {
+      "url": "http://westdean.com/",
+      "label": "West Dean village website"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:13.641Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810573"
+  }
 }

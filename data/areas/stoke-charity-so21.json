@@ -15,34 +15,93 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800584",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:02.148Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Stoke Charity is a small village in the parish of Wonston, in the City of Winchester district, set on the chalk-stream River Dever about 6 miles north of Winchester - half a mile east of Wonston and 1.5 miles west of Sutton Scotney. Its medieval Church of St Mary and St Michael, largely Norman and standing in a field by a lake, is celebrated for its monuments and brasses; John Betjeman called it 'gem-like' and it features in Simon Jenkins's 1,000 Best English Churches.",
+  "character": "A small, tranquil chalk-stream village of thatched and timber-framed cottages along a single hillside street.",
+  "amenities": [
+    "The Norman Church of St Mary and St Michael",
+    "River Dever and surrounding downland walks",
+    "Everyday shops and services in nearby Sutton Scotney",
+    "No shop, pub or school within Stoke Charity itself"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Micheldever",
+        "mode": "Drive",
+        "notes": "Nearest station, about 3 miles, with direct trains to London Waterloo (fastest about 1h 2m)",
+        "typical": "~8 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "About 6 miles south for city shops, services and fast trains; the A34 and M3 are close by",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Micheldever on South Western Railway",
+        "typical": "~70 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is dominated by period thatched and timber-framed cottages with some larger houses, in very low transaction volumes; the quiet Dever-valley setting and fast London commute support a premium. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Visiting the celebrated Norman Church of St Mary and St Michael",
+    "Walking along the River Dever and the surrounding downland",
+    "Exploring nearby Sutton Scotney and Micheldever"
+  ],
+  "placesToEat": [
+    "Pubs and eateries in neighbouring Sutton Scotney and Micheldever"
+  ],
+  "pros": [
+    "A nationally celebrated 'gem-like' Norman church",
+    "Peaceful chalk-stream Dever-valley setting",
+    "Fast direct trains to London from Micheldever, about 3 miles away, with quick M3/A34 access"
+  ],
+  "cons": [
+    "No shop, pub or school in the village",
+    "Limited public transport, so a car is essential",
+    "Quiet and somewhat isolated for those wanting amenities on the doorstep"
+  ],
+  "whoItSuits": "Commuters and downsizers wanting a peaceful chalk-valley village with a fast London rail link from nearby Micheldever.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Micheldever",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Stoke_Charity",
+      "label": "Wikipedia - Stoke Charity"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Stoke_Charity",
+      "label": "Wikishire - Stoke Charity (church and history)"
+    },
+    {
+      "url": "https://www.wonston-pc.gov.uk/community/wonston-parish-council-13432/st-mary--st-michael-stoke-charity/",
+      "label": "Wonston Parish Council - St Mary & St Michael, Stoke Charity"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp447-451",
+      "label": "British History Online - VCH Hampshire, Stoke Charity"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:02.148Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^800584"
+  }
 }

@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800504",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:38.326Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Otterbourne is a village in Hampshire about four miles south of Winchester and eight miles north of Southampton, with a population of around 1,539 (2011 census). Recorded in the Domesday Book as 'Otreburne' (otter stream), it sits near the River Itchen and has a traditional character mixing thatched cottages with modern housing. The focal point is the Grade II listed 13th-century St Matthew's Church, and the village has good amenities plus quick access to the M3.",
+  "character": "An idyllic, well-served Itchen-side village with strong community facilities and a desirable location between Winchester and Southampton.",
+  "amenities": [
+    "Nisa Local convenience store and Post Office",
+    "Three pubs: the White Horse Inn, the Otter and the Old Forge",
+    "Village hall",
+    "Recreation ground and cricket club",
+    "St Matthew's Church (Grade II listed)",
+    "Garage",
+    "Close to Shawford station and the M3"
+  ],
+  "schools": [
+    {
+      "url": "https://www.otterbourneprimaryschool.com/",
+      "name": "Otterbourne CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Outstanding",
+      "distance": "in village (Main Road, SO21 2EQ)"
+    },
+    {
+      "url": null,
+      "name": "Thornden School (secondary, Chandler's Ford catchment)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~4 miles via A335/M3",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "~8 miles",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Shawford or Winchester station",
+        "typical": "~1h 5m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A popular family village with detached homes and period cottages; values supported by the Outstanding-rated primary, Thornden catchment and easy commuting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walks along the River Itchen and Itchen Navigation",
+    "St Matthew's Church",
+    "Cricket at the recreation ground",
+    "Cycling and walking towards the South Downs",
+    "Easy trips to Winchester"
+  ],
+  "placesToEat": [
+    "The Old Forge (family pub with dining)",
+    "The White Horse Inn",
+    "The Otter"
+  ],
+  "pros": [
+    "Outstanding-rated village primary school",
+    "Three pubs and a convenience store",
+    "Excellent commuting via M3 and Shawford/Winchester rail",
+    "Attractive Itchen-side setting"
+  ],
+  "cons": [
+    "Main Road and proximity to the M3 bring some traffic noise",
+    "No secondary school in the village",
+    "Popular location means competitive house prices"
+  ],
+  "whoItSuits": "Families wanting a well-served Hampshire village with a top primary and fast links to Winchester, Southampton and London.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Shawford (~1.5 miles)",
+  "primarySupermarket": "Nisa Local, Otterbourne",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Otterbourne",
+      "label": "Otterbourne - Wikipedia"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116304",
+      "label": "Otterbourne CofE Primary School - GOV.UK"
+    },
+    {
+      "url": "https://www.otterbourneprimaryschool.com/",
+      "label": "Otterbourne CofE Primary School"
+    },
+    {
+      "url": "https://myplacebase.com/places/view/34053",
+      "label": "UK Place Database - Otterbourne"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:38.326Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^800504"
+  }
 }

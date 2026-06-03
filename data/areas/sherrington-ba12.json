@@ -15,34 +15,113 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^39315",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:51.578Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Sherrington is a very small village and civil parish on the south bank of the River Wylye in the Wylye valley, Wiltshire, roughly 9 miles south-east of Warminster and about 10 miles north-west of Salisbury; its population was just 66 in 2011. The village is built around a large mill pond (former watercress beds) with a Domesday-era mill site, and its small 12th-century church of SS Cosmas and Damian sits beside a scheduled motte raised by the Giffard family after the Norman Conquest. It lies within the Cranborne Chase and West Wiltshire Downs National Landscape, with part of Great Ridge Wood (Snailcreep Hanging) inside the parish.",
+  "character": "One of the prettiest traditional villages in Wiltshire - winding lanes and thatched cottages facing a tranquil mill pond at the foot of the downs, with a strong away-from-it-all feel.",
+  "amenities": [
+    "No shop, pub or school within the village itself",
+    "Nearby Codford has a GP surgery, a Budgens store with fuel and a primary school",
+    "Pubs in the neighbouring Wylye-valley villages",
+    "Full range of shops and services in Warminster"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Codford CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3-4 miles (Codford)"
+    },
+    {
+      "url": null,
+      "name": "Kingdown School",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~9 miles (Warminster)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Warminster",
+        "mode": "Drive",
+        "notes": "About 9 miles; A36 and A303 within roughly 10 minutes",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 10 miles down the Wylye valley",
+        "typical": "~35 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Warminster mainline station",
+        "typical": "~2 hr"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A tiny, highly sought-after village of period and thatched houses; recent guide prices for character houses have ranged from around 695,000 to 895,000 pounds. Use the BA12 sold-price record for fuller context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/BA12.html"
+  },
+  "thingsToDo": [
+    "The village mill pond and former watercress beds",
+    "The historic Church of SS Cosmas and Damian and the Giffard motte",
+    "Walking and riding in Great Ridge Wood and the Wylye-valley downland",
+    "Longleat, Stourhead and Shearwater Lake all within reach"
+  ],
+  "placesToEat": [],
+  "pros": [
+    "Exceptionally pretty, peaceful thatched village around a mill pond",
+    "Within the Cranborne Chase National Landscape with Great Ridge Wood on the doorstep",
+    "Quick A36/A303 access and a mainline station at Warminster"
+  ],
+  "cons": [
+    "No shop, pub or school within the village",
+    "Entirely car-dependent for day-to-day needs",
+    "Very small and high-priced housing stock"
+  ],
+  "whoItSuits": "Buyers seeking a picture-postcard, secluded Wylye-valley village, happy to drive to Codford or Warminster for amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Warminster",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Sherrington",
+      "label": "Sherrington - Wikipedia"
+    },
+    {
+      "url": "https://www.britainexpress.com/counties/wiltshire/churches/sherrington.htm",
+      "label": "Church of SS Cosmas & Damian, Sherrington - Britain Express"
+    },
+    {
+      "url": "https://hwwhite.co.uk/wylye-valley/sherrington/",
+      "label": "Sherrington area guide - Whites Estate Agents"
+    },
+    {
+      "url": "https://search.savills.com/gg/en/property-detail/gbsarssas240259",
+      "label": "Sherrington property (amenities, prices) - Savills"
+    },
+    {
+      "url": "https://www.ratedtrips.com/walking/wylye-valley-villages",
+      "label": "Wylye Valley Villages walk - RatedTrips/AA"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:51.578Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^39315"
+  }
 }

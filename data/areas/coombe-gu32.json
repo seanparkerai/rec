@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "A small downland hamlet in the East Hampshire district, in the civil parish of East Meon (one of the historic East Meon tithings of Combe, Oxenbourne, Westbury and part of Bordean retained by the ancient parish at the 1894 split with Langrish). Coombe sits south of the East Meon village core, in a dry chalk valley on the southern slope of the South Downs ridge. It is a working-farm hamlet with cottages and a handful of period houses rather than a planned village: it has no shop, no school and no pub of its own. The administrative postcode is GU32 1 (Petersfield post town), but day-to-day life is shared with East Meon village a short distance to the north. East Meon proper holds the church (All Saints, a Grade I listed Norman building, one of the finest small churches in Hampshire), two pubs (the Olde George Inn and the Izaak Walton), a primary school and a village shop.",
   "character": "Quiet, dispersed downland settlement; chalk-stream and downland landscape; very few new builds; planning controlled by both East Meon Conservation Area policies and the South Downs National Park Authority.",
   "amenities": [
@@ -141,8 +144,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:38.346Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

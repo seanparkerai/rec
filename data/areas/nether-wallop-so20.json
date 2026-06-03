@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1703979",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:32.659Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Nether Wallop is a Test Valley village in Hampshire, one of the three 'Wallops' (with Over and Middle Wallop) linked by the Wallop Brook, whose name derives from Old English for 'the valley of springing water'. It is a thriving community of predominantly period and thatched properties, with the Anglo-Saxon church of St Andrew (noted for rare medieval wall paintings), a primary school and a village hall. The neighbouring Wallops share pubs and a shop/Post Office, and the market town of Stockbridge is about 5 miles away.",
+  "character": "A picturesque, historic Test Valley village of thatched cottages around the Wallop Brook, quiet and rural yet within reach of Stockbridge and good rail links.",
+  "amenities": [
+    "St Andrew's Church (Anglo-Saxon, with medieval wall paintings)",
+    "Wallop Primary School",
+    "Village hall",
+    "Nearby garage with general store",
+    "Shop/Post Office and pubs in neighbouring Over/Middle Wallop",
+    "Veterinary surgery (shared across the Wallops)",
+    "Wallop Brook and surrounding countryside"
+  ],
+  "schools": [
+    {
+      "url": "https://www.wallop.hants.sch.uk/",
+      "name": "Wallop Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "in village (School Lane, SO20 8EH)"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Stockbridge/Andover area (e.g. Test Valley School)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5-8 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Stockbridge",
+        "mode": "Drive",
+        "notes": "~5 miles",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Grateley (~4 miles) or Andover stations",
+        "typical": "~1h 15m"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~13 miles",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable Test Valley village; thatched and period cottages plus larger listed houses and barn conversions command strong values, with limited supply. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO20.html"
+  },
+  "thingsToDo": [
+    "St Andrew's Church and its medieval wall paintings",
+    "Danebury Iron Age hillfort nearby",
+    "Walks along the Wallop Brook and Test Valley",
+    "Trout fishing on the River Test",
+    "Boutique shopping and dining in Stockbridge"
+  ],
+  "placesToEat": [
+    "Pubs in Over and Middle Wallop",
+    "Restaurants and pubs in nearby Stockbridge"
+  ],
+  "pros": [
+    "Beautiful, historic thatched-cottage village",
+    "Good-rated primary school and Anglo-Saxon church",
+    "Test Valley setting with excellent walking and fishing",
+    "Mainline rail at Grateley/Andover within reach"
+  ],
+  "cons": [
+    "Few amenities in Nether Wallop itself (shop/pubs are in neighbouring Wallops)",
+    "No railway station in the village",
+    "Car-dependent for most services"
+  ],
+  "whoItSuits": "Buyers seeking a quintessential, peaceful Test Valley village with a strong primary school and period character, within reach of Stockbridge.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Grateley (~4 miles)",
+  "primarySupermarket": "Village garage/store and shop in Over Wallop; supermarkets in Stockbridge/Andover",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://hwwhite.co.uk/salisbury/the-wallops/",
+      "label": "H&W White - The Wallops"
+    },
+    {
+      "url": "https://www.goodschoolsguide.co.uk/uk-schools/profile/wallop-primary-school",
+      "label": "Wallop Primary School - Good Schools Guide"
+    },
+    {
+      "url": "https://financial-benchmarking-and-insights-tool.education.gov.uk/school/115957/details",
+      "label": "Wallop Primary School - GOV.UK (URN 115957)"
+    },
+    {
+      "url": "https://countrylife.onthemarket.com/details/10929288/",
+      "label": "Country Life / OnTheMarket - Nether Wallop village amenities"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:32.659Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1703979"
+  }
 }

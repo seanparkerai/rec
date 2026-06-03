@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Brown Candover is a small village in the Candovers civil parish, in the Basingstoke and Deane district, set on chalk downland at the head of the Candover Brook (a tributary of the River Itchen) about five miles north of New Alresford. The village population was 236 at the 2011 census. It is the southernmost of three former Candover parishes — Chilton, Brown and Preston — strung along the B3046 between Alresford and Basingstoke; Chilton Candover and Brown Candover were merged into a single Candovers civil parish in 1932. The parish church of St Peter, built in 1845 chiefly at the expense of Lord Ashburton, is a Tudor-style structure that replaced an earlier medieval church; the nearby Grange at Northington, a 19th-century country house and English landscape park owned by the Baring family, is two miles south-west. Brown Candover is home to Candover Cricket Club, who play home matches with the 19th-century St Peter's church as backdrop. The seed CSV records this as RG25 but Wikipedia gives the post town as Alresford and postcode district as SO24; some properties straddle both designations.",
   "character": "Small estate-influenced linear village strung along the B3046 with brick-and-flint cottages, period farmhouses and 20th-century additions. Open arable downland on three sides. No conservation area but tight planning regime in line with the wider Candover Valley character.",
   "amenities": [
@@ -136,8 +139,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:24.915Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

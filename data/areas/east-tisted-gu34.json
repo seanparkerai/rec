@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "A village and civil parish in the East Hampshire district, 4.8 miles south of Alton on the A32. Population at the 2011 census was around 221 in about 100 households. East Tisted is, in practical terms, an estate village: the Rotherfield Park estate (Grade I-listed country house, 1815–21 by Joseph T. Parkinson, with a Grade II-registered park of around 175 hectares) sits to the west of the A32 and owns the manor house, the church, the Front Lodge, the almshouses (built and endowed by Thomas and Septimus Scott in 1879 and 1893) and a significant tranche of village housing. The parish church of St James was rebuilt in 1846 (the 14th-century 3-stage tower survives) and contains tombs of the medieval Norton family. The village is inside the South Downs National Park; the old Meon Valley railway, closed in 1955, ran through the parish and the redundant station building survives.",
   "character": "A protected, picture-book estate village — Picturesque-theory landscape with managed sightlines from the manor through the village to the open downland beyond. Mix of listed cottages, almshouses, the Home Farm and a small number of more recent infill houses. Quiet, very tightly managed, deeply rural.",
   "amenities": [
@@ -154,8 +157,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:46.722Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

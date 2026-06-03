@@ -15,34 +15,132 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^356815",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:36.077Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Colemore is a tiny, largely deserted village in the civil parish of Colemore and Priors Dean in the Hampshire Downs, about 5 miles north-west of Petersfield and within the South Downs National Park. It is one of several East Hampshire settlements depopulated in the medieval period, and the land of its former houses is now a Scheduled Ancient Monument. Its church, St Peter ad Vincula (Grade II* listed, with origins recorded in the Domesday Book of 1086), is redundant and cared for by the Churches Conservation Trust, and retains a square 12th-century Purbeck-marble font with a different design carved on each face. Today the locality is a scatter of farms and detached country houses down quiet lanes, with the twin hamlet of Priors Dean immediately to the east.",
+  "character": "Remote, peaceful and steeped in history - a handful of farmsteads and country houses among wooded chalk downland, with no village centre.",
+  "amenities": [
+    "Largely a scattered rural hamlet with no shop, pub or school of its own",
+    "Froxfield Stores convenience shop about 1.8 miles away",
+    "Redundant Grade II* church of St Peter ad Vincula (Churches Conservation Trust)",
+    "Lidl and a full range of shops in Petersfield (~4-5 miles)",
+    "Within the South Downs National Park; gigabit broadband available at some premises"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116289",
+      "name": "Froxfield Church of England Primary and Pre-School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1.8 miles"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/136903",
+      "name": "The Petersfield School",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": "Outstanding",
+      "distance": "~4.5 miles"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116579",
+      "name": "Churcher's College",
+      "type": "Independent",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4.2 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "notes": "Market town with shops, supermarkets and a mainline station",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Liss",
+        "mode": "Drive",
+        "notes": "Nearest railway station; SWR Portsmouth Direct Line to London Waterloo",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Alton",
+        "mode": "Drive",
+        "notes": "Market town off the A31",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Petersfield on the Portsmouth Direct Line",
+        "typical": "~70 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "An affluent area of predominantly large detached and period country houses with very low turnover - only a handful of sales recorded in these lanes since 1995. Values reflect the protected South Downs setting; nearby comparable postcodes around Selborne average roughly 600,000 pounds and upwards.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/GU34.html"
+  },
+  "thingsToDo": [
+    "Visit the redundant 12th-century church of St Peter ad Vincula and its carved Purbeck-marble font",
+    "Walk the wooded chalk downland and Hangers of the South Downs National Park",
+    "Explore neighbouring Selborne - Gilbert White's House & Gardens and National Trust Selborne Common",
+    "Country drives and cycling around the East Tisted / Rotherfield Park estate"
+  ],
+  "placesToEat": [
+    "Froxfield Stores convenience shop for everyday supplies (~1.8 miles)",
+    "Pubs, cafes and restaurants in Petersfield (~4-5 miles)"
+  ],
+  "pros": [
+    "Exceptionally quiet, unspoilt countryside within the South Downs National Park",
+    "Affluent, very low-crime area with gigabit broadband available",
+    "Good state schools nearby, including Outstanding-rated The Petersfield School",
+    "Rich historic interest, from a Domesday-era church to deserted-medieval-village heritage"
+  ],
+  "cons": [
+    "No shop, pub, school or services within the hamlet - a car is essential",
+    "Nearest railway station is Liss, around 4 miles away",
+    "Very few homes ever come to market, and most are large detached or period houses"
+  ],
+  "whoItSuits": "Buyers seeking an exceptionally peaceful, historic countryside retreat in the South Downs, who are comfortable driving to Petersfield or Liss for shops, schools and trains to London.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Liss",
+  "primarySupermarket": "Lidl, Petersfield",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Colemore",
+      "label": "Colemore - Wikipedia"
+    },
+    {
+      "url": "https://www.britainexpress.com/attractions.htm?attraction=4030",
+      "label": "Colemore, St Peter ad Vincula Church - Britain Express"
+    },
+    {
+      "url": "https://colemore-priorsdean.org/about/",
+      "label": "About - Colemore & Priors Dean parish"
+    },
+    {
+      "url": "https://crystalroof.co.uk/report/postcode/GU343PY/overview",
+      "label": "Colemore Lane (GU34 3PY) area report - Crystal Roof"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/136903",
+      "label": "The Petersfield School - Get Information About Schools (DfE)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:36.077Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^356815"
+  }
 }

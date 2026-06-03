@@ -15,34 +15,109 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809193",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:29.695Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Middle Woodford is the central of the three villages - with Lower and Upper Woodford - that make up Woodford civil parish, strung along the west bank of the Salisbury Avon about 5 miles north of Salisbury. The parish had a population of 443 at the 2011 census. The Grade II listed parish church of All Saints, with 12th-century origins and restored in 1845 by T.H. Wyatt, stands here, as does the Woodford Valley village hall that serves all three villages.",
+  "character": "A tranquil, entirely rural chalk-stream valley village with no main road running through it, set among willow-lined water meadows beside the river.",
+  "amenities": [
+    "Woodford Valley village hall (quiz nights, coffee mornings, a market and cafe, and a mobile library)",
+    "All Saints parish church",
+    "Woodford Valley CE Primary Academy",
+    "Salisbury Reds bus service through the valley",
+    "No village shop or supermarket - everyday shopping is in Salisbury"
+  ],
+  "schools": [
+    {
+      "url": "https://www.woodfordvalley.wilts.sch.uk/",
+      "name": "Woodford Valley CE Primary Academy",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "in the village"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 5 miles south down the valley road for shops, services and the station",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Salisbury Reds runs through the Woodford Valley villages",
+        "typical": "~30 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing is mostly period cottages, thatched and brick-and-flint houses and converted farm buildings, with very low transaction volumes given the small size of the village; the riverside chalk-valley setting and proximity to Salisbury support premium values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP4.html"
+  },
+  "thingsToDo": [
+    "Visiting Heale Garden at Heale House, between Middle and Upper Woodford, where Charles II sheltered in 1651 after the Battle of Worcester",
+    "Walking and fishing along the River Avon water meadows",
+    "Seeing the 12th-century All Saints Church"
+  ],
+  "placesToEat": [
+    "The Bridge Inn, a riverside pub at neighbouring Upper Woodford",
+    "The Wheatsheaf Inn at Lower Woodford",
+    "Market and cafe events at the Woodford Valley village hall"
+  ],
+  "pros": [
+    "Exceptionally peaceful chalk-valley setting with no through traffic",
+    "Well-regarded village Church of England primary academy on the doorstep",
+    "Only about 5 miles from Salisbury's full range of shops, services and rail links"
+  ],
+  "cons": [
+    "No shop or supermarket in the village, so a car is essential",
+    "Limited bus frequency compared with town living",
+    "Some riverside properties sit close to the Avon flood plain"
+  ],
+  "whoItSuits": "Families and downsizers wanting a quiet, picturesque riverside village within easy reach of Salisbury.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Woodford,_Wiltshire",
+      "label": "Wikipedia - Woodford, Wiltshire"
+    },
+    {
+      "url": "https://www.wiltshire-opc.org.uk/parishes/woodford/",
+      "label": "Wiltshire OPC Project - Woodford parish"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/138188",
+      "label": "Ofsted - Woodford Valley CE Primary Academy (URN 138188, Good, Jun 2025)"
+    },
+    {
+      "url": "https://apps.wiltshire.gov.uk/communityhistory/Community/Index/255",
+      "label": "Wiltshire Council community history - Woodford"
+    },
+    {
+      "url": "https://hwwhite.co.uk/woodford-valley/the-woodfords/",
+      "label": "H&W White - the Woodford Valley villages (amenities, bus and rail)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:29.695Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809193"
+  }
 }

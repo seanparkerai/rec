@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1493099",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:50.123Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Selborne is a historic village in East Hampshire, about 3.9 miles south of Alton and just within the northern edge of the South Downs National Park, with a population of around 1,288 (2011 census, including Oakhanger). It is famous as the home of the 18th-century naturalist Revd Gilbert White, whose 'The Natural History of Selborne' (1789) has never been out of print. The Grade I listed church of St Mary the Virgin dates from the late 12th century, and Gilbert White's House (The Wakes), with the Oates Museum, draws visitors from across the country.",
+  "character": "A picturesque, nationally significant heritage village beneath the wooded Selborne Hanger, quiet and rural with a strong literary and natural-history pull.",
+  "amenities": [
+    "The Selborne Arms (village pub) and the Jubilee Tap bar",
+    "Village shop and Post Office (with bookshop)",
+    "Gilbert White's House, gardens, cafe and farm shop",
+    "St Mary the Virgin Church (Grade I listed)",
+    "Primary school",
+    "Public car park and toilets",
+    "Bus 38 link (Alton-Petersfield) through the village"
+  ],
+  "schools": [
+    {
+      "url": "https://www.selborne.hants.sch.uk/",
+      "name": "Selborne CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Alton/Petersfield",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4-8 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Alton",
+        "mode": "Drive",
+        "notes": "~3.9 miles via B3006; Alton has the nearest mainline station",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Alton, Petersfield or Liss stations",
+        "typical": "~1h 15m"
+      },
+      {
+        "to": "Alton / Petersfield",
+        "mode": "Bus",
+        "notes": "Number 38 bus runs through the village (limited service)",
+        "typical": "varies"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after heritage village in the South Downs National Park; period cottages and character homes command a premium, with limited supply. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/GU34.html"
+  },
+  "thingsToDo": [
+    "Gilbert White's House, gardens and the Oates Museum",
+    "The Zig-Zag Path up Selborne Hanger and circular walks",
+    "Selborne Common and Lythes (National Trust land)",
+    "St Mary the Virgin Church with Gilbert White windows",
+    "Walking in the South Downs National Park"
+  ],
+  "placesToEat": [
+    "The Selborne Arms",
+    "The Jubilee Tap",
+    "White's Cafe at Gilbert White's House"
+  ],
+  "pros": [
+    "Outstanding South Downs setting with National Trust land on the doorstep",
+    "Rich heritage and visitor attractions (Gilbert White's House)",
+    "Village pub, shop and primary school retained",
+    "Quiet, rural and unspoilt"
+  ],
+  "cons": [
+    "No railway station; rely on Alton/Petersfield and limited buses",
+    "Visitor traffic to Gilbert White's House in season",
+    "Limited everyday amenities beyond the basics"
+  ],
+  "whoItSuits": "Buyers drawn to a beautiful, heritage-rich South Downs village who value walking and nature over urban convenience.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (~4 miles)",
+  "primarySupermarket": "Village shop; supermarkets in Alton",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Selborne",
+      "label": "Selborne - Wikipedia"
+    },
+    {
+      "url": "https://www.visit-hampshire.co.uk/things-to-do/gilbert-whites-house-and-gardens-p1415531",
+      "label": "Gilbert White's House & Gardens - Visit Hampshire"
+    },
+    {
+      "url": "https://www.visitsoutheastengland.com/places-to-visit/selborne-p2566431",
+      "label": "Visit South East England - Selborne"
+    },
+    {
+      "url": "https://selbornearms.co.uk/",
+      "label": "The Selborne Arms"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:50.123Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1493099"
+  }
 }

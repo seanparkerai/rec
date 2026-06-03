@@ -15,34 +15,119 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^355978",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:14.874Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "West Meon is a vibrant village in the upper Meon Valley within the South Downs National Park, in East Hampshire, roughly 6-7 miles from Petersfield on the A272/A32 crossroads. It takes its name from the River Meon, a chalk stream that winds through the South Downs. Thomas Lord, founder of Lord's Cricket Ground, retired to and is buried in the village, which is well known for its eponymous pub, The Thomas Lord.",
+  "character": "A delightful, active South Downs village with a strong community, country pubs and a notable amateur dramatic and societies scene, set amid prime walking and shooting country.",
+  "amenities": [
+    "The Thomas Lord (well-regarded village pub)",
+    "The West Meon (pub on the A272/A32 crossroads)",
+    "West Meon Community Shop and cafe (open 7 days)",
+    "Village butcher",
+    "West Meon CofE Primary School",
+    "Village hall",
+    "Numerous sports clubs and an amateur dramatic group",
+    "Meon Hut service station/convenience store nearby"
+  ],
+  "schools": [
+    {
+      "url": "https://www.westmeon.hants.sch.uk/",
+      "name": "West Meon CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Church Lane, GU32 1LF)"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Petersfield/Bishop's Waltham area",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~6-8 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "notes": "~6-7 miles via A272; Petersfield has a mainline station",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via A272/A32",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Petersfield station",
+        "typical": "~1h 5m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A popular South Downs village; period cottages and some fine listed houses (including Grade II* country houses on the fringes) command strong values. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/GU32.html"
+  },
+  "thingsToDo": [
+    "Walking and riding in the South Downs National Park",
+    "Trout fishing on the River Meon",
+    "The Thomas Lord pub and Thomas Lord's grave",
+    "Amateur dramatics and village societies",
+    "Shooting and country pursuits in the area"
+  ],
+  "placesToEat": [
+    "The Thomas Lord",
+    "The West Meon",
+    "West Meon Community Shop cafe"
+  ],
+  "pros": [
+    "Two pubs plus a thriving community shop and cafe",
+    "Primary school and strong societies/sports scene",
+    "Beautiful South Downs/Meon Valley setting",
+    "Good A272 links to Petersfield and Winchester"
+  ],
+  "cons": [
+    "No railway station; rely on Petersfield",
+    "On the busy A272/A32 crossroads",
+    "Secondary schooling is out of the village"
+  ],
+  "whoItSuits": "Buyers wanting a lively, well-served South Downs village with pubs, a community shop and excellent walking, within reach of Petersfield rail.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield (~7 miles)",
+  "primarySupermarket": "West Meon Community Shop; supermarkets in Petersfield",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.westmeon-pc.gov.uk/community/west-meon-parish-council-13628/west-meon-village-shop/",
+      "label": "West Meon Parish Council - Village Shop"
+    },
+    {
+      "url": "https://www.westmeon.hants.sch.uk/",
+      "label": "West Meon CofE Primary School"
+    },
+    {
+      "url": "https://search.savills.com/property-detail/gbwnrewnl250040l",
+      "label": "Savills - West Meon village amenities"
+    },
+    {
+      "url": "https://www.inapub.co.uk/venues/the-west-meon/petersfield/gu321jx/15067",
+      "label": "The West Meon pub - Inapub"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:14.874Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^355978"
+  }
 }

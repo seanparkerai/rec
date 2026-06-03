@@ -15,34 +15,108 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4043918",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:17.021Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "West Tytherley is a village in the Test Valley on the Hampshire/Wiltshire border (post town Salisbury), about 11 miles east of Salisbury. With neighbouring East Tytherley it forms a pair of Saxon-origin villages - the name derives from the Old English for 'thin or tender wood'. Unusually for its size the village retains a good cluster of amenities, including a primary school, the church of St Peter, a village hall and the 17th-century Black Horse coaching inn.",
+  "character": "A charming, well-kept Test Valley village with a strong community and a much-loved village pub, ringed by woodland and farmland.",
+  "amenities": [
+    "The Black Horse - a 17th-century Grade II coaching inn with a skittle alley",
+    "West Tytherley CofE Primary School",
+    "Church of St Peter and a village hall",
+    "A village shop serving the two Tytherleys",
+    "Wider shopping in Salisbury, Romsey and Stockbridge"
+  ],
+  "schools": [
+    {
+      "url": "https://www.west-tytherley.hants.sch.uk/",
+      "name": "West Tytherley CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~0.5 mile (in the village; federated with Broughton)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 11 miles west",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "From Dean station, around 2 miles away, on the Salisbury-Southampton line",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester / Romsey / Southampton",
+        "mode": "Drive",
+        "notes": "All within about half an hour, along with Stockbridge and Andover",
+        "typical": "~30 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after Test Valley village of period cottages and houses; well-regarded for its amenities and setting. Use the SP5 sold-price record for current context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "The Black Horse pub with its skittle alley at the heart of village life",
+    "Walking in the surrounding Test Valley woods and farmland",
+    "Mottisfont (National Trust) and the River Test within a short drive",
+    "The Clarendon Way and Monarch's Way long-distance paths nearby"
+  ],
+  "placesToEat": [
+    "The Black Horse, West Tytherley"
+  ],
+  "pros": [
+    "Rare for its size in keeping a pub, primary school, church, shop and village hall",
+    "Pretty, wooded Test Valley setting with a strong community",
+    "Good road links and a nearby station at Dean; several towns within 30 minutes"
+  ],
+  "cons": [
+    "Further from Salisbury (~11 miles) than the close-in villages",
+    "Secondary schooling means travelling to a nearby town",
+    "Car helpful for most journeys"
+  ],
+  "whoItSuits": "Families wanting a well-served, pretty Test Valley village with its own school and pub, within reach of Salisbury, Romsey and Winchester.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Dean",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://hwwhite.co.uk/salisbury/east-and-west-tytherley/",
+      "label": "East and West Tytherley area guide - Whites Estate Agents"
+    },
+    {
+      "url": "https://theblackhorsewesttytherley.com/",
+      "label": "The Black Horse, West Tytherley (official)"
+    },
+    {
+      "url": "https://camra.org.uk/pubs/black-horse-west-tytherley-188887",
+      "label": "Black Horse, West Tytherley - CAMRA"
+    },
+    {
+      "url": "https://www.west-tytherley.hants.sch.uk/",
+      "label": "West Tytherley CofE Primary School (official)"
+    },
+    {
+      "url": "https://www.useyourlocal.com/pubs/black-horse-salisbury-39647/",
+      "label": "Black Horse pub listing (nearest stations) - UseYourLocal"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:17.021Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^4043918"
+  }
 }

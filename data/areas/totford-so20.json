@@ -10,39 +10,127 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0921,
-    "lng": -1.4543
+    "lat": 51.1374,
+    "lng": -1.1854
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "manual-verified:multi-source",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595033",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:08.436Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Totford is a tiny hamlet in the Candover Valley, on the boundary of Northington and the Candovers parishes between the City of Winchester and Basingstoke & Deane districts of Hampshire, about 4-5 miles north of New Alresford. Often described locally as one of the smallest hamlets in England, it sits on the old drovers' route between Alresford and Stockbridge and is centred on the Grade I listed Woolpack Inn (an 1880 flint-and-brick country inn with rooms). The surrounding area is rolling chalk farmland in the scenic Candover Valley, with the Grange at Northington and Brown Candover nearby. There are no shops; the nearest town amenities are in New Alresford.",
+  "character": "A diminutive, picturesque downland hamlet of a handful of houses and farms around a celebrated country inn, set deep in the unspoilt Candover Valley. The feel is exceptionally quiet, rural and traditional, popular with walkers and country-sport visitors, with footpaths leading directly across the valley.",
+  "amenities": [
+    "The Woolpack Inn (Grade I listed country pub with rooms and acclaimed dining)",
+    "No shop in the hamlet; village hall at Northington nearby",
+    "Brown Candover and Northington villages and churches close by",
+    "Full town amenities, shops and Watercress Line at New Alresford (~4-5 mi)",
+    "The Grange at Northington (English Heritage) nearby"
+  ],
+  "schools": [
+    {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
+      "name": "The Candovers CofE Primary / Itchen Valley schools",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3-5 miles"
+    },
+    {
+      "url": "https://www.perins.hants.sch.uk/",
+      "name": "Perins School, New Alresford",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "New Alresford",
+        "mode": "Drive",
+        "notes": "Nearest town for shops and services; Watercress Line",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via the B3046/A33; mainline station to London Waterloo",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Basingstoke",
+        "mode": "Drive",
+        "notes": "Via the B3046/A33; fast trains to London Waterloo (~45 min)",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester (~20 min drive) or Basingstoke (~25 min drive, faster service)",
+        "typical": "~1h"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Totford and the Candover Valley are a prized, very low-supply rural location; housing is almost entirely substantial detached and listed country houses, typically £700k-£2m+ with estate properties well above. Sales are rare.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Walking the Candover Valley footpaths and Drovers' route to Alresford",
+    "The Grange, Northington (English Heritage) and its landscape park",
+    "Watercress Line heritage railway at New Alresford",
+    "Country pubs and downland cycling in the Candovers"
+  ],
+  "placesToEat": [
+    "The Woolpack Inn, Totford (acclaimed country dining, in the hamlet)",
+    "The Woolpack's bar and Sunday roasts",
+    "Wide choice of pubs and cafes in New Alresford (~4-5 mi)"
+  ],
+  "pros": [
+    "Exceptionally quiet, unspoilt Candover Valley setting",
+    "A highly regarded country inn on the doorstep",
+    "Within easy reach of Alresford, Winchester and Basingstoke",
+    "Superb walking and countryside all around"
+  ],
+  "cons": [
+    "Extremely small hamlet with no shops or school; car essential",
+    "Very scarce and expensive housing stock",
+    "No mainline station within walking distance",
+    "Limited public transport"
+  ],
+  "whoItSuits": "Buyers seeking a tiny, prestigious country hamlet in the Candover Valley with a celebrated inn on the doorstep and good access to Alresford, Winchester and Basingstoke, with a budget for the premium rural market.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Micheldever (~4.5 miles, SWR mainline) or Winchester (~8 miles); Basingstoke (~10 miles) for faster London service",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.streetcheck.co.uk/postcode/so249tj",
+      "label": "Totford, Northington, Alresford SO24 9TJ - StreetCheck"
+    },
+    {
+      "url": "https://www.ukpostcodecheck.com/address/85d9a98d/the-firs_totford_northington_alresford_so24-9tj",
+      "label": "The Firs, Totford SO24 9TJ (coordinates) - UKPostcodeCheck"
+    },
+    {
+      "url": "https://www.streetfinder.co.uk/postcode/SO24.htm",
+      "label": "SO24 postcode (incl. Totford, Northington) - StreetFinder"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Northington",
+      "label": "Northington (City of Winchester, SO24) - Wikipedia"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:08.436Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1595033"
+  }
 }

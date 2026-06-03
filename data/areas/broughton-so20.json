@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "A small Test Valley village about four miles west of Stockbridge, organised around its High Street and village hall. The community lost its private store in 2018 but reopened it as a volunteer-run community shop + post office + café, which remains the social anchor.",
   "character": "Working village rather than show village; chalk downland setting, active parish life, primary-school catchment families.",
   "amenities": [
@@ -143,8 +146,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:24.411Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

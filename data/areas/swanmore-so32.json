@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1234501",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:05.968Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Swanmore is a rural village in the Meon Valley in south-east Hampshire, near Bishop's Waltham and on the edge of the South Downs National Park. It originally grew to house workers in local brickworks, so its housing is largely Victorian brick, with older properties in the hamlet of Upper Swanmore to the north. The Grade II listed Church of St Barnabas dates from 1844, and the village is unusual for its size in having its own secondary school, Swanmore College.",
+  "character": "A quiet, tight-knit Victorian brick village with a strong community feel, well regarded for safety and its village amenities despite no longer having the shops it once did.",
+  "amenities": [
+    "Village general shop and convenience store",
+    "Post office",
+    "Hairdresser",
+    "Three pubs including The Rising Sun",
+    "Village hall and community centre",
+    "Methodist church and St Barnabas parish church",
+    "Recreation ground with cricket and football, plus children's play area",
+    "Sports clubs and facilities (3G pitch at Swanmore College)"
+  ],
+  "schools": [
+    {
+      "url": "https://www.swanmoreprimary.hants.sch.uk/",
+      "name": "Swanmore CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": "https://www.swanmore-school.co.uk/",
+      "name": "Swanmore College",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "in village (New Road, SO32 2RB)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via A334/A32 and M27",
+        "typical": "~30 min"
+      },
+      {
+        "to": "Portsmouth",
+        "mode": "Drive",
+        "notes": "Many residents commute to Portsmouth or Southampton",
+        "typical": "~35 min"
+      },
+      {
+        "to": "Winchester / Fareham",
+        "mode": "Bus",
+        "notes": "Public buses connect the village but are infrequent",
+        "typical": "varies"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Predominantly Victorian brick cottages and family homes, with larger detached properties in Upper Swanmore. Demand is supported by the in-village secondary school and South Downs setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Walks in the Meon Valley and South Downs National Park",
+    "Church of St Barnabas (Grade II listed)",
+    "Cricket and football at the recreation ground",
+    "Nearby Bishop's Waltham and its palace ruins"
+  ],
+  "placesToEat": [
+    "The Rising Sun",
+    "Other village pubs",
+    "Eateries in nearby Bishop's Waltham"
+  ],
+  "pros": [
+    "Own secondary school (Swanmore College) plus primary in the village",
+    "Quiet, safe, strong community",
+    "Edge of the South Downs National Park",
+    "Good road access to Southampton and Portsmouth"
+  ],
+  "cons": [
+    "No railway station; car-dependent with infrequent buses",
+    "Fewer shops than in the village's past",
+    "Commutes to the coast cities take 30+ minutes"
+  ],
+  "whoItSuits": "Families wanting a quiet Hampshire village with its own schools and South Downs walking, who are happy to commute by car.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Botley or Hedge End (~6-7 miles)",
+  "primarySupermarket": "Central Convenience Stores in village; larger supermarkets in Bishop's Waltham",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://localhistories.org/a-history-of-swanmore/",
+      "label": "A History of Swanmore - Local Histories"
+    },
+    {
+      "url": "https://www.aboutbritain.com/towns/swanmore.asp",
+      "label": "AboutBritain - Swanmore"
+    },
+    {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool/schooldetails?dfesno=4149",
+      "label": "Swanmore College - Hampshire County Council"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Swanmore",
+      "label": "Swanmore - Wikishire"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:05.968Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1234501"
+  }
 }

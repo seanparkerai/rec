@@ -15,34 +15,115 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4355206",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:06.591Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Tichborne is a small, historic village and civil parish about 4 miles east of Winchester and 2 miles south-west of Alresford in Hampshire, set across the water meadows of the infant River Itchen, with a population of around 167. It is famous for two things: the Tichborne Dole, one of England's oldest charitable customs (dating from around 1150, when Lady Mabella Tichborne endowed an annual gift of flour), and the Victorian 'Tichborne Claimant' impostor case. The Saxon-chancelled church of St Andrew is rare in containing a Roman Catholic chapel within a pre-Reformation Anglican parish church.",
+  "character": "A tiny, picturesque scattering of thatched houses in rolling farmland, steeped in centuries of tradition around the long-established Tichborne family.",
+  "amenities": [
+    "The Tichborne Arms (thatched country pub, site licensed since 1487)",
+    "St Andrew's Church (Saxon chancel; shared Anglican/RC chapel)",
+    "Tichborne Dole charitable festival (Lady Day, 25 March)",
+    "Alresford Golf Course (founded 1890) covering the north-east of the parish",
+    "Surrounding Itchen water meadows and footpaths"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in Alresford/Cheriton area",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 miles"
+    },
+    {
+      "url": null,
+      "name": "Perins School (secondary), New Alresford",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~2-3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~4 miles",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Alresford",
+        "mode": "Drive",
+        "notes": "~2 miles; nearest town amenities",
+        "typical": "~5 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester station",
+        "typical": "~1h 5m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A tiny, sought-after village; period and thatched cottages and farmhouses rarely come to market, supporting high values when they do. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Witnessing the Tichborne Dole (25 March)",
+    "St Andrew's Church with its Tichborne family monuments",
+    "Golf at Alresford Golf Course",
+    "Walks across the Itchen water meadows",
+    "Visiting nearby Georgian Alresford"
+  ],
+  "placesToEat": [
+    "The Tichborne Arms",
+    "Pubs and cafes in nearby Alresford and Cheriton"
+  ],
+  "pros": [
+    "A genuinely historic village with a famous living tradition",
+    "Excellent thatched country pub",
+    "Beautiful Itchen-valley setting close to Winchester",
+    "Golf course within the parish"
+  ],
+  "cons": [
+    "Very small with minimal everyday amenities (no shop or school)",
+    "No railway station; car-dependent",
+    "Few homes ever come to market"
+  ],
+  "whoItSuits": "Buyers wanting a tiny, tradition-rich Itchen-valley village with a great pub, close to Winchester and Alresford.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~4 miles)",
+  "primarySupermarket": "Shops in New Alresford (~2 miles)",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Tichborne",
+      "label": "Tichborne - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Tichborne_Dole",
+      "label": "Tichborne Dole - Wikipedia"
+    },
+    {
+      "url": "https://www.tichbornearms.com/",
+      "label": "The Tichborne Arms"
+    },
+    {
+      "url": "https://information-britain.co.uk/county24/townguideTichborne",
+      "label": "Information Britain - Tichborne"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:06.591Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^4355206"
+  }
 }

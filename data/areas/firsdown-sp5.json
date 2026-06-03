@@ -15,34 +15,114 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810074",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:53.549Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Firsdown is a small village and civil parish on the chalk downs about 4.6 miles north-east of Salisbury in Wiltshire, sitting at around 100-130m above sea level and adjoining the larger village of Winterslow. It had a population of around 581 at the 2011 census and lies within the Winterslow and Upper Bourne Valley ward. Largely a 20th-century residential village strung along Firs Road, it shares many services with neighbouring Winterslow, where the parish council meets.",
+  "character": "A quiet, elevated downland residential village close to Winterslow, valued for its rural calm and easy reach of Salisbury.",
+  "amenities": [
+    "Adjoins Winterslow, which provides shops, pub and village hall",
+    "Firsdown has its own parish council (meeting at Winterslow Village Hall)",
+    "Gigabit-capable broadband available in parts of the village",
+    "Surrounding chalk-downland walks",
+    "Bus services towards Salisbury"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Winterslow Primary School / Pitton CofE Primary (nearest)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1.2-1.5 miles"
+    },
+    {
+      "url": null,
+      "name": "St Joseph's Catholic School / Salisbury grammars (Bishop Wordsworth's, South Wilts)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3-5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~4.6 miles via A30",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station (~4.8 miles)",
+        "typical": "~1h 30m"
+      },
+      {
+        "to": "Andover",
+        "mode": "Drive",
+        "notes": "~12 miles",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Predominantly 20th-century houses and bungalows on the downs; more affordable than the premium Nadder/Wylye villages while keeping a rural feel near Salisbury. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walks on the surrounding chalk downland",
+    "Use of Winterslow's amenities next door",
+    "Easy trips to Salisbury and Old Sarum",
+    "Cycling on quiet country lanes"
+  ],
+  "placesToEat": [
+    "Pub and eateries in neighbouring Winterslow",
+    "Wide choice in Salisbury"
+  ],
+  "pros": [
+    "Quiet, elevated downland setting close to Salisbury",
+    "Shares amenities with the larger village of Winterslow",
+    "Gigabit-capable broadband in parts",
+    "Reasonable value for the Salisbury area"
+  ],
+  "cons": [
+    "Few amenities within Firsdown itself (relies on Winterslow)",
+    "No railway station; rely on Salisbury",
+    "Mostly modern housing with limited period character"
+  ],
+  "whoItSuits": "Buyers wanting an affordable, quiet downland village within easy reach of Salisbury, who are happy to use neighbouring Winterslow's amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~4.8 miles)",
+  "primarySupermarket": "Shops in Winterslow; supermarkets in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.firsdown.org.uk/schools-and-churches",
+      "label": "Firsdown Parish Council - Schools & Churches"
+    },
+    {
+      "url": "https://checkmypostcode.uk/sp51sp",
+      "label": "Check My Postcode - SP5 1SP (Firsdown)"
+    },
+    {
+      "url": "https://www.streetcheck.co.uk/postcode/sp51sp",
+      "label": "StreetCheck - Firs Road, Firsdown"
+    },
+    {
+      "url": "https://www.streetlist.co.uk/sp/sp5/sp5-1/firs-road",
+      "label": "Streetlist - Firs Road, Firsdown"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:53.549Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810074"
+  }
 }

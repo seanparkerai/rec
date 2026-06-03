@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Baybridge is a very small locality in the SO21 countryside around Winchester district, with a predominantly rural and low-density setting. It functions more as a hamlet/place-name cluster than a full-service village. Residents typically rely on nearby larger settlements for day-to-day services while benefiting from quiet surroundings.",
   "character": "Tiny rural hamlet character with scattered dwellings and farmland context.",
   "amenities": [
@@ -101,8 +104,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:06.731Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

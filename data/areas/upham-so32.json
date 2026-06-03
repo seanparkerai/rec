@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595663",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:10.866Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Upham is a village and parish on the edge of the South Downs National Park in Hampshire, lying between Winchester and Bishop's Waltham, about 10 miles from central Southampton. The parish has a population of around 620 across roughly 254 houses and two centres: the original hilltop hamlet of Upham (a conservation area with the church, recreation ground, village pond and Brushmakers Arms) and Lower Upham to the south-west (with the village hall and the Alma Inn). It is a lively community with a primary school, shop, church, two pubs and even its own brewery.",
+  "character": "A charming, active downland village in two parts, with strong community life, country pubs and an extensive footpath network through surrounding farmland.",
+  "amenities": [
+    "Two pubs: the Brushmakers Arms (Upham) and the Alma Inn (Lower Upham)",
+    "Upham Brewery",
+    "Village shop",
+    "Primary school",
+    "Church of the Blessed Mary",
+    "Two village halls / recreation grounds and a village pond",
+    "Active societies and a successful football club",
+    "Bus 69 (Winchester Road) and S5 shopper service"
+  ],
+  "schools": [
+    {
+      "url": "https://www.uphamprimary.hants.sch.uk/",
+      "name": "Upham CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in the Bishop's Waltham/Swanmore area",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3-4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via B2177",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "~10 miles; M3 to the west",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester or Eastleigh stations",
+        "typical": "~1h 15m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after South Downs village; period and detached homes in a conservation-area setting, with limited supply supporting values. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Walking the Monarch's Way, Pilgrims' Trail and King's Way footpaths",
+    "Upham Brewery and the village pubs",
+    "Church of the Blessed Mary and conservation-area lanes",
+    "Village events: Safari Supper, Church Fete, drama and cycling clubs"
+  ],
+  "placesToEat": [
+    "The Brushmakers Arms",
+    "The Alma Inn"
+  ],
+  "pros": [
+    "Two characterful pubs plus a village brewery",
+    "Primary school, shop and church retained",
+    "On the edge of the South Downs National Park with great walking",
+    "Strong community and societies"
+  ],
+  "cons": [
+    "Spread across two centres (Upham and Lower Upham)",
+    "No railway station; car-dependent",
+    "Limited bus services"
+  ],
+  "whoItSuits": "Buyers wanting a lively, characterful South Downs-edge village with pubs, a brewery and good walking, within reach of Winchester.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Eastleigh or Winchester (~6-8 miles)",
+  "primarySupermarket": "Village shop; supermarkets in Bishop's Waltham/Hedge End",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://uphamvillage.org.uk/about-upham/",
+      "label": "About Upham - Upham Village"
+    },
+    {
+      "url": "https://uphamvillage.org.uk/things-to-do/pubs-in-upham/",
+      "label": "Pubs in Upham - Upham Village"
+    },
+    {
+      "url": "https://www.achurchnearyou.com/church/16842/",
+      "label": "Blessed Mary, Upham - A Church Near You"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Lower_Upham",
+      "label": "Lower Upham - Wikipedia"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:10.866Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1595663"
+  }
 }

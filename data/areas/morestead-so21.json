@@ -24,6 +24,9 @@
     "asOf": "2026-05"
   },
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Morestead is a tiny former civil parish — now part of Owslebury parish — set on rising downland inside the South Downs National Park about three miles south-east of Winchester city centre. The historic parish covered around 1,701 acres and had just 96 residents at the 1931 census before being merged into Owslebury in 1932. The 12th-century parish church (no known dedication), with parts dating from around 1150 and a font from about 1200, sits at the lane junction at the heart of the hamlet, beside the former rectory built in the mid-1830s. The Roman road from Portchester to Winchester forms the main village street. Morestead is predominantly a farming community, with racehorse training stables, and is in the benefice of the South Downs Gateway Churches with Twyford, Owslebury and Colden Common. There is no shop, school or pub in the hamlet itself.",
   "character": "Dispersed downland farming hamlet of fewer than thirty households: a parish church, a couple of working farms, the old rectory and a thin scatter of brick-and-flint cottages and 20th-century houses along Morestead Road and Fawley Lane. Strictly inside the South Downs National Park, so planning is tightly controlled.",
   "amenities": [
@@ -165,8 +168,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:31.341Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

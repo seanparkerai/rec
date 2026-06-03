@@ -15,34 +15,120 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
-  "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1390519",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:10.702Z"
-  },
+  "councilTaxBand": "E",
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Landford is a village and parish on the northern edge of the New Forest in south-east Wiltshire, about 10 miles south-east of Salisbury, with the parish (which since 2017 also includes Nomansland and Hamptworth) numbering around 1,100 people. Surrounded by heath and woodland grazed by wild New Forest ponies, it is bisected by the A36 and crossed by the River Blackwater. The Grade II listed Church of St Andrew dates from 1858 (incorporating Norman fragments), and Landford Manor is a 17th-century Grade II* listed house.",
+  "character": "A vibrant, spread-out New Forest-fringe village of woodland and heath, with a strong community and amenities split between Landford and neighbouring Nomansland.",
+  "amenities": [
+    "Village shop and Post Office",
+    "The Landford Poacher pub",
+    "The Cuckoo Inn and Lamb Inn (Nomansland) nearby",
+    "New Forest CofE (VA) Primary School (two sites: Landford and Nomansland)",
+    "St Andrew's Church (Grade II listed, 1858)",
+    "Recreation grounds at Landford and Nomansland; Nomansland village green",
+    "Hamptworth Golf Club with clubhouse and restaurant",
+    "Landford Bog and Landford Heath SSSIs"
+  ],
+  "schools": [
+    {
+      "url": "https://www.thenewforestschool.wilts.sch.uk/",
+      "name": "The New Forest CofE (VA) Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (two sites; Lyndhurst Road, Landford SP5 2AE)"
+    },
+    {
+      "url": null,
+      "name": "Grammar/secondary schools in Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~10 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~10 miles via A36",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via A36/M27; regional airport",
+        "typical": "~30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "<1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable New Forest-edge village; everything from cottages to substantial houses and a major rural estate, with values supported by the National Park setting and Salisbury grammar catchment. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking, cycling and riding in the New Forest National Park",
+    "Golf at Hamptworth Golf Club",
+    "Wildlife at Landford Bog and Landford Heath SSSIs",
+    "St Andrew's Church and Landford Manor",
+    "Nomansland village green and the Lamb Inn"
+  ],
+  "placesToEat": [
+    "The Landford Poacher",
+    "The Cuckoo Inn",
+    "The Lamb Inn, Nomansland",
+    "Hamptworth Golf Club restaurant"
+  ],
+  "pros": [
+    "On the edge of the New Forest National Park with heath and woodland",
+    "Village shop, Post Office, pub and primary school retained",
+    "Within Salisbury grammar-school catchment",
+    "Good A36/M27 links to Salisbury and Southampton"
+  ],
+  "cons": [
+    "Spread-out parish; amenities split between Landford and Nomansland",
+    "Bisected by the busy A36",
+    "No railway station; rely on Salisbury"
+  ],
+  "whoItSuits": "Families wanting a New Forest-fringe village with a primary school, pub and shop, plus Salisbury grammar access and good road links.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~10 miles)",
+  "primarySupermarket": "Village shop and Post Office; supermarkets in Salisbury/Romsey",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://wikishire.co.uk/w/index.php?title=Landford",
+      "label": "Landford - Wikishire"
+    },
+    {
+      "url": "https://hwwhite.co.uk/downton-the-edge-of-the-new-forest/landford/",
+      "label": "H&W White - Landford"
+    },
+    {
+      "url": "https://www.thenewforestschool.wilts.sch.uk/",
+      "label": "The New Forest Primary School"
+    },
+    {
+      "url": "http://www.information-britain.co.uk/county2/townguideLandford",
+      "label": "Information Britain - Landford"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:10.702Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1390519"
+  }
 }

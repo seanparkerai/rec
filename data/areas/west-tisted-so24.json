@@ -15,34 +15,93 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595352",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:16.350Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "West Tisted is a small estate village and civil parish in East Hampshire, just off the A32 about 6.7 miles north-west of Petersfield, within the South Downs National Park. It had a population of 165 at the 2011 census. Much of the parish belongs to the West Tisted Manor Estate (over 1,700 acres, farmed by R.S. Hill & Sons), and many homes are estate cottages. Its medieval church of St Mary Magdalene, reached over a moat bridge, dates from the 12th century and stands beside a yew thought to be over a thousand years old.",
+  "character": "A tiny, quiet agricultural estate village surrounded by farmland and copse, deep in unspoilt South Downs countryside.",
+  "amenities": [
+    "12th-century Church of St Mary Magdalene and its ancient churchyard yew",
+    "West Tisted Village Hall",
+    "The Angel pub nearby towards Privett",
+    "No village shop or post office - everyday shopping is in Alresford or Petersfield"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "notes": "About 6.7 miles south-east to the nearest fast mainline station on the Portsmouth Direct line",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Alresford",
+        "mode": "Drive",
+        "notes": "For shops and the heritage Watercress Line; Alton station is a similar distance north-east",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Petersfield on South Western Railway; fastest services about 1h 2m",
+        "typical": "~75 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Because the manor estate owns much of the village, the private market is small and dominated by period and cottage-style homes, with very low transaction volumes; the South Downs National Park setting underpins values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "The West Tisted Commons and Churches circular walk, taking in the medieval church and a tiny church in the woods",
+    "Walking and riding across the surrounding South Downs farmland and woodland",
+    "Seeing the ancient churchyard yew at St Mary Magdalene"
+  ],
+  "placesToEat": [
+    "The Angel, near the boundary with Privett"
+  ],
+  "pros": [
+    "Deeply rural, unspoilt South Downs National Park setting",
+    "Historic 12th-century church and ancient yew",
+    "A characterful country pub close by"
+  ],
+  "cons": [
+    "Very small private housing market, as the estate owns much of the village",
+    "No shop, school or station in the village",
+    "Car essential, with very limited public transport"
+  ],
+  "whoItSuits": "Buyers wanting a tiny, tranquil estate village deep in the South Downs, who value seclusion and walking over amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/West_Tisted",
+      "label": "Wikipedia - West Tisted"
+    },
+    {
+      "url": "https://ropleybenefice.church/st-mary-magdalene-church/",
+      "label": "Ropley Benefice - St Mary Magdalene, West Tisted"
+    },
+    {
+      "url": "https://west-tisted.parish.uk/",
+      "label": "West Tisted Parish profile (Census 2021)"
+    },
+    {
+      "url": "https://www.alltrails.com/en-gb/trail/england/hampshire/west-tisted-commons-and-churches-circular",
+      "label": "AllTrails - West Tisted Commons and Churches Circular"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:16.350Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1595352"
+  }
 }

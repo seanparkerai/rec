@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
-  "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595060",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:55.702Z"
-  },
+  "councilTaxBand": "E/F",
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "South Wonston is a village on the downland north of Winchester in Hampshire, with a parish population estimated at around 2,870 (2017). The centre lies along Downs Road, where the Post Office and stores, primary school, St Margaret's Church, village hall and social club are clustered. It is largely a 20th-century village of houses and bungalows, popular with Winchester commuters.",
+  "character": "A friendly, self-contained downland commuter village with good community facilities, though without a traditional pub (a members' social club fills that role).",
+  "amenities": [
+    "Village shop and Post Office (Downs Road)",
+    "South Wonston Primary School",
+    "St Margaret's Church",
+    "Village hall",
+    "The Drovers members' social club",
+    "Branch surgery (of Gratton Surgery, Sutton Scotney)",
+    "Recreation ground with two football pitches, tennis court, pavilion, bike track, skate park, basketball court and play park",
+    "Recycling centre"
+  ],
+  "schools": [
+    {
+      "url": "https://www.southwonston.hants.sch.uk/",
+      "name": "South Wonston Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Downs Road, SO21 3EH)"
+    },
+    {
+      "url": null,
+      "name": "Henry Beaufort School (secondary, Harestock)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~4 miles south",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester station",
+        "typical": "~1h"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via A34/M3",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Predominantly detached houses and bungalows built largely in the mid-20th century; most common council tax bands are E and F. Popular with Winchester commuters. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walks on the surrounding Hampshire Downs",
+    "Recreation ground sports and skate park",
+    "Community events at the village hall and social club",
+    "Easy trips to Winchester"
+  ],
+  "placesToEat": [
+    "The Drovers social club (members)",
+    "Eateries in nearby Winchester and Sutton Scotney"
+  ],
+  "pros": [
+    "Strong community facilities including an excellent recreation ground",
+    "Village shop, Post Office, school and surgery on the doorstep",
+    "Quick commute to Winchester and good A34/M3 access",
+    "Elevated downland setting"
+  ],
+  "cons": [
+    "No traditional pub (members' social club only)",
+    "No railway station; rely on Winchester",
+    "Largely modern housing stock with less period character"
+  ],
+  "whoItSuits": "Families and commuters wanting a well-equipped downland village close to Winchester with strong sports and community amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~4-5 miles)",
+  "primarySupermarket": "Village shop and Post Office; supermarkets in Winchester",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/South_Wonston",
+      "label": "South Wonston - Wikipedia"
+    },
+    {
+      "url": "https://www.southwonston-pc.gov.uk/Village_21800.aspx",
+      "label": "South Wonston Parish Council - Village"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116034",
+      "label": "South Wonston Primary School - GOV.UK"
+    },
+    {
+      "url": "https://checkmypostcode.uk/so213eh",
+      "label": "Check My Postcode - SO21 3EH (council tax, prices)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:55.702Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1595060"
+  }
 }

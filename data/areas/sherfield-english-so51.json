@@ -15,34 +15,119 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^805772",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:50.591Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Sherfield English is a small but well-served civil parish in the Test Valley district of Hampshire, lying along the historic Romsey-to-Salisbury road (the A27) about 5 miles north-west of Romsey, between the Test Valley and the New Forest. Largely rural and farming in character, with homes scattered along leafy lanes, it nonetheless offers a surprising array of amenities for its size and is known for a strong community spirit.",
+  "character": "A charming, close-knit rural village with an unusually good range of amenities for its size, set in unspoilt Test Valley countryside.",
+  "amenities": [
+    "Village shop with Post Office and farm shop",
+    "The Hatchet Inn pub",
+    "Tea rooms and a garden centre",
+    "Village hall",
+    "Recreation ground/sports field and pavilion (well regarded)",
+    "Fishing lakes",
+    "Active parish church",
+    "Garage and veterinary clinic"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Awbridge Primary / Lockerley CofE Primary (nearest, both rated Good)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~2-3 miles"
+    },
+    {
+      "url": "https://www.theromseyschool.org/",
+      "name": "The Romsey School (secondary; Sherfield English is in catchment)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "~5 miles via A27",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~11 miles via A27/A36",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Romsey, Winchester or Southampton Parkway stations",
+        "typical": "~1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable Test Valley village; period cottages, farmhouses and larger family homes along quiet lanes, with values supported by amenities and countryside. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO51.html"
+  },
+  "thingsToDo": [
+    "Fishing at the village lakes",
+    "Tea rooms and the garden centre",
+    "Walks between the Test Valley and New Forest",
+    "The Hatchet Inn",
+    "Easy trips to Romsey and Salisbury"
+  ],
+  "placesToEat": [
+    "The Hatchet Inn",
+    "Village tea rooms / Garden Room Cafe",
+    "Waitrose and eateries in nearby Romsey"
+  ],
+  "pros": [
+    "A surprising range of amenities for a small village (shop, pub, tea rooms, garden centre)",
+    "Strong community and recreation facilities",
+    "Good A27/A36/M27 commuter access",
+    "Within The Romsey School catchment"
+  ],
+  "cons": [
+    "No primary school within the village itself",
+    "No railway station; rely on Romsey/Winchester",
+    "Strung along the A27 with some through traffic"
+  ],
+  "whoItSuits": "Families and commuters wanting a friendly, well-equipped rural village between the Test Valley and New Forest with good road links.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Romsey (~5 miles)",
+  "primarySupermarket": "Village shop and farm shop; Waitrose in Romsey",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://sherfieldenglish-pc.gov.uk/",
+      "label": "Sherfield English Parish Council"
+    },
+    {
+      "url": "https://www.hamptons.co.uk/properties/21539882/sales/A1NQ500000LMJIAIAL",
+      "label": "Hamptons - Sherfield English village amenities"
+    },
+    {
+      "url": "https://www.useyourlocal.com/pubs/hatchet-inn-romsey-39464/",
+      "label": "Hatchet Inn, Sherfield English"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_Romsey_School",
+      "label": "The Romsey School (catchment) - Wikipedia"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:50.591Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^805772"
+  }
 }

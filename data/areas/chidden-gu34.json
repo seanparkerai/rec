@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Chidden is a tiny hamlet in the parish of Hambledon, in the City of Winchester district. Despite the seed-data id tagging it as GU34, the real Chidden sits in the PO7 postal area (post town Waterlooville), two miles north of Hambledon village in the chalk valleys between the South Downs and the Meon Valley; properties carry PO7 4TE and PO8 0SD postcodes. The hamlet's name first appears in a tenth-century charter as 'æt cittandene' — the second element is the Old English denu meaning valley. Chidden was historically a tithing of Hambledon and has no church, shop, school or pub of its own; everything is sourced from Hambledon, two miles south, or Petersfield, around six miles north. The hamlet lies within the South Downs National Park, on the police-defined West Meon and Hambledon neighbourhood.",
   "character": "A handful of detached farmhouses and converted agricultural buildings on a single lane through chalk pasture; no village core, no street pattern. Building stock includes brick-and-flint farmhouses and 20th-century additions on dispersed plots. Effectively an outer fragment of the Hambledon parish, governed by SDNP planning constraints.",
   "amenities": [
@@ -106,8 +109,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:30.565Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

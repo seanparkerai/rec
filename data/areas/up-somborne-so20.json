@@ -15,34 +15,126 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595023",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:10.367Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Up Somborne is a small village/hamlet in the civil parish of King's Somborne in the Test Valley district of Hampshire, set on rising chalk downland about 1.5 miles east of King's Somborne village and roughly 3 miles south-east of Stockbridge. It lies between Stockbridge, Romsey and Winchester (the city is about 6-7 miles east). It is a scattered, predominantly residential settlement of houses and farms along Strawberry Lane and surrounding lanes, with no shops or pub of its own; the parish church, primary school and pub are in King's Somborne. The wider parish lies in the Test Valley close to the River Test.",
+  "character": "A quiet, rural downland settlement of detached houses, cottages and farmsteads strung along narrow lanes with open countryside views. The atmosphere is peaceful and agricultural, with footpaths across the downs and a strong community focus on King's Somborne village nearby.",
+  "amenities": [
+    "No shop or pub in Up Somborne itself",
+    "Primary school, church and pub in King's Somborne (~1.5 mi)",
+    "The Crown Inn, King's Somborne",
+    "Market town facilities in Stockbridge (~3 mi)",
+    "Full shopping and services in Winchester (~6-7 mi) and Romsey"
+  ],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116296",
+      "name": "King's Somborne CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1.5 miles"
+    },
+    {
+      "url": "https://www.testvalley.hants.sch.uk/",
+      "name": "Test Valley School, Stockbridge",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via the A3057/A30 or downland lanes; mainline station to London Waterloo",
+        "typical": "~18 min"
+      },
+      {
+        "to": "Stockbridge",
+        "mode": "Drive",
+        "notes": "Nearest market town",
+        "typical": "~8 min"
+      },
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "Via the A3057",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester station (SWR), drive ~18 min to the station",
+        "typical": "~1h"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Up Somborne and the wider King's Somborne parish are a sought-after Test Valley location; housing is mostly detached and period properties, with prices typically in the upper-£400k to £1m+ range and larger country houses well above. Supply is limited.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO20.html"
+  },
+  "thingsToDo": [
+    "Walking the Test Valley and Clarendon Way footpaths",
+    "Fishing and riverside walks on the River Test near Stockbridge",
+    "Exploring historic Stockbridge high street",
+    "John of Gaunt's deer park and downland walks around King's Somborne"
+  ],
+  "placesToEat": [
+    "The Crown Inn, King's Somborne (~1.5 mi)",
+    "Pubs and cafes in Stockbridge (~3 mi), including The Greyhound on the Test",
+    "Wide choice of restaurants in Winchester (~6-7 mi)"
+  ],
+  "pros": [
+    "Quiet downland setting in a desirable Test Valley parish",
+    "Village primary, pub and church a short distance away in King's Somborne",
+    "Good road access to Winchester, Stockbridge and Romsey",
+    "Excellent walking, fishing and countryside on the doorstep"
+  ],
+  "cons": [
+    "No shops, pub or school in Up Somborne itself; car essential",
+    "Limited and relatively expensive housing stock",
+    "No railway station within walking distance",
+    "Rural broadband/mobile coverage can vary"
+  ],
+  "whoItSuits": "Buyers seeking a quiet rural Test Valley village with good schooling and countryside nearby, within easy driving distance of Winchester's mainline and amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~6-7 miles, SWR mainline)",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Up_Somborne",
+      "label": "Wikipedia - Up Somborne"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/King%27s_Somborne",
+      "label": "Wikipedia - King's Somborne"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116296",
+      "label": "Ofsted - King's Somborne CofE Primary School"
+    },
+    {
+      "url": "https://www.thesombornes.org.uk/ks_about.php",
+      "label": "The Sombornes community site"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/SO20.html",
+      "label": "Rightmove - SO20 house prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:10.367Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1595023"
+  }
 }

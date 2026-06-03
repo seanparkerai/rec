@@ -15,34 +15,105 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810098",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:14.261Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "West Grimstead is a small ancient village in the civil parish of Grimstead, on the River Dun about 4.5 miles south-east of Salisbury; with neighbouring East Grimstead it makes up Grimstead parish, which had a population of 534 in 2011. The name derives from the Old English for 'green homestead' and the village was recorded in the Domesday Book with a mill. Its Grade II*-listed church of St John has parts dating from around 1300 with an early-18th-century brick tower, and much of the village was part of large estates (Ilchester, then Radnor/Longford) until sold to sitting tenants in 1916.",
+  "character": "A peaceful, historic village strung along quiet lanes near the River Dun, centred on its old church and village hall and surrounded by farmland.",
+  "amenities": [
+    "Village hall (built 1912-13) and St John's Church are the focus of village life",
+    "The village shop, pub and Methodist chapel have all closed (chapel converted to housing)",
+    "Nearest pubs and shops in neighbouring Alderbury and Whaddon",
+    "Main shopping in Salisbury"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Alderbury and West Grimstead CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 miles (in Alderbury; serves both villages)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 4.5 miles north-west",
+        "typical": "~13 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "From Dean station, around 3 miles east, on the Salisbury-Southampton line",
+        "typical": "~10 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury mainline station",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A small village with a mix of older cottages and a later 20th-century estate; open-market sales are relatively infrequent. Use the SP5 sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Riverside and field walks along the River Dun",
+    "Visit the historic St John's Church",
+    "Walking towards the Clarendon estate and Clarendon Way",
+    "Easy access to Salisbury attractions - the Cathedral and Old Sarum"
+  ],
+  "placesToEat": [],
+  "pros": [
+    "Quiet, historic village very close to Salisbury",
+    "Attractive Grade II* church and an active village hall",
+    "Riverside and farmland countryside on the doorstep"
+  ],
+  "cons": [
+    "No shop, pub or school within the village itself",
+    "Car-dependent for day-to-day needs",
+    "Limited housing stock"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, historic village within a short drive of Salisbury and happy to travel for shops, schooling and a pub.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Dean",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/West_Grimstead",
+      "label": "West Grimstead - Wikipedia"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/West_Grimstead",
+      "label": "West Grimstead - Wikishire (amenities and closures)"
+    },
+    {
+      "url": "https://grimstead.parish.uk/",
+      "label": "Grimstead Parish Council"
+    },
+    {
+      "url": "https://www.westgrimstead.org/home/about",
+      "label": "West Grimstead Village - About"
+    },
+    {
+      "url": "https://clarendoncofe.org/churches/west-grimstead-st-john/",
+      "label": "West Grimstead, St John - The Clarendon Churches"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:14.261Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810098"
+  }
 }

@@ -15,34 +15,107 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809956",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:48.116Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Ridge is a small, dispersed hamlet in the civil parish of Chilmark, in the Nadder Valley of south-west Wiltshire, lying to the south-west of Chilmark village within the Cranborne Chase National Landscape. The Fonthill estate extends into the parish as far as Ridge. A small Baptist chapel (later the Union chapel) was built here between 1851 and 1864; by 2003 it had passed into private hands. Day-to-day amenities are found in Chilmark and, more fully, in nearby Tisbury.",
+  "character": "A scattered, tranquil rural hamlet of farmsteads and cottages on the edge of the Fonthill estate, deeply rural and quiet.",
+  "amenities": [
+    "Former Baptist/Union chapel (now private)",
+    "Amenities in Chilmark village (pub, primary school, church, cricket club)",
+    "Fuller amenities in Tisbury (~4 miles): shops, station, surgeries, leisure centre",
+    "Surrounding Cranborne Chase and Fonthill estate walks"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Chilmark and Fonthill Bishop CofE Primary School (in Chilmark)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1-2 miles"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in the Tisbury/Wilton/Salisbury area",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4-11 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~12 miles via B3089/A36",
+        "typical": "~30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Tisbury station (~4 miles)",
+        "typical": "~1h 50m"
+      },
+      {
+        "to": "Shaftesbury",
+        "mode": "Drive",
+        "notes": "Nearby market town",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A scarce, very rural hamlet; mostly farmhouses and cottages on the edge of the Fonthill estate, rarely coming to market. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Walks on the Fonthill estate and through Cranborne Chase",
+    "Visiting Chilmark village and its pub",
+    "Nadder Valley countryside and quiet lanes"
+  ],
+  "placesToEat": [
+    "The Black Dog at Chilmark",
+    "The Beckford Arms (Fonthill) nearby"
+  ],
+  "pros": [
+    "Deeply rural and peaceful on the Fonthill estate edge",
+    "Cranborne Chase National Landscape setting",
+    "Chilmark's pub and school and Tisbury's amenities within reach"
+  ],
+  "cons": [
+    "A dispersed hamlet with effectively no amenities of its own",
+    "No railway station; car essential",
+    "Very limited public transport"
+  ],
+  "whoItSuits": "Buyers seeking a deeply rural, secluded hamlet within reach of Chilmark and Tisbury, who prioritise peace and countryside.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury (~4 miles)",
+  "primarySupermarket": "Shops in Chilmark and Tisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Chilmark,_Wiltshire",
+      "label": "Chilmark, Wiltshire (incl. Ridge hamlet) - Wikipedia"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Chilmark",
+      "label": "Chilmark - Wikishire (Ridge hamlet)"
+    },
+    {
+      "url": "https://hwwhite.co.uk/tisbury-nadder-valley/chilmark/",
+      "label": "H&W White - Chilmark (incl. Ridge)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:48.116Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809956"
+  }
 }

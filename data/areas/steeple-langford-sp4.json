@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808809",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:00.182Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Steeple Langford is a village and civil parish in the Wylye Valley, Wiltshire, about 6 miles north-west of Wilton and 10 miles from Salisbury, with a population of around 515 (2011 census). The largest of 'The Langfords', its parish also includes the hamlets of Hanging Langford, Little Langford and the former settlement of Bathampton. It lies on the north bank of the River Wylye within the Cranborne Chase National Landscape, and is known for its thatched cottages and the lakes created from worked-out gravel pits, now the Langford Lakes Nature Reserve.",
+  "character": "A quintessential, vibrant Wylye Valley village of thatched cottages beside lakes and chalk stream, with a notably active community calendar for its size.",
+  "amenities": [
+    "Rainbow on the Lake pub (c.1680, with Wylye Valley/lake views)",
+    "Parish church",
+    "Langford Lakes Nature Reserve (Wiltshire Wildlife Trust)",
+    "Village hall",
+    "Volunteer-run sports and social club with bar, clubhouse and cricket pavilion",
+    "Allotments (since 1866)",
+    "Active community: film nights, live music, exercise classes, the monthly Langford Big Breakfast"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in nearby Wylye Valley villages/Wilton",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3-6 miles"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Wilton/Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~6-10 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~10 miles via A36",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Wilton",
+        "mode": "Drive",
+        "notes": "~6 miles",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "<1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after Wylye Valley village; thatched and period cottages plus occasional new builds, with values supported by the lakes, chalk stream and National Landscape setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Birdwatching and walking at Langford Lakes Nature Reserve",
+    "Trout fishing on the River Wylye",
+    "Walks to the Iron Age hillforts of Yarnbury and Grovely Castle",
+    "Community events and the Langford Big Breakfast",
+    "Cricket at the village club"
+  ],
+  "placesToEat": [
+    "Rainbow on the Lake",
+    "Pubs in nearby Wylye, Stapleford and Great Wishford"
+  ],
+  "pros": [
+    "Beautiful chalk-stream and lakeside setting in the Cranborne Chase National Landscape",
+    "Characterful village pub with lake views",
+    "Exceptionally active community for its size",
+    "Nature reserve and excellent walking on the doorstep"
+  ],
+  "cons": [
+    "No village shop or school within Steeple Langford itself",
+    "No railway station; rely on Salisbury",
+    "Bypassed by but close to the busy A36"
+  ],
+  "whoItSuits": "Buyers wanting a picturesque, community-rich Wylye Valley village with lakes and walking, who are happy to travel for shops and schools.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~10 miles)",
+  "primarySupermarket": "Shops in Wilton and Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Steeple_Langford",
+      "label": "Steeple Langford - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/wylye-valley/the-langfords/",
+      "label": "H&W White - The Langfords"
+    },
+    {
+      "url": "https://camra.org.uk/pubs/rainbow-on-the-lake-steeple-langford-192052",
+      "label": "Rainbow on the Lake - CAMRA"
+    },
+    {
+      "url": "https://apps.wiltshire.gov.uk/communityhistory/Community/Index/212",
+      "label": "Wiltshire Community History - Steeple Langford"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:00.182Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808809"
+  }
 }

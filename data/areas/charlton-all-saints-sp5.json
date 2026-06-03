@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Charlton All Saints is in the Salisbury area of Wiltshire (SP5), and sits in the rural-to-commuter belt around Salisbury. Historic references and parish records show long-established settlement patterns, with modern housing mostly as infill around older cores. Day-to-day life depends on local village facilities plus Salisbury for larger services. The area appeals to buyers who want a quieter setting but still need practical links to the city.",
   "character": "Charlton All Saints has a village-scale layout with mixed period and modern homes, a parish-centred feel, and surrounding countryside as a dominant part of daily character.",
   "amenities": [
@@ -97,8 +100,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:26.495Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

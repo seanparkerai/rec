@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Newton Stacey is a hamlet of around fifty households in the civil parish of Barton Stacey, in the Test Valley district, set on the south bank of the River Dever roughly one and a half miles west of Barton Stacey village and four and a half miles south-west of the railway town of Andover. The hamlet lies between the A303 (a mile to the north) and the A30 (a mile to the south) on lanes that cross both trunk roads, giving an unusually quick exit east to Winchester or west to Stockbridge. The seed CSV tags this record SP11 but the Royal Mail post town is Stockbridge and Newton Stacey's actual postcode area is SO20 (residential addresses sit in SO20 6BP and nearby sectors); the Wikipedia infobox confirms SO20. Historically the hamlet's most-cited resident is the 17th-century preacher Stephen Bachiler, whose zealous followers from Newton Stacey settled in New England. The 2012 closure of the Newton Stacey post office means daily-need shopping is now at Barton Stacey or Andover.",
   "character": "Tiny linear hamlet of detached cottages, period farmhouses and a small number of modern infill plots, set in arable chalkland with the Dever as a southern boundary. No village centre and no formal conservation-area designation. Building stock includes brick, flint and rendered cottages alongside larger 20th-century houses.",
   "amenities": [
@@ -127,8 +130,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:34.248Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

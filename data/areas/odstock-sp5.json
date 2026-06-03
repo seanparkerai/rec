@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810086",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:37.053Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Odstock is a village and civil parish about 3 miles south of Salisbury in Wiltshire, with a population of around 554. The parish also includes the village of Nunton and the hamlet of Bodenham. It sits in beautiful countryside at the meeting of the Avon and Ebble valleys, and gives its name to the original Odstock Hospital (built 1942 just to the north in Britford parish), which grew into the major Salisbury District Hospital with its renowned burns and spinal units.",
+  "character": "A quiet, attractive downland-and-valley village close to Salisbury, valued for its rural calm, woodland walks and proximity to the city and hospital.",
+  "amenities": [
+    "The Yew Tree Inn (village pub in former 18th-century cottages)",
+    "Parish church (St Mary)",
+    "Salisbury District Hospital nearby (~1 mile north)",
+    "Avon Valley and Ebble Valley walking paths intersect here",
+    "Bus services to Salisbury",
+    "Farm shop and pub in neighbouring Nunton"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in Salisbury / nearby Coombe Bissett",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2-3 miles"
+    },
+    {
+      "url": null,
+      "name": "Secondary/grammar schools in Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~3 miles",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Regular buses to the city",
+        "typical": "~15-20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "~1h 25m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after village close to Salisbury and its hospital; period cottages and family homes in a quiet valley setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walks in Odstock woods (bluebells in spring)",
+    "The Avon Valley and Ebble Valley paths",
+    "The Yew Tree Inn",
+    "Easy trips into Salisbury",
+    "Cycling on quiet downland lanes"
+  ],
+  "placesToEat": [
+    "The Yew Tree Inn, Odstock",
+    "Pub and farm shop in nearby Nunton",
+    "Wide choice in Salisbury"
+  ],
+  "pros": [
+    "Quiet valley setting only 3 miles from Salisbury",
+    "Village pub and easy access to the District Hospital",
+    "Excellent walking on the Avon and Ebble valley paths",
+    "Regular buses to the city"
+  ],
+  "cons": [
+    "No village shop or school within Odstock itself",
+    "No railway station; rely on Salisbury",
+    "Hospital traffic on nearby roads at peak times"
+  ],
+  "whoItSuits": "Buyers (including hospital staff) wanting a quiet valley village within a short drive or bus ride of Salisbury.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~3 miles)",
+  "primarySupermarket": "Farm shop in Nunton; supermarkets in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Odstock",
+      "label": "Odstock - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Salisbury_District_Hospital",
+      "label": "Salisbury District Hospital - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Nunton",
+      "label": "Nunton - Wikipedia (Odstock parish)"
+    },
+    {
+      "url": "https://hillsidebandb.wordpress.com/",
+      "label": "Hillside Self Catering - Odstock village setting"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:37.053Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810086"
+  }
 }

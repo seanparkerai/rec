@@ -15,34 +15,107 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1337332",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:44.885Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Privett is a small village and conservation area in East Hampshire, in the civil parish of Froxfield and Privett, about 5 miles north-west of Petersfield just off the A272 and within the South Downs National Park. It sits on high ground overlooking the Meon valley and consists mainly of scattered farms and cottages. Its outstanding landmark is Holy Trinity Church, a Grade II* listed Gothic Revival church with a 160-foot spire, designed by Arthur Blomfield and built in 1876-78 by the landowner William Nicholson; now redundant, it is cared for by the Churches Conservation Trust.",
+  "character": "A scattered, high and unspoilt downland village of farms and cottages, dominated by the soaring spire of its redundant Victorian church.",
+  "amenities": [
+    "Holy Trinity Church (Grade II* listed, Churches Conservation Trust)",
+    "The Privett Centre community and sports ground",
+    "Froxfield village shop, post office and primary school at nearby High Cross",
+    "Country pubs nearby including the Angel and, at Priors Dean, the White Horse ('Pub With No Name')"
+  ],
+  "schools": [
+    {
+      "url": "https://froxfield.hants.sch.uk/",
+      "name": "Froxfield Church of England Primary and Pre-School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~2.5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "notes": "About 5 miles south-east to the nearest mainline station and shops",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Petersfield on South Western Railway; fastest services about 1h 2m",
+        "typical": "~65 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "For the wider range of city shops and services",
+        "typical": "~30 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is limited and characterful - period cottages, former estate houses and farmsteads - in low transaction volumes; the South Downs National Park setting supports premium values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/GU34.html"
+  },
+  "thingsToDo": [
+    "Visiting the spectacular Grade II* Holy Trinity Church and its 160-foot spire",
+    "Walking the high South Downs footpaths around the Meon valley",
+    "Cricket and community events at the Privett Centre"
+  ],
+  "placesToEat": [
+    "The Angel, towards the West Tisted boundary",
+    "The White Horse ('Pub With No Name') at Priors Dean, a short drive away"
+  ],
+  "pros": [
+    "Unspoilt, high South Downs setting with a remarkable landmark church",
+    "Village shop, post office and primary school nearby at High Cross",
+    "Direct trains to London from Petersfield, about 5 miles away"
+  ],
+  "cons": [
+    "Very dispersed, with few amenities in Privett itself",
+    "No railway station and limited public transport",
+    "Car essential for everyday life"
+  ],
+  "whoItSuits": "Buyers wanting a peaceful, high South Downs village with striking historic character, who are content to drive to Petersfield and High Cross for amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Privett",
+      "label": "Wikipedia - Privett"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Holy_Trinity_Church,_Privett",
+      "label": "Wikipedia - Holy Trinity Church, Privett (Grade II*)"
+    },
+    {
+      "url": "https://www.britainexpress.com/attractions.htm?attraction=4037",
+      "label": "Britain Express - Holy Trinity Church, Privett"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/p336",
+      "label": "British History Online - VCH Hampshire, Privett"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Froxfield_and_Privett",
+      "label": "Wikipedia - Froxfield and Privett (parish & 2021 population)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:44.885Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1337332"
+  }
 }

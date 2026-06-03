@@ -15,34 +15,94 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1685108",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:11.961Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Upper Wield is a small village high on the chalk downland of the civil parish of Wield, in East Hampshire, set between Alresford, the Candover Valley and Alton. It is the historic nucleus of the parish, which had a population of 237 at the 2021 census. The village green, pond and thatched cottages cluster around the Grade I listed, largely Norman church of St James, which contains a notable monument to Sir William Wallop (died 1617) and a 12th-century Purbeck stone font. The village's pub, the Yew Tree, is about a mile away at neighbouring Lower Wield.",
+  "character": "A remote, high and unspoilt downland village of thatched cottages around a green, well away from main roads and surrounded by walking country.",
+  "amenities": [
+    "Grade I listed Norman Church of St James",
+    "Village green, pond and the parish hall (a former school)",
+    "The Yew Tree country pub at nearby Lower Wield",
+    "Oxdrove Way and Three Castles Path long-distance walking routes",
+    "No village shop - everyday shopping is in Alresford or Alton"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Alton",
+        "mode": "Drive",
+        "notes": "About 5.5 miles east to the nearest mainline station; Alresford is a similar distance south-west",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "For the wider range of city shops, services and fast trains",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Alton on South Western Railway (Alton line)",
+        "typical": "~70-80 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is limited and characterful - thatched cottages, period houses and former farm buildings - with very low transaction volumes; the remote, unspoilt downland setting supports premium values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Visiting the Grade I listed Norman Church of St James",
+    "Walking the Oxdrove Way and the Three Castles Path across the surrounding downland",
+    "Exploring the nearby Candover Valley and the Watercress Line at Alresford and Medstead"
+  ],
+  "placesToEat": [
+    "The Yew Tree, Lower Wield (destination country pub)"
+  ],
+  "pros": [
+    "Exceptionally peaceful, high downland setting away from main roads",
+    "Historic Grade I listed village church and a classic green-and-pond centre",
+    "Excellent walking on the doorstep"
+  ],
+  "cons": [
+    "No shop, school or station in the village and very little public transport",
+    "The pub is in the neighbouring hamlet, about a mile away",
+    "Car essential for everyday life"
+  ],
+  "whoItSuits": "Buyers seeking a secluded, high downland village with strong walking and real rural character, who don't need amenities nearby.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Wield",
+      "label": "Wikipedia - Wield"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Upper_Wield",
+      "label": "Wikipedia - Upper Wield"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp345-347",
+      "label": "British History Online - VCH Hampshire, Wield"
+    },
+    {
+      "url": "https://www.hampshire-history.com/upper-wield-church/",
+      "label": "Hampshire History - St James Church, Upper Wield"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:11.961Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1685108"
+  }
 }

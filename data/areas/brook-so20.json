@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Brook is a small SO20 settlement in the Stockbridge/Test Valley area, positioned within the same chalk-stream landscape that defines nearby villages like Broughton and Houghton. It is primarily residential-rural in function, with day-to-day service reliance on nearby centres rather than a large village core. The setting is attractive but practical life is shaped by road access to Stockbridge, Andover and Romsey.",
   "character": "Small hamlet feel, scattered housing, quiet lanes, and countryside outlooks rather than high-street activity.",
   "amenities": [
@@ -131,8 +134,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:23.805Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

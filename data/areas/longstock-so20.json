@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": "D",
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Longstock is a thatched-cottage village of around 500 residents on the west bank of the upper River Test, about two miles north of Stockbridge in the Test Valley district. Almost every house on the village street is timber-framed and thatched, with the prominent exception of the Peat Spade Inn — a Victorian gastropub-with-rooms that is now the village's main commercial anchor. The parish church of St Mary's was largely rebuilt in the 1880s, but the village's older fabric is exceptional: Longstock is one of the most visually consistent surviving 17th- and 18th-century chalk-stream villages in southern England, which is partly why John Spedan Lewis bought the Longstock Park estate and made his family home there from 1945. Longstock Park (and the neighbouring Leckford Estate) remains owned by the John Lewis Partnership, with Longstock House used by Partnership senior management and Longstock Park Water Gardens open to the public on selected Sundays April–September.",
   "character": "Pure thatched chalk-stream village: timber-frame, lime-render, thatch-and-deep-eaves cottages strung along Longstock Road and Cottage Lane. Tight conservation area; planning constraints are exceptionally strict. Building stock predominantly 17th–18th century with Victorian estate cottages.",
   "amenities": [
@@ -120,8 +123,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:21.048Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

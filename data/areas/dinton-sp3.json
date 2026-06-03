@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4940918",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:40.615Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Dinton is a pretty village in the Nadder Valley about 8 miles west of Salisbury and around 5 miles from Wilton, on the chalk downs dividing the Nadder and Wylye valleys. The B3089 runs through its centre, and the National Trust's Dinton Park and the Neo-Grecian Philipps House (plus Little Clarendon, Hyde's House and Lawes Cottage) sit on its edge. The village absorbed the neighbouring parish of Baverstock in 1934 and lies partly within the Cranborne Chase National Landscape.",
+  "character": "A thriving, history-rich downland village with two pubs, a primary school and extensive National Trust parkland, retaining a strong community feel.",
+  "amenities": [
+    "Two pubs: The Wyndham Arms and The Penruddocke Arms",
+    "Dinton CofE Primary School",
+    "Village hall with pre-school and many clubs",
+    "Large recreation ground with football and cricket pitches and playgrounds",
+    "National Trust Dinton Park and Philipps House (230 acres)",
+    "Annual Dinton Fireworks and Fete at Philipps House",
+    "Bus services to Wilton and Salisbury"
+  ],
+  "schools": [
+    {
+      "url": "https://www.dinton.wilts.sch.uk/",
+      "name": "Dinton CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "in village (SP3 5HW)"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Wilton/Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5-8 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~8 miles via B3089/A30",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Tisbury station (West of England line), a short drive away",
+        "typical": "~1h 50m"
+      },
+      {
+        "to": "Wilton",
+        "mode": "Drive",
+        "notes": "Nearest town amenities",
+        "typical": "~10 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable Nadder Valley village; local-stone period cottages and family homes near National Trust parkland, with values supported by the school and Cranborne Chase setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Walks in National Trust Dinton Park (views to Salisbury Cathedral spire)",
+    "Visiting Philipps House and Little Clarendon",
+    "The Monarch's Way footpath and Grovely Wood",
+    "Dinton Fireworks and Fete",
+    "Two Mills on the Nadder walk"
+  ],
+  "placesToEat": [
+    "The Wyndham Arms",
+    "The Penruddocke Arms (free house with Sunday carvery)"
+  ],
+  "pros": [
+    "Two well-supported village pubs",
+    "Good-rated primary school and lively village hall",
+    "National Trust parkland and Philipps House on the doorstep",
+    "Tisbury mainline station a short drive away"
+  ],
+  "cons": [
+    "No railway station in the village (Tisbury is nearest)",
+    "Limited everyday shopping (rely on Wilton/Tisbury)",
+    "Buses to Salisbury are infrequent"
+  ],
+  "whoItSuits": "Buyers wanting a characterful Nadder Valley village with pubs, a good school and National Trust parkland, within reach of Salisbury and Tisbury rail.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury (~4 miles)",
+  "primarySupermarket": "Shops in Wilton and Tisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Dinton,_Wiltshire",
+      "label": "Dinton, Wiltshire - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/tisbury-nadder-valley/dinton-and-baverstock/",
+      "label": "H&W White - Dinton and Baverstock"
+    },
+    {
+      "url": "https://www.ruralview.co.uk/blog/dinton-wiltshire/",
+      "label": "Rural View - Dinton village and primary school"
+    },
+    {
+      "url": "https://www.schooldash.com/school/149660/",
+      "label": "SchoolDash - Dinton CofE Primary School"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:40.615Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^4940918"
+  }
 }

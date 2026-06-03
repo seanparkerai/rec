@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1235444",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:20.309Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Lockerley is a village in the Test Valley in Hampshire, on the southern bank of the River Dun about 6 miles north-west of Romsey and 11 miles from Salisbury. It is an attractive collection of greens (centred on Butts Green) with a strong community spirit and around 35 clubs and societies. The 12th-century church of St John the Evangelist is a fine example of Norman architecture, and the village was historically part of the landholdings of Romsey Abbey.",
+  "character": "A scenic, green-centred Test Valley village with a notably active community and a semi-rural feel, surrounded by rolling hills and ancient woodland.",
+  "amenities": [
+    "Village store with pop-up Post Office and coffee shop",
+    "Garage",
+    "Lockerley CofE Endowed Primary School",
+    "St John the Evangelist Church (12th-century Norman) and a second church",
+    "Active community/village hall and around 35 groups and societies",
+    "Mottisfont & Dunbridge railway station (~1.9 km)",
+    "The Mill Arms pub in neighbouring Dunbridge",
+    "Holbury Lakes Trout Fishery on the village edge"
+  ],
+  "schools": [
+    {
+      "url": "https://www.lockerleyprimary.co.uk/",
+      "name": "Lockerley CofE Endowed Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Butts Green, SO51 0JG)"
+    },
+    {
+      "url": null,
+      "name": "Romsey/Test Valley secondary schools (e.g. Romsey School, Mountbatten)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~6 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "~6 miles",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Mottisfont & Dunbridge / Dean stations and Salisbury or Romsey",
+        "typical": "~1h 45m"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~11 miles",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable Test Valley village of period cottages and detached family homes around the greens, with values supported by the school, community and River Dun setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO51.html"
+  },
+  "thingsToDo": [
+    "Trout fishing at Holbury Lakes and on the River Dun",
+    "Countryside walks and rides in the Test Valley",
+    "St John the Evangelist Church (Norman, with a 14th-century wall painting)",
+    "Walks to neighbouring Dunbridge and the River Test"
+  ],
+  "placesToEat": [
+    "Village coffee shop",
+    "The Mill Arms, Dunbridge",
+    "Eateries in Romsey"
+  ],
+  "pros": [
+    "Excellent village school and strong community (around 35 groups)",
+    "Village store, coffee shop and garage retained",
+    "Beautiful Test Valley setting with fishing and walks",
+    "Nearby rail at Mottisfont & Dunbridge / Dean"
+  ],
+  "cons": [
+    "No pub in the village itself (nearest at Dunbridge)",
+    "Broadband can be slow in places (median ~18 Mbps in parts)",
+    "Car-dependent for secondary schooling and larger shops"
+  ],
+  "whoItSuits": "Families wanting a friendly, green-centred Test Valley village with a strong school and countryside on the doorstep.",
+  "broadbandMedianMbps": 18,
+  "nearestStation": "Mottisfont & Dunbridge (~1.2 miles)",
+  "primarySupermarket": "Village store; supermarkets in Romsey",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://hwwhite.co.uk/salisbury/lockerley/",
+      "label": "H&W White - Lockerley"
+    },
+    {
+      "url": "https://www.lockerleyprimary.co.uk/",
+      "label": "Lockerley CofE Endowed Primary School"
+    },
+    {
+      "url": "https://search.savills.com/property-detail/gbwnrslac210501",
+      "label": "Savills - Lockerley village amenities"
+    },
+    {
+      "url": "https://www.getthedata.com/postcode/SO51-0LY",
+      "label": "GetTheData - SO51 0LY (Lockerley) stations/broadband"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:20.309Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1235444"
+  }
 }

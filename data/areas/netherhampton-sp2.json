@@ -15,34 +15,119 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808583",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:33.707Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Netherhampton is a village and civil parish immediately west of Salisbury in Wiltshire, about 2 miles from the city centre, with a population of around 493. Its northern edge borders the water meadows of the River Nadder, and to the south lie Salisbury Racecourse (one of England's oldest, racing since the 16th century), the Salisbury and South Wilts Golf Club and a garden centre. The village was recorded in Domesday and is where the important Salisbury Hoard of Bronze and Iron Age metalwork was excavated in 1993.",
+  "character": "A historic, rural village right on Salisbury's western edge, combining water-meadow scenery and racecourse/golf amenities with quick access to the city.",
+  "amenities": [
+    "The Victoria and Albert pub (17th-century cottage)",
+    "St Catherine's Church (18th-century tower; rebuilt 1876-7 in flint-and-stone chequer)",
+    "Salisbury Racecourse (just south)",
+    "Salisbury and South Wilts Golf Club",
+    "Garden centre",
+    "Netherhampton House (17th century)",
+    "Regular buses to Salisbury",
+    "River Nadder water-meadow walks"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in Salisbury/Wilton area",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 miles"
+    },
+    {
+      "url": null,
+      "name": "Salisbury secondary and grammar schools (Bishop Wordsworth's, South Wilts)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~2-3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~2 miles to the city centre",
+        "typical": "~8 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Regular services",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "~1h 25m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable village on Salisbury's edge; period houses (including the historic Netherhampton House) and family homes, with newer development and a business park in parts. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP2.html"
+  },
+  "thingsToDo": [
+    "A day at Salisbury Racecourse",
+    "Golf at Salisbury and South Wilts Golf Club",
+    "Water-meadow and River Nadder walks (Netherhampton Circular)",
+    "St Catherine's Church",
+    "Easy trips into Salisbury and to Wilton House"
+  ],
+  "placesToEat": [
+    "The Victoria and Albert",
+    "Racecourse catering on race days",
+    "Wide choice in Salisbury"
+  ],
+  "pros": [
+    "Rural village feel within 2 miles of Salisbury",
+    "Racecourse, golf club and garden centre on the doorstep",
+    "Beautiful River Nadder water meadows",
+    "Good bus links to the city"
+  ],
+  "cons": [
+    "No school or shop within the village itself",
+    "No railway station; rely on Salisbury",
+    "Some modern development and a business park in the parish"
+  ],
+  "whoItSuits": "Buyers wanting a historic, rural village right beside Salisbury with racecourse and golf amenities close by.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~2 miles)",
+  "primarySupermarket": "Supermarkets in Salisbury (~2 miles)",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Netherhampton",
+      "label": "Netherhampton - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/salisbury/netherhampton/",
+      "label": "H&W White - Netherhampton"
+    },
+    {
+      "url": "https://www.visitwiltshire.co.uk/salisbury/things-to-do/salisbury-racecourse-p448093",
+      "label": "Salisbury Racecourse - Visit Wiltshire"
+    },
+    {
+      "url": "https://www.race-courses.co.uk/salisbury-racecourse/",
+      "label": "Salisbury Racecourse course/facilities"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:33.707Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808583"
+  }
 }

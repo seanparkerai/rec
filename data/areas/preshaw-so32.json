@@ -15,34 +15,126 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^802827",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:43.125Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Preshaw is a very small estate hamlet on high downland north of Corhampton, historically split between the parishes of Upham and Exton, in the City of Winchester district of Hampshire, within the South Downs National Park. It is centred on Preshaw House, a country mansion set in 19th-century parkland with views towards the coast, and a small private chapel (Preshaw Chapel, served seasonally from Upham). There is no village core, shop, pub or school; Preshaw is essentially the estate and a handful of farms and cottages, with everyday amenities in Upham, Bishop's Waltham and Corhampton/Meonstoke.",
+  "character": "A remote, private estate hamlet of parkland, farmland and a few houses high on the South Downs, with long views and deep rural quiet. The character is defined by the Preshaw estate, downland and woodland rather than any village street.",
+  "amenities": [
+    "No shop, pub or school in Preshaw itself",
+    "Preshaw Chapel (private estate chapel, served from Upham in summer)",
+    "Primary school, shop, village hall and two pubs in Upham (~3 mi)",
+    "Shops, services and pubs in Bishop's Waltham (~4-5 mi)",
+    "Corhampton, Meonstoke and the Meon Valley nearby"
+  ],
+  "schools": [
+    {
+      "url": "https://www.uphamprimary.hants.sch.uk/",
+      "name": "Upham CofE Aided Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    },
+    {
+      "url": "https://www.swanmorecollege.hants.sch.uk/",
+      "name": "Swanmore College",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Bishop's Waltham",
+        "mode": "Drive",
+        "notes": "Nearest town for shops and services",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via the A272; mainline station to London Waterloo",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via the A334/M27",
+        "typical": "~30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester station (~25 min drive)",
+        "typical": "~1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Preshaw is dominated by the estate and a very small number of farms and houses; the surrounding SO32 South Downs market is firmly premium, with detached country houses commonly £700k-£2m+ and estate properties well above. Open-market sales are very rare.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Walking the South Downs National Park downland and the Monarch's Way",
+    "Exploring the Meon Valley and Corhampton/Meonstoke villages",
+    "Country pubs of the Upper Meon Valley",
+    "Downland cycling with far-reaching views to the coast"
+  ],
+  "placesToEat": [
+    "The Brushmakers Arms and The Alma, Upham (~3 mi)",
+    "Pubs in Corhampton, Meonstoke and Droxford nearby",
+    "Wide choice of pubs and cafes in Bishop's Waltham (~4-5 mi)"
+  ],
+  "pros": [
+    "Exceptional privacy and downland views in the South Downs National Park",
+    "Deeply rural, peaceful estate setting",
+    "Within reach of Upham and Bishop's Waltham amenities",
+    "Outstanding walking and countryside all around"
+  ],
+  "cons": [
+    "No amenities whatsoever in the hamlet; entirely car-dependent",
+    "Almost no open-market housing; estate-dominated",
+    "National Park planning constraints",
+    "No mainline station within easy reach; remote lanes"
+  ],
+  "whoItSuits": "Buyers seeking extreme rural privacy and downland surroundings within the South Downs National Park, content to drive to Upham and Bishop's Waltham for everyday needs and to Winchester for rail.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~9 miles, SWR mainline)",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Preshaw",
+      "label": "Wikipedia - Preshaw"
+    },
+    {
+      "url": "https://research.hgt.org.uk/item/preshaw-house/",
+      "label": "Hampshire Garden Trust - Preshaw House"
+    },
+    {
+      "url": "https://www.genuki.org.uk/big/eng/HAM/Upham/Preshaw",
+      "label": "GENUKI - Preshaw Chapel, Upham"
+    },
+    {
+      "url": "https://uphamvillage.org.uk/about-upham/",
+      "label": "Upham Village (parish amenities)"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/SO32.html",
+      "label": "Rightmove - SO32 house prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:43.125Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^802827"
+  }
 }

@@ -15,34 +15,101 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1390609",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:24.305Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Mead End is a small hamlet on the northern fringe of Bowerchalke parish in the Chalke Valley, south-west Wiltshire, about 9-11 miles from Salisbury and within the Cranborne Chase National Landscape. It sits at the source of the River Chalke, a classic chalk stream that flows north to join the River Ebble near Broad Chalke. Along with Misselfore and Woodminton it is one of the outlying hamlets of Bowerchalke, a sought-after village whose 13th-century Church of the Holy Trinity is the burial place of Nobel laureate William Golding, author of Lord of the Flies.",
+  "character": "A tiny, tranquil chalk-stream hamlet of houses and farmland on the edge of a pretty downland village, deep in protected AONB countryside.",
+  "amenities": [
+    "No shops or pub in the hamlet itself",
+    "Bowerchalke village (adjoining) has a Saturday village-hall market and a cricket club",
+    "Neighbouring Broad Chalke has the Queens Head pub, a community shop and tearoom, GP surgery and primary school",
+    "Superfast broadband available; main shopping in Salisbury"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Broad Chalke CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1.4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 9-11 miles down the Chalke Valley; Salisbury Reds bus runs through the area",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury, or from Tisbury station (~6 miles) on the same Exeter-Waterloo line",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A very small hamlet of period and detached houses (Mead End House extends to over 2,300 sq ft, for example), within a Conservation Area that limits further development, so sales are infrequent and values sit high. Use the SP5 sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking and fly-fishing along the River Chalke chalk stream",
+    "The Bowerchalke Downs SSSI chalk grassland and Marleycombe Down (popular with paragliders)",
+    "Garston Wood RSPB reserve nearby",
+    "The Chalke Valley History Festival each June"
+  ],
+  "placesToEat": [
+    "The Queens Head, Broad Chalke (~1-2 miles)"
+  ],
+  "pros": [
+    "Beautiful, secluded Chalke Valley and Cranborne Chase setting",
+    "At the source of a classic chalk stream with excellent walking",
+    "Strong community life in adjoining Bowerchalke and nearby Broad Chalke"
+  ],
+  "cons": [
+    "No amenities within the hamlet itself",
+    "Car-dependent and around 9-11 miles from Salisbury",
+    "Very limited, higher-priced housing stock"
+  ],
+  "whoItSuits": "Buyers wanting a peaceful chalk-stream hamlet in protected countryside, with village amenities a short drive away.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://wikishire.co.uk/wiki/Bowerchalke",
+      "label": "Bowerchalke - Wikishire (hamlets incl. Mead End)"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol13/pp28-35",
+      "label": "VCH Wiltshire vol. 13: Bower Chalke - British History Online"
+    },
+    {
+      "url": "https://search.savills.com/property-detail/gbsarscli722764",
+      "label": "Mead End, Bowerchalke property (amenities) - Savills"
+    },
+    {
+      "url": "https://www.streetcheck.co.uk/postcode/sp55bw",
+      "label": "Mead End SP5 5BW services/schools/stations - StreetCheck"
+    },
+    {
+      "url": "https://hwwhite.co.uk/the-chalke-valley/bowerchalke/",
+      "label": "Bowerchalke area guide - Whites Estate Agents"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:24.305Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1390609"
+  }
 }

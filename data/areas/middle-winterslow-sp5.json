@@ -15,34 +15,111 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1390526",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:29.114Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Middle Winterslow is one of the linked Winterslow villages about 6 miles north-east of Salisbury, lying just south of the A30 London Road on the old Roman road between Old Sarum and Winchester. It is the service centre of the roughly 2,000-strong Winterslow parish, holding the primary school, the village shop and Post Office, the main pub, the doctors' surgery, a church and the modern village hall. The Clarendon Way long-distance footpath runs through the village.",
+  "character": "A settled, community-minded chalk-downland village strung along quiet lanes, mixing older flint-and-brick cottages with post-1960s housing amid surrounding farmland and woodland.",
+  "amenities": [
+    "Winterslow CE Primary School",
+    "One Stop village shop with full Post Office (Middleton Road)",
+    "The Lord Nelson Arms pub and brasserie (Middleton)",
+    "Doctors' surgery",
+    "Winterslow Village Hall with tennis court and recreation grounds",
+    "Cricket club and a range of village clubs/societies",
+    "Parish church plus Methodist and Baptist chapels"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/148677",
+      "name": "Winterslow Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "in village"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "Roughly 6-9 miles into the city via the A30/London Road.",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury (about 9 miles) on SWR; Grateley station (about 8 miles) reaches Waterloo in around 85 min. Dean is the nearest station (request stop, about 5 miles) but has a sparse service.",
+        "typical": "~90 min"
+      },
+      {
+        "to": "Andover",
+        "mode": "Drive",
+        "notes": "Via the A30 for A303 connections east/west.",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Sold prices across Winterslow averaged roughly £520,000 in the year to late 2025 - well above the Salisbury town average of about £338,000 - reflecting a market led by detached houses and period cottages. Smaller terraces and ex-local-authority homes (e.g. around Saxon Leas) start in the high £200,000s, while larger houses on lanes such as Middleton can exceed £700,000.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/winterslow.html"
+  },
+  "thingsToDo": [
+    "Walk or cycle the Clarendon Way long-distance path through the village",
+    "Visit the New Art Centre sculpture park and gallery at Roche Court, East Winterslow",
+    "Explore Bentley Wood on the parish edge, known for butterflies and woodland birds",
+    "Sunday lunch at a traditional village pub"
+  ],
+  "placesToEat": [
+    "The Lord Nelson Arms (pub and brasserie, Middleton)",
+    "The Lion's Head at The Common"
+  ],
+  "pros": [
+    "A genuine working village with a primary school, shop/Post Office, pub, surgery and active community life",
+    "Quick access to the A30 and A303 and to Salisbury's mainline station for London commuting",
+    "Surrounded by chalk downland, the Clarendon Way and Bentley Wood for walking and wildlife"
+  ],
+  "cons": [
+    "A strung-out layout means some homes are a walk from the shop and school, and retail is limited to a convenience store",
+    "Car-dependent: the nearest mainline station and full supermarkets are several miles away in Salisbury or at Grateley",
+    "House prices sit well above the Salisbury average"
+  ],
+  "whoItSuits": "Families and downsizers who want a real village community with a school and pub within easy reach of Salisbury and good A-road links, and who don't mind relying on a car.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://winterslow.parish.uk/",
+      "label": "Winterslow Parish (parish.uk) - parish profile & Census 2021"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/148677",
+      "label": "Winterslow CE Primary School - Get Information About Schools (Ofsted: Good, 2024)"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Winterslow",
+      "label": "Winterslow - Wikishire (history, churches, pubs, Clarendon Way)"
+    },
+    {
+      "url": "https://hwwhite.co.uk/salisbury/the-winterslows/",
+      "label": "The Winterslows - H. W. White estate-agent area guide"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/winterslow.html",
+      "label": "Rightmove house prices - Winterslow"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:29.114Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1390526"
+  }
 }

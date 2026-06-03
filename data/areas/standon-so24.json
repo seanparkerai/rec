@@ -15,34 +15,126 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1803975",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:57.331Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Standon is a tiny hamlet in the civil parish of Hursley in the City of Winchester district of Hampshire, lying about half a mile north of Hursley village where the A3090 curves towards Winchester, roughly midway between Winchester and Romsey. It is a small group of houses and farms set in rolling countryside; the Victoria County History describes it as a cluster of cottages and farmsteads north of Hursley. It has no facilities of its own, with the village church, primary school and pubs in Hursley, and full amenities in Winchester (~4-5 miles).",
+  "character": "A very small, quiet rural hamlet of houses and farmsteads on rising ground between Hursley and Winchester. The feel is secluded and agricultural, with countryside walks nearby and the well-kept village of Hursley (known for its tall chimneys) close at hand.",
+  "amenities": [
+    "No shop or pub in Standon itself",
+    "Village shop area, All Saints Church, primary school and two pubs (King's Head, The Dolphin) in Hursley (~0.5 mi)",
+    "IBM Hursley Park nearby (major local employer)",
+    "Full shopping, supermarkets and services in Winchester (~4-5 mi)",
+    "Chandler's Ford retail and rail (~4 mi)"
+  ],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116361",
+      "name": "John Keble CofE Primary School, Hursley",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good (June 2023)",
+      "distance": "~0.5 mile"
+    },
+    {
+      "url": "https://www.kings-winchester.hants.sch.uk/",
+      "name": "Kings' School, Winchester",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via the A3090; mainline station to London Waterloo",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "Via the A3090 the other direction",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via Chandler's Ford and the M3/M27",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester station (SWR), drive ~12 min to the station",
+        "typical": "~1h"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Hursley and Standon are a sought-after location between Winchester and Romsey; housing is dominated by detached and period country houses, commonly £600k-£1.5m+ with larger properties well above. Stock is very limited and sells quickly.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walking around Merdon Castle earthworks and Hursley Park estate",
+    "Countryside footpaths between Hursley and Farley Mount Country Park",
+    "Hursley village (Church of All Saints, historic cottages)",
+    "Easy access to Winchester's culture, cathedral and shops"
+  ],
+  "placesToEat": [
+    "The King's Head, Hursley (~0.5 mi)",
+    "The Dolphin, Hursley (16th-century coaching inn)",
+    "Wide choice of restaurants in Winchester (~4-5 mi)"
+  ],
+  "pros": [
+    "Quiet, secluded setting midway between Winchester and Romsey",
+    "Good village primary (John Keble) and two pubs in Hursley nearby",
+    "Quick drive to Winchester's mainline and amenities",
+    "Attractive countryside and country park within reach"
+  ],
+  "cons": [
+    "Very small hamlet with no amenities of its own; car essential",
+    "Expensive and very limited housing stock",
+    "A3090 traffic on the approach",
+    "No station within walking distance"
+  ],
+  "whoItSuits": "Buyers wanting a small, secluded country hamlet with good schooling in Hursley and a short commute to Winchester, with a budget for the premium local market.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~4-5 miles); Chandler's Ford (~4 miles)",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Hursley",
+      "label": "Wikipedia - Hursley (Standon)"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp417-422",
+      "label": "British History Online - Parishes: Hursley"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116361",
+      "label": "Ofsted - John Keble CofE Primary School"
+    },
+    {
+      "url": "https://search.savills.com/list/property-for-sale/england/hampshire/standon/so21",
+      "label": "Savills - Standon area guide"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/SO21.html",
+      "label": "Rightmove - SO21 house prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:57.331Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1803975"
+  }
 }

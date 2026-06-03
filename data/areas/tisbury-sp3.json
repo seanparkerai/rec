@@ -15,34 +15,126 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809006",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:07.694Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Tisbury is the largest village in Wiltshire's Nadder Valley, around 13 miles west of Salisbury, with a population of roughly 2,000-2,500. It sits within the Cranborne Chase National Landscape (AONB) on the River Nadder, and has its own railway station on the main West of England line. The 12th-century parish church of St John the Baptist stands beside one of the oldest yew trees in Britain, and nearby Place Farm holds one of the largest surviving tithe barns in the UK.",
+  "character": "A thriving, well-heeled but unpretentious village with a bustling independent high street, often cited in best-places-to-live lists for combining genuine rural character with strong amenities and rail links.",
+  "amenities": [
+    "Tisbury railway station (West of England line)",
+    "Co-op food store and independent grocers",
+    "Boots pharmacy",
+    "Independent delicatessen, butcher, fishmonger and florist",
+    "Pubs including The South Western",
+    "Cafes and Beckford Bottle Shop",
+    "Messums West art gallery (tithe barn)",
+    "Nadder Centre community hub and library",
+    "Open-air heated swimming pool (May-September)",
+    "Post office and bank facilities"
+  ],
+  "schools": [
+    {
+      "url": "https://www.stjohnstisbury.wilts.sch.uk/",
+      "name": "St John's CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~0.3 miles"
+    },
+    {
+      "url": null,
+      "name": "The Nadder Centre / Nadder Valley schools (secondary in nearby Wilton/Salisbury)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "varies"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "One stop on the West of England line",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~13 miles via A30",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct South Western Railway service, roughly hourly",
+        "typical": "~1h 45m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "An upmarket Nadder Valley village; period cottages, converted farm buildings and family homes command a premium versus surrounding hamlets given the station and amenities. Check the Rightmove link for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Messums West contemporary art gallery in the historic tithe barn",
+    "Walks through Oddford Vale and the Fonthill Estate",
+    "Open-air heated lido (summer)",
+    "Visit St John the Baptist church and its ancient yew",
+    "Explore nearby Wardour Castle and Pythouse"
+  ],
+  "placesToEat": [
+    "The South Western (Victorian railway pub/hotel)",
+    "Beatons Tea Room and bookshop",
+    "Beckford Bottle Shop (wine, cheese, charcuterie)",
+    "Village cafes and delicatessen"
+  ],
+  "pros": [
+    "Own railway station with direct London and Salisbury services",
+    "Exceptional range of independent shops for a village its size",
+    "Set in Cranborne Chase National Landscape with dark-sky status",
+    "Strong community spirit and cultural offer (Messums gallery, festivals)"
+  ],
+  "cons": [
+    "House prices carry a premium over neighbouring hamlets",
+    "London commute is long at ~1h 45m each way",
+    "Limited secondary schooling within the village itself"
+  ],
+  "whoItSuits": "Buyers wanting a genuine, amenity-rich rural village with rail access who are willing to pay a premium for connectivity and character.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury (on site)",
+  "primarySupermarket": "Co-op, Tisbury High Street",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.visitwiltshire.co.uk/towns-and-villages/tisbury-p441853",
+      "label": "Visit Wiltshire - Tisbury"
+    },
+    {
+      "url": "https://tisbury-pc.gov.uk/",
+      "label": "Tisbury Parish Council"
+    },
+    {
+      "url": "https://wilts.muddystilettos.co.uk/best-places-to-live/wiltshire/tisbury/",
+      "label": "Muddy Stilettos - Best Places to Live: Tisbury"
+    },
+    {
+      "url": "https://www.thetrainline.com/train-times/tisbury-to-london-waterloo",
+      "label": "Trainline - Tisbury to London Waterloo times"
+    },
+    {
+      "url": "https://www.hiddenwiltshire.com/post/tisbury-and-oddford-vale",
+      "label": "Hidden Wiltshire - Tisbury and Oddford Vale"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:07.694Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809006"
+  }
 }

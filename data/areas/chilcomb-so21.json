@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Chilcomb is a Hampshire village/locality in the SO21 area with a long rural settlement history and close links to nearby market towns. Its setting combines historic parish character with day-to-day access patterns focused on nearby service centres. Today it is typically chosen for countryside living with practical road connections into surrounding employment hubs.",
   "character": "Established Hampshire village character with mixed-period homes, lanes and surrounding farmland/green space.",
   "amenities": [
@@ -107,8 +110,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:32.895Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

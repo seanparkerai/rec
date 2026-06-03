@@ -15,34 +15,115 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1704351",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:54.429Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Ford is a small village (historically a hamlet, originally Winterbourne Ford) in the Laverstock and Ford parish of Wiltshire, lying at a crossing of the River Bourne about 2 miles north-north-east of Salisbury city centre and bordered by Old Sarum to the north-west. It has around 185 homes and a population of roughly 475, retaining a clearly defined identity separate from Salisbury, with a 19th-century corn mill still standing over a channel of the Bourne. Wiltshire Council designates it a small village where only infill development is normally permitted.",
+  "character": "A quiet riverside enclave of mostly detached houses on the edge of Salisbury, semi-rural in feel but with the city and Old Sarum close at hand.",
+  "amenities": [
+    "River Bourne and historic 19th-century corn mill",
+    "Laverstock and Ford Sports Club (football and cricket)",
+    "Adjacent to Old Sarum with its shops, eateries and English Heritage monument",
+    "No shops or pub within Ford itself; everyday shopping at Old Sarum and Salisbury"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/149207",
+      "name": "Old Sarum Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1 mile"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Wyvern_St_Edmund%27s",
+      "name": "Wyvern St Edmund's Academy",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~2 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 2.5 miles into the city centre",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "Nearest mainline station; London Waterloo to Exeter line",
+        "typical": "Salisbury station ~2.5 miles"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Salisbury station",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Predominantly detached family houses, some on generous riverside plots; SP4 properties here generally sell from the mid hundreds of thousands of pounds into seven figures for the larger homes.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/sp4.html"
+  },
+  "thingsToDo": [
+    "Riverside and downland walks along the River Bourne and up to Old Sarum",
+    "Exploring Old Sarum Iron Age hillfort and castle (English Heritage)",
+    "Castle Hill Country Park and River Bourne Community Farm nearby"
+  ],
+  "placesToEat": [
+    "The Beehive, Old Sarum (nearby pub and restaurant)",
+    "Wide choice of pubs, cafes and restaurants in Salisbury"
+  ],
+  "pros": [
+    "Distinct riverside village within 2 miles of Salisbury",
+    "Strong, recently built primary schooling at Old Sarum and secondary at Laverstock",
+    "Quick access to the city, Old Sarum and the A303/A36"
+  ],
+  "cons": [
+    "No shop, pub or regular bus service within Ford itself",
+    "High reliance on cars (most households run two or more)",
+    "Limited housing turnover under infill-only planning policy"
+  ],
+  "whoItSuits": "Families and professionals wanting a quiet riverside village on the edge of Salisbury with good schools nearby, who are happy to rely on a car.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://laverstockford-pc.gov.uk/",
+      "label": "Laverstock and Ford Parish Council"
+    },
+    {
+      "url": "https://www.lfcnp.co.uk/communities/ford/",
+      "label": "Ford - Laverstock & Ford Communities Neighbourhood Plan"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Laverstock",
+      "label": "Laverstock (incl. Ford hamlet) - Wikipedia"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/149207",
+      "label": "Old Sarum Primary School - GOV.UK"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Wyvern_St_Edmund%27s",
+      "label": "Wyvern St Edmund's Academy - Wikipedia"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:54.429Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1704351"
+  }
 }

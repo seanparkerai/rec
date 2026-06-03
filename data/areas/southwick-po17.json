@@ -15,34 +15,119 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1195419",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:56.285Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Southwick is a historic estate village beneath the northern slopes of Portsdown Hill in Hampshire, a few miles north of Portsmouth and Portchester. It is famous as the 'D-Day Village': from nearby Southwick House, General Eisenhower made the final decision to launch Operation Overlord in June 1944. Unusually, the village is still effectively a feudal estate, largely owned by one family (the Thistlethwaytes) since the 16th century, which has kept its mix of medieval, Georgian and Victorian cottages immaculate (all with the estate's trademark deep-red front doors).",
+  "character": "An exceptionally well-preserved, estate-owned village around a green, rich in D-Day heritage and unusually generous in amenities for its small size.",
+  "amenities": [
+    "Two pubs: the Golden Lion (WWII officers' mess) and the Red Lion (Grade II listed)",
+    "Southwick Stores and Tea Rooms",
+    "Southwick Brewhouse (Scheduled Ancient Monument, Victorian steam brewery)",
+    "D-Day Memorial Hall (built 1995)",
+    "Village green with the original water pump",
+    "Early medieval church and priory ruins",
+    "Southwick Brewery",
+    "Annual Southwick Revival D-Day event"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in Wickham/Denmead/Portchester area",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2-4 miles"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Fareham/Portsmouth area",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4-5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Portsmouth",
+        "mode": "Drive",
+        "notes": "Via Portsdown Hill / A3",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Fareham",
+        "mode": "Drive",
+        "notes": "~4 miles",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Portchester or Cosham stations",
+        "typical": "~1h 45m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Much of the village is estate-owned, so sales are relatively rare; period and listed cottages are highly sought after when available. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/PO17.html"
+  },
+  "thingsToDo": [
+    "Southwick Brewhouse museum (Scheduled Ancient Monument)",
+    "D-Day Memorial Hall and Southwick House heritage",
+    "Walks to the priory ruins and Portsdown Hill",
+    "The annual Southwick Revival 1940s weekend",
+    "Village green and historic cottages"
+  ],
+  "placesToEat": [
+    "The Golden Lion",
+    "The Red Lion",
+    "Southwick Stores and Tea Rooms"
+  ],
+  "pros": [
+    "Remarkably intact, immaculate estate village",
+    "Two characterful pubs, a shop/tea room and brewery",
+    "Outstanding D-Day and priory heritage",
+    "Quiet rural setting close to Portsmouth and Fareham"
+  ],
+  "cons": [
+    "Largely estate-owned, so few homes come to market",
+    "No railway station; car-dependent",
+    "No school in the village itself"
+  ],
+  "whoItSuits": "Buyers drawn to a unique, heritage-rich estate village near Portsmouth, who value character and history over modern convenience.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Portchester or Cosham (~2-3 miles)",
+  "primarySupermarket": "Southwick Stores; supermarkets in Fareham/Portsmouth",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://goldenlionsouthwick.co.uk/history/",
+      "label": "Golden Lion, Southwick - history"
+    },
+    {
+      "url": "https://www.southwickvillagehall.co.uk/location/",
+      "label": "Southwick D-Day Memorial Hall - location and village"
+    },
+    {
+      "url": "https://www.slow-travel.uk/post/southwick-d-day-village",
+      "label": "Slow Travel - Southwick, the D-Day Village"
+    },
+    {
+      "url": "https://www.visitsoutheastengland.com/events/southwick-revival-d-day-story-p2138721",
+      "label": "Visit South East England - Southwick Revival"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:56.285Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1195419"
+  }
 }

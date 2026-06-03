@@ -15,34 +15,134 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808847",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:04.478Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Sutton Mandeville is a small village and civil parish in the Nadder Valley towards the eastern end of the Vale of Wardour in south-west Wiltshire, lying south of the River Nadder and north of the A30 about 12 miles west of Salisbury and 2.5 miles east of the large village of Tisbury. The parish, which sits within the Cranborne Chase National Landscape (AONB), also takes in the hamlets of Sutton Row and (since 1986) Lower Chicksgrove. It is centred on the medieval All Saints Church and is a quiet farming community of around 232 people; everyday amenities, including shops and a railway station, are in nearby Tisbury.",
+  "character": "A pretty, unspoilt downland-and-watermeadow village of stone and brick cottages and farms in the Cranborne Chase AONB, strung along lanes south of the Nadder. The feel is peaceful, rural and well-kept, with chalk downs, pasture and the river providing the backdrop and a strong sense of village community.",
+  "amenities": [
+    "All Saints Church (medieval parish church)",
+    "The Compasses Inn, Lower Chicksgrove (14th-century pub with rooms, in the parish)",
+    "No general shop in the village; full shops, GP and station in Tisbury (~2.5 mi)",
+    "Tisbury railway station on the Salisbury-Exeter line",
+    "Cranborne Chase National Landscape walking on the doorstep"
+  ],
+  "schools": [
+    {
+      "url": "https://www.tisbury.wilts.sch.uk/",
+      "name": "St John's CofE (VC) Primary School, Tisbury",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2.5 miles"
+    },
+    {
+      "url": "https://www.wiltshire.gov.uk/schools-learning",
+      "name": "Nadder Valley / Tisbury area schools",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2.5-3 miles"
+    },
+    {
+      "url": "https://www.wiltshire.gov.uk/schools-learning",
+      "name": "Secondary options towards Shaftesbury / Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~8-12 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Tisbury",
+        "mode": "Drive",
+        "notes": "Nearest village with shops, services and a railway station",
+        "typical": "~8 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "Via the A30 (~12 mi)",
+        "typical": "~30 min"
+      },
+      {
+        "to": "Shaftesbury",
+        "mode": "Drive",
+        "notes": "Via the A30 (~8 mi)",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Tisbury station (~2.5 mi) on the Salisbury-Exeter line",
+        "typical": "~2h"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Sutton Mandeville is a sought-after Cranborne Chase village; housing is mostly period stone and brick cottages and detached country houses, commonly £500k-£1.2m+ with larger houses well above. Supply is limited and demand strong for Nadder Valley addresses.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Walking the Cranborne Chase AONB and Nadder Valley footpaths",
+    "Riverside and downland walks around the River Nadder",
+    "Old Wardour Castle (English Heritage, near Tisbury)",
+    "Vale of Wardour villages and country pubs"
+  ],
+  "placesToEat": [
+    "The Compasses Inn, Lower Chicksgrove (in the parish, ~1 mi)",
+    "Pubs and cafes in Tisbury (~2.5 mi)",
+    "Nadder Valley and Vale of Wardour country pubs"
+  ],
+  "pros": [
+    "Pretty, unspoilt village in the Cranborne Chase National Landscape",
+    "A characterful 14th-century pub within the parish",
+    "Tisbury's shops, services and railway station ~2.5 miles away",
+    "Outstanding downland and riverside walking"
+  ],
+  "cons": [
+    "No general shop in the village itself; car useful",
+    "AONB planning constraints on alterations and new build",
+    "London rail journeys are relatively long (~2h)",
+    "Limited and premium-priced housing stock"
+  ],
+  "whoItSuits": "Buyers seeking a pretty, peaceful Nadder Valley village in the Cranborne Chase AONB with a good village pub and Tisbury's station and amenities close by, who value countryside over fast London links.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury (~2.5 miles, Salisbury-Exeter line)",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Sutton_Mandeville",
+      "label": "Wikipedia - Sutton Mandeville"
+    },
+    {
+      "url": "https://hwwhite.co.uk/tisbury-nadder-valley/sutton-mandeville-and-chicksgrove/",
+      "label": "H W White - Sutton Mandeville & Chicksgrove area guide"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Tisbury,_Wiltshire",
+      "label": "Wikipedia - Tisbury, Wiltshire"
+    },
+    {
+      "url": "https://www.suttonmandevillepc.org/",
+      "label": "Sutton Mandeville Parish Council"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/SP3.html",
+      "label": "Rightmove - SP3 house prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:04.478Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808847"
+  }
 }

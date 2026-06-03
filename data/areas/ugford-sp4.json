@@ -15,34 +15,92 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1236343",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:09.646Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Ugford is a small hamlet on the A30 at the western boundary of Wilton, within the civil parish of Burcombe Without in the Nadder valley, about a mile west of Wilton and roughly 4-5 miles west of Salisbury. It comprises around eleven properties and a farm, and lies within the Cranborne Chase National Landscape (AONB). Much of the surrounding land is part of the tenanted Wilton Estate, and the hamlet historically formed the detached 'North Ugford' portion of South Newton parish before being divided between Burcombe and Wilton in 1884.",
+  "character": "A tiny, quiet roadside hamlet in protected chalk-downland and Nadder-valley countryside, with a handful of cottages and farmland.",
+  "amenities": [
+    "No shop within the hamlet itself",
+    "Shops and services about a mile away in Wilton and at Barford St Martin",
+    "Bus service runs along the A30, though most residents drive",
+    "Main shopping in Wilton and Salisbury"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 4.5 miles east along the A30",
+        "typical": "~10 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Tiny housing stock (around eleven properties), much of it historically Wilton Estate cottages, so open-market sales are infrequent. Use the wider SP2 / Wilton-and-Nadder-valley sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP2.html"
+  },
+  "thingsToDo": [
+    "Walking and riding the footpaths and bridleways of the Nadder valley and Cranborne Chase",
+    "The three-mile Punch Bowl walk from neighbouring Burcombe",
+    "Wilton House and the Wilton Shopping Village nearby"
+  ],
+  "placesToEat": [
+    "The Bear Inn, Wilton (~1 mile)",
+    "The Pembroke Arms, Wilton (~1 mile)"
+  ],
+  "pros": [
+    "Within walking distance of Wilton's shops and services",
+    "Set in the Cranborne Chase National Landscape and Nadder valley",
+    "Very quick drive into Salisbury"
+  ],
+  "cons": [
+    "Sits directly on the busy A30 (traffic noise)",
+    "No amenities within the hamlet itself",
+    "Very small, largely estate-owned housing stock"
+  ],
+  "whoItSuits": "Buyers wanting a very small rural hamlet within walking distance of Wilton and a short drive of Salisbury.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Burcombe",
+      "label": "Burcombe - Wikipedia (includes Ugford)"
+    },
+    {
+      "url": "https://cranbornechase.org.uk/about-us/parishes-town-councils-in-the-national-landscape/",
+      "label": "Parishes in the National Landscape - Cranborne Chase National Landscape"
+    },
+    {
+      "url": "http://www.burcombeparishcouncil.org/",
+      "label": "Burcombe Parish Council"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/South_Newton,_Wiltshire",
+      "label": "South Newton, Wiltshire - Wikipedia (North Ugford history)"
+    },
+    {
+      "url": "https://getoutside.ordnancesurvey.co.uk/local/ugford-clump-wiltshire",
+      "label": "Ugford Clump - Ordnance Survey GetOutside"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:09.646Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1236343"
+  }
 }
