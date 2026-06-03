@@ -24,6 +24,9 @@
     "asOf": "2026-05"
   },
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Little Sombourne (also spelled Little Somborne) is a dispersed hamlet and civil parish of 94 residents at the 2021 Census — the thirty-fourth largest parish in Test Valley borough — set on the chalk above the Somborne Stream, a tributary of the River Test, about four miles south-east of Stockbridge and seven miles north-west of Winchester. The B3049 Stockbridge–Winchester road cuts the parish in two: until the late nineteenth century almost all settlement was in the southern half near the church, while the northern Sandydown section was only sheep farms. The hamlet is now best known for All Saints' Church, a Grade II*-listed Anglo-Saxon and Norman flint chapel made redundant in the 1970s and conserved by the Churches Conservation Trust; it holds two services a year. Day-to-day life is shared with King's Somborne, the larger village a mile down the lane.",
   "character": "Open downland hamlet rather than nucleated village: a thin scatter of large farmhouses, cottages and one or two more modern properties (mostly large detached) along Sandydown Lane and the road to Up Somborne. Plenty of arable and grazing land, big views and no through traffic away from the B3049. Inside the Test Valley Special Landscape Area but outside any National Park or AONB.",
   "amenities": [
@@ -162,8 +165,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:17.860Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

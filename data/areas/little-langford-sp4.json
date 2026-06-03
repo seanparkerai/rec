@@ -15,34 +15,88 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808341",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:17.091Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Little Langford is a hamlet and former civil parish, now part of Steeple Langford parish, lying on the south side of the River Wylye in the Wylye valley, roughly 5 miles north-west of Wilton and about 10 miles from Salisbury. It is essentially Little Langford Farm together with the Grade II*-listed Norman church of St Nicholas of Mira, whose carved south doorway and tympanum date to around 1120. The former parish had a population of just 64 in 1931 and was merged into Steeple Langford in 1932; much of the land has long been part of the Wilton estate of the Earl of Pembroke.",
+  "character": "About as remote and rural as Wiltshire gets - an isolated farm and ancient church set among riverside meadows and downland, with effectively no village around them.",
+  "amenities": [
+    "No shop, pub or services within the hamlet",
+    "Nearest everyday shops and pubs in the neighbouring Langford/Wishford villages",
+    "Main shopping in Wilton and Salisbury"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "Via the A36 which runs along the Wylye valley",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station; the Warminster-Salisbury rail line passes through the valley but has no stop here",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Very few open-market transactions: the hamlet is dominated by farmland (much historically owned by the Wilton estate) and a handful of houses, so sales are rare. Use the wider SP3 Wylye-valley sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Visit the Norman Church of St Nicholas with its c.1120 carved tympanum",
+    "Walking and birdwatching along the River Wylye and its flood meadows",
+    "Explore the wider Wylye valley and nearby Grovely Wood"
+  ],
+  "placesToEat": [],
+  "pros": [
+    "Deeply peaceful, unspoilt valley-and-downland setting",
+    "Notable historic church on the doorstep",
+    "Easy A36 access to Salisbury and Warminster"
+  ],
+  "cons": [
+    "No amenities, shop, pub or school within the hamlet",
+    "Entirely car-dependent",
+    "Extremely limited housing stock - sales are rare"
+  ],
+  "whoItSuits": "Buyers wanting maximum rural seclusion in the Wylye valley and willing to drive for all amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Little_Langford",
+      "label": "Little Langford - Wikipedia"
+    },
+    {
+      "url": "https://www.britainexpress.com/counties/wiltshire/churches/little-langford.htm",
+      "label": "Church of St Nicholas, Little Langford - Britain Express"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol15/pp178-183",
+      "label": "VCH Wiltshire vol. 15: Little Langford - British History Online"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Steeple_Langford",
+      "label": "Steeple Langford - Wikipedia"
+    },
+    {
+      "url": "https://apps.wiltshire.gov.uk/communityhistory/Community/Index/212",
+      "label": "Steeple Langford - Wiltshire Community History"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:17.091Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808341"
+  }
 }

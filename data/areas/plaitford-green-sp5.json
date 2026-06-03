@@ -15,34 +15,98 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1597305",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:41.904Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Plaitford Green is a small rural locality in the north of Plaitford parish, in the extreme south-east corner of Wiltshire (post town Salisbury) right against the Hampshire border, about 5 miles west of Romsey and roughly 10-11 miles south-east of Salisbury. It lies near Plaitford Wood and Boulder Wood on the northern edge of the New Forest. The wider parish of Plaitford is small, low-lying and wholly agricultural, with the 13th-century church of St Peter and most of the population gathered along the old Salisbury-Southampton road (A36) to the south.",
+  "character": "A quiet, wooded and agricultural corner on the New Forest fringe, with scattered houses, woodland and common land rather than a centre.",
+  "amenities": [
+    "No shops or services at the Green itself",
+    "The Shoe Inn pub sits on the A36 in Plaitford parish to the south",
+    "Everyday shops and a school in neighbouring West Wellow",
+    "Fuller shopping in Romsey and Salisbury"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 11 miles via the A36",
+        "typical": "~20-25 min"
+      },
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "Around 5 miles east",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Romsey or Salisbury stations",
+        "typical": "~90 min+"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A small, rural part of an agricultural parish on the New Forest edge, with limited and infrequently-traded housing stock. Use the SP5 sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking in Plaitford Wood and Boulder Wood",
+    "The New Forest National Park on the doorstep",
+    "Plaitford Common and the historic St Peter's Church",
+    "Riding and cycling the quiet lanes and forest tracks"
+  ],
+  "placesToEat": [
+    "The Shoe Inn, Plaitford (on the A36)"
+  ],
+  "pros": [
+    "Peaceful, wooded edge-of-New-Forest setting",
+    "Good A36 access to Salisbury, Romsey and Southampton",
+    "Amenities of West Wellow close by"
+  ],
+  "cons": [
+    "No amenities at the Green itself",
+    "Car-dependent for everything",
+    "Close to the busy A36; very limited housing stock"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, wooded spot on the New Forest fringe with strong road links, happy to use West Wellow and Romsey for amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Romsey",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Plaitford",
+      "label": "Plaitford - Wikipedia"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/hants/vol4/pp542-543",
+      "label": "VCH Hampshire vol. 4: Plaitford (names Plaitford Green)"
+    },
+    {
+      "url": "https://www.genuki.org.uk/big/eng/WIL/Plaitford",
+      "label": "GENUKI: Plaitford, Wiltshire"
+    },
+    {
+      "url": "https://www.getthedata.com/plaitford/where-is-plaitford",
+      "label": "Where is Plaitford? (SP5, post town Salisbury) - GetTheData"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Plaitford",
+      "label": "Plaitford - Wikishire"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:41.904Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1597305"
+  }
 }

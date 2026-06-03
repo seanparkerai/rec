@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Braishfield is a Hampshire village north-east of Romsey, known for its spring flowers and elevated views over Test Valley countryside. It has long agricultural roots and retains a classic village form centred on parish life and local lanes. Today it offers a desirable rural setting within practical reach of Romsey, Winchester and Southampton routes.",
   "character": "Traditional village with period homes, parish institutions and strong community identity.",
   "amenities": [
@@ -107,8 +110,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:19.045Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

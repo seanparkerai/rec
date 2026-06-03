@@ -15,34 +15,130 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1493109",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:30.625Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Monkwood is a small rural hamlet in the south of Ropley civil parish, in the East Hampshire district, lying between Ropley, Four Marks and West Tisted around 3-4 miles south-west of Alton and a similar distance east of New Alresford. It is a dispersed settlement spread along Petersfield Road, Hill Farm Road and Smugglers Lane, with historic buildings including the 15th-century former Smugglers inn and a Victorian mission hall. The hamlet has no shops or pubs of its own; everyday services are in Ropley and Four Marks, with fuller facilities in Alresford and Alton. Much of the surrounding area lies close to the South Downs National Park.",
+  "character": "A quiet, leafy hamlet of farmhouses, barn conversions and detached country houses scattered along narrow lanes in rolling chalk-and-clay countryside. The feel is private and agricultural, with no through traffic, footpaths nearby and a small, settled rural community.",
+  "amenities": [
+    "No shop or pub in the hamlet itself",
+    "Village shop, primary school and pub in Ropley (~1.5-2 mi)",
+    "Shops and services in Four Marks (~2 mi) on the A31",
+    "Full shopping, supermarkets and stations at New Alresford and Alton (~4 mi)",
+    "Monkwood Mission Hall and nearby Church of St Mary Magdalene"
+  ],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116312",
+      "name": "Ropley CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good (Nov 2022)",
+      "distance": "~2 miles"
+    },
+    {
+      "url": "https://www.fourmarksprimary.com/",
+      "name": "Four Marks CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~2 miles"
+    },
+    {
+      "url": "https://www.eggars.net/",
+      "name": "Eggar's School, Alton",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Alton",
+        "mode": "Drive",
+        "notes": "Nearest mainline station (SWR to London Waterloo)",
+        "typical": "~12 min"
+      },
+      {
+        "to": "New Alresford",
+        "mode": "Drive",
+        "notes": "Watercress Line heritage railway and town amenities",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via the A31/A272",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Alton station (SWR), drive ~12 min to the station",
+        "typical": "~1h 5m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Monkwood's housing is dominated by detached houses and barn conversions; local agents report area sale prices broadly in the £400k-£700k+ range for the GU34/SO24 fringe, with larger country houses running well above. Stock is limited and turns over slowly.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/GU34.html"
+  },
+  "thingsToDo": [
+    "Walking and cycling the lanes and footpaths around Ropley and the South Downs fringe",
+    "Mid Hants Watercress Line heritage railway (Alresford-Alton)",
+    "Selborne and Gilbert White's House (a short drive south-east)",
+    "Hinton Ampner gardens (National Trust, near Alresford)"
+  ],
+  "placesToEat": [
+    "Pubs in Ropley and Four Marks (nearest, ~2 mi)",
+    "Wide choice of pubs, cafes and restaurants in New Alresford (~4 mi)",
+    "Restaurants and pubs in Alton (~4 mi)"
+  ],
+  "pros": [
+    "Quiet, private rural hamlet with low traffic and open countryside",
+    "Good local primary schools at Ropley and Four Marks",
+    "Reasonable reach of Alton mainline (London Waterloo in ~1h)",
+    "Close to South Downs National Park walking and the Watercress Line"
+  ],
+  "cons": [
+    "No shops, pub or school within the hamlet; car essential",
+    "Limited, slow-moving and often expensive housing stock",
+    "Rural broadband and mobile coverage can be variable",
+    "No mainline station within walking distance"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, countryside hamlet with good local primary schooling and a manageable drive to Alton's mainline and Alresford's amenities, who don't need facilities on the doorstep.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (~6 miles, SWR mainline) or Petersfield (~6.5 miles); Ropley (Watercress Line heritage) nearer in Ropley parish",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Monkwood",
+      "label": "Monkwood - Wikipedia"
+    },
+    {
+      "url": "https://www.streetcheck.co.uk/postcode/so240hf",
+      "label": "Monkwood, Alresford SO24 0HF - StreetCheck"
+    },
+    {
+      "url": "https://www.geostats.co.uk/postcode/so24-0",
+      "label": "SO24 0 postcode sector (incl. Monkwood) - Geostats"
+    },
+    {
+      "url": "https://www.streetcheck.co.uk/postcode/so240hb",
+      "label": "Petersfield Road, Monkwood, Alresford SO24 0HB - StreetCheck"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:30.625Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1493109"
+  }
 }

@@ -15,34 +15,101 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810197",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:24.370Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Woodminton is a small hamlet on the south-western edge of Bowerchalke parish in the Chalke Valley, south-west Wiltshire, about 11-12 miles from Salisbury and within the Cranborne Chase National Landscape close to the Dorset and Hampshire borders. Recorded as a group of houses and cottages since the 16th century, it strings along a lane off the Broad Chalke-Sixpenny Handley road, with surviving thatched cottages and 19th/20th-century houses. It gives its name to Woodminton Down, part of the Bowerchalke Downs SSSI chalk grassland.",
+  "character": "A tiny, quiet hamlet of period cottages and farmhouses scattered along a country lane beneath species-rich chalk downland, deep in protected AONB countryside.",
+  "amenities": [
+    "No shops or pub in the hamlet itself",
+    "Bowerchalke village has a monthly village-hall market and the Chalke Valley Cricket Club",
+    "Broad Chalke (~3 miles) has a pub, community shop/cafe, GP surgery and primary school",
+    "Sixpenny Handley (~4 miles) has a primary school, nursery and a well-known butcher"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Broad Chalke CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3.1 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 11-12 miles; Salisbury Reds bus serves the valley",
+        "typical": "~25-30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury, or from Tisbury station (~6 miles) on the Exeter-Waterloo line",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A very small hamlet of period and farm houses (e.g. the brick-and-flint Woodminton Farmhouse, c.1860) within a Conservation Area, so sales are rare and values sit high. Use the SP5 sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking the Bowerchalke Downs SSSI (Woodminton, Marleycombe and Knowle Downs)",
+    "Paragliding country on Marleycombe Down",
+    "Chalk-stream walks along the River Chalke and Garston Wood RSPB reserve nearby",
+    "The Chalke Valley History Festival each June"
+  ],
+  "placesToEat": [
+    "The Queens Head, Broad Chalke (~3 miles)"
+  ],
+  "pros": [
+    "Beautiful, secluded Chalke Valley and Cranborne Chase setting",
+    "Species-rich chalk downland and excellent walking on the doorstep",
+    "Village amenities at Bowerchalke, Broad Chalke and Sixpenny Handley nearby"
+  ],
+  "cons": [
+    "No amenities within the hamlet itself",
+    "Car-dependent and around 11-12 miles from Salisbury",
+    "Very limited, higher-priced housing stock"
+  ],
+  "whoItSuits": "Buyers seeking a tranquil downland hamlet in protected countryside, content to drive a few miles for village amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://wikishire.co.uk/wiki/Bowerchalke",
+      "label": "Bowerchalke - Wikishire (hamlets incl. Woodminton)"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol13/pp28-35",
+      "label": "VCH Wiltshire vol. 13: Bower Chalke (Woodminton history)"
+    },
+    {
+      "url": "https://search.savills.com/com/en/property-detail/gbsarssas210265",
+      "label": "Woodminton, Bowerchalke property (amenities) - Savills"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Bowerchalke_Downs",
+      "label": "Bowerchalke Downs SSSI - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/the-chalke-valley/bowerchalke/",
+      "label": "Bowerchalke area guide - Whites Estate Agents"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:24.370Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810197"
+  }
 }

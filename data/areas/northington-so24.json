@@ -15,34 +15,95 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801724",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:35.614Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Northington is a small village and civil parish in the City of Winchester district, set in the chalk-stream Candover Valley about 4 miles north of Alresford. With its neighbours Swarraton and Totford it had a combined population of around 221 at the 2011 census. The village is best known for The Grange at Northington, a Grade I listed neo-classical mansion in the form of a Greek temple, cared for by English Heritage and home each summer to The Grange Festival opera; the surrounding estate was the ancestral home of the Baring family.",
+  "character": "A quiet, sparsely populated estate village in one of Hampshire's most unspoilt chalk valleys, all rolling fields, hedgerows and the seasonal Candover Brook.",
+  "amenities": [
+    "The Grange at Northington (English Heritage; exterior open to visitors) and The Grange Festival",
+    "Parish church and active Candover Valley community life",
+    "The community-owned Candover Valley Store and Post Office at nearby Preston Candover",
+    "The Yew Tree pub at nearby Lower Wield",
+    "No shop or pub in Northington itself - facilities are spread across the valley"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Alresford",
+        "mode": "Drive",
+        "notes": "About 4 miles south for shops; Alresford has the heritage Watercress Line but no mainline service",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Nearest mainline station, about 9 miles; Micheldever station is closer but has fewer trains",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester on South Western Railway; fastest services under an hour",
+        "typical": "~60-70 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is limited and high-value, dominated by period and estate houses and a handful of cottages, with very low transaction volumes; the unspoilt Candover Valley setting commands a strong premium. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Visiting The Grange at Northington and attending The Grange Festival opera in summer",
+    "Walking the Candover Valley footpaths and over Abbotstone Down",
+    "Touring the wider valley's vineyards, community store and the buried Norman crypt church at Chilton Candover"
+  ],
+  "placesToEat": [
+    "The Yew Tree at Lower Wield (destination country pub)",
+    "Cafe and events at the Candover Valley Store, Preston Candover"
+  ],
+  "pros": [
+    "Exceptionally unspoilt, peaceful chalk-valley setting",
+    "Cultural draw of The Grange and its summer opera festival on the doorstep",
+    "Strong, active valley community despite the rural location"
+  ],
+  "cons": [
+    "Very limited local amenities and almost no public transport",
+    "No shop, pub or school within Northington itself",
+    "Car essential for everyday life"
+  ],
+  "whoItSuits": "Buyers seeking a tranquil, high-value estate village in a beautiful and unspoilt Hampshire chalk valley, who value seclusion over convenience.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Northington",
+      "label": "Wikipedia - Northington"
+    },
+    {
+      "url": "http://candovervalley.org/about/",
+      "label": "English Heritage / The Grange at Northington (via Candover Valley)"
+    },
+    {
+      "url": "https://www.greatbritishlife.co.uk/magazines/hampshire/25855677.everything-need-know-candover-valley-hampshire/",
+      "label": "Great British Life - Candover Valley guide"
+    },
+    {
+      "url": "http://candovervalley.org/",
+      "label": "Candover Valley - parish councils and community"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:35.614Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^801724"
+  }
 }

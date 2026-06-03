@@ -24,6 +24,9 @@
     "asOf": "2026-05"
   },
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Lower Bullington is a tiny hamlet in the Bullington civil parish of Test Valley borough, set in the chalk-stream valley of the River Dever about nine miles south-east of Andover and three miles east of the village of Sutton Scotney. The civil parish — comprising Upper Bullington and Lower Bullington — had a recorded population of just 101 at the 2001 Census. Lower Bullington sits in the valley bottom at around 60 m, while Upper Bullington runs along the parallel ridge to the north; both are off the A30 and reached by a single lane signed from Bullington Cross. The hamlet has no shop, school, pub or church of its own and shares amenities with the larger village of Barton Stacey, two miles west.",
   "character": "Sparsely settled chalk-stream hamlet: a handful of brick-and-flint cottages, a working farm and one or two larger detached properties strung along Lower Bullington Lane. Inside the Test Valley Special Landscape Area, with the Dever cress beds prominent in the landscape. No through traffic and big skies; nearest streetlight is at Sutton Scotney.",
   "amenities": [
@@ -159,8 +162,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:22.416Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

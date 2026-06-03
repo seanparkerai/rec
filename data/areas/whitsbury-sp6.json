@@ -15,34 +15,108 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1390640",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:19.729Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Whitsbury is a village and civil parish on the Hampshire/Wiltshire/Dorset border, close to Fordingbridge (about 2.5 miles) and on the edge of the Cranborne Chase National Landscape; it was part of Wiltshire until transferred to Hampshire in 1895 and had a population of around 210 in 2011. The village is a straggling north-south street of thatched and timbered houses, overlooked by the Iron Age hillfort of Whitsbury Castle Ditches. It is best known for its racehorse-training heritage: the Whitsbury gallops and Whitsbury Manor Stables have trained horses since the 19th century, most famously the great Desert Orchid.",
+  "character": "A picturesque, peaceful downland village with strong equestrian and racing roots, period cottages and far-reaching countryside and Dark Skies views.",
+  "amenities": [
+    "The Cartwheel Inn village pub",
+    "Church of St Leonard",
+    "Village hall",
+    "Everyday shops, schools and services about 2.5 miles away in Fordingbridge"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "The Burgate School and Sixth Form",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles (Fordingbridge)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 8 miles north via the A338",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Fordingbridge",
+        "mode": "Drive",
+        "notes": "Around 2.5 miles for everyday shops and services",
+        "typical": "~7 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station; no railway station locally",
+        "typical": "~90 min+"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A small, sought-after village of thatched and period cottages; recent two- and three-bedroom cottage asking prices have been around 600,000-650,000 pounds, with council tax on individual cottages seen at Band F. Use the SP6 sold-price record for fuller context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP6.html"
+  },
+  "thingsToDo": [
+    "Walk up to Whitsbury Castle Ditches Iron Age hillfort",
+    "Walking and riding on Whitsbury Down and the racing gallops",
+    "Cranborne Chase Dark Skies Reserve stargazing",
+    "Rockbourne Roman Villa nearby; the New Forest National Park a few miles east"
+  ],
+  "placesToEat": [
+    "The Cartwheel Inn, Whitsbury"
+  ],
+  "pros": [
+    "Retains a village pub and church with a strong community",
+    "Striking downland setting in the Cranborne Chase National Landscape and Dark Skies Reserve",
+    "Famous equestrian/racing heritage and excellent walking and riding",
+    "Within reach of Fordingbridge, Salisbury and the New Forest"
+  ],
+  "cons": [
+    "No village shop or school",
+    "No nearby railway station - nearest is Salisbury (~8 miles)",
+    "Car-dependent; limited and relatively pricey housing stock"
+  ],
+  "whoItSuits": "Buyers drawn to a picturesque downland village with a pub, racing heritage and superb countryside, within easy reach of Fordingbridge and Salisbury.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Whitsbury",
+      "label": "Whitsbury - Wikipedia"
+    },
+    {
+      "url": "https://mapcarta.com/17613724",
+      "label": "Whitsbury - Mapcarta (St Leonard's Church, The Cartwheel)"
+    },
+    {
+      "url": "https://marcustregoningracing.co.uk/whitsbury-facilities/",
+      "label": "Whitsbury Manor Stables - Marcus Tregoning Racing"
+    },
+    {
+      "url": "https://www.w-w.co.uk/property/whitsbury-common-fordingbridge-hampshire-sp6/",
+      "label": "Whitsbury property guide - Woolley & Wallis"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Fordingbridge",
+      "label": "Fordingbridge - Wikipedia (surrounding villages)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:19.729Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1390640"
+  }
 }

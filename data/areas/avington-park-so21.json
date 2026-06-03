@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Avington Park is a historic country-house and estate landscape east of Winchester, centred on Avington House and parkland by the River Itchen. It functions more as an estate locality than a conventional village high street, with residential appeal tied to heritage setting, open land and proximity to Winchester/Alresford.",
   "character": "Country-estate landscape character with heritage architecture and low-density residential context.",
   "amenities": [
@@ -107,8 +110,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:03.252Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

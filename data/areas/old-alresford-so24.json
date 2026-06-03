@@ -15,34 +15,114 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801723",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:37.498Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Old Alresford is a village and civil parish in Hampshire, about 0.6 miles north of the Georgian town of New Alresford and roughly 7 miles north-east of Winchester, with a population of around 599. First mentioned in an Anglo-Saxon charter of 701 as 'Alresforda' (the ford by the alder tree), it has a village green with a stream and the Grade II* church of St Mary the Virgin, a brick building of the 1750s where the naval hero Admiral George Brydges Rodney is buried. Alresford Pond, created by a 12th-century Bishop of Winchester, lies between Old and New Alresford.",
+  "character": "A tranquil, historic green-and-stream village with many listed buildings, set just across the water meadows from the amenities of New Alresford.",
+  "amenities": [
+    "Village green with stream and pond nearby",
+    "St Mary the Virgin Church (Grade II*)",
+    "Numerous listed farmhouses and country houses",
+    "Full town amenities of New Alresford within ~1 mile (shops, pubs, cafes)",
+    "Watercress Line heritage railway at New Alresford",
+    "Walks to Alresford Pond and the Alre valley"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in New Alresford (e.g. Sun Hill / The Perins catchment)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1 mile"
+    },
+    {
+      "url": null,
+      "name": "Perins School (secondary), New Alresford",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~1.5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~7 miles via B3046/A31",
+        "typical": "~15 min"
+      },
+      {
+        "to": "New Alresford",
+        "mode": "Drive",
+        "notes": "Adjacent town with full amenities",
+        "typical": "~3 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester or Alton mainline stations",
+        "typical": "~1h 15m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable village of period and listed houses beside the green; values are supported by scarcity, heritage and proximity to New Alresford and Winchester. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Walks to Alresford Pond and along the Alre valley",
+    "St Mary the Virgin Church and the Rodney tombs",
+    "Watercress Line steam railway (New Alresford)",
+    "Nearby Hinton Ampner House and Garden (National Trust)"
+  ],
+  "placesToEat": [
+    "Pubs, cafes and restaurants in adjoining New Alresford (e.g. Caracoli, The Globe on the Lake)"
+  ],
+  "pros": [
+    "Pretty village green and stream with strong heritage",
+    "Town amenities of New Alresford on the doorstep",
+    "Many listed buildings and a Grade II* church",
+    "Excellent walking around Alresford Pond"
+  ],
+  "cons": [
+    "Few amenities within the village itself (relies on New Alresford)",
+    "No railway station; nearest mainline at Winchester/Alton",
+    "Limited supply of homes keeps prices high"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, heritage-rich village green setting with the convenience of New Alresford a short stroll away.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~7 miles)",
+  "primarySupermarket": "Shops in New Alresford (~1 mile)",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Old_Alresford",
+      "label": "Old Alresford - Wikipedia"
+    },
+    {
+      "url": "https://britishlistedbuildings.co.uk/england/old-alresford-winchester-hampshire",
+      "label": "British Listed Buildings - Old Alresford"
+    },
+    {
+      "url": "http://www.alresford.org/discover.php",
+      "label": "Discover Alresford"
+    },
+    {
+      "url": "https://www.visitsoutheastengland.com/places-to-visit/alresford-p2062311",
+      "label": "Visit South East England - Alresford"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:37.498Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^801723"
+  }
 }

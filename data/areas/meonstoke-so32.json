@@ -15,34 +15,116 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
-  "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1595658",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:25.965Z"
-  },
+  "councilTaxBand": "G",
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Meonstoke is a small village on the banks of the River Meon in the South Downs National Park, in the Hampshire Meon Valley, with a population of around 833 (2011 census). It sits in a joint parish with neighbouring Corhampton and has a beautiful 12th-century church, while Corhampton holds a rare 1,000-year-old Saxon church. The village is regarded as one of the most photogenic in the valley.",
+  "character": "A picturesque, tranquil chalk-stream village in the South Downs, popular with those seeking a slower pace, with a thriving pub and well-stocked village stores.",
+  "amenities": [
+    "The Bucks Head pub (shared with Corhampton)",
+    "Meonstoke Village Stores and Post Office (well-stocked, artisan produce)",
+    "12th-century parish church",
+    "CofE Infant School and The Valley Pre-school",
+    "The Meon Hall (large village hall)",
+    "Saxon church at neighbouring Corhampton"
+  ],
+  "schools": [
+    {
+      "url": "https://www.meonvalleyfederation.hants.sch.uk/",
+      "name": "Meonstoke CofE Infant School (Meon Valley Federation)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Chapel Road, SO32 3NJ; ages 4-7)"
+    },
+    {
+      "url": null,
+      "name": "Droxford Junior and Swanmore College (secondary)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~2-5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via A32/B-roads",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester or Petersfield stations",
+        "typical": "~1h 5m"
+      },
+      {
+        "to": "Fareham/M27",
+        "mode": "Drive",
+        "notes": "South along the A32",
+        "typical": "~20 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable South Downs chalk-stream village; period houses (many pre-1900) and detached homes, with common council tax bands F and G in the older parts. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Walks along the River Meon and to Old Winchester Hill",
+    "Meonstoke and Corhampton (Saxon) churches",
+    "South Downs National Park walking and cycling",
+    "Local vineyards (Exton fizz sold at the village stores)"
+  ],
+  "placesToEat": [
+    "The Bucks Head",
+    "Meonstoke Village Stores (deli goods)",
+    "The Baker's Arms gastropub at nearby Droxford"
+  ],
+  "pros": [
+    "Idyllic chalk-stream setting in the South Downs National Park",
+    "Thriving pub and excellent village stores",
+    "Infant school and pre-school in the village",
+    "Outstanding walking on the doorstep (Old Winchester Hill)"
+  ],
+  "cons": [
+    "Only an infant school locally; juniors/secondary are in neighbouring villages",
+    "No railway station; rely on Winchester or Petersfield",
+    "A32 through the valley carries traffic and motorcyclists"
+  ],
+  "whoItSuits": "Buyers wanting a beautiful, peaceful Meon Valley village with a strong pub-and-shop community and superb walking.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield or Winchester (~10 miles)",
+  "primarySupermarket": "Meonstoke Village Stores; supermarkets in Bishop's Waltham/Winchester",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.candm-pc.gov.uk/",
+      "label": "Corhampton and Meonstoke Parish Council"
+    },
+    {
+      "url": "https://www.get-information-schools.service.gov.uk/Establishments/Establishment/Details/116301",
+      "label": "Meonstoke CofE Infant School - GOV.UK"
+    },
+    {
+      "url": "https://www.greatbritishlife.co.uk/magazines/hampshire/22576240.like-live-meon-valley/",
+      "label": "Great British Life - Living in the Meon Valley"
+    },
+    {
+      "url": "https://checkmypostcode.uk/so323nf",
+      "label": "Check My Postcode - SO32 3NF (Meonstoke) council tax/prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:25.965Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1595658"
+  }
 }

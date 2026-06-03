@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Ashley is a small rural settlement in the SO20 Stockbridge/Test Valley area, close to the River Test villages between Stockbridge and Mottisfont. It sits in classic chalk-valley countryside with farmland, fisheries and estate land shaping the immediate setting. The area functions as a quiet residential hamlet rather than a service centre, so day-to-day life depends on nearby Stockbridge and Romsey for broader amenities.",
   "character": "Very small-scale hamlet character: scattered homes, narrow lanes, and little commercial frontage; suited to buyers seeking quiet rather than a busy village core.",
   "amenities": [
@@ -131,8 +134,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:01.364Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

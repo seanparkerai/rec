@@ -15,34 +15,103 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1597304",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:14.088Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Landford Wood (also written Landfordwood, and recorded here as Lanford Wood) is a small, scattered hamlet in the civil parish of Landford in south-east Wiltshire, within the New Forest National Park, about 10 miles south-east of Salisbury and immediately north of Landford village. It lies in former Royal Forest of Melchet woodland near the Wiltshire-Hampshire border, and is one of the parish's named hamlets alongside Hamptworth and Nomansland.",
+  "character": "A very small, wooded forest-edge settlement of cottages and houses dispersed among trees along quiet lanes.",
+  "amenities": [
+    "The New Forest CE Primary School at Landford/Nomansland",
+    "Village shop, post office and the Landford Poacher pub at nearby Landford",
+    "Landford village hall",
+    "No facilities within the hamlet itself"
+  ],
+  "schools": [
+    {
+      "url": "https://www.thenewforestschool.wilts.sch.uk/",
+      "name": "The New Forest Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1.5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 10 miles north-west, partly via the A36, for shops, services and the station",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via the A36 to the south-east",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A very small stock of cottages and detached houses in a wooded New Forest setting, with low transaction volumes; the National Park location supports premium values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking and cycling in the New Forest National Park",
+    "Exploring the nearby Landford Bog and Landford Heath Sites of Special Scientific Interest",
+    "Woodland and common walks in the former Melchet forest"
+  ],
+  "placesToEat": [
+    "The Landford Poacher at Landford",
+    "The Lamb Inn at Nomansland"
+  ],
+  "pros": [
+    "Quiet, wooded New Forest National Park setting",
+    "Close to Landford's shop, pub and primary school",
+    "Easy access to the A36 for Salisbury and Southampton"
+  ],
+  "cons": [
+    "No amenities within the hamlet itself",
+    "Very small and entirely car-dependent",
+    "National Park planning constraints apply"
+  ],
+  "whoItSuits": "Buyers wanting a tiny, secluded woodland hamlet on the New Forest edge with Landford's everyday amenities close by.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Landford",
+      "label": "Wikipedia - Landford (lists Landfordwood)"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Landford",
+      "label": "Wikishire - Landford (church, school, pub, SSSIs)"
+    },
+    {
+      "url": "https://www.landfordparishcouncil.org.uk/",
+      "label": "Landford Parish Council"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/148024",
+      "label": "Ofsted - The New Forest CE Primary School (URN 148024, Good, Dec 2024)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:14.088Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1597304"
+  }
 }

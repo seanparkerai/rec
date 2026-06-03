@@ -15,34 +15,107 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1597402",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:23.078Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Witherington is a small ancient settlement and tithing in the civil parish of Downton, in the extreme south-east of Wiltshire, on rising ground near the east bank of the River Avon about 4-5 miles south-east of Salisbury. Although surveyed in the Domesday Book, it is today little more than Witherington Farm, close to Trafalgar Park, Standlynch and Charlton-All-Saints. The site is now best known locally for Witherington Farm Fishery, a set of coarse-fishing lakes.",
+  "character": "Essentially a single working farm and fishery in quiet Avon-valley countryside, with water meadows, gravel terraces and downland all around and no village around it.",
+  "amenities": [
+    "No shops, pub or services - effectively a single farm",
+    "Nearest full range of amenities in Downton (~2-3 miles): schools, shops, pubs, leisure centre and a local brewery",
+    "Alderbury village about 1.5 miles north",
+    "Main shopping in Salisbury"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Downton CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3 miles (Downton)"
+    },
+    {
+      "url": null,
+      "name": "The Trafalgar School at Downton",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles (Downton)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 4-5 miles, via the A338 Avon-valley road",
+        "typical": "~12-15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station; Downton's own station closed in 1964",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Effectively a single farm/estate holding, so there is almost no open-market housing here and sales are extremely rare. For any local context use the wider SP5 / Downton-area sold-price record.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Coarse fishing at Witherington Farm Fishery",
+    "River Avon and water-meadow walks",
+    "Trafalgar Park (Nelson's former estate) close by",
+    "The New Forest National Park within easy reach"
+  ],
+  "placesToEat": [],
+  "pros": [
+    "Very private, rural Avon-valley setting",
+    "Fishing lakes on the doorstep",
+    "Close to Downton's amenities and to Salisbury, with the New Forest nearby"
+  ],
+  "cons": [
+    "Effectively a single farm with no village or amenities",
+    "Car essential for everything",
+    "Almost no open housing market"
+  ],
+  "whoItSuits": "Those wanting a very private rural or agricultural setting in the Avon valley, within easy reach of Downton and Salisbury.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Witherington",
+      "label": "Witherington - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Downton,_Wiltshire",
+      "label": "Downton, Wiltshire - Wikipedia"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol11/pp19-77",
+      "label": "VCH Wiltshire vol. 11: Downton - British History Online"
+    },
+    {
+      "url": "https://apps.wiltshire.gov.uk/communityhistory/Community/Index/82",
+      "label": "Downton - Wiltshire Community History"
+    },
+    {
+      "url": "https://mapcarta.com/N496219028",
+      "label": "Witherington Farm / Fishery - Mapcarta"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:23.078Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1597402"
+  }
 }

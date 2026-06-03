@@ -15,34 +15,125 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809980",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:41.391Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Downton is a large, ancient village about 6 miles south of Salisbury in the Avon Valley, just outside the New Forest National Park, with a population of roughly 3,000. It straddles the River Avon and was historically a market town and a 'rotten borough' that returned two MPs before the 1832 Reform Act, evidenced today by the wide greens and burgage plots of The Borough. The village has a Grade I listed 12th-century parish church (the fourth-largest medieval parish church in Wiltshire) and The Moot, an 18th-century landscaped garden set in the ruins of a Norman earthwork castle.",
+  "character": "A thriving, self-sufficient riverside village with deep history and a strong community calendar, best known for its annual Cuckoo Fair drawing around 20,000 visitors.",
+  "amenities": [
+    "Co-op food store and village shops",
+    "Several pubs including The Bull Hotel (with EV fast charging)",
+    "Cafe and village hall with stage",
+    "Leisure centre with gym and tennis courts",
+    "Football pitch and bowling green",
+    "ATMs at the Esso garage and elsewhere",
+    "Industrial estate on the northern edge",
+    "Over 20 clubs and societies plus a village band",
+    "Award-winning local brewery"
+  ],
+  "schools": [
+    {
+      "url": "https://www.downton.wilts.sch.uk/",
+      "name": "Downton CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": "https://www.trafalgarschool.com/",
+      "name": "The Trafalgar School at Downton",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "in village (Breamore Road, SP5 3HN)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~6 miles via A338",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station, then direct South Western Railway",
+        "typical": "<1h 30m"
+      },
+      {
+        "to": "Fordingbridge / New Forest",
+        "mode": "Drive",
+        "notes": "Gateway to the New Forest",
+        "typical": "~10 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Period cottages along The Borough and riverside homes alongside modern estates; one of the more affordable larger villages south of Salisbury given it has both a primary and secondary school. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "The Moot landscaped garden and Norman castle earthworks",
+    "Downton Heritage Trail and water-meadow walks",
+    "St Laurence Church (Grade I listed)",
+    "Annual Cuckoo Fair (May)",
+    "Walk to Clearbury Ring Iron Age hillfort",
+    "Fly fishing on the River Avon"
+  ],
+  "placesToEat": [
+    "The Bull Hotel",
+    "Village pubs in The Borough and High Street",
+    "Local cafe"
+  ],
+  "pros": [
+    "Full village amenities including both primary and secondary schools",
+    "Riverside setting on the edge of the New Forest",
+    "Strong community life and events (Cuckoo Fair)",
+    "More affordable than premium Nadder Valley villages"
+  ],
+  "cons": [
+    "No railway station; rely on Salisbury for rail",
+    "Industrial estate on the village edge",
+    "Busy A338 traffic through the area"
+  ],
+  "whoItSuits": "Families wanting a large, amenity-complete village with its own secondary school and easy New Forest and Salisbury access.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~6 miles)",
+  "primarySupermarket": "Co-op, Downton",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://downtonparishcouncil.gov.uk/tourist-information/village-history",
+      "label": "Downton Parish Council - Village History"
+    },
+    {
+      "url": "https://www.visitwiltshire.co.uk/towns-and-villages/downton-p441813",
+      "label": "Visit Wiltshire - Downton"
+    },
+    {
+      "url": "http://downtonvillage.co.uk/",
+      "label": "Downton Village - amenities directory"
+    },
+    {
+      "url": "https://www.discoverdownton.uk/things-to-do",
+      "label": "Discover Downton - Things to do"
+    },
+    {
+      "url": "https://www.trafalgarschool.com/",
+      "label": "The Trafalgar School at Downton"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:41.391Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809980"
+  }
 }

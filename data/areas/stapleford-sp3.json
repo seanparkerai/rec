@@ -15,34 +15,87 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808796",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:57.850Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Stapleford is a village and civil parish about 4 miles north of Wilton and roughly 8 miles north-west of Salisbury, set on the River Till just above its confluence with the River Wylye. It lies on the B3083 where it meets the A36, within the Cranborne Chase National Landscape (AONB), and includes the small hamlet of Serrington. The parish had a population of 264 at the 2011 census; the manor was historically held by the Seymour family, including the father of Henry VIII's queen Jane Seymour.",
+  "character": "A pretty chocolate-box chalk-stream village of cottages strung along the River Till, ringed by downland and farmland.",
+  "amenities": [
+    "The 12th-century, Grade I listed Church of St Mary",
+    "Stapleford village hall",
+    "The Pelican Inn pub and restaurant (with rooms) at Serrington",
+    "No village shop - everyday shopping is in Wilton or Salisbury"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 8 miles south-east via the A36; Warminster is a similar distance to the north-west",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is mainly period cottages and detached houses in low transaction volumes; the Cranborne Chase AONB setting and chalk-stream character support premium values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Walking to the earthwork remains of Stapleford Castle, a medieval ringwork and bailey",
+    "Riverside and downland walks in the Cranborne Chase National Landscape",
+    "Visiting the Grade I listed 12th-century Church of St Mary"
+  ],
+  "placesToEat": [
+    "The Pelican Inn at Serrington/Stapleford - pub, restaurant and rooms"
+  ],
+  "pros": [
+    "Picturesque AONB chalk-stream village with a Grade I listed historic church",
+    "A well-regarded village pub and restaurant",
+    "Midway between Salisbury and Warminster"
+  ],
+  "cons": [
+    "The A36 trunk road passes the southern end of the village",
+    "No village shop or school, so a car is essential",
+    "Limited public transport"
+  ],
+  "whoItSuits": "Buyers wanting a picture-postcard AONB chalk-stream village with a good pub, within reach of both Salisbury and Warminster.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Stapleford,_Wiltshire",
+      "label": "Wikipedia - Stapleford, Wiltshire"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Stapleford,_Wiltshire",
+      "label": "Wikishire - Stapleford (church, castle, hall, pub)"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol15/pp252-263",
+      "label": "British History Online - VCH Wiltshire, Stapleford"
+    },
+    {
+      "url": "https://hwwhite.co.uk/wylye-valley/stapleford/",
+      "label": "H&W White - Stapleford (Wylye Valley)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:57.850Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808796"
+  }
 }

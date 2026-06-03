@@ -15,34 +15,121 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1390526",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:17.529Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "West Winterslow is one of the Winterslow group of settlements (with Middle Winterslow, East Winterslow and The Common) in south-east Wiltshire, about 7 miles north-east of Salisbury and just off the A30 London Road, close to the Hampshire border. It sits on the line of the Roman road and Clarendon Way long-distance path between Old Sarum and Winchester; West and East Winterslow are both recorded in Domesday. The combined Winterslow parish has a population of around 2,000. The Grade I-listed parish church of All Saints at West Winterslow dates from the early 12th century and was rebuilt in coursed flint in 1849-51.",
+  "character": "A lively, well-established village with a strong community spirit, mixing thatched cottages and period houses with later 20th-century estates, set in rolling chalk countryside.",
+  "amenities": [
+    "Village shop and Post Office (One Stop) in Winterslow",
+    "Two pubs: The Lord Nelson at Middle Winterslow and The Lion's Head at The Common",
+    "GP surgery",
+    "Large modern village hall with recreation rooms, tennis court and events",
+    "Cricket club and recreation grounds",
+    "Local primary school and pre-school"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Winterslow CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1 mile (in the village)"
+    },
+    {
+      "url": null,
+      "name": "South Wilts Grammar School",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~8 miles (Salisbury catchment)"
+    },
+    {
+      "url": null,
+      "name": "Bishop Wordsworth's School",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~8 miles (Salisbury catchment)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 7 miles via the A30; A303 also close for Andover/Winchester",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station, with services also to Southampton and Bath",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A broad mix of stock from thatched cottages to modern family homes and bungalows, generally with large gardens and countryside views; a sought-after but mid-priced commuter village. Use the SP5 sold-price record for current context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "The New Art Centre sculpture park and gallery at Roche Court (near East Winterslow)",
+    "Walking the Clarendon Way between Salisbury and Winchester",
+    "Bentley Wood nearby for woodland walks and butterflies",
+    "Village cricket club"
+  ],
+  "placesToEat": [
+    "The Lord Nelson, Middle Winterslow",
+    "The Lion's Head, The Common"
+  ],
+  "pros": [
+    "Good range of village amenities - shop/Post Office, pubs, primary school and GP surgery",
+    "Strong, active community with a large modern village hall",
+    "Easy reach of Salisbury plus A30/A303 connections",
+    "Excellent walking and woodland on the doorstep"
+  ],
+  "cons": [
+    "Secondary schooling and main supermarket shopping mean travelling to Salisbury",
+    "Effectively car-dependent",
+    "Close to the A30"
+  ],
+  "whoItSuits": "Families and Salisbury commuters wanting an active, well-served village within easy reach of the city but firmly in the countryside.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://hwwhite.co.uk/salisbury/the-winterslows/",
+      "label": "The Winterslows area guide - Whites Estate Agents"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Winterslow",
+      "label": "Winterslow - Wikishire"
+    },
+    {
+      "url": "https://www.winterslowvillagehall.org.uk/",
+      "label": "Winterslow Village Hall (amenities)"
+    },
+    {
+      "url": "https://www.cartermay.co.uk/property/west-winterslow-salisbury-sp5/",
+      "label": "West Winterslow property / school catchment - Carter & May"
+    },
+    {
+      "url": "https://www.getthedata.com/postcode/SP5-1SX",
+      "label": "SP5 1SX postcode data (locality West Winterslow) - GetTheData"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:17.529Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1390526"
+  }
 }

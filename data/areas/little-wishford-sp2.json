@@ -15,34 +15,84 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1236307",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:18.571Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Little Wishford is a small settlement in the Wylye valley in Wiltshire, lying between Great Wishford and Stoford on the western side of the river, roughly 4-5 miles north-west of Salisbury and a few miles from Wilton. It was recorded in the Domesday Book of 1086 under the combined manor of Great and Little Wishford, then held by Wilton Abbey, and is named as one of the original riverside settlements of the South Newton area alongside Stoford and Chilhampton. Today it is a very small rural cluster of farmland and houses rather than a full village.",
+  "character": "A quiet, agricultural riverside spot in the Wylye valley with a handful of properties and a strong sense of open countryside.",
+  "amenities": [
+    "No shop or pub within Little Wishford itself",
+    "Nearest pubs and services in Stoford, South Newton and Great Wishford",
+    "Main shopping in Wilton and Salisbury"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 4-5 miles via the A36 down the Wylye valley",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station; the rail line runs along the valley but the former Wishford station closed in 1955",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A very small settlement with few open-market sales; for context use the wider SP2 / lower Wylye-valley sold-price record, which spans Great Wishford, South Newton and Stoford.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP2.html"
+  },
+  "thingsToDo": [
+    "Riverside and meadow walks along the River Wylye",
+    "Visit neighbouring Great Wishford with its historic St Giles church and Oak Apple Day traditions",
+    "Walking and cycling towards Grovely Wood and National Cycle Route 24"
+  ],
+  "placesToEat": [],
+  "pros": [
+    "Peaceful riverside valley setting",
+    "Close to Salisbury and Wilton yet thoroughly rural",
+    "Good walking and cycling country on the doorstep"
+  ],
+  "cons": [
+    "No amenities within the settlement itself",
+    "Car-dependent for shops, schools and services",
+    "Very limited housing stock"
+  ],
+  "whoItSuits": "Buyers after a small, quiet Wylye-valley setting close to Salisbury who are happy to drive for amenities.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://opendomesday.org/place/XX0000/great-and-little-wishford/",
+      "label": "Great and Little Wishford - Open Domesday"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/South_Newton,_Wiltshire",
+      "label": "South Newton, Wiltshire - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Great_Wishford",
+      "label": "Great Wishford - Wikipedia"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol15/pp284-294",
+      "label": "VCH Wiltshire vol. 15: Great Wishford - British History Online"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:18.571Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1236307"
+  }
 }

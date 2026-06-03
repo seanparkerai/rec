@@ -15,34 +15,116 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810107",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:37.591Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Coombe Bissett is a village in the River Ebble valley about 3-4 miles south-west of Salisbury, on the A354 towards Blandford Forum, with a population of around 675 (2011 census). It lies within the Cranborne Chase National Landscape and has a parish church, community-run shop with Post Office, primary school and the Fox and Goose pub. The River Ebble runs through the village, and many period homes (several listed) sit near the water.",
+  "character": "A picturesque, strongly community-minded chalk-valley village with listed period properties around a village green, surrounded by downland and footpaths.",
+  "amenities": [
+    "Community-run village shop with Post Office",
+    "The Fox and Goose pub",
+    "Village hall",
+    "Parish church",
+    "Tennis, cricket and badminton clubs",
+    "Salisbury and South Wiltshire Golf Course (north of the village)",
+    "Coombe Bissett Down Nature Reserve (Wiltshire Wildlife Trust)"
+  ],
+  "schools": [
+    {
+      "url": "https://www.coombebissett.wilts.sch.uk/",
+      "name": "Coombe Bissett CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "in village (Shutts Lane, SP5 4LU)"
+    },
+    {
+      "url": null,
+      "name": "Secondary/grammar schools in Salisbury (Bishop Wordsworth's, South Wilts Grammar)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~3-4 miles via A354",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Regular bus service to Salisbury",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station (~4.6 miles)",
+        "typical": "~1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Sought-after Ebble valley village with a mix of listed period cottages and family homes; proximity to Salisbury and Cranborne Chase supports values. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Coombe Bissett Down Nature Reserve (chalk downland, rare butterflies)",
+    "River Ebble valley walks and footpaths",
+    "Golf at Salisbury and South Wiltshire Golf Course",
+    "Cycling on quiet country roads"
+  ],
+  "placesToEat": [
+    "The Fox and Goose",
+    "Eateries in nearby Salisbury"
+  ],
+  "pros": [
+    "Strong community with shop, pub, school and clubs",
+    "Beautiful Ebble valley/Cranborne Chase setting",
+    "Close to Salisbury (~10 min) and the hospital",
+    "Good walking and cycling on the doorstep"
+  ],
+  "cons": [
+    "No railway station; rely on Salisbury",
+    "Sits on the A354 with through traffic",
+    "Limited services compared with larger villages"
+  ],
+  "whoItSuits": "Buyers wanting a quintessential chalk-valley village with strong community and quick Salisbury access.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~4.6 miles)",
+  "primarySupermarket": "Community village shop; larger supermarkets in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Coombe_Bissett",
+      "label": "Coombe Bissett - Wikipedia"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/126382",
+      "label": "Coombe Bissett CofE Primary School - GOV.UK"
+    },
+    {
+      "url": "https://www.coombebissett.wilts.sch.uk/",
+      "label": "Coombe Bissett Primary School"
+    },
+    {
+      "url": "https://hwwhite.co.uk/salisbury/coombe-bissett/",
+      "label": "H&W White - Coombe Bissett"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:37.591Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810107"
+  }
 }

@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809873",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:18.889Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Whiteparish is a village and civil parish on the A27 about 7.5 miles south-east of Salisbury, sitting close to the Hampshire county border and partly within the New Forest National Park landscape. With a population of around 1,500, it has comprehensive amenities for its size including a community-run shop, primary school, surgery and a Grade II listed church (All Saints). The parish, recorded in Domesday as Frustfield, includes the hamlets of Cowesfield Green and Newton.",
+  "character": "A pretty, active village with notably strong community spirit, where residents help fund amenities such as the Memorial Centre and playground through a village lottery.",
+  "amenities": [
+    "Community-run village shop and Post Office",
+    "Whiteparish Surgery (doctors)",
+    "Whiteparish Memorial Centre (opened 2014)",
+    "Two to three pubs including The Kings Head",
+    "All Saints Church (Grade II listed) and a second church",
+    "Recreation grounds with football and cricket pitches, tennis courts, MUGA and play area",
+    "Skateboard/rollerblading park"
+  ],
+  "schools": [
+    {
+      "url": "https://www.whiteparish.wilts.sch.uk/",
+      "name": "Whiteparish All Saints CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (~150 pupils)"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Salisbury and Romsey area",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~8-10 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~7.5 miles via A27/A36",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "<1h 30m"
+      },
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "~8 miles; Waitrose and further amenities",
+        "typical": "~15 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A popular village with amenities within walking distance; period cottages and family homes (some bespoke builds by local firms) in a New Forest-fringe setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walks along the River Blackwater and into the New Forest fringe",
+    "All Saints Church",
+    "Recreation grounds and MUGA",
+    "Nearby Newhouse Estate and Dean Station heritage area"
+  ],
+  "placesToEat": [
+    "The Kings Head",
+    "Other village pubs",
+    "Newton Farmhouse Bed & Breakfast (nearby)"
+  ],
+  "pros": [
+    "Comprehensive amenities for a village its size (shop, school, surgery)",
+    "Strong, well-organised community",
+    "Edge of the New Forest National Park",
+    "Reasonable drive to both Salisbury and Romsey"
+  ],
+  "cons": [
+    "Sits directly on the busy A27",
+    "No railway station in the village (nearest at Dean, limited service)",
+    "Car-dependent for secondary schooling and bigger shops"
+  ],
+  "whoItSuits": "Families and community-minded buyers wanting a well-served village between Salisbury and the New Forest.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Dean (~2.3 miles, limited service); Salisbury for main services",
+  "primarySupermarket": "Community village shop; Waitrose in Romsey",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Whiteparish",
+      "label": "Whiteparish - Wikipedia"
+    },
+    {
+      "url": "https://www.whiteparish.co.uk/",
+      "label": "Whiteparish Community Website"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Whiteparish",
+      "label": "Whiteparish - Wikishire"
+    },
+    {
+      "url": "https://seearoundbritain.com/venues/whiteparish-post-office-and-village-shop-wiltshire",
+      "label": "Whiteparish Post Office and Village Shop - See Around Britain"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:18.889Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809873"
+  }
 }

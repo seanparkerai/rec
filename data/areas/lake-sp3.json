@@ -10,39 +10,121 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0971,
-    "lng": -1.9413
+    "lat": 51.1503,
+    "lng": -1.8113
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "manual-verified:multi-source",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808796",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:09.624Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Lake is a small hamlet on the west bank of the Hampshire Avon in the Woodford Valley, about 2.5 miles south of Amesbury and roughly 7-8 miles north of Salisbury in Wiltshire. With Wilsford and Normanton it forms the civil parish of Wilsford cum Lake (parish population 191 at the 2011 census), which sits within the Stonehenge World Heritage Site and is studded with Bronze Age round barrows. The hamlet is best known for Lake House, a chequerboard flint-and-stone manor restored by the architect Detmar Blow around 1910 and long associated with the musician Sting and Trudie Styler, whose 16th-century manor stands nearby. It is a linear riverside settlement with no shop or pub of its own; everyday needs are met in Amesbury and Salisbury.",
+  "character": "A tiny, tranquil and very private riverside hamlet of period and listed houses set among water meadows, downland and prehistoric barrows. The mood is rural, affluent and quiet, with no through traffic and footpaths and cycle routes (the Wiltshire Cycleway) running close by.",
+  "amenities": [
+    "No shop or pub in the hamlet; nearest day-to-day services in Amesbury (~2.5 mi)",
+    "Full shopping, supermarkets and amenities in Salisbury (~7-8 mi)",
+    "St Michael's parish church at Wilsford (rebuilt 1852)",
+    "Woodford Valley village hall and community facilities nearby",
+    "Footpaths and the Wiltshire Cycleway through the valley"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/138188",
+      "name": "Woodford Valley CE Primary Academy",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Requires improvement (Nov 2022; previously Outstanding 2009)",
+      "distance": "~2 miles"
+    },
+    {
+      "url": "https://www.stonehenge.wilts.sch.uk/",
+      "name": "The Stonehenge School, Amesbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "Via the Woodford Valley road / A345",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Amesbury",
+        "mode": "Drive",
+        "notes": "Nearest town for everyday needs",
+        "typical": "~8 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station (SWR), drive ~20 min to the station",
+        "typical": "~1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Lake itself rarely trades and is dominated by large period and listed houses; the wider SP3 / Woodford Valley market is firmly in the premium bracket, with detached country houses typically well into seven figures and very limited supply.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Walking and cycling the Woodford Valley and Wiltshire Cycleway",
+    "Exploring the Lake barrow group and Stonehenge World Heritage landscape",
+    "Stonehenge (a short drive north via Amesbury)",
+    "Riverside and downland footpaths along the Hampshire Avon"
+  ],
+  "placesToEat": [
+    "The Wheatsheaf, Lower Woodford (valley pub)",
+    "The Bridge Inn, Upper Woodford (riverside pub)",
+    "Wide choice of restaurants and cafes in Salisbury (~7-8 mi)"
+  ],
+  "pros": [
+    "Exceptionally quiet, private riverside setting in the Woodford Valley",
+    "Inside the Stonehenge World Heritage Site with rich archaeology and walks",
+    "Good local primary and easy reach of Salisbury's grammar and independent schools",
+    "Salisbury main line (London Waterloo) within a 20-minute drive"
+  ],
+  "cons": [
+    "No shop, pub or school within the hamlet itself; car essential",
+    "Very limited and expensive housing stock, dominated by large period houses",
+    "Heritage and conservation constraints limit alteration and new build",
+    "Seasonal visitor traffic in the wider Stonehenge area"
+  ],
+  "whoItSuits": "Buyers seeking a quiet, prestigious riverside village with strong heritage and good schools within reach, who don't need amenities on the doorstep and can budget well above the regional average.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~6-7 miles, SWR mainline); Grateley (~8 miles)",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Wilsford_cum_Lake",
+      "label": "Wilsford cum Lake (incl. Lake) - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/woodford-valley/wilsford-cum-lake/",
+      "label": "Wilsford cum Lake, Woodford Valley - H W White"
+    },
+    {
+      "url": "https://www.postcodes-uk.com/SP4-postcode-district",
+      "label": "SP4 postcode district (incl. Wilsford cum Lake) - Postcodes-UK"
+    },
+    {
+      "url": "https://www.thek6project.co.uk/2023/07/27/wilsford-cum-lake-wiltshire-sp4-7bt/",
+      "label": "Lake / Wilsford cum Lake SP4 7BT (coordinates) - The K6 Project"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:09.624Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808796"
+  }
 }

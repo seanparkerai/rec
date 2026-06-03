@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^806982",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:02.726Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Stratford-sub-Castle is a small, pretty village and ancient parish that now forms a northern edge of Salisbury, about 2 miles from the city centre, set in the Avon valley beneath the Iron Age hillfort and ruined Norman castle of Old Sarum (from which it takes its name). The oldest building is the Grade I listed 13th-century Church of St Lawrence, near where the elder William Pitt (Earl of Chatham) was first elected to Parliament for the rotten borough of Old Sarum. It blends old thatched cottages with Georgian and modern homes and enjoys village character with city amenities close by.",
+  "character": "A historic, sought-after village on Salisbury's northern fringe, combining riverside and downland scenery with the convenience of the city a short drive away.",
+  "amenities": [
+    "St Lawrence Church (Grade I listed, 13th century)",
+    "Primary school",
+    "Village reading room",
+    "Convenience store on Castle Road",
+    "The Wheatsheaf pub nearby",
+    "Regular Salisbury Reds bus into the city",
+    "Avon Valley Nature Reserve (Wiltshire Wildlife Trust) nearby",
+    "Old Sarum historic monument adjacent"
+  ],
+  "schools": [
+    {
+      "url": "https://www.stratfordsubcastle.wilts.sch.uk/",
+      "name": "Stratford-sub-Castle CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": null,
+      "name": "South Wilts Grammar School for Girls (and other Salisbury secondaries/grammars)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5-min walk to ~1 mile"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "<2 miles to the city centre",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Regular Salisbury Reds service",
+        "typical": "~10-15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "~1h 25m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A desirable, historic village within Salisbury's boundary; thatched cottages, Georgian houses and family homes near Old Sarum command strong values given the location and grammar-school proximity. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP1.html"
+  },
+  "thingsToDo": [
+    "Exploring Old Sarum (English Heritage)",
+    "St Lawrence Church and its Pitt/Nelson connections",
+    "Walks in the Avon Valley Nature Reserve (otter sightings)",
+    "Easy access to Salisbury's cathedral, shops and culture",
+    "Stonehenge ~8 miles away"
+  ],
+  "placesToEat": [
+    "The Wheatsheaf (nearby)",
+    "Wide choice in Salisbury city centre"
+  ],
+  "pros": [
+    "Village character with full city amenities under 2 miles away",
+    "Grade I church and Old Sarum heritage on the doorstep",
+    "Walking distance to South Wilts Grammar School",
+    "River Avon and nature reserve nearby"
+  ],
+  "cons": [
+    "Effectively a Salisbury suburb rather than a remote village",
+    "Limited dedicated amenities within the village",
+    "Close to the A36 ring road in places"
+  ],
+  "whoItSuits": "Buyers wanting village character with Salisbury's schools, station and shops within easy reach.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~2 miles)",
+  "primarySupermarket": "Convenience store on Castle Road; full supermarkets (John Lewis/Waitrose) in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Stratford-sub-Castle",
+      "label": "Stratford-sub-Castle - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/St_Lawrence,_Stratford-sub-Castle",
+      "label": "St Lawrence, Stratford-sub-Castle - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/woodford-valley/stratford-sub-castle/",
+      "label": "H&W White - Stratford-sub-Castle"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol6/pp199-213",
+      "label": "British History Online - Stratford-sub-Castle"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:02.726Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^806982"
+  }
 }

@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Beauworth is a small Hampshire hamlet south-east of Winchester, historically associated with agricultural land and estate holdings in the Cheriton–Kilmeston area. It remains lightly populated and strongly rural, with most practical services reached in Alresford, Winchester or nearby larger villages.",
   "character": "Low-density rural hamlet with scenic downland surroundings.",
   "amenities": [
@@ -101,8 +104,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:07.593Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

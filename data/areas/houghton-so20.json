@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Houghton is a Hampshire settlement in the SO20 area with longstanding parish and agricultural roots. It sits within a wider rural-commuter geography connected to nearby towns for day-to-day services. Current appeal is primarily village character, countryside access and practical road links across the county.",
   "character": "Rural Hampshire settlement character with mixed housing, parish identity and open countryside setting.",
   "amenities": [
@@ -107,8 +110,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:01.250Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

@@ -15,34 +15,115 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800422",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:09.032Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Twyford is a sought-after village in the Itchen Valley about three miles south of Winchester in Hampshire. It combines rural character with strong connectivity, sitting close to the M3 and within a short distance of Shawford railway station. The village has a good range of everyday amenities and is home to both a state primary (Twyford St Mary's) and the well-known independent Twyford School, one of England's oldest prep schools.",
+  "character": "An affluent, thriving Itchen Valley village with a desirable blend of countryside, period housing and easy access to Winchester and London by rail.",
+  "amenities": [
+    "Village shop and Post Office",
+    "Popular pubs and cafes",
+    "Parish church",
+    "Recreation/sports facilities",
+    "Close to Shawford station (~0.9 km)",
+    "Easy reach of Winchester city amenities (~3 miles)"
+  ],
+  "schools": [
+    {
+      "url": "https://twyford-pri.hants.sch.uk/",
+      "name": "Twyford St Mary's CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (School Road, SO21 1QQ)"
+    },
+    {
+      "url": "https://www.twyfordschool.com/",
+      "name": "Twyford School (prep, ages 2-13, day and boarding)",
+      "type": "Independent",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (High Street, SO21 1NW)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~3 miles",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Train",
+        "notes": "From Shawford station, ~0.9 km from village",
+        "typical": "~5-8 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct services from Shawford/Winchester",
+        "typical": "~1h 5m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A premium Winchester-area village; period and detached family homes command high values given the schools, Itchen Valley setting and rail access. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walks in the Itchen Valley and along the river",
+    "Twyford parish church",
+    "Cycling on quiet lanes towards Shawford and the South Downs",
+    "Easy day trips to Winchester's cathedral and shops"
+  ],
+  "placesToEat": [
+    "Village pubs and cafes",
+    "Wide choice in nearby Winchester"
+  ],
+  "pros": [
+    "Excellent connectivity (Shawford station, M3, ~1h to London)",
+    "Strong schooling including a renowned prep school",
+    "Attractive Itchen Valley setting close to Winchester",
+    "Good everyday amenities for a village"
+  ],
+  "cons": [
+    "Premium house prices",
+    "Close to the M3 with some road noise in places",
+    "Secondary state schooling is in Winchester/Colden Common, not the village"
+  ],
+  "whoItSuits": "Families and commuters wanting a smart Winchester-area village with top schools and fast London rail access.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Shawford (~0.9 km)",
+  "primarySupermarket": "Village shop; supermarkets in Winchester",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116320",
+      "label": "Twyford St Mary's CofE Primary School - GOV.UK"
+    },
+    {
+      "url": "https://www.twyfordschool.com/",
+      "label": "Twyford School (independent prep)"
+    },
+    {
+      "url": "https://www.getthedata.com/postcode/SO21-1NS",
+      "label": "GetTheData - SO21 1NS (Twyford) postcode/transport stats"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/properties/173692832",
+      "label": "Rightmove - Twyford property listing with village amenities"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:09.032Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^800422"
+  }
 }

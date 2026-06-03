@@ -15,34 +15,88 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801533",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:08.605Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Kitwood is a small, dispersed rural hamlet in the parish of Four Marks (historically part of Ropley) in East Hampshire, on high downland between Ropley and Four Marks. It is an ancient place - Kitwood Lane is recorded in a 1413 court roll as 'kitteswodeweye', and hedgerows along it have been dated at roughly 800 years old - but it has always been a scattering of farms and cottages rather than a nucleated village.",
+  "character": "A tiny, scattered downland hamlet of farmsteads and cottages along old lanes, deep in arable and wooded countryside.",
+  "amenities": [
+    "Old Down Wood and a network of ancient lanes and footpaths nearby",
+    "Shops, schools and pubs in neighbouring Four Marks and Ropley",
+    "No shop, pub or school within Kitwood itself"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Alton",
+        "mode": "Drive",
+        "notes": "Nearest mainline station, about 4 to 5 miles east, on the Alton line to London Waterloo",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "For the wider range of city shops, services and fast trains",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Alton on South Western Railway; the heritage Watercress Line stops at nearby Medstead & Four Marks",
+        "typical": "~75-80 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A very small market of period farmhouses, cottages and occasional larger country houses, with very low transaction volumes; the secluded rural setting near sought-after Four Marks supports strong values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Walking the ancient lanes and Old Down Wood around the hamlet",
+    "Riding the heritage Watercress Line from nearby Medstead & Four Marks",
+    "Exploring Ropley, Four Marks and the wider East Hampshire countryside"
+  ],
+  "placesToEat": [
+    "Pubs and eateries in neighbouring Ropley and Four Marks"
+  ],
+  "pros": [
+    "Exceptionally peaceful, historic rural hamlet",
+    "Amenities and a primary school close by in Four Marks",
+    "Within a few miles of Alton for trains to London"
+  ],
+  "cons": [
+    "No shop, pub or school in the hamlet itself",
+    "Car essential; very limited public transport",
+    "Very dispersed settlement pattern"
+  ],
+  "whoItSuits": "Buyers seeking a secluded, historic rural hamlet with the everyday amenities of Four Marks and Alton's rail link a short drive away.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Kitwood",
+      "label": "Wikipedia - Kitwood"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Four_Marks",
+      "label": "Wikipedia - Four Marks (parish)"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Ropley",
+      "label": "Wikipedia - Ropley (historic parent parish)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:08.605Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^801533"
+  }
 }

@@ -15,34 +15,117 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^808326",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:57.616Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Great Wishford is a picturesque village in the Wylye Valley, halfway between Salisbury and Warminster, sitting in a curve of the River Wylye just across from the A36. Formerly called Wishford Magna, it is known for its timeless character of thatched and flint-and-freestone cottages and its strong community. The flint and limestone church of St Giles has a 12th-century font bowl and 13th-century chancel, and the village famously keeps the ancient Oak Apple Day (29 May) tradition of claiming wood-collecting rights in nearby Grovely Wood.",
+  "character": "A quintessential, heritage-rich Wylye Valley village with a celebrated folk tradition, retaining its pub, church and primary school but a strong sense of timelessness.",
+  "amenities": [
+    "The Royal Oak (17th-century village pub with carvery)",
+    "Great Wishford CofE (VA) Primary School",
+    "St Giles Church (12th-century font, 13th-century chancel)",
+    "Cricket pitch and children's play area (shared with South Newton)",
+    "Village hall (in neighbouring South Newton/Stoford)",
+    "Wilton Fly Fishing Club on the River Wylye",
+    "Bus service to Salisbury (Salisbury Reds)"
+  ],
+  "schools": [
+    {
+      "url": "https://www.greatwishford.wilts.sch.uk/",
+      "name": "Great Wishford CofE (VA) Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Wilton/Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~6-8 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "Via A36",
+        "typical": "~20-25 min"
+      },
+      {
+        "to": "Wilton",
+        "mode": "Drive",
+        "notes": "Nearest town amenities",
+        "typical": "~10 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "<1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after Wylye Valley village; thatched and flint period cottages with strong heritage appeal and limited supply support values. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP2.html"
+  },
+  "thingsToDo": [
+    "Oak Apple Day celebrations (29 May) and Grovely Wood walks",
+    "St Giles Church",
+    "Trout fly fishing on the River Wylye",
+    "Walking the Monarch's Way and cycle route 24",
+    "Visiting the Iron Age hillfort of Ebsbury nearby"
+  ],
+  "placesToEat": [
+    "The Royal Oak",
+    "Eateries in nearby Wilton and Salisbury"
+  ],
+  "pros": [
+    "Strong community and unique Oak Apple Day heritage",
+    "17th-century pub and a village primary school retained",
+    "Beautiful Wylye Valley setting with fishing and woodland walks",
+    "Quick A36 access to Salisbury and Warminster"
+  ],
+  "cons": [
+    "No village shop or Post Office (only limited services remain)",
+    "No railway station; rely on Salisbury",
+    "Close to the busy A36"
+  ],
+  "whoItSuits": "Buyers wanting a deeply traditional, community-rich Wylye Valley village with a pub and school, who don't mind travelling for shops.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~6 miles)",
+  "primarySupermarket": "Shops in Wilton and Salisbury (no village shop)",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Great_Wishford",
+      "label": "Great Wishford - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/wylye-valley/great-wishford/",
+      "label": "H&W White - Great Wishford"
+    },
+    {
+      "url": "https://whatpub.com/pubs/SAL/43/royal-oak-great-wishford",
+      "label": "Royal Oak, Great Wishford - WhatPub/CAMRA"
+    },
+    {
+      "url": "https://www.wylyeandtillvalleybenefice.org/great-wishford",
+      "label": "Great Wishford St Giles - Benefice Website"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:57.616Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^808326"
+  }
 }

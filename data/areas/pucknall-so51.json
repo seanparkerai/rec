@@ -15,34 +15,134 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^3609624",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:45.309Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Pucknall is a small rural hamlet on the eastern edge of Braishfield village in the Test Valley district of Hampshire, lying just east of Braishfield and around 3 miles north-east of Romsey. It is a scattered cluster of farms, cottages and country houses along lanes such as Dores Lane, set in farmland on the northern fringe of the Hampshire Basin. Pucknall has no amenities of its own; the nearest village facilities, including the primary school and pub, are in Braishfield, with full shops, supermarkets and a railway station in Romsey.",
+  "character": "A quiet, dispersed farming hamlet of detached houses, farmsteads and barn conversions among fields and woodland on the edge of Braishfield. The atmosphere is private and distinctly rural, with footpaths nearby and little through traffic.",
+  "amenities": [
+    "No shop or pub in Pucknall itself",
+    "Primary school, village hall and pub in adjoining Braishfield (~1 mi)",
+    "Full shopping, supermarkets and services in Romsey (~3 mi)",
+    "Romsey railway station (~3 mi)",
+    "Sir Harold Hillier Gardens nearby"
+  ],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115866",
+      "name": "Braishfield Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good (2023)",
+      "distance": "~1 mile"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/148213",
+      "name": "Awbridge Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good (Nov 2023)",
+      "distance": "~3 miles"
+    },
+    {
+      "url": "https://www.romsey.hants.sch.uk/",
+      "name": "The Romsey School",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3-4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "Nearest town for shops, services and station",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via Braishfield/Hursley lanes and the A3090",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via the A3090/M271",
+        "typical": "~30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Romsey (~3 mi) via connections, or faster from Winchester",
+        "typical": "~1h 40m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Pucknall and Braishfield are sought-after rural addresses; housing is dominated by detached and period country properties, frequently £600k-£1.5m+ with some substantial houses well above. Stock is scarce and turns over slowly.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO51.html"
+  },
+  "thingsToDo": [
+    "Walking the Test Valley footpaths around Braishfield and Michelmersh",
+    "Sir Harold Hillier Gardens (extensive arboretum, nearby)",
+    "Mottisfont Abbey gardens (National Trust)",
+    "Romsey town, Broadlands and Romsey Abbey"
+  ],
+  "placesToEat": [
+    "The Newport Inn and other pubs in Braishfield (~1 mi)",
+    "Wide choice of pubs, cafes and restaurants in Romsey (~3 mi)",
+    "Test Valley country pubs within a short drive"
+  ],
+  "pros": [
+    "Very quiet, private rural setting on the edge of Braishfield",
+    "Good primary schooling close by",
+    "Easy reach of Romsey's amenities and station",
+    "Excellent countryside and gardens nearby"
+  ],
+  "cons": [
+    "No amenities within the hamlet; car essential",
+    "Expensive and very limited housing stock",
+    "No mainline station within walking distance",
+    "Rural broadband/mobile coverage can vary"
+  ],
+  "whoItSuits": "Buyers seeking a secluded, high-quality rural hamlet near Braishfield with good schooling and Romsey's amenities a short drive away, with budgets to match the premium country-house market.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Romsey (~3 miles)",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Braishfield",
+      "label": "Wikipedia - Braishfield (Pucknall)"
+    },
+    {
+      "url": "https://search.savills.com/list/houses-for-sale/england/hampshire/pucknall/so51",
+      "label": "Savills - Pucknall area guide"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115866",
+      "label": "Ofsted - Braishfield Primary School"
+    },
+    {
+      "url": "https://braishfield.parish.uk/",
+      "label": "Braishfield Parish information"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/SO51.html",
+      "label": "Rightmove - SO51 house prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:45.309Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^3609624"
+  }
 }

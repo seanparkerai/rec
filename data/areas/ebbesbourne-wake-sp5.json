@@ -15,34 +15,116 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810132",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:49.071Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Ebbesbourne Wake is a small, picturesque village near the head of the River Ebble valley in the Chalke Valley, within the Cranborne Chase National Landscape, about 12 miles south-west of Salisbury. With a population of around 210, it is largely a cluster of 17th- and 18th-century thatched cottages around the 13th/14th-century church of St John the Baptist. The village name comes from Geoffrey de Wake, granted the manor by King John in 1205. Its parish includes the tiny hamlet of Fifield Bavant, home to one of the smallest churches in England.",
+  "character": "A sleepy, unspoilt Chalke Valley village of thatched cottages with a famously authentic country pub and a strong community spirit shared across neighbouring villages.",
+  "amenities": [
+    "The Horseshoe Inn (traditional family-run country pub with rooms)",
+    "Village hall (hub for Ebbesbourne Wake, Alvediston and Fifield Bavant; hosts the 'Alvewake' fete)",
+    "St John the Baptist Church (13th/14th century)",
+    "Local newsletter (The Ebble) and community website",
+    "Bus service between Shaftesbury and Salisbury",
+    "Surrounding Cranborne Chase footpaths and walks"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Primary schools in nearby Broad Chalke",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    },
+    {
+      "url": null,
+      "name": "Secondary/grammar schools in Salisbury",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~12 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~12 miles down the Chalke Valley",
+        "typical": "~30 min"
+      },
+      {
+        "to": "Shaftesbury",
+        "mode": "Drive",
+        "notes": "Nearest market town",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station (~12.5 miles)",
+        "typical": "<1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after, scarce Chalke Valley village; mostly listed 17th/18th-century thatched cottages with strong demand and limited supply. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "The Horseshoe Inn",
+    "Walks in the Chalke Valley and Cranborne Chase (Discover Chalke Valley routes)",
+    "St John the Baptist Church and tiny St Martin's at Fifield Bavant",
+    "The annual Chalke Valley History Festival nearby",
+    "Cycling on quiet valley lanes"
+  ],
+  "placesToEat": [
+    "The Horseshoe Inn",
+    "The Queen's Head and other pubs in the wider Chalke Valley"
+  ],
+  "pros": [
+    "Exceptionally pretty, unspoilt Chalke Valley setting",
+    "Authentic, long-established country pub",
+    "Strong community life shared across neighbouring villages",
+    "Cranborne Chase walking on the doorstep"
+  ],
+  "cons": [
+    "Very small with minimal amenities (no shop or school in the village)",
+    "Remote, down narrow lanes; car essential",
+    "No railway station (Salisbury ~12.5 miles)"
+  ],
+  "whoItSuits": "Buyers seeking a tranquil, scenic Chalke Valley village with a great pub and strong community, who don't need in-village shops or schools.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~12.5 miles)",
+  "primarySupermarket": "Shops in Broad Chalke; supermarkets in Salisbury/Shaftesbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Ebbesbourne_Wake",
+      "label": "Ebbesbourne Wake - Wikipedia"
+    },
+    {
+      "url": "https://thehorseshoe-inn.co.uk/",
+      "label": "The Horseshoe Inn, Ebbesbourne Wake"
+    },
+    {
+      "url": "https://hwwhite.co.uk/the-chalke-valley/ebbesborne-wake/",
+      "label": "H&W White - Ebbesborne Wake"
+    },
+    {
+      "url": "https://chalkevalleychurches.org/our-churches/ebbesbourne-wake-st-john",
+      "label": "Chalke Valley Churches - Ebbesbourne Wake St John"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:49.071Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810132"
+  }
 }

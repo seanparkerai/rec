@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "A two-house place (Wikipedia's description) in the civil parish of Liss, East Hampshire district. The settlement is effectively Flexcombe Farm and a small courtyard of barn conversions at Flexcombe Farm Cottages, off Flexcombe Lane between Liss and Stodham. It sits inside the South Downs National Park, immediately west of the A3 bypass and a few miles north of Petersfield. The seed CSV records the postcode as GU32; Wikipedia, Royal Mail and Liss-area address listings confirm the post town is LISS and the postcode district is GU33 — the GU32 entry in the seed is an error, corrected here. Day-to-day services are at Liss (~2 mi south-east) for primary school, station, shops and pubs, and Petersfield for the wider shopping and rail offer.",
   "character": "Single-courtyard rural settlement of converted farm buildings in a working-farm setting, surrounded by chalk-clay countryside and the SDNP's hangers landscape. Effectively a private courtyard rather than a village — no shared public realm beyond the farm track.",
   "amenities": [
@@ -155,8 +158,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:54.004Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

@@ -15,34 +15,95 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1236307",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:55.273Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "South Newton is a village and civil parish on the A36 about 4 to 5 miles north-west of Salisbury, on the left bank of the River Wylye between chalk downs and the ancient Grovely Wood. The parish, which also takes in the village of Stoford and the hamlets of Little Wishford and Chilhampton, had a population of 819 at the 2011 census. There has been a settlement here since Saxon times, and the parish church of St Andrew has medieval origins.",
+  "character": "A linear Wylye-valley village set along and around the A36, with riverside water meadows on one side and downland and woodland on the other.",
+  "amenities": [
+    "St Andrew's parish church",
+    "The Swan Inn riverside pub at neighbouring Stoford (check current opening, as it has periodically been closed)",
+    "Bus stop on the A36 with services to Salisbury and Wilton",
+    "No village shop - everyday shopping is in Wilton or Salisbury"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 5 to 6 miles south-east via the A36; Wilton is closer still",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury (about 6 miles) on South Western Railway",
+        "typical": "~90 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Buses run along the A36 between Warminster, Wilton and Salisbury",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing is a mix of period cottages and later 20th-century and modern homes straddling the A36, with riverside positions attracting a premium; frontage to the trunk road tempers values for some properties. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP2.html"
+  },
+  "thingsToDo": [
+    "Walking in ancient Grovely Wood and along its Roman road byway",
+    "The Hadden Hill loop walk from South Newton through the woods towards Wilton",
+    "Fly-fishing and riverside strolls along the River Wylye",
+    "Visiting nearby Wilton (Wilton House) and Stonehenge"
+  ],
+  "placesToEat": [
+    "The Swan Inn at Stoford (riverside coaching inn)",
+    "Pubs and restaurants in nearby Wilton"
+  ],
+  "pros": [
+    "Attractive Wylye-valley and Grovely Wood setting with excellent walking",
+    "Only about 5 to 6 miles from Salisbury, with Wilton closer still",
+    "Riverside character on the chalk-stream Wylye"
+  ],
+  "cons": [
+    "The A36 trunk road runs through the village, bringing traffic and noise",
+    "No village shop or school in South Newton itself",
+    "Car-dependent for most everyday needs"
+  ],
+  "whoItSuits": "Walkers and countryside lovers wanting a Wylye-valley village close to both Wilton and Salisbury, who can live with the A36 nearby.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/South_Newton",
+      "label": "Wikipedia - South Newton"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol15/pp213-227",
+      "label": "British History Online - VCH Wiltshire, South Newton"
+    },
+    {
+      "url": "https://www.southnewtonpc.org.uk/",
+      "label": "South Newton & Stoford Parish Council"
+    },
+    {
+      "url": "https://hwwhite.co.uk/wylye-valley/south-newton-and-stoford/",
+      "label": "H&W White - South Newton and Stoford (Wylye Valley)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:55.273Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1236307"
+  }
 }

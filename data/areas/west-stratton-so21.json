@@ -15,34 +15,89 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1389536",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:15.747Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "West Stratton is a small village in the civil parish of Micheldever, in the City of Winchester district, about 8 miles north of Winchester. It lies close to the M3 motorway, which now separates it from its neighbour East Stratton, and is roughly 2 miles from Micheldever station on the South West Main Line.",
+  "character": "A small, quiet brick-and-thatch village set in arable downland, close to but largely screened from the M3.",
+  "amenities": [
+    "Village green and surrounding farmland",
+    "Pubs and facilities in neighbouring East Stratton and Micheldever",
+    "No shop or school in the village itself",
+    "Micheldever station nearby for commuting"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Micheldever",
+        "mode": "Drive",
+        "notes": "Nearest station, about 2 miles, with direct trains to London Waterloo (fastest about 1h 2m)",
+        "typical": "~6 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "About 8 miles south; the M3 (junction 9) is immediately accessible",
+        "typical": "~18 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Micheldever on South Western Railway",
+        "typical": "~70 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is mostly period cottages and detached houses in small numbers; very fast road and rail access supports demand, though M3 proximity is a factor for some homes. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walking the downland footpaths around the Strattons",
+    "Spring bluebells at nearby Micheldever Wood",
+    "Exploring Micheldever village and the wider Dever valley"
+  ],
+  "placesToEat": [
+    "Pubs in neighbouring East Stratton and Micheldever"
+  ],
+  "pros": [
+    "Exceptionally fast commuting - Micheldever station about 2 miles, and the M3 on the doorstep",
+    "Quiet rural village setting",
+    "Close to Winchester and Basingstoke"
+  ],
+  "cons": [
+    "Proximity to the M3 brings some traffic noise",
+    "Very limited amenities and no village shop or school",
+    "Car-dependent for most needs"
+  ],
+  "whoItSuits": "Commuters wanting fast rail from Micheldever and immediate M3 access from a small, quiet downland village.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Micheldever",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/West_Stratton",
+      "label": "Wikipedia - West Stratton"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Micheldever",
+      "label": "Wikipedia - Micheldever (civil parish)"
+    },
+    {
+      "url": "https://www.omio.co.uk/trains/micheldever/london-waterloo-3kkif",
+      "label": "Omio - Micheldever to London Waterloo times"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:15.747Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1389536"
+  }
 }

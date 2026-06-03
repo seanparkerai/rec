@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Chilbolton Down sits above the River Test valley near Chilbolton and Stockbridge, in open chalk downland with broad rural views. The locality is best known for outdoor space and for proximity to Chilbolton village and observatory/science heritage nearby. It is a low-density rural address where lifestyle is countryside-led, with services mostly accessed in nearby villages and towns.",
   "character": "Open chalk-down setting with dispersed homes and a distinctly rural, low-noise atmosphere.",
   "amenities": [
@@ -139,8 +142,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:31.204Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

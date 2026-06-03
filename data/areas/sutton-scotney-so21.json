@@ -15,34 +15,116 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800584",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:05.233Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Sutton Scotney is a village in the civil parish of Wonston, in Hampshire, lying alongside the River Dever about 7 miles north of Winchester. With a population of around 1,346, it is now bypassed by the A34 trunk road, which gives quick links north to Newbury and south to Winchester and Southampton. The village retains a good range of everyday amenities and a large recreation ground.",
+  "character": "A practical, well-served Dever-valley village with a strong commuter appeal thanks to fast A34 access, while keeping its rural setting.",
+  "amenities": [
+    "Village shop and Post Office",
+    "Doctors surgery",
+    "Garage/service station",
+    "The Coach and Horses pub (with B&B)",
+    "Large recreation ground (The Gratton) with children's play park and football pitches",
+    "River Dever and trout fisheries nearby",
+    "A34 services with retail/food outlets"
+  ],
+  "schools": [
+    {
+      "url": "https://www.southwonston.hants.sch.uk/",
+      "name": "Wonston Primary / South Wonston Primary (nearest village primaries)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1-2 miles"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Winchester (e.g. Henry Beaufort, Kings')",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~7 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~7 miles via A34",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Newbury",
+        "mode": "Drive",
+        "notes": "Direct via A34 north",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester station (~10 miles)",
+        "typical": "~1h"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A mix of period cottages, modern detached family homes and some social housing; popular with commuters for its A34 access. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Trout fishing on the River Dever (Dever Springs/Sutton Springs)",
+    "Walks in the Dever valley and Hampshire Downs",
+    "Recreation ground and play park",
+    "Easy trips to Winchester and Highclere Castle"
+  ],
+  "placesToEat": [
+    "The Coach and Horses",
+    "A34 service-area food outlets"
+  ],
+  "pros": [
+    "Excellent A34 commuter access (Winchester, Newbury, Southampton)",
+    "Good everyday amenities: shop, surgery, pub, garage",
+    "Large recreation ground and riverside setting",
+    "Bypassed by the A34, so quieter village core"
+  ],
+  "cons": [
+    "No primary school in the village itself (nearby villages provide one)",
+    "No railway station; rely on Winchester",
+    "Proximity to the A34 brings some traffic noise nearby"
+  ],
+  "whoItSuits": "Commuters and families wanting an amenity-rich village with fast road links north and south of Winchester.",
+  "broadbandMedianMbps": 38,
+  "nearestStation": "Winchester (~10 miles)",
+  "primarySupermarket": "Village shop; supermarkets in Winchester",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Sutton_Scotney",
+      "label": "Sutton Scotney - Wikipedia"
+    },
+    {
+      "url": "https://property.dybles.com/properties/sutton-park-road-sutton-scotney-so21-2/",
+      "label": "Dybles - Sutton Scotney village amenities"
+    },
+    {
+      "url": "https://www.stonegatepubpartners.co.uk/find-a-pub/coach-and-horses-sutton-scotney_015050",
+      "label": "Coach and Horses, Sutton Scotney"
+    },
+    {
+      "url": "https://www.streetlist.co.uk/so/so21/so21-3/so21-3la",
+      "label": "Streetlist - SO21 3LA (Sutton Scotney) data"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:05.233Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^800584"
+  }
 }

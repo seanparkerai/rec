@@ -15,34 +15,104 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809792",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:58.574Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Hamptworth (usually spelt Hamptworth, though recorded here as Hampworth) is a hamlet in the civil parish of Landford in the extreme south-east of Wiltshire, within the New Forest National Park, about 10 miles south-east of Salisbury. First mentioned in the early 13th century, it lies among woodland once part of the Royal Forest of Melchet; Manor Farm dates from the 15th century and Hamptworth Lodge is an Arts and Crafts country house of 1912. Until a 2017 boundary change it was part of Redlynch parish.",
+  "character": "A dispersed, heavily wooded New Forest-edge hamlet of farmsteads, cottages and country houses spread along quiet lanes and commons.",
+  "amenities": [
+    "Hamptworth Golf Club (18-hole course, opened 1994)",
+    "The Cuckoo Inn (historic pub - check current opening, as it has frequently been closed)",
+    "The New Forest CE Primary School nearby at Nomansland/Landford",
+    "No village shop - everyday shopping is at Landford or Downton"
+  ],
+  "schools": [
+    {
+      "url": "https://www.thenewforestschool.wilts.sch.uk/",
+      "name": "The New Forest Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~2 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 10 miles north-west, partly via the A36, for shops, services and the station",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via the A36 to the south-east",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is mainly larger detached houses, farmsteads and country properties in a wooded setting, in low volumes; the New Forest National Park location and golf-course proximity support premium values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Golf at Hamptworth Golf Club",
+    "Walking, cycling and riding in the New Forest National Park and former Melchet forest woodland",
+    "Exploring the nearby New Forest commons and the Wiltshire-Hampshire border country"
+  ],
+  "placesToEat": [
+    "The Cuckoo Inn, Hamptworth (check opening)",
+    "The Lamb Inn at Nomansland",
+    "The Landford Poacher at Landford"
+  ],
+  "pros": [
+    "Secluded, wooded New Forest National Park setting",
+    "Has its own golf club",
+    "Characterful period and country houses with privacy and space"
+  ],
+  "cons": [
+    "Very dispersed with no village shop",
+    "The Cuckoo Inn has frequently been closed",
+    "Car essential; National Park planning constraints apply"
+  ],
+  "whoItSuits": "Buyers wanting a secluded, wooded New Forest-edge hamlet with golf and countryside, who value privacy and space over having amenities on the doorstep.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Hamptworth",
+      "label": "Wikipedia - Hamptworth"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Landford",
+      "label": "Wikipedia - Landford (parish)"
+    },
+    {
+      "url": "https://www.landfordparishcouncil.org.uk/",
+      "label": "Landford Parish Council"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/148024",
+      "label": "Ofsted - The New Forest CE Primary School (URN 148024, Good, Dec 2024)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:58.574Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809792"
+  }
 }

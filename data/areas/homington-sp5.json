@@ -15,34 +15,102 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810101",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:00.628Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Homington is a small village in the Ebble (Chalke) valley about 5 miles south-west of Salisbury, a little over a mile down the valley road from Coombe Bissett, into whose civil parish it was absorbed in 1934. It sits within the Cranborne Chase National Landscape (AONB) and has its own small medieval church, St Mary the Virgin, part of the Chalke Valley Benefice. Coombe Bissett with Homington had a combined population of around 675 at the 2011 census.",
+  "character": "A tiny, friendly chalk-stream village of cottages beside the River Ebble, with a strong community feel and downland all around.",
+  "amenities": [
+    "St Mary the Virgin church, with monthly community coffee mornings",
+    "Coombe Bissett (about 1 mile) has the village shop, the Fox & Goose pub, a primary school and a village hall",
+    "No shop or pub in Homington itself"
+  ],
+  "schools": [
+    {
+      "url": "https://www.coombebissett.wilts.sch.uk/",
+      "name": "Coombe Bissett Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Requires Improvement",
+      "distance": "~1.5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 5 miles north-east via the valley road and A354 for shops, services and the station",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Chalke Valley bus services run via Coombe Bissett to Salisbury",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing is mainly period cottages and detached houses in a chalk-valley AONB setting, in low volumes; the protected landscape and Salisbury proximity support premium values, while riverside homes carry flood risk. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking across Homington Down and along the Ebble/Chalke valley",
+    "Coombe Bissett Down nature reserve (Wiltshire Wildlife Trust)",
+    "Seeing the medieval packhorse bridge over the Ebble at Coombe Bissett"
+  ],
+  "placesToEat": [
+    "The Fox & Goose, Coombe Bissett",
+    "Coombe Bissett Stores and cafe"
+  ],
+  "pros": [
+    "Pretty, peaceful Cranborne Chase AONB chalk-valley village",
+    "Strong community with church coffee mornings and nearby clubs",
+    "Close to Coombe Bissett's shop, pub and primary, and only about 5 miles from Salisbury"
+  ],
+  "cons": [
+    "No shop, pub or school in Homington itself",
+    "The River Ebble has caused repeated valley flooding (e.g. 2014 and 2023)",
+    "Car-dependent for most needs"
+  ],
+  "whoItSuits": "Buyers wanting a small, friendly chalk-valley village within easy reach of Salisbury, who do not need amenities in the village and are mindful of valley flood risk.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Coombe_Bissett",
+      "label": "Wikipedia - Coombe Bissett (covers Homington)"
+    },
+    {
+      "url": "https://chalkevalleychurches.org/our-churches/coombe-bissett-st-michael",
+      "label": "Chalke Valley Churches - St Mary the Virgin, Homington"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/126382",
+      "label": "Ofsted - Coombe Bissett CE Primary (URN 126382, Requires Improvement, Apr 2023)"
+    },
+    {
+      "url": "https://www.coombebissett.com/homington-village.html",
+      "label": "Coombe Bissett & Homington Parish Council"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:00.628Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810101"
+  }
 }

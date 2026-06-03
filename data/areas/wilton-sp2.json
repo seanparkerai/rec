@@ -15,34 +15,121 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1596963",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:21.259Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Wilton is a historic market town about three miles west of Salisbury, often described as the ancient capital of Wessex with a history spanning more than 2,000 years. It is best known for Wilton House, seat of the Earls of Pembroke since the 1540s, and for its carpet-making heritage. The town has a market square with a Thursday market and the imposing Italianate church of St Mary and St Nicholas.",
+  "character": "A thriving small market town with an active community and independent high street, blending working-town practicality with notable heritage on Salisbury's doorstep.",
+  "amenities": [
+    "Thursday market in the Market Square",
+    "Independent butchers, bakers, hardware store and cafes",
+    "Pharmacy and Old Orchard Surgery",
+    "Library on South Street",
+    "The Guild (former Wilton Shopping Village)",
+    "Free short-stay parking (Market Square and South Street)",
+    "St Mary and St Nicholas Church and Baptist Church",
+    "Public access defibrillators",
+    "Salisbury park-and-ride nearby"
+  ],
+  "schools": [
+    {
+      "url": "https://www.wilton.wilts.sch.uk/",
+      "name": "Wilton CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~0.5 miles (Burcombe Lane)"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Salisbury (e.g. Bishop Wordsworth's, South Wilts Grammar, Sarum Academy)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~3 miles via A36/A30",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "No station in Wilton; nearest is Salisbury (~4 km), then direct services to London Waterloo",
+        "typical": "n/a"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "~1h 30m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A mix of period town houses, estate cottages and modern developments including the Our Wilton veterans/retirement scheme. More affordable than premium Nadder Valley villages while keeping town amenities. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP2.html"
+  },
+  "thingsToDo": [
+    "Wilton House and grounds (grounds, adventure playground and cafe open during 2026 heating refurbishment)",
+    "Wilton Town Trail past historic landmarks",
+    "St Mary and St Nicholas Church",
+    "Thursday market",
+    "Events such as Wessex Country Fair and horse trials at Wilton House"
+  ],
+  "placesToEat": [
+    "Independent cafes around the Market Square",
+    "Ta Moko Espresso (The Guild)",
+    "Wilton House cafe",
+    "Local pubs"
+  ],
+  "pros": [
+    "Genuine market-town amenities within minutes of Salisbury",
+    "Rich heritage with Wilton House and historic church",
+    "Good superfast broadband (median ~80 Mbps in central postcodes)",
+    "More affordable than premium outlying villages"
+  ],
+  "cons": [
+    "No railway station of its own; rely on Salisbury",
+    "Sits on busy A36/A30 routes with associated traffic",
+    "Less rural feel than smaller surrounding villages"
+  ],
+  "whoItSuits": "Buyers wanting town amenities and heritage with quick access to Salisbury, without paying a premium-village price.",
+  "broadbandMedianMbps": 80,
+  "nearestStation": "Salisbury (~4 km)",
+  "primarySupermarket": "Local convenience stores in town; larger supermarkets in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.wiltontowncouncil.gov.uk/local-information/",
+      "label": "Wilton Town Council - Local Information"
+    },
+    {
+      "url": "https://www.visitwiltshire.co.uk/towns-and-villages/wilton-p442083",
+      "label": "Visit Wiltshire - Wilton"
+    },
+    {
+      "url": "https://www.visitheritage.co.uk/things-to-do/wilton-house-p682261",
+      "label": "Wilton House - Visit Heritage"
+    },
+    {
+      "url": "https://www.getthedata.com/postcode/SP2-0DF",
+      "label": "GetTheData - SP2 0DF broadband and postcode stats"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:21.259Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1596963"
+  }
 }

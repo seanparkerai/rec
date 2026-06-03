@@ -15,34 +15,94 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801580",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:39.674Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Ovington is a small village on the south bank of the River Itchen, about 2 miles west of Alresford and 5 miles north-east of Winchester. It forms part of the civil parish of Itchen Stoke and Ovington (parish population around 210 at the 2011 census). The flint village church was built in 1866 by John Colson, and the village's centrepiece is the 17th-century riverside Bush Inn. The famous Pilgrims' Way and Itchen Way footpaths run alongside the river here.",
+  "character": "A tucked-away, tree-shaded chalk-stream village at a meeting of lanes, defined by the clear waters of the Itchen and its riverside pub.",
+  "amenities": [
+    "The Bush Inn, a Grade II listed 17th-century riverside gastropub",
+    "Village church (1866)",
+    "River Itchen fly-fishing and the Pilgrims' Way / Itchen Way long-distance paths",
+    "No village shop - everyday shopping is in Alresford"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "About 5 miles west to the nearest mainline station, shops and services",
+        "typical": "~12 min"
+      },
+      {
+        "to": "Alresford",
+        "mode": "Drive",
+        "notes": "About 2 miles east for shops and the heritage Watercress Line",
+        "typical": "~6 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester on South Western Railway; fastest services under an hour",
+        "typical": "~60-70 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing is mostly period cottages and detached houses in a sought-after Itchen-valley setting, with low transaction volumes and a strong premium for the chalk-stream location and Winchester proximity. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Fly-fishing on the River Itchen, one of England's premier chalk trout streams",
+    "Walking the Pilgrims' Way and Itchen Way along the river",
+    "A riverside meal or drink at the Bush Inn",
+    "Exploring nearby Alresford and the Watercress Line steam railway"
+  ],
+  "placesToEat": [
+    "The Bush Inn, Ovington (riverside pub and restaurant)"
+  ],
+  "pros": [
+    "Idyllic, peaceful chalk-stream setting on the River Itchen",
+    "A well-regarded riverside village pub",
+    "Only about 5 miles from Winchester and its fast trains to London"
+  ],
+  "cons": [
+    "No shop or school in the village",
+    "Car-dependent, with very limited public transport",
+    "Some low-lying properties sit close to the river"
+  ],
+  "whoItSuits": "Buyers wanting a serene riverside village with a characterful pub and good walking and fishing, within easy reach of Winchester.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Itchen_Stoke_and_Ovington",
+      "label": "Wikipedia - Itchen Stoke and Ovington"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Ovington,_Hampshire",
+      "label": "Wikishire - Ovington (church, history, pub)"
+    },
+    {
+      "url": "https://whatpub.com/pubs/HAS/00310/bush-inn-ovington",
+      "label": "CAMRA / WhatPub - Bush Inn, Ovington (Grade II listed)"
+    },
+    {
+      "url": "https://www.visit-hampshire.co.uk/food-and-drink/the-bush-inn-p320181",
+      "label": "Visit Hampshire - The Bush Inn"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:39.674Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^801580"
+  }
 }

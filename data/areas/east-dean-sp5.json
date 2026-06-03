@@ -15,34 +15,114 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810574",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:44.048Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "East Dean is a small civil parish and village in the Test Valley district of Hampshire, lying on the south bank of the River Dun about 6 miles north-west of Romsey and close to the Wiltshire border. Recorded in the Domesday Book as Dene, it sits in the wooded Dun valley on the Salisbury to Southampton Wessex Main Line and has its own parish church. The neighbouring villages of West Tytherley and Lockerley provide most day-to-day services.",
+  "character": "A quiet, scattered rural settlement of farmland and woodland in the Dun valley, with a strong commuter-belt feel given its mainline railway access toward Salisbury and Southampton.",
+  "amenities": [
+    "Parish church",
+    "Limited services in the village itself",
+    "Post office and village store in nearby West Tytherley and Lockerley",
+    "Village halls, recreation ground and play area in neighbouring West Tytherley"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116323",
+      "name": "West Tytherley CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1 mile"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116363",
+      "name": "Lockerley CofE Endowed Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "From Dean station on the South Western Railway Salisbury to Southampton line (unstaffed halt)",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "About 6 miles south-east via the A27",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Train",
+        "notes": "Direct from Dean station toward Southampton Central",
+        "typical": "~35 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Predominantly detached and period village houses; sold prices in the SP5 area typically range from around 400,000 to over 800,000 pounds depending on size and plot.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/sp5.html"
+  },
+  "thingsToDo": [
+    "Walking and cycling in the Dun valley and surrounding woodland",
+    "Country pub dining at the Black Horse in nearby West Tytherley",
+    "Easy rail day trips to Salisbury and the New Forest"
+  ],
+  "placesToEat": [
+    "The Black Horse, West Tytherley (17th-century Grade II coaching inn with real ales and food)"
+  ],
+  "pros": [
+    "Mainline rail access to Salisbury and Southampton from Dean station",
+    "Quiet rural setting close to the Wiltshire border",
+    "Good local primary schools within a few miles"
+  ],
+  "cons": [
+    "Very few amenities in the village itself",
+    "Reliance on a car or train for shops and services",
+    "Dean station is an unstaffed halt with a limited service"
+  ],
+  "whoItSuits": "Rail commuters and families wanting a quiet Test Valley village within easy reach of Salisbury and Southampton.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Dean",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://east-dean.parish.uk/",
+      "label": "East Dean Parish (official parish site)"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116323",
+      "label": "West Tytherley CofE Primary School - GOV.UK"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116363",
+      "label": "Lockerley CofE Endowed Primary School - GOV.UK"
+    },
+    {
+      "url": "https://www.southwesternrailway.com/travelling-with-us/our-stations/dean",
+      "label": "Dean station - South Western Railway"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/East_Dean,_Hampshire",
+      "label": "East Dean, Hampshire - Wikipedia"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:44.048Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810574"
+  }
 }

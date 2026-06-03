@@ -15,34 +15,89 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800311",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:23.755Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Wonston is a small village on the chalk-stream River Dever about 5 miles north of Winchester. It gives its name to the wider civil parish, which also takes in Sutton Scotney, Hunton, Stoke Charity and Norton; most of the parish's residents actually live in neighbouring Sutton Scotney. The village sits on the northern slope of the downland ridge that rises north-west of Winchester, in quiet farming country.",
+  "character": "A quiet, linear chalk-stream village of cottages and farms strung along the Dever valley, away from main roads.",
+  "amenities": [
+    "Parish church and village community life",
+    "Everyday shops, services and facilities in adjoining Sutton Scotney",
+    "River Dever and surrounding downland",
+    "No shop or pub in Wonston itself"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Micheldever",
+        "mode": "Drive",
+        "notes": "Nearest station, with direct trains to London Waterloo (fastest about 1h 2m)",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "About 5 miles south for city shops, services and fast trains; the A34 and M3 are close by",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Micheldever on South Western Railway",
+        "typical": "~70 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing is mainly period cottages and detached village houses with some farms, in low transaction volumes; the quiet Dever-valley position and easy commute support solid values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walking along the River Dever and over the downland ridge towards Winchester",
+    "Exploring the wider Wonston parish villages and Sutton Scotney",
+    "Country drives to Micheldever and the Test valley"
+  ],
+  "placesToEat": [
+    "Pubs and shops in adjoining Sutton Scotney"
+  ],
+  "pros": [
+    "Quiet, rural chalk-stream village close to Winchester",
+    "Good road and rail links via the A34/M3 and nearby Micheldever station",
+    "Fuller amenities on hand in adjoining Sutton Scotney"
+  ],
+  "cons": [
+    "Few amenities in Wonston village itself",
+    "Car needed for shops, schools and the station",
+    "Limited bus service"
+  ],
+  "whoItSuits": "Buyers wanting a quiet Dever-valley village within easy reach of Winchester and a fast London commute, with everyday shops next door in Sutton Scotney.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Micheldever",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Wonston",
+      "label": "Wikipedia - Wonston"
+    },
+    {
+      "url": "http://www.wonstonparish.org.uk/community/wonston-parish-council-13432/parish-plan",
+      "label": "Wonston Parish Council - parish plan (villages and River Dever)"
+    },
+    {
+      "url": "https://www.thetrainline.com/train-times/micheldever-to-london-waterloo",
+      "label": "Trainline - Micheldever to London Waterloo times"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:23.755Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^800311"
+  }
 }

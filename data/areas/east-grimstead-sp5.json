@@ -15,34 +15,106 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
-  "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4357042",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:44.867Z"
-  },
+  "councilTaxBand": "G",
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "East Grimstead is a small village on the River Dun in Wiltshire, about 5 to 6 miles east of Salisbury, forming the civil parish of Grimstead together with neighbouring West Grimstead. It has around 70 households and historically no shops, public houses or schools, with Holy Trinity Church (a former chapelry of West Dean) and the East Grimstead Reading Room serving as community focal points. The site of a Roman villa lies a short distance to the south-east, and the disused Salisbury and Southampton Canal once passed south of the village.",
+  "character": "A secluded, tranquil farming village of period cottages, old farmhouses and a village green, with strong community life despite very few facilities.",
+  "amenities": [
+    "Holy Trinity Church",
+    "East Grimstead Reading Room and village hall (community venue and events)",
+    "Village green (annual village events such as the summer pig roast)",
+    "No village shop or pub - nearest everyday shopping in Alderbury and Salisbury"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/150254",
+      "name": "Alderbury and West Grimstead Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 6 miles west, with access via the A36",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "From Dean station (about 2 miles east at West Dean) on the South Western Railway Wessex Main Line",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Train",
+        "notes": "From Dean station toward Southampton Central",
+        "typical": "~40 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A mix of detached houses, traditional cottages and old farmhouses; most homes in the SP5 area sell well into the mid-to-high hundreds of thousands of pounds, with larger period properties commanding more.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/sp5.html"
+  },
+  "thingsToDo": [
+    "Walking the lanes and bridleways around the Dun valley",
+    "Spotting the surviving Salisbury and Southampton Canal bridge near the church",
+    "Community events at the Reading Room and on the village green"
+  ],
+  "placesToEat": [
+    "No pub or cafe in the village; nearest pubs and dining in Alderbury, West Dean and Whiteparish"
+  ],
+  "pros": [
+    "Quiet, secluded rural setting close to Salisbury",
+    "Active village community centred on the Reading Room",
+    "Mainline rail access nearby at Dean station"
+  ],
+  "cons": [
+    "No shops, pub or school in the village itself",
+    "Car effectively essential for daily needs",
+    "Very small community with limited housing turnover"
+  ],
+  "whoItSuits": "Buyers wanting a peaceful, close-knit Wiltshire village within easy commuting reach of Salisbury who do not mind relying on a car.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Dean",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/East_Grimstead",
+      "label": "East Grimstead - Wikipedia"
+    },
+    {
+      "url": "https://eastgrimstead.com/",
+      "label": "East Grimstead Reading Room (village website)"
+    },
+    {
+      "url": "https://hwwhite.co.uk/salisbury/the-grimsteads/",
+      "label": "The Grimsteads - Whites Estate Agent area guide"
+    },
+    {
+      "url": "https://www.visionofbritain.org.uk/place/11773",
+      "label": "History of East Grimstead - A Vision of Britain through Time"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/150254",
+      "label": "Alderbury and West Grimstead CofE Primary School - GOV.UK"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:44.867Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^4357042"
+  }
 }

@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^800934",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:56.796Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Sparsholt is a village in beautiful countryside just west of Winchester in Hampshire, regarded as one of the county's finest villages. It is a thriving community with a pub, shop/Post Office, parish church and primary school, and is home to the renowned Lainston House country-house hotel. The village gives its name to Sparsholt College, a long-established land-based further and higher education college on its edge.",
+  "character": "A picturesque, affluent downland village west of Winchester, prized for its rural setting, country-house hotel and strong sense of community.",
+  "amenities": [
+    "Village pub",
+    "Shop with Post Office",
+    "Parish church",
+    "Primary school",
+    "Sparsholt College (land-based FE/HE college)",
+    "Lainston House Hotel",
+    "Surrounded by walking and cycling country"
+  ],
+  "schools": [
+    {
+      "url": "https://www.sparsholt.hants.sch.uk/",
+      "name": "Sparsholt CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Woodman Lane, SO21 2NR)"
+    },
+    {
+      "url": "https://www.sparsholt.ac.uk/",
+      "name": "Sparsholt College (further/higher education, land-based, 14+/16+)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "on village edge (Westley Lane, SO21 2NF)"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~3-4 miles west of Winchester",
+        "typical": "~10 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester station with fast services",
+        "typical": "~1h"
+      },
+      {
+        "to": "Stockbridge",
+        "mode": "Drive",
+        "notes": "Nearby market town",
+        "typical": "~15 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A premium Winchester-area village; characterful period and detached homes in sought-after countryside command high values. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walks and cycling in the downland west of Winchester",
+    "Dining and stays at Lainston House Hotel",
+    "Sparsholt parish church",
+    "Chalk-stream fishing on the nearby Test and Itchen",
+    "Easy access to Winchester's heritage and shops"
+  ],
+  "placesToEat": [
+    "Village pub",
+    "Lainston House Hotel restaurant",
+    "Wide choice in nearby Winchester"
+  ],
+  "pros": [
+    "One of Hampshire's finest villages with full amenities",
+    "Renowned Sparsholt College on the doorstep",
+    "Close to Winchester and fast London rail",
+    "Excellent surrounding countryside and country-house hotel"
+  ],
+  "cons": [
+    "Premium house prices",
+    "No railway station in the village (rely on Winchester)",
+    "Secondary schooling (academic) is in Winchester, not the village"
+  ],
+  "whoItSuits": "Buyers wanting a prestigious, well-served village close to Winchester with countryside on the doorstep.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~4 miles)",
+  "primarySupermarket": "Village shop; supermarkets in Winchester",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.get-information-schools.service.gov.uk/Establishments/Establishment/Details/116317",
+      "label": "Sparsholt CofE Primary School - GOV.UK"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/31/130698",
+      "label": "Sparsholt College - Ofsted report (Good, Oct 2023)"
+    },
+    {
+      "url": "https://www.sparsholt.ac.uk/",
+      "label": "Sparsholt College"
+    },
+    {
+      "url": "https://search.savills.com/property-detail/gbwnrswns250101",
+      "label": "Savills - Sparsholt village description"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:56.796Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^800934"
+  }
 }

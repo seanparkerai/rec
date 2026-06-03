@@ -15,34 +15,98 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809963",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:21.858Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Lover is a small village in the civil parish of Redlynch, about 1 mile south-east of Redlynch and roughly 7.5 miles south-east of Salisbury, within the New Forest National Park. Once called Warminster Green, it had become known as Lover by 1876, possibly a corruption of 'Lower Redlynch'. The village is built around a triangle of three roads - Besomer Drove, School Road and Church Hill - and has St Mary's church, built in 1837, with the adjoining Redlynch Village Hall nearby.",
+  "character": "A scattered, wooded New Forest-edge village of mostly 19th- and 20th-century cottages and houses, quiet and rural, with the community-run Lover Green at its heart.",
+  "amenities": [
+    "St Mary's parish church (1837)",
+    "Redlynch Village Hall, near the church",
+    "Lover Green community green (former school field, home of the annual Lover Country Fayre)",
+    "The Kings Head at Redlynch and the Woodfalls Inn at Woodfalls nearby",
+    "No shop in the village - everyday shopping is in Downton or Salisbury"
+  ],
+  "schools": [
+    {
+      "url": "https://www.mvwacademy.co.uk/",
+      "name": "Morgan's Vale and Woodfalls Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1.5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 7.5 miles north-west for shops, services and the main-line station",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing is mostly 19th- and 20th-century cottages and detached houses, in low volumes; the New Forest National Park setting and tight planning controls support premium, steady values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "Walking, cycling and riding in the New Forest National Park on the doorstep",
+    "The annual Lover Country Fayre on Lover Green",
+    "Following the young River Blackwater, which rises near the village"
+  ],
+  "placesToEat": [
+    "The Kings Head, Redlynch",
+    "The Woodfalls Inn, Woodfalls"
+  ],
+  "pros": [
+    "Inside the New Forest National Park with forest and heath access from the door",
+    "Characterful village with a famous name and a strong community",
+    "Good-rated primary school a short distance away in Redlynch"
+  ],
+  "cons": [
+    "No shop or pub within Lover itself",
+    "Car-dependent location",
+    "National Park planning policy limits new building and extensions"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, characterful New Forest-edge village with countryside on the doorstep, who do not need shops or a pub in the village.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Lover,_Wiltshire",
+      "label": "Wikipedia - Lover, Wiltshire"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Redlynch,_Wiltshire",
+      "label": "Wikipedia - Redlynch, Wiltshire (parish, pubs, churches)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/140112",
+      "label": "Ofsted - Morgan's Vale and Woodfalls CE Primary (URN 140112, Good, 2021)"
+    },
+    {
+      "url": "https://www.redlynchparishcouncil.org/about/",
+      "label": "Redlynch Parish Council"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:21.858Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809963"
+  }
 }

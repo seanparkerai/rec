@@ -15,34 +15,108 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809240",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:22.490Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Winterbourne Gunner is a village in the Bourne valley near the A338, about 4 miles north-east of Salisbury, adjoining Winterbourne Dauntsey. A former parish in its own right, in 1934 it merged with Winterbourne Earls and Winterbourne Dauntsey to form the civil parish of Winterbourne. The River Bourne, a winterbourne that often dries in summer, runs through the village, and its parish church is St Mary the Virgin.",
+  "character": "A small, quiet flint-and-cob village at the northern end of the Winterbournes, more rural and dispersed than its neighbours, with open downland close by.",
+  "amenities": [
+    "St Mary the Virgin parish church",
+    "Winterbourne Earls CE Primary School in the adjoining village",
+    "The Winterbourne Arms pub at nearby Winterbourne Dauntsey",
+    "Bourne Valley community groups and events",
+    "No village shop - everyday shopping is in Salisbury"
+  ],
+  "schools": [
+    {
+      "url": "https://www.winterbourneearls.org/",
+      "name": "Winterbourne Earls Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1 mile"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 4 miles south-west via the A338 for shops, services and the station",
+        "typical": "~14 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Buses run along the A338 Bourne valley corridor",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is predominantly period cottages and detached houses with some later infill, in low volumes given the village's small size; the quiet rural setting and Salisbury proximity support solid values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP4.html"
+  },
+  "thingsToDo": [
+    "Walking along the River Bourne and out onto the surrounding chalk downland",
+    "Following the Roman Port Way towards Old Sarum",
+    "Joining Bourne Valley community clubs and seasonal events"
+  ],
+  "placesToEat": [
+    "The Winterbourne Arms, Winterbourne Dauntsey",
+    "Community cafe events run across the Winterbournes"
+  ],
+  "pros": [
+    "Peaceful, rural northern end of the Bourne valley",
+    "Good-rated primary school in the adjoining village",
+    "About 4 miles from Salisbury's full range of services"
+  ],
+  "cons": [
+    "No shop or pub within Winterbourne Gunner itself",
+    "Car-dependent, with limited bus frequency",
+    "The Bourne can flood the lower ground in wet winters"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, rural valley village with downland walking, within an easy drive of Salisbury and a Good-rated primary nearby.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Winterbourne_Gunner",
+      "label": "Wikipedia - Winterbourne Gunner"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Winterbourne,_Wiltshire",
+      "label": "Wikipedia - Winterbourne, Wiltshire (parish)"
+    },
+    {
+      "url": "https://www.wiltshire-opc.org.uk/parishes/winterbourne-gunner/",
+      "label": "Wiltshire OPC Project - Winterbourne Gunner (St Mary's history)"
+    },
+    {
+      "url": "https://www.thewinterbournes.org.uk/",
+      "label": "Winterbourne Parish Council - The Winterbournes"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/151736",
+      "label": "Ofsted - Winterbourne Earls CE Primary (URN 151736, Good, May 2024)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:22.490Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809240"
+  }
 }

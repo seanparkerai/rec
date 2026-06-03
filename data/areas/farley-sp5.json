@@ -15,34 +15,116 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809992",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:52.149Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Farley is a village in south Wiltshire, lying about 7 miles east of Salisbury just off the A30 London Road and forming the joint civil and ecclesiastical parish of Pitton and Farley with neighbouring Pitton a mile and a half to the north. Its outstanding landmark is the Grade I listed All Saints' Church, built in the 1680s under the patronage of Sir Stephen Fox with strong design influence from Sir Christopher Wren, alongside the contemporary Grade I listed Farley Hospital almshouses. Farley sits on clay (while Pitton sits on chalk) in a quiet downland valley east of Clarendon.",
+  "character": "A small, historic and tight-knit downland village of brick and flint cottages, known for its remarkable Wren-influenced church and a lively annual music and literary festival.",
+  "amenities": [
+    "All Saints' Church (Grade I listed)",
+    "Farley Hospital almshouses (Grade I listed, 1681)",
+    "The Hook and Glove village pub",
+    "Farley village hall and Farley Nursery School",
+    "Shop and post office and further pub (Silver Plough) in neighbouring Pitton"
+  ],
+  "schools": [
+    {
+      "url": "https://stnicholas.dsat.org.uk/",
+      "name": "St Nicholas CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~5 miles"
+    },
+    {
+      "url": "https://www.pittonandfarley.co.uk/",
+      "name": "Farley Nursery School (early years)",
+      "type": "Independent",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 7 miles west via the A30 London Road",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "Nearest mainline station at Salisbury (London Waterloo to Exeter line); Grateley also accessible to the north-east",
+        "typical": "Salisbury station ~7 miles"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Salisbury station",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Mainly period cottages and detached village houses; properties in this SP5 area east of Salisbury typically sell from around the mid hundreds of thousands of pounds upward, with larger homes commanding more.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/sp5.html"
+  },
+  "thingsToDo": [
+    "Farley Music Festival each June and the Farley Literary Festival",
+    "Visiting the Wren-influenced All Saints' Church and Farley almshouses",
+    "Walking and riding around Clarendon, Bentley Wood and the surrounding downland"
+  ],
+  "placesToEat": [
+    "The Hook and Glove, Farley (village pub)",
+    "The Silver Plough, Pitton (well-known nearby dining pub)"
+  ],
+  "pros": [
+    "Exceptional Grade I listed church and historic almshouses",
+    "Strong village community with festivals and events",
+    "Quiet downland setting within easy reach of Salisbury and the A30"
+  ],
+  "cons": [
+    "No railway station in the village; reliance on Salisbury or Grateley",
+    "Limited shopping, with the main shop in neighbouring Pitton",
+    "Nearest primary school is a few miles away"
+  ],
+  "whoItSuits": "Buyers wanting a historic, community-minded Wiltshire village within commuting distance of Salisbury who appreciate heritage and the arts.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.pittonandfarley.co.uk/",
+      "label": "Pitton & Farley official community website"
+    },
+    {
+      "url": "https://apps.wiltshire.gov.uk/communityhistory/Community/Index/182",
+      "label": "Pitton & Farley - Wiltshire Community History (Wiltshire Council)"
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1135703",
+      "label": "Church of All Saints, Pitton and Farley (Grade I) - Historic England"
+    },
+    {
+      "url": "https://stnicholas.dsat.org.uk/",
+      "label": "St Nicholas CofE Primary School - Pitton & Farley catchment page"
+    },
+    {
+      "url": "https://www.achurchnearyou.com/church/9475/",
+      "label": "Farley: All Saints - A Church Near You"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:52.149Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809992"
+  }
 }

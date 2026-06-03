@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "A town of around 16,000 residents in the East Hampshire district, set in the royal Woolmer Forest some five miles south-east of Alton. Bordon is unlike its nearest peers (Petersfield, Farnham, Alton) in that it never grew as a market town: the camp was laid out by the Royal Engineers in 1899 and from 1903 the town developed around the Army, latterly as a base for the Royal Electrical and Mechanical Engineers. The MoD withdrew in 2015 and a 15-year, circa £1bn regeneration partnership (Defence Infrastructure Organisation, Dorchester Regeneration, Taylor Wimpey, East Hants and Hampshire County Councils) is rebuilding the former Prince Philip Barracks site as a 'Green Town' delivering up to 3,350 new homes, a new town centre, schools, a health hub and the 54-hectare Hogmoor Inclosure SANGS. The Sainsbury's that anchors the emerging town centre broke ground in 2025 with first customers due summer 2026. Bordon shares a civil parish (Whitehill) with the contiguous village of Lindford.",
   "character": "A working town in the middle of a long, public-led rebuild. Older Edwardian and post-war military housing on the A325 spine sits alongside new-build Quebec Park and Prince Philip Park phases (Taylor Wimpey, Bovis and others). Heathland, woodland and the Woolmer Forest SSSI are immediately to the south; the new walking and cycling 'Green Loop' threads the town. Mixed demographic — ex-service families, commuters using Liphook for the Portsmouth Direct line, and first-time buyers priced out of Farnham or Haslemere.",
   "amenities": [
@@ -169,8 +172,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:13.963Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

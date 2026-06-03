@@ -10,39 +10,124 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1305,
-    "lng": -1.7463
+    "lat": 51.1286,
+    "lng": -1.7322
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "manual-verified:multi-source",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809163",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:42.594Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Porton is a village in the Bourne valley in Wiltshire, about 5 miles north-east of Salisbury, and the largest settlement in the civil parish of Idmiston. It sits on the River Bourne, a chalk stream, with downland rising to the east. The village gives its name to the nearby Porton Down military science park (the Defence Science and Technology Laboratory), which is a separate, non-residential site and not part of the village itself.",
+  "character": "A small, settled chalk-valley village with a mix of older brick-and-flint cottages and 20th-century housing, a parish church and a working village centre, set in open downland countryside on the edge of Salisbury Plain.",
+  "amenities": [
+    "Village shop and Post Office",
+    "GP surgery",
+    "St Nicholas Church of England primary school",
+    "St Nicholas parish church (built 1877; serves Porton, Idmiston and Gomeldon)",
+    "Porton Garden, Aquatics and Pet Centre with cafe",
+    "Salisbury Reds bus service to Salisbury"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "St Nicholas CofE (Aided) Primary School, Porton",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Salisbury (e.g. Bishop Wordsworth's, South Wilts Grammar, Wyvern St Edmund's)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5-6 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~5 miles via the A338 / Tidworth Road",
+        "typical": "~15-20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station (SWR mainline)",
+        "typical": "~1h 25m"
+      },
+      {
+        "to": "A303 / Andover",
+        "mode": "Drive",
+        "notes": "For road routes towards the M3 and London",
+        "typical": "~20-25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A small Wiltshire commuter-belt village within easy reach of Salisbury; housing is a mix of period cottages and later detached and semi-detached homes. See Rightmove for current sold-price detail for Porton (SP4).",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/porton.html"
+  },
+  "thingsToDo": [
+    "Walks in the Bourne valley and surrounding chalk downland",
+    "Porton Garden, Aquatics and Pet Centre and cafe",
+    "Cycling the quiet Bourne valley lanes",
+    "Easy access to Salisbury's cathedral, museums and markets"
+  ],
+  "placesToEat": [
+    "Cafe at Porton Garden, Aquatics and Pet Centre",
+    "Wider choice of pubs and dining in neighbouring Bourne valley villages and in Salisbury"
+  ],
+  "pros": [
+    "Real, settled village with shop, school, surgery and church",
+    "Close to Salisbury and its mainline station",
+    "Open chalk-downland setting in the Bourne valley",
+    "Established employment nearby at the Porton Down science park"
+  ],
+  "cons": [
+    "No working railway station in the village (nearest mainline at Salisbury)",
+    "Limited evening/weekend bus frequency typical of a rural village",
+    "Proximity to the Porton Down ranges and associated traffic"
+  ],
+  "whoItSuits": "Buyers wanting an established Bourne valley village close to Salisbury, with everyday amenities and good road and rail links - including people working at the Porton Down science park.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~5 miles, South Western Railway mainline); the former Porton station on the line closed in 1968",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Porton",
+      "label": "Porton - Wikipedia"
+    },
+    {
+      "url": "https://gazetteer.org.uk/place/Porton,_Wiltshire_36609",
+      "label": "Porton, Wiltshire - Gazetteer of British Place Names"
+    },
+    {
+      "url": "https://www.getthedata.com/postcode/SP4-0NE",
+      "label": "Porton (SP4 0NE) postcode and coordinates - GetTheData"
+    },
+    {
+      "url": "https://hwwhite.co.uk/bourne-valley/porton/",
+      "label": "Porton, Bourne Valley - H W White"
+    },
+    {
+      "url": "https://www.genuki.org.uk/big/eng/WIL/Porton",
+      "label": "Porton, Wiltshire - GENUKI"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:42.594Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809163"
+  }
 }

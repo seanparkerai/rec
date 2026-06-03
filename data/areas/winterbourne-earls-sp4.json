@@ -15,34 +15,108 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809240",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:21.871Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Winterbourne Earls is a village in the Bourne valley on the A338, about 3.5 miles north-east of Salisbury. It forms part of the civil parish of Winterbourne, created in 1934 by amalgamating the three adjoining villages of Winterbourne Earls, Winterbourne Dauntsey and Winterbourne Gunner (the parish covers around 1,000 residents). The flint church of St Michael and All Angels, built in 1867-68 to serve Earls and Dauntsey, stands in the village, which also has the area's primary school and Glebe Hall.",
+  "character": "A settled, contiguous Bourne-valley village that runs almost seamlessly into Winterbourne Dauntsey, with a strong, active local community and chalk-stream surroundings.",
+  "amenities": [
+    "Winterbourne Earls Church of England Primary School",
+    "St Michael and All Angels Church",
+    "Glebe Hall community venue",
+    "The Winterbourne Arms pub at adjoining Winterbourne Dauntsey",
+    "Active community groups across the Winterbournes (theatre, clubs and events)"
+  ],
+  "schools": [
+    {
+      "url": "https://www.winterbourneearls.org/",
+      "name": "Winterbourne Earls Church of England Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "in the village"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 3.5 miles south-west on the A338 for shops, services and the station",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury on South Western Railway; fastest services about 1h 20m",
+        "typical": "~90 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Regular buses run along the A338 Bourne valley corridor",
+        "typical": "~20 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Housing ranges from period cottages to mid-20th-century and modern family homes, giving more variety and volume than the smaller valley hamlets; demand is supported by the village primary and the short Salisbury commute. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP4.html"
+  },
+  "thingsToDo": [
+    "Walking along the River Bourne and the surrounding chalk downland",
+    "Following the Roman Port Way on the higher ground towards Old Sarum",
+    "Community events at Glebe Hall and across the Winterbournes"
+  ],
+  "placesToEat": [
+    "The Winterbourne Arms, Winterbourne Dauntsey",
+    "Cafe and refreshment events run by the Bourne Valley community groups"
+  ],
+  "pros": [
+    "Its own Good-rated village primary school",
+    "Closest of the Bourne valley villages to Salisbury, about 3.5 miles",
+    "Lively, well-organised village community"
+  ],
+  "cons": [
+    "Limited shopping in the village - main shopping is in Salisbury",
+    "The A338 carries through-traffic past the village",
+    "Some properties sit close to the Bourne flood corridor"
+  ],
+  "whoItSuits": "Families wanting a sociable, well-connected valley village with a good primary school and a short hop into Salisbury.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Winterbourne_Earls",
+      "label": "Wikipedia - Winterbourne Earls"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Winterbourne,_Wiltshire",
+      "label": "Wikipedia - Winterbourne, Wiltshire (parish)"
+    },
+    {
+      "url": "https://www.thewinterbournes.org.uk/",
+      "label": "Winterbourne Parish Council - The Winterbournes"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/151736",
+      "label": "Ofsted - Winterbourne Earls CE Primary (URN 151736, Good, May 2024)"
+    },
+    {
+      "url": "https://www.wiltshire-opc.org.uk/parishes/winterbourne-dauntsey/",
+      "label": "Wiltshire OPC Project - Winterbourne Dauntsey (St Michael & All Angels history)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:21.871Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809240"
+  }
 }

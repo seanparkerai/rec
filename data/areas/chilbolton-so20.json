@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": "D",
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Chilbolton is a village and civil parish of around 1,000 residents in the Test Valley district, four miles south of Andover and roughly four and a half miles north-east of Stockbridge, set in the upper valley of the River Test on chalk-stream country framed by Chilbolton Down and Cow Common. The 12th-century parish church of St Mary the Less sits on the site of an earlier wooden church and is unusual for its low tower. The village is best known nationally for the Chilbolton Observatory on the disused RAF Chilbolton airfield, a research facility for atmospheric science, radio communications and astronomy whose 25-metre steerable parabolic antenna has been a Test Valley landmark since 1967. Chilbolton Cow Common, north-west of the village, is a designated Site of Special Scientific Interest; West Down is a Site Important for Nature Conservation. The village has its own gliding/flying club at Chilbolton airfield.",
   "character": "Quietly affluent chalk-stream village: traditional thatched and brick-and-flint cottages along Stockbridge Road and Drove Road, with newer detached infill on the village fringes. Building stock dates from the 17th century onwards. Designated 'within Special Landscape Area' under Test Valley local plan.",
   "amenities": [
@@ -135,8 +138,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:14:32.045Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

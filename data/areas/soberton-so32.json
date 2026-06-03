@@ -15,34 +15,115 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1234492",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:54.755Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Soberton is a village in the Meon Valley in southern Hampshire, within the South Downs National Park, lying east of the A32 a few miles south of Droxford. Recorded in the Domesday Book as 'Sudbertone', its centre features a War Memorial, the early 16th-century Church of St Peter and St Paul (part of one of the largest parishes in the UK), and the 17th-century White Lion pub. A vault beneath the church was reputedly used to store contraband on an 18th-century smuggling route, and the Georgian manor Soberton Towers stands north of the church.",
+  "character": "A quiet, historic chalk-stream village in the South Downs, prized for its rural calm, country pubs and access to the Meon Valley Trail.",
+  "amenities": [
+    "The White Lion (17th-century country pub with B&B)",
+    "The Bold Forester pub",
+    "Church of St Peter and St Paul (early 16th century)",
+    "Soberton Village Hall (function room for up to 200)",
+    "Meon Valley Trail (former railway) for walking/cycling/riding",
+    "War Memorial at the village centre"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "Meon Valley primary schools (e.g. Droxford Junior, Meonstoke Infant)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1-3 miles"
+    },
+    {
+      "url": "https://www.swanmore-school.co.uk/",
+      "name": "Swanmore College (secondary)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via A32/B-roads",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Fareham/M27",
+        "mode": "Drive",
+        "notes": "South along the A32",
+        "typical": "~20 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Petersfield or Winchester",
+        "typical": "~1h 10m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after South Downs village; character cottages, period homes and some larger houses, with limited supply keeping values firm. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Walking and cycling the Meon Valley Trail",
+    "Church of St Peter and St Paul and its smuggling history",
+    "Walks to Old Winchester Hill and Butser Hill",
+    "Chalk-stream walks along the River Meon"
+  ],
+  "placesToEat": [
+    "The White Lion (AA Rosette country pub)",
+    "The Bold Forester"
+  ],
+  "pros": [
+    "Beautiful, tranquil South Downs/Meon Valley setting",
+    "Two well-regarded country pubs",
+    "Direct access to the Meon Valley Trail",
+    "Rich local history and period character"
+  ],
+  "cons": [
+    "Very limited everyday amenities (no clear village shop or school in the village itself)",
+    "No railway station; car-dependent",
+    "Quiet/remote feel may not suit everyone"
+  ],
+  "whoItSuits": "Buyers seeking a peaceful, historic Meon Valley village with great pubs and walking, who don't need in-village shops or schools.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Petersfield or Winchester (~9-11 miles)",
+  "primarySupermarket": "Shops in nearby Droxford, Wickham and Bishop's Waltham",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Soberton",
+      "label": "Soberton - Wikipedia"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/Soberton",
+      "label": "Soberton - Wikishire"
+    },
+    {
+      "url": "https://www.thewhitelionsoberton.com/",
+      "label": "The White Lion, Soberton"
+    },
+    {
+      "url": "https://www.sobertonvillagehall.co.uk/",
+      "label": "Soberton Village Hall"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:54.755Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1234492"
+  }
 }

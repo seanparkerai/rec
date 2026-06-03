@@ -15,34 +15,92 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1236392",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:23.173Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Lower Chicksgrove is a small hamlet on the north bank of the River Nadder in the Vale of Wardour, in the civil parish of Sutton Mandeville, about 2 miles east of Tisbury and roughly 11 miles west of Salisbury. Recorded as Chicksgrove in the 12th century, it is a scattered cluster of farmsteads and cottages, many built of local Chilmark stone. Chicksgrove Manor, the largest surviving house, was the birthplace of the Elizabethan poet and lawyer Sir John Davies (1569-1626).",
+  "character": "A tranquil, picturesque Nadder-valley hamlet of stone and thatched cottages along quiet lanes, deep in unspoilt countryside.",
+  "amenities": [
+    "The Compasses Inn - a historic 14th-century country pub with restaurant and rooms",
+    "No shop or school in the hamlet - nearest services are in Tisbury (~2 miles)",
+    "Tisbury has the nearest railway station, shops and schools"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Tisbury",
+        "mode": "Drive",
+        "notes": "About 2 miles for the station, shops and schools",
+        "typical": "~7 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 11 miles east via the Nadder valley and A30",
+        "typical": "~30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Direct from Tisbury (about 2 miles) on the Salisbury-Exeter line (South Western Railway)",
+        "typical": "~2 hr"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is mainly period stone and thatched cottages and houses in a Vale of Wardour setting within the Cranborne Chase National Landscape, in very low volumes; character and tranquillity support premium values. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP3.html"
+  },
+  "thingsToDo": [
+    "Walking the Nadder valley and Vale of Wardour (a popular circular walk starts from the Compasses Inn)",
+    "Fly-fishing on the River Nadder",
+    "Visiting Old Wardour Castle and the small town of Tisbury nearby"
+  ],
+  "placesToEat": [
+    "The Compasses Inn, Lower Chicksgrove - award-winning country pub and restaurant with rooms"
+  ],
+  "pros": [
+    "Exceptionally tranquil, picturesque stone-built Nadder-valley hamlet",
+    "A renowned historic country pub with rooms in the hamlet itself",
+    "Direct rail to London and Salisbury from Tisbury, about 2 miles away"
+  ],
+  "cons": [
+    "No shop or school in the hamlet - everyday needs are met in Tisbury",
+    "Very rural and car-dependent, on narrow lanes",
+    "London trains from Tisbury are slower (about 2 hours) than from Salisbury"
+  ],
+  "whoItSuits": "Buyers seeking a deeply rural, characterful Nadder-valley hamlet with a great country pub and a station at Tisbury close by.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Lower_Chicksgrove",
+      "label": "Wikipedia - Lower Chicksgrove"
+    },
+    {
+      "url": "https://thecompassesinn.com/",
+      "label": "The Compasses Inn, Chicksgrove (history)"
+    },
+    {
+      "url": "https://stayinapub.co.uk/the-compasses-inn/",
+      "label": "StayInAPub - The Compasses Inn (Nadder Valley)"
+    },
+    {
+      "url": "https://www.ruralview.co.uk/wp-content/uploads/rps_rvs-TSB150022.pdf",
+      "label": "Rural View - Little Cottage, Lower Chicksgrove (local Chilmark stone, setting)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:23.173Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1236392"
+  }
 }

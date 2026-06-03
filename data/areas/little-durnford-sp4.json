@@ -15,34 +15,102 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4374142",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:16.332Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Little Durnford is a tiny hamlet on the east bank of the Hampshire Avon, about 3 miles north-east of Salisbury, within the civil parish of Durnford and the Woodford Valley. It lies inside the Stonehenge, Avebury and Associated Sites World Heritage Site. The settlement is dominated by the Grade I-listed Little Durnford Manor, a late-17th-century country house remodelled around 1720-40; the medieval village beside the river is thought to have largely disappeared in the 18th century when parkland was laid out for the manor.",
+  "character": "An exceptionally quiet, almost entirely agricultural and residential hamlet of manor, parkland and a handful of cottages, with no main road running through it and a strong riverside, estate feel.",
+  "amenities": [
+    "No shop, pub or services within the hamlet itself",
+    "Nearest pubs in the Woodford Valley: The Bridge Inn (Upper Woodford) and The Wheatsheaf (Lower Woodford), roughly 2-3 miles",
+    "Day-to-day and main shopping in Salisbury, about 3 miles south"
+  ],
+  "schools": [
+    {
+      "url": "https://www.woodfordvalleyschool.org.uk/",
+      "name": "Woodford Valley CofE Primary Academy",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2.5 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 3 miles via the east-bank valley road / A345",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury station (drive ~3.5 miles to the station first)",
+        "typical": "~90 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Open-market sales are very rare: the hamlet is dominated by large estate and manor properties plus a few cottages, so available stock is scarce and values sit at the higher end. Use the wider SP4 / Woodford Valley sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP4.html"
+  },
+  "thingsToDo": [
+    "Riverside walks along the Hampshire Avon",
+    "Walking and cycling in the Woodford Valley and Stonehenge World Heritage landscape",
+    "Ogbury Camp Iron Age hillfort nearby",
+    "High Post Golf Club a short drive north"
+  ],
+  "placesToEat": [
+    "The Bridge Inn, Upper Woodford (~2.5 miles)",
+    "The Wheatsheaf, Lower Woodford (~2 miles)",
+    "The Great Bustard, Great Durnford (~2 miles)"
+  ],
+  "pros": [
+    "Peaceful, scenic riverside setting with no through-traffic",
+    "Very close to Salisbury (~3 miles) yet deeply rural",
+    "Sits within the Stonehenge World Heritage Site landscape"
+  ],
+  "cons": [
+    "Effectively no amenities within the hamlet itself",
+    "Car-dependent for almost everything",
+    "Very limited and high-priced housing stock"
+  ],
+  "whoItSuits": "Buyers seeking a quiet, high-end rural riverside setting within easy reach of Salisbury who do not need amenities on the doorstep.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Durnford,_Wiltshire",
+      "label": "Durnford, Wiltshire - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Little_Durnford_Manor",
+      "label": "Little Durnford Manor - Wikipedia"
+    },
+    {
+      "url": "https://hwwhite.co.uk/woodford-valley/great-durnford/",
+      "label": "Woodford Valley area guide - Whites Estate Agents"
+    },
+    {
+      "url": "https://www.wiltshire-opc.org.uk/parishes/durnford/",
+      "label": "Durnford parish - Wiltshire OPC Project"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol15/pp79-93",
+      "label": "VCH Wiltshire vol. 15: Durnford - British History Online"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:16.332Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^4374142"
+  }
 }

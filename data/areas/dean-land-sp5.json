@@ -15,34 +15,132 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
-  "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^810233",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:39.767Z"
-  },
+  "councilTaxBand": "F",
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Deanland (also written Dean Land) is a small, secluded hamlet about 1.5 miles outside the village of Sixpenny Handley, set within the Cranborne Chase National Landscape (AONB) and International Dark Sky Reserve, just on the Dorset side of the Wiltshire border, with Salisbury the nearest city. It is a quiet cluster of mainly detached houses and farmland with direct access to footpaths and bridleways, the Rushmore Estate and the Garston Wood RSPB reserve. Everyday needs are met in Sixpenny Handley, which has a general store, a well-regarded butcher, a GP surgery, a first school, a church and a recreation ground. Larger shopping and a mainline station to London Waterloo are in Salisbury, with Blandford and Shaftesbury also within reach.",
+  "character": "Deeply rural and dark-sky quiet - a handful of houses among arable fields and ancient woodland, prized for privacy, walking and stargazing.",
+  "amenities": [
+    "Hamlet with no shops of its own; nearest facilities about 1.5 miles away in Sixpenny Handley",
+    "Sixpenny Handley village has a Nisa Local, butcher, GP surgery, first school, church and recreation ground",
+    "Within the Cranborne Chase National Landscape (AONB) and International Dark Sky Reserve",
+    "Garston Wood RSPB reserve and Rushmore Estate woodland nearby",
+    "Gigabit broadband available at some premises; larger shops in Salisbury, Blandford and Shaftesbury"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/142503",
+      "name": "Sixpenny Handley First School and Nursery",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1.5 miles"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/113853",
+      "name": "Cranborne Middle School",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": "Good",
+      "distance": "~4 miles"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/126521",
+      "name": "Sandroyd School (independent prep)",
+      "type": "Independent",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "Nearest city; mainline station to London Waterloo and full shopping",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Sixpenny Handley",
+        "mode": "Drive",
+        "notes": "Nearest village for shop, school, GP and church",
+        "typical": "~4 min"
+      },
+      {
+        "to": "Tisbury",
+        "mode": "Drive",
+        "notes": "Nearest railway station; SWR West of England line to London Waterloo",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Blandford Forum",
+        "mode": "Drive",
+        "notes": "Market town to the south-west",
+        "typical": "~20 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A small hamlet of mainly detached and period country houses; a representative recent example, a 4-bedroom detached house, was guided at around 650,000 pounds (council tax Band F). Few homes trade here and values reflect the protected Cranborne Chase AONB and Dark Sky setting.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/sp5/deanland.html"
+  },
+  "thingsToDo": [
+    "Stargazing in the Cranborne Chase International Dark Sky Reserve",
+    "Walk Garston Wood RSPB reserve, known for its spring bluebells",
+    "Explore the Rushmore Estate woodland and wider Cranborne Chase",
+    "Miles of chalk-downland footpaths and bridleways from the doorstep"
+  ],
+  "placesToEat": [
+    "Village shop and a well-regarded butcher in Sixpenny Handley (~1.5 miles)",
+    "Wider choice of pubs and restaurants in Salisbury, Blandford and Shaftesbury"
+  ],
+  "pros": [
+    "Outstanding dark skies and unspoilt Cranborne Chase countryside",
+    "Real privacy and space, with footpaths and RSPB woodland on the doorstep",
+    "Useful village facilities (shop, butcher, GP, first school) close by in Sixpenny Handley",
+    "Salisbury's mainline trains and full amenities within about 25 minutes' drive"
+  ],
+  "cons": [
+    "Very rural - a car is essential and the nearest supermarket and mainline hub are in Salisbury (~25 min)",
+    "Nearest railway station (Tisbury) is around 8 miles away",
+    "Dorset's three-tier first/middle/upper school system differs from neighbouring Wiltshire"
+  ],
+  "whoItSuits": "Buyers wanting genuine rural seclusion, dark skies and country walks within reach of Salisbury, who do not mind driving for shops, schools and trains.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Tisbury",
+  "primarySupermarket": "Nisa Local, Sixpenny Handley",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.rightmove.co.uk/properties/153521246",
+      "label": "Deanland 4-bed house listing (amenities, council tax) - Woolley & Wallis via Rightmove"
+    },
+    {
+      "url": "https://crystalroof.co.uk/report/postcode/SP55PA/overview",
+      "label": "Dean Lane / Deanland area report - Crystal Roof"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/142503",
+      "label": "Sixpenny Handley First School - Get Information About Schools (DfE)"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/sp5/deanland.html",
+      "label": "Sold house prices, Deanland - Rightmove"
+    },
+    {
+      "url": "https://www.streetcheck.co.uk/postcode/sp55pa",
+      "label": "Dean Lane (SP5 5PA) postcode profile - StreetCheck"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:39.767Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^810233"
+  }
 }

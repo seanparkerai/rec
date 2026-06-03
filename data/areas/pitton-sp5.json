@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^809668",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:41.219Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Pitton is a historic village about 5-7 miles east of Salisbury in Wiltshire, just off the A30 London Road, forming the joint civil and ecclesiastical parish of Pitton and Farley (Farley lies about 1.5 miles south). Set in a chalk valley, Pitton has the parish church of St Peter (largely rebuilt in 1860, with a fine Kempe stained-glass window), its own primary school, a popular pub, and a shop with Post Office.",
+  "character": "A pretty, well-served downland village with a strong community, a good village pub and its own school, in a quiet valley east of Salisbury.",
+  "amenities": [
+    "The Silver Plough (village pub)",
+    "Pitton CofE Primary School",
+    "Village shop and Post Office",
+    "St Peter's Church (rebuilt 1860, Kempe window)",
+    "Village hall",
+    "Park and small recreation ground",
+    "The Hook & Glove pub in neighbouring Farley"
+  ],
+  "schools": [
+    {
+      "url": "https://www.pitton.wilts.sch.uk/",
+      "name": "Pitton CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Whiteway, SP5 1DT)"
+    },
+    {
+      "url": null,
+      "name": "Secondary/grammar schools in Salisbury (Bishop Wordsworth's, South Wilts)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~7 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~5-7 miles via A30",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station",
+        "typical": "~1h 30m"
+      },
+      {
+        "to": "Andover",
+        "mode": "Drive",
+        "notes": "Via A30/A343",
+        "typical": "~30 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after village east of Salisbury; period and chalk-valley cottages plus family homes, with values supported by the school, pub and rural setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP5.html"
+  },
+  "thingsToDo": [
+    "The Silver Plough pub",
+    "St Peter's Church and its Kempe window",
+    "Walks in the chalk valley and to neighbouring Farley",
+    "Village park and recreation ground",
+    "Easy trips into Salisbury"
+  ],
+  "placesToEat": [
+    "The Silver Plough, Pitton",
+    "The Hook & Glove, Farley",
+    "Wide choice in Salisbury"
+  ],
+  "pros": [
+    "Own primary school, pub and shop/Post Office",
+    "Strong community in a pretty chalk-valley setting",
+    "Easy A30 access to Salisbury",
+    "Joined with Farley for a wider community"
+  ],
+  "cons": [
+    "No railway station; rely on Salisbury",
+    "Secondary schooling is in Salisbury",
+    "Quiet/rural with limited public transport"
+  ],
+  "whoItSuits": "Families wanting a well-served, characterful village east of Salisbury with its own school and a good pub.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury (~7 miles)",
+  "primarySupermarket": "Village shop; supermarkets in Salisbury",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://www.stnicholas.dsat.org.uk/page/?title=Pitton+%26+Farley=&pid=80",
+      "label": "St Nicholas CofE Primary - Pitton & Farley"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/148678",
+      "label": "Pitton CofE Primary School - GOV.UK (URN 148678)"
+    },
+    {
+      "url": "https://www.firsdown-pc.gov.uk/schools-and-churches",
+      "label": "Firsdown Parish Council - Schools & Churches (St Peter's Pitton)"
+    },
+    {
+      "url": "https://www.getthedata.com/postcode/SP5-1EH",
+      "label": "GetTheData - SP5 1EH (Pitton)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:41.219Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^809668"
+  }
 }

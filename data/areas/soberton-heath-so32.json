@@ -15,34 +15,134 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^802983",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:54.079Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Soberton Heath is a small rural hamlet in the civil parish of Soberton in the City of Winchester district of Hampshire, in the Meon Valley between Bishop's Waltham and Wickham, a little south of Soberton village and the A32. It is a scattered settlement of houses, bungalows and smallholdings on former heathland, set in farmland on the edge of the South Downs. Soberton Heath has no shops of its own; the nearest pub (the White Lion) and church are in Soberton, with fuller amenities in Bishop's Waltham, Wickham and Droxford nearby.",
+  "character": "A quiet, dispersed rural hamlet of detached houses and smallholdings in open Meon Valley countryside near the South Downs. The atmosphere is peaceful and semi-rural, with lanes, paddocks and footpaths, and the larger village of Soberton and the Meon Valley Trail close by.",
+  "amenities": [
+    "No shop in Soberton Heath itself",
+    "The White Lion Inn and St Peter's Church in Soberton village (~1 mi)",
+    "Shops, services and schools in Bishop's Waltham (~3-4 mi) and Wickham (~3 mi)",
+    "Droxford village amenities and the Meon Valley Trail nearby",
+    "South Downs National Park countryside on the doorstep"
+  ],
+  "schools": [
+    {
+      "url": "https://www.meonvalleyfederation.hants.sch.uk/",
+      "name": "Newtown Soberton Infant School (Meon Valley Federation)",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1.5 miles"
+    },
+    {
+      "url": "https://www.swanmoreprimary.hants.sch.uk/",
+      "name": "Swanmore CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3 miles"
+    },
+    {
+      "url": "https://www.swanmorecollege.hants.sch.uk/",
+      "name": "Swanmore College",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Bishop's Waltham",
+        "mode": "Drive",
+        "notes": "Nearest town for shops and services",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Wickham",
+        "mode": "Drive",
+        "notes": "Village amenities and the A32/A334",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via the A32/A272; mainline station to London Waterloo",
+        "typical": "~30 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Botley or Petersfield (~9-10 mi), or faster from Winchester",
+        "typical": "~1h 40m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Soberton Heath housing is mostly detached houses, bungalows and smallholdings on generous plots; the Meon Valley SO32 market generally runs from the mid-£400ks for smaller homes to £1m+ for larger country properties, with limited turnover.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO32.html"
+  },
+  "thingsToDo": [
+    "Walking and cycling the Meon Valley Trail (former railway)",
+    "South Downs National Park footpaths around Soberton and Droxford",
+    "Fishing and river walks on the River Meon",
+    "Country pubs of the Meon Valley"
+  ],
+  "placesToEat": [
+    "The White Lion Inn, Soberton (~1 mi)",
+    "Pubs in Droxford and Hambledon nearby",
+    "Wide choice of pubs and cafes in Bishop's Waltham (~3-4 mi)"
+  ],
+  "pros": [
+    "Quiet, semi-rural Meon Valley setting near the South Downs",
+    "Generous plots and countryside on the doorstep",
+    "Village pub and infant school close by; towns within ~3-4 miles",
+    "Meon Valley Trail for walking and cycling"
+  ],
+  "cons": [
+    "No shop in the hamlet; car essential",
+    "No mainline railway station within easy reach",
+    "Limited and varied housing stock",
+    "Rural broadband/mobile coverage can vary"
+  ],
+  "whoItSuits": "Buyers wanting a quiet, plot-rich Meon Valley hamlet near the South Downs with village amenities and good schools a short drive away, who are comfortable being car-dependent.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Botley (~9 miles) or Petersfield (~10 miles); Winchester for fast London services",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Soberton",
+      "label": "Wikipedia - Soberton"
+    },
+    {
+      "url": "https://www.visionofbritain.org.uk/place/5762",
+      "label": "Vision of Britain - Soberton (hamlets incl. Newtown/Southend)"
+    },
+    {
+      "url": "https://www.meonvalleyfederation.hants.sch.uk/",
+      "label": "Meon Valley Federation (Newtown Soberton Infant School)"
+    },
+    {
+      "url": "https://search.savills.com/list/property-for-sale/england/hampshire/soberton-heath/so32",
+      "label": "Savills - Soberton Heath area note"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/SO32.html",
+      "label": "Rightmove - SO32 house prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:54.079Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^802983"
+  }
 }

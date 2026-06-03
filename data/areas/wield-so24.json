@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Wield is a small civil parish in the East Hampshire district, on the chalk uplands between Alresford and Basingstoke, containing two villages — Upper Wield and Lower Wield — about a mile apart. The parish population at the 2021 census was 237. The parish church of St James in Upper Wield is mainly Norman, Grade I-listed, and contains a notable monument to William Wallop (c. 1553–1617), who served as MP for Southampton, justice of the peace and three-times mayor of Southampton. The Yew Tree, in Lower Wield, is the parish's pub. The seed CSV records this entry as GU35 but the actual postcode area is SO24 (post town Alresford) — the Yew Tree's address is SO24 9RX. The parish lies in a wide stretch of chalk downland with no significant numbered roads through it; the closest is the B3046 between Alresford and Basingstoke, about a mile and a half west.",
   "character": "Loose two-village civil parish on high chalk downland with mature beechwoods, an active parish hall in Upper Wield and a fishing-and-shooting estate culture. Building stock is predominantly 17th–19th-century brick-and-flint farmhouses and thatched cottages, with a Grade I-listed Norman church anchoring Upper Wield. Strict planning regime; turnover is rare.",
   "amenities": [
@@ -123,8 +126,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:16:20.362Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

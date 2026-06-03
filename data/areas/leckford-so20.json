@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": "D",
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Leckford is a small estate village of around 100 residents in the Test Valley district, two miles north of Stockbridge on the upper River Test. It is unusual among Hampshire villages in being almost entirely owned by a single landlord: John Spedan Lewis bought the 2,800-acre Leckford Estate in 1929 and gifted it to the John Lewis Partnership in 1945-46, since when houses, farmland, the parish church, the bathhouse and most of the surrounding land have remained in Partnership ownership. The estate was integrated into Waitrose in 2001 and now produces apples, pears, milk, arable crops, watercress, sparkling wine and the Leckford Estate brand for Waitrose stores. The Partnership operates a Farm Shop and Café, Longstock Park Nursery, Longstock Park Water Gardens (ranked among Europe's finest of its type) and a fishing/golf club for staff. Recent years have seen tension between Partnership plans to release Leckford and Longstock land for housing development and a strongly organised residents' opposition.",
   "character": "Estate village in the literal sense: thatched and brick-and-flint cottages owned by the Partnership and let to current or former staff under the legacy 'houses for life' scheme (no longer offered to new joiners). The aesthetic is closely-managed, almost National Trust in feel. Building stock is overwhelmingly listed and 17th–19th century.",
   "amenities": [
@@ -126,8 +129,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:14.881Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Michelmersh is a small, scattered village in the Test Valley district about three miles north of Romsey, set on high ground overlooking the River Test valley. It forms one half of the joint civil parish of Michelmersh and Timsbury, which had a combined population of 915 in 2021 across an area of about 1,128 hectares (1.80% of the borough), making it Test Valley's twenty-second largest parish by area. The 12th-century Grade I-listed St Mary's Church sits at the village heart, with the Monarch's Way long-distance footpath crossing its churchyard. The Georgian former rectory, Michelmersh Court, is Grade II*-listed and was for many years the home of broadcaster Sir David Frost. The parish hosts Michelmersh Brick Holdings, the last operational brickworks in Hampshire, producing premium clay bricks from on-site materials. Michelmersh was a regular filming location for the 1980s ITV series Worzel Gummidge.",
   "character": "Linear, scattered village of brick, brick-and-flint and tile-hung cottages along Church Road and Hartley Lane, with the brickworks site forming a distinct industrial presence to one side. The Test valley setting is broad and chalky in the north of the parish, sliding into Eocene sands and clays further south. Plenty of working farmland, no nucleated centre but a strong sense of community.",
   "amenities": [
@@ -162,8 +165,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:27.881Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

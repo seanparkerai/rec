@@ -15,34 +15,121 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1235485",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:47.326Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "East Tytherley is a village and civil parish in the Test Valley district of Hampshire, about 6 miles north-west of Romsey and roughly 9 to 11 miles east of Salisbury, with a 2021 parish population of around 200. The village is spread out along the country road between West Tytherley and Lockerley, without a defined centre, and is known for its Grade II* listed 13th-century parish church of St Peter, set in fields and nicknamed The Church in the Field. The name Tytherley derives from Old English for thin or tender wood, and the manor was held by Queen Philippa, wife of Edward III, in the 14th century.",
+  "character": "A scattered, peaceful Test Valley village of farmland, woodland and period houses, with a strong sense of history and an unhurried rural feel.",
+  "amenities": [
+    "St Peter's Church (Grade II* listed)",
+    "Village hall",
+    "The Star Inn (village dining pub)",
+    "Shared services with West Tytherley including village shop and primary school"
+  ],
+  "schools": [
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116323",
+      "name": "West Tytherley CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~1.5 miles"
+    },
+    {
+      "url": "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/116363",
+      "name": "Lockerley CofE Endowed Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~2 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Romsey",
+        "mode": "Drive",
+        "notes": "About 6 miles south-east",
+        "typical": "~15 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 11 miles west",
+        "typical": "~25 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Train",
+        "notes": "From Mottisfont & Dunbridge or Dean station on the Wessex Main Line",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via Stockbridge and the A30/A272",
+        "typical": "~30 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Mostly detached houses, cottages and converted farm buildings; properties in this SP5 part of the Test Valley typically sell from the high hundreds of thousands into seven figures for larger homes.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/sp5.html"
+  },
+  "thingsToDo": [
+    "Walking and riding in the Test Valley countryside and surrounding woods",
+    "Visiting St Peter's, the Church in the Field",
+    "Country dining at the Star Inn and nearby Black Horse"
+  ],
+  "placesToEat": [
+    "The Star Inn, East Tytherley (country dining pub with rooms)",
+    "The Black Horse, West Tytherley (17th-century village pub)"
+  ],
+  "pros": [
+    "Quiet, historic Test Valley village setting",
+    "Good local primary schooling nearby",
+    "Within easy reach of Romsey, Stockbridge, Winchester and Salisbury"
+  ],
+  "cons": [
+    "Few amenities within the village itself",
+    "Car essential for shops, schools and stations",
+    "Limited and infrequent housing availability"
+  ],
+  "whoItSuits": "Families and country lovers wanting a historic, tranquil Test Valley village with good road and rail links toward Romsey, Winchester and Salisbury.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Mottisfont & Dunbridge",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/East_Tytherley",
+      "label": "East Tytherley - Wikipedia"
+    },
+    {
+      "url": "https://east-tytherley.parish.uk/",
+      "label": "East Tytherley Parish (official site)"
+    },
+    {
+      "url": "https://www.britainexpress.com/counties/hampshire/churches/east-tytherley.htm",
+      "label": "St Peter's Church, East Tytherley - Britain Express"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/hants/vol4/pp515-518",
+      "label": "Parishes: East Tytherley - Victoria County History (British History Online)"
+    },
+    {
+      "url": "https://hwwhite.co.uk/salisbury/east-and-west-tytherley/",
+      "label": "East and West Tytherley - Whites Estate Agent area guide"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:14:47.326Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1235485"
+  }
 }

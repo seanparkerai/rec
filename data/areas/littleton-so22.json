@@ -24,6 +24,9 @@
     "asOf": "2026-05"
   },
   "councilTaxBand": "D",
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Littleton is a village in the joint civil parish of Littleton and Harestock (population 3,577 at the 2011 Census), three miles north-west of Winchester city centre on the downs between the B3420 (the old Roman road to Cirencester) and the B3049 Stockbridge road. Half a dozen of its houses date from the fifteenth and sixteenth centuries — some are Hampshire Hall houses — clustered around the medieval St Catherine's church and the old parsonage. The bulk of the village dates from the early twentieth century, with a village hall built in 1920 as a memorial to residents killed in the First World War. Littleton holds around 450 homes and 2,800 electors across the joint parish (Harestock to the south-east is the newer settlement). It sits inside the Winchester gap zone and just outside the South Downs National Park to the south.",
   "character": "Genuine 'open' village with two centres: an older lane (Main Road and Andover Road) of brick-and-flint and 1920s–1930s cottages around St Catherine's church and the village hall, plus a tighter ribbon of post-war and recent-build housing toward Harestock. Quiet but well-equipped, with extensive sports and recreational facilities.",
   "amenities": [
@@ -169,8 +172,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:19.864Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

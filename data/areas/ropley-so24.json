@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801544",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:49.136Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Ropley is a large, dispersed village and civil parish in East Hampshire, about 4 miles east of New Alresford, with a population of roughly 1,600. The parish covers some 10 square miles of rolling countryside and is split into the village centre (with shop, church and school), Ropley Dean on the A31, and North Street. It is served by a heritage station at Ropley Dean on the Mid Hants Railway (the Watercress Line), and the St Swithun's Way long-distance path passes through.",
+  "character": "A scattered, attractive downland village distinguished by its boundary walls, hedges and mature trees rather than pavements, with a strong community centre well off the main road.",
+  "amenities": [
+    "Community shop and Post Office",
+    "Primary school (Ropley CofE Primary)",
+    "Parish church and parish hall",
+    "Coffee rooms",
+    "Recreation ground and sports pavilion",
+    "Two pubs on the A31 (the Anchor and the Chequers area)",
+    "Watercress Line heritage railway station at Ropley Dean",
+    "Dene Stores and petrol station on the A31"
+  ],
+  "schools": [
+    {
+      "url": "https://www.ropleyprimary.co.uk/",
+      "name": "Ropley CofE Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in village (Church Street, SO24 0DS)"
+    },
+    {
+      "url": null,
+      "name": "Secondary schools in Alresford/Alton (e.g. Perins School)",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4-7 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via A31/B3046",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Alton",
+        "mode": "Drive",
+        "notes": "~6.7 miles; mainline station for London",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Alton station (the Watercress Line at Ropley is a heritage line, not commuter rail)",
+        "typical": "~1h 15m"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after East Hampshire village near the Georgian town of Alresford; period houses and bungalows scattered along country lanes, with values supported by countryside and good schooling. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Rides on the Watercress Line steam railway (Ropley Dean station)",
+    "Walking the St Swithun's Way / Pilgrims' Way",
+    "Countryside walks around the parish",
+    "Visiting nearby Georgian Alresford and its watercress meadows"
+  ],
+  "placesToEat": [
+    "The Anchor (A31)",
+    "Reopened restaurant at Ropley Dean",
+    "Coffee rooms in the village centre"
+  ],
+  "pros": [
+    "Strong community centre with shop, school, hall and recreation ground",
+    "Heritage Watercress Line station in the parish",
+    "Attractive, peaceful rolling countryside",
+    "Close to the Georgian market town of Alresford"
+  ],
+  "cons": [
+    "Very dispersed; amenities spread across the parish",
+    "No commuter rail (nearest mainline at Alton)",
+    "Parts of the parish sit on the busy A31"
+  ],
+  "whoItSuits": "Buyers wanting a spacious, rural East Hampshire village with a genuine community hub and proximity to Alresford and Winchester.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Alton (~6.7 miles) for mainline; Ropley (Watercress Line heritage) in parish",
+  "primarySupermarket": "Community village shop; supermarkets in Alresford",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Ropley",
+      "label": "Ropley - Wikipedia"
+    },
+    {
+      "url": "http://ropley2000.ropleysociety.org/ropleytoday.htm",
+      "label": "Ropley Today - Ropley Society"
+    },
+    {
+      "url": "https://www.ropleyprimary.co.uk/",
+      "label": "Ropley CofE Primary School"
+    },
+    {
+      "url": "https://watercressline.co.uk/visit/what-to-see/ropley-village/",
+      "label": "Ropley Village - Watercress Line"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:49.136Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^801544"
+  }
 }

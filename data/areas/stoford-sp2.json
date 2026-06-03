@@ -15,34 +15,98 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^1236673",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:01.444Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Stoford is a small village in the civil parish of South Newton, on the A36 Salisbury-to-Warminster road on the left bank of the River Wylye, about 5 to 6 miles north-west of Salisbury. It sits opposite Great Wishford across the river, where an old ford - which gave the village its name - had been replaced by a bridge by the early 18th century. Historically Stoford was a line of farmsteads held of South Newton manor.",
+  "character": "A compact riverside village along the old Warminster road, with the chalk-stream Wylye and its water meadows immediately to the west.",
+  "amenities": [
+    "The Swan Inn, a historic riverside coaching inn with restaurant, skittle alley and fishing (check current opening, as it has periodically been closed)",
+    "St Andrew's parish church at neighbouring South Newton",
+    "Bus stop on the A36 with services to Salisbury and Wilton",
+    "No village shop - everyday shopping is in Wilton or Salisbury"
+  ],
+  "schools": [],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "About 6 miles south-east via the A36; Wilton is closer",
+        "typical": "~18 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Salisbury (about 6 miles) on South Western Railway",
+        "typical": "~90 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "The A36 bus stops right outside the village",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Stock is mainly riverside cottages and detached houses; positions overlooking the Wylye attract a premium, while proximity to the A36 is a factor for some homes. See the live Rightmove sold-price page for current figures.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SP2.html"
+  },
+  "thingsToDo": [
+    "Fly-fishing and riverside walks along the River Wylye",
+    "Crossing to Great Wishford to explore the wider valley and downland",
+    "Walking in nearby Grovely Wood",
+    "Day trips to Stonehenge and Wilton, both a short drive away"
+  ],
+  "placesToEat": [
+    "The Swan Inn, Stoford - riverside pub and restaurant"
+  ],
+  "pros": [
+    "Pretty riverside setting on the chalk-stream Wylye",
+    "Has its own historic village inn",
+    "Close to Salisbury, Wilton and Stonehenge"
+  ],
+  "cons": [
+    "Sits directly on the busy A36 trunk road",
+    "Very limited amenities and no village shop or school",
+    "Car-dependent location"
+  ],
+  "whoItSuits": "Buyers wanting a small riverside Wylye-valley village with a pub and quick A36 access to Salisbury and Stonehenge.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Salisbury",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/South_Newton",
+      "label": "Wikipedia - South Newton (covers Stoford)"
+    },
+    {
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol15/pp213-227",
+      "label": "British History Online - VCH Wiltshire, South Newton (Stoford)"
+    },
+    {
+      "url": "https://www.southnewtonpc.org.uk/theswaninnstoford",
+      "label": "South Newton & Stoford Parish Council - the Swan Inn"
+    },
+    {
+      "url": "https://camra.org.uk/pubs/swan-at-stoford-stoford-192058",
+      "label": "CAMRA - Swan at Stoford"
+    },
+    {
+      "url": "https://hwwhite.co.uk/wylye-valley/south-newton-and-stoford/",
+      "label": "H&W White - South Newton and Stoford (Wylye Valley)"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:16:01.444Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^1236673"
+  }
 }

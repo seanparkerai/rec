@@ -15,34 +15,126 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^801533",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:52.899Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Shorley is a very small rural hamlet in Cheriton parish in the City of Winchester district of Hampshire, lying about a mile south-east of Cheriton village near New Cheriton and Beauworth, within the South Downs National Park. Historically the south-east corner of Cheriton parish, it is known for Shorley Copse woodland and the former Shorley Pottery Works. It is a scattered settlement of houses and farms with no amenities of its own; the nearest village facilities are in Cheriton, with fuller shops and services in New Alresford (~4 miles) and Winchester (~8 miles).",
+  "character": "A secluded, wooded downland hamlet of houses and farmsteads set among copses and chalk countryside in the South Downs National Park. The feel is very rural and private, with extensive walking and the quiet, well-regarded village of Cheriton close by.",
+  "amenities": [
+    "No shop or pub in Shorley itself",
+    "Two pubs (including the Flower Pots Inn with its own microbrewery), a shop/post office and village hall in Cheriton (~1 mi)",
+    "Cheriton primary school, cricket pitch and tennis courts",
+    "New Alresford town amenities (~4 mi)",
+    "Full shopping and services in Winchester (~8 mi)"
+  ],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115874",
+      "name": "Cheriton Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good (March 2025)",
+      "distance": "~1 mile"
+    },
+    {
+      "url": "https://www.perins.hants.sch.uk/",
+      "name": "Perins School, New Alresford",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~4 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "New Alresford",
+        "mode": "Drive",
+        "notes": "Nearest town; Watercress Line heritage railway and amenities",
+        "typical": "~10 min"
+      },
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "Via the A272/B3046; mainline station to London Waterloo",
+        "typical": "~20 min"
+      },
+      {
+        "to": "Petersfield",
+        "mode": "Drive",
+        "notes": "Via the A272; mainline to London Waterloo (Portsmouth line)",
+        "typical": "~25 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester station (SWR), drive ~20 min to the station",
+        "typical": "~1h"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "Shorley and the Cheriton area are a premium South Downs location; housing is dominated by detached, period and listed country houses, with recent sales in the area frequently £700k-£1m+ and substantial houses well above. Supply is scarce.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
+  },
+  "thingsToDo": [
+    "Walking the South Downs National Park footpaths and Shorley Copse",
+    "Hinton Ampner gardens and house (National Trust, nearby)",
+    "The Flower Pots Inn and microbrewery in Cheriton",
+    "Watercress Line heritage railway at New Alresford"
+  ],
+  "placesToEat": [
+    "The Flower Pots Inn, Cheriton (~1 mi)",
+    "Other Cheriton village pub and nearby Hinton Arms (Bramdean)",
+    "Wide choice of pubs and cafes in New Alresford (~4 mi)"
+  ],
+  "pros": [
+    "Very quiet, wooded setting inside the South Downs National Park",
+    "Good village primary and two pubs in Cheriton nearby",
+    "Within reach of Alresford and Winchester's mainline",
+    "Outstanding walking and countryside on the doorstep"
+  ],
+  "cons": [
+    "No amenities in the hamlet itself; car essential",
+    "Expensive and very limited housing stock",
+    "National Park planning constraints on alterations",
+    "No mainline station within walking distance"
+  ],
+  "whoItSuits": "Buyers seeking a secluded, high-value hamlet in the South Downs near Cheriton, with good village schooling and Alresford/Winchester within easy reach, who can match the premium country-house market.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester (~8 miles, SWR mainline); Alresford (~4 miles, heritage line)",
+  "primarySupermarket": null,
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Cheriton,_Hampshire",
+      "label": "Wikipedia - Cheriton, Hampshire"
+    },
+    {
+      "url": "https://parishmouse.co.uk/hampshire/cheriton-hampshire-family-history-guide/",
+      "label": "Parishmouse - Cheriton parish (Shorley Copse / Pottery Works)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115874",
+      "label": "Ofsted - Cheriton Primary School"
+    },
+    {
+      "url": "https://www.getthedata.com/postcode/SO24-0AY",
+      "label": "GetTheData - SO24 0 (Cheriton/Shorley) area"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html",
+      "label": "Rightmove - SO24 house prices"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:52.899Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^801533"
+  }
 }

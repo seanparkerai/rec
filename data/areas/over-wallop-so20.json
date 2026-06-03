@@ -18,6 +18,9 @@
   "status": "researched",
   "priceSummary": null,
   "councilTaxBand": "D",
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "Over Wallop is the westernmost of The Wallops — three contiguous villages strung along the chalk-stream Wallop Brook — and the source of the Brook itself, which rises in the parish and flows south-east to join the River Test below Bossington. The village sits in the Test Valley district immediately adjacent to the Wiltshire border, approximately five miles north-west of Stockbridge and seven miles south-west of Andover. It is named in Domesday as 'the other Wallop' — distinguishing it from Nether Wallop, the larger of the original pair. The 12th-century parish church of St Peter (Diocese of Winchester) anchors the southern end of the village; Victorian restorations are visible. Archaeology runs deep: flint mines in the parish date to roughly 3,983 BC, and the Quarley High Linear earthwork to around 245 BC. The Wallops share two pubs, a village hall, a Good village primary at Nether Wallop, a veterinary surgery and a shop with post office. Over Wallop has its own Conservation Area designation and an active Neighbourhood Development Plan (adopted 2022) focused on resisting excessive housing development.",
   "character": "Loose linear village along chalk lanes with timber-framed and brick-and-flint cottages, plus a number of 20th-century additions. Working agricultural village rather than show village; population around 1,000 across the parish. The Brook frames the conservation area and is the social spine.",
   "amenities": [
@@ -133,8 +136,5 @@
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
     "resolvedAt": "2026-06-02T21:15:38.940Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+  }
 }

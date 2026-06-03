@@ -15,34 +15,118 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
-  "transport": {
-    "commutes": []
-  },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
-  "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
-  "images": [],
-  "sources": [],
-  "rightmove": {
-    "locationIdentifier": "POSTCODE^4447973",
-    "identifierType": "POSTCODE",
-    "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:40.582Z"
-  },
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true
+  "active": true,
+  "overview": "Owslebury is a village and civil parish about 5 miles south-east of Winchester in Hampshire, set on a hilltop along a former Roman road and within easy reach of the South Downs National Park, with a population of around 818. It is a geographically concentrated village strung along its main road, with a 14th-century parish church (St Andrew's), a 17th-century inn, a well-regarded primary school and a cricket ground in use for roughly 150 years. Marwell Zoo lies towards the south of the parish.",
+  "character": "A friendly, hilltop downland village with a strong community association, a historic pub and church, and excellent walking on the Pilgrims' and Monarch's Way.",
+  "amenities": [
+    "The Ship Inn (17th-century pub serving food)",
+    "Owslebury Primary School",
+    "St Andrew's Church (14th century)",
+    "Village hall (with part-time Post Office service)",
+    "Village green and cricket/football ground (~150 years)",
+    "Glebe Field and children's playground",
+    "Active community association (OMCA)",
+    "Marwell Zoo within the parish"
+  ],
+  "schools": [
+    {
+      "url": "https://www.owslebury.hants.sch.uk/",
+      "name": "Owslebury Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "in village (Beech Grove, SO21 1LS)"
+    },
+    {
+      "url": null,
+      "name": "The Westgate School and Kings' School (secondary), Winchester",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~5-6 miles"
+    }
+  ],
+  "transport": {
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~5 miles north-west",
+        "typical": "~12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Winchester or Eastleigh stations",
+        "typical": "~1h 5m"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "Via M3/A335",
+        "typical": "~25 min"
+      }
+    ]
+  },
+  "prices": {
+    "asOf": "2026-06",
+    "summary": "A sought-after village close to Winchester; period and detached homes with strong demand for the school catchment and South Downs setting. See Rightmove for current sold-price detail.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
+  },
+  "thingsToDo": [
+    "Walking the Pilgrims' Trail and Monarch's Way (60+ footpaths in the parish)",
+    "Marwell Zoo",
+    "Cricket on the historic village green",
+    "St Andrew's Church",
+    "Community events at the Glebe Field"
+  ],
+  "placesToEat": [
+    "The Ship Inn",
+    "Eateries in nearby Winchester and Colden Common"
+  ],
+  "pros": [
+    "Good-rated primary school and strong community association",
+    "Historic 17th-century pub and 14th-century church",
+    "Excellent walking and South Downs proximity",
+    "Close to Winchester and Marwell Zoo"
+  ],
+  "cons": [
+    "Only a part-time Post Office and no full shop in the village",
+    "No railway station; car-dependent with infrequent buses",
+    "Secondary schooling is in Winchester"
+  ],
+  "whoItSuits": "Families wanting a hilltop downland village with a good primary school, historic pub and great walking, close to Winchester.",
+  "broadbandMedianMbps": null,
+  "nearestStation": "Winchester or Shawford (~5 miles)",
+  "primarySupermarket": "Part-time PO at village hall; supermarkets in Winchester",
+  "images": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Owslebury",
+      "label": "Owslebury - Wikipedia"
+    },
+    {
+      "url": "https://owslebury.org/useful-information/",
+      "label": "Owslebury & Morestead Parish - Information"
+    },
+    {
+      "url": "https://www.get-information-schools.service.gov.uk/establishments/establishment/details/115934",
+      "label": "Owslebury Primary School - GOV.UK (URN 115934)"
+    },
+    {
+      "url": "https://www.belgarum.com/area-guide/owslebury/",
+      "label": "Belgarum - Owslebury Area Guide"
+    }
+  ],
+  "rightmove": {
+    "resolvedAt": "2026-06-02T21:15:40.582Z",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "locationIdentifier": "POSTCODE^4447973"
+  }
 }
