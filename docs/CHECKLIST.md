@@ -537,9 +537,10 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   DOM-coupled with no jsdom → no synthetic pin now; their pure logic is extracted **test-first** in P7.
 - [x] **P1 — CI safety gate** 🔒 (`.github/workflows/*`): `ci.yml` runs the harness on push/PR;
   `pages.yml` deploy made `needs: test`. *(Approved + shipped.)*
-- [ ] **P2 — Documentation reconciliation** (docs only): correct `CLAUDE.md §18.1`/§8/§6 to the live
-  **25 tables / 20 tracked** (18 user-state + 2 content + 3 system + `listings` + `reports`); update
-  `SUPABASE_SYNC.md`; refresh the §19 CSS/module map (`components/` layer, added `pages/` sheets, `fonts.css`).
+- [x] **P2 — Documentation reconciliation** (docs only): corrected `CLAUDE.md` §6/§8/§17/§18.1 to the live
+  **25 tables / 20 tracked** (18 user-state + 2 content + 3 system + `listings` + `reports`); added
+  `area_confirmations` to the §18.1 user-state row; refreshed the §19 CSS map (all 16 `pages/` sheets,
+  `fonts.css`, 13 `components/`). `SUPABASE_SYNC.md` §0 was already authoritative — no change needed.
 - [ ] **P3 — Dead code & orphans:** `supabase-types.ts` → JSDoc `assets/js/types.js` (+ `git rm` the `.ts`);
   archive orphan tools (`enrich-batch-01`, `apply-accurate-coords`, `geocode-areas`, `geocode-per-area`)
   to `tools/archive/`. Keep `migrate-areas.mjs` (still referenced by `area-status.mjs`).
