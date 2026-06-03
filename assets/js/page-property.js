@@ -363,6 +363,7 @@ async function render() {
     rightmove_id: l.rightmove_id, title: l.title, address: l.address, outcode: l.outcode,
     area_id: l.area_id, price: l.price, beds: l.beds, baths: l.baths,
     property_type: l.property_type, status: l.status, url: l.url,
+    image_url: l.image_url ?? null,   // cover photo persists once the live row is withdrawn
   });
   let retrainTimer = null;
   // Persist on Save (the consolidated decision) — one clean append-only row.
