@@ -541,9 +541,13 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   **25 tables / 20 tracked** (18 user-state + 2 content + 3 system + `listings` + `reports`); added
   `area_confirmations` to the §18.1 user-state row; refreshed the §19 CSS map (all 16 `pages/` sheets,
   `fonts.css`, 13 `components/`). `SUPABASE_SYNC.md` §0 was already authoritative — no change needed.
-- [ ] **P3 — Dead code & orphans:** `supabase-types.ts` → JSDoc `assets/js/types.js` (+ `git rm` the `.ts`);
-  archive orphan tools (`enrich-batch-01`, `apply-accurate-coords`, `geocode-areas`, `geocode-per-area`)
-  to `tools/archive/`. Keep `migrate-areas.mjs` (still referenced by `area-status.mjs`).
+- [x] **P3 — Dead code & orphans:** removed the unimported, build-less `supabase-types.ts`; its useful
+  shapes live on as curated JSDoc `@typedef`s in `assets/js/types.js` (`Json` + the row envelope + the
+  core user-state payloads — not a 1:1 schema port). Archived 3 orphan tools to `tools/archive/` (with a
+  README): `enrich-batch-01`, `apply-accurate-coords`, `geocode-per-area`. **Kept** `migrate-areas.mjs`
+  (referenced by `area-status.mjs`) **and `geocode-areas.mjs`** — a reality check found it referenced by
+  `assets/js/page-map.js:234`, so the original "archive geocode-areas" instruction was wrong and is fixed
+  here per CLAUDE.md "reality wins". Harness 394/394.
 - [ ] **P4 — Import-layer guard** (`tests/import-layer.test.js`): no page/tile/section/outreach module
   imports `supabase-client` except documented exceptions; `page-data-sync.js` (sole current violator)
   listed as a temporary exception, removed after the P8 reroute.
