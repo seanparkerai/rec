@@ -70,6 +70,7 @@ const { register: registerCharacterizationFinancesCalc } = await import('../test
 const { register: registerImportLayer } = await import('../tests/import-layer.test.js');
 const { register: registerAreasIndexSync } = await import('../tests/areas-index-sync.test.js');
 const { register: registerDataSyncDiff } = await import('../tests/data-sync-diff.test.js');
+const { register: registerListingsFormat } = await import('../tests/listings-format.test.js');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
 await registerAffordability({ test, assert, assertEqual, fixtures });
@@ -102,6 +103,7 @@ await registerCharacterizationFinancesCalc({ test, assert, assertEqual });
 await registerImportLayer({ test, assert, assertEqual });
 await registerAreasIndexSync({ test, assert, assertEqual });
 await registerDataSyncDiff({ test, assert, assertEqual });
+await registerListingsFormat({ test, assert, assertEqual });
 
 // Run Supabase sync tests
 async function runSyncTests() {

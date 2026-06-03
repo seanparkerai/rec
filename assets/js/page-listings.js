@@ -31,6 +31,7 @@ import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
 import { url } from './config.js';
 import { el, clear } from './dom.js';
 import { wireListingsFetch } from './listings/fetch.js';
+import { fmtPrice, fmtAgo, lastPriceDrop } from './listings/format.js';
 
 const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}&from=listings`;
 
@@ -61,29 +62,7 @@ const STATUS_LABELS = {
   withdrawn: 'Withdrawn',
 };
 
-function fmtPrice(n) {
-  if (n == null) return '—';
-  return '£' + Math.round(n).toLocaleString('en-GB');
-}
-
-function fmtAgo(iso) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  if (isNaN(d)) return '';
-  const days = Math.floor((Date.now() - d.getTime()) / 86400000);
-  if (days <= 0) return 'today';
-  if (days === 1) return 'yesterday';
-  if (days < 30) return `${days}d ago`;
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-}
-
-function lastPriceDrop(listing) {
-  const h = Array.isArray(listing.price_history) ? listing.price_history : [];
-  if (h.length < 2) return null;
-  const prev = h[h.length - 2]?.price, now = h[h.length - 1]?.price;
-  if (prev != null && now != null && now < prev) return prev - now;
-  return null;
-}
+// fmtPrice / fmtAgo / lastPriceDrop now live in ./listings/format.js (imported above).
 
 // Build the geofence chips (distance · village, and the ⚠ flag for an unconfirmed
 // location). Shared by the row and the deck card. `area` is the matched area record.
