@@ -535,8 +535,8 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   (`tests/characterization-finances-calc.test.js`); both wired into `run-intelligence-tests.mjs`;
   this checklist added. Page coordinators (`page-data-sync/listings/report/criteria/property`) are
   DOM-coupled with no jsdom → no synthetic pin now; their pure logic is extracted **test-first** in P7.
-- [ ] **P1 — CI safety gate** 🔒 (`.github/workflows/*`): `ci.yml` runs the harness on push/PR;
-  `pages.yml` deploy made `needs: test`. *(Approval required.)*
+- [x] **P1 — CI safety gate** 🔒 (`.github/workflows/*`): `ci.yml` runs the harness on push/PR;
+  `pages.yml` deploy made `needs: test`. *(Approved + shipped.)*
 - [ ] **P2 — Documentation reconciliation** (docs only): correct `CLAUDE.md §18.1`/§8/§6 to the live
   **25 tables / 20 tracked** (18 user-state + 2 content + 3 system + `listings` + `reports`); update
   `SUPABASE_SYNC.md`; refresh the §19 CSS/module map (`components/` layer, added `pages/` sheets, `fonts.css`).

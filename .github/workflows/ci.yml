@@ -1,0 +1,21 @@
+name: CI
+
+# Runs the unified test harness (intelligence tests + offline Supabase-sync suite)
+# on every push and pull request. The live Supabase checks skip without creds, so
+# this is network-free and deterministic in CI. Pages deploy is separately gated on
+# its own `test` job (see pages.yml `needs: test`).
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run test harness
+        run: node tools/run-intelligence-tests.mjs
