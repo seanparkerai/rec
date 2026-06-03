@@ -68,6 +68,7 @@ const { register: registerCharacterizationOutreach } = await import('../tests/ch
 const { register: registerCharacterizationStorage }  = await import('../tests/characterization-storage.test.js');
 const { register: registerCharacterizationFinancesCalc } = await import('../tests/characterization-finances-calc.test.js');
 const { register: registerImportLayer } = await import('../tests/import-layer.test.js');
+const { register: registerAreasIndexSync } = await import('../tests/areas-index-sync.test.js');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
 await registerAffordability({ test, assert, assertEqual, fixtures });
@@ -98,6 +99,7 @@ await registerCharacterizationOutreach({ test, assert, assertEqual });
 await registerCharacterizationStorage({ test, assert, assertEqual });
 await registerCharacterizationFinancesCalc({ test, assert, assertEqual });
 await registerImportLayer({ test, assert, assertEqual });
+await registerAreasIndexSync({ test, assert, assertEqual });
 
 // Run Supabase sync tests
 async function runSyncTests() {

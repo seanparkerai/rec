@@ -27,8 +27,8 @@
   },
   "areas": {
     "count": 191,
-    "last_synced_at": "2026-05-31T19:28:52.163Z",
-    "_note": "2026-05-31 Step1: deactivated colemore-gu34, flexcombe-gu33, froxfield-green-gu34 (duplicate Rightmove identifiers); migrated flexcombe-gu33 research content into flexcombe-gu32 (canonical GU32 ID)"
+    "last_synced_at": "2026-06-02T21:16:25.330Z",
+    "_note": "count = directory INDEX entries (data/areas.json), built from data/source/villages.csv (191 villages). The per-area files (data/areas/*.json) AND the Supabase areas mirror are 195: the 4 extra are deactivated duplicate-Rightmove / merged variants intentionally kept out of the index — charlwood-so24, colemore-gu32, flexcombe-gu33, froxfield-green-gu32 (flexcombe-gu33 research merged into the canonical flexcombe-gu32). Guarded by tests/areas-index-sync.test.js. (Corrected 2026-06-03: the prior note's gu34 ids were stale.)"
   },
   "house_types": {
     "count": 15,
@@ -68,22 +68,22 @@
     "_note": "empty — no other debts entered; no app UI yet"
   },
   "listing_reactions": {
-    "count": 0,
-    "last_synced_at": null,
+    "count": 264,
+    "last_synced_at": "2026-06-03T11:32:26.191Z",
     "_class": "user-state (append-only)",
-    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). Table created (migration listing_reactions_l3) 2026-05-30; no rows yet. Tracked sync table #18 (16 user-state + 2 content)."
+    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). 264 rows from portal use as of 2026-06-03 (0 at table creation 2026-05-30). Append-only — Supabase always wins; snapshot pulled live via MCP, never written back by Claude. Tracked sync table #18 (16 user-state + 2 content)."
   },
   "learned_preferences": {
-    "count": 0,
-    "last_synced_at": null,
+    "count": 1,
+    "last_synced_at": "2026-06-03T11:28:42.965Z",
     "_class": "user-state",
-    "_note": "v3 L4/L5: distilled preference weights, one row/household (derived = Layer 2 from the reaction log; overrides = Layer 3 manual/AI; dismissals = L5 conflict-prompt quiet-until map, added by migration learned_preferences_dismissals_l5). Table created (migration learned_preferences_l4) 2026-05-31; no rows yet (recomputed once reactions exist). Tracked sync table #19 (17 user-state + 2 content)."
+    "_note": "v3 L4/L5: distilled preference weights, one row/household (derived = Layer 2 from the reaction log; overrides = Layer 3 manual/AI; dismissals = L5 conflict-prompt quiet-until map, added by migration learned_preferences_dismissals_l5). 1 row present, recomputed from the reaction log as of 2026-06-03 (0 at table creation 2026-05-31). Recomputed user-state — Supabase wins; snapshot pulled live via MCP. Tracked sync table #19 (17 user-state + 2 content)."
   },
   "area_confirmations": {
-    "count": 191,
-    "last_synced_at": "2026-05-31T19:28:52.163Z",
+    "count": 1,
+    "last_synced_at": "2026-05-31T19:27:42.001Z",
     "_class": "user-state",
-    "_note": "v3 Step5: per-household area location review confirmations blob ({ confirmed: { areaId: isoTimestamp } }). Table created (migration area_confirmations_step5) 2026-05-31; no rows yet. Tracked sync table #20 (18 user-state + 2 content)."
+    "_note": "v3 Step5: per-household area location review confirmations blob ({ confirmed: { areaId: isoTimestamp } }), one row/household. 1 row present (count was previously 191 — a copy-paste error from the areas block, corrected 2026-06-03 against live via MCP). Tracked sync table #20 (18 user-state + 2 content)."
   },
   "listings": {
     "count": 1298,

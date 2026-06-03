@@ -564,10 +564,19 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   re-export shim at `assets/js/listing-reactions.js` (`export * from './listings/reactions.js'`) keeps
   `storage.js` (§16) untouched until P8 — it is the SOLE remaining old-flat-path importer (grep-verified).
   Harness 398/398. (Plan/archive doc prose still names the old flat paths — left as historical record.)
-- [ ] **P6 — areas-index source-of-truth guard:** run `build-areas.mjs`, observe the count; **verify
-  intent before re-adding the 4 deactivated areas** (`charlwood-so24`, `colemore-gu32`, `flexcombe-gu33`,
-  `froxfield-green-gu32`); add `tests/areas-index-sync.test.js` (rebuild == committed index). Refresh
-  `sync-state.json` high-water marks (incl. `listing_reactions` 250, `learned_preferences` 1).
+- [x] **P6 — areas-index source-of-truth guard:** verified the 195-files / 191-index gap is INTENTIONAL —
+  `build-areas.mjs` builds the index from `data/source/villages.csv` (191 villages; CSV-driven, not
+  per-area-driven as older notes said), and the 4 non-indexed files (`charlwood-so24`, `colemore-gu32`,
+  `flexcombe-gu33`, `froxfield-green-gu32`) are deactivated duplicate-Rightmove / merged variants absent from
+  the CSV — a rebuild does NOT re-add them and leaves `data/areas.json` byte-identical. The Supabase areas
+  mirror = 195 = the per-area files (§18.7 holds). Added `tests/areas-index-sync.test.js` (7 assertions:
+  index⊆files, faithful INDEX_FIELDS projection, no field leakage, unique ids, count==CSV, gap==the 4
+  documented orphans, orphans absent from CSV). Refreshed `sync-state.json` via MCP: `listing_reactions`
+  0→264, `learned_preferences` 0→1 (live high-water; both Supabase-wins user-state), corrected the stale
+  `areas._note` (gu34→real ids) and the `area_confirmations.count` copy-paste bug (191→1). Harness 405/405 (+7).
+  NOTE (out of scope, flagged): running `build-areas.mjs` reorders 3 fields (`active`/`geofenceRadiusMi`/
+  `searchRadiusMi`) in 191 detail files — benign, value-identical, pre-existing; left for a future
+  normalization sweep.
 - [ ] **P7 — Large controller & CSS decomposition** (one checkpoint each):
   - [ ] P7a `page-data-sync.js` · [ ] P7b `page-listings.js` · [ ] P7c `learned-preferences.js`
   - [ ] P7d `page-report.js` · [ ] P7e `page-criteria.js` · [ ] P7f `page-property.js`
