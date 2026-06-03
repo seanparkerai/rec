@@ -548,9 +548,13 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   (referenced by `area-status.mjs`) **and `geocode-areas.mjs`** — a reality check found it referenced by
   `assets/js/page-map.js:234`, so the original "archive geocode-areas" instruction was wrong and is fixed
   here per CLAUDE.md "reality wins". Harness 394/394.
-- [ ] **P4 — Import-layer guard** (`tests/import-layer.test.js`): no page/tile/section/outreach module
-  imports `supabase-client` except documented exceptions; `page-data-sync.js` (sole current violator)
-  listed as a temporary exception, removed after the P8 reroute.
+- [x] **P4 — Import-layer guard** (`tests/import-layer.test.js`): scans the 4 module families
+  (`page-*` / `dashboard` / `finances` / `outreach`, 48 files) and asserts the set importing
+  `supabase-client` *exactly equals* the documented exception set — so a new direct import fails the
+  guard, and a stale exception (after P8 reroutes `page-data-sync.js`) also fails until removed.
+  `page-data-sync.js` is the sole current exception; `storage.js` + `auth-guard.js` are the sanctioned
+  importers and are intentionally outside the scanned families. Node-only (not wired into `tests.html`).
+  Harness 398/398 (+4).
 - [ ] **P5 — `listings/` folderization:** move the 9 `listing*.js` → `assets/js/listings/` (drop prefix);
   atomic import rewrite incl. `dashboard/tile-nba.js`, the 3 pages + bootstraps, and the test files;
   temporary re-export shim at `assets/js/listing-reactions.js` so `storage.js` (§16) is untouched until P8.
