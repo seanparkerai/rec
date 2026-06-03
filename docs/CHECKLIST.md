@@ -594,5 +594,17 @@ distinct from the earlier merged refactor archived at `docs/archive/REFACTOR_CHE
   progress/months/projection, outlay = total/breakdown; outlay reuses `calcSDLT` from purchase) behind a
   re-export shim — runtime surface verified at **exactly 10** names; bodies moved byte-identically via
   `sed`. Updated CLAUDE.md §16/§19. Harness 447/447.
-- [ ] **P10 — CI smoke check + close-out** 🔒: asset/link smoke check in CI; final docs sweep; tick
-  remaining items. *(Approval required.)*
+- [x] **P10 — CI smoke check + close-out**: added `tests/asset-links.test.js` — a static
+  reference-integrity guard (every relative JS import/export, CSS `@import`, and pages/root HTML
+  `href`/`src` must resolve; scans 99 JS + 53 CSS + 22 HTML files, 0 dangling). It rides the existing
+  harness, which **both** CI workflows already run (`ci.yml` on push/PR, `pages.yml` before each Pages
+  deploy), so the check is "in CI" with **no `.github/workflows/*` edit needed** — the §16 guard stayed
+  untouched. Final docs sweep done across P7–P9 (CLAUDE.md §16/§17/§19 now reflect the shims + new
+  subfolders). Harness 450/450 (+3).
+
+**✅ Consolidation pass COMPLETE (P0–P10)** — all phases shipped to `main`, harness **450/450** green.
+Dead code removed (P3); import-layer (P4), areas-index (P6) and asset-link (P10) guards added; `listings/`
+(P5), `data-sync.css` + `listings.css` (P7g/h), `storage/` (P8) and `finances/calc-*` (P9) modularized;
+`storage.js` + `finances.js` split behind **byte-identical re-export shims** (45- and 10-export surfaces
+verified unchanged). `page-data-sync.js` intentionally retained as the documented admin exception. No
+behavioural change to the user-portal write path.

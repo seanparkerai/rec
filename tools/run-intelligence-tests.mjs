@@ -74,6 +74,7 @@ const { register: registerListingsFormat } = await import('../tests/listings-for
 const { register: registerListingsLabels } = await import('../tests/listings-labels.test.js');
 const { register: registerReportFormat } = await import('../tests/report-format.test.js');
 const { register: registerCriteriaForm } = await import('../tests/criteria-form.test.js');
+const { register: registerAssetLinks } = await import('../tests/asset-links.test.js');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
 await registerAffordability({ test, assert, assertEqual, fixtures });
@@ -110,6 +111,7 @@ await registerListingsFormat({ test, assert, assertEqual });
 await registerListingsLabels({ test, assert, assertEqual });
 await registerReportFormat({ test, assert, assertEqual });
 await registerCriteriaForm({ test, assert, assertEqual });
+await registerAssetLinks({ test, assert, assertEqual });
 
 // Run Supabase sync tests
 async function runSyncTests() {
