@@ -78,7 +78,8 @@ const APIFY_MAX_BUDGET_USD = Number(process.env.APIFY_MAX_BUDGET_USD) || 25;
 
 // Always-on baseline source filters — injected into EVERY Rightmove search URL.
 // Never removed, only tightened by the learned spec.
-const BASELINE_PRICE_MAX = 450000;
+const BASELINE_PRICE_MIN = 250000;
+const BASELINE_PRICE_MAX = 425000;
 const BASELINE_MIN_BEDS = 2;
 const BASELINE_DONT_SHOW = 'retirement,sharedOwnership';
 // Always-on property-type allow-list (Rightmove slugs). Rightmove files apartments,
@@ -254,12 +255,13 @@ function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   if (days != null) params.set('maxDaysSinceAdded', String(days));
   // Always-on baseline: hard price cap, minimum beds, excluded categories, and the
   // house+bungalow allow-list (excludes the whole flat family + land + park-home at source).
+  params.set('minPrice', String(BASELINE_PRICE_MIN));
   params.set('maxPrice', String(BASELINE_PRICE_MAX));
   params.set('minBedrooms', String(BASELINE_MIN_BEDS));
   params.set('dontShow', BASELINE_DONT_SHOW);
   params.set('propertyTypes', BASELINE_PROPERTY_TYPES.join(','));
-  // A learned spec can tighten (lower maxPrice, higher minBeds) within the baseline.
-  if (spec?.priceMin) params.set('minPrice', String(spec.priceMin));
+  // A learned spec can tighten (raise minPrice, lower maxPrice, raise minBeds) within the baseline.
+  if (spec?.priceMin && spec.priceMin > BASELINE_PRICE_MIN) params.set('minPrice', String(spec.priceMin));
   if (spec?.priceMax && spec.priceMax < BASELINE_PRICE_MAX) params.set('maxPrice', String(spec.priceMax));
   if (spec?.minBeds && spec.minBeds > BASELINE_MIN_BEDS) params.set('minBedrooms', String(spec.minBeds));
   // L7.4: a search radius (miles) turns a point identifier (POSTCODE^/REGION^/
@@ -453,15 +455,26 @@ async function main() {
       // Hard baseline gate (houses+bungalows · price band · ≥2 beds). The Apify
       // actor honours the search-URL type/price filters only loosely, so this is
       // the GUARANTEE: out-of-baseline rows never reach the geofence or the upsert.
-      const inBaseline = normalised.filter((l) => passesBaseline(l));
+      const inBaseline = normalised.filter((l) => passesBaseline(l, { priceMin: BASELINE_PRICE_MIN, priceMax: BASELINE_PRICE_MAX }));
       const offBaseline = normalised.length - inBaseline.length;
       totalOffBaseline += offBaseline;
+
+      // Text-match new-build exclusion: drop listings whose title or description
+      // mention "new build", "new home", or "NHBC". Catches new-build schemes at
+      // source; resale new-builds without these terms remain visible (accepted per
+      // owner decision 2026-06-04).
+      const NEW_BUILD_RE = /\bnew\s+(?:build|home)\b|\bnhbc\b/i;
+      const notNewBuild = inBaseline.filter(
+        (l) => !NEW_BUILD_RE.test(l.title ?? '') && !NEW_BUILD_RE.test(l.description ?? '')
+      );
+      const newBuildDropped = inBaseline.length - notNewBuild.length;
+      if (newBuildDropped > 0) log(`  ↳ dropped ${newBuildDropped} new-build listing(s) (text match)`);
 
       // L7: the DECISIVE gate is the coordinate geofence against the GLOBAL active
       // village set — not the 20km isInOutcode wrong-region guard (kept only as a
       // diagnostic). Coordinates decide; the listing's own name/postcode text
       // corroborates. corroborated=false → FLAG for audit, never silently dropped.
-      const geo = inBaseline.map((l) => ({ l, g: withinGeofence(l, { villages: ALL_ACTIVE }) }));
+      const geo = notNewBuild.map((l) => ({ l, g: withinGeofence(l, { villages: ALL_ACTIVE }) }));
       const inBuffer = geo.filter((x) => x.g.pass).map((x) => ({
         ...x.l,
         area_id: x.g.area_id,
@@ -536,4 +549,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
