@@ -1431,7 +1431,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "east-meon-gu32",
