@@ -37,7 +37,9 @@ by `tools/purge-listings.mjs` (baseline-violating / rejected-and-old / stale; ne
 liked row) and by user-approved one-off MCP cleanups. The reject SIGNAL that drives feed
 suppression lives in the append-only `listing_reactions` log, NOT in `listings`, so purging
 a heavy listings row never loses suppression. *(2026-06-04: a one-off MCP purge dropped
-1,671 not-liked baseline-violators, 3,086→1,415; `listing_reactions` untouched at 3,244.)*
+1,671 not-liked baseline-violators, 3,086→1,415; then a user-approved removed-area purge dropped
+551 not-liked listings across the 9 inactive areas, 1,415→864 — ever-liked rows always kept;
+`listing_reactions` untouched at 3,244.)*
 
 **v3 L3 addition (2026-05-30):** `listing_reactions` — a **user-state** table (per household_id),
 but **append-only**: every reaction (like/pass/reject + optional reject reason + `listing_snapshot`)

@@ -110,6 +110,10 @@ listings shown. The small review count *emerges* from filtering / dedup / suppre
       `supabase-sync.test.js` asserts the baseline gate is wired into every writer + the purge reuses it
       (pollution can't silently return). Learned auto-narrowing stays OFF (`USE_LEARNED` unset;
       `.github/workflows/*` untouched).
+- [x] **P7 — removed-area purge** (Supabase MCP, user-approved): deleted 551 not-liked listings in the
+      9 inactive (`active:false`) areas tagged `reject/removed_area`; listings 1,415→864 (feed-visible
+      1,252→737). 3 once-liked homes in those areas KEPT (ever-liked never purged) + 1 active-area
+      straggler; reaction log untouched at 3,244; 551 deletes logged to `sync_log`; snapshot updated.
 
 ---
 

@@ -127,6 +127,10 @@ small daily review count *emerges* from filtering, dedup, suppression and fit-ra
 - **P5 — one-off cleanup (2026-06-04).** Purged 1,671 not-liked baseline-violators via MCP
   (listings 3,086→1,415; feed-visible 2,539→1,252; 0 violators remain; 20 liked rows + the
   3,244-row reaction log preserved).
+- **P7 — removed-area purge (2026-06-04, user-approved).** Deleted 551 not-liked `listings` across
+  the 9 inactive (`active:false`) areas tagged `reject/removed_area` (listings 1,415→864; feed-visible
+  1,252→737). The 3 once-liked homes in those areas were KEPT (ever-liked is never purged) plus 1
+  active-area straggler; the 3,244-row reaction log is untouched; all 551 deletes logged to `sync_log`.
 - **Learned auto-narrowing stays OFF** (`USE_LEARNED` unset; `.github/workflows/*` untouched).
 
 ## Failure modes to keep in view
