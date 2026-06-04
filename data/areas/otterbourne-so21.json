@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Otterbourne is a village in Hampshire about four miles south of Winchester and eight miles north of Southampton, with a population of around 1,539 (2011 census). Recorded in the Domesday Book as 'Otreburne' (otter stream), it sits near the River Itchen and has a traditional character mixing thatched cottages with modern housing. The focal point is the Grade II listed 13th-century St Matthew's Church, and the village has good amenities plus quick access to the M3.",
   "character": "An idyllic, well-served Itchen-side village with strong community facilities and a desirable location between Winchester and Southampton.",
   "amenities": [
