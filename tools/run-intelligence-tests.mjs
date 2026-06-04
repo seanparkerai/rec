@@ -52,6 +52,7 @@ const { register: registerListingsNormalise } = await import('../tests/listings-
 const { register: registerListingsClassify } = await import('../tests/listings-classify.test.js');
 const { register: registerListingsSuppress } = await import('../tests/listings-suppress.test.js');
 const { register: registerListingsFeedSuppression } = await import('../tests/listings-feed-suppression.test.js');
+const { register: registerPurgeListings } = await import('../tests/purge-listings.test.js');
 const { register: registerVerifyAreaCoords } = await import('../tests/verify-area-coords.test.js');
 const { register: registerBackfillGeofence } = await import('../tests/backfill-geofence.test.js');
 const { register: registerResolveAreas } = await import('../tests/resolve-areas.test.js');
@@ -92,6 +93,7 @@ await registerListingsNormalise({ test, assert, assertEqual, fixtures });
 await registerListingsClassify({ test, assert, assertEqual });
 await registerListingsSuppress({ test, assert, assertEqual });
 await registerListingsFeedSuppression({ test, assert, assertEqual });
+await registerPurgeListings({ test, assert, assertEqual });
 await registerVerifyAreaCoords({ test, assert, assertEqual, fixtures });
 await registerBackfillGeofence({ test, assert, assertEqual, fixtures });
 await registerResolveAreas({ test, assert, assertEqual, fixtures });
