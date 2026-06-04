@@ -116,7 +116,10 @@ async function render() {
   const filterBar = main.querySelector('[data-listings-filter]');
 
   const [listings, log, criteria, rawFinances, areas, learned, ratings] = await Promise.all([
-    getListings({ limit: null }), getReactionLog(), getCriteria(), getFinances(), getAreas(), getLearnedPreferences(),
+    // includeOutOfArea: a listing you deliberately saved must resolve to its live
+    // row (cover photo, fresh price) even if it sits outside the discovery
+    // geofence — your saved list isn't subject to the feed's discovery filter.
+    getListings({ limit: null, includeOutOfArea: true }), getReactionLog(), getCriteria(), getFinances(), getAreas(), getLearnedPreferences(),
     getListingRatings(),
   ]);
   const finances = rawFinances ? deriveFinances(rawFinances) : null;
