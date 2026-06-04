@@ -251,16 +251,28 @@ const REVIEWED_GROUPS = [
   { key: 'reject', title: 'Rejected', mod: 'rejected', open: false },
 ];
 
-// One collapsible group (a <li> in the listings <ol>) of reviewed cards.
-function buildReviewedGroup(cfg, rows) {
+// One collapsible group (a <li> in the listings <ol>) of reviewed cards. The cards
+// are built lazily on first expand (build-on-toggle): a finished session can hold
+// many reviewed rows across three collapsed groups, and building every card upfront
+// is wasted work. `rows` are raw row-contexts; `buildCard(r)` makes the card <li>.
+function buildReviewedGroup(cfg, rows, buildCard) {
+  const list = el('ul', { class: 'listings reviewed-list' });
+  let built = false;
+  const fill = () => {
+    if (built) return;
+    built = true;
+    for (const r of rows) list.appendChild(buildCard(r));
+  };
   const details = el('details', { class: `reviewed-collapse reviewed-collapse--${cfg.mod}` }, [
     el('summary', { class: 'reviewed-collapse__summary' }, [
       el('span', { class: 'reviewed-collapse__title' }, cfg.title),
       el('span', { class: 'reviewed-collapse__count num' }, String(rows.length)),
     ]),
-    el('ul', { class: 'listings reviewed-list' }, rows),
+    list,
   ]);
   details.open = cfg.open;
+  if (details.open) fill();               // an initially-open group builds immediately
+  details.addEventListener('toggle', () => { if (details.open) fill(); });
   return el('li', { class: 'reviewed-collapse-item' }, [details]);
 }
 
@@ -509,9 +521,20 @@ async function render() {
   const isDecidedListing = (l) => isDecided(l, decided);
 
   const areaOf = (l) => (l.area_id ? areasById.get(l.area_id) : null);
-  const scoreOf = (l) => (finances
-    ? scoreListingFit({ listing: l, finances, criteria, area: areaOf(l), learnedPrefs: listingLearnedPrefs(l, effective), rating: ratings[l.rightmove_id] })
-    : { verdict: 'unknown', score: 0, gated: false, contributions: [] });
+  // Fit scoring is the per-paint hot path (every sort/filter calls paint(), which
+  // scores every listing). Memoise per rightmove_id so repeated paints reuse the
+  // computed verdict; the cache is cleared whenever the learned weights change
+  // (runRetrain) — the only scoring input that varies within a session.
+  const scoreCache = new Map();
+  const scoreOf = (l) => {
+    if (!finances) return { verdict: 'unknown', score: 0, gated: false, contributions: [] };
+    let s = scoreCache.get(l.rightmove_id);
+    if (!s) {
+      s = scoreListingFit({ listing: l, finances, criteria, area: areaOf(l), learnedPrefs: listingLearnedPrefs(l, effective), rating: ratings[l.rightmove_id] });
+      scoreCache.set(l.rightmove_id, s);
+    }
+    return s;
+  };
 
   // Shared search/sort/filter (same module as the saved view). Score and rating are
   // read from the per-paint cache below so sorting never re-runs the fit engine.
@@ -704,7 +727,7 @@ async function render() {
     retraining = true;
     try {
       const res = await recomputeLearnedPreferences({ now: new Date() });
-      if (res) { overrides = res.overrides || {}; effective = effectiveWeights(res.derived || {}, overrides); dismissals = res.dismissals || dismissals; }
+      if (res) { overrides = res.overrides || {}; effective = effectiveWeights(res.derived || {}, overrides); dismissals = res.dismissals || dismissals; scoreCache.clear(); }
       reactionLog = await getReactionLog();
     } catch { /* surfaced via storage toast */ }
     retraining = false;
@@ -772,10 +795,10 @@ async function render() {
       const byVerb = { like: [], pass: [], reject: [] };
       for (const r of reviewed) {
         const verb = reactions[r.listing.rightmove_id]?.reaction;
-        (byVerb[verb] || byVerb.pass).push(rowCtx(r, true));
+        (byVerb[verb] || byVerb.pass).push(r);
       }
       for (const cfg of REVIEWED_GROUPS) {
-        if (byVerb[cfg.key].length) listEl.appendChild(buildReviewedGroup(cfg, byVerb[cfg.key]));
+        if (byVerb[cfg.key].length) listEl.appendChild(buildReviewedGroup(cfg, byVerb[cfg.key], (r) => rowCtx(r, true)));
       }
     }
 
