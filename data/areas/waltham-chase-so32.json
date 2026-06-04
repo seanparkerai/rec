@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Southampton",
   "coords": {
-    "lat": 50.9675,
-    "lng": -1.2077
+    "lat": 50.9363,
+    "lng": -1.2023
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "derived:listing-centroid (provisional - pending web verification; prior os-opendata pin was ~2mi N of the village)",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

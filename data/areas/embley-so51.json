@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Embley is a Hampshire settlement in the SO51 area with longstanding parish and agricultural roots. It sits within a wider rural-commuter geography connected to nearby towns for day-to-day services. Current appeal is primarily village character, countryside access and practical road links across the county.",
   "character": "Rural Hampshire settlement character with mixed housing, parish identity and open countryside setting.",
   "amenities": [

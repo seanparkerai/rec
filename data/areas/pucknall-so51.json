@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Pucknall is a small rural hamlet on the eastern edge of Braishfield village in the Test Valley district of Hampshire, lying just east of Braishfield and around 3 miles north-east of Romsey. It is a scattered cluster of farms, cottages and country houses along lanes such as Dores Lane, set in farmland on the northern fringe of the Hampshire Basin. Pucknall has no amenities of its own; the nearest village facilities, including the primary school and pub, are in Braishfield, with full shops, supermarkets and a railway station in Romsey.",
   "character": "A quiet, dispersed farming hamlet of detached houses, farmsteads and barn conversions among fields and woodland on the edge of Braishfield. The atmosphere is private and distinctly rural, with footpaths nearby and little through traffic.",
   "amenities": [
