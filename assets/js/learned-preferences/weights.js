@@ -2,10 +2,18 @@
 // Layer 2 derive + Layer 2⊕3 effective weights (REFACTOR P7c). Pure. No DOM/IO.
 import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from '../intelligence-constants.js';
 import { signalsForListing, implicatedKinds } from './signals.js';
+import { isNonTrainingReaction } from '../listings/reactions.js';
 
 const GRADED = new Set(['like', 'reject']);
 const PASS   = new Set(['pass']);
 const round3 = (n) => Math.round(n * 1000) / 1000;
+
+// A reaction trains preferences only if it is a graded verb, carries a snapshot,
+// AND is not administrative (e.g. a `removed_area` reject — a wholesale area ignore,
+// which must not be read as a dislike of the homes' type/outcode/beds/price).
+function isTraining(r) {
+  return r && GRADED.has(r.reaction) && r.listing_snapshot && !isNonTrainingReaction(r);
+}
 
 // ── Recency ──────────────────────────────────────────────────────────────────
 
@@ -23,9 +31,7 @@ export function isRecent(listing, now = new Date(), days = RECENCY_DAYS) {
 
 /** Count of graded (like/reject) reactions that carry a usable snapshot. */
 export function gradedCount(reactions) {
-  return (Array.isArray(reactions) ? reactions : []).filter(
-    (r) => r && GRADED.has(r.reaction) && r.listing_snapshot
-  ).length;
+  return (Array.isArray(reactions) ? reactions : []).filter(isTraining).length;
 }
 
 /** True while there is too little graded evidence to credit any learned weight. */
@@ -54,6 +60,7 @@ export function trainingProgress(reactions, opts = {}) {
   let rejects = 0;
   for (const r of arr) {
     if (!r) continue;
+    if (isNonTrainingReaction(r)) continue; // administrative (e.g. removed_area) — not a real judgement
     if (r.reaction === 'like') likes += 1;
     else if (r.reaction === 'reject') rejects += 1;
   }
@@ -133,7 +140,7 @@ export function deriveWeights(reactions, opts = {}) {
   const statusMap = opts.statusMap ?? {};
 
   const all = Array.isArray(reactions) ? reactions : [];
-  const graded = all.filter((r) => r && GRADED.has(r.reaction) && r.listing_snapshot);
+  const graded = all.filter(isTraining);
   const passes = all.filter((r) => r && PASS.has(r.reaction)  && r.listing_snapshot);
 
   const meta = {

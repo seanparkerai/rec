@@ -31,7 +31,26 @@ export const REJECT_REASONS = [
   { key: 'wrong_house_type', label: 'Wrong house type' },
 ];
 
-const REJECT_REASON_KEYS = new Set(REJECT_REASONS.map((r) => r.key));
+/**
+ * Administrative reject reasons — valid + storable like any reject reason, but
+ * deliberately NOT shown in the manual reason picker (reactions-ui only renders
+ * REJECT_REASONS) and NOT counted as a preference-training signal (see
+ * weights.js / isNonTrainingReaction). Used to neutralise WHOLESALE area removals
+ * ("ignore this whole area"): the listings are still rejected/hidden, but the
+ * learning engine must not read those rejections as a dislike of the homes' types,
+ * outcodes, beds or price bands — the user likes those, the area is just ignored.
+ */
+export const SYSTEM_REJECT_REASONS = [
+  { key: 'removed_area', label: 'Removed area (ignored)' },
+];
+
+/** Reason keys that carry NO preference-training signal (administrative). */
+export const NON_TRAINING_REASON_KEYS = new Set(SYSTEM_REJECT_REASONS.map((r) => r.key));
+
+// Reject-reason key membership spans the user-facing chips PLUS the system reasons,
+// so validation/normalisation accept a stored `removed_area` even though it never
+// appears as a manual chip.
+const REJECT_REASON_KEYS = new Set([...REJECT_REASONS, ...SYSTEM_REJECT_REASONS].map((r) => r.key));
 
 /**
  * Optional second-level refinements per primary reject reason — the "further
@@ -126,7 +145,7 @@ export const LIKE_SUBREASONS = {
 // Union of every recognised PRIMARY reason key (reject + like). `other` appears
 // in both vocabularies and means the same generic thing in either, so a shared
 // lookup is safe.
-const REASON_KEYS = new Set([...REJECT_REASONS, ...LIKE_REASONS].map((r) => r.key));
+const REASON_KEYS = new Set([...REJECT_REASONS, ...SYSTEM_REJECT_REASONS, ...LIKE_REASONS].map((r) => r.key));
 // Parent-key → sub-reason list. Parent keys are disjoint across reject/like
 // (except `other`, empty in both), so the merge never loses entries.
 const SUBREASONS_BY_KEY = { ...REJECT_SUBREASONS, ...LIKE_SUBREASONS };
@@ -192,6 +211,24 @@ export function validateReaction(r) {
 /** True if `key` is a recognised reject-reason chip key. */
 export function isRejectReasonKey(key) {
   return REJECT_REASON_KEYS.has(key);
+}
+
+/** True if `key` is an administrative (non-training) reject reason. */
+export function isNonTrainingReasonKey(key) {
+  return NON_TRAINING_REASON_KEYS.has(key);
+}
+
+/**
+ * True if a reaction is administrative — it carries a non-training reason
+ * (e.g. `removed_area`) and so must be EXCLUDED from preference learning. Checks
+ * both the structured `reasons` array and the dual-written scalar `reason`.
+ * @param {object} r  { reaction, reason?, reasons? }
+ */
+export function isNonTrainingReaction(r) {
+  if (!r) return false;
+  const arr = Array.isArray(r.reasons) ? r.reasons : [];
+  if (arr.some((x) => NON_TRAINING_REASON_KEYS.has(x?.key))) return true;
+  return r.reason != null && NON_TRAINING_REASON_KEYS.has(String(r.reason));
 }
 
 /**

@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Tisbury is the largest village in Wiltshire's Nadder Valley, around 13 miles west of Salisbury, with a population of roughly 2,000-2,500. It sits within the Cranborne Chase National Landscape (AONB) on the River Nadder, and has its own railway station on the main West of England line. The 12th-century parish church of St John the Baptist stands beside one of the oldest yew trees in Britain, and nearby Place Farm holds one of the largest surviving tithe barns in the UK.",
   "character": "A thriving, well-heeled but unpretentious village with a bustling independent high street, often cited in best-places-to-live lists for combining genuine rural character with strong amenities and rail links.",
   "amenities": [

@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Southwick is a historic estate village beneath the northern slopes of Portsdown Hill in Hampshire, a few miles north of Portsmouth and Portchester. It is famous as the 'D-Day Village': from nearby Southwick House, General Eisenhower made the final decision to launch Operation Overlord in June 1944. Unusually, the village is still effectively a feudal estate, largely owned by one family (the Thistlethwaytes) since the 16th century, which has kept its mix of medieval, Georgian and Victorian cottages immaculate (all with the estate's trademark deep-red front doors).",
   "character": "An exceptionally well-preserved, estate-owned village around a green, rich in D-Day heritage and unusually generous in amenities for its small size.",
   "amenities": [

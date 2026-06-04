@@ -63,6 +63,26 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   // ── train only on graded ───────────────────────────────────────────────────
+  test('learned-prefs: removed_area rejects are excluded from all training', () => {
+    // A pile of administrative `removed_area` rejects must behave like they were
+    // never in the log: no graded count, no derived weights, no training progress.
+    const removed = many(40, 'reject').map((r) => ({ ...r, reason: 'removed_area', reasons: [{ key: 'removed_area', detail: null, note: null }] }));
+    assertEqual(gradedCount(removed), 0, 'administrative rejects are not graded');
+    assert(isColdStart(removed), 'cannot cross cold start on administrative rejects alone');
+    const { derived } = deriveWeights(removed, { now: NOW });
+    assertEqual(Object.keys(derived).length, 0, 'no signal learned from a removed area');
+    const tp = trainingProgress(removed);
+    assertEqual(tp.rejects, 0, 'training progress ignores administrative rejects');
+
+    // And they do not pollute a genuine signal: likes of the base snapshot vs
+    // rejects of a 2-bed Flat should still learn type/beds, unchanged by adding
+    // 40 removed_area rejects of detached homes alongside.
+    const genuine = [...many(15, 'like'), ...many(15, 'reject', { property_type: 'Flat', beds: 2 })];
+    const base = deriveWeights(genuine, { now: NOW }).derived;
+    const withNoise = deriveWeights([...genuine, ...removed], { now: NOW }).derived;
+    assertEqual(JSON.stringify(withNoise), JSON.stringify(base), 'removed_area rejects leave the model identical');
+  });
+
   test('learned-prefs: pass/viewed never train (absence is unlabelled)', () => {
     // 30 passes carrying a snapshot must NOT cross the cold-start threshold or
     // produce any weight — only like/reject count.

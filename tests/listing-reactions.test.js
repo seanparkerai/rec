@@ -6,12 +6,15 @@ import {
   GRADED_REACTIONS,
   REJECT_REASONS,
   REJECT_SUBREASONS,
+  SYSTEM_REJECT_REASONS,
   LIKE_REASONS,
   LIKE_SUBREASONS,
   PERSONAL_STATUSES,
   isReaction,
   isPersonalStatus,
   isRejectReasonKey,
+  isNonTrainingReasonKey,
+  isNonTrainingReaction,
   isReasonKey,
   isSubReasonKey,
   subReasonsFor,
@@ -46,6 +49,29 @@ export async function register({ test, assert, assertEqual }) {
     assert(isRejectReasonKey('too_expensive'), 'known chip key');
     assert(!isRejectReasonKey('other'), 'other removed from vocabulary');
     assert(!isRejectReasonKey('nope'), 'unknown chip key rejected');
+  });
+
+  test('reactions: removed_area is a valid system reason, not a manual chip', () => {
+    // Storable + validatable like any reject reason …
+    assert(isRejectReasonKey('removed_area'), 'removed_area is a recognised reject key');
+    assert(isReasonKey('removed_area'), 'removed_area is a recognised reason key');
+    assert(validateReaction({ listing_id: '1', reaction: 'reject', reason: 'removed_area' }), 'accepted by validation');
+    // … but NOT offered in the manual picker (reactions-ui renders REJECT_REASONS).
+    assert(!REJECT_REASONS.some((r) => r.key === 'removed_area'), 'not in the user-facing chip list');
+    assert(SYSTEM_REJECT_REASONS.some((r) => r.key === 'removed_area'), 'lives in the system list');
+    // normaliseReaction keeps it and dual-writes the scalar.
+    const n = normaliseReaction({ listing_id: '1', reaction: 'reject', reasons: [{ key: 'removed_area' }] });
+    assertEqual(n.reason, 'removed_area');
+    assertEqual(n.reasons[0].key, 'removed_area');
+  });
+
+  test('reactions: isNonTrainingReaction flags administrative rejects only', () => {
+    assert(isNonTrainingReasonKey('removed_area'), 'removed_area is non-training');
+    assert(!isNonTrainingReasonKey('wrong_area'), 'wrong_area is a real training signal');
+    assert(isNonTrainingReaction({ reaction: 'reject', reasons: [{ key: 'removed_area' }] }), 'array form');
+    assert(isNonTrainingReaction({ reaction: 'reject', reason: 'removed_area' }), 'scalar form');
+    assert(!isNonTrainingReaction({ reaction: 'reject', reason: 'wrong_area' }), 'genuine reject trains');
+    assert(!isNonTrainingReaction({ reaction: 'like' }), 'a like trains');
   });
 
   test('reactions: validateReaction accepts a valid reject with reason', () => {

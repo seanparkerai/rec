@@ -327,7 +327,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "wherwell-sp11",
@@ -351,7 +351,7 @@
     "councilTaxBand": "D",
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "wield-so24",
@@ -495,7 +495,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "bordean-gu32",
@@ -927,7 +927,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "awbridge-so51",
@@ -3057,7 +3057,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "bishopdown-sp1",
@@ -3465,7 +3465,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "ford-sp4",

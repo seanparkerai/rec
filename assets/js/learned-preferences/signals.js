@@ -146,6 +146,8 @@ export const REASON_SIGNAL_KINDS = {
   needs_work:    ['type'],   // work-intensity correlates with property type/age
   no_outdoor:    ['outdoor'],
   wrong_house_type: ['type'],   // explicit "not this kind of home" → property type
+  removed_area:  [],   // administrative wholesale area-ignore — excluded from training
+                       // upstream (weights.js isTraining); [] here is defensive only.
 
   // like reasons (positive)
   great_area:    ['outcode', 'area'],
