@@ -30,7 +30,14 @@ count is wrong and must be reconciled to this section.
 Created by migration `listings_l1`. It is **not** one of the tracked git-synced
 tables and is **not** mirrored to/from repo JSON: it is written exclusively by
 `tools/fetch-listings.mjs` (service role) and changes hourly, so it has no
-review/cite value the way `areas` does.
+review/cite value the way `areas` does. Both writers (`fetch-listings.mjs` and the
+backfill `import-apify-runs.mjs`) apply the `passesBaseline` gate
+(`assets/js/listings/classify.js`), and the row is also **purged — not only appended** —
+by `tools/purge-listings.mjs` (baseline-violating / rejected-and-old / stale; never a
+liked row) and by user-approved one-off MCP cleanups. The reject SIGNAL that drives feed
+suppression lives in the append-only `listing_reactions` log, NOT in `listings`, so purging
+a heavy listings row never loses suppression. *(2026-06-04: a one-off MCP purge dropped
+1,671 not-liked baseline-violators, 3,086→1,415; `listing_reactions` untouched at 3,244.)*
 
 **v3 L3 addition (2026-05-30):** `listing_reactions` — a **user-state** table (per household_id),
 but **append-only**: every reaction (like/pass/reject + optional reject reason + `listing_snapshot`)

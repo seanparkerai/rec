@@ -195,6 +195,46 @@ demote a home below an unrated one.
 Constants live in `assets/js/intelligence-constants.js` (`LISTING_VERDICTS`, `FIT_BANDS`,
 `FIT_WEIGHTS`). Change them and this section together. *(v3 L2 — added 2026-05-30; rating signal 2026-06-01.)*
 
+## Listing identity, suppression & purge (v3 convergence)
+
+**Baseline gate (`assets/js/listings/classify.js`).** One houses+bungalows allow-list plus a
+price/beds band is the single "is this a home worth showing?" rule, applied post-normalise by
+every writer of the `listings` table (the live fetcher AND the backfill importer):
+- `BASELINE_PRICE_MIN` = £100,000 · `BASELINE_PRICE_MAX` = £450,000 (LISA-aligned) ·
+  `BASELINE_MIN_BEDS` = 2. A KNOWN price/beds outside the band rejects; UNKNOWN (null) does not
+  (a re-fetched summary can omit them, and must not drop a known-good row). The type rule is
+  unconditional.
+- EXCLUDED is tested before ALLOWED, so "Coach House" / "House Share" / HMO don't slip through
+  the broad "house" rule. `passesBaseline()` is the gate; `flags.js` also hides an excluded type
+  in the feed. *(This gate is the pollution guard — `tests/supabase-sync.test.js` asserts every
+  writer imports it, so the table can't silently re-pollute.)*
+
+**Physical-property fingerprint.** `propertyFingerprint(l)` = `type|beds|street|town`, a
+price-insensitive identity that is `null` when the address is too coarse (town-only) to trust —
+deliberately conservative so distinct homes never false-merge. It exists because `rightmove_id`
+is NOT stable: a withdrawn-then-relisted property gets a new id, which is why reactions orphaned
+and duplicates piled up.
+
+**Suppression policy (`assets/js/listings/suppress.js`).**
+- A property whose LATEST reaction is **like or reject is "decided"** → never shown as a fresh
+  card again, matched by id AND fingerprint (so a re-list under a new id is caught).
+- **`pass` is a soft skip** — not decided, may resurface.
+- Among undecided rows, same-fingerprint **duplicates collapse to one** representative
+  (`dedupeByFingerprint` keeps the newest listing; `dedupeNewestByFingerprint` keeps the newest by
+  an explicit time accessor — the Saved view's most-recently-liked).
+- The feed derives "decided" from the LIVE append-only log via `latestPerListing` + `decidedSets`,
+  the same source the Saved view reads (so feed and Saved never disagree).
+
+**Rejection memory is DERIVED, not stored separately.** There is no rejection table — the
+append-only `listing_reactions` log is the durable signal. This is why the heavy `listings` row can
+be purged without losing suppression.
+
+**Maintenance purge (`tools/purge-listings.mjs`).** Deletes a `listings` row when it is (a)
+baseline-violating, (b) rejected (by id AND fingerprint) and unseen past `REJECT_HALF_LIFE_DAYS`
+(14), or (c) stale past `STALE_DAYS` (30) — but NEVER a row ever liked. Reuses `passesBaseline` +
+`propertyFingerprint` + `isDecided` so it can't drift from what the feed suppresses. It is
+maintenance, **not a cap** — it never trims valid, undecided, in-baseline listings. *(v3 convergence — added 2026-06-04.)*
+
 ## Learned preferences (v3 L4)
 
 The append-only `listing_reactions` log (Layer 1) is distilled into **derived weights**

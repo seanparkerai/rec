@@ -84,6 +84,33 @@ Plan: `docs/V3_LISTINGS_PLAN.md`. Build order L0→L6; minimum-lovable = L0–L4
       shell (so the whole listings page rendered unstyled) — added `@import 'pages/listings.css'`
       and `pages/property.css`. 243/243 green.
 
+### v3 Convergence — listings intelligence (P1–P6, 2026-06-04)
+Make the feed converge on "a handful that fit" by intelligence — **NO caps** on Apify pulls or
+listings shown. The small review count *emerges* from filtering / dedup / suppression / fit-ranking.
+- [x] **P1 — baseline gate (single source of truth)**: `assets/js/listings/classify.js`
+      (`passesBaseline` houses+bungalows allow-list + £100k–£450k band + ≥2 beds; `propertyFingerprint`
+      identity). Applied by BOTH writers (`fetch-listings.mjs` + `import-apify-runs.mjs` — the
+      importer's missing gate was the pollution); `flags.js` hides excluded types. Tested
+      (`tests/listings-classify.test.js`).
+- [x] **P2 — feed suppression + dedup wired**: `assets/js/listings/suppress.js`
+      (`decidedSets`/`isDecided`/`dedupeByFingerprint`/`dedupeNewestByFingerprint`) wired into
+      `page-listings.js` + `page-saved-listings.js`. Liked/rejected never return as fresh cards (by id
+      AND fingerprint); duplicates collapse; `pass` resurfaces; feed + Saved both read the live log
+      (`latestPerListing`). New summary segments ("already decided (hidden)" / "duplicates merged").
+      Tests: `listings-suppress` + new `listings-feed-suppression` (6).
+- [x] **P3 — render perf (no caps)**: reviewed groups build-on-toggle; fit scores memoised per
+      `rightmove_id` (cache cleared on retrain). Every listing stays available.
+- [x] **P4 — maintenance purge tool**: `tools/purge-listings.mjs` (baseline / rejected-and-old ~14d /
+      stale ~30d; never a liked row; reuses `passesBaseline` + fingerprint; DRY RUN unless `APPLY=1`).
+      7 tests (`tests/purge-listings.test.js`).
+- [x] **P5 — one-off junk cleanup** (Supabase MCP, user-approved): purged 1,671 not-liked
+      baseline-violators; listings 3,086→1,415 (feed-visible 2,539→1,252); 0 violators remain; 20 liked
+      rows + the 3,244-row reaction log preserved. `data/snapshots/sync-state.json` updated.
+- [x] **P6 — docs + tests**: V3_LISTINGS_PLAN / INTELLIGENCE_RULES / SUPABASE_SYNC / CHECKLIST updated;
+      `supabase-sync.test.js` asserts the baseline gate is wired into every writer + the purge reuses it
+      (pollution can't silently return). Learned auto-narrowing stays OFF (`USE_LEARNED` unset;
+      `.github/workflows/*` untouched).
+
 ---
 
 ## Phase 0 — Foundation & governance

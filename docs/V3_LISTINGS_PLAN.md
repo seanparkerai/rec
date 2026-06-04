@@ -1,8 +1,11 @@
 # v3 — Live Listings architecture & build plan
 
-> Status as of 2026-05-31: **L0–L6 done** (L6 = dossier only; outreach join deferred by request).
+> Status as of 2026-06-04: **L0–L6 done** + **Convergence pass (P1–P6) done** — baseline gate,
+> physical-property identity, fingerprint suppression/dedup, render perf, and a maintenance purge
+> (see "Convergence" below). L6 = dossier only; outreach join deferred by request.
 > Checklist mirror: `docs/CHECKLIST.md` (v3 section). Rule constants:
-> `docs/INTELLIGENCE_RULES.md` §"Listing fit". Sync class: `docs/SUPABASE_SYNC.md` §1.
+> `docs/INTELLIGENCE_RULES.md` §"Listing fit" + §"Listing identity, suppression & purge".
+> Sync class: `docs/SUPABASE_SYNC.md` §1.
 
 ## What we're building
 A buyer-assistant layer whose defining property is a **feedback loop**: every
@@ -93,6 +96,38 @@ Four committed decisions (do not relitigate without new evidence):
   context, reaction/status). The `property_outreach` join is **deferred by request** (outreach left
   out entirely for now). Per user priority, L6 (bookings/outreach) is lower priority than the
   listings/learning core (L1–L4).
+
+## Convergence — baseline gate · identity · suppression · purge (P1–P6, 2026-06-04)
+The feed converges on "a handful that fit" by **intelligence, never a cap**. There is no
+cap on Apify pulls or on listings shown (`RESULTS_PER_OUTCODE=50` stays a cost guard); the
+small daily review count *emerges* from filtering, dedup, suppression and fit-ranking.
+
+- **P1 — baseline gate (single source of truth).** `assets/js/listings/classify.js`: the
+  one houses+bungalows allow-list + price/beds band — `passesBaseline`, `BASELINE_PRICE_MIN`
+  £100k / `BASELINE_PRICE_MAX` £450k / `BASELINE_MIN_BEDS` 2. Applied post-normalise by BOTH
+  writers (`tools/fetch-listings.mjs`, `tools/import-apify-runs.mjs`) — the importer's missing
+  gate was the original pollution. `flags.js` also HIDES an excluded type in the feed.
+- **Physical-property fingerprint.** `propertyFingerprint(l)` = price-insensitive
+  `type|beds|street|town` (null when the address is too coarse — never false-merge).
+  `rightmove_id` is NOT stable (a re-list gets a new id), so the fingerprint is the identity
+  that survives re-lists and collapses duplicates.
+- **P2 — suppression + dedup in the feed.** `assets/js/listings/suppress.js`
+  (`decidedSets` / `isDecided` / `dedupeByFingerprint` / `dedupeNewestByFingerprint`), wired
+  into `page-listings.js` + `page-saved-listings.js`: a property whose LATEST reaction is
+  like/reject is "decided" and never returns as a fresh card (matched by id AND fingerprint);
+  duplicates collapse to one; `pass` stays resurfaceable. Feed and Saved both derive from the
+  live append-only log (`latestPerListing`) — no more cached-map disagreement.
+- **P3 — render perf (never a cap).** Reviewed groups build their cards on first expand; fit
+  scores memoise per `rightmove_id` (cache cleared on retrain). Every listing stays available.
+- **P4 — maintenance purge.** `tools/purge-listings.mjs` deletes heavy `listings` rows that
+  are baseline-violating, rejected-and-old (half-life ~14d, by id AND fingerprint), or stale
+  (~30d) — never a liked row. The reject SIGNAL persists in the append-only `listing_reactions`
+  log, so suppression survives a purge. Reuses `passesBaseline` + `propertyFingerprint` (no
+  drift). DRY RUN unless `APPLY=1`.
+- **P5 — one-off cleanup (2026-06-04).** Purged 1,671 not-liked baseline-violators via MCP
+  (listings 3,086→1,415; feed-visible 2,539→1,252; 0 violators remain; 20 liked rows + the
+  3,244-row reaction log preserved).
+- **Learned auto-narrowing stays OFF** (`USE_LEARNED` unset; `.github/workflows/*` untouched).
 
 ## Failure modes to keep in view
 Apify abandonment → our-schema indirection swaps source in one file. Silent wrong-region

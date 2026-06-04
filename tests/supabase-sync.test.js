@@ -72,6 +72,32 @@ test('listing_reactions vocabulary is well-formed (v3 L3)', async () => {
     'reaction helpers must be exported for storage.js');
 });
 
+test('listings baseline gate is wired into every writer (pollution guard, v3 P1)', async () => {
+  // The single houses+bungalows price/beds gate must be applied by EVERY path that
+  // writes the listings table, or the table re-pollutes (as it did from the one
+  // unfiltered 2026-05-31 import). Assert the gate exists and that BOTH the live
+  // fetcher and the backfill importer import + apply passesBaseline.
+  const classify = await import('../assets/js/listings/classify.js');
+  assert(typeof classify.passesBaseline === 'function', 'classify.passesBaseline must exist');
+  assert(typeof classify.propertyFingerprint === 'function', 'classify.propertyFingerprint must exist');
+  assert(classify.BASELINE_PRICE_MIN < classify.BASELINE_PRICE_MAX, 'baseline price band must be sane');
+  assert(classify.BASELINE_MIN_BEDS >= 1, 'baseline min beds must be >= 1');
+  for (const tool of ['tools/fetch-listings.mjs', 'tools/import-apify-runs.mjs']) {
+    const src = await readFile(resolve(root, tool), 'utf8');
+    assert(/passesBaseline/.test(src) && /listings\/classify\.js/.test(src),
+      `${tool} must import + apply passesBaseline (pollution guard)`);
+  }
+});
+
+test('purge tool reuses the baseline + fingerprint contract (no drift, v3 P4)', async () => {
+  // tools/purge-listings.mjs must reuse the SAME gate + fingerprint as the feed, never
+  // re-implement them, so a purge can't diverge from what the feed suppresses.
+  const src = await readFile(resolve(root, 'tools/purge-listings.mjs'), 'utf8');
+  assert(/passesBaseline/.test(src), 'purge must reuse passesBaseline');
+  assert(/propertyFingerprint/.test(src) && /isDecided/.test(src),
+    'purge must reuse the fingerprint suppression contract (propertyFingerprint + isDecided)');
+});
+
 // ── Offline: repo content structure ──────────────────────────────────────────
 
 test('all area files match schema', async () => {
@@ -141,6 +167,7 @@ test('backfill script is present and executable', async () => {
 // never counted as passing — so the green total reflects only what was actually verified.
 skip('schema check — run online via MCP in session', 'offline harness cannot call MCP');
 skip('areas mirror row count == repo area files — run online via MCP', 'requires live Supabase');
+skip('every live listings row passes the baseline gate (no pollution) — run online via MCP', 'requires live Supabase');
 
 // ── Runner ──────────────────────────────────────────────────────────────────
 
