@@ -38,11 +38,28 @@
   "nearestStation": null,
   "primarySupermarket": null,
   "images": [],
-  "sources": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Whiteparish",
+      "label": "Whiteparish (incl. Newton hamlet) - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Downton,_Wiltshire",
+      "label": "Downton, Wiltshire - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Charlton-All-Saints",
+      "label": "Charlton-All-Saints - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Newtown,_Hampshire",
+      "label": "Newtown, Hampshire (name collision) - Wikipedia"
+    }
+  ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1236651",
+    "resolvedAt": "2026-06-02T21:15:34.850Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:34.850Z"
+    "locationIdentifier": "POSTCODE^1236651"
   }
 }

@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0057,
-    "lng": -1.0169
+    "lat": 51.0122,
+    "lng": -1.088
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:postcode-checker;getthedata; cross-checked listing-centroid; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

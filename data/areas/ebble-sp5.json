@@ -38,11 +38,28 @@
   "nearestStation": null,
   "primarySupermarket": null,
   "images": [],
-  "sources": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/River_Ebble",
+      "label": "River Ebble - Wikipedia"
+    },
+    {
+      "url": "https://www.bishopstone-pc.gov.uk/the-river-ebble/",
+      "label": "The River Ebble - Bishopstone Parish Council"
+    },
+    {
+      "url": "https://wikishire.co.uk/wiki/River_Ebble",
+      "label": "River Ebble - Wikishire"
+    },
+    {
+      "url": "https://www.wiltshire.gov.uk/media/1013/Landscape-Type-5-December-2005/pdf/lca-dec-05-type-5.pdf",
+      "label": "Landscape Type 5: Chalk River Valley (Ebble River Valley) - Wiltshire Council"
+    }
+  ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^810576",
+    "resolvedAt": "2026-06-02T21:14:49.826Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:49.826Z"
+    "locationIdentifier": "POSTCODE^810576"
   }
 }

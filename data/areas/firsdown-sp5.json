@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0178,
-    "lng": -1.767
+    "lat": 51.0998,
+    "lng": -1.695
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:ukpostcodecheck;streetcheck; cross-checked listing-centroid; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

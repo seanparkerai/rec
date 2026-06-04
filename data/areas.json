@@ -762,15 +762,15 @@
     "active": true
   },
   {
-    "id": "monkwood-gu34",
+    "id": "monkwood-so24",
     "name": "Monkwood",
     "village": "Monkwood",
     "town": "Petersfield",
     "county": "Hampshire",
-    "postcode": "GU34",
-    "hubCity": "Guildford",
-    "regionDir": "",
-    "settlementType": "",
+    "postcode": "SO24",
+    "hubCity": "Southampton",
+    "regionDir": "North",
+    "settlementType": "Non-City",
     "subRegion": "Petersfield",
     "coords": {
       "lat": 51.0841,
@@ -1133,10 +1133,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.9598,
-      "lng": -1.1703
+      "lat": 50.9605,
+      "lng": -1.139
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata;getthedata; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1253,10 +1253,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.9556,
-      "lng": -1.2195
+      "lat": 50.944,
+      "lng": -1.1812
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki;achurchnearyou; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1469,10 +1469,10 @@
     "settlementType": "",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0057,
-      "lng": -1.0169
+      "lat": 51.0122,
+      "lng": -1.088
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:postcode-checker;getthedata; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1728,12 +1728,12 @@
     "active": true
   },
   {
-    "id": "totford-so20",
+    "id": "totford-so24",
     "name": "Totford",
     "village": "Totford",
     "town": "Winchester",
     "county": "Hampshire",
-    "postcode": "SO20",
+    "postcode": "SO24",
     "hubCity": "Southampton",
     "regionDir": "North",
     "settlementType": "Non-City",
@@ -2339,10 +2339,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1373,
-      "lng": -1.283
+      "lat": 51.1535,
+      "lng": -1.339
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:britishlistedbuildings;britishlistedbuildings; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3167,10 +3167,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0628,
-      "lng": -1.8721
+      "lat": 51.1185,
+      "lng": -1.8863
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki;wikidata; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3239,10 +3239,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0573,
-      "lng": -1.853
+      "lat": 51.1098,
+      "lng": -1.8778
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:osm;genuki; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3372,12 +3372,12 @@
     "active": true
   },
   {
-    "id": "lake-sp3",
+    "id": "lake-sp4",
     "name": "Lake",
     "village": "Lake",
     "town": "Salisbury",
     "county": "Wiltshire",
-    "postcode": "SP3",
+    "postcode": "SP4",
     "hubCity": "Salisbury",
     "regionDir": "",
     "settlementType": "",
@@ -3540,21 +3540,21 @@
     "active": true
   },
   {
-    "id": "little-langford-sp4",
+    "id": "little-langford-sp3",
     "name": "Little Langford",
     "village": "Little Langford",
     "town": "Salisbury",
     "county": "Wiltshire",
-    "postcode": "SP4",
+    "postcode": "SP3",
     "hubCity": "Salisbury",
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1246,
-      "lng": -1.8789
+      "lat": 51.12866,
+      "lng": -1.93421
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:os-grid:SU047366(GENUKI)+gazetteer.org.uk+wikidata:Q11761979; postcode-corrected SP4->SP3; no listings to cross-check; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3612,21 +3612,21 @@
     "active": true
   },
   {
-    "id": "steeple-langford-sp4",
+    "id": "steeple-langford-sp3",
     "name": "Steeple Langford",
     "village": "Steeple Langford",
     "town": "Salisbury",
     "county": "Wiltshire",
-    "postcode": "SP4",
+    "postcode": "SP3",
     "hubCity": "Salisbury",
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1601,
-      "lng": -1.894
+      "lat": 51.136,
+      "lng": -1.9464
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki:SU036374+gazetteer.org.uk:GBPNID42314; postcode-corrected SP4->SP3; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3636,21 +3636,21 @@
     "active": true
   },
   {
-    "id": "ugford-sp4",
+    "id": "ugford-sp2",
     "name": "Ugford",
     "village": "Ugford",
     "town": "Salisbury",
     "county": "Wiltshire",
-    "postcode": "SP4",
+    "postcode": "SP2",
     "hubCity": "Salisbury",
     "regionDir": "",
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0741,
-      "lng": -1.8313
+      "lat": 51.08029,
+      "lng": -1.88121
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:ukpostcodecheck:SP2-0EB+os-en:408418/131225; postcode-corrected SP4->SP2; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4103,10 +4103,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0178,
-      "lng": -1.767
+      "lat": 51.0998,
+      "lng": -1.695
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:ukpostcodecheck;streetcheck; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4271,10 +4271,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0139,
-      "lng": -1.682
+      "lat": 51.096,
+      "lng": -1.656
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata;doogal; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4487,10 +4487,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0151,
-      "lng": -1.8597
+      "lat": 51.0383,
+      "lng": -1.7
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:gazetteer.org.uk;wikidata; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4535,10 +4535,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0126,
-      "lng": -1.6831
+      "lat": 51.0908,
+      "lng": -1.6745
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:mappy;genuki; cross-checked listing-centroid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,

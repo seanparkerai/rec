@@ -1,0 +1,2158 @@
+[
+  {
+    "id": "abbotstone-so24",
+    "name": "Abbotstone",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.1073,
+      "lng": -1.1971
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "alderbury-sp5",
+    "name": "Alderbury",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.027,
+      "lng": -1.7537
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ashley-so20",
+    "name": "Ashley",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.0826,
+      "lng": -1.4933
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ashton-so32",
+    "name": "Ashton",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9651,
+      "lng": -1.1682
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "avington-park-so21",
+    "name": "Avington Park",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0903,
+      "lng": -1.2107
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "avington-so21",
+    "name": "Avington",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0912,
+      "lng": -1.2142
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "awbridge-so51",
+    "name": "Awbridge",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 51.0099,
+      "lng": -1.5256
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "barford-st-martin-sp5",
+    "name": "Barford St Martin",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0779,
+      "lng": -1.963
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "barton-stacey-so21",
+    "name": "Barton Stacey",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1549,
+      "lng": -1.3708
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "baybridge-so21",
+    "name": "Baybridge",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0481,
+      "lng": -1.25
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "beauworth-so24",
+    "name": "Beauworth",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.049,
+      "lng": -1.1688
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "beech-gu34",
+    "name": "Beech",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.146,
+      "lng": -1.0878
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bemerton-sp2",
+    "name": "Bemerton",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.0726,
+      "lng": -1.8222
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bentworth-gu34",
+    "name": "Bentworth",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.1399,
+      "lng": -1.0995
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bighton-so24",
+    "name": "Bighton",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0737,
+      "lng": -1.1453
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bishop-s-sutton-so24",
+    "name": "Bishop's Sutton",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0585,
+      "lng": -1.1483
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bishop-s-waltham-so32",
+    "name": "Bishop's Waltham",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9573,
+      "lng": -1.216
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bishopdown-sp1",
+    "name": "Bishopdown",
+    "postcode": "SP1",
+    "coords": {
+      "lat": 51.0958,
+      "lng": -1.778
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bishopstone-sp5",
+    "name": "Bishopstone",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0113,
+      "lng": -1.8547
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bordean-gu32",
+    "name": "Bordean",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 51.0056,
+      "lng": -1.0041
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bordon-gu35",
+    "name": "Bordon",
+    "postcode": "GU35",
+    "coords": {
+      "lat": 51.1076,
+      "lng": -0.8631
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "bossington-so20",
+    "name": "Bossington",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.0862,
+      "lng": -1.4794
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bowerchalke-sp5",
+    "name": "Bowerchalke",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0174,
+      "lng": -1.972
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bradley-gu34",
+    "name": "Bradley",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.1274,
+      "lng": -1.0927
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "braishfield-so51",
+    "name": "Braishfield",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 51.0247,
+      "lng": -1.4877
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bramdean-so24",
+    "name": "Bramdean",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0531,
+      "lng": -1.114
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "bramshaw-so43",
+    "name": "Bramshaw",
+    "postcode": "SO43",
+    "coords": {
+      "lat": 50.9663,
+      "lng": -1.5809
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "breamore-sp6",
+    "name": "Breamore",
+    "postcode": "SP6",
+    "coords": {
+      "lat": 50.9561,
+      "lng": -1.7961
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "broad-chalke-sp5",
+    "name": "Broad Chalke",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0176,
+      "lng": -1.9631
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "brockwood-park-so24",
+    "name": "Brockwood Park",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0463,
+      "lng": -1.107
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "brook-so20",
+    "name": "Brook",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.0931,
+      "lng": -1.4747
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "broughton-so20",
+    "name": "Broughton",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.0795,
+      "lng": -1.5277
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "brown-candover-so24",
+    "name": "Brown Candover",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.15,
+      "lng": -1.1744
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "burcombe-sp2",
+    "name": "Burcombe",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.0762,
+      "lng": -1.8771
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "charlton-all-saints-sp5",
+    "name": "Charlton All Saints",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9812,
+      "lng": -1.8009
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "charlwood-gu34",
+    "name": "Charlwood",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0775,
+      "lng": -0.9846
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "charlwood-so24",
+    "name": "Charlwood",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0732,
+      "lng": -1.0879
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "cheriton-so24",
+    "name": "Cheriton",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0471,
+      "lng": -1.1659
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "chidden-gu34",
+    "name": "Chidden",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.04,
+      "lng": -1.0199
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "chilbolton-down-so20",
+    "name": "Chilbolton Down",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.1315,
+      "lng": -1.4649
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "chilbolton-so20",
+    "name": "Chilbolton",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.1329,
+      "lng": -1.4554
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "chilcomb-so21",
+    "name": "Chilcomb",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0574,
+      "lng": -1.2805
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "chillworth-so16",
+    "name": "Chillworth",
+    "postcode": "SO16",
+    "coords": {
+      "lat": 50.9529,
+      "lng": -1.4274
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "chilmark-sp3",
+    "name": "Chilmark",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.0821,
+      "lng": -1.9847
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "colden-common-so21",
+    "name": "Colden Common",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0174,
+      "lng": -1.2923
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "colemore-gu32",
+    "name": "Colemore",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 51.0547,
+      "lng": -1.0506
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "colemore-gu34",
+    "name": "Colemore",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0547,
+      "lng": -1.0506
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "compton-so21",
+    "name": "Compton",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0421,
+      "lng": -1.317
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "coombe-bissett-sp5",
+    "name": "Coombe Bissett",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0106,
+      "lng": -1.8195
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "coombe-gu32",
+    "name": "Coombe",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 50.9901,
+      "lng": -0.9907
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "crawley-so21",
+    "name": "Crawley",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0692,
+      "lng": -1.3576
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "dean-land-sp5",
+    "name": "Dean Land",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0048,
+      "lng": -1.8878
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "dinton-sp3",
+    "name": "Dinton",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.0798,
+      "lng": -1.9472
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "downton-sp5",
+    "name": "Downton",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.993,
+      "lng": -1.7826
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "droxford-so32",
+    "name": "Droxford",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9605,
+      "lng": -1.139
+    },
+    "coordsSource": "web-verified:getthedata;getthedata; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "dunbridge-so51",
+    "name": "Dunbridge",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 50.9952,
+      "lng": -1.5122
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "dundridge-so32",
+    "name": "Dundridge",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9413,
+      "lng": -1.1952
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "east-dean-sp5",
+    "name": "East Dean",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9933,
+      "lng": -1.875
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "east-grimstead-sp5",
+    "name": "East Grimstead",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0213,
+      "lng": -1.8348
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "east-meon-gu32",
+    "name": "East Meon",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 50.9977,
+      "lng": -1.008
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "east-stratton-so21",
+    "name": "East Stratton",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1237,
+      "lng": -1.2157
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "east-tisted-gu34",
+    "name": "East Tisted",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0808,
+      "lng": -1.0443
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "east-tytherely-sp5",
+    "name": "East Tytherely",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9947,
+      "lng": -1.601
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "easton-so21",
+    "name": "Easton",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0753,
+      "lng": -1.2698
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ebbesbourne-wake-sp5",
+    "name": "Ebbesbourne Wake",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.009,
+      "lng": -1.9847
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ebble-sp5",
+    "name": "Ebble",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9818,
+      "lng": -1.8718
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "embley-so51",
+    "name": "Embley",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 51.0051,
+      "lng": -1.4972
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "farley-mount-so21",
+    "name": "Farley Mount",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0513,
+      "lng": -1.3823
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "farley-sp5",
+    "name": "Farley",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.003,
+      "lng": -1.747
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "filmore-hill-gu34",
+    "name": "Filmore Hill",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0937,
+      "lng": -1.0265
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "firsdown-sp5",
+    "name": "Firsdown",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0998,
+      "lng": -1.695
+    },
+    "coordsSource": "web-verified:ukpostcodecheck;streetcheck; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "flexcombe-gu32",
+    "name": "Flexcombe",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 51.0228,
+      "lng": -0.9456
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "flexcombe-gu33",
+    "name": "Flexcombe",
+    "postcode": "GU33",
+    "coords": {
+      "lat": 51.0228,
+      "lng": -0.9456
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "ford-sp4",
+    "name": "Ford",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1089,
+      "lng": -1.8001
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "four-marks-gu34",
+    "name": "Four Marks",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.1006,
+      "lng": -1.0438
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "froxfield-green-gu32",
+    "name": "Froxfield Green",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 51.0344,
+      "lng": -0.9763
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "froxfield-green-gu34",
+    "name": "Froxfield Green",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0344,
+      "lng": -0.9763
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "gomeldon-sp4",
+    "name": "Gomeldon",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1174,
+      "lng": -1.7682
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "great-wishford-sp2",
+    "name": "Great Wishford",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.1185,
+      "lng": -1.8863
+    },
+    "coordsSource": "web-verified:genuki;wikidata; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "hambledon-po7",
+    "name": "Hambledon",
+    "postcode": "PO7",
+    "coords": {
+      "lat": 50.886,
+      "lng": -1.0713
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "hampworth-sp5",
+    "name": "Hampworth",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9775,
+      "lng": -1.665
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "high-cross-gu32",
+    "name": "High Cross",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 50.9852,
+      "lng": -0.999
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "hinton-ampner-so24",
+    "name": "Hinton Ampner",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.056,
+      "lng": -1.1482
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "homington-sp5",
+    "name": "Homington",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0113,
+      "lng": -1.8435
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "houghton-so20",
+    "name": "Houghton",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.054,
+      "lng": -1.488
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "hursley-so21",
+    "name": "Hursley",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0123,
+      "lng": -1.376
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "itchen-abbas-so21",
+    "name": "Itchen Abbas",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0933,
+      "lng": -1.2356
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "kilmeston-so24",
+    "name": "Kilmeston",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.046,
+      "lng": -1.1629
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "kimbridge-so51",
+    "name": "Kimbridge",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 50.9888,
+      "lng": -1.5173
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "king-s-somborne-so20",
+    "name": "King's Somborne",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.0622,
+      "lng": -1.4762
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "kings-worthy-so23",
+    "name": "Kings Worthy",
+    "postcode": "SO23",
+    "coords": {
+      "lat": 51.0824,
+      "lng": -1.301
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "kitwood-so24",
+    "name": "Kitwood",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0618,
+      "lng": -1.131
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lake-sp4",
+    "name": "Lake",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1503,
+      "lng": -1.8113
+    },
+    "coordsSource": "manual-verified:multi-source",
+    "active": true
+  },
+  {
+    "id": "landford-sp5",
+    "name": "Landford",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9749,
+      "lng": -1.6478
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lane-end-so21",
+    "name": "Lane End",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0398,
+      "lng": -1.2683
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lanford-wood-sp5",
+    "name": "Lanford Wood",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9898,
+      "lng": -1.6599
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "leckford-so20",
+    "name": "Leckford",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.1263,
+      "lng": -1.4913
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "little-durnford-sp4",
+    "name": "Little Durnford",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1553,
+      "lng": -1.7789
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "little-langford-sp3",
+    "name": "Little Langford",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.12866,
+      "lng": -1.93421
+    },
+    "coordsSource": "web-verified:os-grid:SU047366(GENUKI)+gazetteer.org.uk+wikidata:Q11761979; postcode-corrected SP4->SP3; no listings to cross-check; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "little-sombourne-so20",
+    "name": "Little Sombourne",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.0737,
+      "lng": -1.473
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "little-wishford-sp2",
+    "name": "Little Wishford",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.0498,
+      "lng": -1.8572
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "littleton-so22",
+    "name": "Littleton",
+    "postcode": "SO22",
+    "coords": {
+      "lat": 51.0749,
+      "lng": -1.3328
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lockerley-so51",
+    "name": "Lockerley",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 51.0011,
+      "lng": -1.5439
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "longstock-so20",
+    "name": "Longstock",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.1131,
+      "lng": -1.4941
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lover-sp5",
+    "name": "Lover",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.99,
+      "lng": -1.7474
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lower-bullington-so21",
+    "name": "Lower Bullington",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1428,
+      "lng": -1.3047
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lower-chicksgrove-sp3",
+    "name": "Lower Chicksgrove",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.0727,
+      "lng": -1.9933
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "lyndhurst-so43",
+    "name": "Lyndhurst",
+    "postcode": "SO43",
+    "coords": {
+      "lat": 50.876,
+      "lng": -1.5761
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "mead-end-sp5",
+    "name": "Mead End",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9798,
+      "lng": -1.7598
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "medstead-gu34",
+    "name": "Medstead",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.1008,
+      "lng": -1.055
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "meonstoke-so32",
+    "name": "Meonstoke",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9595,
+      "lng": -1.19
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "micheldever-so21",
+    "name": "Micheldever",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1202,
+      "lng": -1.2329
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "michelmersh-so51",
+    "name": "Michelmersh",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 51.0097,
+      "lng": -1.4963
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "middle-wallop-so20",
+    "name": "Middle Wallop",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.1434,
+      "lng": -1.5651
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "middle-winterslow-sp5",
+    "name": "Middle Winterslow",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.096,
+      "lng": -1.656
+    },
+    "coordsSource": "web-verified:getthedata;doogal; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "middle-woodford-sp4",
+    "name": "Middle Woodford",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1448,
+      "lng": -1.7839
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "monkwood-so24",
+    "name": "Monkwood",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0841,
+      "lng": -1.033
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "morestead-so21",
+    "name": "Morestead",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0428,
+      "lng": -1.2752
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "nether-wallop-so20",
+    "name": "Nether Wallop",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.137,
+      "lng": -1.558
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "netherhampton-sp2",
+    "name": "Netherhampton",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.0658,
+      "lng": -1.8373
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "newton-stacey-sp11",
+    "name": "Newton Stacey",
+    "postcode": "SP11",
+    "coords": {
+      "lat": 51.177,
+      "lng": -1.4537
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "newtown-sp5",
+    "name": "Newtown",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9873,
+      "lng": -1.7612
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "northington-so24",
+    "name": "Northington",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0985,
+      "lng": -1.1672
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "nunton-sp5",
+    "name": "Nunton",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0049,
+      "lng": -1.7914
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "odstock-sp5",
+    "name": "Odstock",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0216,
+      "lng": -1.8108
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "old-alresford-so24",
+    "name": "Old Alresford",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.094,
+      "lng": -1.1692
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "otterbourne-so21",
+    "name": "Otterbourne",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0119,
+      "lng": -1.3495
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "over-wallop-so20",
+    "name": "Over Wallop",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.1479,
+      "lng": -1.5632
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ovington-so24",
+    "name": "Ovington",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0813,
+      "lng": -1.1995
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "owlsbury-so21",
+    "name": "Owlsbury",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0503,
+      "lng": -1.2932
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "pitton-sp5",
+    "name": "Pitton",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0897,
+      "lng": -1.693
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "plaitford-green-sp5",
+    "name": "Plaitford Green",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.984,
+      "lng": -1.6373
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "porton-down-sp4",
+    "name": "Porton",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1286,
+      "lng": -1.7322
+    },
+    "coordsSource": "manual-verified:multi-source",
+    "active": true
+  },
+  {
+    "id": "preshaw-so32",
+    "name": "Preshaw",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9781,
+      "lng": -1.192
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "preston-candover-rg25",
+    "name": "Preston Candover",
+    "postcode": "RG25",
+    "coords": {
+      "lat": 51.1703,
+      "lng": -1.1237
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "privett-gu34",
+    "name": "Privett",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0622,
+      "lng": -1.0234
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "pucknall-so51",
+    "name": "Pucknall",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 50.9903,
+      "lng": -1.495
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "redlynch-sp5",
+    "name": "Redlynch",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9902,
+      "lng": -1.7321
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ridge-sp5",
+    "name": "Ridge",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9998,
+      "lng": -1.75
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ropley-so24",
+    "name": "Ropley",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0479,
+      "lng": -1.1068
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "selborne-gu34",
+    "name": "Selborne",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0889,
+      "lng": -0.946
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "sherfield-english-so51",
+    "name": "Sherfield English",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 50.9818,
+      "lng": -1.5524
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "sherrington-ba12",
+    "name": "Sherrington",
+    "postcode": "BA12",
+    "coords": {
+      "lat": 51.1687,
+      "lng": -2.1
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "shootash-so51",
+    "name": "Shootash",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 50.9998,
+      "lng": -1.548
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "shorley-so24",
+    "name": "Shorley",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0567,
+      "lng": -1.127
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "silkstead-so21",
+    "name": "Silkstead",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0357,
+      "lng": -1.3296
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "soberton-heath-so32",
+    "name": "Soberton Heath",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.958,
+      "lng": -1.1836
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "soberton-so32",
+    "name": "Soberton",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9597,
+      "lng": -1.1835
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "south-newton-sp2",
+    "name": "South Newton",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.1098,
+      "lng": -1.8778
+    },
+    "coordsSource": "web-verified:osm;genuki; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "south-wonston-so21",
+    "name": "South Wonston",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1032,
+      "lng": -1.279
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "southwick-po17",
+    "name": "Southwick",
+    "postcode": "PO17",
+    "coords": {
+      "lat": 50.8843,
+      "lng": -1.1651
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "sparsholt-so21",
+    "name": "Sparsholt",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0641,
+      "lng": -1.3697
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "standon-so24",
+    "name": "Standon",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0458,
+      "lng": -1.166
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "stapleford-sp3",
+    "name": "Stapleford",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.0953,
+      "lng": -1.9428
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "steep-gu32",
+    "name": "Steep",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 51.0042,
+      "lng": -0.9697
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "steep-marsh-gu32",
+    "name": "Steep Marsh",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 50.9971,
+      "lng": -0.9653
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "steeple-langford-sp3",
+    "name": "Steeple Langford",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.136,
+      "lng": -1.9464
+    },
+    "coordsSource": "web-verified:genuki:SU036374+gazetteer.org.uk:GBPNID42314; postcode-corrected SP4->SP3; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "stockbridge-so20",
+    "name": "Stockbridge",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.112,
+      "lng": -1.4914
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "stoford-sp2",
+    "name": "Stoford",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.0433,
+      "lng": -1.8612
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "stoke-charity-so21",
+    "name": "Stoke Charity",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1358,
+      "lng": -1.2801
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "stratford-sub-castle-sp1",
+    "name": "Stratford-sub-Castle",
+    "postcode": "SP1",
+    "coords": {
+      "lat": 51.0877,
+      "lng": -1.8143
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "stroud-gu32",
+    "name": "Stroud",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 51.0017,
+      "lng": -0.9578
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "sutton-mandeville-sp3",
+    "name": "Sutton Mandeville",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.0625,
+      "lng": -1.9741
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "sutton-scotney-so21",
+    "name": "Sutton Scotney",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1535,
+      "lng": -1.339
+    },
+    "coordsSource": "web-verified:britishlistedbuildings;britishlistedbuildings; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "swanmore-so32",
+    "name": "Swanmore",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.944,
+      "lng": -1.1812
+    },
+    "coordsSource": "web-verified:genuki;achurchnearyou; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "tichborne-so24",
+    "name": "Tichborne",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.0637,
+      "lng": -1.153
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "timsbury-so51",
+    "name": "Timsbury",
+    "postcode": "SO51",
+    "coords": {
+      "lat": 51.0122,
+      "lng": -1.4943
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "tisbury-sp3",
+    "name": "Tisbury",
+    "postcode": "SP3",
+    "coords": {
+      "lat": 51.0641,
+      "lng": -2.0743
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "totford-so24",
+    "name": "Totford",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.1374,
+      "lng": -1.1854
+    },
+    "coordsSource": "manual-verified:multi-source",
+    "active": true
+  },
+  {
+    "id": "twyford-so21",
+    "name": "Twyford",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0092,
+      "lng": -1.3197
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "ugford-sp2",
+    "name": "Ugford",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.08029,
+      "lng": -1.88121
+    },
+    "coordsSource": "web-verified:ukpostcodecheck:SP2-0EB+os-en:408418/131225; postcode-corrected SP4->SP2; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "up-somborne-so20",
+    "name": "Up Somborne",
+    "postcode": "SO20",
+    "coords": {
+      "lat": 51.0726,
+      "lng": -1.484
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "upham-so32",
+    "name": "Upham",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9672,
+      "lng": -1.211
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "upper-farringdon-gu34",
+    "name": "Upper Farringdon",
+    "postcode": "GU34",
+    "coords": {
+      "lat": 51.0793,
+      "lng": -0.9896
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "upper-wield-so24",
+    "name": "Upper Wield",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.1113,
+      "lng": -1.0242
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "upper-woodford-sp4",
+    "name": "Upper Woodford",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.147,
+      "lng": -1.7823
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "waltham-chase-so32",
+    "name": "Waltham Chase",
+    "postcode": "SO32",
+    "coords": {
+      "lat": 50.9363,
+      "lng": -1.2023
+    },
+    "coordsSource": "derived:listing-centroid (provisional - pending web verification; prior os-opendata pin was ~2mi N of the village)",
+    "active": true
+  },
+  {
+    "id": "west-dean-sp5",
+    "name": "West Dean",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 50.9924,
+      "lng": -1.844
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "west-grimstead-sp5",
+    "name": "West Grimstead",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0383,
+      "lng": -1.7
+    },
+    "coordsSource": "web-verified:gazetteer.org.uk;wikidata; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "west-meon-gu32",
+    "name": "West Meon",
+    "postcode": "GU32",
+    "coords": {
+      "lat": 51.0122,
+      "lng": -1.088
+    },
+    "coordsSource": "web-verified:postcode-checker;getthedata; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "west-stratton-so21",
+    "name": "West Stratton",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.1338,
+      "lng": -1.2213
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "west-tisted-so24",
+    "name": "West Tisted",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.061,
+      "lng": -1.0771
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "west-tytherely-sp5",
+    "name": "West Tytherely",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0038,
+      "lng": -1.6057
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "west-winterslow-sp5",
+    "name": "West Winterslow",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0908,
+      "lng": -1.6745
+    },
+    "coordsSource": "web-verified:mappy;genuki; cross-checked listing-centroid; 2026-06-04",
+    "active": true
+  },
+  {
+    "id": "wherwell-sp11",
+    "name": "Wherwell",
+    "postcode": "SP11",
+    "coords": {
+      "lat": 51.1624,
+      "lng": -1.4756
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": false
+  },
+  {
+    "id": "whiteley-po15",
+    "name": "Whiteley",
+    "postcode": "PO15",
+    "coords": {
+      "lat": 50.8809,
+      "lng": -1.2524
+    },
+    "coordsSource": "web-research",
+    "active": true
+  },
+  {
+    "id": "whiteparish-sp5",
+    "name": "Whiteparish",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0231,
+      "lng": -1.6443
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "whitsbury-sp6",
+    "name": "Whitsbury",
+    "postcode": "SP6",
+    "coords": {
+      "lat": 50.9627,
+      "lng": -1.8198
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "wield-so24",
+    "name": "Wield",
+    "postcode": "SO24",
+    "coords": {
+      "lat": 51.1138,
+      "lng": -1.0259
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "wilton-sp2",
+    "name": "Wilton",
+    "postcode": "SP2",
+    "coords": {
+      "lat": 51.0754,
+      "lng": -1.8591
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "winterbourne-earls-sp4",
+    "name": "Winterbourne Earls",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1243,
+      "lng": -1.7693
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "winterbourne-gunner-sp4",
+    "name": "Winterbourne Gunner",
+    "postcode": "SP4",
+    "coords": {
+      "lat": 51.1213,
+      "lng": -1.764
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "witherington-sp5",
+    "name": "Witherington",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0048,
+      "lng": -1.8898
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "wonston-so21",
+    "name": "Wonston",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0993,
+      "lng": -1.2871
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "woodminton-sp5",
+    "name": "Woodminton",
+    "postcode": "SP5",
+    "coords": {
+      "lat": 51.0099,
+      "lng": -2.0001
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  },
+  {
+    "id": "worthy-down-so21",
+    "name": "Worthy Down",
+    "postcode": "SO21",
+    "coords": {
+      "lat": 51.0943,
+      "lng": -1.2977
+    },
+    "coordsSource": "os-opendata:place-centre",
+    "active": true
+  }
+]

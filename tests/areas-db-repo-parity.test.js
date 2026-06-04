@@ -1,0 +1,96 @@
+// areas-db-repo-parity.test.js — DB ⇄ repo coordinate-parity guard (Phase-2 lock-in).
+//
+// The Supabase `areas` mirror is the SOURCE OF TRUTH for area records (CLAUDE.md §18.5,
+// relaxed for `areas`), and data/areas/<id>.json is a materialised view written by
+// tools/sync-areas-from-supabase.mjs. That tool also writes a compact snapshot of what
+// it pulled to data/snapshots/areas.json ({id,name,postcode,coords,coordsSource,active}).
+//
+// This test asserts — OFFLINE, against the committed snapshot — that every per-area file
+// still matches the DB it was materialised from on the four coordinate-truth fields the
+// run aligned: id, coords, coordsSource, postcode. If anyone hand-edits a per-area file
+// (or the index) without going through the DB → sync path, the file diverges from the
+// snapshot and THIS test fails in CI — which is exactly the drift the Phase-2 run closed.
+//
+// The snapshot's own fidelity to the LIVE DB is an ONLINE concern: it is guaranteed at
+// sync time and re-checked by the freshness pass (CLAUDE.md §18.2/§18.3, run via the
+// Supabase MCP connector at session start/end). Like the supabase-sync suite, the live
+// comparison is reported as skipped here rather than run, because no DB connection
+// exists in the Node harness. Node-only; wired into tools/run-intelligence-tests.mjs.
+
+const EPS = 1e-9; // coords are the same JSON round-trip on both sides; allow float dust only.
+
+function coordsEqual(a, b) {
+  if (a == null || b == null) return a === b;
+  return Math.abs(Number(a.lat) - Number(b.lat)) <= EPS
+      && Math.abs(Number(a.lng) - Number(b.lng)) <= EPS;
+}
+
+export async function register({ test, assert, assertEqual }) {
+  const { readFileSync, readdirSync, existsSync } = await import('node:fs');
+  const { join, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+  const readJson = (p) => JSON.parse(readFileSync(join(root, p), 'utf8'));
+
+  const snapPath = 'data/snapshots/areas.json';
+
+  test('areas-parity: DB snapshot (data/snapshots/areas.json) exists and is a non-empty array', () => {
+    assert(existsSync(join(root, snapPath)), `${snapPath} missing — run tools/sync-areas-from-supabase.mjs`);
+    const snap = readJson(snapPath);
+    assert(Array.isArray(snap) && snap.length > 0, 'areas snapshot is empty');
+  });
+
+  const snap = existsSync(join(root, snapPath)) ? readJson(snapPath) : [];
+  const snapById = new Map(snap.map((r) => [r.id, r]));
+  const fileIds = readdirSync(join(root, 'data/areas'))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace(/\.json$/, ''));
+
+  test('areas-parity: every per-area file id is backed by a DB snapshot row', () => {
+    const orphanFiles = fileIds.filter((id) => !snapById.has(id));
+    assert(orphanFiles.length === 0,
+      `per-area files with no DB row (hand-added or stale after a migration?): ${orphanFiles.join(', ')}`);
+  });
+
+  test('areas-parity: every DB snapshot row has a per-area file', () => {
+    const fileSet = new Set(fileIds);
+    const missing = snap.filter((r) => !fileSet.has(r.id)).map((r) => r.id);
+    assert(missing.length === 0, `DB rows with no data/areas/<id>.json (run the materialiser): ${missing.join(', ')}`);
+  });
+
+  test('areas-parity: id/postcode/coords/coordsSource of each file == its DB snapshot row', () => {
+    const drift = [];
+    for (const id of fileIds) {
+      const row = snapById.get(id);
+      if (!row) continue; // reported by the orphan test above
+      const f = readJson(`data/areas/${id}.json`);
+      const reasons = [];
+      if (f.id !== row.id) reasons.push(`id ${f.id}!=${row.id}`);
+      if ((f.postcode ?? null) !== (row.postcode ?? null)) reasons.push(`postcode ${f.postcode}!=${row.postcode}`);
+      if (!coordsEqual(f.coords ?? null, row.coords ?? null)) {
+        reasons.push(`coords ${JSON.stringify(f.coords)}!=${JSON.stringify(row.coords)}`);
+      }
+      if ((f.coordsSource ?? null) !== (row.coordsSource ?? null)) reasons.push('coordsSource');
+      if (reasons.length) drift.push(`${id} [${reasons.join('; ')}]`);
+    }
+    assert(drift.length === 0, `repo ⇄ DB drift on ${drift.length} area(s): ${drift.slice(0, 8).join(' · ')}`);
+  });
+
+  test('areas-parity: every ACTIVE area has map-usable coords (lat+lng present)', () => {
+    const bad = [];
+    for (const row of snap) {
+      if (row.active === false) continue;
+      const f = existsSync(join(root, `data/areas/${row.id}.json`)) ? readJson(`data/areas/${row.id}.json`) : null;
+      const c = f?.coords;
+      if (!c || c.lat == null || c.lng == null) bad.push(row.id);
+    }
+    assert(bad.length === 0, `active areas missing coords: ${bad.join(', ')}`);
+  });
+
+  // ONLINE: snapshot vs live DB — guaranteed at sync time, re-checked via MCP at
+  // session start/end (CLAUDE.md §18.2/§18.3). Reported skipped (no DB in the harness).
+  test('areas-parity: snapshot == live Supabase areas [skipped — online, via MCP freshness]', () => {
+    assert(true);
+  });
+}

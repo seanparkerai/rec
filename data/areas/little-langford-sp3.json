@@ -1,19 +1,19 @@
 {
-  "id": "little-langford-sp4",
+  "id": "little-langford-sp3",
   "name": "Little Langford",
   "village": "Little Langford",
   "town": "Salisbury",
   "county": "Wiltshire",
-  "postcode": "SP4",
+  "postcode": "SP3",
   "hubCity": "Salisbury",
   "regionDir": "",
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1246,
-    "lng": -1.8789
+    "lat": 51.12866,
+    "lng": -1.93421
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:os-grid:SU047366(GENUKI)+gazetteer.org.uk+wikidata:Q11761979; postcode-corrected SP4->SP3; no listings to cross-check; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

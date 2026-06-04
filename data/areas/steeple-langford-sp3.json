@@ -1,19 +1,19 @@
 {
-  "id": "steeple-langford-sp4",
+  "id": "steeple-langford-sp3",
   "name": "Steeple Langford",
   "village": "Steeple Langford",
   "town": "Salisbury",
   "county": "Wiltshire",
-  "postcode": "SP4",
+  "postcode": "SP3",
   "hubCity": "Salisbury",
   "regionDir": "",
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1601,
-    "lng": -1.894
+    "lat": 51.136,
+    "lng": -1.9464
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki:SU036374+gazetteer.org.uk:GBPNID42314; postcode-corrected SP4->SP3; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

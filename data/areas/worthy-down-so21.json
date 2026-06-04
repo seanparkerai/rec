@@ -38,11 +38,28 @@
   "nearestStation": null,
   "primarySupermarket": null,
   "images": [],
-  "sources": [],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/MOD_Worthy_Down",
+      "label": "MOD Worthy Down - Wikipedia"
+    },
+    {
+      "url": "http://www.winchester-garrison.co.uk/Winchester-Garrison/Military-Units-Winchester-Garrison-04022015.htm",
+      "label": "Military Units, Winchester Garrison (Worthy Down)"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/South_Wonston",
+      "label": "South Wonston - Wikipedia"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Kings_Worthy",
+      "label": "Kings Worthy - Wikipedia"
+    }
+  ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1659157",
+    "resolvedAt": "2026-06-02T21:16:25.118Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:25.118Z"
+    "locationIdentifier": "POSTCODE^1659157"
   }
 }

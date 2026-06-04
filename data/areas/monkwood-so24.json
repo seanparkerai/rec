@@ -1,13 +1,13 @@
 {
-  "id": "monkwood-gu34",
+  "id": "monkwood-so24",
   "name": "Monkwood",
   "village": "Monkwood",
   "town": "Petersfield",
   "county": "Hampshire",
-  "postcode": "GU34",
-  "hubCity": "Guildford",
-  "regionDir": "",
-  "settlementType": "",
+  "postcode": "SO24",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
   "subRegion": "Petersfield",
   "coords": {
     "lat": 51.0841,

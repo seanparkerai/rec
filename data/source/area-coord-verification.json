@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-31T14:56:36.490Z",
+  "generatedAt": "2026-06-04T16:25:00.643Z",
   "online": false,
   "counts": {
-    "areas": 195,
-    "corroborated": 195,
+    "areas": 196,
+    "corroborated": 196,
     "hardFlagged": 0,
     "nameUnconfirmed": 0,
     "duplicateVillageRecords": 6
@@ -64,19 +64,19 @@
     {
       "id": "abbotstone-so24",
       "name": "Abbotstone",
-      "outcode": "SO21",
+      "outcode": "SO24",
       "coords": {
-        "lat": 51.0852,
-        "lng": -1.1773
+        "lat": 51.1073,
+        "lng": -1.1971
       },
       "flags": [],
       "notes": [],
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 8.65,
+        "ownCentroidKm": 3.23,
         "nearestCentroid": "SO24",
-        "nearestCentroidKm": 1.32,
+        "nearestCentroidKm": 3.23,
         "nameInList": true,
         "matchedVillage": "Abbotstone",
         "matchedTown": "Winchester",
@@ -156,7 +156,7 @@
     {
       "id": "avington-park-so21",
       "name": "Avington Park",
-      "outcode": "SO24",
+      "outcode": "SO21",
       "coords": {
         "lat": 51.0903,
         "lng": -1.2107
@@ -166,7 +166,7 @@
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 3.54,
+        "ownCentroidKm": 6.47,
         "nearestCentroid": "SO24",
         "nearestCentroidKm": 3.54,
         "nameInList": true,
@@ -800,22 +800,22 @@
     {
       "id": "brown-candover-so24",
       "name": "Brown Candover",
-      "outcode": "RG25",
+      "outcode": "SO24",
       "coords": {
-        "lat": 51.1521,
-        "lng": -1.1527
+        "lat": 51.15,
+        "lng": -1.1744
       },
       "flags": [],
       "notes": [],
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 12.79,
+        "ownCentroidKm": 6.75,
         "nearestCentroid": "SO24",
-        "nearestCentroidKm": 6.92,
+        "nearestCentroidKm": 6.75,
         "nameInList": true,
         "matchedVillage": "Brown Candover",
-        "matchedTown": "Basingstoke",
+        "matchedTown": "Winchester",
         "strictNameHit": true,
         "reverseGeocode": "skipped"
       }
@@ -1315,17 +1315,17 @@
       "name": "Droxford",
       "outcode": "SO32",
       "coords": {
-        "lat": 50.9598,
-        "lng": -1.1703
+        "lat": 50.9605,
+        "lng": -1.139
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 3.08,
+        "sourceOk": false,
+        "coordsSource": "web-verified:getthedata;getthedata; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 5.25,
         "nearestCentroid": "SO32",
-        "nearestCentroidKm": 3.08,
+        "nearestCentroidKm": 5.25,
         "nameInList": true,
         "matchedVillage": "Droxford",
         "matchedTown": "Southampton",
@@ -1616,24 +1616,22 @@
     {
       "id": "farley-mount-so21",
       "name": "Farley Mount",
-      "outcode": "RG25",
+      "outcode": "SO21",
       "coords": {
         "lat": 51.0513,
         "lng": -1.3823
       },
       "flags": [],
-      "notes": [
-        "coords_distant:23.0km"
-      ],
+      "notes": [],
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 22.99,
+        "ownCentroidKm": 6.33,
         "nearestCentroid": "SO22",
         "nearestCentroidKm": 3.17,
         "nameInList": true,
         "matchedVillage": "Farley Mount",
-        "matchedTown": "Basingstoke",
+        "matchedTown": "Winchester",
         "strictNameHit": true,
         "reverseGeocode": "skipped"
       }
@@ -1689,17 +1687,19 @@
       "name": "Firsdown",
       "outcode": "SP5",
       "coords": {
-        "lat": 51.0178,
-        "lng": -1.767
+        "lat": 51.0998,
+        "lng": -1.695
       },
       "flags": [],
-      "notes": [],
+      "notes": [
+        "coords_distant:16.0km"
+      ],
       "checks": {
         "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 6.8,
+        "coordsSource": "web-verified:ukpostcodecheck;streetcheck; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 16.01,
         "nearestCentroid": "SP1",
-        "nearestCentroidKm": 6.6,
+        "nearestCentroidKm": 7.31,
         "nameInList": true,
         "matchedVillage": "Firsdown",
         "matchedTown": "Salisbury",
@@ -1883,17 +1883,17 @@
       "name": "Great Wishford",
       "outcode": "SP2",
       "coords": {
-        "lat": 51.0628,
-        "lng": -1.8721
+        "lat": 51.1185,
+        "lng": -1.8863
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 2.25,
-        "nearestCentroid": "SP2",
-        "nearestCentroidKm": 2.25,
+        "sourceOk": false,
+        "coordsSource": "web-verified:genuki;wikidata; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 7.07,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 5.77,
         "nameInList": true,
         "matchedVillage": "Great Wishford",
         "matchedTown": "Salisbury",
@@ -2201,21 +2201,21 @@
       }
     },
     {
-      "id": "lake-sp3",
+      "id": "lake-sp4",
       "name": "Lake",
-      "outcode": "SP3",
+      "outcode": "SP4",
       "coords": {
-        "lat": 51.0971,
-        "lng": -1.9413
+        "lat": 51.1503,
+        "lng": -1.8113
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 1.7,
-        "nearestCentroid": "SP3",
-        "nearestCentroidKm": 1.7,
+        "sourceOk": false,
+        "coordsSource": "manual-verified:multi-source",
+        "ownCentroidKm": 3.12,
+        "nearestCentroid": "SP4",
+        "nearestCentroidKm": 3.12,
         "nameInList": true,
         "matchedVillage": "Lake",
         "matchedTown": "Salisbury",
@@ -2343,21 +2343,21 @@
       }
     },
     {
-      "id": "little-langford-sp4",
+      "id": "little-langford-sp3",
       "name": "Little Langford",
-      "outcode": "SP4",
+      "outcode": "SP3",
       "coords": {
-        "lat": 51.1246,
-        "lng": -1.8789
+        "lat": 51.12866,
+        "lng": -1.93421
       },
       "flags": [],
       "notes": [],
       "checks": {
         "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 8.56,
+        "coordsSource": "web-verified:os-grid:SU047366(GENUKI)+gazetteer.org.uk+wikidata:Q11761979; postcode-corrected SP4->SP3; no listings to cross-check; 2026-06-04",
+        "ownCentroidKm": 5.24,
         "nearestCentroid": "SP3",
-        "nearestCentroidKm": 6.61,
+        "nearestCentroidKm": 5.24,
         "nameInList": true,
         "matchedVillage": "Little Langford",
         "matchedTown": "Salisbury",
@@ -2715,17 +2715,19 @@
       "name": "Middle Winterslow",
       "outcode": "SP5",
       "coords": {
-        "lat": 51.0139,
-        "lng": -1.682
+        "lat": 51.096,
+        "lng": -1.656
       },
       "flags": [],
-      "notes": [],
+      "notes": [
+        "coords_distant:17.8km"
+      ],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 12.55,
+        "sourceOk": false,
+        "coordsSource": "web-verified:getthedata;doogal; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 17.81,
         "nearestCentroid": "SP1",
-        "nearestCentroidKm": 10.26,
+        "nearestCentroidKm": 9.78,
         "nameInList": true,
         "matchedVillage": "Middle Winterslow",
         "matchedTown": "Salisbury",
@@ -2757,9 +2759,9 @@
       }
     },
     {
-      "id": "monkwood-gu34",
+      "id": "monkwood-so24",
       "name": "Monkwood",
-      "outcode": "GU34",
+      "outcode": "SO24",
       "coords": {
         "lat": 51.0841,
         "lng": -1.033
@@ -2769,7 +2771,7 @@
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 8.17,
+        "ownCentroidKm": 8.89,
         "nearestCentroid": "GU34",
         "nearestCentroidKm": 8.17,
         "nameInList": true,
@@ -3135,17 +3137,17 @@
       "name": "Porton Down",
       "outcode": "SP4",
       "coords": {
-        "lat": 51.1305,
-        "lng": -1.7463
+        "lat": 51.1286,
+        "lng": -1.7322
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 5.11,
+        "sourceOk": false,
+        "coordsSource": "manual-verified:multi-source",
+        "ownCentroidKm": 5.82,
         "nearestCentroid": "SP4",
-        "nearestCentroidKm": 5.11,
+        "nearestCentroidKm": 5.82,
         "nameInList": true,
         "matchedVillage": "Porton Down",
         "matchedTown": "Salisbury",
@@ -3386,22 +3388,22 @@
     {
       "id": "shootash-so51",
       "name": "Shootash",
-      "outcode": "SO20",
+      "outcode": "SO51",
       "coords": {
-        "lat": 51.0328,
-        "lng": -1.4872
+        "lat": 50.9998,
+        "lng": -1.548
       },
       "flags": [],
       "notes": [],
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 9.48,
+        "ownCentroidKm": 3.7,
         "nearestCentroid": "SO51",
-        "nearestCentroidKm": 4.93,
+        "nearestCentroidKm": 3.7,
         "nameInList": true,
         "matchedVillage": "Shootash",
-        "matchedTown": "Winchester",
+        "matchedTown": "Romsey",
         "strictNameHit": true,
         "reverseGeocode": "skipped"
       }
@@ -3503,17 +3505,17 @@
       "name": "South Newton",
       "outcode": "SP2",
       "coords": {
-        "lat": 51.0573,
-        "lng": -1.853
+        "lat": 51.1098,
+        "lng": -1.8778
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 1.05,
-        "nearestCentroid": "SP2",
-        "nearestCentroidKm": 1.05,
+        "sourceOk": false,
+        "coordsSource": "web-verified:osm;genuki; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 5.93,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 5.62,
         "nameInList": true,
         "matchedVillage": "South Newton",
         "matchedTown": "Salisbury",
@@ -3616,7 +3618,7 @@
     {
       "id": "stapleford-sp3",
       "name": "Stapleford",
-      "outcode": "SP2",
+      "outcode": "SP3",
       "coords": {
         "lat": 51.0953,
         "lng": -1.9428
@@ -3626,7 +3628,7 @@
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 8.08,
+        "ownCentroidKm": 1.49,
         "nearestCentroid": "SP3",
         "nearestCentroidKm": 1.49,
         "nameInList": true,
@@ -3683,21 +3685,21 @@
       }
     },
     {
-      "id": "steeple-langford-sp4",
+      "id": "steeple-langford-sp3",
       "name": "Steeple Langford",
-      "outcode": "SP4",
+      "outcode": "SP3",
       "coords": {
-        "lat": 51.1601,
-        "lng": -1.894
+        "lat": 51.136,
+        "lng": -1.9464
       },
       "flags": [],
       "notes": [],
       "checks": {
         "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 7.97,
-        "nearestCentroid": "SP4",
-        "nearestCentroidKm": 7.97,
+        "coordsSource": "web-verified:genuki:SU036374+gazetteer.org.uk:GBPNID42314; postcode-corrected SP4->SP3; 2026-06-04",
+        "ownCentroidKm": 6.01,
+        "nearestCentroid": "SP3",
+        "nearestCentroidKm": 6.01,
         "nameInList": true,
         "matchedVillage": "Steeple Langford",
         "matchedTown": "Salisbury",
@@ -3848,17 +3850,17 @@
       "name": "Sutton Scotney",
       "outcode": "SO21",
       "coords": {
-        "lat": 51.1373,
-        "lng": -1.283
+        "lat": 51.1535,
+        "lng": -1.339
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 7.03,
+        "sourceOk": false,
+        "coordsSource": "web-verified:britishlistedbuildings;britishlistedbuildings; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 9.14,
         "nearestCentroid": "SO21",
-        "nearestCentroidKm": 7.03,
+        "nearestCentroidKm": 9.14,
         "nameInList": true,
         "matchedVillage": "Sutton Scotney",
         "matchedTown": "Winchester",
@@ -3871,17 +3873,17 @@
       "name": "Swanmore",
       "outcode": "SO32",
       "coords": {
-        "lat": 50.9556,
-        "lng": -1.2195
+        "lat": 50.944,
+        "lng": -1.1812
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 0.54,
+        "sourceOk": false,
+        "coordsSource": "web-verified:genuki;achurchnearyou; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 2.44,
         "nearestCentroid": "SO32",
-        "nearestCentroidKm": 0.54,
+        "nearestCentroidKm": 2.44,
         "nameInList": true,
         "matchedVillage": "Swanmore",
         "matchedTown": "Southampton",
@@ -3961,21 +3963,21 @@
       }
     },
     {
-      "id": "totford-so20",
+      "id": "totford-so24",
       "name": "Totford",
-      "outcode": "SO20",
+      "outcode": "SO24",
       "coords": {
-        "lat": 51.0921,
-        "lng": -1.4543
+        "lat": 51.1374,
+        "lng": -1.1854
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 3.85,
-        "nearestCentroid": "SO20",
-        "nearestCentroidKm": 3.85,
+        "sourceOk": false,
+        "coordsSource": "manual-verified:multi-source",
+        "ownCentroidKm": 5.56,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 5.56,
         "nameInList": true,
         "matchedVillage": "Totford",
         "matchedTown": "Winchester",
@@ -4007,21 +4009,21 @@
       }
     },
     {
-      "id": "ugford-sp4",
+      "id": "ugford-sp2",
       "name": "Ugford",
-      "outcode": "SP4",
+      "outcode": "SP2",
       "coords": {
-        "lat": 51.0741,
-        "lng": -1.8313
+        "lat": 51.08029,
+        "lng": -1.88121
       },
       "flags": [],
       "notes": [],
       "checks": {
         "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 11.33,
+        "coordsSource": "web-verified:ukpostcodecheck:SP2-0EB+os-en:408418/131225; postcode-corrected SP4->SP2; 2026-06-04",
+        "ownCentroidKm": 3.53,
         "nearestCentroid": "SP2",
-        "nearestCentroidKm": 1.48,
+        "nearestCentroidKm": 3.53,
         "nameInList": true,
         "matchedVillage": "Ugford",
         "matchedTown": "Salisbury",
@@ -4101,7 +4103,7 @@
     {
       "id": "upper-wield-so24",
       "name": "Upper Wield",
-      "outcode": "GU35",
+      "outcode": "SO24",
       "coords": {
         "lat": 51.1113,
         "lng": -1.0242
@@ -4111,7 +4113,7 @@
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 11.19,
+        "ownCentroidKm": 9.77,
         "nearestCentroid": "GU34",
         "nearestCentroidKm": 5.29,
         "nameInList": true,
@@ -4149,17 +4151,17 @@
       "name": "Waltham Chase",
       "outcode": "SO32",
       "coords": {
-        "lat": 50.9675,
-        "lng": -1.2077
+        "lat": 50.9363,
+        "lng": -1.2023
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 1.65,
+        "sourceOk": false,
+        "coordsSource": "derived:listing-centroid (provisional - pending web verification; prior os-opendata pin was ~2mi N of the village)",
+        "ownCentroidKm": 2,
         "nearestCentroid": "SO32",
-        "nearestCentroidKm": 1.65,
+        "nearestCentroidKm": 2,
         "nameInList": true,
         "matchedVillage": "Waltham Chase",
         "matchedTown": "Southampton",
@@ -4195,17 +4197,17 @@
       "name": "West Grimstead",
       "outcode": "SP5",
       "coords": {
-        "lat": 51.0151,
-        "lng": -1.8597
+        "lat": 51.0383,
+        "lng": -1.7
       },
       "flags": [],
       "notes": [],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 1.68,
-        "nearestCentroid": "SP5",
-        "nearestCentroidKm": 1.68,
+        "sourceOk": false,
+        "coordsSource": "web-verified:gazetteer.org.uk;wikidata; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 11.97,
+        "nearestCentroid": "SP1",
+        "nearestCentroidKm": 7.62,
         "nameInList": true,
         "matchedVillage": "West Grimstead",
         "matchedTown": "Salisbury",
@@ -4218,17 +4220,17 @@
       "name": "West Meon",
       "outcode": "GU32",
       "coords": {
-        "lat": 51.0057,
-        "lng": -1.0169
+        "lat": 51.0122,
+        "lng": -1.088
       },
       "flags": [],
       "notes": [],
       "checks": {
         "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 5.45,
-        "nearestCentroid": "GU32",
-        "nearestCentroidKm": 5.45,
+        "coordsSource": "web-verified:postcode-checker;getthedata; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 10.46,
+        "nearestCentroid": "SO24",
+        "nearestCentroidKm": 10.01,
         "nameInList": true,
         "matchedVillage": "West Meon",
         "matchedTown": "Winchester",
@@ -4312,17 +4314,19 @@
       "name": "West Winterslow",
       "outcode": "SP5",
       "coords": {
-        "lat": 51.0126,
-        "lng": -1.6831
+        "lat": 51.0908,
+        "lng": -1.6745
       },
       "flags": [],
-      "notes": [],
+      "notes": [
+        "coords_distant:16.4km"
+      ],
       "checks": {
-        "sourceOk": true,
-        "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 12.46,
+        "sourceOk": false,
+        "coordsSource": "web-verified:mappy;genuki; cross-checked listing-centroid; 2026-06-04",
+        "ownCentroidKm": 16.44,
         "nearestCentroid": "SP1",
-        "nearestCentroidKm": 10.3,
+        "nearestCentroidKm": 8.39,
         "nameInList": true,
         "matchedVillage": "West Winterslow",
         "matchedTown": "Salisbury",
@@ -4349,6 +4353,29 @@
         "nameInList": true,
         "matchedVillage": "Wherwell",
         "matchedTown": "Andover",
+        "strictNameHit": true,
+        "reverseGeocode": "skipped"
+      }
+    },
+    {
+      "id": "whiteley-po15",
+      "name": "Whiteley",
+      "outcode": "PO15",
+      "coords": {
+        "lat": 50.8809,
+        "lng": -1.2524
+      },
+      "flags": [],
+      "notes": [],
+      "checks": {
+        "sourceOk": false,
+        "coordsSource": "web-research",
+        "ownCentroidKm": null,
+        "nearestCentroid": "PO17",
+        "nearestCentroidKm": 5.18,
+        "nameInList": true,
+        "matchedVillage": "Whiteley",
+        "matchedTown": "Fareham",
         "strictNameHit": true,
         "reverseGeocode": "skipped"
       }
@@ -4404,7 +4431,7 @@
     {
       "id": "wield-so24",
       "name": "Wield",
-      "outcode": "GU35",
+      "outcode": "SO24",
       "coords": {
         "lat": 51.1138,
         "lng": -1.0259
@@ -4414,12 +4441,12 @@
       "checks": {
         "sourceOk": true,
         "coordsSource": "os-opendata:place-centre",
-        "ownCentroidKm": 11.3,
+        "ownCentroidKm": 9.73,
         "nearestCentroid": "GU34",
         "nearestCentroidKm": 5.15,
         "nameInList": true,
         "matchedVillage": "Wield",
-        "matchedTown": "Basingstoke",
+        "matchedTown": "Winchester",
         "strictNameHit": true,
         "reverseGeocode": "skipped"
       }

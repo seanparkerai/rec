@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Southampton",
   "coords": {
-    "lat": 50.9556,
-    "lng": -1.2195
+    "lat": 50.944,
+    "lng": -1.1812
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki;achurchnearyou; cross-checked listing-centroid; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
