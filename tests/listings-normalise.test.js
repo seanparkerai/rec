@@ -195,6 +195,31 @@ export async function register({ test, assert, assertEqual }) {
     assert(withinGeofence({ lat: 51.145, lng: -1.468 }, { villages: v }).pass, 'centre still accepted');
   });
 
+  // ── L7.6 overlap tiebreak: a home inside several village disks lands on the one it is ADDRESSED in ──
+  test('geofence tiebreak: a home in two overlapping disks lands on the village it is ADDRESSED in', () => {
+    // The Waltham Chase pin is (deliberately) mis-placed ~2mi north, so by coordinates
+    // alone the home is nearest to Dundridge — the exact real-world bug. The address
+    // names Waltham Chase, and WC's buffer still contains the home, so the tiebreak fixes it.
+    const villages = [
+      { id: 'dundridge-so32', name: 'Dundridge', outcode: 'SO32', lat: 50.9413, lng: -1.1952 },
+      { id: 'waltham-chase-so32', name: 'Waltham Chase', outcode: 'SO32', lat: 50.9675, lng: -1.2077 },
+    ];
+    const home = { lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase, SO32', postcode: 'SO32' };
+    assertEqual(nearestVillage(home, villages).area_id, 'dundridge-so32');     // coords alone → Dundridge
+    const r = withinGeofence(home, { villages });
+    assertEqual(r.area_id, 'waltham-chase-so32');                              // name tiebreak corrects it
+    assert(r.pass && r.name_match === true && r.corroborated === true, 'in-buffer, named, corroborated');
+  });
+
+  test('geofence tiebreak: the named village must still be IN buffer (coordinates stay decisive)', () => {
+    const villages = [
+      { id: 'dundridge-so32', name: 'Dundridge', outcode: 'SO32', lat: 50.9413, lng: -1.1952 },
+      { id: 'waltham-chase-far', name: 'Waltham Chase', outcode: 'SO32', lat: 51.10, lng: -1.20 }, // ~11mi N, out of buffer
+    ];
+    const home = { lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase, SO32' };
+    assertEqual(withinGeofence(home, { villages }).area_id, 'dundridge-so32'); // WC out of buffer → no tiebreak, coords win
+  });
+
   // ── Second-signal (failsafe) corroboration ──
   test('corroboration: in-buffer AND name agrees → corroborated=true', () => {
     const r = withinGeofence({ lat: 51.145, lng: -1.468, town: 'Wherwell', postcode: 'SP11 7JX' }, { villages: SP11_VILLAGES });

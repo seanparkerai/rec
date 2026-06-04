@@ -101,6 +101,19 @@ export function nameAgrees(listing, village) {
 }
 
 /**
+ * Address-name match for the overlap tiebreak (L7.6). Does the listing's own text
+ * name THIS village specifically? Distinct from nameAgrees() — which also accepts an
+ * OUTCODE match — because villages in one cluster share an outcode, so to tell them
+ * apart the village NAME is the only usable signal. Pure.
+ */
+export function addressNamesVillage(listing, village) {
+  if (!village) return false;
+  const hay = normaliseName([listing?.town, listing?.displayAddress, listing?.address].filter(Boolean).join(' '));
+  const want = normaliseName(village.name);
+  return !!(hay && want && hay.includes(want));
+}
+
+/**
  * Decisive accept test: within the (per-village or default) buffer of the nearest
  * ACTIVE village. Listings without coordinates are REJECTED. The name signal
  * corroborates but never overrides the coordinate verdict; a contradiction is
@@ -110,18 +123,34 @@ export function nameAgrees(listing, village) {
  * @returns {{ pass, km, distance_mi, area_id, name_match, corroborated }}
  */
 export function withinGeofence(listing, { villages = [], radiusKm = GEOFENCE_RADIUS_KM } = {}) {
-  const { km, village, area_id } = nearestVillage(listing, villages);
-  if (!Number.isFinite(km)) {
+  if (listing?.lat == null || listing?.lng == null || !villages.length) {
     return { pass: false, km: null, distance_mi: null, area_id: null, name_match: null, corroborated: false };
   }
-  const r = village?.geofenceRadiusKm ?? radiusKm;        // per-village override (L7.3)
-  const pass = km <= r;
-  const name_match = nameAgrees(listing, village);         // true | false | null (no text)
+  const here = { lat: Number(listing.lat), lng: Number(listing.lng) };
+  // Distance to every active village + that village's own buffer (L7.3 override).
+  const scored = villages
+    .map((v) => ({ v, km: haversineKm(here, v), r: v.geofenceRadiusKm ?? radiusKm }))
+    .sort((a, b) => a.km - b.km);
+  const nearest = scored[0];
+  if (!nearest || !Number.isFinite(nearest.km)) {
+    return { pass: false, km: null, distance_mi: null, area_id: null, name_match: null, corroborated: false };
+  }
+  // Overlap tiebreak (L7.6): among villages whose buffer actually CONTAINS the
+  // listing, prefer the NEAREST one the address explicitly NAMES. A home sitting
+  // inside several overlapping village disks then lands on the village it is
+  // addressed in — not merely the nearest centroid, which a mis-placed pin can make
+  // the wrong one. Coordinates stay decisive: only in-buffer villages are eligible,
+  // so this can never reintroduce a wrong-village (out-of-buffer) match.
+  const inBuffer = scored.filter((s) => s.km <= s.r);      // already km-sorted
+  const named = inBuffer.filter((s) => addressNamesVillage(listing, s.v));
+  const chosen = named[0] || inBuffer[0] || nearest;
+  const pass = chosen.km <= chosen.r;
+  const name_match = nameAgrees(listing, chosen.v);         // true | false | null (no text)
   // corroborated = within buffer AND the name signal does not contradict. A null
   // name_match (no text) is treated as "not contradicted" so coordinate-only
   // listings still pass — but the absence is recorded via name_match=null.
   const corroborated = pass && name_match !== false;
-  return { pass, km, distance_mi: km * MILES_PER_KM, area_id, name_match, corroborated };
+  return { pass, km: chosen.km, distance_mi: chosen.km * MILES_PER_KM, area_id: chosen.v.id, name_match, corroborated };
 }
 
 /** Pull a full postcode (outcode + incode) or bare outcode token from an address. */
