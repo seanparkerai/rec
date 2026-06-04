@@ -321,7 +321,24 @@ const MILESTONE_SEGMENTS = [
 const MILESTONE_INDEX = { 'warming-up': 0, learning: 0, usable: 1, solid: 2, mature: 3 };
 const MILESTONE_LABEL = { 'warming-up': 'Warming up', learning: 'Learning', usable: 'Usable', solid: 'Solid', mature: 'Mature' };
 
-function buildTrainingProgress(p, deckDone, deckTotal) {
+// The strongest features the model currently rewards (↑) or penalises (↓),
+// derived from the effective weights — the human-readable "what it learned".
+function topLearnedSignals(weights, n = 3) {
+  const entries = Object.entries(weights || {}).filter(([, w]) => Number.isFinite(w) && w !== 0);
+  const pick = (dir) => entries
+    .filter(([, w]) => (dir === 'up' ? w > 0 : w < 0))
+    .sort((a, b) => (dir === 'up' ? b[1] - a[1] : a[1] - b[1]))
+    .slice(0, n)
+    .map(([k]) => ({ label: describeSignal(k), dir }));
+  return [...pick('up'), ...pick('down')];
+}
+
+// @param {object} [opts] { collapsible, expanded, onToggle, learned } — when
+//   collapsible, the widget is a native <details> (summary = live one-line
+//   status; body = the bars + what the model has learned). The review deck
+//   passes nothing and keeps the original always-open block.
+function buildTrainingProgress(p, deckDone, deckTotal, opts = {}) {
+  const { collapsible = false, expanded = false, onToggle, learned = [] } = opts;
   const reached = MILESTONE_INDEX[p.milestone] ?? 0;
   const segs = MILESTONE_SEGMENTS.map((s, i) => el('span', {
     class: `training-seg${i <= reached ? ' training-seg--on' : ''}${i === reached ? ' training-seg--current' : ''}`,
@@ -351,16 +368,40 @@ function buildTrainingProgress(p, deckDone, deckTotal) {
     ? el('p', { class: 'training__reviewed num' }, `≈${deckDone} reviewed of ${deckTotal} recent`)
     : null;
 
-  return el('div', { class: 'training' }, [
-    el('div', { class: 'training__head' }, [
-      el('span', { class: `learning-status__dot${p.cold ? '' : ' learning-status__dot--on'}`, 'aria-hidden': 'true' }),
+  const dot = () => el('span', { class: `learning-status__dot${p.cold ? '' : ' learning-status__dot--on'}`, 'aria-hidden': 'true' });
+  const nextLine = el('p', { class: `training__next${p.imbalanced ? ' training__next--alert' : ''}` }, p.nextAction);
+
+  if (!collapsible) {
+    return el('div', { class: 'training' }, [
+      el('div', { class: 'training__head' }, [dot(), el('span', { class: 'training__headline' }, headline)]),
+      bar, balance, nextLine, reviewedLine,
+    ].filter(Boolean));
+  }
+
+  // "Slightly more detail": what the model has actually learned from your
+  // graded reactions — shown only in the expanded body, collapsed by default.
+  let learnedBlock = null;
+  if (learned.length) {
+    learnedBlock = el('div', { class: 'training__learned' }, [
+      el('p', { class: 'training__learned-title' }, 'What your reactions have taught the model'),
+      el('ul', { class: 'training__learned-list' }, learned.map((s) => el('li', {
+        class: `training__learned-item training__learned-item--${s.dir}`,
+      }, `${s.dir === 'up' ? '↑ leans toward' : '↓ leans away from'} ${s.label}`))),
+    ]);
+  } else if (!p.cold) {
+    learnedBlock = el('p', { class: 'training__learned-empty' }, 'No standout patterns yet — keep reacting and they’ll surface here.');
+  }
+
+  const details = el('details', { class: 'training', open: expanded }, [
+    el('summary', { class: 'training__summary' }, [
+      dot(),
       el('span', { class: 'training__headline' }, headline),
+      el('span', { class: 'training__summary-hint' }, 'Details'),
     ]),
-    bar,
-    balance,
-    el('p', { class: `training__next${p.imbalanced ? ' training__next--alert' : ''}` }, p.nextAction),
-    reviewedLine,
-  ].filter(Boolean));
+    el('div', { class: 'training__body' }, [bar, balance, nextLine, reviewedLine, learnedBlock].filter(Boolean)),
+  ]);
+  if (onToggle) details.addEventListener('toggle', () => onToggle(details.open));
+  return details;
 }
 
 function buildDeckCard(listing, scored, area, handlers) {
@@ -530,6 +571,9 @@ async function render() {
   );
   // ── learning state / training feedback (Stage 5 rich, balance-aware) ──────
   const deckDoneCount = () => deckOrder.filter((l) => isReviewed(l.rightmove_id)).length;
+  // The top-of-page widget loads collapsed; remember the user's expand choice so
+  // an in-place repaint (e.g. after saving a reaction) doesn't snap it shut.
+  let learningExpanded = false;
   function updateLearning() {
     if (!learningEl) return;
     // In review mode the deck renders its own training widget (paintDeck), so the
@@ -541,7 +585,12 @@ async function render() {
     learningEl.classList.add('learning-status--rich');
     learningEl.classList.toggle('learning-status--cold', p.cold);
     learningEl.classList.toggle('training--imbalanced', p.imbalanced);
-    learningEl.appendChild(buildTrainingProgress(p, deckDoneCount(), deckOrder.length));
+    learningEl.appendChild(buildTrainingProgress(p, deckDoneCount(), deckOrder.length, {
+      collapsible: true,
+      expanded: learningExpanded,
+      onToggle: (open) => { learningExpanded = open; },
+      learned: topLearnedSignals(effective),
+    }));
   }
   function updateReviewCount() {
     const n = deckOrder.filter((l) => !isReviewed(l.rightmove_id)).length;
