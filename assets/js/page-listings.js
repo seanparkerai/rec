@@ -7,7 +7,7 @@
 // (using these reactions) arrive in L4.
 import {
   getListings, getCriteria, getFinances, getAreas,
-  getListingReactions, saveListingReaction,
+  saveListingReaction,
   getShortlistStatuses, setShortlistStatus,
   getLearnedPreferences, recomputeLearnedPreferences,
   getReactionLog, dismissConflict,
@@ -20,7 +20,9 @@ import { detectConflicts, dismissUntil } from './meta-observations.js';
 import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listings/fit.js';
 import { classifyListing, HIDE_LABELS } from './listings/flags.js';
-import { PERSONAL_STATUSES } from './listings/reactions.js';
+import { PERSONAL_STATUSES, latestPerListing } from './listings/reactions.js';
+import { decidedSets, isDecided, dedupeByFingerprint } from './listings/suppress.js';
+import { propertyFingerprint } from './listings/classify.js';
 import { buildReasonPicker } from './listings/reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
@@ -267,17 +269,20 @@ function buildReviewedGroup(cfg, rows) {
 // affordability gate and any filter-hidden count. Returns an array of segment
 // nodes (separator-interleaved) appended into the summary <p>; recomputed live as
 // the user reacts (renderSummary re-runs on every Save), so the totals move.
-function buildSummary({ review, like, pass, reject, gated, hiddenJunk, hiddenByFilter }) {
+function buildSummary({ review, like, pass, reject, gated, hiddenJunk, hiddenByFilter, decided, dup }) {
   const seg = (n, label, mod) => el('span', { class: `listings-summary__seg listings-summary__seg--${mod}` }, [
     el('b', { class: 'listings-summary__n' }, String(n)),
     ` ${label}`,
   ]);
-  const segs = [
-    seg(review, 'to review', 'review'),
-    seg(like, 'liked', 'like'),
-    seg(pass, 'passed', 'pass'),
-    seg(reject, 'rejected', 'reject'),
-  ];
+  // `to review` is always shown (the primary CTA count); the handled verbs render
+  // only when non-zero, so suppression doesn't leave misleading "0 liked / 0
+  // rejected" noise once decided rows are hidden out of the feed.
+  const segs = [seg(review, 'to review', 'review')];
+  if (like) segs.push(seg(like, 'liked', 'like'));
+  if (pass) segs.push(seg(pass, 'passed', 'pass'));
+  if (reject) segs.push(seg(reject, 'rejected', 'reject'));
+  if (decided) segs.push(seg(decided, 'already decided (hidden)', 'decided'));
+  if (dup) segs.push(seg(dup, 'duplicates merged', 'dup'));
   if (gated) segs.push(seg(gated, 'out of reach (hidden)', 'gated'));
   if (hiddenJunk) segs.push(seg(hiddenJunk, 'hidden: auction / over-55', 'junk'));
   if (hiddenByFilter) segs.push(seg(hiddenByFilter, 'hidden by filters', 'filtered'));
@@ -468,9 +473,9 @@ async function render() {
   const modeBtns = [...main.querySelectorAll('[data-mode]')];
   if (!listEl) return;
 
-  const [listings, criteria, rawFinances, areas, reactions, statuses, learned, reactionLogInit, ratings] = await Promise.all([
+  const [listings, criteria, rawFinances, areas, statuses, learned, reactionLogInit, ratings] = await Promise.all([
     getListings({ limit: null }), getCriteria(), getFinances(), getAreas(),
-    getListingReactions(), getShortlistStatuses(), getLearnedPreferences(), getReactionLog(),
+    getShortlistStatuses(), getLearnedPreferences(), getReactionLog(),
     getListingRatings(),
   ]);
   const finances = rawFinances ? deriveFinances(rawFinances) : null;
@@ -482,6 +487,26 @@ async function render() {
   let effective = effectiveWeights(learned?.derived || {}, overrides);
   let dismissals = learned?.dismissals || {};
   let reactionLog = reactionLogInit || [];
+
+  // Feed suppression derives the CURRENT reaction per listing from the live
+  // append-only log (the same source the Saved page reads) — not a cached map — so
+  // the feed and Saved can never disagree. A property whose latest reaction is
+  // like/reject is "decided" and is suppressed from the fresh feed by id AND by
+  // physical-property fingerprint, so a re-list under a new rightmove_id is caught.
+  // `pass` is a soft skip and stays resurfaceable.
+  const liveById = new Map(listings.map((l) => [String(l.rightmove_id), l]));
+  const latest = latestPerListing(reactionLog);
+  const reactions = {};
+  for (const [id, row] of latest) {
+    reactions[String(id)] = {
+      reaction: row.reaction,
+      reason: row.reason ?? null,
+      reasons: Array.isArray(row.reasons) ? row.reasons : [],
+      created_at: row.created_at,
+    };
+  }
+  const decided = decidedSets(latest, liveById);
+  const isDecidedListing = (l) => isDecided(l, decided);
 
   const areaOf = (l) => (l.area_id ? areasById.get(l.area_id) : null);
   const scoreOf = (l) => (finances
@@ -539,6 +564,13 @@ async function render() {
       reasons: reasons || [],
       created_at: new Date().toISOString(),
     };
+    // Keep the suppression sets live so the next paint hides a just-decided property
+    // (by id AND by fingerprint); `pass` is a soft skip and never suppresses.
+    if (reaction === 'like' || reaction === 'reject') {
+      decided.ids.add(String(listing.rightmove_id));
+      const fp = propertyFingerprint(listing);
+      if (fp) decided.fps.add(fp);
+    }
     reviewedSet.add(String(listing.rightmove_id));
     addReviewedListing(listing.rightmove_id);
     return true;
@@ -566,7 +598,7 @@ async function render() {
   // The review deck always hides junk (auction / over-55) — the "Show hidden"
   // toggle is a browse-mode affordance, not part of the focused review wave.
   const deckOrder = diversifySelection(
-    listings.filter((l) => isRecent(l, now) && !scoreOf(l).gated && !classifyListing(l).hide),
+    listings.filter((l) => isRecent(l, now) && !scoreOf(l).gated && !classifyListing(l).hide && !isDecidedListing(l)),
     listingBucketKey,
   );
   // ── learning state / training feedback (Stage 5 rich, balance-aware) ──────
@@ -602,7 +634,7 @@ async function render() {
   // recomputed from the current reactions/reviewedSet WITHOUT a full repaint —
   // that's what makes the totals move the instant a row is liked/passed/rejected
   // (the card stays put; only the counts change).
-  let lastBrowse = { visible: [], gatedCount: 0, hiddenJunkCount: 0, hiddenByFilter: 0 };
+  let lastBrowse = { visible: [], gatedCount: 0, hiddenJunkCount: 0, decidedCount: 0, dupCount: 0, hiddenByFilter: 0 };
   function summaryCounts(visible) {
     const c = { review: 0, like: 0, pass: 0, reject: 0 };
     for (const r of visible) {
@@ -619,8 +651,8 @@ async function render() {
     if (!summaryEl) return;
     clear(summaryEl);
     if (!listings.length || mode !== 'browse') return;
-    const { visible, gatedCount, hiddenJunkCount, hiddenByFilter } = lastBrowse;
-    const nodes = buildSummary({ ...summaryCounts(visible), gated: gatedCount, hiddenJunk: hiddenJunkCount, hiddenByFilter });
+    const { visible, gatedCount, hiddenJunkCount, hiddenByFilter, decidedCount, dupCount } = lastBrowse;
+    const nodes = buildSummary({ ...summaryCounts(visible), gated: gatedCount, hiddenJunk: hiddenJunkCount, hiddenByFilter, decided: decidedCount, dup: dupCount });
     for (const node of nodes) summaryEl.appendChild(node);
   }
 
@@ -707,8 +739,16 @@ async function render() {
     const afford = includeOOR ? scoredRows : scoredRows.filter((r) => !r.scored.gated);
     const junkRows = afford.filter((r) => classifyListing(r.listing).hide);
     const pool = includeHidden ? afford : afford.filter((r) => !classifyListing(r.listing).hide);
+    // Suppress already-decided properties (latest reaction like/reject) by id AND by
+    // physical-property fingerprint, so a re-list under a new rightmove_id is caught;
+    // `pass` stays resurfaceable. Then collapse same-fingerprint duplicates to one
+    // representative. "Show hidden" reveals the decided rows alongside junk.
+    const undecided = includeHidden ? pool : pool.filter((r) => !isDecidedListing(r.listing));
+    const deduped = dedupeByFingerprint(undecided, (r) => r.listing);
+    const decidedCount = pool.length - undecided.length;
+    const dupCount = undecided.length - deduped.length;
     const visible = controls
-      .apply(pool.map((r) => r.listing))
+      .apply(deduped.map((r) => r.listing))
       .map((l) => rowById.get(l.rightmove_id))
       .filter(Boolean);
 
@@ -745,7 +785,9 @@ async function render() {
       visible,
       gatedCount,
       hiddenJunkCount,
-      hiddenByFilter: Math.max(0, listings.length - visible.length - gatedCount - hiddenJunkCount),
+      decidedCount,
+      dupCount,
+      hiddenByFilter: Math.max(0, listings.length - visible.length - gatedCount - hiddenJunkCount - decidedCount - dupCount),
     };
     renderSummary();
   }

@@ -14,6 +14,7 @@ import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listings/fit.js';
 import { effectiveWeights, listingLearnedPrefs } from './learned-preferences.js';
 import { latestPerListing, LIKE_REASONS, LIKE_SUBREASONS } from './listings/reactions.js';
+import { dedupeNewestByFingerprint } from './listings/suppress.js';
 import { buildReasonPicker } from './listings/reactions-ui.js';
 import { createListingsControls } from './listings/controls.js';
 import { buildRatingControl } from './listings/rating-ui.js';
@@ -151,6 +152,9 @@ async function render() {
     const listing = liveById.get(key) || row.listing_snapshot;
     if (listing && listing.rightmove_id) liked.push({ listing, created_at: row.created_at });
   }
+  // Collapse same-physical-property saves (a re-list liked again under a new id) to a
+  // single card — keep the most-recently-liked. Coarse-address saves never merge.
+  liked = dedupeNewestByFingerprint(liked, (x) => x.listing, (x) => x.created_at);
 
   const areaOf = (l) => (l.area_id ? areasById.get(l.area_id) : null);
   const scoreOf = (l) => (finances

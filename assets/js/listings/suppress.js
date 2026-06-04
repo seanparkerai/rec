@@ -72,3 +72,27 @@ export function dedupeByFingerprint(items, keyOf = (x) => x) {
   }
   return [...reps, ...singles];
 }
+
+/**
+ * Collapse same-fingerprint items to ONE representative, choosing the entry with the
+ * newest timestamp from `timeOf` (e.g. the most-recently-liked save). Like
+ * dedupeByFingerprint, but the representative is picked by an explicit time accessor
+ * rather than the listing's own added_date/first_seen — used by the Saved view, where
+ * "newest" means most-recently saved, not most-recently listed. Items whose address is
+ * too coarse to fingerprint (null) are always kept (no false merge).
+ * @param {Array} items
+ * @param {(x)=>object} [keyOf]   extract the fingerprintable listing from a wrapper
+ * @param {(x)=>(string|number|Date)} [timeOf]  the comparison timestamp
+ */
+export function dedupeNewestByFingerprint(items, keyOf = (x) => x, timeOf = () => 0) {
+  const repByFp = new Map();
+  const singles = [];
+  const t = (x) => new Date(timeOf(x)).getTime() || 0;
+  for (const it of items || []) {
+    const fp = propertyFingerprint(keyOf(it));
+    if (!fp) { singles.push(it); continue; }
+    const prev = repByFp.get(fp);
+    if (!prev || t(it) > t(prev)) repByFp.set(fp, it);
+  }
+  return [...repByFp.values(), ...singles];
+}
