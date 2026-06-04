@@ -428,7 +428,7 @@ async function render() {
   if (!listEl) return;
 
   const [listings, criteria, rawFinances, areas, reactions, statuses, learned, reactionLogInit, ratings] = await Promise.all([
-    getListings({ limit: 200 }), getCriteria(), getFinances(), getAreas(),
+    getListings({ limit: null }), getCriteria(), getFinances(), getAreas(),
     getListingReactions(), getShortlistStatuses(), getLearnedPreferences(), getReactionLog(),
     getListingRatings(),
   ]);

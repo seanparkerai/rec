@@ -49,23 +49,45 @@ export async function getReport() {
 // Read-only from the portal: rows are written by tools/fetch-listings.mjs via
 // the service role. listings is the one fetcher-written table (live-content
 // class — see docs/SUPABASE_SYNC.md), so there is no save path here.
+const _LISTING_COLS = 'rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status, lat, lng, image_url, description, first_seen, last_seen, added_date, update_reason, price_history, distance_mi, geofence_pass, name_match, corroborated, match_source';
+
+// Read the live listings. Pass `limit: null` to fetch EVERYTHING (no arbitrary
+// cap) — the rows are paginated so nothing "ages out" of view as the table
+// grows past a single page. A numeric `limit` keeps the legacy capped behaviour
+// for callers (e.g. the next-best-action tile) that only want a recent sample.
 export async function getListings({ limit = 200, status = null, includeOutOfArea = false } = {}) {
   const sb = await _initSb();
   if (!sb) return [];
-  try {
-    let q = sb
-      .from('listings')
-      .select('rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status, lat, lng, image_url, description, first_seen, last_seen, added_date, update_reason, price_history, distance_mi, geofence_pass, name_match, corroborated, match_source')
-      .order('first_seen', { ascending: false })
-      .limit(limit);
+  // Each query starts from the same base; we rebuild it per page so the filters
+  // and ordering are applied consistently across the .range() window.
+  const buildQuery = () => {
+    let q = sb.from('listings').select(_LISTING_COLS).order('first_seen', { ascending: false });
     if (status) q = q.eq('status', status);
     // L7: only show listings inside a target-village geofence. Exclude
     // geofence_pass === false; a null verdict (a not-yet-backfilled row) is
     // treated as pass so nothing vanishes before the backfill lands.
     if (!includeOutOfArea) q = q.not('geofence_pass', 'is', false);
-    const { data, error } = await q;
-    if (error) throw error;
-    return data ?? [];
+    return q;
+  };
+  try {
+    // Capped path: a single bounded read (unchanged behaviour).
+    if (limit != null) {
+      const { data, error } = await buildQuery().limit(limit);
+      if (error) throw error;
+      return data ?? [];
+    }
+    // Uncapped path: page through every row so the full kept history is returned
+    // (Supabase caps a single response at ~1000 rows, so we must paginate).
+    const PAGE = 1000;
+    const all = [];
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await buildQuery().range(from, from + PAGE - 1);
+      if (error) throw error;
+      const batch = data ?? [];
+      all.push(...batch);
+      if (batch.length < PAGE) break; // last (short) page reached
+    }
+    return all;
   } catch (e) {
     console.error('storage: read listings', e.message);
     return [];

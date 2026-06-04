@@ -116,7 +116,7 @@ async function render() {
   const filterBar = main.querySelector('[data-listings-filter]');
 
   const [listings, log, criteria, rawFinances, areas, learned, ratings] = await Promise.all([
-    getListings({ limit: 200 }), getReactionLog(), getCriteria(), getFinances(), getAreas(), getLearnedPreferences(),
+    getListings({ limit: null }), getReactionLog(), getCriteria(), getFinances(), getAreas(), getLearnedPreferences(),
     getListingRatings(),
   ]);
   const finances = rawFinances ? deriveFinances(rawFinances) : null;

@@ -330,7 +330,7 @@ function assignArea(listing, areas) {
 async function restGetExisting(ids) {
   if (!ids.length) return new Map();
   const inList = ids.map((i) => `"${i}"`).join(',');
-  const url = `${SUPABASE_URL}/rest/v1/listings?select=rightmove_id,price,price_history,first_seen&rightmove_id=in.(${inList})`;
+  const url = `${SUPABASE_URL}/rest/v1/listings?select=rightmove_id,price,price_history,first_seen,image_url&rightmove_id=in.(${inList})`;
   const res = await fetch(url, {
     headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
   });
@@ -498,6 +498,10 @@ async function main() {
           ...l,
           first_seen: prev?.first_seen ?? l.first_seen, // never reset on update
           last_seen: now.toISOString(),
+          // Never blank a photo or price we already hold: a re-fetch that returns
+          // a null image/price (e.g. a summary payload) must not erase good data.
+          image_url: l.image_url ?? prev?.image_url ?? null,
+          price: l.price ?? prev?.price ?? null,
           price_history,
           raw_json: l.raw_json,
         };
