@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0749,
-    "lng": -1.3328
+    "lat": 51.0919,
+    "lng": -1.3543
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:GENUKI SU452327;OS-postcode-cluster(St Catherines); two-source(~150m); listing-centroid n=17 ~2.5km SE (parish incl Harestock); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {

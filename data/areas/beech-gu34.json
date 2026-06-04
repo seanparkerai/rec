@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Alton",
   "coords": {
-    "lat": 51.146,
-    "lng": -1.0878
+    "lat": 51.14442,
+    "lng": -1.00942
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-beech-centre-SU693388;getthedata-GU34-4AH-wellhouse-rd;wikipedia-OSgrid; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {

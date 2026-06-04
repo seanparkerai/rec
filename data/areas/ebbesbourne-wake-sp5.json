@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.009,
-    "lng": -1.9847
+    "lat": 51.01628,
+    "lng": -2.01421
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki-OS-ST991241;HistoricEngland-WarMemorial-school-ST992241;listing-centroid-agree~170m;NOTE-parish-spelled-Ebbesborne; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

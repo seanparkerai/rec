@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9873,
-    "lng": -1.7612
+    "lat": 50.99068,
+    "lng": -1.75884
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:Newtown is the west-of-Avon part of Downton SP5; listing-centroid(50.99068,-1.75884) corroborated by getthedata SP5-3HU Batten Rd(50.99601,-1.75620 ~290m) & SP5-3NQ Mesh Pond(50.9913,-1.7636); agrees with stored 50.9873,-1.7612 ~400m; note: not the SP3/SN8/SO43 Newtowns; 2026-06-04",
   "houseTypeIds": [],
   "status": "directory",
   "priceSummary": null,

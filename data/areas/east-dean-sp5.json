@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9933,
-    "lng": -1.875
+    "lat": 51.0394,
+    "lng": -1.6114
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:HistoricEngland-StWinfred-SU273267;getthedata-SP5-1HD(58m);xcheck-getthedata-centre(~150m);old-OS-19km-off; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

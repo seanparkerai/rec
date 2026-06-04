@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0092,
-    "lng": -1.3197
+    "lat": 51.01611,
+    "lng": -1.31632
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:listing-centroid(51.01611,-1.31632);getthedata SO21-1RQ Brewers Lane(51.016506,-1.317391 ~75m) within Twyford crossroads cluster (SO21-1PT 51.0184,-1.315); stored 51.0092 ~750m S; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

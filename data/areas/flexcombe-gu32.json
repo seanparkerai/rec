@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0228,
-    "lng": -0.9456
+    "lat": 51.03764,
+    "lng": -0.91254
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:OSM-place-hamlet-node251820411-Q586844;wikipedia-OSgrid-SU7642027015;agree-87m-centroid-rejected-polluted; note:OS/Liss-lists-GU33-record-says-GU32-boundary; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

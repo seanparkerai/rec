@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0017,
-    "lng": -0.9578
+    "lat": 51.0082,
+    "lng": -0.9698
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:Wikipedia grid SU722236;getthedata Stroud(GU32 1AX); two-source(~500m, namesake=East Hants); listing-centroid n=16 ~2km E toward Petersfield; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

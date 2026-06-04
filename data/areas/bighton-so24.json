@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0737,
-    "lng": -1.1453
+    "lat": 51.10594,
+    "lng": -1.12635
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO249RB-village;getthedata-centre-51.10488;centroid-rejected-3km-S-BishopsSutton; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

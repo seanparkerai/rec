@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0903,
-    "lng": -1.2107
+    "lat": 51.08793,
+    "lng": -1.2405
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikidata/historic-england Avington House OS grid SU5325532323(51.0877,-1.2410);getthedata SO21-1DB Avington nr Avington House(51.087925,-1.240496 ~15m); no listings; stored 51.0903,-1.2107 ~2km E rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

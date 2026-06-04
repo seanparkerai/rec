@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0463,
-    "lng": -1.107
+    "lat": 51.0334,
+    "lng": -1.10519
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO24-0LQ-brockwood;osm-brockwood-park-school-node;isbi-school-coords; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Alton",
   "coords": {
-    "lat": 51.1008,
-    "lng": -1.055
+    "lat": 51.12787,
+    "lng": -1.06549
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:doogal-GU34-5LR-villagecore;HistoricEngland-StAndrew-SU654371;getthedata-GU34-5LS-ChurchLane-WarMemorial-191m;centroid-rejected-2km-FourMarks-merge; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {

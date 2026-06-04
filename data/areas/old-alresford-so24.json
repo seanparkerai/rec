@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.094,
-    "lng": -1.1692
+    "lat": 51.10297,
+    "lng": -1.16243
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:openstreetmap-way225812501(village hall/green);wikipedia-SU5832; centroid n=14 rejected (sits on New Alresford ~2km S); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

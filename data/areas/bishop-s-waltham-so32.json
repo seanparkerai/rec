@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Southampton",
   "coords": {
-    "lat": 50.9573,
-    "lng": -1.216
+    "lat": 50.9546,
+    "lng": -1.2128
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:Wikipedia grid SU554174;HistoricEngland Social Club(1095670)+St Peter; cross-checked listing-centroid (n=27, gap~0.15km); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

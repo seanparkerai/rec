@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0931,
-    "lng": -1.4747
+    "lat": 51.058,
+    "lng": -1.5138
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:historic-england-brook-farm-house-SU341288;HE-brook-cottages-cluster;wikipedia-brook-test-valley-namesake; hamlet-S-of-kings-somborne; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

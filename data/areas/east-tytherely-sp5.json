@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9947,
-    "lng": -1.601
+    "lat": 51.0596,
+    "lng": -1.5842
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:HistoricEngland-StPeter-SU292290;BritainExpress-OS-SU292290(0m);dispersed-village-anchored-on-church;id-typo-Tytherely-kept;old-OS-7.1km-S; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

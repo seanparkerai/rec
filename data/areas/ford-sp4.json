@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1089,
-    "lng": -1.8001
+    "lat": 51.09558,
+    "lng": -1.76703
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SP4-6DW;getthedata-SP4-6DH;Ford-Laverstock-OS-postcode-cluster-287m; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

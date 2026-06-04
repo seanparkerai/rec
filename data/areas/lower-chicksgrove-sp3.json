@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0727,
-    "lng": -1.9933
+    "lat": 51.06424,
+    "lng": -2.03745
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SP3-6NB-LowerChicksGrove(51.064235,-2.037452);getthedata-Chicksgrove-centre(51.06271,-2.03839 ~190m S);anchor historic-england Chicksgrove Manor 51.0696,-2.0437 ~620m N; stored 51.0727,-1.9933 ~3km E rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Stockbridge",
   "coords": {
-    "lat": 51.0795,
-    "lng": -1.5277
+    "lat": 51.09619,
+    "lng": -1.5616
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO208AG-ChapelLane;listing-centroid-agree~120m;getthedata-HighStreet; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

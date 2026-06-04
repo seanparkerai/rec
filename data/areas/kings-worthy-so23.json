@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0824,
-    "lng": -1.301
+    "lat": 51.0888,
+    "lng": -1.2993
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:GENUKI SU491324;getthedata-centre; two-source agreement (~140m); listing-centroid n=12 skews ~1.5km N along A33; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {

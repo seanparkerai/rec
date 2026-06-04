@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Southampton",
   "coords": {
-    "lat": 50.876,
-    "lng": -1.5761
+    "lat": 50.87259,
+    "lng": -1.57662
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:postcode-checker.co.uk(town centre SO43);cross-checked listing-centroid (n=12, ~190m); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

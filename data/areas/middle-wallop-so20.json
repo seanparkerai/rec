@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Andover",
   "coords": {
-    "lat": 51.1434,
-    "lng": -1.5651
+    "lat": 51.14089,
+    "lng": -1.58562
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO20-8HW-MiddleWallop-nr-George-Inn(51.140894,-1.585620);listing-centroid(51.14072,-1.58592 ~20m);cross-check getthedata centre 51.13616; stored lng -1.5651 ~1km E rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

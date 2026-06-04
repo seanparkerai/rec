@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.1113,
-    "lng": -1.0242
+    "lat": 51.14466,
+    "lng": -1.10158
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre-Upper-Wield(51.14466,-1.10158);historic-england-Church-Cottage-Upper-Wield(51.1446,-1.1026 ~75m);cross-check listing centroid 51.11053,-0.99372 ~8km SE & stored 51.1113,-1.0242 ~3km SE both rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

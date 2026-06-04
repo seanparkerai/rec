@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.1237,
-    "lng": -1.2157
+    "lat": 51.15744,
+    "lng": -1.22754
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:GENUKI-AllSaints-SU54117-40082;wikipedia-osgrid-SU541400(83m);xcheck-getthedata-SO21-3XA(71m); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

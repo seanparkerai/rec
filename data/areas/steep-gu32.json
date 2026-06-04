@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0042,
-    "lng": -0.9697
+    "lat": 51.0226,
+    "lng": -0.94813
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:listing-centroid(51.02260,-0.94813);getthedata Church Rd cluster GU32-2DN(51.0229,-0.9469 ~50m) at Steep School/St Peters; cross-check getthedata centre 51.02338,-0.95165 ~250m; stored 51.0042,-0.9697 ~2.3km SW rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

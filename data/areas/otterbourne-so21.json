@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0119,
-    "lng": -1.3495
+    "lat": 50.99874,
+    "lng": -1.3523
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO212HX-ChapelLane;listing-centroid-agree~280m;getthedata-SO212HZ; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

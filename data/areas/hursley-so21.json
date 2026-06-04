@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0123,
-    "lng": -1.376
+    "lat": 51.0253,
+    "lng": -1.3905
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:postcode-checker.co.uk(village centre);getthedata-SO21-2JQ(Main Rd shop); two-source agreement ~20m; centroid n=9 rejected (4.2km S); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

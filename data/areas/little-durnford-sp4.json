@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1553,
-    "lng": -1.7789
+    "lat": 51.107,
+    "lng": -1.82171
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata.com;wikidata-Q17529888; two-source agreement (~120m), listing-centroid rejected as geofence pollution (n=58, 6.5km north); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

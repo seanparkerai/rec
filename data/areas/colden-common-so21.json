@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0174,
-    "lng": -1.2923
+    "lat": 50.9978,
+    "lng": -1.3142
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:Wikidata-P625(Q2020511);GENUKI/getthedata; cross-checked listing-centroid (n=17, gap~0.4km); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

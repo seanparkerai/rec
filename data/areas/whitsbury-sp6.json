@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9627,
-    "lng": -1.8198
+    "lat": 50.964,
+    "lng": -1.811
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:zestate-SP63PX-50.96475;getthedata-SP63QZ-WellHouseClose;centroid-rejected-polluted-1.4km-S;NOTE-county-is-Hampshire-not-Wiltshire-New-Forest; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

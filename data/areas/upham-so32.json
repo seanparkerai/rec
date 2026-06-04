@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 50.9672,
-    "lng": -1.211
+    "lat": 50.98175,
+    "lng": -1.2388
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre-Upham(50.98142,-1.23822);getthedata SO32-1JE Widlers Lane(50.981750,-1.238796 ~50m) at Upham village/church/school; stored 50.9672,-1.211 & centroid 50.96637 sit ~2km SE at Lower Upham (separate settlement) rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0421,
-    "lng": -1.317
+    "lat": 51.0161,
+    "lng": -1.3349
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:doogal-SO21-2DA;doogal-SO21-2BZ; two-source agreement ~200m; centroid n=9 rejected (4.2km N Winchester edge); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

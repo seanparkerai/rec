@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Stockbridge",
   "coords": {
-    "lat": 51.0862,
-    "lng": -1.4794
+    "lat": 51.08134,
+    "lng": -1.51739
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO20-6LY-bossington;getthedata-SO20-6LR-bossington-busstop-21m;bossington-cottages-corroborate; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

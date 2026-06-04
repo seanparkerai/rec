@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Southampton",
   "coords": {
-    "lat": 50.9651,
-    "lng": -1.1682
+    "lat": 50.97069,
+    "lng": -1.2158
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre-Ashton-SO32(50.97069,-1.2158);bracketed by getthedata SO32-1FQ Ashton Lane(50.96929,-1.21345 ~230m W) & Great Ashton SO32-1FT(50.970045,-1.207855 E); historic-england Ashton House 50.968,-1.2231; no listings; stored 50.9651,-1.1682 ~3.5km E rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

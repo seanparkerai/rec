@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.049,
-    "lng": -1.1688
+    "lat": 51.03138,
+    "lng": -1.17855
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki-SU577261;historic-england-stjames-church;wikipedia-OSgrid; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

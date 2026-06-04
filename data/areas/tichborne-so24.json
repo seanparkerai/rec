@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0637,
-    "lng": -1.153
+    "lat": 51.06899,
+    "lng": -1.18677
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO24-0ND-Tichborne(51.068986,-1.186771);historic-england-Church-of-St-Andrew(51.0689,-1.1897 ~150m);cross-check listing centroid 51.07975,-1.16158 ~1.7km NE polluted; stored 51.0637,-1.153 ~2.4km SE rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

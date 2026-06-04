@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9663,
-    "lng": -1.5809
+    "lat": 50.94381,
+    "lng": -1.61782
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre-StocksCross;geopunk-OSM-MethodistChurch-agree~110m;centroid-rejected-3.5km-NE; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

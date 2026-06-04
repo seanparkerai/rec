@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0531,
-    "lng": -1.114
+    "lat": 51.04606,
+    "lng": -1.12409
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:doogal-SO24-0LP;historic-england-old-curates-house-SU614277;village-core-A272-not-church-500m-W; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

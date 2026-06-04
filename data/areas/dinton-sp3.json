@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0798,
-    "lng": -1.9472
+    "lat": 51.0834,
+    "lng": -1.9805
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:Wikipedia/Wikidata grid SU014315;doogal SP3 5DZ+GENUKI SU010316; two-source(~150m); namesake=Wilts-Dinton not Bucks; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

@@ -11,10 +11,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.146,
-      "lng": -1.0878
+      "lat": 51.14442,
+      "lng": -1.00942
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-beech-centre-SU693388;getthedata-GU34-4AH-wellhouse-rd;wikipedia-OSgrid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -41,10 +41,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.1274,
-      "lng": -1.0927
+      "lat": 51.172,
+      "lng": -1.092
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:historic-england-allsaints-SU635418;wikipedia-OSgrid-SU634417;basingstoke-and-deane-bradley; DB-outcode-GU34-but-postcode-region-disputed-GU34/SO24; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -119,10 +119,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.1006,
-      "lng": -1.0438
+      "lat": 51.1058,
+      "lng": -1.054
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-GU345FE/5GN-core;listing-centroid-agree~80m;WinchesterRd-A31; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -143,10 +143,10 @@
     "settlementType": "",
     "subRegion": "Alton",
     "coords": {
-      "lat": 51.1008,
-      "lng": -1.055
+      "lat": 51.12787,
+      "lng": -1.06549
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-GU34-5LR-villagecore;HistoricEngland-StAndrew-SU654371;getthedata-GU34-5LS-ChurchLane-WarMemorial-191m;centroid-rejected-2km-FourMarks-merge; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -197,10 +197,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.1329,
-      "lng": -1.4554
+      "lat": 51.15723,
+      "lng": -1.44018
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;wikipedia-osgrid-SU392399(~51m);old-OS-2.9km-off; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -245,10 +245,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.1131,
-      "lng": -1.4941
+      "lat": 51.1275,
+      "lng": -1.49295
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre(51.12729,-1.4931);historic-england-TestViewCottage(51.1278,-1.4928 ~60m);cross-check listing centroid 51.1345 at north end of linear village; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -269,10 +269,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.1434,
-      "lng": -1.5651
+      "lat": 51.14089,
+      "lng": -1.58562
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO20-8HW-MiddleWallop-nr-George-Inn(51.140894,-1.585620);listing-centroid(51.14072,-1.58592 ~20m);cross-check getthedata centre 51.13616; stored lng -1.5651 ~1km E rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -293,10 +293,10 @@
     "settlementType": "Non-City",
     "subRegion": "Andover",
     "coords": {
-      "lat": 51.1479,
-      "lng": -1.5632
+      "lat": 51.14373,
+      "lng": -1.59611
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;genuki-OS-SU283384;listing-centroid-agree~170m; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -365,10 +365,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1138,
-      "lng": -1.0259
+      "lat": 51.14373,
+      "lng": -1.0498
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-LowerWield-SU636402;streetcheck-SO24-9RX(Yew Tree pub); two-source agreement; centroid n=11 rejected (4.8km E nr Bentworth); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -389,10 +389,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.15,
-      "lng": -1.1744
+      "lat": 51.15004,
+      "lng": -1.17436
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-brown-candover-centre;genuki-SU577393;historic-england-st-peter+candover-house; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -437,10 +437,10 @@
     "settlementType": "Outlier",
     "subRegion": "Basingstoke",
     "coords": {
-      "lat": 51.1703,
-      "lng": -1.1237
+      "lat": 51.17207,
+      "lng": -1.13286
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:listing-centroid(51.17207,-1.13286);getthedata-centre(51.17197,-1.13318 ~25m);cross-check GENUKI grid SU607417(51.171328,-1.13315); stored lng -1.1237 ~650m E; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -509,10 +509,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0056,
-      "lng": -1.0041
+      "lat": 51.018,
+      "lng": -1.0159
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-OSgrid-SU691247=hebberdens-HE;getthedata-GU32-1ES-lower-bordean;HE-lower-bordean-farmhouse-cluster; hamlet-centre-at-lower-bordean; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -557,10 +557,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0228,
-      "lng": -0.9456
+      "lat": 51.03764,
+      "lng": -0.91254
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:OSM-place-hamlet-node251820411-Q586844;wikipedia-OSgrid-SU7642027015;agree-87m-centroid-rejected-polluted; note:OS/Liss-lists-GU33-record-says-GU32-boundary; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -581,10 +581,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 50.9852,
-      "lng": -0.999
+      "lat": 51.03411,
+      "lng": -0.98494
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre(51.03443,-0.98397);doogal-GU32-1EG(51.03411,-0.98494);cross-check village bus stops on High Cross, stored 50.9852 & wiki grid SU713266 rejected as ~5km too far south; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -605,10 +605,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0042,
-      "lng": -0.9697
+      "lat": 51.0226,
+      "lng": -0.94813
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:listing-centroid(51.02260,-0.94813);getthedata Church Rd cluster GU32-2DN(51.0229,-0.9469 ~50m) at Steep School/St Peters; cross-check getthedata centre 51.02338,-0.95165 ~250m; stored 51.0042,-0.9697 ~2.3km SW rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -653,10 +653,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0017,
-      "lng": -0.9578
+      "lat": 51.0082,
+      "lng": -0.9698
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikipedia grid SU722236;getthedata Stroud(GU32 1AX); two-source(~500m, namesake=East Hants); listing-centroid n=16 ~2km E toward Petersfield; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -725,10 +725,10 @@
     "settlementType": "",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0808,
-      "lng": -1.0443
+      "lat": 51.08515,
+      "lng": -0.99984
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU701322;HistoricEngland-WellHouse-pump(40m);xcheck-getthedata-GU34-3QJ(111m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -773,10 +773,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0841,
-      "lng": -1.033
+      "lat": 51.0739,
+      "lng": -1.04584
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO240HB-PetersfieldRd;getthedata-centre-agree~90m;listing-centroid-agree~20m; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -845,10 +845,10 @@
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0531,
-      "lng": -1.114
+      "lat": 51.04606,
+      "lng": -1.12409
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-SO24-0LP;historic-england-old-curates-house-SU614277;village-core-A272-not-church-500m-W; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -869,10 +869,10 @@
     "settlementType": "Non-City",
     "subRegion": "Petersfield",
     "coords": {
-      "lat": 51.0463,
-      "lng": -1.107
+      "lat": 51.0334,
+      "lng": -1.10519
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO24-0LQ-brockwood;osm-brockwood-park-school-node;isbi-school-coords; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1037,10 +1037,10 @@
     "settlementType": "Non-City",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9663,
-      "lng": -1.5809
+      "lat": 50.94381,
+      "lng": -1.61782
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre-StocksCross;geopunk-OSM-MethodistChurch-agree~110m;centroid-rejected-3.5km-NE; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1085,10 +1085,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.9651,
-      "lng": -1.1682
+      "lat": 50.97069,
+      "lng": -1.2158
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre-Ashton-SO32(50.97069,-1.2158);bracketed by getthedata SO32-1FQ Ashton Lane(50.96929,-1.21345 ~230m W) & Great Ashton SO32-1FT(50.970045,-1.207855 E); historic-england Ashton House 50.968,-1.2231; no listings; stored 50.9651,-1.1682 ~3.5km E rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1109,10 +1109,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.9573,
-      "lng": -1.216
+      "lat": 50.9546,
+      "lng": -1.2128
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikipedia grid SU554174;HistoricEngland Social Club(1095670)+St Peter; cross-checked listing-centroid (n=27, gap~0.15km); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1181,10 +1181,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.9595,
-      "lng": -1.19
+      "lat": 50.97734,
+      "lng": -1.12543
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;getthedata-SO323NF-RectoryLane;doogal-SO323NF-agree~10m;centroid-rejected-6km-SW; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1301,10 +1301,10 @@
     "settlementType": "Non-City",
     "subRegion": "Southampton",
     "coords": {
-      "lat": 50.876,
-      "lng": -1.5761
+      "lat": 50.87259,
+      "lng": -1.57662
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:postcode-checker.co.uk(town centre SO43);cross-checked listing-centroid (n=12, ~190m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1349,10 +1349,10 @@
     "settlementType": "Non-City",
     "subRegion": "Stockbridge",
     "coords": {
-      "lat": 51.0862,
-      "lng": -1.4794
+      "lat": 51.08134,
+      "lng": -1.51739
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO20-6LY-bossington;getthedata-SO20-6LR-bossington-busstop-21m;bossington-cottages-corroborate; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1373,10 +1373,10 @@
     "settlementType": "Non-City",
     "subRegion": "Stockbridge",
     "coords": {
-      "lat": 51.0795,
-      "lng": -1.5277
+      "lat": 51.09619,
+      "lng": -1.5616
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO208AG-ChapelLane;listing-centroid-agree~120m;getthedata-HighStreet; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1445,10 +1445,10 @@
     "settlementType": "",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.9977,
-      "lng": -1.008
+      "lat": 50.99448,
+      "lng": -1.03351
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;getthedata-GU321NH-AllSaints-church;listing-centroid-agree~120m; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1493,10 +1493,10 @@
     "settlementType": "",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1399,
-      "lng": -1.0995
+      "lat": 51.1563,
+      "lng": -1.0505
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki-SU665401;wikipedia-OSgrid-SU664401;doogal-GU34-5RE-church-st; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1517,10 +1517,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1113,
-      "lng": -1.0242
+      "lat": 51.14466,
+      "lng": -1.10158
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre-Upper-Wield(51.14466,-1.10158);historic-england-Church-Cottage-Upper-Wield(51.1446,-1.1026 ~75m);cross-check listing centroid 51.11053,-0.99372 ~8km SE & stored 51.1113,-1.0242 ~3km SE both rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1541,10 +1541,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0826,
-      "lng": -1.4933
+      "lat": 51.07542,
+      "lng": -1.45471
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia OS grid SU385310 Ashley Test Valley(~51.0758,-1.4548);ukpostcodecheck Ashley Cottage/Park SO20-6RQ(51.075418,-1.454713 ~20m); no listings; stored 51.0826,-1.4933 ~3km W rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1565,10 +1565,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0931,
-      "lng": -1.4747
+      "lat": 51.058,
+      "lng": -1.5138
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:historic-england-brook-farm-house-SU341288;HE-brook-cottages-cluster;wikipedia-brook-test-valley-namesake; hamlet-S-of-kings-somborne; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1589,10 +1589,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1315,
-      "lng": -1.4649
+      "lat": 51.12815,
+      "lng": -1.41601
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;getthedata-SO20-6BU-centroid(65m);wiki-point-275m-N-dispersed; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1715,10 +1715,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.112,
-      "lng": -1.4914
+      "lat": 51.1145,
+      "lng": -1.4936
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikipedia OS-grid SU355351;GENUKI 51.11446,-1.49363; two-source agreement (~50m); NOTE listing-centroid n=3 ~3.4km S, likely mis-geofenced; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1787,10 +1787,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1073,
-      "lng": -1.1971
+      "lat": 51.10725,
+      "lng": -1.19707
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre-Abbotstone(51.10725,-1.19707);wikipedia OS grid SU5635534533(~51.1073,-1.1971 ~5m); cross-check getthedata SO24-9TE 51.106746,-1.194851 ~160m; no listings; stored already accurate; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1811,10 +1811,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0912,
-      "lng": -1.2142
+      "lat": 51.08745,
+      "lng": -1.2405
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:St Marys Church Avington OS grid SU532322(~51.0868,-1.2410);getthedata SO21-1DB locality Avington(51.087925,-1.240496 ~130m); village core at church/Avington House cluster; no listings; stored 51.0912,-1.2142 ~2km E rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1835,10 +1835,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1549,
-      "lng": -1.3708
+      "lat": 51.16616,
+      "lng": -1.37883
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO213RL-TheSwan;listing-centroid-agree~140m;getthedata-SO213RH; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1859,10 +1859,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0481,
-      "lng": -1.25
+      "lat": 51.00416,
+      "lng": -1.2524
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO21-1JN-Baybridge;zestate-baybridge-park;postbox-344m-corroborate; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1883,10 +1883,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0574,
-      "lng": -1.2805
+      "lat": 51.0534,
+      "lng": -1.2767
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia(51.0534,-1.2767 SU507284);grokipedia(concur); two-source agreement; centroid n=6 rejected (1.9km NW); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1907,10 +1907,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0174,
-      "lng": -1.2923
+      "lat": 50.9978,
+      "lng": -1.3142
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikidata-P625(Q2020511);GENUKI/getthedata; cross-checked listing-centroid (n=17, gap~0.4km); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1931,10 +1931,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0421,
-      "lng": -1.317
+      "lat": 51.0161,
+      "lng": -1.3349
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-SO21-2DA;doogal-SO21-2BZ; two-source agreement ~200m; centroid n=9 rejected (4.2km N Winchester edge); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1955,10 +1955,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0692,
-      "lng": -1.3576
+      "lat": 51.11097,
+      "lng": -1.39301
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-SO21-2PU;wikipedia-OSgrid-SU4278834791;cross-check-201m-centroid-rejected-7km-polluted; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -1979,10 +1979,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1237,
-      "lng": -1.2157
+      "lat": 51.15744,
+      "lng": -1.22754
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI-AllSaints-SU54117-40082;wikipedia-osgrid-SU541400(83m);xcheck-getthedata-SO21-3XA(71m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2003,10 +2003,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0753,
-      "lng": -1.2698
+      "lat": 51.08595,
+      "lng": -1.27178
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU511321;HistoricEngland-built-up-OldManor(128m);old-OS-1.2km-S; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2027,10 +2027,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0123,
-      "lng": -1.376
+      "lat": 51.0253,
+      "lng": -1.3905
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:postcode-checker.co.uk(village centre);getthedata-SO21-2JQ(Main Rd shop); two-source agreement ~20m; centroid n=9 rejected (4.2km S); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2105,10 +2105,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.1428,
-      "lng": -1.3047
+      "lat": 51.16845,
+      "lng": -1.35397
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO21-3RE-LowerBullington(51.168448,-1.353969);historic-england-ChurchFarmhouse-LowerBullington(51.1686,-1.3515 ~85m);cross-check stored 51.1428 & centroid 51.1192 both ~3km too far south, rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -2195,10 +2195,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0119,
-      "lng": -1.3495
+      "lat": 50.99874,
+      "lng": -1.3523
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO212HX-ChapelLane;listing-centroid-agree~280m;getthedata-SO212HZ; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2219,10 +2219,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0503,
-      "lng": -1.2932
+      "lat": 51.00857,
+      "lng": -1.27618
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-SU514234(St Andrews church);zestate-Main-Road-SO21-1LU; two-source agreement ~80m; centroid n=14 rejected (5.5km NW); NOTE id misspelled should be owslebury; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2243,10 +2243,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0357,
-      "lng": -1.3296
+      "lat": 51.04813,
+      "lng": -1.34177
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:savills(hamlet SW of Winchester nr Hursley/Compton);rightmove-SO21-2LG; cross-checked listing-centroid (n=15, ~120m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2363,10 +2363,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0092,
-      "lng": -1.3197
+      "lat": 51.01611,
+      "lng": -1.31632
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:listing-centroid(51.01611,-1.31632);getthedata SO21-1RQ Brewers Lane(51.016506,-1.317391 ~75m) within Twyford crossroads cluster (SO21-1PT 51.0184,-1.315); stored 51.0092 ~750m S; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2411,10 +2411,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0993,
-      "lng": -1.2871
+      "lat": 51.15291,
+      "lng": -1.3251
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-SO213LW;getthedata-centre-agree~30m;HistoricEngland-HolyTrinity-360m-E;centroid-rejected-4km-S-SouthWonston; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2435,10 +2435,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0943,
-      "lng": -1.2977
+      "lat": 51.11226,
+      "lng": -1.34255
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre-Worthy-Down(51.112,-1.343);getthedata SO21-2QS(51.112256,-1.342553 ~35m) at Worthy Down camp/Connaught Rd cluster; cross-check MOD Worthy Down Camp 51.1133,-1.3238; stored 51.0943,-1.2977 & centroid 51.09241 sit ~3.5km SE at Abbots Worthy rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -2459,10 +2459,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0749,
-      "lng": -1.3328
+      "lat": 51.0919,
+      "lng": -1.3543
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU452327;OS-postcode-cluster(St Catherines); two-source(~150m); listing-centroid n=17 ~2.5km SE (parish incl Harestock); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -2489,10 +2489,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0824,
-      "lng": -1.301
+      "lat": 51.0888,
+      "lng": -1.2993
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU491324;getthedata-centre; two-source agreement (~140m); listing-centroid n=12 skews ~1.5km N along A33; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": {
@@ -2519,10 +2519,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0903,
-      "lng": -1.2107
+      "lat": 51.08793,
+      "lng": -1.2405
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikidata/historic-england Avington House OS grid SU5325532323(51.0877,-1.2410);getthedata SO21-1DB Avington nr Avington House(51.087925,-1.240496 ~15m); no listings; stored 51.0903,-1.2107 ~2km E rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2543,10 +2543,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.049,
-      "lng": -1.1688
+      "lat": 51.03138,
+      "lng": -1.17855
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki-SU577261;historic-england-stjames-church;wikipedia-OSgrid; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2567,10 +2567,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0737,
-      "lng": -1.1453
+      "lat": 51.10594,
+      "lng": -1.12635
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO249RB-village;getthedata-centre-51.10488;centroid-rejected-3km-S-BishopsSutton; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2591,10 +2591,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0585,
-      "lng": -1.1483
+      "lat": 51.08414,
+      "lng": -1.13764
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki-SU605320;doogal-SO24-0AA;historic-england-1-church-lane; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2615,10 +2615,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0471,
-      "lng": -1.1659
+      "lat": 51.0529,
+      "lng": -1.16956
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;genuki-osgrid-SU583285;xcheck-StMichael-SU58195-28489(65-105m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2711,10 +2711,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.094,
-      "lng": -1.1692
+      "lat": 51.10297,
+      "lng": -1.16243
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:openstreetmap-way225812501(village hall/green);wikipedia-SU5832; centroid n=14 rejected (sits on New Alresford ~2km S); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2831,10 +2831,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0637,
-      "lng": -1.153
+      "lat": 51.06899,
+      "lng": -1.18677
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO24-0ND-Tichborne(51.068986,-1.186771);historic-england-Church-of-St-Andrew(51.0689,-1.1897 ~150m);cross-check listing centroid 51.07975,-1.16158 ~1.7km NE polluted; stored 51.0637,-1.153 ~2.4km SE rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2903,10 +2903,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 50.9672,
-      "lng": -1.211
+      "lat": 50.98175,
+      "lng": -1.2388
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre-Upham(50.98142,-1.23822);getthedata SO32-1JE Widlers Lane(50.981750,-1.238796 ~50m) at Upham village/church/school; stored 50.9672,-1.211 & centroid 50.96637 sit ~2km SE at Lower Upham (separate settlement) rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2927,10 +2927,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0247,
-      "lng": -1.4877
+      "lat": 51.02308,
+      "lng": -1.46624
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;doogal-SO510PN;wikipedia-SU3725; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -2999,10 +2999,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0097,
-      "lng": -1.4963
+      "lat": 51.0325,
+      "lng": -1.5056
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU348260;Wikipedia grid SU346261+getthedata; two-source(~150m); listing-centroid n=15 ~4km SE (merged w/Timsbury); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3023,10 +3023,10 @@
     "settlementType": "Non-City",
     "subRegion": "Winchester",
     "coords": {
-      "lat": 51.0122,
-      "lng": -1.4943
+      "lat": 51.00607,
+      "lng": -1.4738
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:streetmap(New Road Timsbury grid 434679/125636);wikipedia(A3057 N of Romsey); cross-checked listing-centroid (n=10, ~70m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3071,10 +3071,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0958,
-      "lng": -1.778
+      "lat": 51.0885,
+      "lng": -1.7785
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata OS-postcode-cluster(SP1-3);HistoricEngland Bishopdown Farm(1355736); cross-checked listing-centroid (n=29, gap~0.4km); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3095,10 +3095,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0877,
-      "lng": -1.8143
+      "lat": 51.0916,
+      "lng": -1.8137
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU130326;Wikipedia grid SU133323 (~300m); listing-centroid n=35 ~1.3km SE toward Salisbury; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3119,10 +3119,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0726,
-      "lng": -1.8222
+      "lat": 51.0737,
+      "lng": -1.8258
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU123305;Wikipedia grid SU120306 (~150m); NOTE n=83 listing-centroid skews ~1.9km E (suburb sprawl/geofence breadth - review); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3143,10 +3143,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0762,
-      "lng": -1.8771
+      "lat": 51.078,
+      "lng": -1.9008
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-OSgrid-SU070310;historic-england-burcombe-manor+old-farmhouse-cluster;whites-w3w-SU070310; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3215,10 +3215,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0658,
-      "lng": -1.8373
+      "lat": 51.0674,
+      "lng": -1.848
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU108298;Wikipedia/Wikidata grid SU110298 (~150m); listing-centroid n=6 ~1.4km E; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3263,10 +3263,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0953,
-      "lng": -1.9428
+      "lat": 51.1357,
+      "lng": -1.9001
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikipedia/GENUKI OS-grid SU070374;HistoricEngland Stapleford Cottage(1146224); two-source agreement (no listings, ~200m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3311,10 +3311,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0754,
-      "lng": -1.8591
+      "lat": 51.0809,
+      "lng": -1.8632
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU096313;Wikipedia grid SU096312; cross-checked listing-centroid (n=20, gap~0.25km); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3335,10 +3335,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0821,
-      "lng": -1.9847
+      "lat": 51.0936,
+      "lng": -2.04564
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-ST969327;getthedata-SP3-5AP-TheStreet(78m);old-OS-was-4.4km-off; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3359,10 +3359,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0798,
-      "lng": -1.9472
+      "lat": 51.0834,
+      "lng": -1.9805
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikipedia/Wikidata grid SU014315;doogal SP3 5DZ+GENUKI SU010316; two-source(~150m); namesake=Wilts-Dinton not Bucks; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3407,10 +3407,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0727,
-      "lng": -1.9933
+      "lat": 51.06424,
+      "lng": -2.03745
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SP3-6NB-LowerChicksGrove(51.064235,-2.037452);getthedata-Chicksgrove-centre(51.06271,-2.03839 ~190m S);anchor historic-england Chicksgrove Manor 51.0696,-2.0437 ~620m N; stored 51.0727,-1.9933 ~3km E rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3431,10 +3431,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0625,
-      "lng": -1.9741
+      "lat": 51.05854,
+      "lng": -2.02208
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki-OS-ST985288;HistoricEngland-ChurchFarmhouse-AllSaints;centroid-rejected-2.3km-E; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3479,10 +3479,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1089,
-      "lng": -1.8001
+      "lat": 51.09558,
+      "lng": -1.76703
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SP4-6DW;getthedata-SP4-6DH;Ford-Laverstock-OS-postcode-cluster-287m; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3503,10 +3503,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1174,
-      "lng": -1.7682
+      "lat": 51.11818,
+      "lng": -1.73057
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-SP4-6LU;getthedata-gomeldon;listing-centroid-79m; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3527,10 +3527,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.1553,
-      "lng": -1.7789
+      "lat": 51.107,
+      "lng": -1.82171
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata.com;wikidata-Q17529888; two-source agreement (~120m), listing-centroid rejected as geofence pollution (n=58, 6.5km north); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3671,10 +3671,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.147,
-      "lng": -1.7823
+      "lat": 51.13674,
+      "lng": -1.8221
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:listing-centroid(51.13674,-1.82210);getthedata SP4-6PA Upper Meads(51.136208,-1.822106 ~70m); cross-check SP4-6NU nr Bridge Inn 51.1316,-1.8242 & historic-england 37-38 Upper Woodford 51.1294,-1.823; stored 51.147,-1.7823 ~3km NE rejected; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3743,10 +3743,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.027,
-      "lng": -1.7537
+      "lat": 51.0451,
+      "lng": -1.7396
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:HistoricEngland-warmemorial(1452014);GeoNames-villagenode; cross-checked listing-centroid (n=10, gap~1.1km parish spans Whaddon/ShuteEnd); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3767,10 +3767,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0779,
-      "lng": -1.963
+      "lat": 51.08189,
+      "lng": -1.92
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki-SU057314;historic-england-listed-cluster;wikipedia-OSgrid; DB-outcode-SP5-but-actual-SP3; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3791,10 +3791,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0113,
-      "lng": -1.8547
+      "lat": 51.0355,
+      "lng": -1.893
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikipedia grid SU069257;getthedata OS-postcode-cluster(High Rd/Pitts); two-source(no listings, ~0.8km parish spread along Ebble); namesake=Salisbury-Bishopstone SP5; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3815,10 +3815,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0174,
-      "lng": -1.972
+      "lat": 51.01028,
+      "lng": -1.97027
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;getthedata-SP55BJ-CostersLane-HolyTrinity;getthedata-SP55BE-ChurchSt; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3839,10 +3839,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0176,
-      "lng": -1.9631
+      "lat": 51.0262,
+      "lng": -1.9438
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Wikipedia grid SU039255;GENUKI SU041252+doogal SP5 5DP; two-source(~150m); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3863,10 +3863,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9812,
-      "lng": -1.8009
+      "lat": 51.01331,
+      "lng": -1.7505
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikidata-allsaints-church-coords;wikipedia-OSgrid-SU176241;whites-w3w-SU176241; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3887,10 +3887,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0106,
-      "lng": -1.8195
+      "lat": 51.03686,
+      "lng": -1.84592
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU109264;HistoricEngland-listed-built-up-area(131m);old-OS-3.5km-S; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3935,10 +3935,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.993,
-      "lng": -1.7826
+      "lat": 50.9935,
+      "lng": -1.7421
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI/OS-grid SU182216;Wikidata Q2110657; cross-checked listing-centroid (n=10, gap~0.2km); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3959,10 +3959,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9933,
-      "lng": -1.875
+      "lat": 51.0394,
+      "lng": -1.6114
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:HistoricEngland-StWinfred-SU273267;getthedata-SP5-1HD(58m);xcheck-getthedata-centre(~150m);old-OS-19km-off; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -3983,10 +3983,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0213,
-      "lng": -1.8348
+      "lat": 51.05001,
+      "lng": -1.67896
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU226279;getthedata-centre(74m);doogal-SP5-3RT(72m);old-OS-11.4km-off; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4007,10 +4007,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9947,
-      "lng": -1.601
+      "lat": 51.0596,
+      "lng": -1.5842
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:HistoricEngland-StPeter-SU292290;BritainExpress-OS-SU292290(0m);dispersed-village-anchored-on-church;id-typo-Tytherely-kept;old-OS-7.1km-S; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4031,10 +4031,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.009,
-      "lng": -1.9847
+      "lat": 51.01628,
+      "lng": -2.01421
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki-OS-ST991241;HistoricEngland-WarMemorial-school-ST992241;listing-centroid-agree~170m;NOTE-parish-spelled-Ebbesborne; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4175,10 +4175,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9749,
-      "lng": -1.6478
+      "lat": 50.96788,
+      "lng": -1.63508
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;getthedata-SP52AP-LyndhurstRd;listing-centroid-agree~220m; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4295,10 +4295,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9873,
-      "lng": -1.7612
+      "lat": 50.99068,
+      "lng": -1.75884
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:Newtown is the west-of-Avon part of Downton SP5; listing-centroid(50.99068,-1.75884) corroborated by getthedata SP5-3HU Batten Rd(50.99601,-1.75620 ~290m) & SP5-3NQ Mesh Pond(50.9913,-1.7636); agrees with stored 50.9873,-1.7612 ~400m; note: not the SP3/SN8/SO43 Newtowns; 2026-06-04",
     "houseTypeIds": [],
     "status": "directory",
     "priceSummary": null,
@@ -4343,10 +4343,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0216,
-      "lng": -1.8108
+      "lat": 51.03451,
+      "lng": -1.7926
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;genuki-OS-SU146262;centroid-rejected-2.2km-N-hospital; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4367,10 +4367,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0897,
-      "lng": -1.693
+      "lat": 51.08319,
+      "lng": -1.69918
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:listing-centroid(51.08319,-1.69918);historic-england-Church-of-St-Peter-Pitton(51.0829,-1.6977 ~110m);cross-check getthedata centre 51.07982,-1.69794 ~380m S; stored 51.0897 ~700m N; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4415,10 +4415,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9902,
-      "lng": -1.7321
+      "lat": 50.99085,
+      "lng": -1.71452
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-SP5-2JT;HistoricEngland-KingsHead-SU201212;cross-check-59m-centroid-rejected-dispersed-parish; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4559,10 +4559,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 51.0231,
-      "lng": -1.6443
+      "lat": 51.01136,
+      "lng": -1.65129
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;getthedata-SP52RG-AllSaints-church;listing-centroid-agree~180m; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4631,10 +4631,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9561,
-      "lng": -1.7961
+      "lat": 50.9612,
+      "lng": -1.775
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:GENUKI SU159180;Wikipedia grid SU158180 (~80m); NOTE n=56 listing-centroid ~3.7km S toward Fordingbridge (geofence breadth - review); 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,
@@ -4655,10 +4655,10 @@
     "settlementType": "",
     "subRegion": "Salisbury",
     "coords": {
-      "lat": 50.9627,
-      "lng": -1.8198
+      "lat": 50.964,
+      "lng": -1.811
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:zestate-SP63PX-50.96475;getthedata-SP63QZ-WellHouseClose;centroid-rejected-polluted-1.4km-S;NOTE-county-is-Hampshire-not-Wiltshire-New-Forest; 2026-06-04",
     "houseTypeIds": [],
     "status": "researched",
     "priceSummary": null,

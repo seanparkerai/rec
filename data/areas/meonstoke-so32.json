@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Southampton",
   "coords": {
-    "lat": 50.9595,
-    "lng": -1.19
+    "lat": 50.97734,
+    "lng": -1.12543
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre;getthedata-SO323NF-RectoryLane;doogal-SO323NF-agree~10m;centroid-rejected-6km-SW; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

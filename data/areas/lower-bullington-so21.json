@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.1428,
-    "lng": -1.3047
+    "lat": 51.16845,
+    "lng": -1.35397
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO21-3RE-LowerBullington(51.168448,-1.353969);historic-england-ChurchFarmhouse-LowerBullington(51.1686,-1.3515 ~85m);cross-check stored 51.1428 & centroid 51.1192 both ~3km too far south, rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {

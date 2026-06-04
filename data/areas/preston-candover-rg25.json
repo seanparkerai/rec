@@ -10,10 +10,10 @@
   "settlementType": "Outlier",
   "subRegion": "Basingstoke",
   "coords": {
-    "lat": 51.1703,
-    "lng": -1.1237
+    "lat": 51.17207,
+    "lng": -1.13286
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:listing-centroid(51.17207,-1.13286);getthedata-centre(51.17197,-1.13318 ~25m);cross-check GENUKI grid SU607417(51.171328,-1.13315); stored lng -1.1237 ~650m E; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

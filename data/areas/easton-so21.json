@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0753,
-    "lng": -1.2698
+    "lat": 51.08595,
+    "lng": -1.27178
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-osgrid-SU511321;HistoricEngland-built-up-OldManor(128m);old-OS-1.2km-S; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

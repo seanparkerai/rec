@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0231,
-    "lng": -1.6443
+    "lat": 51.01136,
+    "lng": -1.65129
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre;getthedata-SP52RG-AllSaints-church;listing-centroid-agree~180m; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

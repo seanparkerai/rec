@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0897,
-    "lng": -1.693
+    "lat": 51.08319,
+    "lng": -1.69918
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:listing-centroid(51.08319,-1.69918);historic-england-Church-of-St-Peter-Pitton(51.0829,-1.6977 ~110m);cross-check getthedata centre 51.07982,-1.69794 ~380m S; stored 51.0897 ~700m N; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

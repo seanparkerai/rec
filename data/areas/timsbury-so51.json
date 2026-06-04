@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0122,
-    "lng": -1.4943
+    "lat": 51.00607,
+    "lng": -1.4738
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:streetmap(New Road Timsbury grid 434679/125636);wikipedia(A3057 N of Romsey); cross-checked listing-centroid (n=10, ~70m); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

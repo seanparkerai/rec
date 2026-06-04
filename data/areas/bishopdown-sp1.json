@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0958,
-    "lng": -1.778
+    "lat": 51.0885,
+    "lng": -1.7785
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata OS-postcode-cluster(SP1-3);HistoricEngland Bishopdown Farm(1355736); cross-checked listing-centroid (n=29, gap~0.4km); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

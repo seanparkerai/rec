@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.027,
-    "lng": -1.7537
+    "lat": 51.0451,
+    "lng": -1.7396
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:HistoricEngland-warmemorial(1452014);GeoNames-villagenode; cross-checked listing-centroid (n=10, gap~1.1km parish spans Whaddon/ShuteEnd); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

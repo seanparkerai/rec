@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.1399,
-    "lng": -1.0995
+    "lat": 51.1563,
+    "lng": -1.0505
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki-SU665401;wikipedia-OSgrid-SU664401;doogal-GU34-5RE-church-st; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

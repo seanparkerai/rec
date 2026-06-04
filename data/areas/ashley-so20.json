@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0826,
-    "lng": -1.4933
+    "lat": 51.07542,
+    "lng": -1.45471
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia OS grid SU385310 Ashley Test Valley(~51.0758,-1.4548);ukpostcodecheck Ashley Cottage/Park SO20-6RQ(51.075418,-1.454713 ~20m); no listings; stored 51.0826,-1.4933 ~3km W rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

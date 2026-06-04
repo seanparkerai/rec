@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0841,
-    "lng": -1.033
+    "lat": 51.0739,
+    "lng": -1.04584
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO240HB-PetersfieldRd;getthedata-centre-agree~90m;listing-centroid-agree~20m; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

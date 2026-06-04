@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1174,
-    "lng": -1.7682
+    "lat": 51.11818,
+    "lng": -1.73057
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:doogal-SP4-6LU;getthedata-gomeldon;listing-centroid-79m; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

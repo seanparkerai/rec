@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0174,
-    "lng": -1.972
+    "lat": 51.01028,
+    "lng": -1.97027
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre;getthedata-SP55BJ-CostersLane-HolyTrinity;getthedata-SP55BE-ChurchSt; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Alton",
   "coords": {
-    "lat": 51.1274,
-    "lng": -1.0927
+    "lat": 51.172,
+    "lng": -1.092
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:historic-england-allsaints-SU635418;wikipedia-OSgrid-SU634417;basingstoke-and-deane-bradley; DB-outcode-GU34-but-postcode-region-disputed-GU34/SO24; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

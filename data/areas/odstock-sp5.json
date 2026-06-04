@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0216,
-    "lng": -1.8108
+    "lat": 51.03451,
+    "lng": -1.7926
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre;genuki-OS-SU146262;centroid-rejected-2.2km-N-hospital; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

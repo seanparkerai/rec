@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.147,
-    "lng": -1.7823
+    "lat": 51.13674,
+    "lng": -1.8221
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:listing-centroid(51.13674,-1.82210);getthedata SP4-6PA Upper Meads(51.136208,-1.822106 ~70m); cross-check SP4-6NU nr Bridge Inn 51.1316,-1.8242 & historic-england 37-38 Upper Woodford 51.1294,-1.823; stored 51.147,-1.7823 ~3km NE rejected; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

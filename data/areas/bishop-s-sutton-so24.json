@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0585,
-    "lng": -1.1483
+    "lat": 51.08414,
+    "lng": -1.13764
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki-SU605320;doogal-SO24-0AA;historic-england-1-church-lane; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

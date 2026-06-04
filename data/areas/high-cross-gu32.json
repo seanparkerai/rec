@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 50.9852,
-    "lng": -0.999
+    "lat": 51.03411,
+    "lng": -0.98494
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre(51.03443,-0.98397);doogal-GU32-1EG(51.03411,-0.98494);cross-check village bus stops on High Cross, stored 50.9852 & wiki grid SU713266 rejected as ~5km too far south; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

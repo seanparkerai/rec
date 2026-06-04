@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0503,
-    "lng": -1.2932
+    "lat": 51.00857,
+    "lng": -1.27618
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-SU514234(St Andrews church);zestate-Main-Road-SO21-1LU; two-source agreement ~80m; centroid n=14 rejected (5.5km NW); NOTE id misspelled should be owslebury; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

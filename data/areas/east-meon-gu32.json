@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 50.9977,
-    "lng": -1.008
+    "lat": 50.99448,
+    "lng": -1.03351
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre;getthedata-GU321NH-AllSaints-church;listing-centroid-agree~120m; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.1138,
-    "lng": -1.0259
+    "lat": 51.14373,
+    "lng": -1.0498
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-LowerWield-SU636402;streetcheck-SO24-9RX(Yew Tree pub); two-source agreement; centroid n=11 rejected (4.8km E nr Bentworth); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

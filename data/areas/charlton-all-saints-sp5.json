@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9812,
-    "lng": -1.8009
+    "lat": 51.01331,
+    "lng": -1.7505
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikidata-allsaints-church-coords;wikipedia-OSgrid-SU176241;whites-w3w-SU176241; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

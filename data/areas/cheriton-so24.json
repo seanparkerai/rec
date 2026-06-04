@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0471,
-    "lng": -1.1659
+    "lat": 51.0529,
+    "lng": -1.16956
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre;genuki-osgrid-SU583285;xcheck-StMichael-SU58195-28489(65-105m); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

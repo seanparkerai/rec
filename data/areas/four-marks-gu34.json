@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Alton",
   "coords": {
-    "lat": 51.1006,
-    "lng": -1.0438
+    "lat": 51.1058,
+    "lng": -1.054
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-GU345FE/5GN-core;listing-centroid-agree~80m;WinchesterRd-A31; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

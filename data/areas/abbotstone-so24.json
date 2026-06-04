@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.1073,
-    "lng": -1.1971
+    "lat": 51.10725,
+    "lng": -1.19707
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre-Abbotstone(51.10725,-1.19707);wikipedia OS grid SU5635534533(~51.1073,-1.1971 ~5m); cross-check getthedata SO24-9TE 51.106746,-1.194851 ~160m; no listings; stored already accurate; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

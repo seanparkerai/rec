@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Andover",
   "coords": {
-    "lat": 51.1131,
-    "lng": -1.4941
+    "lat": 51.1275,
+    "lng": -1.49295
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre(51.12729,-1.4931);historic-england-TestViewCottage(51.1278,-1.4928 ~60m);cross-check listing centroid 51.1345 at north end of linear village; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

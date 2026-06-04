@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0097,
-    "lng": -1.4963
+    "lat": 51.0325,
+    "lng": -1.5056
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:GENUKI SU348260;Wikipedia grid SU346261+getthedata; two-source(~150m); listing-centroid n=15 ~4km SE (merged w/Timsbury); 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

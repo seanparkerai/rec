@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0993,
-    "lng": -1.2871
+    "lat": 51.15291,
+    "lng": -1.3251
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:doogal-SO213LW;getthedata-centre-agree~30m;HistoricEngland-HolyTrinity-360m-E;centroid-rejected-4km-S-SouthWonston; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

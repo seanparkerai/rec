@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0762,
-    "lng": -1.8771
+    "lat": 51.078,
+    "lng": -1.9008
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-OSgrid-SU070310;historic-england-burcombe-manor+old-farmhouse-cluster;whites-w3w-SU070310; 2026-06-04",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
