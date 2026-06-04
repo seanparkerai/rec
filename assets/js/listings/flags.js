@@ -1,16 +1,19 @@
 // listing-flags.js — review-screen post-fetch classifier (pure module).
 // No DOM, no storage, no fetch — same discipline as listing-fit.js.
 //
-// Rightmove's source filters can stop flats/land/park-home/retirement-flagged/
-// shared-ownership at the URL (see tools/fetch-listings.mjs), but it has NO
-// auction filter and no reliable "hidden over-55" filter. Those only surface in
-// the listing TEXT, so they're caught here, after the fetch. This saves review
-// effort, NOT money (the listing was already fetched + billed).
+// Rightmove's source filters are MEANT to stop flats/land/park-home/retirement/
+// shared-ownership at the URL (see tools/fetch-listings.mjs), but in practice the
+// scraper honours them only loosely (~26% wrong-type still slips through). So an
+// excluded property TYPE is hidden here too as a backstop (classify.js is the one
+// allow-list). Auction and "hidden over-55" have no source filter at all and only
+// surface in the listing TEXT, so they're caught here as well, after the fetch.
+// This saves review effort, NOT money (the listing was already fetched + billed).
 //
 // Two tiers, by the household's instruction:
-//   • HIDE  — junk you never want: auction lots, over-55 / retirement homes that
-//             slipped past the type filter. Removed from the feed (behind the
-//             "Show hidden" toggle — never destroyed).
+//   • HIDE  — junk you never want: an excluded property type (flat, apartment,
+//             park home, land, retirement…), auction lots, and over-55 / retirement
+//             homes that slipped past the type filter. Removed from the feed (behind
+//             the "Show hidden" toggle — never destroyed).
 //   • FLAG  — judgement calls you still want to SEE, just labelled: new builds
 //             (you're open to them) and condition red-flags from your criteria
 //             (needs modernisation / refurbishment / cash buyers only /
@@ -18,6 +21,8 @@
 //
 // Matching is deliberately conservative: a guard phrase like "no age restriction"
 // must NOT trip the over-55 rule, and only explicit auction phrasing counts.
+
+import { propertyTypeClass } from './classify.js';
 
 const norm = (s) => String(s || '').toLowerCase();
 
@@ -42,7 +47,7 @@ const CONDITION = [
 ];
 
 /** Human labels for the HIDE reasons (chip text when shown via the toggle). */
-export const HIDE_LABELS = { auction: 'Auction', 'over-55': 'Over-55 / retirement' };
+export const HIDE_LABELS = { 'wrong-type': 'Not a house/bungalow', auction: 'Auction', 'over-55': 'Over-55 / retirement' };
 
 /**
  * Classify a single listing's text for the review screen.
@@ -53,6 +58,10 @@ export function classifyListing(listing = {}) {
   const text = norm(`${listing.title || ''} ${listing.description || ''}`);
 
   const hideReasons = [];
+  // An excluded property TYPE (flat/apartment/park home/land/retirement…) is hidden
+  // outright. Only a KNOWN-excluded type hides — an unrecognised/empty type stays
+  // visible (conservative, matching the auction/over-55 guards below).
+  if (listing.property_type && propertyTypeClass(listing.property_type) === 'excluded') hideReasons.push('wrong-type');
   if (AUCTION.test(text)) hideReasons.push('auction');
   const ageHit = AGE_PHRASE.test(text) && !AGE_NEGATION.test(text);
   if (RETIREMENT_BRAND.test(text) || ageHit) hideReasons.push('over-55');

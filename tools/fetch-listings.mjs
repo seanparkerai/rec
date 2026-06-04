@@ -53,6 +53,7 @@ import {
 } from './listings-normalise.mjs';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
+import { passesBaseline } from '../assets/js/listings/classify.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -437,7 +438,7 @@ async function main() {
   if (DRY_RUN) console.log('DRY RUN — no Apify calls or writes will be made');
 
   const now = new Date();
-  let totalRaw = 0, totalKept = 0, totalRejected = 0, totalFlagged = 0, totalWritten = 0, totalPriceChanges = 0;
+  let totalRaw = 0, totalOffBaseline = 0, totalKept = 0, totalRejected = 0, totalFlagged = 0, totalWritten = 0, totalPriceChanges = 0;
 
   for (const target of targets) {
     const oc = target.outcode;
@@ -449,11 +450,18 @@ async function main() {
 
       const normalised = raw.map((r) => normaliseRawListing(r, { outcode: oc, source: SOURCE, now })).filter(Boolean);
 
+      // Hard baseline gate (houses+bungalows · price band · ≥2 beds). The Apify
+      // actor honours the search-URL type/price filters only loosely, so this is
+      // the GUARANTEE: out-of-baseline rows never reach the geofence or the upsert.
+      const inBaseline = normalised.filter((l) => passesBaseline(l));
+      const offBaseline = normalised.length - inBaseline.length;
+      totalOffBaseline += offBaseline;
+
       // L7: the DECISIVE gate is the coordinate geofence against the GLOBAL active
       // village set — not the 20km isInOutcode wrong-region guard (kept only as a
       // diagnostic). Coordinates decide; the listing's own name/postcode text
       // corroborates. corroborated=false → FLAG for audit, never silently dropped.
-      const geo = normalised.map((l) => ({ l, g: withinGeofence(l, { villages: ALL_ACTIVE }) }));
+      const geo = inBaseline.map((l) => ({ l, g: withinGeofence(l, { villages: ALL_ACTIVE }) }));
       const inBuffer = geo.filter((x) => x.g.pass).map((x) => ({
         ...x.l,
         area_id: x.g.area_id,
@@ -463,7 +471,7 @@ async function main() {
         corroborated: x.g.corroborated,
         match_source: x.g.name_match !== null ? 'coordinates+name' : 'coordinates',
       }));
-      const rejected = normalised.length - inBuffer.length;
+      const rejected = inBaseline.length - inBuffer.length;
       totalRejected += rejected;
       // Diagnostic only: how many of the rejected were also out of the coarse region.
       const outOfRegion = geo.filter((x) => !x.g.pass && !isInOutcode(x.l, { outcode: oc, areaCoords: areas })).length;
@@ -478,7 +486,7 @@ async function main() {
       totalFlagged += flagged;
 
       const radiusNote = target.radiusMiles != null ? ` r=${target.radiusMiles.toFixed(1)}mi` : '';
-      console.log(`── ${target.label} (${locId}${radiusNote}): raw ${raw.length} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
+      console.log(`── ${target.label} (${locId}${radiusNote}): raw ${raw.length}${offBaseline ? ` → baseline ${inBaseline.length} [-${offBaseline} off-baseline]` : ''} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
 
       if (DRY_RUN) {
         for (const l of deduped.slice(0, 5)) {
@@ -520,7 +528,7 @@ async function main() {
   }
 
   console.log('\n=== SUMMARY ===');
-  console.log(`raw ${totalRaw} · kept(in-buffer,unique) ${totalKept} · out-of-buffer ${totalRejected} · flagged(corroborated=false) ${totalFlagged} · written ${totalWritten} · price-changes ${totalPriceChanges}`);
+  console.log(`raw ${totalRaw} · off-baseline ${totalOffBaseline} · kept(in-buffer,unique) ${totalKept} · out-of-buffer ${totalRejected} · flagged(corroborated=false) ${totalFlagged} · written ${totalWritten} · price-changes ${totalPriceChanges}`);
 }
 
 // Only run when invoked directly (so the orchestrator can be imported safely).

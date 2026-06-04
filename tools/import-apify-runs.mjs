@@ -32,6 +32,7 @@ import {
   mergePriceHistory,
 } from './listings-normalise.mjs';
 import { loadOutcodeMap } from './fetch-listings.mjs';
+import { passesBaseline } from '../assets/js/listings/classify.js';
 import { pathToFileURL } from 'node:url';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
@@ -132,7 +133,7 @@ async function main() {
 
   const now = new Date();
   const collected = [];
-  let totalRaw = 0, totalRejected = 0;
+  let totalRaw = 0, totalRejected = 0, totalOffBaseline = 0;
 
   for (const run of runs) {
     let raw = [];
@@ -144,6 +145,10 @@ async function main() {
     for (const item of raw) {
       const l = normaliseRawListing(item, { outcode: '', source: SOURCE, now });
       if (!l) continue;
+      // Same hard baseline gate the live fetcher applies — this importer previously
+      // upserted EVERYTHING (flats, park homes, land, over/under-priced), which is
+      // how the table got polluted. Never again.
+      if (!passesBaseline(l)) { totalOffBaseline += 1; continue; }
       const m = matchListingToArea(l, { areas, knownOutcodes });
       if (!m.accepted) { totalRejected += 1; continue; }
       l.outcode = m.outcode;
@@ -162,7 +167,7 @@ async function main() {
       console.log(`    • ${l.address ?? '—'} — £${(l.price ?? 0).toLocaleString('en-GB')} — ${l.beds ?? '?'}bd ${l.property_type ?? ''} → ${l.outcode}/${l.area_id ?? '—'}`);
     }
     console.log('\n=== SUMMARY (dry-run) ===');
-    console.log(`raw ${totalRaw} · unique ${deduped.length} · rejected ${totalRejected} · written 0 (dry-run)`);
+    console.log(`raw ${totalRaw} · off-baseline ${totalOffBaseline} · unique ${deduped.length} · rejected ${totalRejected} · written 0 (dry-run)`);
     return;
   }
 
@@ -193,7 +198,7 @@ async function main() {
   }
 
   console.log('\n=== SUMMARY ===');
-  console.log(`raw ${totalRaw} · unique ${deduped.length} · rejected ${totalRejected} · written ${written}`);
+  console.log(`raw ${totalRaw} · off-baseline ${totalOffBaseline} · unique ${deduped.length} · rejected ${totalRejected} · written ${written}`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {

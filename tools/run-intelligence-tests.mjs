@@ -49,6 +49,7 @@ const { register: registerInvestmentPerformance } = await import('../tests/inves
 const { register: registerSavingsSeries } = await import('../tests/savings-series.test.js');
 const { register: registerOutreachTemplates } = await import('../tests/outreach-templates.test.js');
 const { register: registerListingsNormalise } = await import('../tests/listings-normalise.test.js');
+const { register: registerListingsClassify } = await import('../tests/listings-classify.test.js');
 const { register: registerVerifyAreaCoords } = await import('../tests/verify-area-coords.test.js');
 const { register: registerBackfillGeofence } = await import('../tests/backfill-geofence.test.js');
 const { register: registerResolveAreas } = await import('../tests/resolve-areas.test.js');
@@ -86,6 +87,7 @@ await registerInvestmentPerformance({ test, assert, assertEqual, fixtures });
 await registerSavingsSeries({ test, assert, assertEqual, fixtures });
 await registerOutreachTemplates({ test, assert, assertEqual, fixtures });
 await registerListingsNormalise({ test, assert, assertEqual, fixtures });
+await registerListingsClassify({ test, assert, assertEqual });
 await registerVerifyAreaCoords({ test, assert, assertEqual, fixtures });
 await registerBackfillGeofence({ test, assert, assertEqual, fixtures });
 await registerResolveAreas({ test, assert, assertEqual, fixtures });
