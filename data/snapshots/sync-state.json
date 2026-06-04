@@ -86,9 +86,9 @@
     "_note": "v3 Step5: per-household area location review confirmations blob ({ confirmed: { areaId: isoTimestamp } }), one row/household. 1 row present (count was previously 191 — a copy-paste error from the areas block, corrected 2026-06-03 against live via MCP). Tracked sync table #20 (18 user-state + 2 content)."
   },
   "listings": {
-    "count": 3070,
-    "last_synced_at": "2026-06-04T00:00:00Z",
+    "count": 1415,
+    "last_synced_at": "2026-06-04T02:30:00Z",
     "_class": "live-content",
-    "_note": "v3 L1: fetcher-written live content (NOT git-versioned, NOT one of the 19 tracked git-synced tables). Backfilled 2026-05-31 with 1298 real listings via tools/import-apify-runs.mjs (storage read of already-paid Apify datasets, no new spend) across 12 outcodes; 0 unmatched, 0 out-of-region. 2026-06-04: grown to 3070 rows via subsequent fetches (informational — untracked). Fetcher BASELINE_PRICE_MAX lowered 500k→450k so over-budget listings stop arriving."
+    "_note": "v3 L1: fetcher-written live content (NOT git-versioned, NOT one of the 20 tracked git-synced tables). Backfilled 2026-05-31 with 1298 real listings via tools/import-apify-runs.mjs (storage read of already-paid Apify datasets, no new spend) across 12 outcodes; 0 unmatched, 0 out-of-region. Fetcher BASELINE_PRICE_MAX lowered 500k→450k so over-budget listings stop arriving. 2026-06-04 P5 junk purge (Supabase MCP, user-approved): DELETEd 1,671 baseline-violating rows that were NOT liked (excluded type / >£450k / <£100k / <2 beds); 3,086→1,415, feed-visible 2,539→1,252, 0 baseline-violators remain. The reject SIGNAL persists in the append-only listing_reactions log (unchanged at 3,244) so feed suppression survives the purge; all 20 liked rows preserved. Forward maintenance now via tools/purge-listings.mjs."
   }
 }
