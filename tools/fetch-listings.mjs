@@ -77,7 +77,7 @@ const APIFY_MAX_BUDGET_USD = Number(process.env.APIFY_MAX_BUDGET_USD) || 25;
 
 // Always-on baseline source filters — injected into EVERY Rightmove search URL.
 // Never removed, only tightened by the learned spec.
-const BASELINE_PRICE_MAX = 500000;
+const BASELINE_PRICE_MAX = 450000;
 const BASELINE_MIN_BEDS = 2;
 const BASELINE_DONT_SHOW = 'retirement,sharedOwnership';
 // Always-on property-type allow-list (Rightmove slugs). Rightmove files apartments,

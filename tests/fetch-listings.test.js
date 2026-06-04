@@ -92,7 +92,7 @@ export async function register({ test, assert, assertEqual }) {
   test('fetch-listings: baseline price cap always applied', () => {
     const url = buildSearchUrl('OUTCODE^1');
     assert(url.includes(`maxPrice=${BASELINE_PRICE_MAX}`), `£${BASELINE_PRICE_MAX} cap always in URL`);
-    assertEqual(BASELINE_PRICE_MAX, 500000, 'baseline is £500k hard cap');
+    assertEqual(BASELINE_PRICE_MAX, 450000, 'baseline is £450k hard cap');
   });
 
   test('fetch-listings: baseline min beds always applied', () => {

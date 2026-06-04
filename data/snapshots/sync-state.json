@@ -68,10 +68,10 @@
     "_note": "empty — no other debts entered; no app UI yet"
   },
   "listing_reactions": {
-    "count": 2979,
-    "last_synced_at": "2026-06-04T01:06:48.002Z",
+    "count": 3244,
+    "last_synced_at": "2026-06-04T00:00:00Z",
     "_class": "user-state (append-only)",
-    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). 1136 rows as of 2026-06-04 (264 on 2026-06-03; 0 at table creation 2026-05-30). 2026-06-04: bulk reject batches via MCP — unwanted property types (Flat/Apartment/Penthouse→wrong_house_type/flat, plus Maisonette/Ground Flat/Ground Maisonette/Retirement/Coach House/Park Home/Land/Plot/Mobile Home/House Share/HMO/Garages/Farm Land/Equestrian/Not Specified→reject) and all chillworth-so16 listings→reject/wrong_area. Append-only — Supabase always wins; snapshot pulled live via MCP, never written back by Claude. Tracked sync table #18 (16 user-state + 2 content)."
+    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). 1136 rows as of 2026-06-04 (264 on 2026-06-03; 0 at table creation 2026-05-30). 2026-06-04: bulk reject batches via MCP — unwanted property types (Flat/Apartment/Penthouse→wrong_house_type/flat, plus Maisonette/Ground Flat/Ground Maisonette/Retirement/Coach House/Park Home/Land/Plot/Mobile Home/House Share/HMO/Garages/Farm Land/Equestrian/Not Specified→reject) and all chillworth-so16 listings→reject/wrong_area. 2026-06-04: PRICE-BAND batch — 265 active listings priced >£440k bulk-rejected reject/too_expensive (reasons sub-detail over_budget → price-band training signal), with snapshots so weights.js#isTraining keeps them; the 1 over-£440k liked listing preserved (§18.5). Active pool 945→680. Append-only — Supabase always wins; snapshot pulled live via MCP, never written back by Claude. Tracked sync table #18 (16 user-state + 2 content)."
   },
   "learned_preferences": {
     "count": 1,
@@ -86,9 +86,9 @@
     "_note": "v3 Step5: per-household area location review confirmations blob ({ confirmed: { areaId: isoTimestamp } }), one row/household. 1 row present (count was previously 191 — a copy-paste error from the areas block, corrected 2026-06-03 against live via MCP). Tracked sync table #20 (18 user-state + 2 content)."
   },
   "listings": {
-    "count": 1298,
-    "last_synced_at": "2026-05-31T02:07:30.988Z",
+    "count": 3070,
+    "last_synced_at": "2026-06-04T00:00:00Z",
     "_class": "live-content",
-    "_note": "v3 L1: fetcher-written live content (NOT git-versioned, NOT one of the 19 tracked git-synced tables). Backfilled 2026-05-31 with 1298 real listings via tools/import-apify-runs.mjs (storage read of already-paid Apify datasets, no new spend) across 12 outcodes; 0 unmatched, 0 out-of-region."
+    "_note": "v3 L1: fetcher-written live content (NOT git-versioned, NOT one of the 19 tracked git-synced tables). Backfilled 2026-05-31 with 1298 real listings via tools/import-apify-runs.mjs (storage read of already-paid Apify datasets, no new spend) across 12 outcodes; 0 unmatched, 0 out-of-region. 2026-06-04: grown to 3070 rows via subsequent fetches (informational — untracked). Fetcher BASELINE_PRICE_MAX lowered 500k→450k so over-budget listings stop arriving."
   }
 }
