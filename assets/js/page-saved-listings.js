@@ -94,7 +94,15 @@ function buildCard(listing, { reaction, rating, onSave, onRate }) {
     meta ? el('p', { class: 'listing-card__meta num' }, meta) : null,
     buildPositives(reaction?.reasons),
     el('div', { class: 'listing-controls' }, [
-      buildReasonPicker({ variant: 'row', current: reaction, onSave: (d) => onSave(listing, d) }),
+      // The like/reasons/Save controls are collapsed by default on Saved — the
+      // "why you liked it" chips above already summarise the decision, and the
+      // full editor also lives in the dossier. A native <details> keeps it
+      // editable here without the buttons crowding every card on load
+      // (keyboard- and reduced-motion-friendly; no JS).
+      el('details', { class: 'listing-react-toggle' }, [
+        el('summary', { class: 'listing-react-toggle__summary' }, 'Edit reaction'),
+        buildReasonPicker({ variant: 'row', current: reaction, onSave: (d) => onSave(listing, d) }),
+      ]),
       buildRatingControl({ value: rating, onChange: (n) => onRate(listing, n) }),
     ]),
     listing.url

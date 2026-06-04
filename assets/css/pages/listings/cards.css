@@ -137,6 +137,29 @@
 .listing-controls > .listing-rating-wrap {
   align-self: flex-start; padding-top: var(--space-3); border-top: 1px solid var(--hairline);
 }
+
+/* Saved page: the reaction editor is collapsed by default behind a quiet
+   disclosure so cards stay calm on load (the "why you liked it" chips above
+   already summarise it). Native <details> — keyboard-accessible, no JS. */
+.listing-react-toggle { width: 100%; }
+.listing-react-toggle > summary {
+  list-style: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  min-height: 32px; /* comfortable target (§11) */
+  font-family: var(--font-body); font-size: var(--text-sm); color: var(--ink-muted);
+  transition: color 0.12s;
+}
+.listing-react-toggle > summary::-webkit-details-marker { display: none; }
+.listing-react-toggle > summary::before {
+  content: "›"; display: inline-block; font-size: 1.1em; line-height: 1;
+  color: var(--ink-muted); transition: transform 0.15s ease;
+}
+.listing-react-toggle[open] > summary::before { transform: rotate(90deg); }
+.listing-react-toggle > summary:hover { color: var(--ink); }
+.listing-react-toggle > summary:focus-visible {
+  outline: var(--focus-ring); outline-offset: 2px; border-radius: var(--rec-radius-sm);
+}
+.listing-react-toggle[open] > .reaction-picker--row { width: 100%; margin-top: var(--space-2); }
 .listing-react { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
 /* Row-variant verbs read as proper buttons (comfortable 40px target, §10/§11). */
 .reaction-picker--row .listing-react__btn { min-height: 40px; padding: 0.4rem 0.95rem; font-size: var(--text-sm); }
