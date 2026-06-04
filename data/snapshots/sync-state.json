@@ -27,8 +27,8 @@
   },
   "areas": {
     "count": 192,
-    "last_synced_at": "2026-06-03T23:08:53Z",
-    "_note": "count = directory INDEX entries (data/areas.json), built from data/source/villages.csv (192 villages). The per-area files (data/areas/*.json) AND the Supabase areas mirror are 196: the 4 extra are deactivated duplicate-Rightmove / merged variants intentionally kept out of the index — charlwood-so24, colemore-gu32, flexcombe-gu33, froxfield-green-gu32 (flexcombe-gu33 research merged into the canonical flexcombe-gu32). Guarded by tests/areas-index-sync.test.js. (Corrected 2026-06-03: the prior note's gu34 ids were stale.) 2026-06-03: 100 areas down-synced from Supabase (DB was source for this run); repo now 192 researched + 1 partial (lane-end-so21) + 3 directory (ebble-sp5, newtown-sp5, worthy-down-so21 — not yet researched in Supabase). 2026-06-03: added whiteley-po15 (researched)."
+    "last_synced_at": "2026-06-04T00:38:51Z",
+    "_note": "count = directory INDEX entries (data/areas.json), built from data/source/villages.csv (192 villages). The per-area files (data/areas/*.json) AND the Supabase areas mirror are 196: the 4 extra are deactivated duplicate-Rightmove / merged variants intentionally kept out of the index — charlwood-so24, colemore-gu32, flexcombe-gu33, froxfield-green-gu32 (flexcombe-gu33 research merged into the canonical flexcombe-gu32). Guarded by tests/areas-index-sync.test.js. (Corrected 2026-06-03: the prior note's gu34 ids were stale.) 2026-06-03: 100 areas down-synced from Supabase (DB was source for this run); repo now 192 researched + 1 partial (lane-end-so21) + 3 directory (ebble-sp5, newtown-sp5, worthy-down-so21 — not yet researched in Supabase). 2026-06-03: added whiteley-po15 (researched). 2026-06-04: chillworth-so16 set active:false (soft-ignored — pruned from the fetcher's L7.5 active set; still in index/mirror); its 277 listings rejected."
   },
   "house_types": {
     "count": 15,
@@ -68,10 +68,10 @@
     "_note": "empty — no other debts entered; no app UI yet"
   },
   "listing_reactions": {
-    "count": 264,
-    "last_synced_at": "2026-06-03T11:32:26.191Z",
+    "count": 1136,
+    "last_synced_at": "2026-06-04T00:37:54.120Z",
     "_class": "user-state (append-only)",
-    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). 264 rows from portal use as of 2026-06-03 (0 at table creation 2026-05-30). Append-only — Supabase always wins; snapshot pulled live via MCP, never written back by Claude. Tracked sync table #18 (16 user-state + 2 content)."
+    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). 1136 rows as of 2026-06-04 (264 on 2026-06-03; 0 at table creation 2026-05-30). 2026-06-04: bulk reject batches via MCP — unwanted property types (Flat/Apartment/Penthouse→wrong_house_type/flat, plus Maisonette/Ground Flat/Ground Maisonette/Retirement/Coach House/Park Home/Land/Plot/Mobile Home/House Share/HMO/Garages/Farm Land/Equestrian/Not Specified→reject) and all chillworth-so16 listings→reject/wrong_area. Append-only — Supabase always wins; snapshot pulled live via MCP, never written back by Claude. Tracked sync table #18 (16 user-state + 2 content)."
   },
   "learned_preferences": {
     "count": 1,
