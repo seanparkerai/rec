@@ -80,6 +80,8 @@ export function purgeDecision(row, ctx) {
   if (!row) return null;
   if (likedIds && likedIds.has(String(row.rightmove_id))) return null;       // liked → protected
   if (!passesBaseline(row)) return 'baseline';
+  const NEW_BUILD_RE = /\bnew\s+(?:build|home)\b|\bnhbc\b/i;
+  if (NEW_BUILD_RE.test(row.title ?? '') || NEW_BUILD_RE.test(row.description ?? '')) return 'new-build';
   const age = ageInDays(row, now);
   if (rejectedSets && isDecided(row, rejectedSets) && age > rejectHalfLifeDays) return 'rejected-stale';
   if (age > staleDays) return 'stale';

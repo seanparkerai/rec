@@ -42,8 +42,8 @@ export function isAllowedPropertyType(type) {
 // The actor honours the search-URL price/type filters only loosely (~26% wrong
 // type, ~15% over-ceiling slip through), so this gate is the GUARANTEE applied
 // post-normalise in BOTH the live fetcher and the backfill importer.
-export const BASELINE_PRICE_MIN = 100000;   // below this a 2-bed house here is a share/auction guide/park home
-export const BASELINE_PRICE_MAX = 450000;   // statutory-LISA-aligned ceiling
+export const BASELINE_PRICE_MIN = 250000;   // owner-set floor (2026-06-04)
+export const BASELINE_PRICE_MAX = 425000;   // owner-set ceiling (2026-06-04)
 export const BASELINE_MIN_BEDS  = 2;
 
 /**

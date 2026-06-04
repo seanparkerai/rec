@@ -3,7 +3,7 @@
 // threaded into the Rightmove URL, the post-filter drops excluded types and
 // stale listings, learned-favourite outcodes are processed first, and the
 // always-on baseline (price cap, min beds, dontShow) is verified.
-import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
+import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-05-31T00:00:00Z');
@@ -69,7 +69,7 @@ export async function register({ test, assert, assertEqual }) {
     const url = buildSearchUrl('OUTCODE^123');
     assert(url.includes('locationIdentifier=OUTCODE^123'), 'carries the location id with literal ^ (not %5E)');
     assert(url.includes('maxDaysSinceAdded=3'), 'default 3-day cron overlap');
-    assert(!url.includes('minPrice'), 'no learned price floor without a spec');
+    assert(url.includes(`minPrice=${BASELINE_PRICE_MIN}`), 'baseline price floor always present');
     // Baseline params are always present even without a spec.
     assert(url.includes(`maxPrice=${BASELINE_PRICE_MAX}`), 'baseline price cap always present');
     assert(url.includes(`minBedrooms=${BASELINE_MIN_BEDS}`), 'baseline min beds always present');
@@ -92,7 +92,7 @@ export async function register({ test, assert, assertEqual }) {
   test('fetch-listings: baseline price cap always applied', () => {
     const url = buildSearchUrl('OUTCODE^1');
     assert(url.includes(`maxPrice=${BASELINE_PRICE_MAX}`), `£${BASELINE_PRICE_MAX} cap always in URL`);
-    assertEqual(BASELINE_PRICE_MAX, 450000, 'baseline is £450k hard cap');
+    assertEqual(BASELINE_PRICE_MAX, 425000, 'baseline is £425k hard cap');
   });
 
   test('fetch-listings: baseline min beds always applied', () => {
@@ -102,11 +102,11 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   test('fetch-listings: a learned spec narrows the Apify query', () => {
-    const spec = { recencyDays: 14, priceMin: 250000, priceMax: 450000, minBeds: 3, excludeTypes: [], focusOutcodes: [] };
+    const spec = { recencyDays: 14, priceMin: 300000, priceMax: 400000, minBeds: 3, excludeTypes: [], focusOutcodes: [] };
     const url = buildSearchUrl('OUTCODE^123', spec);
     assert(url.includes('maxDaysSinceAdded=14'), 'recency window from spec');
-    assert(url.includes('minPrice=250000'), 'price floor');
-    assert(url.includes('maxPrice=450000'), 'price ceiling tightened below baseline');
+    assert(url.includes('minPrice=300000'), 'price floor tightened above baseline');
+    assert(url.includes('maxPrice=400000'), 'price ceiling tightened below baseline');
     assert(url.includes('minBedrooms=3'), 'bed minimum tightened above baseline');
     // Baseline exclusions still present alongside the spec.
     assert(url.includes('dontShow='), 'dontShow still present with spec');
