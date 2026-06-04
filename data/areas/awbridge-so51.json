@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Awbridge is a small Test Valley village and civil parish about three miles north-west of Romsey, near the River Test. It has a traditional Hampshire village profile, with scattered housing, village facilities and strong access to surrounding countryside. The location balances rural character with relatively quick links to Romsey and Southampton employment centres.",
   "character": "Traditional village/parish character with quiet lanes and community-led local life.",
   "amenities": [
@@ -30,12 +30,12 @@
   ],
   "schools": [
     {
+      "url": "https://www.awbridge.hants.sch.uk/",
       "name": "Awbridge Primary School",
-      "phase": "Primary",
       "type": "State",
+      "phase": "Primary",
       "ofsted": null,
-      "distance": "In village",
-      "url": "https://www.awbridge.hants.sch.uk/"
+      "distance": "In village"
     }
   ],
   "transport": {
@@ -43,20 +43,20 @@
       {
         "to": "Romsey",
         "mode": "Drive",
-        "typical": "~10 min",
-        "notes": "closest town and station"
+        "notes": "closest town and station",
+        "typical": "~10 min"
       },
       {
         "to": "Southampton",
         "mode": "Drive",
-        "typical": "~25–35 min",
-        "notes": "A3057/M27 corridor"
+        "notes": "A3057/M27 corridor",
+        "typical": "~25–35 min"
       }
     ]
   },
   "prices": {
-    "summary": "SO51 pricing reflects Romsey/Test Valley demand with village premiums in quieter lanes.",
     "asOf": "2026-04",
+    "summary": "SO51 pricing reflects Romsey/Test Valley demand with village premiums in quieter lanes.",
     "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO51.html"
   },
   "thingsToDo": [
@@ -81,26 +81,26 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Awbridge",
-      "url": "https://en.wikipedia.org/wiki/Awbridge"
+      "url": "https://en.wikipedia.org/wiki/Awbridge",
+      "label": "Wikipedia — Awbridge"
     },
     {
-      "label": "Awbridge village site",
-      "url": "https://www.awbridge.info/"
+      "url": "https://www.awbridge.info/",
+      "label": "Awbridge village site"
     },
     {
-      "label": "Rightmove House Prices SO51",
-      "url": "https://www.rightmove.co.uk/house-prices/SO51.html"
+      "url": "https://www.rightmove.co.uk/house-prices/SO51.html",
+      "label": "Rightmove House Prices SO51"
     },
     {
-      "label": "Awbridge Primary School",
-      "url": "https://www.awbridge.hants.sch.uk/"
+      "url": "https://www.awbridge.hants.sch.uk/",
+      "label": "Awbridge Primary School"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^805605",
+    "resolvedAt": "2026-06-02T21:14:04.758Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:04.758Z"
+    "locationIdentifier": "POSTCODE^805605"
   }
 }

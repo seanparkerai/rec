@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Shootash is a small hamlet in the north of Wellow civil parish in the Test Valley district of Hampshire, strung along the A27 Romsey-to-Whiteparish road about 2.5 miles west of Romsey. Originally just a few farmsteads, woodland and common land, it developed into a small roadside hamlet through the 20th century. The village of West Wellow lies about 2 miles south-west, and the New Forest is close by. Shootash has no shops or pub of its own, with everyday and fuller amenities in Romsey, including two supermarkets, schools and a railway station.",
   "character": "A small, dispersed roadside hamlet of houses, bungalows, barn conversions and farms in open Test Valley countryside on the edge of the New Forest. The feel is quiet and rural, though the A27 runs through it; many properties sit on generous plots along lanes off the main road.",
   "amenities": [

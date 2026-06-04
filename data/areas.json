@@ -765,13 +765,13 @@
     "id": "monkwood-so24",
     "name": "Monkwood",
     "village": "Monkwood",
-    "town": "Petersfield",
+    "town": "Winchester",
     "county": "Hampshire",
     "postcode": "SO24",
     "hubCity": "Southampton",
     "regionDir": "North",
     "settlementType": "Non-City",
-    "subRegion": "Petersfield",
+    "subRegion": "Winchester",
     "coords": {
       "lat": 51.0841,
       "lng": -1.033
@@ -951,7 +951,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "dunbridge-so51",
@@ -975,7 +975,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "lockerley-so51",
@@ -999,7 +999,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "sherfield-english-so51",
@@ -1023,7 +1023,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "bramshaw-so43",
@@ -1701,7 +1701,7 @@
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,
     "searchRadiusMi": 3,
-    "active": true
+    "active": false
   },
   {
     "id": "stockbridge-so20",

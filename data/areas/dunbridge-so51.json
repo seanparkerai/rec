@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Dunbridge is a Hampshire village/locality in the SO51 area with a long rural settlement history and close links to nearby market towns. Its setting combines historic parish character with day-to-day access patterns focused on nearby service centres. Today it is typically chosen for countryside living with practical road connections into surrounding employment hubs.",
   "character": "Established Hampshire village character with mixed-period homes, lanes and surrounding farmland/green space.",
   "amenities": [
@@ -30,20 +30,20 @@
   ],
   "schools": [
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Dunbridge area primary option",
-      "phase": "Primary",
       "type": "State",
+      "phase": "Primary",
       "ofsted": null,
-      "distance": "~1-5 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~1-5 miles"
     },
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Romsey catchment secondary option",
-      "phase": "Secondary",
       "type": "State",
+      "phase": "Secondary",
       "ofsted": null,
-      "distance": "~4-10 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~4-10 miles"
     }
   ],
   "transport": {
@@ -51,20 +51,20 @@
       {
         "to": "Romsey",
         "mode": "Drive",
-        "typical": "~15-35 min",
-        "notes": "Depends on exact address and route"
+        "notes": "Depends on exact address and route",
+        "typical": "~15-35 min"
       },
       {
         "to": "Southampton",
         "mode": "Drive",
-        "typical": "~30-55 min",
-        "notes": "Via major A-road/M27 corridors where relevant"
+        "notes": "Via major A-road/M27 corridors where relevant",
+        "typical": "~30-55 min"
       }
     ]
   },
   "prices": {
-    "summary": "SO51 pricing reflects wider Hampshire demand patterns, with village stock often commanding premiums when supply is limited.",
     "asOf": "2026-05",
+    "summary": "SO51 pricing reflects wider Hampshire demand patterns, with village stock often commanding premiums when supply is limited.",
     "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO51.html"
   },
   "thingsToDo": [
@@ -89,26 +89,26 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Dunbridge",
-      "url": "https://en.wikipedia.org/wiki/Dunbridge"
+      "url": "https://en.wikipedia.org/wiki/Dunbridge",
+      "label": "Wikipedia — Dunbridge"
     },
     {
-      "label": "Hampshire County Council — Find a school",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
+      "label": "Hampshire County Council — Find a school"
     },
     {
-      "label": "Rightmove House Prices SO51",
-      "url": "https://www.rightmove.co.uk/house-prices/SO51.html"
+      "url": "https://www.rightmove.co.uk/house-prices/SO51.html",
+      "label": "Rightmove House Prices SO51"
     },
     {
-      "label": "National Rail stations and journey info",
-      "url": "https://www.nationalrail.co.uk/"
+      "url": "https://www.nationalrail.co.uk/",
+      "label": "National Rail stations and journey info"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^3893486",
+    "resolvedAt": "2026-06-02T21:14:42.831Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:42.831Z"
+    "locationIdentifier": "POSTCODE^3893486"
   }
 }

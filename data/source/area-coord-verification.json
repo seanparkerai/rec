@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-04T16:25:00.643Z",
+  "generatedAt": "2026-06-04T19:50:15.789Z",
   "online": false,
   "counts": {
     "areas": 196,
@@ -2776,7 +2776,7 @@
         "nearestCentroidKm": 8.17,
         "nameInList": true,
         "matchedVillage": "Monkwood",
-        "matchedTown": "Petersfield",
+        "matchedTown": "Winchester",
         "strictNameHit": true,
         "reverseGeocode": "skipped"
       }

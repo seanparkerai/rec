@@ -20,7 +20,7 @@
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
-  "active": true,
+  "active": false,
   "overview": "Lockerley is a village in the Test Valley in Hampshire, on the southern bank of the River Dun about 6 miles north-west of Romsey and 11 miles from Salisbury. It is an attractive collection of greens (centred on Butts Green) with a strong community spirit and around 35 clubs and societies. The 12th-century church of St John the Evangelist is a fine example of Norman architecture, and the village was historically part of the landholdings of Romsey Abbey.",
   "character": "A scenic, green-centred Test Valley village with a notably active community and a semi-rural feel, surrounded by rolling hills and ancient woodland.",
   "amenities": [

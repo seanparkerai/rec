@@ -74,7 +74,7 @@
       "lng": -1.5256
     },
     "coordsSource": "os-opendata:place-centre",
-    "active": true
+    "active": false
   },
   {
     "id": "barford-st-martin-sp5",
@@ -613,7 +613,7 @@
       "lng": -1.5122
     },
     "coordsSource": "os-opendata:place-centre",
-    "active": true
+    "active": false
   },
   {
     "id": "dundridge-so32",
@@ -1130,7 +1130,7 @@
       "lng": -1.5439
     },
     "coordsSource": "os-opendata:place-centre",
-    "active": true
+    "active": false
   },
   {
     "id": "longstock-so20",
@@ -1559,7 +1559,7 @@
       "lng": -1.5524
     },
     "coordsSource": "os-opendata:place-centre",
-    "active": true
+    "active": false
   },
   {
     "id": "sherrington-ba12",
@@ -1581,7 +1581,7 @@
       "lng": -1.548
     },
     "coordsSource": "os-opendata:place-centre",
-    "active": true
+    "active": false
   },
   {
     "id": "shorley-so24",
