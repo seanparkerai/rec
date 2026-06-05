@@ -3,6 +3,13 @@
 Tick items as completed and **commit**. To resume in a fresh chat: read this file, then `docs/PLAN.md` +
 `docs/CONTEXT.md`, run `node tools/area-status.mjs`, run tests, continue at the first unchecked box.
 
+> **▶ ACTIVE PLAN — Model Refinement Engine ("the decision plan"):** full staged
+> plan + live checklist + progress log live in **`docs/REFINEMENT_PLAN.md`**. If asked to
+> *"pick up the decision plan work,"* open that file and follow its RESUME banner.
+> **Current state (2026-06-05):** plan captured/persisted; **Stage 1 not started** —
+> next is schema discovery → `SCHEMA_NOTES.md` → confirm Section 5 constants with Luke
+> before any migration.
+
 **Status (reconciled 2026-05-30):** The app is well past the original eight-page plan. Shipped since:
 the data-model / intelligence-engine expansion, the investments split, the 5-band dashboard overhaul
 (A1–B5), Supabase as the live backend (auth + 20 tables, RLS), and the JS/CSS module refactor. Pages
