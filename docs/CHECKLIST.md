@@ -7,10 +7,12 @@ Tick items as completed and **commit**. To resume in a fresh chat: read this fil
 > plan + live checklist + progress log live in **`docs/REFINEMENT_PLAN.md`**; live schema
 > facts in **`docs/SCHEMA_NOTES.md`**. If asked to *"pick up the decision plan work,"*
 > open `REFINEMENT_PLAN.md` and follow its RESUME banner.
-> **Current state (2026-06-05):** **Stage 1 COMPLETE & merged** (schema discovered;
-> migration `refinement_engine_stage1` applied — 3 empty RLS tables). **Next: Stage 2** —
-> the pure statistical engine module + unit tests (no UI, no writes). One open item:
-> confirm/adjust the Section 5 (Cautious) constants before Stage 2 wires them in.
+> **Current state (2026-06-05):** **Stage 2 COMPLETE** — the pure statistical engine
+> (`assets/js/refinement/engine.js` + config `…/config.js`, Cautious shipped) and 19
+> unit tests (`tests/refinement-engine.test.js`); harness green 513/513; still no UI,
+> no DB writes (3 engine tables empty). Section 5 (Cautious) constants confirmed & wired.
+> Stage 1 remains COMPLETE (migration `refinement_engine_stage1`, 3 empty RLS tables).
+> **Next: Stage 3** — suggestion generation + persistence (notify-only, still no UI).
 
 **Status (reconciled 2026-05-30):** The app is well past the original eight-page plan. Shipped since:
 the data-model / intelligence-engine expansion, the investments split, the 5-band dashboard overhaul

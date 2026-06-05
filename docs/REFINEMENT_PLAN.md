@@ -21,23 +21,24 @@
 >    this file together with the code.
 >
 > **Current status — _as of 2026-06-05_:**
-> - **Active stage:** Stage 1 (Foundations) — **COMPLETE & MERGED to `main`.**
->   **Next: Stage 2** (the pure statistical engine module + unit tests — no UI,
->   no DB writes).
-> - **Done so far:** plan persisted; live schema discovered via MCP and written to
->   `docs/SCHEMA_NOTES.md`; migration `refinement_engine_stage1` applied (3 empty
->   tables — `refinement_suggestions`, `refinement_runs`, `scrape_probation` —
->   RLS-enabled, mirrored into `supabase/schema.sql`); harness green.
-> - **Next action:** begin Stage 2 — build the deterministic engine in a new pure
->   module (Section 2 spec): normalisation → decayed counts → Wilson lower bound →
->   lift + two-proportion test → Benjamini-Hochberg FDR → the five gates + tiers +
->   ranking + `volume_artefact`. Add the unit tests listed in the Stage 2 box.
->   Read `docs/SCHEMA_NOTES.md` first — it has the real shapes and key facts
->   (esp. the ~98.7% reject baseline → **lift is the binding gate**).
-> - **Open item for Luke (non-blocking):** the Section 5 constants are the
->   documented **Cautious** defaults (Luke's prior choice), treated as confirmed
->   so Stage 1 could proceed. They live in a Stage 2 config module, not the
->   schema. **Confirm or adjust them before Stage 2 wires them into code.**
+> - **Active stage:** Stage 2 (Statistical engine) — **COMPLETE.**
+>   **Next: Stage 3** (suggestion generation + persistence — run the engine on a
+>   schedule, upsert `refinement_suggestions`, record `refinement_runs`, advance the
+>   persistence counter, log to `sync_log` `actor='system'`; still notify-only, no
+>   scope/listing mutation).
+> - **Done so far:** Stage 1 foundations (schema discovered → `docs/SCHEMA_NOTES.md`;
+>   migration `refinement_engine_stage1` — 3 empty RLS tables). Stage 2: the pure
+>   deterministic engine `assets/js/refinement/engine.js` + the single config module
+>   `assets/js/refinement/config.js` (Cautious shipped), 19 unit tests in
+>   `tests/refinement-engine.test.js`, harness green (513/513). No UI, no DB writes —
+>   the 3 engine tables are still empty.
+> - **Next action:** begin Stage 3 — wrap `runRefinementEngine()` in a job that
+>   snapshots reactions, persists results, and advances `runs_qualified` (the engine
+>   already takes injected `priorRunsQualified` for the persistence gate). Respect
+>   `dismissals`/`snoozed_until`. Read SCHEMA_NOTES §8 (engine-table tracking decision)
+>   and §3 first.
+> - **Constants:** the Section 5 **Cautious** defaults are confirmed (Luke, this
+>   session) and wired into `assets/js/refinement/config.js`. No change requested.
 >
 > **The golden rule (never violate):** the engine *proposes*; it never mutates
 > the scrape scope and never hides a listing without an explicit user
@@ -308,21 +309,38 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
   advisor clean for the new tables (no new RLS warnings).
 - **Merge gate:** ✅ merged to `main` — schema + empty tables, **no behaviour
   change** to the live app (no UI, no writes, no scope mutation).
-### Stage 2 — Statistical engine (pure module, no UI, no writes)
+### Stage 2 — Statistical engine (pure module, no UI, no writes) ✅ COMPLETE (2026-06-05)
 **Goal:** implement Section 2 exactly, with tests.
-- [ ] Normalisation + decayed counts (`n_eff`, `k_eff`, `p_hat`,
-      `distinct_rejected_listings`).
-- [ ] Wilson lower bound with small-n continuity correction.
-- [ ] Baseline, lift, two-proportion test, Benjamini-Hochberg FDR.
-- [ ] The five gates + confidence tiers + ranking + `volume_artefact` flag.
-- [ ] **Unit tests** covering: small-sample penalty (7/8 must rank below
-      870/1000); volume-artefact detection (high count, lift≈1 → not actionable);
-      decay (stale pattern fades); FDR (many noisy values → few/zero false
-      actionables); duplicate-key normalisation (`bemerton-sp2` variants collapse).
-- **Acceptance:** all tests green; feeding in the current `listing_reactions`
-  snapshot produces a sensible ranked list (mid-terrace surfaces above
-  detached/semi on the type dimension).
-- **Merge gate:** module + tests merged to `main`; still no UI, no writes.
+- [x] Normalisation + decayed counts (`n_eff`, `k_eff`, `p_hat`,
+      `distinct_rejected_listings`). → `assets/js/refinement/engine.js`
+      (`normaliseValue`, `extractValue` snapshot→listings fallback, `decayWeight`,
+      `aggregate`).
+- [x] Wilson lower bound with small-n continuity correction (`wilsonLowerBound`,
+      Newcombe CC applied below `CONTINUITY_N_MAX`=30).
+- [x] Baseline, lift, two-proportion test, Benjamini-Hochberg FDR
+      (`twoProportionPValue` one-sided, `benjaminiHochberg`, per-dimension family
+      via `FDR_PER_DIMENSION`).
+- [x] The five gates + confidence tiers + ranking + `volume_artefact` flag
+      (gates 1–5 incl. injected `priorRunsQualified` for persistence; `tierFor`
+      §2.7 boundaries; `rankCmp` wilson→lift→n_eff; artefact = lift≤1 & high count).
+      All tunables in one config module `assets/js/refinement/config.js` (Cautious
+      preset shipped; `PRESETS`/`FIXED`/`resolveConfig`).
+- [x] **Unit tests** (`tests/refinement-engine.test.js`, 19 cases) covering:
+      small-sample penalty (7/8 ranks below 870/1000); volume-artefact (high count,
+      lift≈1 → flagged, not actionable); decay (stale pattern fades below the
+      sample gate); FDR (40 noisy values → 0 actionable, ≤2 FDR hits + direct BH
+      tests); duplicate-key normalisation (`bemerton-sp2` variants collapse); plus
+      the full actionable/persistence path and the global-gate guard.
+- **Acceptance:** ✅ harness green (513/513 via `node tools/run-intelligence-tests.mjs`;
+  sync suite 11/0/3-skipped). Feeding the live `listing_reactions` distribution
+  ranks **terraced** (the mid-terrace equivalent; there is no literal "mid-terrace"
+  type) above **detached** and **semi-detached** — confirmed both in-test and live
+  via MCP (terraced wilson_lower 0.9909 / lift 1.0137 > detached 0.9835 / 1.0060 >
+  semi-detached 0.9481 / 0.9801). The ~98.7% baseline caps lift at ≈1.01, so
+  **nothing clears MIN_LIFT 1.6 → zero actionable**: the lift gate binds exactly as
+  SCHEMA_NOTES §1 predicted.
+- **Merge gate:** ✅ module + tests on the working branch; still **no UI, no writes,
+  no scope mutation** (the 3 engine tables remain empty).
 ### Stage 3 — Suggestion generation + persistence (notify-only, still no UI)
 **Goal:** run the engine on a schedule and persist results.
 - [ ] A job/function that: snapshots reactions → runs the engine → upserts
@@ -440,6 +458,19 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 2 COMPLETE.** Built the pure, deterministic engine
+  `assets/js/refinement/engine.js` (normalise → decayed `n_eff`/`k_eff`/`p_hat`/
+  `distinct_rejected_listings` → Wilson lower bound w/ Newcombe continuity correction
+  <30 → baseline `p0` + lift + one-sided two-proportion test → Benjamini-Hochberg FDR
+  → 5 gates + tiers + wilson→lift→n_eff ranking + `volume_artefact`) and the single
+  config module `assets/js/refinement/config.js` (Cautious shipped; preset matrix +
+  fixed constants + `resolveConfig`). 19 unit tests in `tests/refinement-engine.test.js`
+  (all 5 named cases + actionable/persistence path + global-gate guard); wired into the
+  runner. Harness green **513/513**. Live MCP check: terraced (wilson 0.9909/lift 1.014)
+  ranks above detached (0.9835/1.006) & semi-detached (0.9481/0.980); ~98.7% baseline
+  caps lift ≈1.01 ⇒ **0 actionable** (lift gate binds, per SCHEMA_NOTES §1). No UI, no
+  DB writes, no scope mutation — 3 engine tables still empty. Supabase: pushed 0 areas,
+  0 user-state rows. **Next: Stage 3.**
 - **2026-06-05** — **Stage 1 COMPLETE → merged to `main`.** Discovered live schema
   via Supabase MCP → `docs/SCHEMA_NOTES.md` (key fact: ~98.7% raw reject baseline
   ⇒ lift is the binding gate; `overrides`/`dismissals` empty; `listings.status`
