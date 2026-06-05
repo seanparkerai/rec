@@ -371,7 +371,8 @@ async function render() {
   let retrainTimer = null;
   // Persist on Save (the consolidated decision) — one clean append-only row.
   const onSave = async ({ reaction, reasons }) => {
-    await saveListingReaction({ listing_id: listing.rightmove_id, reaction, reasons, listing_snapshot: snapshotOf(listing) });
+    const saved = await saveListingReaction({ listing_id: listing.rightmove_id, reaction, reasons, listing_snapshot: snapshotOf(listing) });
+    if (!saved) throw new Error('Failed to save reaction');
     if (retrainTimer) clearTimeout(retrainTimer);
     retrainTimer = setTimeout(() => { recomputeLearnedPreferences({ now: new Date() }).catch(() => {}); }, 1500);
   };

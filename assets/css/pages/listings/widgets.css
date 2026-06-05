@@ -32,7 +32,7 @@
 }
 
 /* Save — the unmistakable primary action that consolidates the decision. */
-.listing-save-row { margin: var(--space-1) 0 0; }
+.listing-save-row { margin: var(--space-1) 0 0; display: grid; gap: var(--space-1); }
 .listing-save, .deck-save {
   font-family: var(--font-body); font-weight: 600; font-size: var(--text-sm);
   min-height: 40px; padding: 0.4rem 1.1rem; cursor: pointer;
@@ -51,6 +51,21 @@
 .reaction-picker.is-saved .deck-save {
   background: var(--positive);
   box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--positive) 60%, var(--ink));
+}
+/* Error state: save failed, show error message and highlight button. */
+.listing-save-error {
+  display: block; font-size: var(--text-xs); padding: 0 0.5rem;
+  color: color-mix(in oklch, var(--danger) 65%, var(--ink));
+  line-height: 1.3;
+}
+.reaction-picker.is-save-error .listing-save,
+.reaction-picker.is-save-error .deck-save {
+  background: color-mix(in oklch, var(--danger) 72%, var(--ink));
+  border-color: color-mix(in oklch, var(--danger) 45%, var(--hairline));
+}
+.reaction-picker.is-save-error .listing-save:hover,
+.reaction-picker.is-save-error .deck-save:hover {
+  background: color-mix(in oklch, var(--danger) 82%, var(--ink));
 }
 
 /* ── Rightmove buttons (Stage 6 — clear, external, distinct from dossier) ──── */

@@ -130,7 +130,8 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
     type: 'button', class: deck ? 'deck-save' : 'listing-save', 'data-save': '',
     'aria-label': 'Save your decision for this property',
   }, 'Save decision');
-  const saveRow = el('div', { class: 'listing-save-row' }, [saveBtn]);
+  const errorMsg = el('span', { class: 'listing-save-error', hidden: true, role: 'alert' });
+  const saveRow = el('div', { class: 'listing-save-row' }, [saveBtn, errorMsg]);
 
   const refreshSaveState = () => {
     saveBtn.disabled = !state.verb;
@@ -139,22 +140,39 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
   // After a save, show a confirmed state until the user changes something.
   function markSaved() {
     wrap.classList.add('is-saved');
+    wrap.classList.remove('is-save-error');
     saveBtn.textContent = 'Saved ✓';
     saveBtn.setAttribute('aria-pressed', 'true');
+    errorMsg.hidden = true;
+    errorMsg.textContent = '';
   }
   function markDirty() {
     if (!wrap.classList.contains('is-saved')) return;
     wrap.classList.remove('is-saved');
     saveBtn.textContent = 'Save decision';
     saveBtn.removeAttribute('aria-pressed');
+    errorMsg.hidden = true;
+  }
+  function markError(err) {
+    wrap.classList.add('is-save-error');
+    wrap.classList.remove('is-saved');
+    saveBtn.textContent = 'Save failed — try again';
+    saveBtn.removeAttribute('aria-pressed');
+    errorMsg.hidden = false;
+    errorMsg.textContent = err?.message || 'Failed to save. Check your connection and try again.';
   }
 
   saveBtn.addEventListener('click', async () => {
     if (!state.verb) return;
     const reasons = buildReasonsArray();
-    markSaved();
-    try { await onSave?.({ reaction: state.verb, reasons }); }
-    catch { markDirty(); }
+    saveBtn.disabled = true;
+    try {
+      await onSave?.({ reaction: state.verb, reasons });
+      markSaved();
+    } catch (e) {
+      markError(e);
+      saveBtn.disabled = false;
+    }
   });
 
   // ── verb interaction ───────────────────────────────────────────────────────
