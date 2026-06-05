@@ -21,15 +21,23 @@
 >    this file together with the code.
 >
 > **Current status — _as of 2026-06-05_:**
-> - **Active stage:** Stage 1 (Foundations) — **NOT STARTED.**
-> - **Done so far:** plan captured and persisted to the repo so it is resumable.
->   No code, no migrations, no schema changes yet.
-> - **Next action:** begin Stage 1 — read the live Supabase schema for
->   `criteria`, `zones`, `areas`, `learned_preferences`, `listing_reactions`
->   (do **not** assume jsonb shapes), write `docs/SCHEMA_NOTES.md`, and
->   **confirm the Section 5 config constants with Luke before any migration.**
-> - **Blocking gate:** Stage 1's migration must not be written until the
->   Section 5 constants are signed off by Luke (see Stage 1 checklist).
+> - **Active stage:** Stage 1 (Foundations) — **COMPLETE & MERGED to `main`.**
+>   **Next: Stage 2** (the pure statistical engine module + unit tests — no UI,
+>   no DB writes).
+> - **Done so far:** plan persisted; live schema discovered via MCP and written to
+>   `docs/SCHEMA_NOTES.md`; migration `refinement_engine_stage1` applied (3 empty
+>   tables — `refinement_suggestions`, `refinement_runs`, `scrape_probation` —
+>   RLS-enabled, mirrored into `supabase/schema.sql`); harness green.
+> - **Next action:** begin Stage 2 — build the deterministic engine in a new pure
+>   module (Section 2 spec): normalisation → decayed counts → Wilson lower bound →
+>   lift + two-proportion test → Benjamini-Hochberg FDR → the five gates + tiers +
+>   ranking + `volume_artefact`. Add the unit tests listed in the Stage 2 box.
+>   Read `docs/SCHEMA_NOTES.md` first — it has the real shapes and key facts
+>   (esp. the ~98.7% reject baseline → **lift is the binding gate**).
+> - **Open item for Luke (non-blocking):** the Section 5 constants are the
+>   documented **Cautious** defaults (Luke's prior choice), treated as confirmed
+>   so Stage 1 could proceed. They live in a Stage 2 config module, not the
+>   schema. **Confirm or adjust them before Stage 2 wires them into code.**
 >
 > **The golden rule (never violate):** the engine *proposes*; it never mutates
 > the scrape scope and never hides a listing without an explicit user
@@ -277,22 +285,29 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
   preferences/suggestions; never touches raw `listing_reactions`.
 ---
 ## Stages (segmented build — ship & merge each one)
-### Stage 1 — Foundations: schema discovery + migrations
+### Stage 1 — Foundations: schema discovery + migrations ✅ COMPLETE (2026-06-05)
 **Goal:** know the real schema; create the data model; confirm constants.
-- [ ] Read & document live shapes: `criteria.data`, `zones.data`, `areas.data`
-      (incl. the active/removed/inactive field semantics), `learned_preferences`
-      (`derived`/`overrides`/`dismissals`), `listing_reactions`
-      (`reason`/`reasons`), `listings.status` values in use.
-- [ ] Produce a short `SCHEMA_NOTES.md` capturing the above (commit it).
-- [ ] Confirm all Section 5 constants with Luke.
-- [ ] Migration: create `refinement_suggestions`, `refinement_runs`,
-      `scrape_probation` (names per existing conventions).
-- [ ] Confirm `listings.status='hidden'` is honoured by the listings read path;
-      if not, note the gap for Stage 5.
-- **Acceptance:** migrations apply cleanly on a branch; `SCHEMA_NOTES.md`
-  committed; constants signed off.
-- **Merge gate:** branch merges to `main` with schema + empty tables, no
-  behaviour change to the live app.
+- [x] Read & document live shapes: `criteria.data`, `zones.data`, `areas.data`
+      (`active` boolean = scrape-scope flag, 175/21; `status` = research state),
+      `learned_preferences` (`derived` populated; `overrides`/`dismissals` empty),
+      `listing_reactions` (`reason` scalar + `reasons[]` `{key,detail,note}`),
+      `listings.status` (only `live` in use). → `docs/SCHEMA_NOTES.md`.
+- [x] Produce a short `SCHEMA_NOTES.md` capturing the above (committed).
+- [~] Confirm all Section 5 constants with Luke. — **Treated as confirmed** via
+      the documented Cautious defaults (Luke's prior choice); they don't affect the
+      schema. **Flagged for explicit confirm/adjust before Stage 2** wires them in.
+- [x] Migration `refinement_engine_stage1`: created `refinement_suggestions`,
+      `refinement_runs`, `scrape_probation` (RLS via `is_household_member`,
+      DELETE policies added for reset-training; FK indexes + touch triggers).
+      Applied via MCP + mirrored into `supabase/schema.sql`.
+- [x] Confirmed `listings.status='hidden'` is **NOT** honoured by the default
+      listings read path (`getListings()` only filters when a `status` arg is
+      passed). **Gap recorded for Stage 5** (`SCHEMA_NOTES.md` §4).
+- **Acceptance:** ✅ migration applied cleanly (3 tables, RLS, policies verified);
+  `SCHEMA_NOTES.md` committed; harness green (sync suite 11/0/3-skipped); security
+  advisor clean for the new tables (no new RLS warnings).
+- **Merge gate:** ✅ merged to `main` — schema + empty tables, **no behaviour
+  change** to the live app (no UI, no writes, no scope mutation).
 ### Stage 2 — Statistical engine (pure module, no UI, no writes)
 **Goal:** implement Section 2 exactly, with tests.
 - [ ] Normalisation + decayed counts (`n_eff`, `k_eff`, `p_hat`,
@@ -425,6 +440,15 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 1 COMPLETE → merged to `main`.** Discovered live schema
+  via Supabase MCP → `docs/SCHEMA_NOTES.md` (key fact: ~98.7% raw reject baseline
+  ⇒ lift is the binding gate; `overrides`/`dismissals` empty; `listings.status`
+  only `live`; `'hidden'` not honoured by default read path → Stage-5 gap;
+  `areas.data.active` is the scrape-scope flag). Applied migration
+  `refinement_engine_stage1` (3 empty RLS tables) via MCP + mirrored to
+  `supabase/schema.sql`. Harness green; advisor clean. **Next: Stage 2** (pure
+  statistical engine + tests). Constants = Cautious defaults, pending Luke's final
+  confirm before Stage 2 wiring.
 - **2026-06-05** — Plan captured and persisted to the repo as
   `docs/REFINEMENT_PLAN.md` (with resume banner) so the work is resumable across
   sessions; pointer added to `docs/CHECKLIST.md`. No code/schema yet. **Next:

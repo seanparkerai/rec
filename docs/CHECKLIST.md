@@ -4,11 +4,13 @@ Tick items as completed and **commit**. To resume in a fresh chat: read this fil
 `docs/CONTEXT.md`, run `node tools/area-status.mjs`, run tests, continue at the first unchecked box.
 
 > **▶ ACTIVE PLAN — Model Refinement Engine ("the decision plan"):** full staged
-> plan + live checklist + progress log live in **`docs/REFINEMENT_PLAN.md`**. If asked to
-> *"pick up the decision plan work,"* open that file and follow its RESUME banner.
-> **Current state (2026-06-05):** plan captured/persisted; **Stage 1 not started** —
-> next is schema discovery → `SCHEMA_NOTES.md` → confirm Section 5 constants with Luke
-> before any migration.
+> plan + live checklist + progress log live in **`docs/REFINEMENT_PLAN.md`**; live schema
+> facts in **`docs/SCHEMA_NOTES.md`**. If asked to *"pick up the decision plan work,"*
+> open `REFINEMENT_PLAN.md` and follow its RESUME banner.
+> **Current state (2026-06-05):** **Stage 1 COMPLETE & merged** (schema discovered;
+> migration `refinement_engine_stage1` applied — 3 empty RLS tables). **Next: Stage 2** —
+> the pure statistical engine module + unit tests (no UI, no writes). One open item:
+> confirm/adjust the Section 5 (Cautious) constants before Stage 2 wires them in.
 
 **Status (reconciled 2026-05-30):** The app is well past the original eight-page plan. Shipped since:
 the data-model / intelligence-engine expansion, the investments split, the 5-band dashboard overhaul

@@ -425,4 +425,105 @@ CREATE INDEX IF NOT EXISTS idx_household_members_user         ON household_membe
 CREATE INDEX IF NOT EXISTS idx_investments_accounts_household ON investments_accounts (household_id);
 CREATE INDEX IF NOT EXISTS idx_investments_history_account    ON investments_history (account_id);
 
+-- -----------------------------------------------------------------------
+-- Model Refinement Engine (notify-only) — see docs/REFINEMENT_PLAN.md §3.
+-- Stage 1: empty tables only. The engine PROPOSES; nothing here mutates scrape
+-- scope or hides a listing. All household-scoped, RLS via is_household_member().
+-- -----------------------------------------------------------------------
+
+-- refinement_suggestions: one row per (household, dimension, value) tracked.
+CREATE TABLE IF NOT EXISTS refinement_suggestions (
+  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id      uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  dimension         text NOT NULL CHECK (dimension IN ('area','property_type')),
+  value             text NOT NULL,                 -- normalised lower(trim())
+  metrics           jsonb NOT NULL DEFAULT '{}',   -- §2.8 engine output (counts/metrics, not id lists)
+  tier              text CHECK (tier IN ('forming','probable','confident','strong')),
+  status            text NOT NULL DEFAULT 'forming'
+                      CHECK (status IN ('forming','actionable','confirmed_hide','confirmed_scrape','dismissed','snoozed')),
+  first_detected_at timestamptz NOT NULL DEFAULT now(),
+  last_evaluated_at timestamptz NOT NULL DEFAULT now(),
+  runs_qualified    int NOT NULL DEFAULT 0,        -- consecutive qualifying runs (persistence gate §2.6.5)
+  snoozed_until     timestamptz,
+  updated_at        timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (household_id, dimension, value)
+);
+
+ALTER TABLE refinement_suggestions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "household members can read refinement_suggestions" ON refinement_suggestions;
+CREATE POLICY "household members can read refinement_suggestions"
+  ON refinement_suggestions FOR SELECT USING (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can insert refinement_suggestions" ON refinement_suggestions;
+CREATE POLICY "household members can insert refinement_suggestions"
+  ON refinement_suggestions FOR INSERT WITH CHECK (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can update refinement_suggestions" ON refinement_suggestions;
+CREATE POLICY "household members can update refinement_suggestions"
+  ON refinement_suggestions FOR UPDATE USING (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can delete refinement_suggestions" ON refinement_suggestions;
+CREATE POLICY "household members can delete refinement_suggestions"
+  ON refinement_suggestions FOR DELETE USING (is_household_member(household_id));
+
+-- refinement_runs: audit of each evaluation run (backs the persistence gate).
+CREATE TABLE IF NOT EXISTS refinement_runs (
+  id                   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id         uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  run_at               timestamptz NOT NULL DEFAULT now(),
+  params               jsonb NOT NULL DEFAULT '{}',  -- config snapshot used for the run
+  candidates_evaluated int NOT NULL DEFAULT 0,
+  actionable_count     int NOT NULL DEFAULT 0
+);
+
+ALTER TABLE refinement_runs ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "household members can read refinement_runs" ON refinement_runs;
+CREATE POLICY "household members can read refinement_runs"
+  ON refinement_runs FOR SELECT USING (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can insert refinement_runs" ON refinement_runs;
+CREATE POLICY "household members can insert refinement_runs"
+  ON refinement_runs FOR INSERT WITH CHECK (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can delete refinement_runs" ON refinement_runs;
+CREATE POLICY "household members can delete refinement_runs"
+  ON refinement_runs FOR DELETE USING (is_household_member(household_id));
+
+-- scrape_probation: areas/types approved for removal from active scrape (reversible).
+CREATE TABLE IF NOT EXISTS scrape_probation (
+  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id      uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  dimension         text NOT NULL CHECK (dimension IN ('area','property_type')),
+  value             text NOT NULL,                 -- normalised lower(trim())
+  approved_at       timestamptz NOT NULL DEFAULT now(),
+  reprobe_every_runs int NOT NULL DEFAULT 6,       -- PROBATION_REPROBE_RUNS
+  last_reprobe_run  int NOT NULL DEFAULT 0,        -- run counter of the last re-probe
+  status            text NOT NULL DEFAULT 'active'
+                      CHECK (status IN ('active','reconsider','restored')),
+  updated_at        timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (household_id, dimension, value)
+);
+
+ALTER TABLE scrape_probation ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "household members can read scrape_probation" ON scrape_probation;
+CREATE POLICY "household members can read scrape_probation"
+  ON scrape_probation FOR SELECT USING (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can insert scrape_probation" ON scrape_probation;
+CREATE POLICY "household members can insert scrape_probation"
+  ON scrape_probation FOR INSERT WITH CHECK (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can update scrape_probation" ON scrape_probation;
+CREATE POLICY "household members can update scrape_probation"
+  ON scrape_probation FOR UPDATE USING (is_household_member(household_id));
+DROP POLICY IF EXISTS "household members can delete scrape_probation" ON scrape_probation;
+CREATE POLICY "household members can delete scrape_probation"
+  ON scrape_probation FOR DELETE USING (is_household_member(household_id));
+
+-- updated_at touch triggers (reuse touch_updated_at()).
+DROP TRIGGER IF EXISTS trg_touch_refinement_suggestions ON refinement_suggestions;
+CREATE TRIGGER trg_touch_refinement_suggestions BEFORE UPDATE ON refinement_suggestions
+  FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+DROP TRIGGER IF EXISTS trg_touch_scrape_probation ON scrape_probation;
+CREATE TRIGGER trg_touch_scrape_probation BEFORE UPDATE ON scrape_probation
+  FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+
+-- Covering indexes for the new FKs.
+CREATE INDEX IF NOT EXISTS idx_refinement_suggestions_household ON refinement_suggestions (household_id);
+CREATE INDEX IF NOT EXISTS idx_refinement_runs_household        ON refinement_runs (household_id);
+CREATE INDEX IF NOT EXISTS idx_scrape_probation_household       ON scrape_probation (household_id);
+
 COMMIT;
