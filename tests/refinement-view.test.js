@@ -6,6 +6,7 @@ import {
   humaniseValue, toCard, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
   REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
   probationStatusLabel, effectiveStatus, snoozeDaysLeft,
+  REFINEMENT_SETTINGS_KEY, presetFromOverrides, PRESET_OPTIONS,
 } from '../assets/js/refinement/view.js';
 import { effectiveWeights } from '../assets/js/learned-preferences.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
@@ -211,5 +212,20 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(g.inbox[0].value, 's-exp');
     assertEqual(g.dismissed.length, 1);
     assertEqual(g.counts.actionable, 1, 'counts reflect effective status');
+  });
+
+  // ── Stage 7: sensitivity preset persistence ────────────────────────────────
+  test('view: presetFromOverrides reads the reserved settings key, defaults to cautious', () => {
+    assertEqual(presetFromOverrides({}), 'cautious');
+    assertEqual(presetFromOverrides({ [REFINEMENT_SETTINGS_KEY]: { preset: 'balanced' } }), 'balanced');
+    assertEqual(presetFromOverrides({ [REFINEMENT_SETTINGS_KEY]: { preset: 'nonsense' } }), 'cautious', 'invalid → default');
+    assertEqual(PRESET_OPTIONS.length, 3);
+  });
+
+  test('view: the reserved settings key is invisible to effectiveWeights', () => {
+    const ov = { 'type:flat': { weight: -0.5 }, [REFINEMENT_SETTINGS_KEY]: { preset: 'aggressive' } };
+    const eff = effectiveWeights({}, ov);
+    assertEqual(eff['type:flat'], -0.5);
+    assert(!(REFINEMENT_SETTINGS_KEY in eff), 'settings key never becomes a scoring weight');
   });
 }

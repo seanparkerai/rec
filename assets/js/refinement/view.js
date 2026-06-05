@@ -34,6 +34,23 @@ export function humaniseValue(dimension, value) {
 // `${dimension}:${value}` with the value stored NORMALISED (lower(trim())) to match
 // the engine; the durable, reversible record is the rule + the suggestion status flip.
 export const REFINEMENT_HIDE_KEY = '__refinement_hidden';
+// Stage 7: the chosen sensitivity preset persists under another reserved overrides key
+// (same safety: no numeric `.weight`, so effectiveWeights skips it; recompute preserves it).
+export const REFINEMENT_SETTINGS_KEY = '__refinement_settings';
+
+/** The three sensitivity presets, with plain-English copy for the §4.6 control. */
+export const PRESET_OPTIONS = [
+  { id: 'cautious', label: 'Cautious', blurb: 'Only strong, persistent evidence. Fewest suggestions.' },
+  { id: 'balanced', label: 'Balanced', blurb: 'A middle ground between caution and reach.' },
+  { id: 'aggressive', label: 'Aggressive', blurb: 'Surfaces suggestions sooner, on lighter evidence.' },
+];
+
+/** Read the persisted preset from an overrides blob (defaults to 'cautious'). */
+export function presetFromOverrides(overrides = {}) {
+  const s = overrides && typeof overrides === 'object' ? overrides[REFINEMENT_SETTINGS_KEY] : null;
+  const p = s && typeof s === 'object' ? s.preset : null;
+  return PRESET_OPTIONS.some((o) => o.id === p) ? p : 'cautious';
+}
 
 const normKey = (s) => String(s ?? '').trim().toLowerCase();
 

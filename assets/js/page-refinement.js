@@ -18,8 +18,9 @@ import {
   hideSuggestion, unhideSuggestion, countMatchingListings,
   stopSearchingArea, bringBackArea,
   dismissSuggestion, undismissSuggestion, snoozeSuggestion, unsnoozeSuggestion,
+  getRefinementPreset, setRefinementPreset, resetTraining,
 } from './storage.js';
-import { classifySuggestions, buildConfidenceMeter, probationStatusLabel } from './refinement/view.js';
+import { classifySuggestions, buildConfidenceMeter, probationStatusLabel, PRESET_OPTIONS } from './refinement/view.js';
 import { resolveConfig } from './refinement/config.js';
 import { esc, byId as $, on } from './dom.js';
 
@@ -220,11 +221,55 @@ function wireActions(refresh) {
   });
 }
 
+// ── Stage 7: training controls (preset + reset) ──────────────────────────────
+function renderPresets(current) {
+  const el = $('ref-presets');
+  if (!el) return;
+  el.innerHTML = PRESET_OPTIONS.map((p) => `
+    <button type="button" class="ref-preset" data-preset="${esc(p.id)}" aria-pressed="${p.id === current}">
+      <span class="ref-preset__label">${esc(p.label)}</span>
+      <span class="ref-preset__blurb">${esc(p.blurb)}</span>
+    </button>`).join('');
+}
+
+function wireTraining() {
+  // Preset selection — persisted; applies on the next engine evaluation.
+  on($('ref-presets'), 'click', async (e) => {
+    const btn = e.target.closest?.('[data-preset]');
+    if (!btn || btn.getAttribute('aria-pressed') === 'true') return;
+    const preset = btn.dataset.preset;
+    renderPresets(preset); // optimistic
+    const ok = await setRefinementPreset(preset);
+    announce(ok
+      ? `Sensitivity set to ${preset}. This applies the next time the engine evaluates your feedback.`
+      : 'Could not save that setting — please try again.');
+    if (!ok) renderPresets(await getRefinementPreset());
+  });
+
+  // Reset training — strong confirm, scoped.
+  const dlg = $('ref-reset-dialog');
+  on($('ref-reset-btn'), 'click', () => dlg?.showModal());
+  on($('ref-reset-cancel'), 'click', () => dlg?.close());
+  on(dlg, 'click', (e) => { if (e.target === dlg) dlg.close(); });
+  on($('ref-reset-ok'), 'click', async () => {
+    const picked = dlg?.querySelector('input[name="ref-reset-scope"]:checked')?.value || 'all';
+    const args = picked === 'all' ? { scope: 'all' } : { scope: 'dimension', dimension: picked };
+    const btn = $('ref-reset-ok');
+    if (btn) { btn.disabled = true; btn.textContent = 'Resetting…'; }
+    const ok = await resetTraining(args);
+    if (btn) { btn.disabled = false; btn.textContent = 'Reset'; }
+    dlg?.close();
+    announce(ok ? 'Training reset. The engine will rebuild suggestions on its next run.' : 'Could not reset right now — please try again.');
+    if (ok) await refresh();
+  });
+}
+
 async function refresh() {
-  const [rows, meta, probation] = await Promise.all([
-    getRefinementSuggestions(), getRefinementMeta(), getScrapeProbation(),
+  const [rows, meta, probation, preset] = await Promise.all([
+    getRefinementSuggestions(), getRefinementMeta(), getScrapeProbation(), getRefinementPreset(),
   ]);
   renderMeter(meta);
+  renderPresets(preset);
 
   const groups = classifySuggestions(rows || []);
   const probByKey = new Map((probation || []).map((p) => [`${p.dimension}:${String(p.value).trim().toLowerCase()}`, p]));
@@ -248,6 +293,7 @@ async function refresh() {
 async function init() {
   wireDialog(refresh);
   wireActions(refresh);
+  wireTraining();
   try {
     await refresh();
   } catch (e) {

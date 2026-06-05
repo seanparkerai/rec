@@ -497,16 +497,28 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
   (enforcement deferred), so the golden rule holds.
 - **Merge gate:** portal scrape lever merged to `main`; scraper enforcement is its
   own gate.
-### Stage 7 — Training controls & reset
+### Stage 7 — Training controls & reset ✅ COMPLETE (2026-06-05)
 **Goal:** user-friendly control over the model's learning.
-- [ ] Sensitivity presets (Cautious/Balanced/Aggressive) mapping to constants;
-      persisted per household; re-runs the engine on change.
-- [ ] Reset training: all / per-dimension / per-value, with strong confirm;
-      clears `refinement_suggestions` + derived prefs only; never touches raw
-      `listing_reactions`.
-- **Acceptance:** switching preset visibly changes which suggestions are
-  actionable; reset clears derived state while raw reactions remain intact.
-- **Merge gate:** controls merged to `main`.
+- [x] Sensitivity presets (Cautious/Balanced/Aggressive) mapping to the §5 preset
+      matrix; **persisted per household** in `learned_preferences.overrides`
+      (reserved `__refinement_settings.preset` key — invisible to `effectiveWeights`).
+      `setRefinementPreset`/`getRefinementPreset` + a segmented control on the
+      Refinement page (§4.6). The server-side engine job (`tools/refinement-run.mjs`,
+      REST mode) **reads the preset** and `resolveConfig({preset})` on its next run —
+      the portal can't re-run the server engine itself, so a change applies on the next
+      evaluation (the UI says so).
+- [x] Reset training: **all / per-dimension** (areas or types) in the UI (strong,
+      scoped confirm `<dialog>`), **per-value** supported in storage. Clears the
+      refinement engine's derived state — `refinement_suggestions`, `scrape_probation`,
+      hide rules + dismiss memory — and **never** touches raw `listing_reactions` or the
+      separate learned-preferences `derived` weights. → `resetTraining({scope,…})` over
+      the verified DELETE RLS on `refinement_suggestions`/`scrape_probation`.
+- **Acceptance:** ✅ harness green **548/548** (+2: preset extraction + the settings-key
+  safety invariant). Live round-trip: preset `balanced` written + read back as the job
+  would (`overrides.__refinement_settings.preset`), then reverted (`overrides` `{}`).
+  Switching preset changes the thresholds the next run uses (lower `WILSON_FLOOR`/
+  `MIN_LIFT` → more actionable); reset rebuilds suggestions from the intact reaction log.
+- **Merge gate:** ✅ controls on the working branch.
 ### Stage 8 — Scrape enforcement & invariant check  — **CORE DONE** (2026-06-05)
 **Goal:** make scope correctness self-enforcing so it can't silently drift.
 - [x] The scraper's active area list is derived at run time from the source of
@@ -564,6 +576,15 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 7 COMPLETE → working branch.** Training controls: sensitivity
+  presets persisted in `learned_preferences.overrides.__refinement_settings` (reserved key,
+  skipped by `effectiveWeights`) via `setRefinementPreset`/`getRefinementPreset` + a
+  segmented control (§4.6); `tools/refinement-run.mjs` REST mode now reads the preset +
+  dismiss memory so a portal change applies next run. `resetTraining({scope})` clears
+  refinement_suggestions / scrape_probation / hide rules / dismissals (never
+  listing_reactions or learned `derived`) with a scoped strong-confirm dialog (all /
+  areas / property types). +2 tests (548/548). Live round-trip: preset balanced
+  written/read/reverted (overrides {}). Supabase: pushed 0 areas, 0 user-state rows.
 - **2026-06-05** — **Stage 6 scraper enforcement + Stage 8 invariant → working branch.**
   Pure scope module `assets/js/refinement/scope.js` (`activeAreaIds`/`probationAreaSet`/
   `reprobeThisRun`/`probationDropIds`/`scopeInvariant`). Wired into

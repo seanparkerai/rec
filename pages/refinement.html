@@ -34,6 +34,18 @@
       <div id="ref-meter" class="ref-meter"></div>
     </section>
 
+    <!-- §4.6 training controls (sensitivity preset + reset) -->
+    <section class="card ref-section" aria-labelledby="ref-training-h">
+      <header class="ref-section__head">
+        <h2 id="ref-training-h">Training controls</h2>
+      </header>
+      <p class="ref-section__hint">How eagerly the engine suggests changes. A change applies the next time it evaluates your feedback.</p>
+      <div id="ref-presets" class="ref-presets" role="group" aria-label="Sensitivity preset"></div>
+      <div class="ref-reset">
+        <button type="button" id="ref-reset-btn" class="ref-action ref-action--ghost">Reset training…</button>
+      </div>
+    </section>
+
     <!-- §4.1 suggested refinements (the inbox) -->
     <section class="card ref-section" aria-labelledby="ref-inbox-h">
       <header class="ref-section__head">
@@ -97,6 +109,22 @@
       <footer class="ref-dialog__actions">
         <button type="button" id="ref-confirm-cancel" class="ref-dialog__btn ref-dialog__btn--ghost">Cancel</button>
         <button type="button" id="ref-confirm-ok" class="ref-dialog__btn ref-dialog__btn--primary">Hide from view</button>
+      </footer>
+    </dialog>
+
+    <!-- Stage 7: reset-training confirm dialog (strong confirm, scoped) -->
+    <dialog id="ref-reset-dialog" class="ref-dialog ref-dialog--danger" aria-labelledby="ref-reset-title">
+      <h2 id="ref-reset-title" class="ref-dialog__title">Reset training?</h2>
+      <p class="ref-dialog__msg">This clears the engine's suggestions, paused areas, hidden values and dismiss memory so it starts fresh. Your raw reactions (likes / passes / rejects) are never touched.</p>
+      <fieldset id="ref-reset-scope" class="ref-reset-scope">
+        <legend>What to reset</legend>
+        <label><input type="radio" name="ref-reset-scope" value="all" checked /> Everything</label>
+        <label><input type="radio" name="ref-reset-scope" value="area" /> Areas only</label>
+        <label><input type="radio" name="ref-reset-scope" value="property_type" /> Property types only</label>
+      </fieldset>
+      <footer class="ref-dialog__actions">
+        <button type="button" id="ref-reset-cancel" class="ref-dialog__btn ref-dialog__btn--ghost">Cancel</button>
+        <button type="button" id="ref-reset-ok" class="ref-dialog__btn ref-dialog__btn--primary">Reset</button>
       </footer>
     </dialog>
   </main>

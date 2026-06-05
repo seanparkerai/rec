@@ -64,9 +64,15 @@ async function loadInputs() {
   const householdId = arg('--household') || (await restGetAll('households?select=id'))[0]?.id;
   const reactions = await restGetAll('listing_reactions?select=listing_id,reaction,created_at,listing_snapshot');
   const existingSuggestions = await restGetAll(`refinement_suggestions?select=dimension,value,status,runs_qualified,first_detected_at,snoozed_until&household_id=eq.${householdId}`);
+  // Stage 7: the household's chosen sensitivity preset + dismiss memory live in
+  // learned_preferences (reserved overrides key + dismissals). Read them so a portal
+  // preset change / dismissal takes effect on this run.
+  const lp = (await restGetAll(`learned_preferences?select=overrides,dismissals&household_id=eq.${householdId}`))[0] || {};
+  const preset = lp.overrides?.__refinement_settings?.preset || 'cautious';
+  const dismissedKeys = new Set(Object.keys(lp.dismissals || {}).filter((k) => k.includes(':')));
   return {
-    householdId, now: new Date().toISOString(), config: resolveConfig({}),
-    aggregates: null, reactions, existingSuggestions, dismissedKeys: new Set(),
+    householdId, now: new Date().toISOString(), config: resolveConfig({ preset }),
+    aggregates: null, reactions, existingSuggestions, dismissedKeys,
   };
 }
 

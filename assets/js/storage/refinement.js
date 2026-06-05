@@ -14,7 +14,7 @@
 // durable/reversible record is the rule + the status flip + learned_preferences.updated_at.
 import { _initSb, _getHid } from './core.js';
 import { getLearnedPreferences, saveLearnedPreferences } from './listings.js';
-import { REFINEMENT_HIDE_KEY, hideRuleKey } from '../refinement/view.js';
+import { REFINEMENT_HIDE_KEY, REFINEMENT_SETTINGS_KEY, hideRuleKey, presetFromOverrides } from '../refinement/view.js';
 
 /** All refinement suggestions for the current household (engine-derived, read-only). */
 export async function getRefinementSuggestions() {
@@ -120,6 +120,75 @@ export async function unsnoozeSuggestion({ dimension, value } = {}) {
   if (!dimension || !value) return false;
   const norm = String(value).trim().toLowerCase();
   return _updateSuggestion(dimension, norm, { status: 'actionable', snoozed_until: null });
+}
+
+// ── Stage 7: training controls (sensitivity preset + reset) ───────────────────
+
+/** The household's chosen sensitivity preset (persisted in overrides; default cautious). */
+export async function getRefinementPreset() {
+  const prefs = await getLearnedPreferences();
+  return presetFromOverrides(prefs.overrides || {});
+}
+
+/**
+ * Persist the sensitivity preset. The engine job (tools/refinement-run.mjs) reads it
+ * from `overrides.__refinement_settings.preset` on its next run — the portal can't
+ * re-run the server-side engine itself, so a preset change applies on the next evaluation.
+ */
+export async function setRefinementPreset(preset) {
+  const valid = ['cautious', 'balanced', 'aggressive'];
+  if (!valid.includes(preset)) return false;
+  const prefs = await getLearnedPreferences();
+  const overrides = { ...(prefs.overrides || {}) };
+  overrides[REFINEMENT_SETTINGS_KEY] = { ...(overrides[REFINEMENT_SETTINGS_KEY] || {}), preset, at: new Date().toISOString() };
+  return saveLearnedPreferences({ overrides });
+}
+
+/**
+ * Reset training (§4.6): clear the refinement engine's DERIVED state — suggestions,
+ * scrape-probation rows, hide rules and dismiss memory — so the engine starts fresh on
+ * its next run. NEVER touches raw `listing_reactions` (the evidence) or the separate
+ * learned-preferences `derived` weights (the fit engine). Scope: 'all' | 'dimension'
+ * (areas or types) | 'value' (one suggestion). Returns true on success.
+ */
+export async function resetTraining({ scope = 'all', dimension = null, value = null } = {}) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return false;
+  const norm = value != null ? String(value).trim().toLowerCase() : null;
+  try {
+    // 1) delete the matching refinement_suggestions rows.
+    let q = sb.from('refinement_suggestions').delete().eq('household_id', hid);
+    if (scope === 'dimension' && dimension) q = q.eq('dimension', dimension);
+    if (scope === 'value' && dimension && norm) q = q.eq('dimension', dimension).eq('value', norm);
+    const { error: e1 } = await q;
+    if (e1) throw e1;
+    // 2) delete the matching scrape_probation rows (area scope only).
+    if (scope === 'all' || (scope === 'dimension' && dimension === 'area') || (scope === 'value' && dimension === 'area')) {
+      let pq = sb.from('scrape_probation').delete().eq('household_id', hid);
+      if (scope === 'value' && norm) pq = pq.eq('value', norm);
+      const { error: e2 } = await pq;
+      if (e2) throw e2;
+    }
+  } catch (e) {
+    console.error('storage: reset training', e.message);
+    return false;
+  }
+  // 3) clear the matching hide rules + dismiss memory from overrides/dismissals.
+  const prefs = await getLearnedPreferences();
+  const overrides = { ...(prefs.overrides || {}) };
+  const dismissals = { ...(prefs.dismissals || {}) };
+  const hideBlob = { ...(overrides[REFINEMENT_HIDE_KEY] || {}) };
+  const matches = (key) => {
+    if (scope === 'all') return true;
+    const [dim, val] = key.split(/:(.+)/);
+    if (scope === 'dimension') return dim === dimension;
+    return dim === dimension && val === norm;
+  };
+  for (const k of Object.keys(hideBlob)) if (matches(k)) delete hideBlob[k];
+  for (const k of Object.keys(dismissals)) if (k.includes(':') && matches(k)) delete dismissals[k];
+  if (Object.keys(hideBlob).length) overrides[REFINEMENT_HIDE_KEY] = hideBlob;
+  else delete overrides[REFINEMENT_HIDE_KEY];
+  return saveLearnedPreferences({ overrides, dismissals });
 }
 
 /**
