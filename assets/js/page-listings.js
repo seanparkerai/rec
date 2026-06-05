@@ -21,8 +21,7 @@ import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listings/fit.js';
 import { classifyListing, HIDE_LABELS } from './listings/flags.js';
 import { PERSONAL_STATUSES, latestPerListing } from './listings/reactions.js';
-import { decidedSets, isDecided, dedupeByFingerprint } from './listings/suppress.js';
-import { propertyFingerprint } from './listings/classify.js';
+import { decidedSets, isDecided, dedupeByFingerprint, foldDecision } from './listings/suppress.js';
 import { buildReasonPicker } from './listings/reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
@@ -603,12 +602,9 @@ async function render() {
       created_at: new Date().toISOString(),
     };
     // Keep the suppression sets live so the next paint hides a just-decided property
-    // (by id AND by fingerprint); `pass` is a soft skip and never suppresses.
-    if (reaction === 'like' || reaction === 'reject') {
-      decided.ids.add(String(listing.rightmove_id));
-      const fp = propertyFingerprint(listing);
-      if (fp) decided.fps.add(fp);
-    }
+    // (by id AND fingerprint); `pass` is a soft skip and never suppresses. Same
+    // primitive the cross-page `reactions-changed` listener uses, so they can't drift.
+    foldDecision(decided, listing.rightmove_id, reaction, listing, liveById);
     reviewedSet.add(String(listing.rightmove_id));
     addReviewedListing(listing.rightmove_id);
     return true;
@@ -908,6 +904,26 @@ async function render() {
   modeBtns.forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
   if (showOOR) showOOR.addEventListener('change', () => { if (mode === 'browse') paint(); });
   if (showHidden) showHidden.addEventListener('change', () => { if (mode === 'browse') paint(); });
+
+  // A reaction made ANYWHERE (notably the dossier page in the same tab, or a
+  // background revalidation) fires `reactions-changed` from saveListingReaction.
+  // Fold it into the live suppression sets + current-reaction map, then repaint so a
+  // liked/rejected property leaves the feed immediately — no refresh, and no reliance
+  // on each write path remembering to update feed state. This page is a per-load MPA
+  // coordinator with no SPA teardown, so one listener per load needs no removal.
+  window.addEventListener('reactions-changed', (e) => {
+    const { listing_id, reaction, reasons, created_at } = e.detail || {};
+    if (!listing_id || !reaction) return;
+    reactions[String(listing_id)] = {
+      reaction,
+      reason: reaction === 'reject' ? (reasons?.[0]?.key ?? null) : null,
+      reasons: Array.isArray(reasons) ? reasons : [],
+      created_at: created_at || new Date().toISOString(),
+    };
+    foldDecision(decided, listing_id, reaction, null, liveById);
+    reviewedSet.add(String(listing_id));
+    if (mode === 'browse') paint();
+  });
 
   wireReturnTracking(listEl, 'listings');
 

@@ -208,6 +208,22 @@ export async function saveListingReaction({ listing_id, reaction, reason = null,
     const cached = readLocal('listing-reactions') ?? {};
     cached[norm.listing_id] = { reaction: norm.reaction, reason: norm.reason, reasons: norm.reasons, created_at: norm.created_at };
     writeLocal('listing-reactions', cached);
+    // Single notification chokepoint: every reaction write (feed OR dossier OR any
+    // future path) announces itself so other live views re-derive their state. The
+    // listings feed listens for this to keep its suppression sets in sync — fixing
+    // dossier likes that previously never reached the feed's `decided` set. Fire-and-
+    // forget: never awaited, never affects the return. Guarded for non-browser (Node
+    // test) contexts so this module stays importable without a DOM shim.
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('reactions-changed', {
+        detail: {
+          listing_id: norm.listing_id,
+          reaction: norm.reaction,
+          reasons: norm.reasons,
+          created_at: norm.created_at,
+        },
+      }));
+    }
     return true;
   } catch (e) {
     console.error('storage: write listing_reactions', e.message);

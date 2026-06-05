@@ -7,7 +7,7 @@
 // unit-importable (they touch the DOM + storage).
 import { latestPerListing } from '../assets/js/listings/reactions.js';
 import {
-  decidedSets, isDecided, dedupeNewestByFingerprint,
+  decidedSets, isDecided, dedupeNewestByFingerprint, foldDecision,
 } from '../assets/js/listings/suppress.js';
 import { propertyFingerprint } from '../assets/js/listings/classify.js';
 
@@ -79,5 +79,36 @@ export async function register({ test, assert, assertEqual }) {
     const out = dedupeNewestByFingerprint(liked, (x) => x.listing, (x) => x.created_at);
     assertEqual(out.length, 1);
     assertEqual(out[0].listing.rightmove_id, 'b', 'the newest created_at wins regardless of order');
+  });
+
+  // ── Event-driven re-suppression (dossier → feed via `reactions-changed`) ─────
+  // A like on the dossier page never touched the feed's `decided` set directly; the
+  // fix routes it through saveListingReaction's `reactions-changed` event, whose
+  // handler folds the decision into `decided` with foldDecision — the SAME primitive
+  // the feed's own Save uses. These assert that shared primitive end-to-end.
+  test('event-fold: a dossier like (id only) becomes decided by id and by fingerprint', () => {
+    // Start from a log with NO reaction for listing 555, mirroring a fresh feed.
+    const decided = decidedSets(latestPerListing(log));
+    const liveById = new Map([
+      ['555', { rightmove_id: '555', address: 'Sandleheath Road, Fordingbridge, SP6', beds: 3, property_type: 'Detached' }],
+    ]);
+    assertEqual(isDecided(liveById.get('555'), decided), false, 'undecided before the event');
+    // The event carries only an id (the dossier doesn't know the feed's row) — the
+    // fingerprint is recovered from liveById, exactly as the page listener calls it.
+    foldDecision(decided, '555', 'like', null, liveById);
+    assertEqual(isDecided(liveById.get('555'), decided), true, 'decided by id after the like event');
+    // And a re-list under a NEW id (same address) is caught by fingerprint.
+    const reListed = { rightmove_id: '777', address: 'Sandleheath Road, Fordingbridge, SP6', beds: 3, property_type: 'Detached House' };
+    assertEqual(isDecided(reListed, decided), true, 're-list of the just-liked property is suppressed by fingerprint');
+  });
+
+  test('event-fold: a pass event never decides', () => {
+    const decided = decidedSets(latestPerListing(log));
+    const liveById = new Map([
+      ['888', { rightmove_id: '888', address: 'X Road, Fordingbridge', beds: 2, property_type: 'Flat' }],
+    ]);
+    foldDecision(decided, '888', 'pass', liveById.get('888'), liveById);
+    assertEqual(decided.ids.has('888'), false, 'pass stays resurfaceable');
+    assertEqual(isDecided(liveById.get('888'), decided), false, 'a passed property is never suppressed');
   });
 }
