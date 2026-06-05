@@ -602,16 +602,24 @@ async function render() {
     const ok = await setShortlistStatus(listing.rightmove_id, status);
     if (ok) { if (status) statuses[listing.rightmove_id] = status; else delete statuses[listing.rightmove_id]; }
   };
-  // Browse rows: persist, then refresh the live counts in place (summary + Review
-  // badge + training widget) so handling a listing visibly moves the totals. The
-  // card itself stays put (no repaint) — Stage 4's collapse happens on the next
-  // full paint, e.g. on mode switch.
+  // Browse rows: persist, then re-partition the feed so the just-decided property
+  // LEAVES the active list immediately — like/reject are suppressed from the feed
+  // (by id AND physical-property fingerprint, so a re-list is caught too), and a
+  // pass drops into the collapsed "Passed" group. paint() is the single source of
+  // truth for that split (and refreshes the summary), so we repaint rather than
+  // hand-maintain the DOM. Scroll is preserved: the reacted card is in view, its
+  // slot collapses, and the rows below slide up (inbox-style), with no jump to top.
+  // Like the deck path, a browse reaction also schedules the debounced retrain so
+  // the model learns from browse decisions live (parity with deckOnSave).
   const browseOnSave = async (listing, d) => {
     const ok = await onSave(listing, d);
     if (!ok) return false;
-    renderSummary();
+    const y = window.scrollY;
+    paint();                 // re-partitions + calls renderSummary()
+    window.scrollTo({ top: y });
     updateReviewCount();
     updateLearning();
+    scheduleRetrain();
     return true;
   };
 
