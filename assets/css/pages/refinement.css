@@ -177,6 +177,13 @@
 }
 /* Stage 6: the scrape lever is higher-stakes — tint it danger so it reads distinct
    from the reversible display-hide action. */
+/* Low-emphasis secondary actions (Snooze / Dismiss) — quieter than Hide/Stop. */
+.ref-action--ghost {
+  border-color: var(--hairline);
+  background: transparent;
+  color: var(--ink-muted);
+}
+.ref-action--ghost:hover { background: var(--surface-sunken); }
 .ref-action--stop {
   border-color: color-mix(in oklch, var(--danger) 45%, var(--hairline));
   background: var(--danger-soft);

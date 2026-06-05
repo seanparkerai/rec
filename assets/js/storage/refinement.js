@@ -54,23 +54,72 @@ export async function getRefinementMeta() {
 
 // ── Stage 5: display-hide lever (Approach B — overrides rule + status flip) ───
 
-/** Flip one suggestion's status (portal HAS update RLS on refinement_suggestions). */
-async function _setSuggestionStatus(dimension, value, status) {
+/** Patch one suggestion row (portal HAS update RLS on refinement_suggestions). */
+async function _updateSuggestion(dimension, value, patch) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return false;
   try {
     const { error } = await sb
       .from('refinement_suggestions')
-      .update({ status })
+      .update(patch)
       .eq('household_id', hid)
       .eq('dimension', dimension)
       .eq('value', value);
     if (error) throw error;
     return true;
   } catch (e) {
-    console.error('storage: update refinement_suggestions status', e.message);
+    console.error('storage: update refinement_suggestions', e.message);
     return false;
   }
+}
+
+/** Flip one suggestion's status. */
+const _setSuggestionStatus = (dimension, value, status) => _updateSuggestion(dimension, value, { status });
+
+// ── Dismiss / Snooze (§4.1/§4.5) — the "don't re-nag" memory ──────────────────
+// Setting the status is enough for stickiness (the engine's ON CONFLICT CASE guard
+// only ever overwrites forming/actionable). We ALSO record dismissals in
+// learned_preferences.dismissals (keyed `dim:value`) so the engine job's dismissedKeys
+// set excludes the value even if the suggestion row were later rebuilt from scratch.
+
+async function _patchDismissals(mutate) {
+  const prefs = await getLearnedPreferences();
+  const dismissals = { ...(prefs.dismissals || {}) };
+  mutate(dismissals);
+  return saveLearnedPreferences({ dismissals });
+}
+
+/** Dismiss a suggestion: never suggest this value again (until un-dismissed). */
+export async function dismissSuggestion({ dimension, value } = {}) {
+  if (!dimension || !value) return false;
+  const norm = String(value).trim().toLowerCase();
+  const okMem = await _patchDismissals((d) => { d[`${dimension}:${norm}`] = { at: new Date().toISOString() }; });
+  const okStatus = await _setSuggestionStatus(dimension, norm, 'dismissed');
+  return okMem && okStatus;
+}
+
+/** Un-dismiss: drop the memory and return the suggestion to the inbox. */
+export async function undismissSuggestion({ dimension, value } = {}) {
+  if (!dimension || !value) return false;
+  const norm = String(value).trim().toLowerCase();
+  const okMem = await _patchDismissals((d) => { delete d[`${dimension}:${norm}`]; });
+  const okStatus = await _setSuggestionStatus(dimension, norm, 'actionable');
+  return okMem && okStatus;
+}
+
+/** Snooze: hide the suggestion for N days, then it re-surfaces (expiry handled in view). */
+export async function snoozeSuggestion({ dimension, value, days = 30 } = {}) {
+  if (!dimension || !value) return false;
+  const norm = String(value).trim().toLowerCase();
+  const until = new Date(Date.now() + Number(days) * 86_400_000).toISOString();
+  return _updateSuggestion(dimension, norm, { status: 'snoozed', snoozed_until: until });
+}
+
+/** Un-snooze (one-tap): clear the snooze and return to the inbox. */
+export async function unsnoozeSuggestion({ dimension, value } = {}) {
+  if (!dimension || !value) return false;
+  const norm = String(value).trim().toLowerCase();
+  return _updateSuggestion(dimension, norm, { status: 'actionable', snoozed_until: null });
 }
 
 /**

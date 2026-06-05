@@ -5,7 +5,7 @@
 import {
   humaniseValue, toCard, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
   REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
-  probationStatusLabel,
+  probationStatusLabel, effectiveStatus, snoozeDaysLeft,
 } from '../assets/js/refinement/view.js';
 import { effectiveWeights } from '../assets/js/learned-preferences.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
@@ -182,5 +182,34 @@ export async function register({ test, assert, assertEqual }) {
     const last = probationStatusLabel({ reprobe_every_runs: 4, last_reprobe_run: 12 }, cfg);
     assert(last.includes('run 12'), 'surfaces last_reprobe_run once present');
     assert(probationStatusLabel({ status: 'reconsider', reprobe_every_runs: 6 }, cfg).includes('reconsidering'), 'reconsider badge copy');
+  });
+
+  // ── Stage 5/6: dismiss / snooze (with snooze expiry) ───────────────────────
+  test('view: a snooze re-surfaces as actionable once snoozed_until passes', () => {
+    const now = new Date('2026-06-05T00:00:00Z');
+    const future = { status: 'snoozed', snoozed_until: '2026-07-05T00:00:00Z' };
+    const past = { status: 'snoozed', snoozed_until: '2026-05-05T00:00:00Z' };
+    assertEqual(effectiveStatus(future, now), 'snoozed', 'still snoozed before expiry');
+    assertEqual(effectiveStatus(past, now), 'actionable', 'expired snooze returns to the inbox');
+    assertEqual(effectiveStatus({ status: 'dismissed' }, now), 'dismissed', 'non-snooze statuses are unchanged');
+    assertEqual(snoozeDaysLeft(future, now), 30, '30 days left');
+    assertEqual(snoozeDaysLeft(past, now), 0, 'never negative');
+  });
+
+  test('view: classifySuggestions routes an expired snooze to the inbox and a live one to snoozed', () => {
+    const now = new Date('2026-06-05T00:00:00Z');
+    const rows = [
+      row({ value: 's-live', status: 'snoozed', snoozed_until: '2026-07-01T00:00:00Z' }),
+      row({ value: 's-exp', status: 'snoozed', snoozed_until: '2026-06-01T00:00:00Z' }),
+      row({ value: 'd1', status: 'dismissed' }),
+    ];
+    const g = classifySuggestions(rows, cfg, now);
+    assertEqual(g.snoozed.length, 1, 'only the live snooze stays snoozed');
+    assertEqual(g.snoozed[0].value, 's-live');
+    assert(typeof g.snoozed[0].snoozeDaysLeft === 'number', 'snoozed cards carry days left');
+    assertEqual(g.inbox.length, 1, 'the expired snooze re-enters the inbox');
+    assertEqual(g.inbox[0].value, 's-exp');
+    assertEqual(g.dismissed.length, 1);
+    assertEqual(g.counts.actionable, 1, 'counts reflect effective status');
   });
 }

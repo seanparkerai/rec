@@ -161,23 +161,46 @@ export function sortByConfidence(rows) {
 }
 
 /**
- * Split rows into the Section-4 buckets by status. Only `actionable` rows reach the
- * inbox; `forming` rows are the low-pressure "patterns forming" list; the rest map to
- * Active (confirmed_hide), Probation (confirmed_scrape), Dismissed and Snoozed.
+ * The status a row reads as right now. A `snoozed` row whose `snoozed_until` has
+ * passed re-surfaces as `actionable` (snooze expiry is handled here, not by the engine
+ * job — its ON CONFLICT CASE guard never flips a snoozed row back, so the view owns it).
  */
-export function classifySuggestions(rows = [], config = resolveConfig()) {
-  const inbox = rankForInbox(rows.filter((r) => r.status === 'actionable'), config.MAX_INBOX);
+export function effectiveStatus(row = {}, now = new Date()) {
+  if (row.status === 'snoozed') {
+    const until = row.snoozed_until ? new Date(row.snoozed_until) : null;
+    if (until && until <= now) return 'actionable'; // a dated snooze that has elapsed
+  }
+  return row.status;
+}
+
+/** Whole days remaining on a snooze (≥0), for the "snoozed · N days left" copy. */
+export function snoozeDaysLeft(row = {}, now = new Date()) {
+  if (!row.snoozed_until) return 0;
+  const ms = new Date(row.snoozed_until).getTime() - now.getTime();
+  return Math.max(0, Math.ceil(ms / 86_400_000));
+}
+
+/**
+ * Split rows into the Section-4 buckets by EFFECTIVE status (snooze expiry applied).
+ * Only `actionable` rows reach the inbox; `forming` rows are the low-pressure "patterns
+ * forming" list; the rest map to Active (confirmed_hide), Probation (confirmed_scrape),
+ * Dismissed and Snoozed.
+ */
+export function classifySuggestions(rows = [], config = resolveConfig(), now = new Date()) {
+  const eff = rows.map((r) => ({ row: r, status: effectiveStatus(r, now) }));
+  const of = (s) => eff.filter((e) => e.status === s).map((e) => e.row);
+  const inbox = rankForInbox(of('actionable'), config.MAX_INBOX);
   return {
     inbox: inbox.map(toCard),
-    forming: sortByConfidence(rows.filter((r) => r.status === 'forming')).map(toCard),
-    active: rows.filter((r) => r.status === 'confirmed_hide').map(toCard),
-    probation: rows.filter((r) => r.status === 'confirmed_scrape').map(toCard),
-    dismissed: rows.filter((r) => r.status === 'dismissed').map(toCard),
-    snoozed: rows.filter((r) => r.status === 'snoozed').map(toCard),
+    forming: sortByConfidence(of('forming')).map(toCard),
+    active: of('confirmed_hide').map(toCard),
+    probation: of('confirmed_scrape').map(toCard),
+    dismissed: of('dismissed').map(toCard),
+    snoozed: of('snoozed').map((r) => ({ ...toCard(r), snoozeDaysLeft: snoozeDaysLeft(r, now) })),
     counts: {
       total: rows.length,
-      actionable: rows.filter((r) => r.status === 'actionable').length,
-      forming: rows.filter((r) => r.status === 'forming').length,
+      actionable: of('actionable').length,
+      forming: of('forming').length,
     },
   };
 }

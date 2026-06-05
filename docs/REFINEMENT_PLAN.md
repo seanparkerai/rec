@@ -432,9 +432,14 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
       never set to `hidden`), so the §16-guarded `storage/listings.js` is **untouched**.
 - [x] **Active refinements** undo: one-tap **Restore to feed** → remove the override
       rule + revert suggestion to `actionable`. → `unhideSuggestion()`.
-- [ ] Dismiss / Snooze wired to `dismissals` / `snoozed_until`. **DEFERRED** — the
-      display-hide lever was this session's scope; dismiss/snooze (and the §4.1
-      "Why?" reaction-rate sparkline + sample rejected listings) carry forward.
+- [x] Dismiss / Snooze wired to `dismissals` / `snoozed_until`. → `dismissSuggestion`
+      (status=dismissed + `learned_preferences.dismissals[dim:value]`), `snoozeSuggestion`
+      (status=snoozed + `snoozed_until` = now+30d), with one-tap `undismiss`/`unsnooze`.
+      Snooze **expiry is handled in the view** (`effectiveStatus`) — an elapsed snooze
+      re-enters the inbox — because the engine job's ON CONFLICT CASE guard never flips a
+      snoozed row back. New Snoozed §4.5 section + Dismissed un-dismiss. (The §4.1 "Why?"
+      reaction-rate sparkline + sample rejected listings remain deferred — they need extra
+      `listing_reactions` time-series reads beyond the counts-only `metrics` blob.)
 - **Acceptance:** ✅ harness green **535/535** (+5: 4 view helpers + 1 persistence
   stickiness). Unit-tested: rule extraction/matching (case-insensitive Title-Case ↔
   lower), the reserved key is **invisible to `effectiveWeights`** (the safety

@@ -17,6 +17,7 @@ import {
   getRefinementSuggestions, getRefinementMeta, getScrapeProbation,
   hideSuggestion, unhideSuggestion, countMatchingListings,
   stopSearchingArea, bringBackArea,
+  dismissSuggestion, undismissSuggestion, snoozeSuggestion, unsnoozeSuggestion,
 } from './storage.js';
 import { classifySuggestions, buildConfidenceMeter, probationStatusLabel } from './refinement/view.js';
 import { resolveConfig } from './refinement/config.js';
@@ -39,6 +40,8 @@ function cardHTML(c, variant, extra = {}) {
     actions = `<footer class="ref-card__actions">
         <button type="button" class="ref-action ref-action--hide" data-action="hide" ${data}>Hide these from view</button>
         ${stop}
+        <button type="button" class="ref-action ref-action--ghost" data-action="snooze" ${data}>Snooze 30 days</button>
+        <button type="button" class="ref-action ref-action--ghost" data-action="dismiss" ${data}>Dismiss</button>
       </footer>`;
   } else if (variant === 'active') {
     actions = `<footer class="ref-card__actions">
@@ -50,6 +53,17 @@ function cardHTML(c, variant, extra = {}) {
     actions = `${rp}<footer class="ref-card__actions">
         <span class="ref-action__state">Paused — new listings not being searched</span>
         <button type="button" class="ref-action ref-action--undo" data-action="bringback" ${data}>Bring back</button>
+      </footer>`;
+  } else if (variant === 'dismissed') {
+    actions = `<footer class="ref-card__actions">
+        <span class="ref-action__state">Dismissed — won't be suggested again</span>
+        <button type="button" class="ref-action ref-action--undo" data-action="undismiss" ${data}>Bring back</button>
+      </footer>`;
+  } else if (variant === 'snoozed') {
+    const left = c.snoozeDaysLeft ?? 0;
+    actions = `<footer class="ref-card__actions">
+        <span class="ref-action__state">Snoozed · ${left} day${left === 1 ? '' : 's'} left</span>
+        <button type="button" class="ref-action ref-action--undo" data-action="unsnooze" ${data}>Resume now</button>
       </footer>`;
   }
   return `
@@ -189,15 +203,20 @@ function wireActions(refresh) {
       openConfirm({ action, dimension, value, label });
       return;
     }
-    // One-tap, reversible undos (two-way doors — no confirm needed).
+    // One-tap, reversible actions (two-way doors — no confirm needed).
     btn.disabled = true;
-    const ok = action === 'unhide'
-      ? await unhideSuggestion({ dimension, value })
-      : action === 'bringback'
-        ? await bringBackArea({ value })
-        : false;
-    if (ok) { announce(action === 'bringback' ? `${label} back in your search.` : `${label} restored to your feed.`); await refresh(); }
-    else { btn.disabled = false; announce('Could not undo that right now — please try again.'); }
+    const ONE_TAP = {
+      unhide: { fn: () => unhideSuggestion({ dimension, value }), msg: `${label} restored to your feed.` },
+      bringback: { fn: () => bringBackArea({ value }), msg: `${label} back in your search.` },
+      snooze: { fn: () => snoozeSuggestion({ dimension, value, days: 30 }), msg: `Snoozed ${label} for 30 days.` },
+      dismiss: { fn: () => dismissSuggestion({ dimension, value }), msg: `Dismissed ${label}.` },
+      undismiss: { fn: () => undismissSuggestion({ dimension, value }), msg: `${label} back in your suggestions.` },
+      unsnooze: { fn: () => unsnoozeSuggestion({ dimension, value }), msg: `${label} resumed.` },
+    };
+    const h = ONE_TAP[action];
+    const ok = h ? await h.fn() : false;
+    if (ok) { announce(h.msg); await refresh(); }
+    else { btn.disabled = false; announce('Could not do that right now — please try again.'); }
   });
 }
 
@@ -219,6 +238,7 @@ async function refresh() {
   renderList('ref-probation', groups.probation,
     "No areas paused. Areas you stop searching will appear here, with a one-tap bring-back.", 'probation',
     (c) => ({ reprobeLabel: probationStatusLabel(probByKey.get(`${c.dimension}:${c.value}`) || {}, cfg) }));
+  renderList('ref-snoozed', groups.snoozed, "Nothing snoozed.", 'snoozed');
   renderList('ref-dismissed', groups.dismissed, "Nothing dismissed.", 'dismissed');
 
   setCount('ref-inbox-count', groups.counts.actionable);
