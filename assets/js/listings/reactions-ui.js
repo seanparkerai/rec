@@ -166,6 +166,7 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
     if (!state.verb) return;
     const reasons = buildReasonsArray();
     saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving…';
     try {
       await onSave?.({ reaction: state.verb, reasons });
       markSaved();
