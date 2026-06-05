@@ -23,6 +23,62 @@ export function humaniseValue(dimension, value) {
   return titleCase(v); // property_type: 'semi-detached' → 'Semi-Detached', 'end of terrace' → 'End Of Terrace'
 }
 
+// ── Stage 5: display-hide rules (Approach B — client-side overrides filter) ──
+// The Hide lever does NOT flip listings.status: the publishable/browser key can only
+// SELECT the shared, household-less `listings` table (RLS "listings public read"), so
+// an UPDATE is impossible without widening RLS. Instead each hide rule is stored under
+// a RESERVED key inside learned_preferences.overrides. That key is safe because
+// effectiveWeights() (learned-preferences/weights.js) only consumes entries with a
+// numeric `.weight`, so it skips the reserved object, and recomputeLearnedPreferences()
+// preserves `overrides` wholesale — a rule survives a retrain. Each rule is keyed
+// `${dimension}:${value}` with the value stored NORMALISED (lower(trim())) to match
+// the engine; the durable, reversible record is the rule + the suggestion status flip.
+export const REFINEMENT_HIDE_KEY = '__refinement_hidden';
+
+const normKey = (s) => String(s ?? '').trim().toLowerCase();
+
+/** The rule key the engine and portal agree on for a (dimension, value) pair. */
+export function hideRuleKey(dimension, value) {
+  return `${dimension}:${normKey(value)}`;
+}
+
+/**
+ * Extract the active display-hide rules from a learned_preferences.overrides blob.
+ * Returns [{ key, dimension, value (normalised), count, at, label }]. Tolerant of a
+ * missing or non-object reserved key (returns []).
+ */
+export function hiddenRulesFromOverrides(overrides = {}) {
+  const blob = overrides && typeof overrides === 'object' ? overrides[REFINEMENT_HIDE_KEY] : null;
+  if (!blob || typeof blob !== 'object') return [];
+  return Object.entries(blob).map(([key, meta]) => {
+    const m = meta && typeof meta === 'object' ? meta : {};
+    const ci = key.indexOf(':');
+    const dimension = m.dimension || (ci >= 0 ? key.slice(0, ci) : '');
+    const value = normKey(m.value != null ? m.value : (ci >= 0 ? key.slice(ci + 1) : key));
+    return { key, dimension, value, count: Number(m.count) || 0, at: m.at || null, label: humaniseValue(dimension, value) };
+  });
+}
+
+/**
+ * The first display-hide rule a listing matches, or null. A listing matches when the
+ * rule's dimension column (area → area_id, property_type → property_type) equals the
+ * rule value after lower(trim()) on BOTH sides (listings store Title-Case types, e.g.
+ * 'Terraced', while the engine value is 'terraced').
+ */
+export function matchingHideRule(listing = {}, rules = []) {
+  for (const r of rules || []) {
+    const field = r.dimension === 'area' ? listing.area_id
+      : r.dimension === 'property_type' ? listing.property_type : null;
+    if (field != null && normKey(field) === r.value) return r;
+  }
+  return null;
+}
+
+/** Whether a listing is hidden by any active display-hide rule. */
+export function listingHiddenByRefinement(listing = {}, rules = []) {
+  return matchingHideRule(listing, rules) != null;
+}
+
 const pct = (x) => `${Math.round((Number(x) || 0) * 100)}%`;
 const round1 = (x) => (Number(x) || 0).toFixed(1);
 

@@ -29,6 +29,7 @@ import {
   diversifySelection, listingBucketKey, describeSignal, trainingProgress, deriveSearchSpec,
   inferOutdoorSpace, inferParking,
 } from './learned-preferences.js';
+import { hiddenRulesFromOverrides, listingHiddenByRefinement, matchingHideRule } from './refinement/view.js';
 import { LEARNED_PREF, RECENCY_DAYS } from './intelligence-constants.js';
 import { url } from './config.js';
 import { el, clear } from './dom.js';
@@ -67,7 +68,7 @@ function geoChips(listing, area) {
 // red-flags) are always shown — they're judgement calls you still want to see. The
 // HIDE-reason chip only renders when a hidden listing is on screen (i.e. the user
 // turned on "Show hidden"), labelling WHY it was hidden. Shared by row + deck card.
-function flagChips(listing) {
+function flagChips(listing, hiddenRules = []) {
   const { hide, hideReasons, flags } = classifyListing(listing);
   const chips = flags.map((f) => el('span', { class: 'listing-tag listing-tag--flag' }, f.label));
   if (hide) {
@@ -77,6 +78,15 @@ function flagChips(listing) {
         title: 'Normally hidden — showing because “Show hidden” is on',
       }, `🚫 ${HIDE_LABELS[r] || r}`));
     }
+  }
+  // Stage 5: a listing hidden by a confirmed refinement (a value the user chose to
+  // hide from the feed) only renders when "Show hidden" is on; label WHY it's hidden.
+  const refRule = matchingHideRule(listing, hiddenRules);
+  if (refRule) {
+    chips.push(el('span', {
+      class: 'listing-tag listing-tag--hidden',
+      title: 'Hidden by a refinement you confirmed — showing because “Show hidden” is on',
+    }, `🚫 Hidden by refinement: ${refRule.label}`));
   }
   return chips;
 }
@@ -188,7 +198,7 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
   if (drop) tags.push(el('span', { class: 'listing-tag listing-tag--drop' }, `↓ ${fmtPrice(drop)}`));
   if (listing.update_reason === 'new') tags.push(el('span', { class: 'listing-tag listing-tag--new' }, 'New'));
   tags.push(...geoChips(listing, area));
-  tags.push(...flagChips(listing));
+  tags.push(...flagChips(listing, ctx.hiddenRules));
   const tagRow = tags.length ? el('div', { class: 'listing-tags' }, tags) : null;
 
   const controls = ctx.onSave
@@ -281,7 +291,7 @@ function buildReviewedGroup(cfg, rows, buildCard) {
 // affordability gate and any filter-hidden count. Returns an array of segment
 // nodes (separator-interleaved) appended into the summary <p>; recomputed live as
 // the user reacts (renderSummary re-runs on every Save), so the totals move.
-function buildSummary({ review, like, pass, reject, gated, hiddenJunk, hiddenByFilter, decided, dup }) {
+function buildSummary({ review, like, pass, reject, gated, hiddenJunk, hiddenByRefinement, hiddenByFilter, decided, dup }) {
   const seg = (n, label, mod) => el('span', { class: `listings-summary__seg listings-summary__seg--${mod}` }, [
     el('b', { class: 'listings-summary__n' }, String(n)),
     ` ${label}`,
@@ -297,6 +307,7 @@ function buildSummary({ review, like, pass, reject, gated, hiddenJunk, hiddenByF
   if (dup) segs.push(seg(dup, 'duplicates merged', 'dup'));
   if (gated) segs.push(seg(gated, 'out of reach (hidden)', 'gated'));
   if (hiddenJunk) segs.push(seg(hiddenJunk, 'hidden: auction / over-55', 'junk'));
+  if (hiddenByRefinement) segs.push(seg(hiddenByRefinement, 'hidden by refinement', 'refinement'));
   if (hiddenByFilter) segs.push(seg(hiddenByFilter, 'hidden by filters', 'filtered'));
   const nodes = [];
   segs.forEach((s, i) => {
@@ -430,7 +441,7 @@ function buildDeckCard(listing, scored, area, handlers) {
   const drop = lastPriceDrop(listing);
   if (drop) tags.push(el('span', { class: 'listing-tag listing-tag--drop' }, `↓ ${fmtPrice(drop)}`));
   tags.push(...geoChips(listing, area));
-  tags.push(...flagChips(listing));
+  tags.push(...flagChips(listing, handlers.hiddenRules));
 
   const placeBits = [];
   if (listing.address) placeBits.push(listing.address);
@@ -498,6 +509,10 @@ async function render() {
   let overrides = learned?.overrides || {};
   let effective = effectiveWeights(learned?.derived || {}, overrides);
   let dismissals = learned?.dismissals || {};
+  // Stage 5: active display-hide rules from the reserved overrides key — listings
+  // matching a confirmed refinement are filtered from the default feed (revealed by
+  // "Show hidden"). Recomputed after a retrain (overrides can change in runRetrain).
+  let hiddenRules = hiddenRulesFromOverrides(overrides);
   let reactionLog = reactionLogInit || [];
 
   // Feed suppression derives the CURRENT reaction per listing from the live
@@ -629,7 +644,8 @@ async function render() {
   // The review deck always hides junk (auction / over-55) — the "Show hidden"
   // toggle is a browse-mode affordance, not part of the focused review wave.
   const deckOrder = diversifySelection(
-    listings.filter((l) => isRecent(l, now) && !scoreOf(l).gated && !classifyListing(l).hide && !isDecidedListing(l)),
+    listings.filter((l) => isRecent(l, now) && !scoreOf(l).gated && !classifyListing(l).hide
+      && !listingHiddenByRefinement(l, hiddenRules) && !isDecidedListing(l)),
     listingBucketKey,
   );
   // ── learning state / training feedback (Stage 5 rich, balance-aware) ──────
@@ -665,7 +681,7 @@ async function render() {
   // recomputed from the current reactions/reviewedSet WITHOUT a full repaint —
   // that's what makes the totals move the instant a row is liked/passed/rejected
   // (the card stays put; only the counts change).
-  let lastBrowse = { visible: [], gatedCount: 0, hiddenJunkCount: 0, decidedCount: 0, dupCount: 0, hiddenByFilter: 0 };
+  let lastBrowse = { visible: [], gatedCount: 0, hiddenJunkCount: 0, hiddenRefCount: 0, decidedCount: 0, dupCount: 0, hiddenByFilter: 0 };
   function summaryCounts(visible) {
     const c = { review: 0, like: 0, pass: 0, reject: 0 };
     for (const r of visible) {
@@ -682,8 +698,8 @@ async function render() {
     if (!summaryEl) return;
     clear(summaryEl);
     if (!listings.length || mode !== 'browse') return;
-    const { visible, gatedCount, hiddenJunkCount, hiddenByFilter, decidedCount, dupCount } = lastBrowse;
-    const nodes = buildSummary({ ...summaryCounts(visible), gated: gatedCount, hiddenJunk: hiddenJunkCount, hiddenByFilter, decided: decidedCount, dup: dupCount });
+    const { visible, gatedCount, hiddenJunkCount, hiddenRefCount, hiddenByFilter, decidedCount, dupCount } = lastBrowse;
+    const nodes = buildSummary({ ...summaryCounts(visible), gated: gatedCount, hiddenJunk: hiddenJunkCount, hiddenByRefinement: hiddenRefCount, hiddenByFilter, decided: decidedCount, dup: dupCount });
     for (const node of nodes) summaryEl.appendChild(node);
   }
 
@@ -735,7 +751,7 @@ async function render() {
     retraining = true;
     try {
       const res = await recomputeLearnedPreferences({ now: new Date() });
-      if (res) { overrides = res.overrides || {}; effective = effectiveWeights(res.derived || {}, overrides); dismissals = res.dismissals || dismissals; scoreCache.clear(); }
+      if (res) { overrides = res.overrides || {}; effective = effectiveWeights(res.derived || {}, overrides); dismissals = res.dismissals || dismissals; hiddenRules = hiddenRulesFromOverrides(overrides); scoreCache.clear(); }
       reactionLog = await getReactionLog();
     } catch { /* surfaced via storage toast */ }
     retraining = false;
@@ -764,12 +780,18 @@ async function render() {
     // identical to the prior hand-rolled ordering).
     scoreById = new Map(scoredRows.map((r) => [r.listing.rightmove_id, r.scored.score]));
     const rowById = new Map(scoredRows.map((r) => [r.listing.rightmove_id, r]));
-    // Two independent hides, both reversible via their toggle: affordability gate
-    // (out-of-reach) and the junk classifier (auction / over-55). Gated rows are
-    // counted first, so junk is counted only among rows that survived the gate.
+    // Three independent hides, all reversible: the affordability gate (out-of-reach),
+    // the junk classifier (auction / over-55), and confirmed refinements (Stage 5 — a
+    // value the user chose to hide). Gated rows are counted first; junk and refinement
+    // are counted among rows that survived the gate. A listing both junk AND
+    // refinement-hidden is counted only as junk (no double-count). All three are
+    // revealed together by the "Show hidden" toggle.
     const afford = includeOOR ? scoredRows : scoredRows.filter((r) => !r.scored.gated);
-    const junkRows = afford.filter((r) => classifyListing(r.listing).hide);
-    const pool = includeHidden ? afford : afford.filter((r) => !classifyListing(r.listing).hide);
+    const isJunk = (r) => classifyListing(r.listing).hide;
+    const isRefHidden = (r) => listingHiddenByRefinement(r.listing, hiddenRules);
+    const junkRows = afford.filter(isJunk);
+    const refHiddenRows = afford.filter((r) => !isJunk(r) && isRefHidden(r));
+    const pool = includeHidden ? afford : afford.filter((r) => !isJunk(r) && !isRefHidden(r));
     // Suppress already-decided properties (latest reaction like/reject) by id AND by
     // physical-property fingerprint, so a re-list under a new rightmove_id is caught;
     // `pass` stays resurfaceable. Then collapse same-fingerprint duplicates to one
@@ -788,7 +810,7 @@ async function render() {
     const rowCtx = (r, reviewed) => buildRow(r.listing, 0, r.scored, r.area, {
       reaction: reactions[r.listing.rightmove_id] || null,
       status: statuses[r.listing.rightmove_id] || '',
-      reviewed, onSave: browseOnSave, onStatus,
+      reviewed, onSave: browseOnSave, onStatus, hiddenRules,
     });
     const unreviewed = visible.filter((r) => !isReviewed(r.listing.rightmove_id));
     const reviewed = visible.filter((r) => isReviewed(r.listing.rightmove_id));
@@ -812,13 +834,15 @@ async function render() {
 
     const gatedCount = includeOOR ? 0 : gated.length;
     const hiddenJunkCount = includeHidden ? 0 : junkRows.length;
+    const hiddenRefCount = includeHidden ? 0 : refHiddenRows.length;
     lastBrowse = {
       visible,
       gatedCount,
       hiddenJunkCount,
+      hiddenRefCount,
       decidedCount,
       dupCount,
-      hiddenByFilter: Math.max(0, listings.length - visible.length - gatedCount - hiddenJunkCount - decidedCount - dupCount),
+      hiddenByFilter: Math.max(0, listings.length - visible.length - gatedCount - hiddenJunkCount - hiddenRefCount - decidedCount - dupCount),
     };
     renderSummary();
   }
@@ -864,6 +888,7 @@ async function render() {
     deckEl.appendChild(buildDeckCard(next, scoreOf(next), areaOf(next), {
       current: reactions[next.rightmove_id] || null,
       onSave: (d) => deckOnSave(next, d),
+      hiddenRules,
     }));
   }
 

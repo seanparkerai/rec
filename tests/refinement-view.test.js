@@ -4,7 +4,9 @@
 // the inbox ranking + MAX_INBOX cap, and the model-confidence meter states.
 import {
   humaniseValue, toCard, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
+  REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
 } from '../assets/js/refinement/view.js';
+import { effectiveWeights } from '../assets/js/learned-preferences.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
 
 export async function register({ test, assert, assertEqual }) {
@@ -115,5 +117,55 @@ export async function register({ test, assert, assertEqual }) {
     const m = buildConfidenceMeter(null, cfg);
     assertEqual(m.ready, false);
     assertEqual(m.pct, 0);
+  });
+
+  // ── Stage 5: display-hide rules (Approach B) ───────────────────────────────
+  const overridesWith = (...rules) => ({
+    'type:flat': { weight: -0.8 }, // a real learned override — must NOT be read as a hide rule
+    [REFINEMENT_HIDE_KEY]: Object.fromEntries(rules.map((r) => [hideRuleKey(r.dimension, r.value), r])),
+  });
+
+  test('view: hiddenRulesFromOverrides reads the reserved key and humanises labels', () => {
+    const ov = overridesWith(
+      { dimension: 'property_type', value: 'terraced', count: 170, at: '2026-06-05T00:00:00Z' },
+      { dimension: 'area', value: 'hambledon-po7', count: 12 },
+    );
+    const rules = hiddenRulesFromOverrides(ov);
+    assertEqual(rules.length, 2);
+    const t = rules.find((r) => r.value === 'terraced');
+    assertEqual(t.dimension, 'property_type');
+    assertEqual(t.label, 'Terraced');
+    assertEqual(t.count, 170);
+    const a = rules.find((r) => r.dimension === 'area');
+    assertEqual(a.label, 'Hambledon (PO7)');
+  });
+
+  test('view: hiddenRulesFromOverrides is empty for a blank / missing reserved key', () => {
+    assertEqual(hiddenRulesFromOverrides({}).length, 0);
+    assertEqual(hiddenRulesFromOverrides({ 'type:flat': { weight: -0.5 } }).length, 0);
+    assertEqual(hiddenRulesFromOverrides().length, 0);
+  });
+
+  test('view: matchingHideRule matches case-insensitively (Title-Case listing vs lower rule)', () => {
+    const rules = hiddenRulesFromOverrides(overridesWith(
+      { dimension: 'property_type', value: 'terraced' },
+      { dimension: 'area', value: 'hambledon-po7' },
+    ));
+    // listings store Title-Case property_type
+    assert(listingHiddenByRefinement({ property_type: 'Terraced', area_id: 'whiteley-po15' }, rules), 'Terraced matches terraced rule');
+    assert(matchingHideRule({ property_type: 'Terraced' }, rules).label === 'Terraced', 'returns the matched rule');
+    assert(listingHiddenByRefinement({ property_type: 'Detached', area_id: 'Hambledon-PO7' }, rules), 'area_id matches case-insensitively');
+    assert(!listingHiddenByRefinement({ property_type: 'Detached', area_id: 'whiteley-po15' }, rules), 'no rule → not hidden');
+    assert(!listingHiddenByRefinement({}, rules), 'missing fields → not hidden');
+  });
+
+  test('view: the reserved hide key is invisible to effectiveWeights (no numeric .weight)', () => {
+    // SAFETY: the whole Approach-B design rests on effectiveWeights skipping the
+    // reserved object. The real 'type:flat' override survives; the hide blob does not
+    // leak a weight into scoring.
+    const ov = overridesWith({ dimension: 'property_type', value: 'terraced', count: 170 });
+    const eff = effectiveWeights({}, ov);
+    assertEqual(eff['type:flat'], -0.8);
+    assert(!(REFINEMENT_HIDE_KEY in eff), 'reserved hide key never becomes a scoring weight');
   });
 }

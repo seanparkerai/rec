@@ -75,9 +75,9 @@
   },
   "learned_preferences": {
     "count": 1,
-    "last_synced_at": "2026-06-03T11:28:42.965Z",
+    "last_synced_at": "2026-06-05T15:19:38.836Z",
     "_class": "user-state",
-    "_note": "v3 L4/L5: distilled preference weights, one row/household (derived = Layer 2 from the reaction log; overrides = Layer 3 manual/AI; dismissals = L5 conflict-prompt quiet-until map, added by migration learned_preferences_dismissals_l5). 1 row present, recomputed from the reaction log as of 2026-06-03 (0 at table creation 2026-05-31). Recomputed user-state — Supabase wins; snapshot pulled live via MCP. Tracked sync table #19 (17 user-state + 2 content)."
+    "_note": "v3 L4/L5: distilled preference weights, one row/household (derived = Layer 2 from the reaction log; overrides = Layer 3 manual/AI; dismissals = L5 conflict-prompt quiet-until map, added by migration learned_preferences_dismissals_l5). 1 row present, recomputed from the reaction log as of 2026-06-03 (0 at table creation 2026-05-31). Recomputed user-state — Supabase wins; snapshot pulled live via MCP. Tracked sync table #19 (17 user-state + 2 content). 2026-06-05 (Refinement Stage 5): overrides/dismissals confirmed EMPTY ({}); the Approach-B display-hide lever stores hide rules under overrides.__refinement_hidden (reserved key, skipped by effectiveWeights, preserved by recomputeLearnedPreferences). updated_at bumped to 15:19:38 by a hide/undo round-trip verification that was fully reverted (content unchanged)."
   },
   "area_confirmations": {
     "count": 1,

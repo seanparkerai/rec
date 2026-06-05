@@ -77,6 +77,19 @@
       </header>
       <div id="ref-dismissed" class="ref-list"></div>
     </section>
+
+    <!-- Stage 5: status announcements for hide / restore (SC 4.1.3) -->
+    <p id="ref-live" class="ref-sr-only" role="status" aria-live="polite"></p>
+
+    <!-- Stage 5: confirm dialog for the display-hide lever (§4.1) -->
+    <dialog id="ref-confirm" class="ref-dialog" aria-labelledby="ref-confirm-title">
+      <h2 id="ref-confirm-title" class="ref-dialog__title">Hide from view?</h2>
+      <p id="ref-confirm-msg" class="ref-dialog__msg"></p>
+      <footer class="ref-dialog__actions">
+        <button type="button" id="ref-confirm-cancel" class="ref-dialog__btn ref-dialog__btn--ghost">Cancel</button>
+        <button type="button" id="ref-confirm-ok" class="ref-dialog__btn ref-dialog__btn--primary">Hide from view</button>
+      </footer>
+    </dialog>
   </main>
 
   <div data-include="components/footer.html"></div>

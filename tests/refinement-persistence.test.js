@@ -160,6 +160,29 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   // ════════════════════════════════════════════════════════════════════════════
+  // STAGE 5 — a confirmed_hide is sticky against an engine re-run (display lever)
+  // ════════════════════════════════════════════════════════════════════════════
+  test('persistence: a confirmed_hide value stays hidden against an engine re-run', () => {
+    const reactions = strongSignal();
+    const existing = [{
+      dimension: dim, value: 'park home', status: 'confirmed_hide',
+      runs_qualified: cfg.PERSISTENCE_RUNS + 2, // long-qualified — would be actionable
+      first_detected_at: new Date(BASE - DAY).toISOString(), snoozed_until: null,
+    }];
+    const run = runRefinementEngine(reactions, {
+      now: new Date(BASE), config: cfg, dimensions: [dim], priorRunsQualified: priorRunsFromRows(existing),
+    });
+    const plan = planRun(run, { householdId: HH, existingRows: existing, now: new Date(BASE) });
+    const ph = plan.upserts.find((u) => u.value === 'park home');
+    assertEqual(ph.status, 'confirmed_hide', 'engine never downgrades a user-applied hide');
+    assertEqual(plan.actionableCount, 0, 'a confirmed hide is not re-counted as actionable');
+    // Even on a race (the job upserts before reading the new status), the rendered
+    // ON CONFLICT CASE guard only overwrites forming/actionable, so confirmed_hide holds.
+    const sql = renderPlanSql(plan);
+    assert(sql.includes("status IN ('forming','actionable')"), 'ON CONFLICT guard preserves user-owned statuses');
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
   // ACCEPTANCE 3 — the rendered SQL is notify-only: only the three engine tables
   // ════════════════════════════════════════════════════════════════════════════
   test('persistence: renderPlanSql is an idempotent upsert touching only engine tables', () => {

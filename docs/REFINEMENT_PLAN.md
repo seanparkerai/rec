@@ -21,22 +21,26 @@
 >    this file together with the code.
 >
 > **Current status — _as of 2026-06-05_:**
-> - **Active stage:** Stage 4 (Control panel — read-only views) — **COMPLETE.**
->   **Next: Stage 5** (Display-hide lever — the first user action: "Hide these from
->   view" → confirm modal → write rule to `learned_preferences.overrides`, flip matching
->   live listings to `status='hidden'`, log to `sync_log`, set suggestion
->   `status='confirmed_hide'`; default listings read excludes `hidden` + a global "Show
->   hidden" toggle; undo restores. **§16-guarded `storage/listings.js` — its own named
->   change.** Stage 5 also lands the deferred "Why?" sparkline + sample rejected listings.
-> - **Done so far:** Stages 1–3 (schema, pure engine + config, persistence job; live DB
->   holds 51 `forming` suggestions + 2 run-audit rows). Stage 4: read-only Refinement
->   page (`pages/refinement.html` + `page-refinement.js` + `pages/refinement.css`, nav
->   entry), pure view layer `assets/js/refinement/view.js`, read-only storage getter
->   `assets/js/storage/refinement.js`, model-confidence meter (run record now carries a
->   `feedback` summary). 9 view tests; harness green (530/530).
-> - **Next action:** begin Stage 5 — wire the **Hide** lever (display-hide, reversible).
->   Read SCHEMA_NOTES §4 first (the `getListings()` default-read gap — `'hidden'` is NOT
->   filtered today; Stage 5 must fix the default read + add a "Show hidden" toggle).
+> - **Active stage:** Stage 5 (Display-hide lever) — **COMPLETE (Approach B).** The
+>   reversible Hide / Restore lever is live: "Hide these from view" → confirm modal
+>   (states listings affected) → writes a rule to `learned_preferences.overrides`
+>   (reserved key `__refinement_hidden`) + flips the suggestion to `confirmed_hide`;
+>   the listings feed hides matching rows by default (revealed by the existing "Show
+>   hidden" toggle); one-tap Restore undoes it. **NO `listings.status` flip and NO
+>   `sync_log` write — both blocked by RLS** (shared, SELECT-only `listings`; no portal
+>   `sync_log` INSERT). See Stage 5 §below + SCHEMA_NOTES §4. **Next: Stage 6**
+>   (scrape-scope lever + probation), or finish the Stage-5 carry-overs (dismiss/snooze
+>   + the "Why?" sparkline / sample listings).
+> - **Done so far:** Stages 1–4 (schema, pure engine + config, persistence job, read-only
+>   control panel; live DB holds 51 `forming` suggestions). Stage 5: `hideSuggestion` /
+>   `unhideSuggestion` / `countMatchingListings` in `storage/refinement.js`; pure helpers
+>   `hiddenRulesFromOverrides` / `matchingHideRule` / `listingHiddenByRefinement` in
+>   `refinement/view.js`; confirm `<dialog>` + actions in `page-refinement.js` /
+>   `pages/refinement.html` / `pages/refinement.css`; feed integration in
+>   `page-listings.js` (pool filter + chip + summary). Harness green (535/535).
+> - **Next action:** Stage 6 (scrape lever) — OR pick up the Stage-5 carry-overs
+>   (dismiss/snooze → `dismissals`/`snoozed_until`; the §4.1 "Why?" reaction-rate
+>   sparkline + sample rejected listings, which need extra `listing_reactions` reads).
 > - **Constants:** Section 5 **Cautious** defaults confirmed (Luke) and wired into
 >   `assets/js/refinement/config.js`.
 >
@@ -402,20 +406,46 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
   Storage getter `getRefinementSuggestions()`/`getRefinementMeta()` added in a new
   read-only `assets/js/storage/refinement.js` (§17 "Adding a new data type", read side;
   §16-compliant — `storage.js` shim extended by one re-export, not rewritten).
-### Stage 5 — Display-hide lever (confirm + undo)
+### Stage 5 — Display-hide lever (confirm + undo) — **APPROACH B** (2026-06-05)
 **Goal:** the reversible, low-stakes action goes live.
-- [ ] **Hide these from view** → confirm modal (states count affected) → write
-      rule to `learned_preferences.overrides`, flip matching live listings to
-      `status='hidden'`, log to `sync_log` (`actor='portal'`),
-      set suggestion `status='confirmed_hide'`.
-- [ ] Listings read path filters `hidden` by default, with a global **Show
-      hidden** toggle.
-- [ ] **Active refinements** undo: restore `status='live'`, remove the override,
-      log it.
-- [ ] Dismiss / Snooze wired to `dismissals` / `snoozed_until`.
-- **Acceptance:** hide → listings disappear from default view, reappear under
-  "Show hidden"; undo fully restores; everything logged; round-trips are exact.
-- **Merge gate:** display lever merged to `main`.
+> **DESIGN DECISION (owner-approved, do not re-litigate):** the planned
+> `listings.status='hidden'` flip is **blocked** — `listings` is shared content with
+> a **SELECT-only** RLS policy and no `household_id`, so the browser/publishable key
+> cannot UPDATE it; `sync_log` has no portal INSERT policy either (both verified via
+> MCP 2026-06-05, see `docs/SCHEMA_NOTES.md` §4). Replaced by **client-side hiding via
+> `learned_preferences.overrides`** — no migration, no RLS change, no `listings` /
+> `sync_log` writes from the browser.
+- [x] **Hide these from view** → confirm modal (states count affected via
+      `countMatchingListings()`) → write rule to `learned_preferences.overrides`
+      under the reserved key `__refinement_hidden` (skipped by `effectiveWeights`,
+      preserved by `recomputeLearnedPreferences`), set suggestion
+      `status='confirmed_hide'`. **No `listings` flip, no `sync_log` write** (RLS
+      blocks both from the portal). → `storage/refinement.js` `hideSuggestion()`;
+      `page-refinement.js` confirm `<dialog>` (`pages/refinement.html` +
+      `pages/refinement.css`, Linear-dense).
+- [x] Listings read path hides matching listings **by default** via the rule, with
+      the existing global **Show hidden** toggle revealing them (same mechanism as
+      the junk classifier — `page-listings.js` `paint()` pool filter + a
+      "Hidden by refinement: [value]" chip in `flagChips()`). The old
+      `getListings(status='hidden')` gap is **moot** under Approach B (status is
+      never set to `hidden`), so the §16-guarded `storage/listings.js` is **untouched**.
+- [x] **Active refinements** undo: one-tap **Restore to feed** → remove the override
+      rule + revert suggestion to `actionable`. → `unhideSuggestion()`.
+- [ ] Dismiss / Snooze wired to `dismissals` / `snoozed_until`. **DEFERRED** — the
+      display-hide lever was this session's scope; dismiss/snooze (and the §4.1
+      "Why?" reaction-rate sparkline + sample rejected listings) carry forward.
+- **Acceptance:** ✅ harness green **535/535** (+5: 4 view helpers + 1 persistence
+  stickiness). Unit-tested: rule extraction/matching (case-insensitive Title-Case ↔
+  lower), the reserved key is **invisible to `effectiveWeights`** (the safety
+  invariant), and `confirmed_hide` survives an engine re-run (ON CONFLICT CASE guard).
+  **Live round-trip (household 9628b44f…, fully reverted):** set `terraced`→actionable,
+  applied the hide (status→`confirmed_hide`, rule written, `feed_count`=170 matched the
+  modal copy), undid it (status→`actionable`, `overrides` back to `{}`), restored to
+  `forming`. RLS verified: `refinement_suggestions` UPDATE ✓, `learned_preferences`
+  INSERT/UPDATE ✓, `listings` SELECT-only ✓. In production the Hide button only appears
+  once a suggestion is `actionable` (all 51 are `forming`; lift ≈1.01 < MIN_LIFT 1.6 at
+  the ~98.7% baseline), so this ships dormant until Stage 7's looser presets.
+- **Merge gate:** ✅ display lever merged to the working branch.
 ### Stage 6 — Scrape-scope lever + probation + exploration re-probe
 **Goal:** the higher-stakes action goes live, with the feedback-loop safeguard.
 - [ ] **Stop searching this area** → confirm modal (clear "no new listings"
@@ -496,6 +526,26 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 5 COMPLETE (Approach B) → working branch.** Shipped the
+  reversible **display-hide lever** without any `listings`/`sync_log` write: the planned
+  `listings.status='hidden'` flip is **impossible from the portal** (shared, SELECT-only
+  `listings` RLS; no household_id; no `sync_log` INSERT policy — all verified via MCP), so
+  the owner-approved design is **client-side via `learned_preferences.overrides`**. Added
+  `hideSuggestion`/`unhideSuggestion`/`countMatchingListings` to `storage/refinement.js`
+  (rule under reserved key `__refinement_hidden` — skipped by `effectiveWeights`, preserved
+  by `recomputeLearnedPreferences`; suggestion status → `confirmed_hide`/back to
+  `actionable`); pure helpers `hiddenRulesFromOverrides`/`matchingHideRule`/
+  `listingHiddenByRefinement` in `refinement/view.js`; a confirm `<dialog>` + Hide/Restore
+  buttons + live region in `page-refinement.js`/`pages/refinement.html`/`pages/refinement.css`
+  (Linear-dense, tokens only); feed integration in `page-listings.js` (pool filter +
+  "Hidden by refinement" chip + summary segment, revealed by the existing Show-hidden
+  toggle; deck wave excludes hidden too). +5 tests (4 view incl. the effectiveWeights
+  safety invariant, 1 persistence `confirmed_hide`-sticky); harness green **535/535**.
+  Live round-trip verified end-to-end then fully reverted (set terraced→actionable→hide
+  [status confirmed_hide, rule written, feed_count 170 == modal copy]→undo [overrides {}]→
+  restore forming). SCHEMA_NOTES §4 corrected (status-flip assumption → Approach B).
+  **Deferred to a follow-up:** dismiss/snooze + the "Why?" sparkline / sample listings.
+  Supabase: pushed 0 areas, 0 user-state rows (round-trip reverted). **Next: Stage 6.**
 - **2026-06-05** — **Stage 4 COMPLETE → merged to `main`.** Read-only Refinement
   control panel: `pages/refinement.html` + `assets/js/page-refinement.js` + the pure
   view layer `assets/js/refinement/view.js` (`humaniseValue`/`toCard`/`rankForInbox`/

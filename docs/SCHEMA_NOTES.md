@@ -61,19 +61,46 @@
   refinement engine should store **counts/metrics**, not id lists, in
   `refinement_suggestions.metrics`.
 
-## 4. `listings` (671 rows) + `listings.status` — the display lever target
+## 4. `listings` (671 rows) + `listings.status` — display lever (Approach B)
 - `status` values currently in use: **`live` only** (670; 1 row other/none).
-  `'hidden'` is **not yet used** anywhere.
-- **GAP for Stage 5 (Stage-1 checklist answer):** `getListings()` in
-  `assets/js/storage/listings.js:58` filters by status **only when a `status` arg
-  is explicitly passed** (`if (status) q = q.eq('status', status)`); the default
-  call passes `status=null` → **no status filter → `'hidden'` rows would still be
-  returned by default.** So `status='hidden'` is **NOT** honoured by the default
-  read path today. **Stage 5 must:** (a) change the default listings read to
-  exclude `hidden` (e.g. `status='live'` or `status != 'hidden'`), and (b) add a
-  global **Show hidden** toggle that passes the opposite. This is a §16-guarded
-  file (`storage.js` shim → `storage/listings.js`) — **extend, do not rewrite**,
-  and it is its own named change within Stage 5.
+  `'hidden'` is **not used** anywhere — and, under the Stage-5 decision below, it
+  is **never written by the portal**.
+- **STAGE 5 RESOLUTION (2026-06-05, owner-approved — "client-side via overrides"):**
+  the originally-planned status flip (`listings.status='hidden'`) is **blocked and
+  abandoned**. Two hard facts make it impossible from the portal:
+  1. `listings` has **no `household_id`** (shared, fetcher-written content) and a
+     **SELECT-only** RLS policy (`"listings public read"` — verified 2026-06-05:
+     the only policy on the table is `FOR SELECT`). The browser/publishable key
+     therefore **cannot UPDATE `listings`** — only the service-role fetcher can.
+     A portal status-flip would require widening RLS (rejected — security cost,
+     and it would let any client mutate shared content).
+  2. `sync_log` has **no INSERT policy** for the portal → the browser cannot write
+     audit rows either.
+  - **Approach B (shipped):** the hide lever is **purely client-side via a rule in
+    `learned_preferences.overrides`**, under a reserved key `__refinement_hidden`
+    (`{ "property_type:terraced": { dimension, value, count, at }, … }`). This is
+    safe because `effectiveWeights()` (`learned-preferences/weights.js:247`) only
+    consumes entries with a numeric `.weight`, so it **skips** the reserved object,
+    and `recomputeLearnedPreferences()` preserves `overrides` wholesale → a hide
+    rule **survives a retrain**. The feed filters matching listings client-side
+    (`listingHiddenByRefinement()` in `refinement/view.js`), revealed by the
+    existing `[data-show-hidden]` toggle — the **same** mechanism the junk
+    classifier already uses (`page-listings.js` `paint()`), not a second one.
+  - **No `listings` mutation, no `sync_log` write from the browser.** The
+    durable/reversible record is: the override rule **+** the suggestion status flip
+    (`refinement_suggestions` → `confirmed_hide`; portal **does** have an UPDATE RLS
+    policy here, verified) **+** `learned_preferences.updated_at`. Undo reverts the
+    status to `actionable` and drops the rule.
+  - **The earlier "GAP" (default `getListings()` does not filter `status='hidden'`)
+    is therefore MOOT** — Approach B never sets `status='hidden'`, so `getListings`
+    is left unchanged and the §16-guarded `storage/listings.js` read path is **not**
+    touched. (If a future audit trail is wanted, it needs a separate, named
+    migration adding a `sync_log` INSERT policy — out of scope for Stage 5.)
+- Matching is **case-insensitive**: `listings.property_type` is stored Title-Case
+  (`Terraced`, `Semi-Detached`) while engine/rule values are lowercase (`terraced`)
+  — the client filter normalises both with `lower(trim())`; the modal's
+  `countMatchingListings()` uses `ilike` + the feed's geofence rule
+  (`geofence_pass IS NOT FALSE`).
 - Relevant columns for the engine: `area_id text?`, `property_type text?`,
   `status text DEFAULT 'live'`, `rightmove_id`, `outcode`.
 
