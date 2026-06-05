@@ -47,8 +47,8 @@ Fix = paginate the reaction reads (minimal patch; no schema change, no rejected 
       `getReactionLog`, `_sbGetReactionRows`, `recomputeLearnedPreferences` via a shared
       `_fetchAllReactionRows()` paging helper modelled on `getListings()`. Harness green
       (548 + sync). Live check: paged read resolves to 29 likes / 2,624 decided (was ~3 / ~1000).
-- [ ] Phase 2: nav reorder in `components/nav.html` — Listings + Saved to right after Home.
-      Harness green. Commit + push.
+- [x] Phase 2: nav reorder in `components/nav.html` — Listings + Saved now sit right after
+      Home (Home → Listings → Saved → Finances → …). Harness green. Commit + push.
 
 ---
 
