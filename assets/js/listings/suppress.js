@@ -47,6 +47,29 @@ export function isDecided(listing, { ids, fps } = {}) {
 }
 
 /**
+ * Fold a single reaction into a live { ids, fps } suppression set, in place — the
+ * one primitive both the feed's own Save and any cross-page `reactions-changed`
+ * event use, so the two paths can never drift. like/reject DECIDE a property
+ * (suppress by id AND fingerprint); `pass` is a soft skip and never suppresses.
+ * `listing` (preferred) supplies the fingerprint; when only an id is known (e.g. a
+ * dossier event), the fingerprint is recovered from `liveById`. Mutates + returns
+ * `decided` so it composes after decidedSets().
+ * @param {{ids:Set<string>, fps:Set<string>}} decided
+ * @param {string|number} id
+ * @param {string} reaction
+ * @param {object} [listing]   the live listing row (for the fingerprint)
+ * @param {Map<string, object>} [liveById]  rightmove_id → live row (fingerprint fallback)
+ */
+export function foldDecision(decided, id, reaction, listing = null, liveById = new Map()) {
+  if (!DECIDING.has(reaction)) return decided;
+  const key = String(id);
+  decided.ids.add(key);
+  const fp = propertyFingerprint(listing) || propertyFingerprint(liveById.get(key));
+  if (fp) decided.fps.add(fp);
+  return decided;
+}
+
+/**
  * Collapse same-fingerprint listings to a single representative. Rows whose address
  * is too coarse to fingerprint (null) are always kept as unique (no false merge).
  * The representative is the newest (added_date|first_seen), tie-broken to the
