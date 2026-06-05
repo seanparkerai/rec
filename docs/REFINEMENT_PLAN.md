@@ -467,15 +467,22 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
       area/outcode). No `areas`/`sync_log` write from the portal (RLS). →
       `storage/refinement.js` `stopSearchingArea()`; `page-refinement.js` (shared
       confirm `<dialog>`, generalised for hide+stop).
-- [ ] **Scraper enforcement** — `tools/fetch-listings.mjs` (service role) reads
-      `scrape_probation` and removes those areas from the **active** scrape set used
-      by the Apify run. **DEFERRED** (separate commit; outward-facing + spends Apify).
-- [ ] **Exploration re-probe:** every `PROBATION_REPROBE_RUNS` scraper runs,
-      temporarily re-include probationed values for a small sample pull so the
-      engine keeps learning. **DEFERRED** (with scraper enforcement).
+- [x] **Scraper enforcement** — `tools/fetch-listings.mjs` (service role) reads
+      `scrape_probation` (`loadProbation`) and folds the paused area ids into its
+      existing `dropAreas` prune via the pure `probationDropIds()`
+      (`assets/js/refinement/scope.js`). Probation is **fully enforced by default**
+      (no `SCRAPER_RUN_INDEX` → no re-probe, no extra writes). ⚠ **Not live-verified**
+      (would spend Apify); covered by unit tests + a `node --check` parse + a DRY-RUN
+      path that no-ops without a service key.
+- [x] **Exploration re-probe:** pure cadence (`reprobeThisRun()` — re-include once
+      `runIndex - last_reprobe_run ≥ reprobe_every_runs`), wired into the scraper and
+      gated behind a monotonic `SCRAPER_RUN_INDEX` (advances `last_reprobe_run` via a
+      best-effort PATCH). The workflow that supplies the index is a `.github/workflows`
+      change (§16-guarded) — its own named step.
 - [ ] Auto **"Reconsider?"** badge when a probationed value's re-probe reject
-      rate drops below `RECONSIDER_RATE`. **DEFERRED** (needs re-probe data; the
-      portal already renders a `reconsider` status + copy when the scraper sets it).
+      rate drops below `RECONSIDER_RATE`. **DEFERRED** — needs re-probe reject-rate
+      aggregation; the portal *already* renders a `reconsider` status + copy
+      (`probationStatusLabel`) the moment the scraper sets it.
 - [x] **Bring back** restores the value to active search (deletes the probation row +
       reverts the suggestion to `actionable`), one-tap. → `bringBackArea()`. The
       **On probation** view lists paused areas with a forward-looking re-probe label
@@ -500,18 +507,22 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
 - **Acceptance:** switching preset visibly changes which suggestions are
   actionable; reset clears derived state while raw reactions remain intact.
 - **Merge gate:** controls merged to `main`.
-### Stage 8 — Scrape enforcement & invariant check
+### Stage 8 — Scrape enforcement & invariant check  — **CORE DONE** (2026-06-05)
 **Goal:** make scope correctness self-enforcing so it can't silently drift.
-- [ ] The scraper's active area/type list is derived at run time from the source
-      of truth = **active areas** (from `areas`) **minus** `scrape_probation`
-      values. If it currently reads a hand-maintained `criteria`/`zones` list,
-      make that a generated projection, or add a pre-run validation that prunes
-      probationed/inactive values before the Apify call fires.
-- [ ] Invariant check (scheduled): re-derive "in-scope but not active/allowed"
-      and "probationed but still in scope"; alert/log if either set is non-empty.
-- **Acceptance:** a deliberately mis-set scope row is caught/pruned before a run;
-  invariant check reports clean afterwards.
-- **Merge gate:** enforcement + invariant check merged to `main`.
+- [x] The scraper's active area list is derived at run time from the source of
+      truth = **active areas** (`areas.active !== false`, read from `data/areas/*.json`)
+      **minus** `scrape_probation` (the pure `probationDropIds()` folded into the
+      scraper's `dropAreas` prune — see Stage 6 enforcement). No hand-maintained list.
+- [x] Invariant check: `tools/refinement-scope-check.mjs` re-derives
+      `probationedButActive` ("paused but the scraper would still pull it") and
+      `probationedNotActive` (stale paused rows) via the pure `scopeInvariant()`;
+      exits non-zero on drift (`--warn-only` to soften). Verified locally: a probation
+      row on an active area surfaces as drift; the repo's already-inactive areas show
+      as stale, not drift.
+- **Acceptance:** ✅ pure invariant + CLI green (6 scope tests); the check reports
+  paused-but-active vs stale correctly. **Scheduling** it in CI is a
+  `.github/workflows` change (§16-guarded) — its own named step.
+- **Merge gate:** ✅ enforcement + invariant check on the working branch.
 ### Stage 9 — Polish, plain-English copy, safety review
 **Goal:** make it genuinely easy and safe.
 - [ ] Copy review: every suggestion, confirm modal, and undo reads in plain
@@ -553,6 +564,22 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 6 scraper enforcement + Stage 8 invariant → working branch.**
+  Pure scope module `assets/js/refinement/scope.js` (`activeAreaIds`/`probationAreaSet`/
+  `reprobeThisRun`/`probationDropIds`/`scopeInvariant`). Wired into
+  `tools/fetch-listings.mjs`: `loadProbation()` (REST read) + `probationDropIds` folded
+  into the existing `dropAreas` prune (probation fully enforced by default; exploration
+  re-probe gated behind a monotonic `SCRAPER_RUN_INDEX`, advancing `last_reprobe_run`
+  via best-effort PATCH). New `tools/refinement-scope-check.mjs` (Stage 8 drift check,
+  exits non-zero on paused-but-active). +6 scope tests (546/546 green); `node --check`
+  clean; scope-check verified locally (active-area probation → drift; inactive → stale).
+  ⚠ Scraper not live-run (Apify spend); the CI schedule for the check is a §16-guarded
+  workflow step (deferred). Supabase: pushed 0 areas, 0 user-state rows. **Next: Stage 7.**
+- **2026-06-05** — **dismiss/snooze levers → working branch.** `dismissSuggestion`/
+  `undismissSuggestion`/`snoozeSuggestion`/`unsnoozeSuggestion` (status flip +
+  `learned_preferences.dismissals`; snooze `snoozed_until`=now+30d). View `effectiveStatus`
+  handles snooze expiry (elapsed → back to inbox); new Snoozed §4.5 section + Dismissed
+  un-dismiss. +2 tests (540/540). Supabase: pushed 0 areas, 0 user-state rows.
 - **2026-06-05** — **Stage 6 PORTAL LEVER → working branch** (scraper enforcement
   deferred, owner decision: portal-first). Shipped the reversible **"Stop searching this
   area" / "Bring back"** scrape lever. Same RLS reality as Stage 5 — `areas` is

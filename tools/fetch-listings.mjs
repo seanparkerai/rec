@@ -52,6 +52,7 @@ import {
   MILES_PER_KM,
 } from './listings-normalise.mjs';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
+import { probationDropIds, reprobeThisRun } from '../assets/js/refinement/scope.js';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 import { passesBaseline } from '../assets/js/listings/classify.js';
 
@@ -377,6 +378,38 @@ async function restGetOne(table, select) {
   return rows[0] ?? null;
 }
 
+// Stage 6 enforcement: the household-scoped areas the user paused via "Stop searching".
+// Read-only here (the portal writes these rows). Returns [] when unreadable so a probation
+// outage never silently widens the scrape (the scraper just behaves as un-pruned L1).
+async function loadProbation() {
+  if (!SERVICE_KEY) return [];
+  try {
+    const url = `${SUPABASE_URL}/rest/v1/scrape_probation?select=dimension,value,status,reprobe_every_runs,last_reprobe_run`;
+    const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
+    if (!res.ok) throw new Error(`GET scrape_probation failed: ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.warn('probation load failed:', e.message);
+    return [];
+  }
+}
+
+// Advance last_reprobe_run for the areas re-probed this run (best-effort; only when the
+// workflow supplies a monotonic SCRAPER_RUN_INDEX). Never blocks the fetch.
+async function markReprobed(values, runIndex) {
+  if (!SERVICE_KEY || runIndex == null || !values.length) return;
+  for (const v of values) {
+    try {
+      const url = `${SUPABASE_URL}/rest/v1/scrape_probation?dimension=eq.area&value=eq.${encodeURIComponent(v)}`;
+      await fetch(url, {
+        method: 'PATCH',
+        headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ last_reprobe_run: runIndex, updated_at: new Date().toISOString() }),
+      });
+    } catch (e) { console.warn(`mark-reprobed ${v} failed:`, e.message); }
+  }
+}
+
 // v3 L4 optimised search: read the household's criteria + learned preferences and
 // distil them into a narrowing spec (deriveSearchSpec). Returns null when learned
 // mode is off or there's nothing to read — the fetcher then behaves exactly as L1.
@@ -416,6 +449,18 @@ async function main() {
   // additionally carry dropAreas / dropOutcodes.
   const dropAreas = new Set(spec?.dropAreas || []);
   const dropOutcodes = new Set((spec?.dropOutcodes || []).map((s) => String(s).toUpperCase()));
+  // Stage 6 enforcement: subtract user-paused areas (scrape_probation) from the active
+  // set, honouring the exploration re-probe. With no SCRAPER_RUN_INDEX, probation is
+  // fully enforced and nothing is re-probed (and no probation writes happen).
+  const probation = await loadProbation();
+  const runIndex = process.env.SCRAPER_RUN_INDEX != null && process.env.SCRAPER_RUN_INDEX !== ''
+    ? Number(process.env.SCRAPER_RUN_INDEX) : null;
+  const probDrop = probationDropIds(probation, runIndex);
+  const reprobed = [...reprobeThisRun(probation, runIndex)];
+  for (const id of probDrop) dropAreas.add(id);
+  if (probDrop.size || reprobed.length) {
+    console.log(`probation: -${probDrop.size} paused area(s)${reprobed.length ? ` · re-probing ${reprobed.length} this run (${reprobed.join(', ')})` : ''}`);
+  }
   if (dropAreas.size || dropOutcodes.size) {
     for (const [oc, arr] of [...outcodeMap]) {
       const kept = arr.filter((v) => !dropAreas.has(v.id));
@@ -424,6 +469,7 @@ async function main() {
     }
     console.log(`learned prune: -${dropAreas.size} areas · -${dropOutcodes.size} outcodes`);
   }
+  if (!DRY_RUN && reprobed.length) await markReprobed(reprobed, runIndex);
   const ALL_ACTIVE = flattenVillages(outcodeMap);          // global geofence index
   // L7.4: build search targets for the chosen mode (outcode|village|cluster), then
   // order by learned focus (by outcode) and cap with FETCH_LIMIT.

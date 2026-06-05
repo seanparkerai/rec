@@ -83,6 +83,7 @@ const { register: registerAssetLinks } = await import('../tests/asset-links.test
 const { register: registerRefinementEngine } = await import('../tests/refinement-engine.test.js');
 const { register: registerRefinementPersistence } = await import('../tests/refinement-persistence.test.js');
 const { register: registerRefinementView } = await import('../tests/refinement-view.test.js');
+const { register: registerRefinementScope } = await import('../tests/refinement-scope.test.js');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
 await registerAffordability({ test, assert, assertEqual, fixtures });
@@ -128,6 +129,7 @@ await registerAssetLinks({ test, assert, assertEqual });
 await registerRefinementEngine({ test, assert, assertEqual });
 await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });
+await registerRefinementScope({ test, assert, assertEqual });
 
 // Run Supabase sync tests
 async function runSyncTests() {
