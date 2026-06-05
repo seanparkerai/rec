@@ -21,26 +21,27 @@
 >    this file together with the code.
 >
 > **Current status — _as of 2026-06-05_:**
-> - **Active stage:** Stage 5 (Display-hide lever) — **COMPLETE (Approach B).** The
->   reversible Hide / Restore lever is live: "Hide these from view" → confirm modal
->   (states listings affected) → writes a rule to `learned_preferences.overrides`
->   (reserved key `__refinement_hidden`) + flips the suggestion to `confirmed_hide`;
->   the listings feed hides matching rows by default (revealed by the existing "Show
->   hidden" toggle); one-tap Restore undoes it. **NO `listings.status` flip and NO
->   `sync_log` write — both blocked by RLS** (shared, SELECT-only `listings`; no portal
->   `sync_log` INSERT). See Stage 5 §below + SCHEMA_NOTES §4. **Next: Stage 6**
->   (scrape-scope lever + probation), or finish the Stage-5 carry-overs (dismiss/snooze
->   + the "Why?" sparkline / sample listings).
-> - **Done so far:** Stages 1–4 (schema, pure engine + config, persistence job, read-only
->   control panel; live DB holds 51 `forming` suggestions). Stage 5: `hideSuggestion` /
->   `unhideSuggestion` / `countMatchingListings` in `storage/refinement.js`; pure helpers
->   `hiddenRulesFromOverrides` / `matchingHideRule` / `listingHiddenByRefinement` in
->   `refinement/view.js`; confirm `<dialog>` + actions in `page-refinement.js` /
->   `pages/refinement.html` / `pages/refinement.css`; feed integration in
->   `page-listings.js` (pool filter + chip + summary). Harness green (535/535).
-> - **Next action:** Stage 6 (scrape lever) — OR pick up the Stage-5 carry-overs
->   (dismiss/snooze → `dismissals`/`snoozed_until`; the §4.1 "Why?" reaction-rate
->   sparkline + sample rejected listings, which need extra `listing_reactions` reads).
+> - **Active stage:** Stage 6 (Scrape-scope lever) — **PORTAL LEVER COMPLETE**;
+>   scraper enforcement + re-probe **DEFERRED** to a separate commit (owner decision:
+>   portal-first). "Stop searching this area" (area cards only) → danger confirm modal
+>   → upsert `scrape_probation` + flip suggestion to `confirmed_scrape`; the **On
+>   probation** view lists paused areas with a one-tap **Bring back**. Same RLS reality
+>   as Stage 5: `areas` is SELECT-only, so the lever writes the household-scoped
+>   `scrape_probation` table, NOT `areas.active`; the scraper subtraction is its own
+>   change. Stage 5 (Display-hide lever) is **COMPLETE (Approach B)** — Hide/Restore via
+>   `learned_preferences.overrides`. See SCHEMA_NOTES §4 (hide) + §5 (scrape).
+> - **Done so far:** Stages 1–5 complete; Stage 6 portal lever done. Stage 6 added
+>   `getScrapeProbation` / `stopSearchingArea` / `bringBackArea` to
+>   `storage/refinement.js`, `probationStatusLabel` to `refinement/view.js`, and the
+>   Stop/Bring-back UI + generalised confirm dialog in `page-refinement.js` /
+>   `pages/refinement.css`. Harness green (538/538). Live DB holds 51 `forming`
+>   suggestions; 0 probation rows; overrides `{}`.
+> - **Next action:** the **scraper enforcement** — make `tools/fetch-listings.mjs`
+>   read `scrape_probation` and drop those areas from the active set, + the exploration
+>   re-probe every `PROBATION_REPROBE_RUNS` runs + the "Reconsider?" detection (this is
+>   the outward-facing, Apify-spending half; overlaps §8). OR the Stage-5/6 carry-overs:
+>   dismiss/snooze (`dismissals`/`snoozed_until`) and the §4.1 "Why?" sparkline + sample
+>   rejected listings (need extra `listing_reactions` reads).
 > - **Constants:** Section 5 **Cautious** defaults confirmed (Luke) and wired into
 >   `assets/js/refinement/config.js`.
 >
@@ -448,21 +449,42 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
 - **Merge gate:** ✅ display lever merged to the working branch.
 ### Stage 6 — Scrape-scope lever + probation + exploration re-probe
 **Goal:** the higher-stakes action goes live, with the feedback-loop safeguard.
-- [ ] **Stop searching this area** → confirm modal (clear "no new listings"
-      warning) → add to `scrape_probation`, remove value from the **active**
-      scrape scope used by the Apify run, set suggestion `status='confirmed_scrape'`,
-      log it.
+> **Split by owner decision (2026-06-05): PORTAL lever first, scraper enforcement
+> separate.** Same RLS reality as Stage 5 — `areas` is SELECT-only from the portal
+> (no `household_id`), so the lever **cannot** flip `areas.active`. It writes the
+> household-scoped `scrape_probation` table (portal-writable) + flips the suggestion
+> to `confirmed_scrape`. The scraper-side subtraction + re-probe (which changes real
+> Apify fetches/spend) is deferred to its own commit (overlaps §8 enforcement).
+- [x] **Stop searching this area** → confirm modal (stronger "no new listings"
+      warning, danger-tinted, states listings currently shown) → upsert
+      `scrape_probation` (status='active', `reprobe_every_runs`) + set suggestion
+      `status='confirmed_scrape'`. **Area dimension only** (the scraper searches by
+      area/outcode). No `areas`/`sync_log` write from the portal (RLS). →
+      `storage/refinement.js` `stopSearchingArea()`; `page-refinement.js` (shared
+      confirm `<dialog>`, generalised for hide+stop).
+- [ ] **Scraper enforcement** — `tools/fetch-listings.mjs` (service role) reads
+      `scrape_probation` and removes those areas from the **active** scrape set used
+      by the Apify run. **DEFERRED** (separate commit; outward-facing + spends Apify).
 - [ ] **Exploration re-probe:** every `PROBATION_REPROBE_RUNS` scraper runs,
       temporarily re-include probationed values for a small sample pull so the
-      engine keeps learning about them.
+      engine keeps learning. **DEFERRED** (with scraper enforcement).
 - [ ] Auto **"Reconsider?"** badge when a probationed value's re-probe reject
-      rate drops below `RECONSIDER_RATE`.
-- [ ] **Bring back** restores the value to active scrape (and restores any hidden
-      listings), logged.
-- **Acceptance:** approving removes the value from the next scrape's scope;
-  re-probe re-includes it on cadence; bring-back is exact and logged; no hard
-  deletes anywhere.
-- **Merge gate:** scrape lever merged to `main`.
+      rate drops below `RECONSIDER_RATE`. **DEFERRED** (needs re-probe data; the
+      portal already renders a `reconsider` status + copy when the scraper sets it).
+- [x] **Bring back** restores the value to active search (deletes the probation row +
+      reverts the suggestion to `actionable`), one-tap. → `bringBackArea()`. The
+      **On probation** view lists paused areas with a forward-looking re-probe label
+      (`probationStatusLabel`) + Bring-back button.
+- **Acceptance (portal lever):** ✅ harness green **538/538** (+3: 2 probation-copy
+  view tests + 1 `confirmed_scrape` stickiness). **Live round-trip (household
+  9628b44f…, fully reverted):** set `hambledon-po7`→actionable → stop searching
+  (scrape_probation row `active`/reprobe 6 written, suggestion→`confirmed_scrape`) →
+  bring back (probation row deleted, suggestion→`actionable`) → restored to `forming`.
+  RLS verified: `scrape_probation` INSERT/UPDATE/DELETE ✓, `areas` SELECT-only ✓.
+  No hard deletes of `listing_reactions`; nothing in the scrape scope changed yet
+  (enforcement deferred), so the golden rule holds.
+- **Merge gate:** portal scrape lever merged to `main`; scraper enforcement is its
+  own gate.
 ### Stage 7 — Training controls & reset
 **Goal:** user-friendly control over the model's learning.
 - [ ] Sensitivity presets (Cautious/Balanced/Aggressive) mapping to constants;
@@ -526,6 +548,23 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 6 PORTAL LEVER → working branch** (scraper enforcement
+  deferred, owner decision: portal-first). Shipped the reversible **"Stop searching this
+  area" / "Bring back"** scrape lever. Same RLS reality as Stage 5 — `areas` is
+  SELECT-only from the portal (verified), so the lever writes the household-scoped
+  `scrape_probation` table (full CRUD RLS) + flips the suggestion to `confirmed_scrape`,
+  NOT `areas.active`. Added `getScrapeProbation`/`stopSearchingArea`/`bringBackArea` to
+  `storage/refinement.js` (area-only; upsert on the unique (household,dimension,value));
+  `probationStatusLabel` (forward-looking re-probe copy) to `refinement/view.js`; the
+  Stop button (area inbox cards, danger-tinted) + Bring-back (On-probation cards) + a
+  generalised confirm `<dialog>` in `page-refinement.js`/`pages/refinement.css`. +3 tests
+  (538/538 green): 2 probation-copy, 1 `confirmed_scrape`-sticky against an engine re-run.
+  Live round-trip verified then fully reverted (hambledon-po7: actionable→stop [probation
+  row active/reprobe 6, status confirmed_scrape]→bring back [row deleted, actionable]→
+  forming; 0 probation rows after). SCHEMA_NOTES §5 updated (areas SELECT-only →
+  scrape_probation is the lever). **DEFERRED:** the scraper-side subtraction + exploration
+  re-probe + "Reconsider?" (the Apify-spending half; overlaps §8). Supabase: pushed 0
+  areas, 0 user-state rows (round-trip reverted). **Next: scraper enforcement.**
 - **2026-06-05** — **Stage 5 COMPLETE (Approach B) → working branch.** Shipped the
   reversible **display-hide lever** without any `listings`/`sync_log` write: the planned
   `listings.status='hidden'` flip is **impossible from the portal** (shared, SELECT-only

@@ -111,6 +111,17 @@
   **NOT** scrape state. Do not conflate the two.
 - Therefore the Stage 8 invariant "active scrape scope = **active areas** minus
   `scrape_probation`" derives from `areas.data.active = true` minus probation rows.
+- **STAGE 6 (2026-06-05): `areas` is SELECT-only from the portal** (`"areas public
+  read"` is the only policy; no `household_id`) — exactly like `listings`. So the
+  portal **cannot** flip `areas.active` directly. The "Stop searching this area"
+  lever therefore writes the **household-scoped `scrape_probation`** table (full
+  INSERT/UPDATE/DELETE RLS for household members — verified) + flips the suggestion
+  to `confirmed_scrape`; the **scraper** (`tools/fetch-listings.mjs`, service role)
+  subtracts probationed areas from its active set in a **separate, named change**
+  (the §8 enforcement step — not yet wired). `scrape_probation` has a unique
+  `(household_id, dimension, value)` index (upsertable) and `status ∈
+  {active, reconsider, restored}`. Bring-back = DELETE the probation row + revert the
+  suggestion to `actionable`.
 - Other `data` keys present: `searchRadiusMi`, `geofenceRadiusMi`, `rightmove`,
   `houseTypeIds`, `coords`, `postcode`, `town`, `county`, `prices`, … (full area
   record per `data/schema/area.schema.json`).

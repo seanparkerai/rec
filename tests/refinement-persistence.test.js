@@ -182,6 +182,23 @@ export async function register({ test, assert, assertEqual }) {
     assert(sql.includes("status IN ('forming','actionable')"), 'ON CONFLICT guard preserves user-owned statuses');
   });
 
+  test('persistence: a confirmed_scrape value stays paused against an engine re-run', () => {
+    // Stage 6 scrape lever: the same guard protects a user-applied "stop searching".
+    const reactions = strongSignal();
+    const existing = [{
+      dimension: dim, value: 'park home', status: 'confirmed_scrape',
+      runs_qualified: cfg.PERSISTENCE_RUNS + 2,
+      first_detected_at: new Date(BASE - DAY).toISOString(), snoozed_until: null,
+    }];
+    const run = runRefinementEngine(reactions, {
+      now: new Date(BASE), config: cfg, dimensions: [dim], priorRunsQualified: priorRunsFromRows(existing),
+    });
+    const plan = planRun(run, { householdId: HH, existingRows: existing, now: new Date(BASE) });
+    const ph = plan.upserts.find((u) => u.value === 'park home');
+    assertEqual(ph.status, 'confirmed_scrape', 'engine never reverts a user-applied scrape pause');
+    assertEqual(plan.actionableCount, 0, 'a confirmed scrape pause is not re-counted as actionable');
+  });
+
   // ════════════════════════════════════════════════════════════════════════════
   // ACCEPTANCE 3 — the rendered SQL is notify-only: only the three engine tables
   // ════════════════════════════════════════════════════════════════════════════

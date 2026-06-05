@@ -113,6 +113,81 @@ export async function unhideSuggestion({ dimension, value } = {}) {
   return okPrefs && okStatus;
 }
 
+// ── Stage 6: scrape-scope lever (probation) — PORTAL side only ───────────────
+// The "Stop searching this area" lever is the higher-stakes scrape lever. Like the
+// Stage-5 hide lever, the portal CANNOT mutate the scrape source directly: `areas`
+// has a SELECT-only RLS policy ("areas public read") and no household_id, so the
+// publishable key cannot flip `areas.active`. Instead the household-scoped
+// `scrape_probation` table (full CRUD RLS for household members) records the user's
+// intent; the scraper (tools/fetch-listings.mjs, service role) subtracts probationed
+// values from its active set in a SEPARATE, named change (the §8 enforcement step).
+// These functions only write the portal-owned intent + flip the suggestion status.
+
+/** All scrape-probation rows for the current household (the authoritative paused set). */
+export async function getScrapeProbation() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return [];
+  try {
+    const { data, error } = await sb
+      .from('scrape_probation')
+      .select('dimension, value, approved_at, reprobe_every_runs, last_reprobe_run, status')
+      .eq('household_id', hid);
+    if (error) throw error;
+    return data ?? [];
+  } catch (e) {
+    console.error('storage: read scrape_probation', e.message);
+    return [];
+  }
+}
+
+/**
+ * Stop searching an area (the scrape lever, §4.1): upsert a scrape_probation row
+ * (status='active', re-probe cadence) and flip the suggestion → confirmed_scrape. Area
+ * dimension only — the scraper searches by area/outcode, so a property-type probation
+ * has no scrape meaning. `value` is normalised to match the engine and the scraper.
+ */
+export async function stopSearchingArea({ value, reprobeEveryRuns = 6 } = {}) {
+  if (!value) return false;
+  const norm = String(value).trim().toLowerCase();
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return false;
+  try {
+    const now = new Date().toISOString();
+    const { error } = await sb.from('scrape_probation').upsert(
+      { household_id: hid, dimension: 'area', value: norm, approved_at: now, reprobe_every_runs: Number(reprobeEveryRuns) || 6, status: 'active', updated_at: now },
+      { onConflict: 'household_id,dimension,value' },
+    );
+    if (error) throw error;
+  } catch (e) {
+    console.error('storage: upsert scrape_probation', e.message);
+    return false;
+  }
+  return await _setSuggestionStatus('area', norm, 'confirmed_scrape');
+}
+
+/**
+ * Bring an area back into active search (§4.3): delete its scrape_probation row and
+ * revert the suggestion to actionable. One-tap, reversible — the area returns to the
+ * scraper's active set on the next run (once §8 enforcement reads probation).
+ */
+export async function bringBackArea({ value } = {}) {
+  if (!value) return false;
+  const norm = String(value).trim().toLowerCase();
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return false;
+  try {
+    const { error } = await sb
+      .from('scrape_probation')
+      .delete()
+      .eq('household_id', hid).eq('dimension', 'area').eq('value', norm);
+    if (error) throw error;
+  } catch (e) {
+    console.error('storage: delete scrape_probation', e.message);
+    return false;
+  }
+  return await _setSuggestionStatus('area', norm, 'actionable');
+}
+
 /**
  * Count the live, feed-visible listings a hide rule would remove (for the confirm
  * modal's "removes X listings" copy). Matches case-insensitively because listings store

@@ -5,6 +5,7 @@
 import {
   humaniseValue, toCard, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
   REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
+  probationStatusLabel,
 } from '../assets/js/refinement/view.js';
 import { effectiveWeights } from '../assets/js/learned-preferences.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
@@ -167,5 +168,19 @@ export async function register({ test, assert, assertEqual }) {
     const eff = effectiveWeights({}, ov);
     assertEqual(eff['type:flat'], -0.8);
     assert(!(REFINEMENT_HIDE_KEY in eff), 'reserved hide key never becomes a scoring weight');
+  });
+
+  // ── Stage 6: probation re-probe status copy ────────────────────────────────
+  test('view: probationStatusLabel describes the re-probe cadence (forward-looking)', () => {
+    const l = probationStatusLabel({ reprobe_every_runs: 6, status: 'active' }, cfg);
+    assert(l.includes('every 6 scraper runs'), 'states the cadence');
+    assert(!l.includes('Last re-checked'), 'no "last re-checked" until the scraper writes one');
+  });
+
+  test('view: probationStatusLabel falls back to the config cadence and surfaces reconsider', () => {
+    assert(probationStatusLabel({}, cfg).includes(`every ${cfg.PROBATION_REPROBE_RUNS} scraper runs`), 'config default cadence');
+    const last = probationStatusLabel({ reprobe_every_runs: 4, last_reprobe_run: 12 }, cfg);
+    assert(last.includes('run 12'), 'surfaces last_reprobe_run once present');
+    assert(probationStatusLabel({ status: 'reconsider', reprobe_every_runs: 6 }, cfg).includes('reconsidering'), 'reconsider badge copy');
   });
 }

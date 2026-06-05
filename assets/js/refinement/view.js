@@ -79,6 +79,24 @@ export function listingHiddenByRefinement(listing = {}, rules = []) {
   return matchingHideRule(listing, rules) != null;
 }
 
+/**
+ * Plain-English re-probe status for an on-probation area (§4.3). Forward-looking: the
+ * scraper-side enforcement (re-probe cadence, "reconsider" detection) lands separately,
+ * so until a re-probe has run we describe the cadence; `last_reprobe_run` and a
+ * 'reconsider' status are surfaced once the scraper writes them.
+ */
+export function probationStatusLabel(row = {}, config = resolveConfig()) {
+  const every = Number(row.reprobe_every_runs) || config.PROBATION_REPROBE_RUNS;
+  const cadence = `We'll quietly re-check it every ${every} scraper run${every === 1 ? '' : 's'} in case it's worth bringing back.`;
+  if (row.status === 'reconsider') {
+    return `Worth reconsidering — recent re-checks suggest this area may be picking up. ${cadence}`;
+  }
+  if (row.last_reprobe_run != null) {
+    return `Last re-checked at scraper run ${row.last_reprobe_run}. ${cadence}`;
+  }
+  return cadence;
+}
+
 const pct = (x) => `${Math.round((Number(x) || 0) * 100)}%`;
 const round1 = (x) => (Number(x) || 0).toFixed(1);
 

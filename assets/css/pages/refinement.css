@@ -175,6 +175,19 @@
   color: var(--ink-muted);
   margin-right: auto;
 }
+/* Stage 6: the scrape lever is higher-stakes — tint it danger so it reads distinct
+   from the reversible display-hide action. */
+.ref-action--stop {
+  border-color: color-mix(in oklch, var(--danger) 45%, var(--hairline));
+  background: var(--danger-soft);
+  color: color-mix(in oklch, var(--danger) 70%, var(--ink));
+}
+.ref-action--stop:hover { background: color-mix(in oklch, var(--danger) 22%, var(--paper)); }
+.ref-action__reprobe {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
 
 /* ── Stage 5: confirm dialog (native <dialog>) ───────────────────────────── */
 .ref-dialog {
@@ -212,6 +225,12 @@
   color: var(--accent-contrast);
 }
 .ref-dialog__btn--primary:hover { background: var(--accent-hover); }
+/* When confirming the higher-stakes scrape lever, the primary button reads danger. */
+.ref-dialog--danger .ref-dialog__btn--primary {
+  border-color: var(--danger);
+  background: var(--danger);
+}
+.ref-dialog--danger .ref-dialog__btn--primary:hover { background: color-mix(in oklch, var(--danger) 88%, var(--ink)); }
 .ref-dialog__btn--ghost:hover { background: var(--surface-sunken); }
 .ref-dialog__btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 .ref-dialog__btn:disabled { opacity: 0.6; cursor: progress; }
