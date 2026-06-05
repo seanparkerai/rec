@@ -7,14 +7,15 @@ Tick items as completed and **commit**. To resume in a fresh chat: read this fil
 > plan + live checklist + progress log live in **`docs/REFINEMENT_PLAN.md`**; live schema
 > facts in **`docs/SCHEMA_NOTES.md`**. If asked to *"pick up the decision plan work,"*
 > open `REFINEMENT_PLAN.md` and follow its RESUME banner.
-> **Current state (2026-06-05):** **Stage 4 COMPLETE** — read-only Refinement control
-> panel: `pages/refinement.html` + `page-refinement.js` + pure view layer
-> `assets/js/refinement/view.js` + read-only getter `assets/js/storage/refinement.js`;
-> Linear-dense CSS; nav entry; model-confidence meter (Ready). 9 view tests; harness
-> green 530/530. Live page shows 51 `forming` cards + 0 actionable (empty inbox). Stages
-> 1–3 remain COMPLETE (schema, engine+config, persistence job; 51 live suggestions).
-> **Next: Stage 5** — display-hide lever (first user action; confirm + undo; §16-guarded
-> `storage/listings.js`). Also lands the deferred "Why?" sparkline + sample listings.
+> **Current state (2026-06-05):** **ALL STAGES 1–9 COMPLETE.** Full engine: schema →
+> pure engine → persistence job → control panel → display-hide lever (Approach B,
+> `learned_preferences.overrides`) → scrape-pause lever + probation + scraper enforcement
+> + Stage 8 invariant → dismiss/snooze → training controls (presets + reset) → polish +
+> safety review. Harness green **548/548**. Maintenance map: `docs/REFINEMENT_README.md`.
+> Production: 51 `forming`, 0 actionable (lift binds at the ~98.7% baseline) so the action
+> buttons ship dormant. **Deferred (documented, non-blocking):** "Why?" sparkline + sample
+> listings; "Reconsider?" auto-badge; CI scheduling + `SCRAPER_RUN_INDEX` (workflow,
+> §16-guarded; scraper not yet live-run vs Apify).
 
 **Status (reconciled 2026-05-30):** The app is well past the original eight-page plan. Shipped since:
 the data-model / intelligence-engine expansion, the investments split, the 5-band dashboard overhaul

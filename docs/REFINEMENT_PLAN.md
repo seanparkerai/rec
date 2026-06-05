@@ -21,27 +21,25 @@
 >    this file together with the code.
 >
 > **Current status — _as of 2026-06-05_:**
-> - **Active stage:** Stage 6 (Scrape-scope lever) — **PORTAL LEVER COMPLETE**;
->   scraper enforcement + re-probe **DEFERRED** to a separate commit (owner decision:
->   portal-first). "Stop searching this area" (area cards only) → danger confirm modal
->   → upsert `scrape_probation` + flip suggestion to `confirmed_scrape`; the **On
->   probation** view lists paused areas with a one-tap **Bring back**. Same RLS reality
->   as Stage 5: `areas` is SELECT-only, so the lever writes the household-scoped
->   `scrape_probation` table, NOT `areas.active`; the scraper subtraction is its own
->   change. Stage 5 (Display-hide lever) is **COMPLETE (Approach B)** — Hide/Restore via
->   `learned_preferences.overrides`. See SCHEMA_NOTES §4 (hide) + §5 (scrape).
-> - **Done so far:** Stages 1–5 complete; Stage 6 portal lever done. Stage 6 added
->   `getScrapeProbation` / `stopSearchingArea` / `bringBackArea` to
->   `storage/refinement.js`, `probationStatusLabel` to `refinement/view.js`, and the
->   Stop/Bring-back UI + generalised confirm dialog in `page-refinement.js` /
->   `pages/refinement.css`. Harness green (538/538). Live DB holds 51 `forming`
->   suggestions; 0 probation rows; overrides `{}`.
-> - **Next action:** the **scraper enforcement** — make `tools/fetch-listings.mjs`
->   read `scrape_probation` and drop those areas from the active set, + the exploration
->   re-probe every `PROBATION_REPROBE_RUNS` runs + the "Reconsider?" detection (this is
->   the outward-facing, Apify-spending half; overlaps §8). OR the Stage-5/6 carry-overs:
->   dismiss/snooze (`dismissals`/`snoozed_until`) and the §4.1 "Why?" sparkline + sample
->   rejected listings (need extra `listing_reactions` reads).
+> - **ALL STAGES (1–9) COMPLETE.** The Model Refinement Engine is built end-to-end:
+>   schema → pure engine → persistence job → read-only panel → **display-hide lever**
+>   (Approach B, `learned_preferences.overrides`) → **scrape-pause lever** + probation +
+>   scraper enforcement + re-probe + **Stage 8 invariant** → **training controls**
+>   (presets + reset) → polish + safety review. See `docs/REFINEMENT_README.md` for the
+>   maintenance map. Harness green **548/548**.
+> - **Two RLS realities shaped the build** (both verified, both documented in
+>   SCHEMA_NOTES §4/§5): `listings` and `areas` are shared, SELECT-only from the portal,
+>   so neither lever mutates them — the display lever uses a reserved `overrides` key, the
+>   scrape lever uses the household-scoped `scrape_probation` table, and the scraper
+>   (service role) does the subtraction.
+> - **Remaining (deferred, documented, non-blocking):** the §4.1 "Why?" sparkline +
+>   sample listings; the "Reconsider?" auto-badge from re-probe rates; and the CI
+>   scheduling + `SCRAPER_RUN_INDEX` wiring (all `.github/workflows`, §16-guarded; the
+>   scraper enforcement is not yet live-run against Apify).
+> - **Production state:** 51 `forming` suggestions, **0 actionable** (~98.7% baseline caps
+>   lift ≈1.01 < `MIN_LIFT` 1.6), so the action buttons ship dormant until an actionable
+>   suggestion appears (looser preset / taste shift). All paths verified via reversible
+>   live round-trips. overrides `{}`, 0 probation rows.
 > - **Constants:** Section 5 **Cautious** defaults confirmed (Luke) and wired into
 >   `assets/js/refinement/config.js`.
 >
@@ -535,19 +533,29 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
   paused-but-active vs stale correctly. **Scheduling** it in CI is a
   `.github/workflows` change (§16-guarded) — its own named step.
 - **Merge gate:** ✅ enforcement + invariant check on the working branch.
-### Stage 9 — Polish, plain-English copy, safety review
+### Stage 9 — Polish, plain-English copy, safety review ✅ COMPLETE (2026-06-05)
 **Goal:** make it genuinely easy and safe.
-- [ ] Copy review: every suggestion, confirm modal, and undo reads in plain
-      English; "Why?" expanders are clear; no exposed jargon.
-- [ ] Accessibility / mobile layout pass on the Refinement page.
-- [ ] Safety review against the golden rule: confirm there is **no code path**
-      that hides a listing or removes a scrape area without an explicit user
-      action; confirm all actions are reversible and logged; confirm no hard
-      deletes of `listing_reactions`.
-- [ ] Update this document's Progress Log and write a short `REFINEMENT_README.md`
-      for future maintenance.
-- **Acceptance:** safety review checklist passes; docs committed.
-- **Merge gate:** final merge to `main`.
+- [x] Copy review: suggestions, confirm modals (hide / stop / reset) and the undo
+      buttons all read in plain English; "Why?" expanders show counts/tier, no raw
+      jargon; the stat numerals use `--font-data` but are labelled in words.
+- [x] Accessibility / mobile pass on the Refinement page: native `<dialog>`
+      (focus-trapped, Escape, click-outside), `:focus-visible` rings on every control,
+      ≥44px targets, `aria-pressed` on the preset/segmented buttons, `fieldset/legend`
+      for the reset scope, a polite `aria-live` status region, mobile-first single-column
+      grids that widen at 768px. Tokens only — no hard-coded hex/px.
+- [x] Safety review against the golden rule (grep-audited): **no code path** hides a
+      listing or pauses a scrape area without an explicit user action — `confirmed_hide`/
+      `confirmed_scrape` are written **only** by the user-triggered storage functions;
+      the engine job's `resolveStatus` originates only `forming`/`actionable` and
+      **preserves** user statuses; the scraper drops areas only from `areas.active` +
+      user-written `scrape_probation`. All actions reversible (unhide / bring-back /
+      undismiss / unsnooze / reset). **No hard delete of `listing_reactions`** anywhere
+      (verified). "Logged": the durable record is status + overrides/probation +
+      `learned_preferences.updated_at` (portal `sync_log` INSERT is RLS-blocked — see
+      `REFINEMENT_README.md`); the engine job still logs `actor='system'`.
+- [x] `docs/REFINEMENT_README.md` written (maintenance map) + Progress Log updated.
+- **Acceptance:** ✅ safety review clean; harness green **548/548**; docs committed.
+- **Merge gate:** ✅ final merge to `main`.
 ---
 ## 5. Configuration constants (single source of truth)
 All live in one config module. **Shipped defaults below are the Cautious preset**
@@ -576,6 +584,16 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 9 COMPLETE → ALL STAGES DONE.** Polish + plain-English copy
+  pass; accessibility/mobile pass (native dialogs, focus-visible, 44px targets,
+  aria-pressed/live, fieldset reset scope, mobile-first grids, tokens only). Safety review
+  grep-audited against the golden rule: no path hides/pauses without explicit user action
+  (confirmed_* written only by user-triggered storage; engine originates only
+  forming/actionable + preserves user statuses; scraper drops only active-flag +
+  user-written probation); all actions reversible; **zero** listing_reactions deletes.
+  Wrote `docs/REFINEMENT_README.md` (maintenance map; documents why portal sync_log audit
+  is RLS-blocked and the durable record instead). Harness green **548/548**. Supabase:
+  pushed 0 areas, 0 user-state rows.
 - **2026-06-05** — **Stage 7 COMPLETE → working branch.** Training controls: sensitivity
   presets persisted in `learned_preferences.overrides.__refinement_settings` (reserved key,
   skipped by `effectiveWeights`) via `setRefinementPreset`/`getRefinementPreset` + a
