@@ -492,7 +492,7 @@
       "lng": -1.3142
     },
     "coordsSource": "web-verified:Wikidata-P625(Q2020511);GENUKI/getthedata; cross-checked listing-centroid (n=17, gap~0.4km); 2026-06-04",
-    "active": true
+    "active": false
   },
   {
     "id": "colemore-gu32",
@@ -943,7 +943,7 @@
       "lng": -1.3905
     },
     "coordsSource": "web-verified:postcode-checker.co.uk(village centre);getthedata-SO21-2JQ(Main Rd shop); two-source agreement ~20m; centroid n=9 rejected (4.2km S); 2026-06-04",
-    "active": true
+    "active": false
   },
   {
     "id": "itchen-abbas-so21",
@@ -1394,7 +1394,7 @@
       "lng": -1.3523
     },
     "coordsSource": "web-verified:getthedata-SO212HX-ChapelLane;listing-centroid-agree~280m;getthedata-SO212HZ; 2026-06-04",
-    "active": true
+    "active": false
   },
   {
     "id": "over-wallop-so20",
