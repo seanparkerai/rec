@@ -326,10 +326,13 @@ function buildActions(listing, current, onSave, onStatus, onRate) {
 
 function notFound(mount, msg) {
   clear(mount);
+  // Context-aware + filter-preserving back link (same as the main render path), so
+  // even the "not found" fallback returns you to the filtered view you came from.
+  const back = backTargetFrom();
   mount.appendChild(el('div', { class: 'dossier-empty' }, [
     el('p', { class: 'dossier-empty__title' }, msg || 'Listing not found'),
     el('p', { class: 'dossier-muted' }, 'It may have been withdrawn, or the link is out of date.'),
-    el('a', { class: 'dossier-back', href: url('pages/listings.html') }, '← Back to listings'),
+    el('a', { class: 'dossier-back', href: url(back.page) }, back.label),
   ]));
 }
 
