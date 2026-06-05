@@ -120,7 +120,7 @@ export function tierFor(wilsonLower, config) {
 }
 
 // ── aggregation (§2.1–2.2) ──────────────────────────────────────────────────────
-function aggregate(reactions, dimension, { nowMs, config }) {
+function aggregateDimension(reactions, dimension, { nowMs, config }) {
   const byValue = new Map();
   let dimDecayed = 0;
   for (const r of reactions) {
@@ -144,7 +144,40 @@ function aggregate(reactions, dimension, { nowMs, config }) {
     }
     dimDecayed += w;
   }
-  return { byValue, dimDecayed };
+  const values = [...byValue.values()].map((e) => ({
+    value: e.value,
+    n_eff: e.n_eff,
+    k_eff: e.k_eff,
+    n_raw: e.n_raw,
+    k_raw: e.k_raw,
+    distinct_rejected_listings: e.rejectedListings.size,
+  }));
+  return { dimDecayed, values };
+}
+
+/**
+ * Aggregate raw reactions into the decayed per-value counts the scorer consumes
+ * (§2.1–2.2). Separated from scoring so the SAME scorer can run on counts computed
+ * here in JS (unit tests) OR computed in SQL against the live DB (the scheduled
+ * Stage-3 job) — identical downstream math, no 3.5k-row dump needed.
+ *
+ * @returns {{ systemDecayed:number, perDimension: Record<string,
+ *   { dimDecayed:number, values: Array<{value,n_eff,k_eff,n_raw,k_raw,distinct_rejected_listings}> }> }}
+ */
+export function buildAggregates(reactions = [], opts = {}) {
+  const config = opts.config || resolveConfig();
+  const dimensions = opts.dimensions || ['area', 'property_type'];
+  const now = opts.now ? new Date(opts.now) : new Date();
+  const nowMs = now.getTime();
+  let systemDecayed = 0;
+  for (const r of reactions) {
+    if (config.EXCLUDE_PASSES && r.reaction === 'pass') continue;
+    const ageDays = (nowMs - new Date(r.created_at).getTime()) / DAY_MS;
+    systemDecayed += decayWeight(ageDays, config.HALF_LIFE_DAYS);
+  }
+  const perDimension = {};
+  for (const dim of dimensions) perDimension[dim] = aggregateDimension(reactions, dim, { nowMs, config });
+  return { systemDecayed, perDimension };
 }
 
 function reasonSummary(c, p0) {
@@ -165,75 +198,68 @@ function rankCmp(a, b) {
 }
 
 /**
- * Run the engine over a reaction snapshot.
+ * Score pre-aggregated decayed counts into ranked candidates (§2.3–2.8). The pure
+ * statistical heart — takes the output of `buildAggregates` (from JS or SQL) plus the
+ * injected persistence history, and produces the full run result. No reaction rows,
+ * no clock reads beyond `now`, no DB.
  *
- * @param {Array} reactions  reaction rows: { listing_id, reaction, created_at,
- *   listing_snapshot?, listing? }. `reaction` ∈ {'like','pass','reject'}.
+ * @param {ReturnType<typeof buildAggregates>} aggregates
  * @param {object} [opts]
- * @param {Date|string} [opts.now]                 evaluation clock (default: real now).
  * @param {object} [opts.config]                   resolved config (default: Cautious).
- * @param {string[]} [opts.dimensions]             ['area','property_type'].
+ * @param {string[]} [opts.dimensions]             default: keys of aggregates.perDimension.
+ * @param {Date|string} [opts.now]                 stamp for generated_at.
  * @param {Record<string,number>} [opts.priorRunsQualified]  consecutive prior qualifying
- *   runs keyed `${dimension}:${value}` — backs the persistence gate (§2.6.5). The engine
- *   is pure: persistence state is injected, never read from a DB here.
+ *   runs keyed `${dimension}:${value}` — backs the persistence gate (§2.6.5).
  * @returns {object} { config, generated_at, baseline, dimensions, candidates, actionable }
  */
-export function runRefinementEngine(reactions = [], opts = {}) {
+export function scoreFromAggregates(aggregates, opts = {}) {
   const config = opts.config || resolveConfig();
   const now = opts.now ? new Date(opts.now) : new Date();
-  const nowMs = now.getTime();
-  const dimensions = opts.dimensions || ['area', 'property_type'];
+  const perDim = aggregates.perDimension || {};
+  const dimensions = opts.dimensions || Object.keys(perDim);
   const priorRunsQualified = opts.priorRunsQualified || {};
-
-  // Gate 1a: system-wide decayed feedback (independent of dimension membership).
-  let systemDecayed = 0;
-  for (const r of reactions) {
-    if (config.EXCLUDE_PASSES && r.reaction === 'pass') continue;
-    const ageDays = (nowMs - new Date(r.created_at).getTime()) / DAY_MS;
-    systemDecayed += decayWeight(ageDays, config.HALF_LIFE_DAYS);
-  }
-  const globalGateOpen = systemDecayed >= config.GLOBAL_MIN_FEEDBACK;
+  const globalGateOpen = (aggregates.systemDecayed || 0) >= config.GLOBAL_MIN_FEEDBACK;
 
   const allCandidates = [];
   const perDimension = {};
 
   for (const dim of dimensions) {
-    const { byValue, dimDecayed } = aggregate(reactions, dim, { nowMs, config });
-    const dimGateOpen = globalGateOpen && dimDecayed >= config.DIM_MIN_FEEDBACK;
+    const agg = perDim[dim] || { dimDecayed: 0, values: [] };
+    const dimGateOpen = globalGateOpen && agg.dimDecayed >= config.DIM_MIN_FEEDBACK;
 
     // Baseline decayed reject rate across the whole dimension pool (§2.4).
     let Kall = 0;
     let Nall = 0;
-    for (const e of byValue.values()) { Kall += e.k_eff; Nall += e.n_eff; }
+    for (const v of agg.values) { Kall += v.k_eff; Nall += v.n_eff; }
     const p0 = Nall > 0 ? Kall / Nall : 0;
 
     const candidates = [];
-    for (const e of byValue.values()) {
-      const p_hat = e.n_eff > 0 ? e.k_eff / e.n_eff : 0;
-      const wilson_lower = wilsonLowerBound(e.k_eff, e.n_eff, {
+    for (const v of agg.values) {
+      const p_hat = v.n_eff > 0 ? v.k_eff / v.n_eff : 0;
+      const wilson_lower = wilsonLowerBound(v.k_eff, v.n_eff, {
         z: config.WILSON_Z,
-        continuity: e.n_eff < config.CONTINUITY_N_MAX,
+        continuity: v.n_eff < config.CONTINUITY_N_MAX,
       });
       const lift = p0 > 0 ? p_hat / p0 : 0;
-      const p_value = twoProportionPValue(e.k_eff, e.n_eff, Kall - e.k_eff, Nall - e.n_eff);
+      const p_value = twoProportionPValue(v.k_eff, v.n_eff, Kall - v.k_eff, Nall - v.n_eff);
       const cand = {
         dimension: dim,
-        value: e.value,
-        n_eff: e.n_eff,
-        k_eff: e.k_eff,
-        n_raw: e.n_raw,
-        k_raw: e.k_raw,
+        value: v.value,
+        n_eff: v.n_eff,
+        k_eff: v.k_eff,
+        n_raw: v.n_raw,
+        k_raw: v.k_raw,
         p_hat,
         wilson_lower,
         lift,
         p_value,
-        distinct_rejected_listings: e.rejectedListings.size,
+        distinct_rejected_listings: v.distinct_rejected_listings,
         fdr_significant: false, // set by BH below
       };
       candidates.push(cand);
       allCandidates.push(cand);
     }
-    perDimension[dim] = { p0, dimDecayed, dimGateOpen, candidates };
+    perDimension[dim] = { p0, dimDecayed: agg.dimDecayed, dimGateOpen, candidates };
   }
 
   // FDR across the chosen family (§2.5): per-dimension or one pooled family.
@@ -281,4 +307,26 @@ export function runRefinementEngine(reactions = [], opts = {}) {
     candidates,
     actionable,
   };
+}
+
+/**
+ * Run the engine over a reaction snapshot: aggregate (§2.1–2.2) then score (§2.3–2.8).
+ * Thin composition of `buildAggregates` + `scoreFromAggregates`.
+ *
+ * @param {Array} reactions  reaction rows: { listing_id, reaction, created_at,
+ *   listing_snapshot?, listing? }. `reaction` ∈ {'like','pass','reject'}.
+ * @param {object} [opts]  { now?, config?, dimensions?, priorRunsQualified? } — see above.
+ * @returns {object} { config, generated_at, baseline, dimensions, candidates, actionable }
+ */
+export function runRefinementEngine(reactions = [], opts = {}) {
+  const config = opts.config || resolveConfig();
+  const now = opts.now ? new Date(opts.now) : new Date();
+  const dimensions = opts.dimensions || ['area', 'property_type'];
+  const aggregates = buildAggregates(reactions, { dimensions, now, config });
+  return scoreFromAggregates(aggregates, {
+    config,
+    now,
+    dimensions,
+    priorRunsQualified: opts.priorRunsQualified || {},
+  });
 }

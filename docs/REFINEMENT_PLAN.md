@@ -21,24 +21,24 @@
 >    this file together with the code.
 >
 > **Current status — _as of 2026-06-05_:**
-> - **Active stage:** Stage 2 (Statistical engine) — **COMPLETE.**
->   **Next: Stage 3** (suggestion generation + persistence — run the engine on a
->   schedule, upsert `refinement_suggestions`, record `refinement_runs`, advance the
->   persistence counter, log to `sync_log` `actor='system'`; still notify-only, no
->   scope/listing mutation).
-> - **Done so far:** Stage 1 foundations (schema discovered → `docs/SCHEMA_NOTES.md`;
->   migration `refinement_engine_stage1` — 3 empty RLS tables). Stage 2: the pure
->   deterministic engine `assets/js/refinement/engine.js` + the single config module
->   `assets/js/refinement/config.js` (Cautious shipped), 19 unit tests in
->   `tests/refinement-engine.test.js`, harness green (513/513). No UI, no DB writes —
->   the 3 engine tables are still empty.
-> - **Next action:** begin Stage 3 — wrap `runRefinementEngine()` in a job that
->   snapshots reactions, persists results, and advances `runs_qualified` (the engine
->   already takes injected `priorRunsQualified` for the persistence gate). Respect
->   `dismissals`/`snoozed_until`. Read SCHEMA_NOTES §8 (engine-table tracking decision)
->   and §3 first.
-> - **Constants:** the Section 5 **Cautious** defaults are confirmed (Luke, this
->   session) and wired into `assets/js/refinement/config.js`. No change requested.
+> - **Active stage:** Stage 3 (Suggestion generation + persistence) — **COMPLETE.**
+>   **Next: Stage 4** (Control panel — read-only views: Refinement page scaffold,
+>   inbox cards capped at `MAX_INBOX`, plain-English "Why?" expander, patterns-forming
+>   list, model-confidence meter reading real feedback volume vs the global gate). UI
+>   only — still no user actions/levers (those are Stage 5/6).
+> - **Done so far:** Stage 1 (schema + 3 RLS tables). Stage 2 (pure engine
+>   `assets/js/refinement/engine.js` + config, 19 tests). Stage 3: the persistence
+>   planning layer `assets/js/refinement/persistence.js` + the job driver
+>   `tools/refinement-run.mjs`; engine refactored into `buildAggregates` +
+>   `scoreFromAggregates`; 8 persistence tests; harness green (521/521). **Live DB now
+>   holds 51 `forming` suggestions + 2 run-audit rows** for the household (notify-only,
+>   no UI yet).
+> - **Next action:** begin Stage 4 — build the read-only Refinement page (Section 4
+>   layout). The data is already in `refinement_suggestions`; read it via a new
+>   `storage.js` getter (`getRefinementSuggestions()` — §17 "Adding a new data type",
+>   its own named change). No write actions this stage.
+> - **Constants:** Section 5 **Cautious** defaults confirmed (Luke) and wired into
+>   `assets/js/refinement/config.js`.
 >
 > **The golden rule (never violate):** the engine *proposes*; it never mutates
 > the scrape scope and never hides a listing without an explicit user
@@ -341,18 +341,35 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
   SCHEMA_NOTES §1 predicted.
 - **Merge gate:** ✅ module + tests on the working branch; still **no UI, no writes,
   no scope mutation** (the 3 engine tables remain empty).
-### Stage 3 — Suggestion generation + persistence (notify-only, still no UI)
+### Stage 3 — Suggestion generation + persistence (notify-only, still no UI) ✅ COMPLETE (2026-06-05)
 **Goal:** run the engine on a schedule and persist results.
-- [ ] A job/function that: snapshots reactions → runs the engine → upserts
+- [x] A job/function that: snapshots reactions → runs the engine → upserts
       `refinement_suggestions` → records a `refinement_runs` row → advances the
       persistence counter → logs to `sync_log` (`actor='system'`).
-- [ ] Respect `dismissals`/`snoozed_until` (do not re-raise dismissed/snoozed).
-- [ ] No mutation of scrape scope or listings anywhere in this stage.
-- **Acceptance:** running the job twice advances `runs_qualified` correctly; a
-  dismissed value stays dismissed; nothing in `listings`/`criteria`/`zones`
-  changed.
-- **Merge gate:** job merged to `main`, suggestions populating in the DB,
-  invisible to the user so far.
+      → `tools/refinement-run.mjs` (driver: `--from-file` MCP-bundle mode + REST mode,
+      emits idempotent SQL) over the pure `assets/js/refinement/persistence.js`
+      (`planRun` → `renderPlanSql`). Engine split into `buildAggregates` (decayed
+      counts — computable in SQL for the live job) + `scoreFromAggregates` so the job
+      never dumps 3.5k rows.
+- [x] Respect `dismissals`/`snoozed_until` (do not re-raise dismissed/snoozed).
+      → `resolveStatus` keeps confirmed/dismissed/snoozed-until-expiry sticky; the
+      upsert's `ON CONFLICT … status = CASE WHEN status IN ('forming','actionable')`
+      guard means the job can never overwrite a user-owned status, even on a race.
+- [x] No mutation of scrape scope or listings anywhere in this stage. → the plan SQL
+      touches only `refinement_suggestions` / `refinement_runs` / `sync_log`; asserted
+      in tests + verified live.
+- **Acceptance:** ✅ harness green (521/521). Unit tests prove the read-back loop
+      advances `runs_qualified` 1→5→actionable and that a dismissed value is never
+      re-raised. **Live (household 9628b44f…):** run #1 persisted **51** tracked
+      suggestions (36 area + 15 type, all `forming`, **0 actionable** — lift binds at
+      the 0.986 baseline) + a `refinement_runs` row + a `sync_log` `system` entry; run
+      #2 re-evaluated idempotently (still 51 rows, `first_detected_at` preserved,
+      `last_evaluated_at` advanced) and the live `ON CONFLICT` CASE guard preserved a
+      `park home` dismissal against the engine's `forming` write. `listings` (670),
+      `criteria` (1), `zones` (1), `scrape_probation` (0), hidden listings (0) all
+      **unchanged** across both runs.
+- **Merge gate:** ✅ job + persistence merged to `main`; suggestions populating in the
+      DB, invisible to the user so far (no UI until Stage 4).
 ### Stage 4 — Control panel: read-only views
 **Goal:** surface what the engine found; no actions yet.
 - [ ] Refinement page scaffold (Section 4 layout).
@@ -458,6 +475,22 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 3 COMPLETE → merged to `main`.** Built the notify-only
+  persistence job: pure planner `assets/js/refinement/persistence.js`
+  (`priorRunsFromRows`/`isTracked`/`resolveStatus`/`planRun`/`renderPlanSql`) + driver
+  `tools/refinement-run.mjs` (`--from-file` MCP-bundle + REST modes, emits idempotent
+  SQL). Refactored the engine into `buildAggregates` (decayed counts — runnable in SQL
+  for the live job, no 3.5k-row dump) + `scoreFromAggregates`; `runRefinementEngine`
+  now composes them (Stage-2 behaviour unchanged). 8 persistence tests; harness green
+  **521/521**. **Live run (household 9628b44f…):** persisted **51 `forming`**
+  suggestions (36 area + 15 type; **0 actionable** — lift binds at the 0.986 baseline,
+  per SCHEMA_NOTES §1) + 2 `refinement_runs` audit rows + 2 `sync_log` `system` entries
+  across two runs; verified `runs_qualified` read-back, `first_detected_at` preserved,
+  and the live `ON CONFLICT` CASE guard preserving a `dismissed` against an engine
+  `forming` write. `listings`/`criteria`/`zones`/`scrape_probation`/hidden-listings all
+  unchanged — golden rule intact. SCHEMA_NOTES §8 updated: `refinement_*` remain
+  **untracked** (engine/audit-class). Supabase: pushed 51 suggestion rows + 2 run rows
+  + 2 sync_log (system). **Next: Stage 4** (read-only control panel).
 - **2026-06-05** — **Stage 2 COMPLETE.** Built the pure, deterministic engine
   `assets/js/refinement/engine.js` (normalise → decayed `n_eff`/`k_eff`/`p_hat`/
   `distinct_rejected_listings` → Wilson lower bound w/ Newcombe continuity correction

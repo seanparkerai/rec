@@ -117,13 +117,19 @@
 
 ## 8. Tracking / sync-state decision
 - `data/snapshots/sync-state.json` tracks 21 tables (20 tracked + `listings`).
-  The 3 new engine tables (`refinement_suggestions`, `refinement_runs`,
-  `scrape_probation`) are **intentionally NOT added to sync-state in Stage 1** —
-  they are empty and engine-managed. `refinement_runs` is audit-class (like
-  `sync_log`, never tracked). Whether `refinement_suggestions` / `scrape_probation`
-  join the tracked set is **deferred to Stage 3**, when they first carry data and
-  the persistence/freshness contract becomes meaningful. This keeps the offline
-  sync test (asserts the 20 tracked tables present) green for Stage 1.
+  The 3 engine tables (`refinement_suggestions`, `refinement_runs`,
+  `scrape_probation`) are **NOT** added to sync-state — they are engine-managed.
+  `refinement_runs` is audit-class (like `sync_log`, never tracked).
+- **Stage 3 RESOLUTION (2026-06-05):** `refinement_suggestions` and `scrape_probation`
+  **remain untracked** even now that `refinement_suggestions` carries data (51 live
+  rows). Rationale: they are *engine-derived* state, regenerated each run from the
+  append-only `listing_reactions` log (the real source of truth) — there is no
+  portal↔repo freshness contract to enforce, so they behave like `sync_log`/`reports`
+  (also untracked). User-owned overlays on these rows (a `dismissed`/`snoozed`/
+  `confirmed_*` status the user sets in Stage 5+) are protected at write time by the
+  upsert's `status = CASE WHEN status IN ('forming','actionable')` guard, not by the
+  sync snapshot. Keeping them untracked preserves the offline sync test's 20-tracked-
+  tables assertion (green) and avoids a meaningless freshness check on regenerated data.
 
 ## 9. Config constants — status
 - Section 5 of `docs/REFINEMENT_PLAN.md` holds the agreed defaults (Cautious
