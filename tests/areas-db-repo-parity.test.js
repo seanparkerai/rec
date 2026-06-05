@@ -77,6 +77,23 @@ export async function register({ test, assert, assertEqual }) {
     assert(drift.length === 0, `repo ⇄ DB drift on ${drift.length} area(s): ${drift.slice(0, 8).join(' · ')}`);
   });
 
+  test('areas-parity: active flag of each file == its DB snapshot row (scope-integrity gate)', () => {
+    // This catches the failure mode: DB sets active=false but sync-areas-from-supabase
+    // hasn't been run, so the per-area file still has active=true and the scraper
+    // (fetch-listings.mjs:111, `if (a.active === false) continue`) would include it.
+    const drift = [];
+    for (const id of fileIds) {
+      const row = snapById.get(id);
+      if (!row) continue;
+      const f = readJson(`data/areas/${id}.json`);
+      const fileActive = f.active ?? true;   // default-active matches scraper semantics
+      const snapActive = row.active ?? true;
+      if (fileActive !== snapActive) drift.push(`${id} [file=${fileActive} snap=${snapActive}]`);
+    }
+    assert(drift.length === 0,
+      `active-flag drift on ${drift.length} area(s) — run tools/sync-areas-from-supabase.mjs: ${drift.join(', ')}`);
+  });
+
   test('areas-parity: every ACTIVE area has map-usable coords (lat+lng present)', () => {
     const bad = [];
     for (const row of snap) {
