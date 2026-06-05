@@ -125,10 +125,21 @@ export function planRun(engineRun, ctx = {}) {
     });
   }
 
+  // Feedback summary for the Stage-4 model-confidence meter (gate 1, §2.6.1).
+  const cfg = engineRun.config;
+  const dims = engineRun.dimensions || {};
+  const feedback = {
+    system_decayed: engineRun.system_decayed || 0,
+    global_min: cfg.GLOBAL_MIN_FEEDBACK,
+    global_gate_open: (engineRun.system_decayed || 0) >= cfg.GLOBAL_MIN_FEEDBACK,
+    dim_min: cfg.DIM_MIN_FEEDBACK,
+    dims: Object.fromEntries(Object.keys(dims).map((d) => [d, dims[d].dimDecayed || 0])),
+  };
+
   const runRow = {
     household_id: householdId,
     run_at: nowIso,
-    params: paramsOf(engineRun.config),
+    params: { ...paramsOf(engineRun.config), feedback },
     candidates_evaluated: engineRun.candidates.length,
     actionable_count: actionableCount,
   };

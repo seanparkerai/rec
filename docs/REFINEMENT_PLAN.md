@@ -21,22 +21,22 @@
 >    this file together with the code.
 >
 > **Current status — _as of 2026-06-05_:**
-> - **Active stage:** Stage 3 (Suggestion generation + persistence) — **COMPLETE.**
->   **Next: Stage 4** (Control panel — read-only views: Refinement page scaffold,
->   inbox cards capped at `MAX_INBOX`, plain-English "Why?" expander, patterns-forming
->   list, model-confidence meter reading real feedback volume vs the global gate). UI
->   only — still no user actions/levers (those are Stage 5/6).
-> - **Done so far:** Stage 1 (schema + 3 RLS tables). Stage 2 (pure engine
->   `assets/js/refinement/engine.js` + config, 19 tests). Stage 3: the persistence
->   planning layer `assets/js/refinement/persistence.js` + the job driver
->   `tools/refinement-run.mjs`; engine refactored into `buildAggregates` +
->   `scoreFromAggregates`; 8 persistence tests; harness green (521/521). **Live DB now
->   holds 51 `forming` suggestions + 2 run-audit rows** for the household (notify-only,
->   no UI yet).
-> - **Next action:** begin Stage 4 — build the read-only Refinement page (Section 4
->   layout). The data is already in `refinement_suggestions`; read it via a new
->   `storage.js` getter (`getRefinementSuggestions()` — §17 "Adding a new data type",
->   its own named change). No write actions this stage.
+> - **Active stage:** Stage 4 (Control panel — read-only views) — **COMPLETE.**
+>   **Next: Stage 5** (Display-hide lever — the first user action: "Hide these from
+>   view" → confirm modal → write rule to `learned_preferences.overrides`, flip matching
+>   live listings to `status='hidden'`, log to `sync_log`, set suggestion
+>   `status='confirmed_hide'`; default listings read excludes `hidden` + a global "Show
+>   hidden" toggle; undo restores. **§16-guarded `storage/listings.js` — its own named
+>   change.** Stage 5 also lands the deferred "Why?" sparkline + sample rejected listings.
+> - **Done so far:** Stages 1–3 (schema, pure engine + config, persistence job; live DB
+>   holds 51 `forming` suggestions + 2 run-audit rows). Stage 4: read-only Refinement
+>   page (`pages/refinement.html` + `page-refinement.js` + `pages/refinement.css`, nav
+>   entry), pure view layer `assets/js/refinement/view.js`, read-only storage getter
+>   `assets/js/storage/refinement.js`, model-confidence meter (run record now carries a
+>   `feedback` summary). 9 view tests; harness green (530/530).
+> - **Next action:** begin Stage 5 — wire the **Hide** lever (display-hide, reversible).
+>   Read SCHEMA_NOTES §4 first (the `getListings()` default-read gap — `'hidden'` is NOT
+>   filtered today; Stage 5 must fix the default read + add a "Show hidden" toggle).
 > - **Constants:** Section 5 **Cautious** defaults confirmed (Luke) and wired into
 >   `assets/js/refinement/config.js`.
 >
@@ -370,17 +370,38 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
       **unchanged** across both runs.
 - **Merge gate:** ✅ job + persistence merged to `main`; suggestions populating in the
       DB, invisible to the user so far (no UI until Stage 4).
-### Stage 4 — Control panel: read-only views
+### Stage 4 — Control panel: read-only views ✅ COMPLETE (2026-06-05)
 **Goal:** surface what the engine found; no actions yet.
-- [ ] Refinement page scaffold (Section 4 layout).
-- [ ] Inbox cards (capped at `MAX_INBOX`), plain-English copy, "Why?" expander
-      with counts, tier, sparkline, sample listings.
-- [ ] Patterns-forming, Active (empty for now), Probation (empty), Dismissed
-      views render.
-- [ ] Model-confidence meter reads real feedback volume vs the global gate.
-- **Acceptance:** page renders real suggestions; artefact flag shows its note;
-  buttons present but inert (or hidden) this stage.
-- **Merge gate:** page merged to `main` behind a simple nav entry; read-only.
+- [x] Refinement page scaffold (Section 4 layout). → `pages/refinement.html` +
+      `assets/js/page-refinement.js`; nav entry added; `assets/css/pages/refinement.css`
+      (anchor: **Linear-dense**) appended to the `dashboard.css` shell.
+- [~] Inbox cards (capped at `MAX_INBOX`), plain-English copy, "Why?" expander with
+      counts, tier, **sparkline, sample listings**. → cards + plain-English reason +
+      `<details>` "Why?" with counts / tier / lift / confidence / distinct-listings are
+      **done** (`assets/js/refinement/view.js` `toCard`/`rankForInbox`). The **sparkline
+      (reactions-over-time) and sample rejected listings are DEFERRED**: by design the
+      `metrics` jsonb stores counts, not id lists or a time series (SCHEMA_NOTES §3), so
+      they need extra `listing_reactions` reads — folded into Stage 5, where sample
+      listings also back the confirm modal.
+- [x] Patterns-forming, Active (empty for now), Probation (empty), Dismissed views
+      render. → `classifySuggestions` buckets by status; each renders its cards or a
+      plain-English empty state.
+- [x] Model-confidence meter reads real feedback volume vs the global gate. →
+      `buildConfidenceMeter` reads `refinement_runs.params.feedback` (added to the run
+      record this stage; the 2 prior live runs backfilled). Live: **Ready — learned from
+      3556 recent reactions.**
+- **Acceptance:** ✅ harness green (530/530, incl. 9 view tests + `asset-links` which
+      proves the new page/imports resolve). Live page reads **51** `forming` cards (top:
+      hambledon-po7, terraced, flat), **0** actionable (friendly empty inbox), Ready
+      meter. The **volume-artefact note is implemented + unit-tested** (`toCard` →
+      `artefactNote`); no artefact is *persisted* today because the tracked set requires
+      `lift > 1` (artefacts are `lift ≤ 1`), so the note will surface once an artefact is
+      ever shown. **No action buttons rendered this stage** (the "(or hidden)" branch) —
+      the hide / stop-searching / dismiss levers are Stage 5/6.
+- **Merge gate:** ✅ page merged to `main` behind a simple nav entry; read-only.
+  Storage getter `getRefinementSuggestions()`/`getRefinementMeta()` added in a new
+  read-only `assets/js/storage/refinement.js` (§17 "Adding a new data type", read side;
+  §16-compliant — `storage.js` shim extended by one re-export, not rewritten).
 ### Stage 5 — Display-hide lever (confirm + undo)
 **Goal:** the reversible, low-stakes action goes live.
 - [ ] **Hide these from view** → confirm modal (states count affected) → write
@@ -475,6 +496,21 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-05** — **Stage 4 COMPLETE → merged to `main`.** Read-only Refinement
+  control panel: `pages/refinement.html` + `assets/js/page-refinement.js` + the pure
+  view layer `assets/js/refinement/view.js` (`humaniseValue`/`toCard`/`rankForInbox`/
+  `classifySuggestions`/`buildConfidenceMeter`, incl. the volume-artefact note),
+  `assets/css/pages/refinement.css` (Linear-dense, tokens only) appended to the
+  dashboard shell, nav entry, and a read-only storage getter
+  `assets/js/storage/refinement.js` (`getRefinementSuggestions`/`getRefinementMeta`;
+  `storage.js` shim extended by one re-export — §16-compliant). Added a `feedback`
+  summary to the run record (engine `scoreFromAggregates` now returns `system_decayed`)
+  and backfilled the 2 live runs so the model-confidence meter reads **Ready** (3556
+  reactions). 9 view tests; harness green **530/530**. Live page renders 51 `forming`
+  cards (0 actionable → empty inbox) + Ready meter; no action buttons (Stage 5/6).
+  Deferred to Stage 5: the "Why?" sparkline + sample rejected listings (need
+  `listing_reactions` reads, not in the counts-only `metrics` blob). Supabase: backfilled
+  2 run rows (feedback), 0 new suggestion rows. **Next: Stage 5** (display-hide lever).
 - **2026-06-05** — **Stage 3 COMPLETE → merged to `main`.** Built the notify-only
   persistence job: pure planner `assets/js/refinement/persistence.js`
   (`priorRunsFromRows`/`isTracked`/`resolveStatus`/`planRun`/`renderPlanSql`) + driver

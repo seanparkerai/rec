@@ -302,6 +302,7 @@ export function scoreFromAggregates(aggregates, opts = {}) {
   return {
     config,
     generated_at: now.toISOString(),
+    system_decayed: aggregates.systemDecayed || 0,
     baseline: Object.fromEntries(dimensions.map((d) => [d, perDimension[d].p0])),
     dimensions: perDimension,
     candidates,

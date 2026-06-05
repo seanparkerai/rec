@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Refinement · rec</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container">
+    <header class="page-head">
+      <div>
+        <p class="eyebrow">Notify-only</p>
+        <h1>Refinement</h1>
+        <p class="lead">The engine watches your like / pass / reject feedback and, only when the evidence is strong, suggests an area or property type you might want to stop seeing. Nothing is hidden or removed without your say-so.</p>
+      </div>
+    </header>
+
+    <!-- §4.6 model-confidence meter -->
+    <section class="card ref-section" aria-labelledby="ref-confidence-h">
+      <header class="ref-section__head">
+        <h2 id="ref-confidence-h">Model confidence</h2>
+      </header>
+      <div id="ref-meter" class="ref-meter"></div>
+    </section>
+
+    <!-- §4.1 suggested refinements (the inbox) -->
+    <section class="card ref-section" aria-labelledby="ref-inbox-h">
+      <header class="ref-section__head">
+        <h2 id="ref-inbox-h">Suggested refinements</h2>
+        <span class="ref-section__count" id="ref-inbox-count">0</span>
+      </header>
+      <p class="ref-section__hint">The strongest, best-evidenced suggestions appear here first.</p>
+      <div id="ref-inbox" class="ref-list"></div>
+    </section>
+
+    <!-- §4.4 patterns forming -->
+    <section class="card ref-section" aria-labelledby="ref-forming-h">
+      <header class="ref-section__head">
+        <h2 id="ref-forming-h">Patterns forming</h2>
+        <span class="ref-section__count" id="ref-forming-count">0</span>
+      </header>
+      <p class="ref-section__hint">Areas and property types trending in your feedback — shown for awareness, no action needed.</p>
+      <div id="ref-forming" class="ref-list"></div>
+    </section>
+
+    <!-- §4.2 active refinements -->
+    <section class="card ref-section" aria-labelledby="ref-active-h">
+      <header class="ref-section__head">
+        <h2 id="ref-active-h">Active refinements</h2>
+      </header>
+      <div id="ref-active" class="ref-list"></div>
+    </section>
+
+    <!-- §4.3 on probation -->
+    <section class="card ref-section" aria-labelledby="ref-probation-h">
+      <header class="ref-section__head">
+        <h2 id="ref-probation-h">On probation</h2>
+      </header>
+      <div id="ref-probation" class="ref-list"></div>
+    </section>
+
+    <!-- §4.5 dismissed -->
+    <section class="card ref-section" aria-labelledby="ref-dismissed-h">
+      <header class="ref-section__head">
+        <h2 id="ref-dismissed-h">Dismissed</h2>
+      </header>
+      <div id="ref-dismissed" class="ref-list"></div>
+    </section>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-refinement.js"></script>
+</body>
+</html>

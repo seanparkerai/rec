@@ -7,13 +7,14 @@ Tick items as completed and **commit**. To resume in a fresh chat: read this fil
 > plan + live checklist + progress log live in **`docs/REFINEMENT_PLAN.md`**; live schema
 > facts in **`docs/SCHEMA_NOTES.md`**. If asked to *"pick up the decision plan work,"*
 > open `REFINEMENT_PLAN.md` and follow its RESUME banner.
-> **Current state (2026-06-05):** **Stage 3 COMPLETE** — notify-only persistence job:
-> pure planner `assets/js/refinement/persistence.js` + driver `tools/refinement-run.mjs`
-> (engine split into `buildAggregates`+`scoreFromAggregates`); 8 persistence tests;
-> harness green 521/521. **Live DB now holds 51 `forming` suggestions + 2 run-audit
-> rows** (0 actionable — lift binds; `listings`/`criteria`/`zones` untouched). Stages 1
-> (3 RLS tables) and 2 (pure engine + config + 19 tests) remain COMPLETE.
-> **Next: Stage 4** — read-only control panel (Refinement page; no user actions yet).
+> **Current state (2026-06-05):** **Stage 4 COMPLETE** — read-only Refinement control
+> panel: `pages/refinement.html` + `page-refinement.js` + pure view layer
+> `assets/js/refinement/view.js` + read-only getter `assets/js/storage/refinement.js`;
+> Linear-dense CSS; nav entry; model-confidence meter (Ready). 9 view tests; harness
+> green 530/530. Live page shows 51 `forming` cards + 0 actionable (empty inbox). Stages
+> 1–3 remain COMPLETE (schema, engine+config, persistence job; 51 live suggestions).
+> **Next: Stage 5** — display-hide lever (first user action; confirm + undo; §16-guarded
+> `storage/listings.js`). Also lands the deferred "Why?" sparkline + sample listings.
 
 **Status (reconciled 2026-05-30):** The app is well past the original eight-page plan. Shipped since:
 the data-model / intelligence-engine expansion, the investments split, the 5-band dashboard overhaul

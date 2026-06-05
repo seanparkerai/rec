@@ -102,6 +102,12 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(plan.runRow.candidates_evaluated, run.candidates.length, 'audits all evaluated candidates');
     assertEqual(plan.runRow.actionable_count, 0, 'not actionable on run 1 (persistence unmet)');
     assertEqual(plan.upserts[0].status, 'forming');
+    // run row carries the feedback summary for the Stage-4 confidence meter (§4.6)
+    const fb = plan.runRow.params.feedback;
+    assert(fb && typeof fb.system_decayed === 'number', 'feedback.system_decayed recorded');
+    assertEqual(fb.global_min, cfg.GLOBAL_MIN_FEEDBACK);
+    assertEqual(fb.global_gate_open, fb.system_decayed >= cfg.GLOBAL_MIN_FEEDBACK);
+    assert('property_type' in fb.dims, 'per-dimension decayed feedback recorded');
   });
 
   // ════════════════════════════════════════════════════════════════════════════
