@@ -36,6 +36,22 @@ insets, and the no-horizontal-scroll / skip-link smoke tests all landed.
 
 ---
 
+## Listings reaction-save fix (2026-06-05) — reaction-log truncation
+Root cause: `listing_reactions` is append-only (3,631 rows live); `getReactionLog()` read it
+with no `ORDER BY`/pagination, so Supabase returned only the oldest ~1,000 rows. Result: 26 of
+29 likes never reached **Saved**, and 2,631 decided rows were missing from the feed's
+suppression set (rejects resurfaced). Dossier was unaffected (ordered + cached read path).
+Fix = paginate the reaction reads (minimal patch; no schema change, no rejected page).
+
+- [x] Phase 1: paginate reaction reads in `assets/js/storage/listings.js` (§16 named phase) —
+      `getReactionLog`, `_sbGetReactionRows`, `recomputeLearnedPreferences` via a shared
+      `_fetchAllReactionRows()` paging helper modelled on `getListings()`. Harness green
+      (548 + sync). Live check: paged read resolves to 29 likes / 2,624 decided (was ~3 / ~1000).
+- [x] Phase 2: nav reorder in `components/nav.html` — Listings + Saved now sit right after
+      Home (Home → Listings → Saved → Finances → …). Harness green. Commit + push.
+
+---
+
 ## v3 — Live Listings (active)
 Plan: `docs/V3_LISTINGS_PLAN.md`. Build order L0→L6; minimum-lovable = L0–L4.
 

@@ -118,17 +118,44 @@ export async function getListing(rightmoveId) {
 // latest row per listing is the current reaction. getListingReactions returns a
 // { [listing_id]: { reaction, reason, created_at } } map of the *current*
 // reaction per listing, cached + revalidated like the readiness checklist.
+
+// The reaction log is APPEND-ONLY and unbounded — it already exceeds Supabase's
+// ~1000-row single-response cap, so any single .select() silently truncates and
+// the newest reactions vanish (likes never reach Saved; decided properties
+// resurface in the feed). Page through every row in 1000-row windows, mirroring
+// the uncapped getListings() loop above. A STABLE order (created_at, then id as a
+// tiebreak for same-millisecond rows) keeps the .range() windows from skipping or
+// duplicating rows across pages. `id` is always selected so the tiebreak resolves
+// even for callers that don't otherwise need it.
+async function _fetchAllReactionRows(sb, hid, { select, ascending = true }) {
+  const PAGE = 1000;
+  const all = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await sb
+      .from('listing_reactions')
+      .select(select)
+      .eq('household_id', hid)
+      .order('created_at', { ascending })
+      .order('id', { ascending })
+      .range(from, from + PAGE - 1);
+    if (error) throw error;
+    const batch = data ?? [];
+    all.push(...batch);
+    if (batch.length < PAGE) break; // last (short) page reached
+  }
+  return all;
+}
+
 async function _sbGetReactionRows() {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return null;
   try {
-    const { data, error } = await sb
-      .from('listing_reactions')
-      .select('listing_id, reaction, reason, reasons, created_at')
-      .eq('household_id', hid)
-      .order('created_at', { ascending: false });
-    if (error) throw error;
-    return data ?? [];
+    // Full log (newest first), paged so the latest-per-listing reduction in
+    // _reactionsToMap() sees every listing, not just the most recent ~1000 rows.
+    return await _fetchAllReactionRows(sb, hid, {
+      select: 'id, listing_id, reaction, reason, reasons, created_at',
+      ascending: false,
+    });
   } catch (e) {
     console.error('storage: read listing_reactions', e.message);
     return null;
@@ -175,12 +202,14 @@ export async function getReactionLog() {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return [];
   try {
-    const { data, error } = await sb
-      .from('listing_reactions')
-      .select('id, listing_id, reaction, reason, reasons, created_at, listing_snapshot')
-      .eq('household_id', hid);
-    if (error) throw error;
-    return data ?? [];
+    // Paged: the feed-suppression set and the Saved page both derive from this,
+    // so it MUST return every row — an un-paged select capped at ~1000 rows is
+    // exactly what broke Saved + feed dedup. Snapshots are included so delisted
+    // likes still render.
+    return await _fetchAllReactionRows(sb, hid, {
+      select: 'id, listing_id, reaction, reason, reasons, created_at, listing_snapshot',
+      ascending: true,
+    });
   } catch (e) {
     console.error('storage: read reaction log', e.message);
     return [];
@@ -314,17 +343,20 @@ export async function recomputeLearnedPreferences({ now } = {}) {
   let rows = [];
   let statusMap = {};
   try {
-    const [reactRes, slRes] = await Promise.all([
-      sb.from('listing_reactions')
-        .select('id, listing_id, reaction, reason, reasons, created_at, listing_snapshot')
-        .eq('household_id', hid),
+    // Paged: deriveWeights() must train on the WHOLE append-only log, not the
+    // oldest ~1000 rows a single select would return.
+    const [reactRows, slRes] = await Promise.all([
+      _fetchAllReactionRows(sb, hid, {
+        select: 'id, listing_id, reaction, reason, reasons, created_at, listing_snapshot',
+        ascending: true,
+      }),
       sb.from('shortlist')
         .select('data')
         .eq('household_id', hid)
         .limit(1),
     ]);
-    if (reactRes.error) throw reactRes.error;
-    rows = reactRes.data ?? [];
+    if (slRes.error) throw slRes.error;
+    rows = reactRows ?? [];
     statusMap = _normShortlist(slRes.data?.[0]?.data).status;
   } catch (e) {
     console.error('storage: recompute read listing_reactions', e.message);
