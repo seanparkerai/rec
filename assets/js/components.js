@@ -66,13 +66,32 @@ function initTheme() {
   });
 }
 
-/* ---------- Scroll-shrink header ---------- */
-function initScrollShrink() {
-  const set = () => {
-    document.documentElement.toggleAttribute('data-scrolled', window.scrollY > 4);
-  };
-  set();
-  window.addEventListener('scroll', set, { passive: true });
+/* ---------- Sidebar nav drawer (native <dialog>) ---------- */
+function initNavDrawer() {
+  const dialog = document.getElementById('nav-drawer');
+  const toggle = document.getElementById('nav-toggle');
+  if (!dialog || !toggle) return;
+
+  const open = () => { if (!dialog.open) dialog.showModal(); };
+  const close = () => { if (dialog.open) dialog.close(); };
+
+  toggle.addEventListener('click', open);
+  document.getElementById('nav-drawer-close')?.addEventListener('click', close);
+
+  // Reflect open state on the burger for assistive tech.
+  dialog.addEventListener('close', () => toggle.setAttribute('aria-expanded', 'false'));
+  toggle.addEventListener('click', () => toggle.setAttribute('aria-expanded', 'true'));
+
+  // Backdrop click (outside the drawer panel) closes it.
+  dialog.addEventListener('click', (e) => {
+    if (e.target !== dialog) return; // clicks on inner content bubble with their own target
+    const r = dialog.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    if (!inside) close();
+  });
+
+  // Any nav link closes the drawer (covers same-page / hash links that don't navigate away).
+  dialog.querySelectorAll('a[data-nav]').forEach((a) => a.addEventListener('click', close));
 }
 
 function initHeaderHeightVar() {
@@ -82,10 +101,6 @@ function initHeaderHeightVar() {
   };
   setH();
   window.addEventListener('resize', setH, { passive: true });
-  new MutationObserver(setH).observe(
-    document.documentElement,
-    { attributes: true, attributeFilter: ['data-scrolled'] }
-  );
 }
 
 /* Apply saved theme ASAP to reduce flash (before includes resolve). */
@@ -94,7 +109,7 @@ applyTheme(localStorage.getItem(THEME_KEY));
 injectIncludes().then(async () => {
   setActiveNav();
   initTheme();
-  initScrollShrink();
+  initNavDrawer();
   initHeaderHeightVar();
   await initHeaderUser();
   document.dispatchEvent(new CustomEvent('shell:ready'));

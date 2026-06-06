@@ -11,6 +11,9 @@
 .listings-summary {
   margin: 0; font-family: var(--font-data); font-feature-settings: "tnum";
   font-size: var(--text-sm); color: var(--ink-muted);
+  /* Flex item: allow it to shrink and wrap between segments instead of
+     forcing the controls row wider than the viewport (horizontal-scroll fix). */
+  flex: 1 1 auto; min-width: 0; white-space: normal;
 }
 /* Review-pipeline breakdown: to review · liked · passed · rejected · gated.
    The bold count sits in full ink so the numbers read first; the still-to-review
