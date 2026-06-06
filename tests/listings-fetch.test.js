@@ -37,6 +37,11 @@ export async function register({ test, assert, assertEqual }) {
   await test('listings-fetch: windowLabel reads naturally', () => {
     assertEqual(windowLabel(1), '24-hour');
     assertEqual(windowLabel(3), '3-day');
+    assertEqual(windowLabel(7), '7-day');
+  });
+
+  await test('listings-fetch: 7d button maps to maxDaysSinceAdded=7', () => {
+    assertEqual(buildDispatchBody(7).inputs.max_days_since_added, '7');
   });
 
   await test('listings-fetch: PAT prefixes are validated', () => {

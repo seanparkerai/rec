@@ -7,10 +7,12 @@
 // Data-sync page (§03) already stores in localStorage under `rec:gh-pat`.
 //
 // Each button pins an explicit Rightmove recency window. Rightmove only honours
-// maxDaysSinceAdded ∈ {1, 3, 7, 14}; we expose the two used day to day:
-//   "Pull listings: 24hr"  → 1 day   (same window as the 06:00 UTC scheduled run)
-//   "Pull listings: 3 days" → 3 days  (catch-up after a gap)
-// Re-pulling the same window is always safe: dedup is guaranteed downstream by
+// maxDaysSinceAdded ∈ {1, 3, 7, 14}; the row exposes the windows used day to day:
+//   "24hr" → 1 day   (same window as the 06:00 UTC scheduled run)
+//   "3d"   → 3 days   (catch-up after a short gap)
+//   "7d"   → 7 days   (catch-up after a longer gap; 7 is the next window Rightmove
+//                      supports above 3)
+// Re-pulling a wider window is always safe: dedup is guaranteed downstream by
 // the `rightmove_id` UNIQUE constraint + UPSERT merge, independent of timing.
 
 import { byId, el } from '../dom.js';
