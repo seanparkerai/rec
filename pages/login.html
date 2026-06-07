@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Sign in · rec</title>
-  <meta name="description" content="Sign in to rec — your property search dashboard." />
+  <title>Sign in · GR</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <meta name="description" content="Sign in to GR — your property search dashboard." />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
@@ -71,17 +72,14 @@
     .brand-mark {
       width: 40px;
       height: 40px;
-      border-radius: 50%;
-      background: var(--paper);
-      color: var(--ink);
+      color: var(--paper); /* line-mark on the dark panel → light strokes via currentColor */
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 500;
       flex-shrink: 0;
     }
+
+    .brand-mark svg { display: block; width: 100%; height: 100%; }
 
     .brand-name {
       font-family: var(--font-display);
@@ -123,29 +121,6 @@
       color: color-mix(in oklch, var(--paper) 55%, transparent);
       line-height: 1.6;
       max-width: 30ch;
-    }
-
-    /* Bottom caption */
-    .panel-left-bottom {
-      position: relative;
-    }
-
-    .panel-caption {
-      font-family: var(--font-data);
-      font-size: var(--text-xs);
-      color: color-mix(in oklch, var(--paper) 30%, transparent);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    /* Accent rule above caption */
-    .panel-caption::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--accent);
-      margin-bottom: var(--space-3);
     }
 
     /* ── Right panel — light, form ───────────────────────────────────── */
@@ -285,7 +260,7 @@
       }
 
       .panel-left::before { display: none; }
-      .panel-left-mid, .panel-left-bottom { display: none; }
+      .panel-left-mid { display: none; }
 
       .panel-left-top { flex: 1; }
 
@@ -313,8 +288,28 @@
     <div class="panel-left" aria-hidden="true">
       <div class="panel-left-top">
         <div class="brand-lockup">
-          <span class="brand-mark">r</span>
-          <span class="brand-name">rec</span>
+          <span class="brand-mark">
+            <svg viewBox="0 0 1254 1254" aria-hidden="true" focusable="false">
+              <g fill="none" stroke="currentColor" stroke-width="40" stroke-linejoin="round" stroke-linecap="round">
+                <rect x="248" y="247" width="81" height="27" rx="1"/><rect x="255" y="272" width="62" height="131" rx="1"/>
+                <rect x="917" y="247" width="81" height="27" rx="1"/><rect x="925" y="272" width="62" height="131" rx="1"/>
+                <path d="M221 439 L411 309 L843 309 L1030 439 Z"/><rect x="221" y="439" width="806" height="30" rx="1"/>
+                <rect x="234" y="468" width="776" height="528" rx="1"/>
+                <g stroke-width="24">
+                  <defs><g id="gr-win-l">
+                    <rect x="334" y="513" width="113" height="17" rx="1"/><rect x="342" y="529" width="96" height="141" rx="1"/>
+                    <rect x="334" y="671" width="113" height="17" rx="1"/>
+                    <line x1="390" y1="529" x2="390" y2="670"/><line x1="342" y1="599" x2="438" y2="599"/>
+                  </g></defs>
+                  <use href="#gr-win-l"/><use href="#gr-win-l" transform="translate(236 0)"/><use href="#gr-win-l" transform="translate(472 0)"/>
+                  <use href="#gr-win-l" transform="translate(0 247)"/><use href="#gr-win-l" transform="translate(472 247)"/>
+                </g>
+                <path d="M560 996 L560 812 A64 64 0 0 1 688 812 L688 996 Z"/>
+                <path d="M581 806 A43 43 0 0 1 667 806 L581 806 Z"/>
+              </g>
+            </svg>
+          </span>
+          <span class="brand-name">GR</span>
         </div>
       </div>
 
@@ -323,9 +318,6 @@
         <p class="panel-sub">Your property search — budgets, areas, and shortlists — in one place.</p>
       </div>
 
-      <div class="panel-left-bottom">
-        <p class="panel-caption">Hampshire &amp; Wiltshire</p>
-      </div>
     </div>
 
     <!-- ── Right: form panel ──────────────────────────────────────── -->

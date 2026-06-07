@@ -249,7 +249,7 @@ function attachFootAfford(a, finances, criteria) {
 }
 
 async function renderArea(a) {
-  document.title = `${a.name} · rec`;
+  document.title = `${a.name} · GR`;
 
   // Header
   $('area-title').textContent = a.name;
@@ -311,7 +311,7 @@ async function renderArea(a) {
 }
 
 function renderNotFound(id) {
-  document.title = 'Area not found · rec';
+  document.title = 'Area not found · GR';
   $('area-title').textContent = 'Area not found';
   $('area-meta').textContent = '';
   const main = document.querySelector('main');
