@@ -1,7 +1,7 @@
 /* pages/finances-v3-charts.css — v3 finances chart suite + deposit-risk waterfall. */
 
-.chart-wrap--tall { height: 320px; }
-.chart-wrap--tall canvas { max-height: 320px; }
+.chart-wrap--tall { height: clamp(220px, 50vw, 320px); }
+.chart-wrap--tall canvas { max-height: clamp(220px, 50vw, 320px); }
 .chart-caption {
   font-size: var(--text-sm);
   color: var(--ink-muted);

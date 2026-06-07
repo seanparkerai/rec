@@ -25,8 +25,9 @@
 //  5. Guard-railed paths (storage/*, config.js, data-loader.js, finances.js,
 //     finances/calc-*.js) are SKIPPED by the JS rules — a lint must not demand
 //     edits to files the project forbids editing (CLAUDE.md §16).
-//  6. r-no-fixed-font-px allows fixed `font-size:Npx` only inside SVG-drawing
-//     JS modules (assets/js/**/section-*.js, *-visuals.js). Everything else flags.
+//  6. r-no-fixed-font-px allows fixed `font-size:Npx` only on SVG <text>: in CSS,
+//     a rule that also sets `fill:` (SVG-text styling); in JS, the SVG-drawing
+//     modules assets/js/**/section-*.js and *-visuals.js. Everything else flags.
 //  7. r-no-style-assign also catches `.style.cssText=` and setAttribute('style');
 //     it ALLOWS `.style.setProperty('--`. r-no-100vw flags every 100vw — the
 //     sanctioned fix is `100%` (scrollbar-aware), never 100dvw.
@@ -158,9 +159,14 @@ for (const file of cssFiles) {
     if (!m[1]) add('r-no-raw-vh', file, m.index, text, m[0]);
   }
 
-  // r-no-fixed-font-px — fixed px font-size in CSS (never allowed in CSS).
-  for (const m of text.matchAll(/font-size\s*:\s*\d+(?:\.\d+)?px/gi)) {
-    add('r-no-fixed-font-px', file, m.index, text, m[0]);
+  // r-no-fixed-font-px — fixed px font-size in CSS. Allowed only on SVG <text>
+  // (§B.6(b)): a rule that also sets `fill:` is styling SVG text, so exempt it.
+  for (const block of text.matchAll(/([^{}]*)\{([^{}]*)\}/g)) {
+    const body = block[2];
+    if (/\bfill\s*:/.test(body)) continue; // SVG-text styling
+    for (const m of body.matchAll(/font-size\s*:\s*\d+(?:\.\d+)?px/gi)) {
+      add('r-no-fixed-font-px', file, block.index, text, m[0]);
+    }
   }
 
   // r-undefined-token — var(--name) referencing an undefined token.

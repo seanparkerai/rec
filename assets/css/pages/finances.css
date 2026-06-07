@@ -14,7 +14,7 @@
       transparent 60%),
     var(--paper);
 }
-@media (min-width: 720px) { .finance-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: var(--space-12); } }
+@media (min-width: 768px) { .finance-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: var(--space-12); } }
 .finance-hero-num {
   margin: var(--space-2) 0 var(--space-3);
   font-family: var(--font-display); font-optical-sizing: auto;
@@ -29,7 +29,9 @@
   margin: 0; display: grid; gap: var(--space-3);
   grid-template-columns: 1fr;
 }
-@media (min-width: 480px) { .finance-hero-stats { grid-template-columns: 1fr 1fr 1fr; } }
+/* Two-step: 1 → 2-col at phone-landscape, → 3-col at tablet portrait. */
+@media (min-width: 480px) { .finance-hero-stats { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 768px) { .finance-hero-stats { grid-template-columns: 1fr 1fr 1fr; } }
 .finance-hero-stats > div {
   display: grid; gap: var(--space-1);
   padding: var(--space-3); border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
@@ -47,12 +49,13 @@
 }
 
 /* ---- Finances tables / calculators -------------------------------- */
-.chart-tall { height: 320px; }
-.chart-tall canvas { max-height: 320px; }
+.chart-tall { height: clamp(220px, 50vw, 320px); }
+.chart-tall canvas { max-height: clamp(220px, 50vw, 320px); }
 
 /* .table-wrap primitive now lives in components/table.css */
 
-.calc-grid { display: grid; gap: var(--space-4); grid-template-columns: 1fr 1fr; }
+/* Mobile-first: single-column calculators; two-up from tablet portrait. */
+.calc-grid { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
 .calc-grid fieldset { border: 1px solid var(--pico-muted-border-color); border-radius: var(--rec-radius-sm); padding: var(--space-3) var(--space-4); margin: 0; }
 .calc-grid legend { font-weight: 600; padding: 0 var(--space-2); }
 .calc-grid label { display: block; font-size: var(--text-xs); color: var(--pico-muted-color); margin-top: var(--space-2); }
@@ -60,6 +63,6 @@
 .calc-result { margin: var(--space-3) 0 0; font-size: var(--text-base); }
 .calc-result strong { color: var(--accent); }
 
-@media (max-width: 768px) {
-  .calc-grid { grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .calc-grid { grid-template-columns: 1fr 1fr; }
 }
