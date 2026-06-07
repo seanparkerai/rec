@@ -1,0 +1,361 @@
+{
+  "version": 1,
+  "phases": [
+    {
+      "id": "finances",
+      "title": "Get your money ready",
+      "summary": "Before you start viewing, get your deposit, budget and credit in order. Everything after this moves faster once it's done.",
+      "steps": [
+        {
+          "id": "budget",
+          "title": "Work out what you can really afford",
+          "blurb": "Your true budget is the price plus all the extras — not just the deposit.",
+          "link": "pages/finances.html",
+          "tasks": [
+            { "id": "finances.budget.1", "label": "Confirm the deposit you'll put down (aim for 5–10%+ of the price; more unlocks better rates)" },
+            { "id": "finances.budget.2", "label": "Budget the one-off extras: solicitor/conveyancer, survey, mortgage fee, removals, buildings insurance" },
+            { "id": "finances.budget.3", "label": "Check your Stamp Duty — as an England first-time buyer you pay nothing on the first £300k if the price is £500k or below", "note": "First-time buyer relief: gov.uk Stamp Duty Land Tax calculator" },
+            { "id": "finances.budget.4", "label": "Leave a contingency for moving-in costs and early repairs" }
+          ]
+        },
+        {
+          "id": "deposit",
+          "title": "Get your deposit and savings working",
+          "blurb": "A bigger deposit steps you down through the 90 / 85 / 80 / 75% rate bands.",
+          "tasks": [
+            { "id": "finances.deposit.1", "label": "Confirm where the deposit is held and that it's accessible when you need it" },
+            { "id": "finances.deposit.2", "label": "If you hold a Lifetime ISA, check the bonus and the withdrawal rules before relying on it" },
+            { "id": "finances.deposit.3", "label": "Make sure the deposit has been in your account long enough to satisfy a lender" }
+          ]
+        },
+        {
+          "id": "credit",
+          "title": "Check and tidy your credit",
+          "blurb": "Lenders look closely at your credit history — small fixes now help.",
+          "tasks": [
+            { "id": "finances.credit.1", "label": "Check your credit report on the main agencies and correct any errors" },
+            { "id": "finances.credit.2", "label": "Make sure you're on the electoral roll at your current address" },
+            { "id": "finances.credit.3", "label": "Pay down small debts and avoid new credit applications before you apply" },
+            { "id": "finances.credit.4", "label": "Keep every bill paid on time in the months before applying" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mip",
+      "title": "Get a Mortgage in Principle",
+      "summary": "An MIP (also called an Agreement in Principle) shows agents and sellers you're a serious, credible buyer.",
+      "steps": [
+        {
+          "id": "docs",
+          "title": "Gather your documents",
+          "tasks": [
+            { "id": "mip.docs.1", "label": "Photo ID and proof of address" },
+            { "id": "mip.docs.2", "label": "Last 3 months' payslips and your latest P60 (or 2–3 years' accounts if self-employed)" },
+            { "id": "mip.docs.3", "label": "Last 3 months' bank statements" },
+            { "id": "mip.docs.4", "label": "Proof of deposit, plus proof of any gifted funds" }
+          ]
+        },
+        {
+          "id": "borrowing",
+          "title": "Decide how you'll borrow",
+          "blurb": "Understand the trade-offs before you commit to a deal.",
+          "tasks": [
+            { "id": "mip.borrowing.1", "label": "Decide whether to use a mortgage broker or go direct to lenders" },
+            { "id": "mip.borrowing.2", "label": "Compare fixed vs tracker rates and the fee-vs-rate trade-off" },
+            { "id": "mip.borrowing.3", "label": "Note the LTV band your deposit puts you in (rates step down at 90 / 85 / 80 / 75%)" }
+          ]
+        },
+        {
+          "id": "get-mip",
+          "title": "Get your MIP",
+          "tasks": [
+            { "id": "mip.get-mip.1", "label": "Apply for the MIP/AIP (a soft check that doesn't harm your credit)", "outreachTemplateId": "A5" },
+            { "id": "mip.get-mip.2", "label": "Save the certificate and note its expiry (usually ~30–90 days)" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "title": "Find the right home",
+      "summary": "The fun part — but stay disciplined about your must-haves and view with a critical eye.",
+      "steps": [
+        {
+          "id": "criteria",
+          "title": "Lock in your search criteria",
+          "link": "pages/criteria.html",
+          "tasks": [
+            { "id": "search.criteria.1", "label": "Separate your must-haves from your nice-to-haves" },
+            { "id": "search.criteria.2", "label": "Set your target areas and your price ceiling" }
+          ]
+        },
+        {
+          "id": "alerts",
+          "title": "Set up alerts and register with agents",
+          "link": "pages/listings.html",
+          "tasks": [
+            { "id": "search.alerts.1", "label": "Turn on portal alerts so new listings reach you fast" },
+            { "id": "search.alerts.2", "label": "Register with local agents and tell them your position (first-time buyer, MIP in hand)" }
+          ]
+        },
+        {
+          "id": "viewings",
+          "title": "Book and attend viewings",
+          "blurb": "View more than once, and at different times of day.",
+          "tasks": [
+            { "id": "search.viewings.1", "label": "Book viewings for your shortlist" },
+            { "id": "search.viewings.2", "label": "Visit at different times to gauge noise, traffic and parking" },
+            { "id": "search.viewings.3", "label": "Book a second viewing for any front-runner, and measure the rooms" }
+          ]
+        },
+        {
+          "id": "inspect",
+          "title": "Inspect each property properly",
+          "blurb": "A calm, thorough look now saves money and regret later.",
+          "tasks": [
+            { "id": "search.inspect.1", "label": "Outside: roof, walls, gutters and drainage — look for cracks and damp" },
+            { "id": "search.inspect.2", "label": "Inside: damp, mould, cracks, and any lingering smells or stains" },
+            { "id": "search.inspect.3", "label": "Plumbing: run the taps, check water pressure, look for leaks" },
+            { "id": "search.inspect.4", "label": "Electrics: test sockets and check the fuse box / last inspection date" },
+            { "id": "search.inspect.5", "label": "Heating: boiler age and last service; check the radiators" },
+            { "id": "search.inspect.6", "label": "Check the EPC rating and the broadband / mobile signal" },
+            { "id": "search.inspect.7", "label": "Note which fixtures and fittings are included" }
+          ]
+        },
+        {
+          "id": "area-research",
+          "title": "Research the area",
+          "link": "pages/areas.html",
+          "tasks": [
+            { "id": "search.area-research.1", "label": "Check recent sold prices nearby for a realistic value" },
+            { "id": "search.area-research.2", "label": "Check schools, transport links and flood risk" },
+            { "id": "search.area-research.3", "label": "Walk the neighbourhood and check the commute" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "offer",
+      "title": "Make an offer",
+      "summary": "A well-judged offer, backed by your strong position, wins the right home at the right price.",
+      "steps": [
+        {
+          "id": "decide-offer",
+          "title": "Decide your offer",
+          "blurb": "Base it on evidence, not emotion — sold comparables, condition, and time on the market.",
+          "tasks": [
+            { "id": "offer.decide-offer.1", "label": "Check recent sold prices for similar nearby homes" },
+            { "id": "offer.decide-offer.2", "label": "Factor in condition and any work the survey might later flag" },
+            { "id": "offer.decide-offer.3", "label": "Set your opening offer and your walk-away ceiling (your strategy: start ~5–10% under asking)" }
+          ]
+        },
+        {
+          "id": "submit-offer",
+          "title": "Put the offer in",
+          "tasks": [
+            { "id": "offer.submit-offer.1", "label": "Make the offer through the agent and state your position (first-time buyer, chain-free, MIP ready)", "outreachTemplateId": "B1" },
+            { "id": "offer.submit-offer.2", "label": "Be ready to negotiate; know your maximum before you start" }
+          ]
+        },
+        {
+          "id": "accepted",
+          "title": "Lock in an accepted offer",
+          "tasks": [
+            { "id": "offer.accepted.1", "label": "Get the agreed price and what's included in writing" },
+            { "id": "offer.accepted.2", "label": "Ask the agent to mark it Sold STC and take it off the market" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "instruct",
+      "title": "Offer accepted: instruct and apply",
+      "summary": "The clock now starts. Moving quickly here is the single biggest thing you control.",
+      "steps": [
+        {
+          "id": "solicitor",
+          "title": "Instruct a solicitor or conveyancer",
+          "blurb": "They handle the legal transfer. Responsiveness matters more than the cheapest quote.",
+          "tasks": [
+            { "id": "instruct.solicitor.1", "label": "Get two or three fixed-fee quotes and check they include searches", "outreachTemplateId": "C3" },
+            { "id": "instruct.solicitor.2", "label": "Instruct your choice and read the letter of engagement carefully" },
+            { "id": "instruct.solicitor.3", "label": "Complete the anti-money-laundering ID checks" },
+            { "id": "instruct.solicitor.4", "label": "Pay the money on account for searches" }
+          ]
+        },
+        {
+          "id": "mortgage-app",
+          "title": "Apply for your full mortgage",
+          "tasks": [
+            { "id": "instruct.mortgage-app.1", "label": "Submit the full mortgage application (via your broker or lender)", "outreachTemplateId": "C2" },
+            { "id": "instruct.mortgage-app.2", "label": "Expect the lender to run a mortgage valuation of the property" },
+            { "id": "instruct.mortgage-app.3", "label": "Reply fast to any questions or document requests" }
+          ]
+        },
+        {
+          "id": "survey",
+          "title": "Book the right survey",
+          "blurb": "Match the survey level to the property's age and condition.",
+          "tasks": [
+            { "id": "instruct.survey.1", "label": "For most modern homes, a Level 2 (HomeBuyer) survey is enough", "outreachTemplateId": "C5" },
+            { "id": "instruct.survey.2", "label": "For older, larger or unusual properties, choose a Level 3 (Building) survey" },
+            { "id": "instruct.survey.3", "label": "Book it and read the report carefully when it arrives" }
+          ]
+        },
+        {
+          "id": "insurance",
+          "title": "Line up buildings insurance",
+          "tasks": [
+            { "id": "instruct.insurance.1", "label": "Get buildings-insurance quotes now", "outreachTemplateId": "D6" },
+            { "id": "instruct.insurance.2", "label": "Arrange cover to start from your exchange date (not completion)" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conveyancing",
+      "title": "Conveyancing: searches and enquiries",
+      "summary": "The longest, quietest stretch. Keep nudging everyone and reply quickly to keep it moving.",
+      "steps": [
+        {
+          "id": "searches",
+          "title": "Searches",
+          "blurb": "Your solicitor orders local, water/drainage and environmental searches — usually 2–6 weeks.",
+          "tasks": [
+            { "id": "conveyancing.searches.1", "label": "Confirm the searches have been ordered", "outreachTemplateId": "D1" },
+            { "id": "conveyancing.searches.2", "label": "Review the results with your solicitor and ask about anything flagged" }
+          ]
+        },
+        {
+          "id": "survey-review",
+          "title": "Review the survey and renegotiate if needed",
+          "tasks": [
+            { "id": "conveyancing.survey-review.1", "label": "Read the survey findings carefully" },
+            { "id": "conveyancing.survey-review.2", "label": "If it reveals problems, get repair quotes and consider renegotiating the price" }
+          ]
+        },
+        {
+          "id": "enquiries",
+          "title": "Pre-contract enquiries",
+          "blurb": "Your solicitor raises questions on the title and the seller's property forms.",
+          "tasks": [
+            { "id": "conveyancing.enquiries.1", "label": "Review the seller's property-information and fixtures forms" },
+            { "id": "conveyancing.enquiries.2", "label": "Make sure your solicitor's enquiries are answered to your satisfaction" },
+            { "id": "conveyancing.enquiries.3", "label": "Confirm the EPC is valid" }
+          ]
+        },
+        {
+          "id": "mortgage-offer",
+          "title": "Get your mortgage offer in writing",
+          "tasks": [
+            { "id": "conveyancing.mortgage-offer.1", "label": "Receive and check the formal mortgage offer" },
+            { "id": "conveyancing.mortgage-offer.2", "label": "Confirm it matches the property and the agreed price" }
+          ]
+        },
+        {
+          "id": "agree-completion",
+          "title": "Agree fixtures and a completion date",
+          "tasks": [
+            { "id": "conveyancing.agree-completion.1", "label": "Agree what's included (fixtures & fittings) in writing" },
+            { "id": "conveyancing.agree-completion.2", "label": "Agree a completion date with the seller (and any chain)" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "exchange",
+      "title": "Exchange contracts",
+      "summary": "Once you exchange, the sale is legally binding — the point of no return, in a good way.",
+      "steps": [
+        {
+          "id": "pre-exchange",
+          "title": "Final checks before exchange",
+          "blurb": "Run the checklist — everything should be in place before you commit.",
+          "tasks": [
+            { "id": "exchange.pre-exchange.1", "label": "Searches back and reviewed" },
+            { "id": "exchange.pre-exchange.2", "label": "Survey done and any issues resolved" },
+            { "id": "exchange.pre-exchange.3", "label": "Mortgage offer in writing" },
+            { "id": "exchange.pre-exchange.4", "label": "Deposit funds ready to transfer" },
+            { "id": "exchange.pre-exchange.5", "label": "Buildings insurance ready to start on exchange" },
+            { "id": "exchange.pre-exchange.6", "label": "Completion date agreed" }
+          ]
+        },
+        {
+          "id": "do-exchange",
+          "title": "Sign and exchange",
+          "tasks": [
+            { "id": "exchange.do-exchange.1", "label": "Sign the contract" },
+            { "id": "exchange.do-exchange.2", "label": "Transfer your exchange deposit to your solicitor" },
+            { "id": "exchange.do-exchange.3", "label": "Solicitors exchange contracts — you're now legally committed" },
+            { "id": "exchange.do-exchange.4", "label": "Confirm your buildings insurance is live from today" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "completion",
+      "title": "Completion: get the keys",
+      "summary": "Completion day — the money moves, and the home becomes yours.",
+      "steps": [
+        {
+          "id": "complete",
+          "title": "Completion day",
+          "tasks": [
+            { "id": "completion.complete.1", "label": "Your solicitor sends the balance to the seller's solicitor" },
+            { "id": "completion.complete.2", "label": "Once the funds clear, the sale completes" },
+            { "id": "completion.complete.3", "label": "Collect the keys from the agent" }
+          ]
+        },
+        {
+          "id": "post-completion-legal",
+          "title": "The legal tidy-up (handled for you)",
+          "blurb": "Your conveyancer does these — just check they're done.",
+          "tasks": [
+            { "id": "completion.post-completion-legal.1", "label": "Stamp Duty is paid to HMRC within the deadline" },
+            { "id": "completion.post-completion-legal.2", "label": "You're registered as the new owner with HM Land Registry" },
+            { "id": "completion.post-completion-legal.3", "label": "You receive your title deeds and completion statement — keep them safe" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "moving",
+      "title": "Move in and settle",
+      "summary": "The keys are yours. Here's how to land smoothly in your new home.",
+      "steps": [
+        {
+          "id": "pre-move",
+          "title": "Before moving day",
+          "tasks": [
+            { "id": "moving.pre-move.1", "label": "Book removals 4–6 weeks ahead (or plan a DIY move)", "outreachTemplateId": "D5" },
+            { "id": "moving.pre-move.2", "label": "Buy packing materials and start decluttering" },
+            { "id": "moving.pre-move.3", "label": "Pack non-essentials early and label boxes by room" },
+            { "id": "moving.pre-move.4", "label": "Make an inventory and photograph anything valuable" },
+            { "id": "moving.pre-move.5", "label": "Book broadband (mind the lead time)" },
+            { "id": "moving.pre-move.6", "label": "Tell people your new address: bank, DVLA, GP, employer, electoral roll" }
+          ]
+        },
+        {
+          "id": "move-day",
+          "title": "On moving day",
+          "tasks": [
+            { "id": "moving.move-day.1", "label": "Take meter readings — gas, electric, water", "outreachTemplateId": "D7" },
+            { "id": "moving.move-day.2", "label": "Locate the stopcock and test it" },
+            { "id": "moving.move-day.3", "label": "Pack a first-night box: chargers, meds, documents, kettle, bedding" }
+          ]
+        },
+        {
+          "id": "settle",
+          "title": "Your first week in",
+          "tasks": [
+            { "id": "moving.settle.1", "label": "Set up gas, electricity and water with suppliers" },
+            { "id": "moving.settle.2", "label": "Register for council tax" },
+            { "id": "moving.settle.3", "label": "Change the locks" },
+            { "id": "moving.settle.4", "label": "File your completion statement and title deeds somewhere safe" }
+          ]
+        }
+      ]
+    }
+  ]
+}

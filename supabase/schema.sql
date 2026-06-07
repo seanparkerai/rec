@@ -207,6 +207,33 @@ CREATE POLICY "household members can update journey_checks"
   ON journey_checks FOR UPDATE USING (is_household_member(household_id));
 
 -- -----------------------------------------------------------------------
+-- journey_progress — buying-journey timeline tick state (v3)
+-- Shape: { tasks: { [taskId]: true } } — the set of ticked task ids from
+-- data/journey.json. A step is "done" when all its tasks are ticked.
+-- Replaces the fixed-shape journey_checks blob with two-way synced progress.
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS journey_progress (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id uuid NOT NULL UNIQUE REFERENCES households(id) ON DELETE CASCADE,
+  data         jsonb NOT NULL DEFAULT '{"tasks":{}}',
+  updated_at   timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE journey_progress ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "household members can read journey_progress" ON journey_progress;
+CREATE POLICY "household members can read journey_progress"
+  ON journey_progress FOR SELECT USING (is_household_member(household_id));
+
+DROP POLICY IF EXISTS "household members can insert journey_progress" ON journey_progress;
+CREATE POLICY "household members can insert journey_progress"
+  ON journey_progress FOR INSERT WITH CHECK (is_household_member(household_id));
+
+DROP POLICY IF EXISTS "household members can update journey_progress" ON journey_progress;
+CREATE POLICY "household members can update journey_progress"
+  ON journey_progress FOR UPDATE USING (is_household_member(household_id));
+
+-- -----------------------------------------------------------------------
 -- contacts — agents / brokers / solicitors / surveyors directory
 -- Shape: { agents: [], brokers: [], solicitors: [], surveyors: [] }
 -- -----------------------------------------------------------------------

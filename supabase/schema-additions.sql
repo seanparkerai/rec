@@ -232,7 +232,8 @@ BEGIN
     'debts_credit_cards',
     'debts_student_loans',
     'debts_other',
-    'readiness_checklist'
+    'readiness_checklist',
+    'journey_progress'
   ]
   LOOP
     EXECUTE format(

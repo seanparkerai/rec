@@ -80,6 +80,7 @@ const { register: registerListingsLabels } = await import('../tests/listings-lab
 const { register: registerReportFormat } = await import('../tests/report-format.test.js');
 const { register: registerCriteriaForm } = await import('../tests/criteria-form.test.js');
 const { register: registerAssetLinks } = await import('../tests/asset-links.test.js');
+const { register: registerJourneyData } = await import('../tests/journey-data.test.js');
 const { register: registerRefinementEngine } = await import('../tests/refinement-engine.test.js');
 const { register: registerRefinementPersistence } = await import('../tests/refinement-persistence.test.js');
 const { register: registerRefinementView } = await import('../tests/refinement-view.test.js');
@@ -126,6 +127,7 @@ await registerListingsLabels({ test, assert, assertEqual });
 await registerReportFormat({ test, assert, assertEqual });
 await registerCriteriaForm({ test, assert, assertEqual });
 await registerAssetLinks({ test, assert, assertEqual });
+await registerJourneyData({ test, assert, assertEqual });
 await registerRefinementEngine({ test, assert, assertEqual });
 await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });

@@ -19,6 +19,14 @@ export async function saveFinances(d)         { return _save('finances', 'financ
 export async function getGoals(opts = {})     { return _get('goals',     'goals',     'fixtures/goals.sample',    opts.onUpdate || null); }
 export async function saveGoals(d)            { return _save('goals',    'goals',     d); }
 
+// v3 — buying-journey progress (blob; the set of ticked task ids from
+// data/journey.json). Source of truth = Supabase; no seed JSON — tick-state
+// starts empty like shortlist/zones. Defaults to { tasks: {} } when absent.
+export async function getJourneyProgress(opts = {}) {
+  return _get('journey-progress', 'journey_progress', null, opts.onUpdate || null) ?? { tasks: {} };
+}
+export async function saveJourneyProgress(d)  { return _save('journey-progress', 'journey_progress', d); }
+
 // v3 — readiness checklist (row-per-item; no blob).
 export async function getReadinessChecklist(opts = {}) {
   const cached = readLocal('readiness');
