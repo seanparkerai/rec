@@ -7,20 +7,20 @@
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
 }
 .filter-row + .filter-row { margin-top: var(--space-3); }
+/* Mobile-first: stacked; side-by-side from phone-landscape (480) up. */
 .filter-row-end {
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   align-items: center;
+}
+@media (min-width: 480px) {
+  .filter-row-end { grid-template-columns: 1fr auto; }
 }
 .filter-field { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; }
 .filter-field > span { font-size: var(--text-xs); color: var(--pico-muted-color); }
 .filter-field input,
-.filter-field select { margin: 0; min-height: 44px; }
-.check-row { display: inline-flex; align-items: center; gap: var(--space-2); margin: 0; min-height: 44px; }
+.filter-field select { margin: 0; min-height: var(--tap-min); }
+.check-row { display: inline-flex; align-items: center; gap: var(--space-2); margin: 0; min-height: var(--tap-min); }
 .check-row input { margin: 0; width: 1.1rem; height: 1.1rem; }
-
-@media (max-width: 480px) {
-  .filter-row-end { grid-template-columns: 1fr; }
-}
 
 .result-summary { margin: 0 0 var(--space-3); color: var(--pico-muted-color); font-size: var(--text-sm); }
 
@@ -30,16 +30,19 @@
   margin: 0; padding: 0; list-style: none;
   border-top: 1px solid var(--hairline);
 }
+/* Mobile-first: index · name · star. The meta column appears from tablet
+   portrait (768) up — same step as area-row--v2's data columns. */
 .area-row {
   display: grid; gap: var(--space-3);
-  grid-template-columns: 2.5rem 1fr auto auto;
+  grid-template-columns: 2rem 1fr auto;
   align-items: center;
   padding: var(--space-4) var(--space-2);
   border-bottom: 1px solid var(--hairline);
 }
-@media (max-width: 480px) {
-  .area-row { grid-template-columns: 2rem 1fr auto; }
-  .area-row .area-meta { display: none; }
+.area-row .area-meta { display: none; }
+@media (min-width: 768px) {
+  .area-row { grid-template-columns: 2.5rem 1fr auto auto; }
+  .area-row .area-meta { display: block; }
 }
 .area-row .area-index {
   font-family: var(--font-data); font-size: var(--text-xs);
@@ -73,7 +76,7 @@
 }
 
 .star-btn {
-  width: 44px; height: 44px; min-width: 44px;
+  width: var(--tap-min); height: var(--tap-min); min-width: var(--tap-min);
   background: transparent; border: 1px solid var(--hairline);
   border-radius: var(--rec-radius-sm);
   font-size: 1.4rem; line-height: 1; padding: 0; margin: 0;

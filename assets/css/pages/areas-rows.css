@@ -1,10 +1,14 @@
 /* pages/areas-phase4b.css — Phase 4b areas + area-detail overhaul. */
 
-/* Area row v2: index · fit-dot · main · bed-fit · ct-band · star */
+/* Area row v2: index · fit-dot · main · bed-fit · ct-band · star.
+   Mobile-first: index · fit-dot · main · star; bed-fit + ct-band appear from
+   tablet portrait (768) up (identical step to area-row v1's meta column). */
 .area-row--v2 {
-  grid-template-columns: 2rem 0.75rem 1fr auto auto auto;
+  grid-template-columns: 1.5rem 0.75rem 1fr auto;
   align-items: center;
 }
+.area-row--v2 .bed-fit,
+.area-row--v2 .ct-band { display: none; }
 .area-row--v2 .area-row__main { min-width: 0; }
 .area-row--v2 .fit-dot { width: 0.75rem; height: 0.75rem; }
 .area-row--v2 .bed-fit {
@@ -27,10 +31,10 @@
   background: color-mix(in oklch, var(--ink) 4%, var(--paper));
 }
 .area-row--v2 .ct-band--empty { background: transparent; color: var(--ink-subtle); border-style: dashed; }
-@media (max-width: 768px) {
-  .area-row--v2 { grid-template-columns: 1.5rem 0.75rem 1fr auto; }
+@media (min-width: 768px) {
+  .area-row--v2 { grid-template-columns: 2rem 0.75rem 1fr auto auto auto; }
   .area-row--v2 .bed-fit,
-  .area-row--v2 .ct-band { display: none; }
+  .area-row--v2 .ct-band { display: inline-flex; }
 }
 
 /* Area-detail Phase 4b additions */
