@@ -1,70 +1,47 @@
+// dashboard/tile-journey.js — the Home "Where you are" tile. Reads the buying-journey
+// timeline (data/journey.json) + the per-household tick state (journey_progress, via
+// storage.getJourneyProgress). One track node per phase (done / current / upcoming);
+// the next action is the current step, and the tick button advances one task within it.
 import { loadJSON } from '../data-loader.js';
-import { _internal } from '../storage.js';
-import { esc, byId as $, setText } from '../dom.js';
-
-function journeyState() {
-  return _internal.readLocal('journey-checks') || { viewing: {}, process: {}, moving: {} };
-}
-
-function itemLabel(section, item) {
-  return section === 'moving' ? (item.task || '') : (item.item || '');
-}
-
-function findNextAction(checklists, state) {
-  const order = ['viewing', 'process', 'moving'];
-  for (const key of order) {
-    const items = checklists?.[key] || [];
-    for (let i = 0; i < items.length; i++) {
-      if (!state[key]?.[i]) {
-        return { section: key, index: i, title: itemLabel(key, items[i]) };
-      }
-    }
-  }
-  return null;
-}
+import { getJourneyProgress, saveJourneyProgress } from '../storage.js';
+import { byId as $, setText } from '../dom.js';
+import { phaseProgress, phaseIsDone, currentStep } from '../journey/progress.js';
 
 export async function renderJourneyTrack() {
   try {
-    const data = await loadJSON('checklists');
-    const state = journeyState();
-    const sections = [
-      { key: 'viewing', label: 'Viewing' },
-      { key: 'process', label: 'Buying process' },
-      { key: 'moving',  label: 'Moving' },
-    ];
-    const stats = sections.map((s) => {
-      const items = data[s.key] || [];
-      const total = items.length;
-      const done = items.reduce((n, _, i) => n + (state[s.key]?.[i] ? 1 : 0), 0);
-      return { ...s, total, done, isDone: total > 0 && done >= total };
-    });
-    const currentIdx = stats.findIndex((s) => !s.isDone);
+    const journey = await loadJSON('journey');
+    const state = await getJourneyProgress() || { tasks: {} };
+    const current = currentStep(journey, state);
+    const currentPhaseId = current?.phase.id || null;
 
-    $('tj-track').innerHTML = stats.map((s, i) => {
-      const mod = s.isDone ? '--done' : (i === currentIdx ? '--current' : '');
+    $('tj-track').innerHTML = journey.phases.map((phase, i) => {
+      const pp = phaseProgress(state, phase);
+      const mod = phaseIsDone(state, phase) ? '--done'
+                : (phase.id === currentPhaseId ? '--current' : '');
       return `
         <li class="journey-track__node ${mod ? 'journey-track__node' + mod : ''}">
-          <span class="journey-track__label">${esc(s.label)}</span>
-          <span class="journey-track__count">${s.done}/${s.total}</span>
+          <span class="journey-track__label">${i + 1}</span>
+          <span class="journey-track__count">${pp.done}/${pp.total}</span>
         </li>
       `;
     }).join('');
 
-    const next = findNextAction(data, state);
     const tickBtn = $('tj-next-tick');
-    if (!next) {
+    if (!current) {
       setText('tj-next-text', 'All steps ticked off — nice work.');
       if (tickBtn) tickBtn.disabled = true;
       return;
     }
-    setText('tj-next-text', next.title);
+    setText('tj-next-text', current.step.title);
     if (tickBtn) {
       tickBtn.disabled = false;
-      tickBtn.onclick = () => {
-        const fresh = journeyState();
-        fresh[next.section] = fresh[next.section] || {};
-        fresh[next.section][next.index] = true;
-        _internal.writeLocal('journey-checks', fresh);
+      tickBtn.onclick = async () => {
+        // Advance one task within the current step (the global first un-ticked task).
+        const next = current.step.tasks.find((t) => !state.tasks[t.id]);
+        if (next) {
+          state.tasks[next.id] = true;
+          await saveJourneyProgress(state);
+        }
         renderJourneyTrack();
       };
     }
