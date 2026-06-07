@@ -47,10 +47,9 @@ export async function register({ test, assert, assertEqual, fixtures }) {
 
   const actual = scanned.filter(importsSupabaseClient).sort();
 
-  // Documented temporary exceptions. page-data-sync.js is the sole current
-  // violator; CLAUDE.md / the P8 reroute removes this import, at which point
-  // the "no stale exceptions" test below fails until this entry is deleted.
-  const EXPECTED_EXCEPTIONS = ['page-data-sync.js'];
+  // No documented exceptions remain: page-data-sync.js — the last module that
+  // imported supabase-client directly — was removed with the Data sync page.
+  const EXPECTED_EXCEPTIONS = [];
 
   test('import-layer: scanned the expected module surface (≥40 files)', () => {
     assert(scanned.length >= 40, `only scanned ${scanned.length} modules — glob likely broke`);
@@ -68,7 +67,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
       `listed as exceptions but no longer import supabase-client — remove from EXPECTED_EXCEPTIONS: ${stale.join(', ')}`);
   });
 
-  test('import-layer: page-data-sync.js is the sole documented exception (P8 removes it)', () => {
-    assertEqual(EXPECTED_EXCEPTIONS.join(','), 'page-data-sync.js');
+  test('import-layer: no documented exceptions remain', () => {
+    assertEqual(EXPECTED_EXCEPTIONS.join(','), '');
   });
 }

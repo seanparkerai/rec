@@ -4,7 +4,5 @@
   "r-no-style-assign|assets/js/page-area-detail.js|.style.viewTransitionName =": 1,
   "r-no-style-assign|assets/js/page-areas.js|.style.viewTransitionName =": 1,
   "r-no-style-assign|assets/js/page-listings.js|.style.width =": 2,
-  "r-no-style-assign|assets/js/page-property.js|.style.cursor =": 1,
-  "r-tap-target|assets/css/pages/data-sync/fetch.css|.dialog-ack input[type=\"checkbox\"] { min-height: 16px }": 1,
-  "r-tap-target|assets/css/pages/data-sync/fetch.css|.dialog-ack input[type=\"checkbox\"] { min-width: 16px }": 1
+  "r-no-style-assign|assets/js/page-property.js|.style.cursor =": 1
 }

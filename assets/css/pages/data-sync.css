@@ -1,9 +1,0 @@
-/* pages/data-sync.css — entry shell for the Data Sync admin page. Anchor: Linear-dense.
-   Split from an 867-line monolith into focused, cascade-ordered partials (REFACTOR P7g).
-   Loaded DIRECTLY by pages/data-sync.html via <link> (this page does not use dashboard.css).
-   The @import order below is the original rule order, so the cascade is byte-for-byte
-   unchanged. Mirrors the @import-shell pattern used by dashboard.css. */
-@import 'data-sync/state.css';  /* status tiles · alignment result · per-row diff · prompt boxes */
-@import 'data-sync/tools.css';  /* push/pull panels · data viewer · schema checker · config tools */
-@import 'data-sync/guide.css';  /* workflow guide · note callout · page head · refresh row */
-@import 'data-sync/fetch.css';  /* fetch listings · resolve-areas bar · confirm dialogs */
