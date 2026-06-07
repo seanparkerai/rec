@@ -142,8 +142,9 @@ The contract for the systematic mobile-responsiveness overhaul. Enforced where m
    `--seasoning-pct`/`--marker-pct` pattern). `.style.setProperty('--…')` is the one allowed JS style call.
 8. **SVG charts** keep `viewBox` + `preserveAspectRatio`, sized `width: 100%; height: auto` (+`max-height`);
    JS draws in viewBox space and sets no pixel root size. **Fixed `px` font-size is allowed only on SVG
-   `text`** — concretely, only inside the SVG-drawing JS modules `assets/js/**/section-*.js` and
-   `*-visuals.js` (the `r-no-fixed-font-px` convention). Everywhere else, fixed-px font-size is flagged.
+   `text`** (the `r-no-fixed-font-px` convention): in CSS, a rule that also sets `fill:` (SVG-text styling);
+   in JS, the SVG-drawing modules `assets/js/**/section-*.js` and `*-visuals.js`. Everywhere else, fixed-px
+   font-size is flagged.
 9. **iOS input-zoom.** Any focusable control (`input`/`select`/`textarea`) resolves to **≥16px** effective
    font at mobile, or Safari zoom-jumps on focus. Floor relevant `clamp()` minimums at `1rem`.
 10. **Reduced motion.** All transitions/animations honour `@media (prefers-reduced-motion: reduce)`.
