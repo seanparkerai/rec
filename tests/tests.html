@@ -72,9 +72,9 @@
       await test(`partial ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
 
     // --- pages reachable ---
-    // Every shipped page that is free of inline style="" / <style> blocks (debug.html
-    // is deliberately excluded — it carries dev-only inline styles). The inline-style,
-    // <style>-block and horizontal-scroll smoke tests below all iterate this list.
+    // Every shipped page that is free of inline style="" / <style> blocks. The
+    // inline-style, <style>-block and horizontal-scroll smoke tests below all
+    // iterate this list.
     const ALL_PAGES = [
       'index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html',
       'pages/areas.html', 'pages/area-detail.html', 'pages/area-review.html', 'pages/house-types.html',
