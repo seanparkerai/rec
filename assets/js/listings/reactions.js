@@ -232,6 +232,26 @@ export function isNonTrainingReaction(r) {
 }
 
 /**
+ * True if a reaction is a reject carrying NO reason at all — neither a scalar `reason`
+ * nor a non-empty `reasons` array. Such a reject is UNATTRIBUTED: it hides the listing
+ * but carries no causal information about WHY, so it cannot be credited to any feature
+ * (type/area/price/beds…). These are overwhelmingly quick/bulk-triage rejects, and when
+ * trained at full weight on every signal they poison the learning engine (a detached
+ * home quick-rejected for being in the wrong spot reads as "dislikes detached"). The
+ * learning gate therefore EXCLUDES them (see learned-preferences/weights.js isTraining /
+ * trainingProgress). They remain valid reactions that still suppress the listing — they
+ * simply do not move preference weights. A `like` is never unattributed (likes train on
+ * their own merit); only a reject can be.
+ * @param {object} r  { reaction, reason?, reasons? }
+ */
+export function isUnattributedReject(r) {
+  if (!r || r.reaction !== 'reject') return false;
+  const hasReasons = Array.isArray(r.reasons) && r.reasons.length > 0;
+  const hasReason = r.reason != null && String(r.reason).trim() !== '';
+  return !hasReasons && !hasReason;
+}
+
+/**
  * Clean a loose array of `{ key, detail?, note? }` (or bare key strings) into the
  * validated, de-duplicated reasons shape stored on a reaction. Pure: invalid
  * entries are DROPPED (never thrown). Unknown primary keys are dropped; a

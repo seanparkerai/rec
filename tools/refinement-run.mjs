@@ -23,6 +23,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { runRefinementEngine, scoreFromAggregates } from '../assets/js/refinement/engine.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
 import { priorRunsFromRows, planRun, renderPlanSql } from '../assets/js/refinement/persistence.js';
+import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -62,7 +63,7 @@ async function loadInputs() {
   }
   if (!SERVICE_KEY) throw new Error('no service key — use --from-file <bundle.json> (build via MCP) for the sandbox path');
   const householdId = arg('--household') || (await restGetAll('households?select=id'))[0]?.id;
-  const reactions = await restGetAll('listing_reactions?select=listing_id,reaction,created_at,listing_snapshot');
+  const reactions = await restGetAll('listing_reactions?select=listing_id,reaction,reason,reasons,created_at,listing_snapshot');
   const existingSuggestions = await restGetAll(`refinement_suggestions?select=dimension,value,status,runs_qualified,first_detected_at,snoozed_until&household_id=eq.${householdId}`);
   // Stage 7: the household's chosen sensitivity preset + dismiss memory live in
   // learned_preferences (reserved overrides key + dismissals). Read them so a portal
@@ -81,9 +82,20 @@ async function main() {
   if (!householdId) throw new Error('no householdId resolved');
 
   const priorRunsQualified = priorRunsFromRows(existingSuggestions);
+  // Refinement findings must reflect GENUINE, one-at-a-time reactions — not the en-masse
+  // area/price sweeps + administrative removals that dominate the log (they inflate the
+  // baseline to ~99%, so every value — INCLUDING the user's favourite types — looks
+  // "disproportionately rejected"). In reactions-mode we drop bulk + admin here; an
+  // aggregates-mode caller must pre-filter the SAME way in SQL (docs/REFINEMENT_README.md).
+  // `--all-reactions` bypasses the filter (debugging / parity checks).
+  const useAll = process.argv.includes('--all-reactions');
+  const filtered = (reactions && !useAll) ? genuineReactions(reactions) : reactions;
+  if (reactions && !useAll) {
+    process.stderr.write(`  genuine-only filter: ${reactions.length} → ${filtered.length} reactions (dropped ${reactions.length - filtered.length} bulk/admin)\n`);
+  }
   const run = aggregates
     ? scoreFromAggregates(aggregates, { config, now, dimensions: DIMENSIONS, priorRunsQualified })
-    : runRefinementEngine(reactions || [], { config, now, dimensions: DIMENSIONS, priorRunsQualified });
+    : runRefinementEngine(filtered || [], { config, now, dimensions: DIMENSIONS, priorRunsQualified });
 
   const plan = planRun(run, { householdId, existingRows: existingSuggestions, dismissedKeys, now });
   const sql = renderPlanSql(plan);

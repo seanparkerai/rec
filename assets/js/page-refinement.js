@@ -19,8 +19,10 @@ import {
   stopSearchingArea, bringBackArea,
   dismissSuggestion, undismissSuggestion, snoozeSuggestion, unsnoozeSuggestion,
   getRefinementPreset, setRefinementPreset, resetTraining,
+  getReactionLog,
 } from './storage.js';
 import { classifySuggestions, buildConfidenceMeter, probationStatusLabel, PRESET_OPTIONS } from './refinement/view.js';
+import { provenanceSummary } from './listings/reaction-provenance.js';
 import { resolveConfig } from './refinement/config.js';
 import { esc, byId as $, on } from './dom.js';
 
@@ -91,6 +93,33 @@ function cardHTML(c, variant, extra = {}) {
 
 function emptyHTML(text) {
   return `<p class="ref-empty">${esc(text)}</p>`;
+}
+
+// Honest engagement summary ("Your reactions"): how many homes were judged one at a time
+// vs filtered en masse. The findings below are built ONLY from the genuine, one-at-a-time
+// reactions — the bulk area/price sweeps + whole-area removals are excluded so they can't
+// make a favourite type look "99% rejected". Numbers are pure (reaction-provenance.js).
+function renderReactions(log) {
+  const el = $('ref-reactions');
+  if (!el) return;
+  const s = provenanceSummary(log || []);
+  const i = s.individual;
+  const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+  el.innerHTML = `
+    <p class="ref-reactions__lead">
+      <strong class="ref-reactions__headline">${i.total}</strong>
+      <span class="ref-reactions__cap">homes you've reviewed one at a time</span>
+    </p>
+    <ul class="ref-reactions__split">
+      <li><span class="ref-reactions__n">${i.likes}</span> liked</li>
+      <li><span class="ref-reactions__n">${i.rejects}</span> rejected individually</li>
+      <li><span class="ref-reactions__n">${i.passes}</span> skipped</li>
+    </ul>
+    <p class="ref-reactions__note">
+      Your findings below are based on these <strong>${s.genuineGraded}</strong> genuine judgements.
+      ${plural(s.bulk, 'bulk filter action')} and ${plural(s.admin, 'whole-area removal')}
+      are set aside — they tidied your feed but don't shape what the engine thinks you like.
+    </p>`;
 }
 
 function renderMeter(meta) {
@@ -265,9 +294,10 @@ function wireTraining() {
 }
 
 async function refresh() {
-  const [rows, meta, probation, preset] = await Promise.all([
-    getRefinementSuggestions(), getRefinementMeta(), getScrapeProbation(), getRefinementPreset(),
+  const [rows, meta, probation, preset, reactionLog] = await Promise.all([
+    getRefinementSuggestions(), getRefinementMeta(), getScrapeProbation(), getRefinementPreset(), getReactionLog(),
   ]);
+  renderReactions(reactionLog);
   renderMeter(meta);
   renderPresets(preset);
 

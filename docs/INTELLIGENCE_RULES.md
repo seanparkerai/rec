@@ -260,6 +260,18 @@ the attributed signal (probability shares stay ≤ 1, every reaction contributes
 `w` to mass exactly once). Counts (`n`, hence `MIN_SIGNAL_N`/confidence) are untouched —
 the discount applies to mass, not counts.
 
+**Unattributed rejects don't train (2026-06).** The "no reasons ⇒ undiscounted" path above
+applies to **likes** (which train on their own merit). A **reject** carrying *no* reason at
+all (no `reasons[]`, no scalar `reason`) is now a **non-training** signal
+(`reactions.js#isUnattributedReject`, gated in `weights.js#isTraining` + `trainingProgress`):
+it still hides the listing, but it carries no causal information, so it never moves a weight
+and counts toward neither `gradedCount` nor the training-progress totals — exactly like an
+administrative `removed_area` reject, different cause. Rationale: unattributed rejects are
+overwhelmingly quick / bulk-triage actions; crediting them at full weight against every
+feature poisoned the live model (an in-budget detached home quick-rejected for its *location*
+read as "dislikes detached"). A reasoned reject of the same home still trains normally — it is
+the missing reason, not the reject verb, that gates.
+
 Reason → implicated signal kinds (`REASON_SIGNAL_KINDS`):
 `too_small→beds` · `wrong_area→outcode,area` · `too_expensive→price-band` ·
 `busy_road→outcode,area` · `poor_layout→baths` · `needs_work / no_outdoor / other → (none,

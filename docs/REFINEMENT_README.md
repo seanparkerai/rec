@@ -70,11 +70,22 @@ still logs `actor='system'` run rows.
 - **Tests**: `node tools/run-intelligence-tests.mjs` (the refinement suites are
   `refinement-engine` / `-persistence` / `-view` / `-scope`).
 
-## Current production state (2026-06-05)
-51 `forming` suggestions, **0 actionable** — the ~98.7% reject baseline caps lift at
-≈1.01, below `MIN_LIFT` 1.6 (Cautious). The Hide/Stop buttons therefore stay dormant in
-production until an actionable suggestion appears (e.g. a looser preset, or taste shift).
-The full UI + data paths are verified via live reversible round-trips (see Progress Log).
+## Current production state (2026-06-07)
+**Genuine-only inputs (2026-06-07).** The engine now scores **genuine, one-at-a-time
+reactions only**. `tools/refinement-run.mjs` filters the log through
+`assets/js/listings/reaction-provenance.js#genuineReactions`, dropping administrative
+`removed_area` removals **and** en-masse **bulk-burst** rejects (≥ `REACTION_CADENCE.BULK_PER_MIN`
+= 6 graded reactions sharing one minute). Before this, ~85% of the log was bulk area/price
+sweeps, inflating the baseline reject rate to ~98.7% so **every** value — including the
+household's favourite types — showed lift ≈ 1.0 with a scary ~99% reject rate (detached read
+99.1% "strong", terrifying the owner even though detached is their #1 liked type). On the
+genuine set the baseline is **0.819** and the findings collapse to **8 `forming`, 0 actionable**:
+`terraced`, `flat`, `end of terrace` + 5 areas — the values genuinely rejected *above* baseline.
+Detached / semi-detached / bungalow / cottage sit *below* baseline (lift < 1) and correctly
+**drop out**. The portal's "Your reactions" panel (page-refinement) shows the honest
+individual-vs-bulk split via `provenanceSummary`. Aggregates-mode callers must pre-filter the
+same way in SQL. The Hide/Stop buttons stay dormant until an actionable suggestion appears
+(lift ≥ `MIN_LIFT` 1.6, Cautious).
 
 ## Known follow-ups (deferred, documented)
 - The §4.1 "Why?" reaction-rate **sparkline + sample rejected listings** (need extra
