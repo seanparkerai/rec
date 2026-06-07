@@ -157,7 +157,7 @@ function renderVillageRanking(d) {
   return `
 <section class="report-section" aria-labelledby="rpt-rank-h">
   <h2 id="rpt-rank-h">Village ranking <span class="chip num">${rows.length}</span></h2>
-  <p class="muted" style="font-size:var(--text-sm)">Default sort: composite score (highest first). Click any column header to sort.</p>
+  <p class="muted report-table-hint">Default sort: composite score (highest first). Click any column header to sort.</p>
   <div class="rank-filters">
     <label class="rank-filter-label" for="rank-search">Filter</label>
     <input type="search" id="rank-search" class="rank-search" placeholder="Village or county…" autocomplete="off" />

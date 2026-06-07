@@ -9,7 +9,7 @@ function sumNumeric(arr, key) {
 function sparkbar(value, max) {
   if (!max || max <= 0) return '';
   const pct = Math.min(100, Math.max(0, (Number(value) / max) * 100));
-  return `<span class="sparkbar" aria-hidden="true"><span style="width:${pct.toFixed(1)}%"></span></span>`;
+  return `<span class="sparkbar" aria-hidden="true"><span data-w="${pct.toFixed(1)}"></span></span>`;
 }
 
 function renderTable(targetId, rows, columns, totals = null, sparkColumnKey = null, sparkMax = null) {
@@ -28,6 +28,7 @@ function renderTable(targetId, rows, columns, totals = null, sparkColumnKey = nu
   `).join('');
   const foot = totals ? `<tfoot><tr>${columns.map((c) => `<td${c.numeric ? ' class="num"' : ''}><strong>${esc(totals[c.key] ?? '')}</strong></td>`).join('')}</tr></tfoot>` : '';
   el.innerHTML = `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody>${foot}</table></div>`;
+  el.querySelectorAll('.sparkbar > span[data-w]').forEach((s) => s.style.setProperty('--spark-w', `${s.dataset.w}%`));
 }
 
 export function renderBreakdowns(finData) {

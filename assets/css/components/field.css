@@ -26,3 +26,11 @@
 .add-row { gap: 0.5rem; }
 .add-row input { flex: 1 1 12rem; margin: 0; }
 .add-row button { margin: 0; }
+
+/* Edit-form field label (was inline in page-profile.js). */
+.edit-field-label {
+  display: block;
+  font-size: var(--text-xs); color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-top: var(--space-3);
+}

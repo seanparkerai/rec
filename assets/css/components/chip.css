@@ -26,3 +26,6 @@
   width: var(--tap-min-floor); height: var(--tap-min-floor); padding: 0; line-height: 1;
   border-radius: 999px; margin: 0; font-size: 1rem;
 }
+
+/* Empty-state chip (was inline color in page-profile.js). */
+.chip--empty { color: var(--ink-muted); }

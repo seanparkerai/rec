@@ -130,7 +130,7 @@ function applyFilters() {
 function renderCards(list) {
   const grid = $('areas-grid');
   if (!list.length) {
-    grid.innerHTML = `<li style="padding:var(--space-6) 0;color:var(--ink-muted);text-align:center;">No areas match those filters.</li>`;
+    grid.innerHTML = `<li class="areas-empty">No areas match those filters.</li>`;
     return;
   }
   grid.innerHTML = list.map((a, i) => {

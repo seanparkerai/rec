@@ -85,3 +85,6 @@
 }
 .star-btn:hover { color: var(--accent); border-color: var(--accent); }
 .star-btn.is-starred { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+/* Empty-state row in the areas grid (was an inline style in page-areas.js). */
+.areas-empty { padding: var(--space-6) 0; color: var(--ink-muted); text-align: center; }

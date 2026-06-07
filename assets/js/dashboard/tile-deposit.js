@@ -63,14 +63,21 @@ function renderMiniFlow(financesData) {
     const b = flow.buckets.find((x) => x.name === name);
     if (!b || b.amount <= 0) return '';
     const w = (b.amount / total) * 100;
-    return `<span style="width:${w.toFixed(2)}%;background:${MINI_FLOW_COLORS[name]}" title="${esc(name)}: ${gbp(b.amount)}"></span>`;
+    return `<span data-w="${w.toFixed(2)}" data-c="${MINI_FLOW_COLORS[name]}" title="${esc(name)}: ${gbp(b.amount)}"></span>`;
   }).join(''));
+  $('td-flow')?.querySelectorAll('span[data-w]').forEach((s) => {
+    s.style.setProperty('--seg-w', `${s.dataset.w}%`);
+    s.style.setProperty('--seg-c', s.dataset.c);
+  });
 
   setHTML('td-flow-legend', order.map((name) => {
     const b = flow.buckets.find((x) => x.name === name);
     if (!b) return '';
-    return `<li><span class="swatch" style="background:${MINI_FLOW_COLORS[name]}" aria-hidden="true"></span>${esc(name)}<strong>${gbp(b.amount)}</strong></li>`;
+    return `<li><span class="swatch" data-c="${MINI_FLOW_COLORS[name]}" aria-hidden="true"></span>${esc(name)}<strong>${gbp(b.amount)}</strong></li>`;
   }).join(''));
+  $('td-flow-legend')?.querySelectorAll('.swatch[data-c]').forEach((s) => {
+    s.style.setProperty('--seg-c', s.dataset.c);
+  });
 }
 
 export function renderDeposit(financesData) {

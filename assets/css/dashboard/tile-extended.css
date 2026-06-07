@@ -95,7 +95,7 @@
   display: flex; height: 12px; border-radius: var(--rec-radius-sm); overflow: hidden;
   background: var(--hairline);
 }
-.isa-attribution__seg { min-width: 2px; }
+.isa-attribution__seg { min-width: 2px; flex: var(--seg-flex, 0); } /* flex set in section-isa-attribution.js */
 .isa-attribution__seg--contributed { background: var(--accent); }
 .isa-attribution__seg--dividends   { background: color-mix(in oklch, var(--accent) 60%, oklch(65% 0.18 145)); }
 .isa-attribution__seg--interest    { background: color-mix(in oklch, var(--accent) 30%, oklch(65% 0.18 145)); }

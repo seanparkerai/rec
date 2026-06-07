@@ -363,7 +363,7 @@ const VIEWER_TABLES = [
 on(byId('btn-load-viewer'), 'click', async () => {
   if (!await requireAuth()) return;
   const viewerEl = byId('data-viewer');
-  viewerEl.innerHTML = '<p style="font-size:var(--text-sm);color:var(--ink-muted)">Loading…</p>';
+  viewerEl.innerHTML = '<p class="dv-msg">Loading…</p>';
   const hid = await getHouseholdId();
 
   const sections = await Promise.all(VIEWER_TABLES.map(async ({ table, label }) => {
@@ -391,7 +391,7 @@ on(byId('btn-load-viewer'), 'click', async () => {
     const summary = document.createElement('summary');
     const nameEl   = Object.assign(document.createElement('span'), { className: 'dv-table-name',  textContent: table });
     const labelEl  = document.createElement('span');
-    labelEl.style.cssText = 'flex:1;font-weight:400;color:var(--ink-muted);font-size:var(--text-sm)';
+    labelEl.className = 'dv-table-label';
     labelEl.textContent = label;
     const metaEl   = Object.assign(document.createElement('span'), { className: 'dv-table-meta',  textContent: meta });
     const toggleEl = Object.assign(document.createElement('span'), { className: 'dv-toggle-icon', textContent: '▶' });
@@ -402,8 +402,7 @@ on(byId('btn-load-viewer'), 'click', async () => {
     body.className = 'dv-body';
 
     if (err) {
-      const errP = Object.assign(document.createElement('p'), { className: 'dv-no-data' });
-      errP.style.color = 'oklch(55% 0.18 25)';
+      const errP = Object.assign(document.createElement('p'), { className: 'dv-no-data dv-error' });
       errP.textContent = `Error: ${err}`;
       body.appendChild(errP);
     } else if (empty) {
@@ -441,7 +440,7 @@ on(byId('btn-check-schema'), 'click', async () => {
   if (!sb) { alert('Supabase not configured.'); return; }
 
   const listEl = byId('schema-list');
-  listEl.innerHTML = '<p style="font-size:var(--text-sm);color:var(--ink-muted)">Checking…</p>';
+  listEl.innerHTML = '<p class="dv-msg">Checking…</p>';
   byId('schema-migration-prompt').classList.remove('visible');
 
   const results = await Promise.all(EXPECTED_TABLES.map(async table => {
@@ -515,7 +514,7 @@ function updateRemoveButtons() {
   const rows = rowsWrap.querySelectorAll('.member-row');
   rows.forEach(r => {
     const btn = r.querySelector('.btn-remove-member');
-    if (btn) btn.style.display = rows.length > 1 ? '' : 'none';
+    if (btn) btn.hidden = rows.length <= 1;
   });
 }
 
@@ -533,7 +532,7 @@ on(byId('btn-add-member'), 'click', () => {
       <label>Supabase UID</label>
       <input type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" class="member-uid" spellcheck="false" />
     </div>
-    <div style="padding-bottom:0">
+    <div class="member-row__action">
       <label>&nbsp;</label>
       <button type="button" class="outline secondary btn-remove-member">Remove</button>
     </div>`;

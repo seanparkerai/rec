@@ -61,6 +61,7 @@
 }
 .tile-deposit .mini-flow > span {
   display: block; height: 100%;
+  width: var(--seg-w, 0); background: var(--seg-c); /* set in tile-deposit.js via setProperty */
   transition: width 600ms var(--ease-out);
 }
 .tile-deposit .mini-flow-legend {
@@ -73,6 +74,7 @@
 }
 .tile-deposit .mini-flow-legend .swatch {
   width: 0.5rem; height: 0.5rem; border-radius: 2px; display: inline-block;
+  background: var(--seg-c); /* set in tile-deposit.js via setProperty */
 }
 .tile-deposit .mini-flow-legend strong {
   color: var(--ink); font-weight: 500; font-family: var(--font-data); margin-left: var(--space-1);

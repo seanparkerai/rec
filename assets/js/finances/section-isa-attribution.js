@@ -24,9 +24,10 @@ export async function renderISAAttribution(finData) {
       <dt>Total return</dt><dd>${perf.totalReturnPct != null ? perf.totalReturnPct.toFixed(2) + '%' : '—'}</dd>
     </dl>
     <div class="isa-attribution__bar" role="img" aria-label="ISA growth breakdown">
-      <div class="isa-attribution__seg isa-attribution__seg--contributed" style="flex:${pct(perf.netContributed)}" title="Contributed ${pct(perf.netContributed)}%"></div>
-      <div class="isa-attribution__seg isa-attribution__seg--dividends" style="flex:${pct(perf.dividendsReceived)}" title="Dividends ${pct(perf.dividendsReceived)}%"></div>
-      <div class="isa-attribution__seg isa-attribution__seg--interest" style="flex:${pct(perf.interestEarned)}" title="Interest ${pct(perf.interestEarned)}%"></div>
-      <div class="isa-attribution__seg isa-attribution__seg--growth" style="flex:${pct(Math.max(0, perf.unrealisedGain))}" title="Growth ${pct(Math.max(0, perf.unrealisedGain))}%"></div>
+      <div class="isa-attribution__seg isa-attribution__seg--contributed" data-flex="${pct(perf.netContributed)}" title="Contributed ${pct(perf.netContributed)}%"></div>
+      <div class="isa-attribution__seg isa-attribution__seg--dividends" data-flex="${pct(perf.dividendsReceived)}" title="Dividends ${pct(perf.dividendsReceived)}%"></div>
+      <div class="isa-attribution__seg isa-attribution__seg--interest" data-flex="${pct(perf.interestEarned)}" title="Interest ${pct(perf.interestEarned)}%"></div>
+      <div class="isa-attribution__seg isa-attribution__seg--growth" data-flex="${pct(Math.max(0, perf.unrealisedGain))}" title="Growth ${pct(Math.max(0, perf.unrealisedGain))}%"></div>
     </div>`;
+  el.querySelectorAll('.isa-attribution__seg[data-flex]').forEach((s) => s.style.setProperty('--seg-flex', s.dataset.flex));
 }

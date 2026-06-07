@@ -450,3 +450,6 @@
   line-height: var(--leading-snug);
 }
 .report-disclaimer p { margin: 0; }
+
+/* Hint line under a table heading (was an inline font-size). */
+.report-table-hint { font-size: var(--text-sm); }

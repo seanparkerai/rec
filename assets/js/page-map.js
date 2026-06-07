@@ -199,26 +199,26 @@ async function loadAreaMarkers() {
       const matched = matchedPriceForMap(a, criteria);
       if (finances && criteria && matched) {
         const r = assessAffordability({ price: matched, finances, criteria });
-        const dotStyle = {
-          comfortable:    'background: color-mix(in oklch, var(--accent) 80%, var(--paper));',
-          stretch:        'background: color-mix(in oklch, var(--accent) 40%, var(--paper));',
-          tight:          'background: color-mix(in oklch, var(--ink) 30%, var(--paper));',
-          'out-of-reach': 'background: var(--paper); border: 1px solid var(--ink-muted);',
-        }[r.verdict] || 'background: transparent; border: 1px dashed var(--ink-subtle);';
-        fitHtml = `<div style="display:flex;align-items:center;gap:0.4rem;margin-top:0.35rem;font-size:var(--text-xs);">
-          <span style="display:inline-block;width:0.6rem;height:0.6rem;border-radius:50%;${dotStyle}"></span>
-          <span style="color:var(--ink-muted);">Fit: <strong style="color:var(--ink);">${esc(r.verdict)}</strong> at ${esc(gbp(matched))}</span>
+        const dotClass = {
+          comfortable:    'map-popup__fit-dot--comfortable',
+          stretch:        'map-popup__fit-dot--stretch',
+          tight:          'map-popup__fit-dot--tight',
+          'out-of-reach': 'map-popup__fit-dot--out-of-reach',
+        }[r.verdict] || '';
+        fitHtml = `<div class="map-popup__fit">
+          <span class="map-popup__fit-dot ${dotClass}"></span>
+          <span class="map-popup__fit-label">Fit: <strong>${esc(r.verdict)}</strong> at ${esc(gbp(matched))}</span>
         </div>`;
       }
       const ctHtml = a.councilTaxBand
-        ? `<div style="font-size:var(--text-xs);color:var(--ink-muted);margin-top:0.25rem;">Council tax band <strong style="color:var(--ink);">${esc(a.councilTaxBand)}</strong></div>`
+        ? `<div class="map-popup__ct">Council tax band <strong>${esc(a.councilTaxBand)}</strong></div>`
         : '';
       marker.bindPopup(`
-        <strong>${esc(a.name)}</strong>${approx ? ' <span style="color:var(--ink-subtle);font-size:0.8em;">approx.</span>' : ''}<br />
-        <span style="color:var(--ink-muted);font-size:var(--text-xs);">${esc(a.town)} · ${esc(a.postcode)}</span>
+        <strong>${esc(a.name)}</strong>${approx ? ' <span class="map-popup__approx">approx.</span>' : ''}<br />
+        <span class="map-popup__place">${esc(a.town)} · ${esc(a.postcode)}</span>
         ${fitHtml}
         ${ctHtml}
-        <div style="margin-top:0.5rem;"><a href="${detailUrl}">View profile →</a></div>
+        <div class="map-popup__link"><a href="${detailUrl}">View profile →</a></div>
       `);
       cluster.addLayer(marker);
     });
@@ -245,13 +245,13 @@ function addLegend() {
   legendControl.onAdd = () => {
     const div = L.DomUtil.create('div', 'map-legend');
     div.innerHTML = `
-      <strong style="display:block;font-size:var(--text-xs);letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:0.4rem;">Status</strong>
-      <ul style="list-style:none;margin:0;padding:0;display:grid;gap:0.3rem;font-size:var(--text-xs);color:var(--ink);">
+      <strong class="map-legend__title">Status</strong>
+      <ul class="map-legend__list">
         <li><span class="legend-dot legend-dot--shortlisted"></span>Shortlisted</li>
         <li><span class="legend-dot legend-dot--researched"></span>Researched</li>
         <li><span class="legend-dot legend-dot--partial"></span>Partial</li>
         <li><span class="legend-dot legend-dot--stub"></span>Stub / directory</li>
-        <li style="margin-top:0.35rem;"><span class="legend-dot legend-dot--geofence"></span>Listings geofence (≈3&nbsp;mi)</li>
+        <li class="map-legend__geofence-item"><span class="legend-dot legend-dot--geofence"></span>Listings geofence (≈3&nbsp;mi)</li>
       </ul>
     `;
     return div;
@@ -268,14 +268,14 @@ async function loadShortlistPanel() {
     const countEl = $('sheet-count');
     if (countEl) countEl.textContent = `${list.length} ${list.length === 1 ? 'area' : 'areas'}`;
     if (!list.length) {
-      panel.innerHTML = `<p style="color:var(--ink-muted);font-size:var(--text-sm);">No shortlisted areas yet. Star areas in the <a href="${url('pages/areas.html')}" style="color:var(--accent-ink);">directory</a>.</p>`;
+      panel.innerHTML = `<p class="map-shortlist-empty">No shortlisted areas yet. Star areas in the <a href="${url('pages/areas.html')}">directory</a>.</p>`;
       return;
     }
-    panel.innerHTML = `<ol class="area-list" style="border-top:0;">${list.map((a, i) => `
-      <li class="area-row" style="padding:var(--space-3) 0;grid-template-columns:2rem 1fr auto;">
+    panel.innerHTML = `<ol class="area-list map-shortlist">${list.map((a, i) => `
+      <li class="area-row">
         <span class="area-index">${String(i + 1).padStart(2, '0')}</span>
         <div>
-          <p class="area-name" style="font-size:var(--text-base);">
+          <p class="area-name">
             <a href="${url('pages/area-detail.html')}?id=${encodeURIComponent(a.id)}">${esc(a.name)}</a>
           </p>
           <p class="area-place">

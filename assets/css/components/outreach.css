@@ -571,3 +571,25 @@
     transition: none;
   }
 }
+
+/* ── Toast (built in outreach/toast.js; was fully inline-styled) ───────── */
+.outreach-toast {
+  position: fixed;
+  bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--rec-radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-out);
+  white-space: nowrap;
+}
+.outreach-toast.is-visible { opacity: 1; }
+.outreach-toast--error { background: var(--danger); }
+@media (prefers-reduced-motion: reduce) { .outreach-toast { transition: none; } }

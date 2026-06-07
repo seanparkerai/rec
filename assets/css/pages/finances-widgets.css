@@ -9,6 +9,7 @@
 }
 .sparkbar > span {
   display: block; height: 100%;
+  width: var(--spark-w, 0); /* set by section-breakdowns.js via setProperty */
   background: color-mix(in oklch, var(--accent) 50%, var(--paper));
   border-radius: 2px;
   transition: width 400ms var(--ease-out);

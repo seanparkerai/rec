@@ -128,8 +128,9 @@ function renderMeter(meta) {
   const m = buildConfidenceMeter(meta);
   el.classList.toggle('is-ready', m.ready);
   el.innerHTML = `
-    <div class="ref-meter__track"><span class="ref-meter__fill" style="width:${m.pct}%"></span></div>
+    <div class="ref-meter__track"><span class="ref-meter__fill"></span></div>
     <p class="ref-meter__label">${esc(m.label)}</p>`;
+  el.querySelector('.ref-meter__fill')?.style.setProperty('--ref-pct', `${m.pct}%`);
 }
 
 function renderList(id, cards, emptyText, variant, extraFor = () => ({})) {

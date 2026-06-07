@@ -53,7 +53,7 @@ function renderFieldList(container, rows) {
 
 function renderChips(container, arr, opts = {}) {
   if (!arr || !arr.length) {
-    container.innerHTML = '<li class="chip" style="color:var(--ink-muted);">None added.</li>';
+    container.innerHTML = '<li class="chip chip--empty">None added.</li>';
     return;
   }
   const cls = opts.warn ? 'chip is-warn' : 'chip';
@@ -95,7 +95,7 @@ function buildDialogFields() {
     const input = f.type === 'textarea'
       ? `<textarea id="${id}" name="${f.key}" rows="3">${value}</textarea>`
       : `<input type="text" id="${id}" name="${f.key}" value="${value}" />`;
-    html.push(`<label for="${id}" style="font-size:var(--text-xs);color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:var(--space-3);display:block;">${esc(f.label)}</label>${input}`);
+    html.push(`<label for="${id}" class="edit-field-label">${esc(f.label)}</label>${input}`);
   }
   for (const f of ARRAY_FIELDS) {
     const items = (current[f.key] || []).map((x, i) => `
@@ -105,7 +105,7 @@ function buildDialogFields() {
       </li>
     `).join('');
     html.push(`
-      <label style="font-size:var(--text-xs);color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:var(--space-4);display:block;">${esc(f.label)}</label>
+      <label class="edit-field-label">${esc(f.label)}</label>
       <ul class="edit-list" id="list-${f.key}">${items}</ul>
       <div class="row add-row">
         <input type="text" id="add-${f.key}" placeholder="Add…" />

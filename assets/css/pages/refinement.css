@@ -35,6 +35,7 @@
 }
 .ref-meter__fill {
   display: block;
+  width: var(--ref-pct, 0%); /* set by page-refinement.js via setProperty */
   height: 100%;
   border-radius: inherit;
   background: var(--accent);

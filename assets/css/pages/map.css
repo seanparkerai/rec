@@ -65,6 +65,33 @@ body:has(.map-canvas) .page-head .eyebrow { display: none; }
   .map-card { height: calc(100dvh - 6rem); }
 }
 
+/* ---- Marker popup (built in page-map.js) ------------------------- */
+.map-popup__approx { color: var(--ink-subtle); font-size: 0.8em; }
+.map-popup__place { color: var(--ink-muted); font-size: var(--text-xs); }
+.map-popup__fit { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem; font-size: var(--text-xs); }
+.map-popup__fit-dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: transparent; border: 1px dashed var(--ink-subtle); }
+.map-popup__fit-dot--comfortable  { background: color-mix(in oklch, var(--accent) 80%, var(--paper)); border: 0; }
+.map-popup__fit-dot--stretch      { background: color-mix(in oklch, var(--accent) 40%, var(--paper)); border: 0; }
+.map-popup__fit-dot--tight        { background: color-mix(in oklch, var(--ink) 30%, var(--paper)); border: 0; }
+.map-popup__fit-dot--out-of-reach { background: var(--paper); border: 1px solid var(--ink-muted); }
+.map-popup__fit-label { color: var(--ink-muted); }
+.map-popup__fit-label strong { color: var(--ink); }
+.map-popup__ct { font-size: var(--text-xs); color: var(--ink-muted); margin-top: 0.25rem; }
+.map-popup__ct strong { color: var(--ink); }
+.map-popup__link { margin-top: 0.5rem; }
+
+/* ---- Legend (Leaflet control built in page-map.js) --------------- */
+.map-legend__title { display: block; font-size: var(--text-xs); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.4rem; }
+.map-legend__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; font-size: var(--text-xs); color: var(--ink); }
+.map-legend__geofence-item { margin-top: 0.35rem; }
+
+/* ---- Shortlist panel (compact .area-row reuse) ------------------- */
+.map-shortlist { border-top: 0; }
+.map-shortlist .area-row { padding: var(--space-3) 0; grid-template-columns: 2rem 1fr auto; }
+.map-shortlist .area-name { font-size: var(--text-base); }
+.map-shortlist-empty { color: var(--ink-muted); font-size: var(--text-sm); }
+.map-shortlist-empty a { color: var(--accent-ink); }
+
 /* ---- Home dashboard: journey progress widget ---- */
 .journey-row + .journey-row { margin-top: var(--space-3); }
 .journey-row-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem; font-size: var(--text-sm); }

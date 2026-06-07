@@ -245,3 +245,6 @@ details.data-viewer-table[open] .dv-toggle-icon { transform: rotate(90deg); }
 .member-row input { font-family: var(--font-data); font-size: var(--text-xs); width: 100%; }
 .btn-row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
 
+
+/* Spacer cell aligning the Remove button with labelled inputs (was inline). */
+.member-row__action { padding-bottom: 0; }
