@@ -77,7 +77,7 @@ export async function register({ test, assert, assertEqual }) {
     // And they do not pollute a genuine signal: likes of the base snapshot vs
     // rejects of a 2-bed Flat should still learn type/beds, unchanged by adding
     // 40 removed_area rejects of detached homes alongside.
-    const genuine = [...many(15, 'like'), ...many(15, 'reject', { property_type: 'Flat', beds: 2 })];
+    const genuine = [...many(15, 'like'), ...many(15, 'reject', { property_type: 'Flat', beds: 2 }).map((r) => ({ ...r, reason: 'wrong_house_type', reasons: [{ key: 'wrong_house_type', detail: null, note: null }] }))];
     const base = deriveWeights(genuine, { now: NOW }).derived;
     const withNoise = deriveWeights([...genuine, ...removed], { now: NOW }).derived;
     assertEqual(JSON.stringify(withNoise), JSON.stringify(base), 'removed_area rejects leave the model identical');
@@ -98,9 +98,11 @@ export async function register({ test, assert, assertEqual }) {
     // Every reaction (10 like, 10 reject) is a Detached home, but beds split the
     // set: liked are 4-bed, rejected are 2-bed. "type:detached" is ubiquitous →
     // ~0; "beds:4" (liked) positive; "beds:2" (rejected) negative.
+    // Both sides attributed to beds (right_size / too_small) so the BEDS contrast is the
+    // training signal; type:detached, ubiquitous and discounted symmetrically, still cancels.
     const rs = [
-      ...many(10, 'like', { beds: 4 }),
-      ...many(10, 'reject', { beds: 2 }),
+      ...many(10, 'like', { beds: 4 }).map((r) => ({ ...r, reasons: [{ key: 'right_size', detail: null, note: null }] })),
+      ...many(10, 'reject', { beds: 2 }).map((r) => ({ ...r, reason: 'too_small', reasons: [{ key: 'too_small', detail: null, note: null }] })),
     ];
     const { derived } = deriveWeights(rs, { now: NOW });
     assert(Math.abs(derived['type:detached']?.weight ?? 0) < 0.05, 'ubiquitous signal ~0');
@@ -193,13 +195,23 @@ export async function register({ test, assert, assertEqual }) {
     assert(Math.abs(wPrice) < Math.abs(wOutcode) * 0.5, `price suppressed (${wPrice} vs ${wOutcode})`);
   });
 
-  test('learned-prefs: the SAME rejects WITHOUT reasons move all signals equally (back-compat)', () => {
+  test('learned-prefs: an unattributed reject (no reason) does NOT train — a reason is required', () => {
+    // CHANGED CONTRACT (2026-06): a reject carrying no reason at all is UNATTRIBUTED — it
+    // hides the listing but carries no causal information, so it must not move any weight.
+    // Crediting unattributed rejects at full weight against every feature is exactly what
+    // poisoned the live model (in-budget detached homes quick-rejected for their LOCATION
+    // read as "dislikes detached"). It now behaves like an absent training signal. A
+    // REASONED reject of the same home still trains — proving the gate is the missing
+    // reason, not the reject verb.
     const base = { outcode: 'SP5', area_id: 'cann-sp5', beds: 2, price: 360_000 };
-    const d = deriveWeights(many(14, 'reject', base), { now: NOW }).derived;
-    const wOutcode = d['outcode:sp5']?.weight ?? 0;
-    const wBeds = d['beds:2']?.weight ?? 0;
-    assert(wOutcode < -0.15 && wBeds < -0.15, 'all signals negative');
-    assert(Math.abs(wOutcode - wBeds) < 0.01, `equal without attribution (${wOutcode} vs ${wBeds})`);
+    const bare = many(14, 'reject', base);
+    assertEqual(gradedCount(bare), 0, 'unattributed rejects are not graded');
+    assert(isColdStart(bare), 'unattributed rejects cannot cross cold start');
+    assertEqual(Object.keys(deriveWeights(bare, { now: NOW }).derived).length, 0, 'no weights from unattributed rejects');
+    assertEqual(trainingProgress(bare).rejects, 0, 'training progress ignores unattributed rejects');
+    // The same rejects, now reasoned "wrong area", DO train (attributed to outcode/area).
+    const d = deriveWeights(withReasons(bare, [{ key: 'wrong_area', detail: null, note: null }]), { now: NOW }).derived;
+    assert((d['outcode:sp5']?.weight ?? 0) < -0.15, 'a reasoned reject of the same home trains');
   });
 
   test('learned-prefs: the unattributed discount scales the weight by exactly d', () => {
@@ -299,7 +311,7 @@ export async function register({ test, assert, assertEqual }) {
     // of type:flat must score IDENTICALLY whether or not 200 unrelated detached
     // listings were passed. (A shared rejected denominator would have diluted it.)
     const likes   = many(10, 'like',   { property_type: 'Detached' });
-    const rejects = many(4,  'reject', { property_type: 'Flat' });
+    const rejects = withReasons(many(4, 'reject', { property_type: 'Flat' }), [{ key: 'wrong_house_type', detail: null, note: null }]);
     const passes  = many(200, 'pass',  { property_type: 'Detached' });
     const wWithout = deriveWeights([...likes, ...rejects],          { now: NOW }).derived['type:flat']?.weight ?? 0;
     const wWith    = deriveWeights([...likes, ...rejects, ...passes], { now: NOW }).derived['type:flat']?.weight ?? 0;
@@ -346,7 +358,11 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   // ── training progress (balance-aware) ───────────────────────────────────────
-  const reacts = (n, reaction) => Array.from({ length: n }, () => ({ reaction }));
+  // A reject must carry a reason to count as training signal (unattributed rejects are
+  // excluded), so reject fixtures get a representative reason; likes / passes stay bare.
+  const reacts = (n, reaction) => Array.from({ length: n }, () => (
+    reaction === 'reject' ? { reaction, reasons: [{ key: 'wrong_area', detail: null, note: null }] } : { reaction }
+  ));
 
   test('learned-prefs: trainingProgress flags cold start below COLD_START_MIN', () => {
     const p = trainingProgress(reacts(5, 'like'));

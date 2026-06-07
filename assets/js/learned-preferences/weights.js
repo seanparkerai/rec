@@ -2,17 +2,22 @@
 // Layer 2 derive + Layer 2⊕3 effective weights (REFACTOR P7c). Pure. No DOM/IO.
 import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from '../intelligence-constants.js';
 import { signalsForListing, implicatedKinds } from './signals.js';
-import { isNonTrainingReaction } from '../listings/reactions.js';
+import { isNonTrainingReaction, isUnattributedReject } from '../listings/reactions.js';
 
 const GRADED = new Set(['like', 'reject']);
 const PASS   = new Set(['pass']);
 const round3 = (n) => Math.round(n * 1000) / 1000;
 
-// A reaction trains preferences only if it is a graded verb, carries a snapshot,
-// AND is not administrative (e.g. a `removed_area` reject — a wholesale area ignore,
-// which must not be read as a dislike of the homes' type/outcode/beds/price).
+// A reaction trains preferences only if it is a graded verb, carries a snapshot, is not
+// administrative (e.g. a `removed_area` reject — a wholesale area ignore, which must not
+// be read as a dislike of the homes' type/outcode/beds/price), AND — for a reject — is
+// attributed: an UNATTRIBUTED reject (no reason at all) carries no causal information, so
+// crediting it at full weight against every feature poisons the model (a detached home
+// quick-rejected for its location reads as "dislikes detached"). It still hides the
+// listing; it just does not move weights. See reactions.js isUnattributedReject.
 function isTraining(r) {
-  return r && GRADED.has(r.reaction) && r.listing_snapshot && !isNonTrainingReaction(r);
+  return r && GRADED.has(r.reaction) && r.listing_snapshot
+    && !isNonTrainingReaction(r) && !isUnattributedReject(r);
 }
 
 // ── Recency ──────────────────────────────────────────────────────────────────
@@ -61,6 +66,7 @@ export function trainingProgress(reactions, opts = {}) {
   for (const r of arr) {
     if (!r) continue;
     if (isNonTrainingReaction(r)) continue; // administrative (e.g. removed_area) — not a real judgement
+    if (isUnattributedReject(r)) continue;  // reject with no reason — no causal signal, not trained
     if (r.reaction === 'like') likes += 1;
     else if (r.reaction === 'reject') rejects += 1;
   }

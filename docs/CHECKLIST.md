@@ -11,9 +11,14 @@ Tick items as completed and **commit**. To resume in a fresh chat: read this fil
 > pure engine → persistence job → control panel → display-hide lever (Approach B,
 > `learned_preferences.overrides`) → scrape-pause lever + probation + scraper enforcement
 > + Stage 8 invariant → dismiss/snooze → training controls (presets + reset) → polish +
-> safety review. Harness green **548/548**. Maintenance map: `docs/REFINEMENT_README.md`.
-> Production: 51 `forming`, 0 actionable (lift binds at the ~98.7% baseline) so the action
-> buttons ship dormant. **Deferred (documented, non-blocking):** "Why?" sparkline + sample
+> safety review. Harness green **574/574**. Maintenance map: `docs/REFINEMENT_README.md`.
+> **2026-06-07 reaction-learning cleanup:** findings now score GENUINE one-at-a-time reactions
+> only (en-masse bulk/admin sweeps excluded via `assets/js/listings/reaction-provenance.js`);
+> genuine baseline 0.986→0.819, so favourite types (detached/semi/bungalow/cottage) no longer
+> surface as "rejected" — **8 `forming`, 0 actionable**. Unattributed (no-reason) rejects are
+> now NON-TRAINING (`reactions.js#isUnattributedReject`); 230 untagged rejects relabelled; new
+> "Your reactions" panel shows the honest individual-vs-bulk split.
+> **Deferred (documented, non-blocking):** "Why?" sparkline + sample
 > listings; "Reconsider?" auto-badge; CI scheduling + `SCRAPER_RUN_INDEX` (workflow,
 > §16-guarded; scraper not yet live-run vs Apify).
 
