@@ -24,8 +24,11 @@
 /* Readiness tile */
 .tile-readiness .readiness-headline { font-size: var(--text-base); margin: 0 0 var(--space-4); }
 .readiness-stats {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-2) var(--space-3);
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2) var(--space-3);
   margin: 0 0 var(--space-4);
+}
+@media (min-width: 480px) {
+  .readiness-stats { grid-template-columns: 1fr 1fr 1fr; }
 }
 .readiness-stats > div { display: contents; }
 .readiness-stats dt { font-size: var(--text-sm); color: var(--ink-muted); }
@@ -57,9 +60,11 @@
 
 /* Affordability scenarios tile */
 .scenario-list { list-style: none; margin: 0; padding: 0; }
+/* Mobile-first: label + badge on row 1, detail wraps to row 2; three columns
+   from phone-landscape (480) up. */
 .scenario-row-item {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
   gap: var(--space-1) var(--space-3);
   padding: var(--space-3) 0;
@@ -67,8 +72,13 @@
 }
 .scenario-row-item:last-child { border-bottom: none; }
 .scenario-label { font-size: var(--text-sm); font-weight: 500; grid-column: 1; grid-row: 1; }
-.scenario-detail { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: var(--text-sm); grid-column: 2; grid-row: 1; white-space: nowrap; }
-.scenario-row-item .verdict-badge { grid-column: 3; grid-row: 1; align-self: start; }
+.scenario-detail { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: var(--text-sm); grid-column: 1; grid-row: 2; white-space: nowrap; }
+.scenario-row-item .verdict-badge { grid-column: 2; grid-row: 1; align-self: start; }
+@media (min-width: 480px) {
+  .scenario-row-item { grid-template-columns: 1fr auto auto; }
+  .scenario-detail { grid-column: 2; grid-row: 1; }
+  .scenario-row-item .verdict-badge { grid-column: 3; }
+}
 .scenario-eta { font-size: var(--text-xs); color: var(--ink-muted); grid-column: 1 / -1; grid-row: 2; }
 
 /* ISA YTD stat in deposit tile */
@@ -103,9 +113,12 @@
   margin: var(--space-4) 0 0;
 }
 .profile-dl .field-view {
-  display: grid; grid-template-columns: 200px 1fr; gap: var(--space-2) var(--space-4);
+  display: grid; grid-template-columns: 1fr; gap: var(--space-1) var(--space-4);
   padding: var(--space-3) 0;
   border-bottom: 1px solid var(--hairline);
+}
+@media (min-width: 480px) {
+  .profile-dl .field-view { grid-template-columns: 200px 1fr; gap: var(--space-2) var(--space-4); }
 }
 .profile-dl .field-view:last-child { border-bottom: none; }
 .profile-dl dt { font-size: var(--text-sm); color: var(--ink-muted); align-self: start; }
@@ -115,10 +128,4 @@
 }
 .followup-list li { margin-bottom: var(--space-2); font-size: var(--text-sm); }
 
-@media (max-width: 480px) {
-  .profile-dl .field-view { grid-template-columns: 1fr; }
-  .readiness-stats { grid-template-columns: 1fr 1fr; }
-  .scenario-row-item { grid-template-columns: 1fr auto; }
-  .scenario-row-item .verdict-badge { grid-column: 2; }
-  .scenario-detail { grid-column: 1; grid-row: 2; }
-}
+/* (Mobile layouts are now the base; wider layouts live in min-width:480 blocks.) */

@@ -66,12 +66,18 @@
 }
 
 /* Net-worth donut */
+/* Mobile-first: donut stacked above stats; side-by-side from phone-landscape up. */
 .networth-cols {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-4);
   align-items: center;
   margin: var(--space-2) 0;
+}
+.networth-cols .networth-donut { margin: 0 auto; }
+@media (min-width: 480px) {
+  .networth-cols { grid-template-columns: 200px 1fr; }
+  .networth-cols .networth-donut { margin: 0; }
 }
 .networth-donut {
   display: block;
@@ -123,11 +129,6 @@
   font-size: var(--text-sm);
   color: var(--ink-muted);
   margin: var(--space-2) 0 0;
-}
-
-@media (max-width: 480px) {
-  .networth-cols { grid-template-columns: 1fr; }
-  .networth-donut { margin: 0 auto; }
 }
 
 /* Withdrawal-readiness seasoning bar */

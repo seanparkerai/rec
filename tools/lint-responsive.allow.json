@@ -1,5 +1,4 @@
 {
-  "r-canonical-bp|assets/css/dashboard/base.css|max-width: 800px": 1,
   "r-canonical-bp|assets/css/pages/area-detail.css|max-width: 600px": 1,
   "r-canonical-bp|assets/css/pages/data-sync/state.css|max-width: 600px": 1,
   "r-canonical-bp|assets/css/pages/data-sync/tools.css|max-width: 600px": 1,
@@ -54,9 +53,6 @@
   "r-no-inline-style-attr|assets/js/page-profile.js|style=\"font-size:var(--text-xs);color:var(--ink-muted);text-": 2,
   "r-no-inline-style-attr|assets/js/page-refinement.js|style=\"width:${m.pct}%\"": 1,
   "r-no-inline-style-attr|assets/js/page-report.js|style=\"font-size:var(--text-sm)\"": 1,
-  "r-no-max-width-media|assets/css/dashboard/base.css|@media (max-width: 800px)": 1,
-  "r-no-max-width-media|assets/css/dashboard/tile-extended.css|@media (max-width: 480px)": 1,
-  "r-no-max-width-media|assets/css/dashboard/tile-v3-visuals.css|@media (max-width: 480px)": 1,
   "r-no-max-width-media|assets/css/pages/area-detail.css|@media (max-width: 600px)": 1,
   "r-no-max-width-media|assets/css/pages/area-review.css|@media (max-width: 480px)": 1,
   "r-no-max-width-media|assets/css/pages/areas-rows.css|@media (max-width: 768px)": 1,
@@ -89,7 +85,6 @@
   "r-tap-target|assets/css/pages/listings/widgets.css|.btn-map { min-height: 40px }": 1,
   "r-tap-target|assets/css/pages/listings/widgets.css|.btn-map { width: 40px }": 1,
   "r-tap-target|assets/css/pages/listings/widgets.css|/* ── Rightmove buttons (Stage 6 — clear, external, distinct from dossier) ──── */ .btn-rm { min-height: 40px }": 1,
-  "r-undefined-token|assets/css/dashboard/tile-deposit.css|var(--space-10)": 1,
   "r-undefined-token|assets/css/pages/data-sync/fetch.css|var(--border)": 10,
   "r-undefined-token|assets/css/pages/data-sync/fetch.css|var(--font-mono)": 9,
   "r-undefined-token|assets/css/pages/data-sync/guide.css|var(--border)": 3,

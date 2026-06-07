@@ -101,22 +101,20 @@
 .progress > span { display: block; height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
 .progress.small { height: 6px; }
 
-/* ---- Legacy dash-grid (kept for any page still referencing) -------- */
-.dash-grid { display: grid; gap: var(--rec-gap); grid-template-columns: repeat(12, 1fr); }
-.dash-grid > .span-8 { grid-column: span 8; }
-.dash-grid > .span-6 { grid-column: span 6; }
-.dash-grid > .span-4 { grid-column: span 4; }
-.dash-grid > .span-12 { grid-column: span 12; }
-@media (max-width: 800px) {
-  .dash-grid > .span-4,
-  .dash-grid > .span-6,
-  .dash-grid > .span-8,
-  .dash-grid > .span-12 { grid-column: 1 / -1; }
+/* ---- dash-grid — mobile-first: single column on phones, 12-col from tablet
+   portrait (768) up. Kills the old 800px iPad reflow. ------------------- */
+.dash-grid { display: grid; gap: var(--rec-gap); grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .dash-grid { grid-template-columns: repeat(12, 1fr); }
+  .dash-grid > .span-8 { grid-column: span 8; }
+  .dash-grid > .span-6 { grid-column: span 6; }
+  .dash-grid > .span-4 { grid-column: span 4; }
+  .dash-grid > .span-12 { grid-column: span 12; }
 }
 
-/* Chart canvas placeholder sizing (shared) */
-.chart-wrap { position: relative; height: 240px; }
-.chart-wrap canvas { max-height: 240px; }
+/* Chart canvas placeholder sizing (shared) — fluid, capped. */
+.chart-wrap { position: relative; height: clamp(200px, 45vw, 320px); }
+.chart-wrap canvas { max-height: clamp(200px, 45vw, 320px); }
 
 /* Simple list inside cards (kept; non-dashboard pages still use it) */
 .mini-list { list-style: none; margin: 0; padding: 0; }

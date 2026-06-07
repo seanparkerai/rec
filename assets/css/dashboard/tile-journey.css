@@ -50,7 +50,7 @@ main > .tile-journey { margin-bottom: var(--space-6); }
 }
 .journey-next-text { color: var(--ink); flex: 1; min-width: 0; }
 .journey-tick {
-  min-width: 44px; min-height: 44px;
+  min-width: var(--tap-min); min-height: var(--tap-min);
   background: var(--paper); color: var(--ink);
   border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
   font-size: 1.2rem; line-height: 1; cursor: pointer;

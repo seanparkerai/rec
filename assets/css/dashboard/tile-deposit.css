@@ -1,24 +1,28 @@
 /* dashboard/tile-deposit.css — deposit arc, mini flow bar, scenario chips. */
 
-/* Mobile: single column stack. Desktop (full-width tile): arc left, flow right. */
+/* Mobile-first: single column stack with a centered, smaller arc. From a wide
+   card (container ≥720px): arc left, flow right; larger arc, two-col arc head.
+   One container direction only (min-width), no competing max-width query. */
 .tile-deposit .deposit-cols {
   display: flex; flex-direction: column; gap: var(--space-4);
 }
 .tile-deposit .deposit-right {
   display: flex; flex-direction: column; gap: var(--space-4);
 }
-@container (min-width: 720px) {
-  .tile-deposit .deposit-cols {
-    flex-direction: row; gap: var(--space-10); align-items: flex-start;
-  }
-  .tile-deposit .deposit-arc { flex-shrink: 0; }
-  .tile-deposit .deposit-right { flex: 1; min-width: 0; }
-}
 .tile-deposit .deposit-arc {
-  display: grid; grid-template-columns: auto 1fr; gap: var(--space-6);
+  display: grid; grid-template-columns: 1fr; gap: var(--space-6);
   align-items: center;
 }
-.tile-deposit .ring { position: relative; width: 9rem; height: 9rem; flex-shrink: 0; }
+@container (min-width: 720px) {
+  .tile-deposit .deposit-cols {
+    flex-direction: row; gap: var(--space-8); align-items: flex-start;
+  }
+  .tile-deposit .deposit-arc { flex-shrink: 0; grid-template-columns: auto 1fr; }
+  .tile-deposit .deposit-right { flex: 1; min-width: 0; }
+  .tile-deposit .ring { width: 9rem; height: 9rem; margin: 0; }
+  .tile-deposit .arc-stats dd { font-size: var(--text-lg); }
+}
+.tile-deposit .ring { position: relative; width: 8rem; height: 8rem; flex-shrink: 0; margin: 0 auto; }
 .tile-deposit .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
 .tile-deposit .ring-track { fill: none; stroke: var(--hairline-strong); stroke-width: 8; }
 .tile-deposit .ring-bar {
@@ -42,18 +46,13 @@
 .tile-deposit .arc-stats dt { color: var(--ink-muted); font-size: var(--text-sm); margin: 0; }
 .tile-deposit .arc-stats dd {
   margin: 0; font-family: var(--font-data); font-feature-settings: "tnum";
-  font-size: var(--text-lg); font-weight: 500; color: var(--ink);
+  font-size: var(--text-base); font-weight: 500; color: var(--ink);
 }
 .tile-deposit .deposit-eta {
   margin: 0; padding-top: var(--space-3); border-top: 1px solid var(--hairline);
   color: var(--ink-muted); font-size: var(--text-sm);
 }
 .tile-deposit .deposit-eta strong { color: var(--ink); font-weight: 500; font-family: var(--font-data); }
-@container (max-width: 520px) {
-  .tile-deposit .deposit-arc { grid-template-columns: 1fr; }
-  .tile-deposit .ring { width: 8rem; height: 8rem; margin: 0 auto; }
-  .tile-deposit .arc-stats dd { font-size: var(--text-base); }
-}
 
 .tile-deposit .mini-flow-label { margin: 0; }
 .tile-deposit .mini-flow {
@@ -87,7 +86,7 @@
 .scenario-row li { margin: 0; }
 .scenario-chip {
   display: inline-flex; align-items: center;
-  min-height: 44px; padding: 0 var(--space-3);
+  min-height: var(--tap-min); padding: 0 var(--space-3);
   font-family: var(--font-data); font-size: var(--text-sm);
   background: var(--paper); color: var(--ink);
   border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
