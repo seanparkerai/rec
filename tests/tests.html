@@ -78,7 +78,7 @@
     const ALL_PAGES = [
       'index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html',
       'pages/areas.html', 'pages/area-detail.html',
-      'pages/journey.html', 'pages/finances.html', 'pages/investments.html',
+      'pages/journey.html', 'pages/finances.html',
       'pages/listings.html', 'pages/saved-listings.html', 'pages/property.html', 'pages/outreach.html',
       'pages/ask.html', 'pages/refinement.html', 'pages/report.html',
       'pages/setup.html', 'pages/login.html',
@@ -94,8 +94,8 @@
       assert(missing.length === 0, `missing tile ids: ${missing.join(', ')}`);
     });
 
-    // --- v3 finances Now-stage visuals present ---
-    await test('pages/finances.html contains v3 Now-stage section ids', async () => {
+    // --- v3 finances Investments-topic visuals present (merged page) ---
+    await test('pages/finances.html contains v3 Investments-topic section ids', async () => {
       const html = await (await fetch(url('pages/finances.html'))).text();
       const required = [
         'savings-over-time-card', 'monthly-deposits-card', 'isa-stacked-area-card',

@@ -70,3 +70,54 @@
 @media (min-width: 768px) {
   .calc-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ---- Sticky topic nav (Today / Investments / The purchase) --------
+   Mirrors the .area-toc mobile treatment (components/toc.css): a sticky
+   horizontal scroll-snap chip row, kept horizontal at all widths so the
+   full-width charts below have room. */
+.finance-toc {
+  position: sticky;
+  top: var(--header-h, 4rem);
+  z-index: 5;
+  margin: var(--space-3) calc(-1 * var(--space-3)) var(--space-5);
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  backdrop-filter: saturate(160%) blur(12px);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.finance-toc::-webkit-scrollbar { display: none; }
+.finance-toc ol {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; gap: var(--space-2); flex-wrap: nowrap;
+  min-width: max-content;
+}
+.finance-toc a {
+  display: inline-flex; align-items: center; min-height: var(--tap-min);
+  padding: 0.35rem 0.75rem; border-radius: 99px;
+  border: 1px solid var(--hairline);
+  color: var(--ink); text-decoration: none;
+  font-size: var(--text-sm); font-weight: 500;
+  scroll-snap-align: start; white-space: nowrap;
+  transition: background 120ms, border-color 120ms, color 120ms;
+}
+.finance-toc a:hover { border-color: var(--accent); color: var(--accent-ink); }
+.finance-toc a[aria-current="true"] {
+  background: color-mix(in oklch, var(--accent) 14%, var(--paper));
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Anchor jumps clear the sticky header + topic nav. */
+.finance-topic { scroll-margin-top: calc(var(--header-h, 4rem) + 4rem); }
+
+/* Investments topic chip — distinct from the accent "Now" / muted "Later". */
+.stage-chip--invest {
+  color: var(--ink);
+  background: color-mix(in oklch, var(--accent) 22%, transparent);
+}

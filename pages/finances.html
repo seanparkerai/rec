@@ -24,11 +24,19 @@
     <header class="page-head">
       <p class="eyebrow">Budget &amp; calculators</p>
       <h1>Finances</h1>
-      <p class="lead">Two stages, one page. <strong>Now</strong> tracks where the savings sit today. <strong>Later</strong> models the costs that land at and after completion.</p>
+      <p class="lead">Your whole money picture in one place: <strong>where you stand today</strong>, <strong>how your investments are doing</strong>, and <strong>what the purchase will cost</strong>.</p>
     </header>
 
-    <!-- =============================== NOW ============================== -->
-    <section class="finance-stage" id="finance-now" aria-labelledby="stage-now-h">
+    <nav class="finance-toc" aria-label="Finance topics">
+      <ol>
+        <li><a href="#topic-today" data-topic="topic-today">Today</a></li>
+        <li><a href="#topic-investments" data-topic="topic-investments">Investments</a></li>
+        <li><a href="#topic-purchase" data-topic="topic-purchase">The purchase</a></li>
+      </ol>
+    </nav>
+
+    <!-- ============================== TODAY ============================= -->
+    <section class="finance-stage finance-topic" id="topic-today" aria-labelledby="stage-now-h">
       <header class="stage-head">
         <div class="stage-title">
           <span class="stage-chip">Now</span>
@@ -50,8 +58,6 @@
           <div><dt>Months to target</dt>   <dd class="num" id="tile-months">&mdash;</dd></div>
         </dl>
       </section>
-
-      <p class="cell-foot mb-4"><a data-nav="pages/investments.html">How are my investments doing? &rarr;</a></p>
 
       <!-- Now flow -->
       <section class="tile-card tile-flow" id="now-flow-tile" aria-labelledby="now-flow-h">
@@ -82,8 +88,82 @@
       </section>
     </section>
 
-    <!-- ============================== LATER ============================= -->
-    <section class="finance-stage" id="finance-later" aria-labelledby="stage-later-h">
+    <!-- =========================== INVESTMENTS ========================== -->
+    <section class="finance-stage finance-topic" id="topic-investments" aria-labelledby="stage-invest-h">
+      <header class="stage-head">
+        <div class="stage-title">
+          <span class="stage-chip stage-chip--invest">Invested</span>
+          <h2 id="stage-invest-h">How your investments are doing</h2>
+        </div>
+        <p class="stage-lead">Where the money is right now — Trading 212 ISA contributions, growth attribution, allocation, and P&amp;L.</p>
+      </header>
+
+      <!-- Savings over time -->
+      <section class="card chart-tall" id="savings-over-time-card" aria-labelledby="sot-h">
+        <h2 id="sot-h">Savings over time</h2>
+        <p class="muted is-card-intro">Cumulative balance month-by-month against your &pound;40k deposit target.</p>
+        <div class="chart-wrap chart-wrap--tall"><canvas id="savings-over-time-canvas"></canvas></div>
+        <p class="chart-caption" id="sot-caption">&mdash;</p>
+      </section>
+
+      <!-- Monthly deposits -->
+      <section class="card chart-tall" id="monthly-deposits-card" aria-labelledby="md-h">
+        <h2 id="md-h">Monthly deposits</h2>
+        <p class="muted is-card-intro">Net deposits per month — what you actually put in vs your &pound;2,000 goal.</p>
+        <div class="chart-wrap"><canvas id="monthly-deposits-canvas"></canvas></div>
+        <p class="chart-caption" id="md-caption">&mdash;</p>
+      </section>
+
+      <!-- ISA growth attribution -->
+      <section class="card" aria-labelledby="isa-attribution-h">
+        <h2 id="isa-attribution-h">ISA growth attribution</h2>
+        <p class="muted is-card-intro">How the Trading 212 ISA balance breaks down: what you put in vs what the market added.</p>
+        <div id="isa-attribution" aria-live="polite"><p class="muted">Loading&hellip;</p></div>
+      </section>
+
+      <!-- ISA stacked-area chart -->
+      <section class="card chart-tall" id="isa-stacked-area-card" aria-labelledby="isasa-h">
+        <h2 id="isasa-h">Where the balance came from</h2>
+        <p class="muted is-card-intro">Contribution vs dividends vs interest vs market growth, stacked over time.</p>
+        <div class="chart-wrap chart-wrap--tall"><canvas id="isa-stacked-canvas"></canvas></div>
+        <p class="chart-caption" id="isasa-caption">&mdash;</p>
+      </section>
+
+      <!-- Cumulative dividends + interest -->
+      <section class="card chart-tall" id="div-int-cumulative-card" aria-labelledby="di-h">
+        <h2 id="di-h">Cumulative dividends &amp; interest</h2>
+        <p class="muted is-card-intro">Passive income paid into the ISA over time.</p>
+        <div class="chart-wrap"><canvas id="div-int-canvas"></canvas></div>
+        <p class="chart-caption" id="di-caption">&mdash;</p>
+      </section>
+
+      <!-- Strategy epoch comparison -->
+      <section class="card" id="epoch-comparison-card" aria-labelledby="ec-h">
+        <h2 id="ec-h">Strategy epochs</h2>
+        <p class="muted is-card-intro">What each strategy phase contributed and what it returned.</p>
+        <svg id="epoch-svg" class="epoch-comparison" viewBox="0 0 600 180" preserveAspectRatio="xMinYMin meet" aria-label="Per-epoch contribution and return"></svg>
+        <p class="chart-caption" id="ec-caption">&mdash;</p>
+      </section>
+
+      <!-- Ticker exposure treemap -->
+      <section class="card" id="ticker-treemap-card" aria-labelledby="tt-h">
+        <h2 id="tt-h">Ticker exposure</h2>
+        <p class="muted is-card-intro">Where deployed capital is sitting right now.</p>
+        <svg id="ticker-treemap-svg" class="ticker-treemap" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet" aria-label="Holdings by ticker"></svg>
+        <p class="chart-caption" id="tt-caption">&mdash;</p>
+      </section>
+
+      <!-- Realised vs unrealised P&L -->
+      <section class="card" id="realised-unrealised-card" aria-labelledby="ru-h">
+        <h2 id="ru-h">Realised vs unrealised P&amp;L</h2>
+        <p class="muted is-card-intro">Profit locked in by selling vs profit still riding the market.</p>
+        <svg id="ru-svg" class="realised-unrealised" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid meet" aria-label="Realised vs unrealised profit"></svg>
+        <p class="chart-caption" id="ru-caption">&mdash;</p>
+      </section>
+    </section>
+
+    <!-- ========================== THE PURCHASE ========================= -->
+    <section class="finance-stage finance-topic" id="topic-purchase" aria-labelledby="stage-later-h">
       <header class="stage-head">
         <div class="stage-title">
           <span class="stage-chip stage-chip--later">Later</span>

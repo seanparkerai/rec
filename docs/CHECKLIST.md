@@ -564,6 +564,16 @@ All tests 189/189 green before each push.
   - `pages/about-search.html`: "Browse matching areas →" before the save bar.
   - `pages/journey.html`: "Email your affordability to a broker →" (outreach A5).
   - `pages/house-types.html`: "Browse areas →" footer link.
+- [x] **B6 — Finances + Investments re-merged into one topic-split page** (2026-06-07):
+  - Reverses B2. `pages/finances.html` now carries three topic sections — **Today** (`#topic-today`),
+    **Investments** (`#topic-investments`, the 8 chart sections), **The purchase** (`#topic-purchase`) —
+    behind a sticky `.finance-toc` jump-nav with an IntersectionObserver scrollspy.
+  - `assets/js/page-finances.js` re-imports the investment renderers (`section-isa-attribution.js`,
+    `section-v3-charts.js`) and calls them in `renderEverything()`; added `initTopicNav()`.
+  - `.finance-toc` / `.finance-topic` / `.stage-chip--invest` styles appended to `assets/css/pages/finances.css`.
+  - Retired `pages/investments.html` + `assets/js/page-investments.js`; removed the Investments nav entry
+    and the finances→investments cross-link; dropped `pages/investments.html` from `tests/tests.html`
+    `ALL_PAGES` (the existing finances v3-id test now passes).
 
 ### Pending (separate phases)
 
