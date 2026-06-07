@@ -29,7 +29,7 @@
   border: 1px solid color-mix(in oklch, var(--accent) 30%, var(--hairline));
   border-radius: var(--rec-radius-sm);
   white-space: nowrap;
-  min-height: 36px;
+  min-height: var(--tap-min);
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
@@ -47,26 +47,7 @@
 }
 .afford-outreach-link:hover { text-decoration: underline; }
 
-/* ── Skip link (first focusable element) ──────────────────────────────── */
-.skip-link {
-  position: absolute;
-  top: var(--space-2);
-  left: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: var(--accent);
-  color: var(--accent-contrast);
-  border-radius: var(--rec-radius-sm);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  z-index: 1000;
-  transform: translateY(-200%);
-  transition: transform 0.15s var(--ease-out);
-}
-.skip-link:focus-visible {
-  transform: translateY(0);
-  box-shadow: var(--focus-ring);
-  outline: none;
-}
+/* Skip link lives in base.css (single source of truth). */
 
 /* ── Page head ─────────────────────────────────────────────────────────── */
 .outreach-head { margin-bottom: var(--space-6); }
@@ -112,7 +93,7 @@
   border: 1px solid var(--hairline);
   cursor: pointer;
   white-space: nowrap;
-  min-height: 44px;
+  min-height: var(--tap-min);
   display: inline-flex;
   align-items: center;
   transition: background 0.1s, color 0.1s;
@@ -189,47 +170,45 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   margin-top: var(--space-2);
-  min-height: 44px;
+  min-height: var(--tap-min);
 }
 .template-tile[hidden] { display: none; }
 
 /* ── Generate dialog ─────────────────────────────────────────────────────── */
-#outreach-dialog {
-  max-width: min(860px, calc(100vw - var(--space-6)));
+/* Phone: inherits the fullscreen <dialog> base. Tablet+ becomes a wide card. */
+#outreach-dialog > article { gap: var(--space-4); }
+@media (min-width: 768px) {
+  #outreach-dialog { max-width: min(860px, calc(100% - var(--space-6))); }
+  #outreach-dialog > article { padding: var(--space-6); }
 }
-#outreach-dialog > article {
-  padding: var(--space-6);
-  gap: var(--space-4);
-}
+/* Mobile-first: rail stacked above main; two columns from tablet up. */
 .dialog-body {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-6);
   overflow-y: auto;
   flex: 1;
   min-height: 0;
 }
-@media (max-width: 767px) {
-  .dialog-body {
-    grid-template-columns: 1fr;
-  }
+@media (min-width: 768px) {
+  .dialog-body { grid-template-columns: 220px 1fr; }
 }
 
 /* Left rail — best-practice notes */
 .dialog-rail {
-  border-right: 1px solid var(--hairline);
-  padding-right: var(--space-6);
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
   min-width: 0;
 }
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .dialog-rail {
-    border-right: 0;
-    padding-right: 0;
-    border-bottom: 1px solid var(--hairline);
-    padding-bottom: var(--space-4);
+    border-bottom: 0;
+    padding-bottom: 0;
+    border-right: 1px solid var(--hairline);
+    padding-right: var(--space-6);
   }
 }
 .dialog-rail h3 {
@@ -401,28 +380,31 @@
 }
 .preview-attach strong { color: var(--ink); }
 
-/* Dialog action row — sticky bottom on mobile */
+/* Dialog action row — mobile-first: sticky bottom in the thumb zone, full-width
+   stacked buttons. Becomes a static inline row from tablet up. */
 .dialog-actions {
   display: flex;
+  flex-direction: column;
   gap: var(--space-3);
-  flex-wrap: wrap;
-  align-items: center;
-  padding-top: var(--space-4);
+  align-items: stretch;
+  position: sticky;
+  bottom: max(0px, env(safe-area-inset-bottom));
+  background: var(--paper);
+  margin: 0 calc(-1 * var(--space-4));
+  padding: var(--space-4) var(--space-4) max(var(--space-4), env(safe-area-inset-bottom));
   border-top: 1px solid var(--hairline);
 }
-.dialog-actions button { min-height: 44px; margin: 0; }
-.dialog-actions .btn-primary { flex: 1 1 auto; }
-.dialog-actions .btn-secondary { flex: 0 0 auto; }
-@media (max-width: 480px) {
+.dialog-actions button { min-height: var(--tap-min); margin: 0; width: 100%; }
+@media (min-width: 768px) {
   .dialog-actions {
-    position: sticky;
-    bottom: max(0px, env(safe-area-inset-bottom));
-    background: var(--paper);
-    margin: 0 calc(-1 * var(--space-6));
-    padding: var(--space-4) var(--space-6) max(var(--space-4), env(safe-area-inset-bottom));
-    flex-direction: column;
+    flex-direction: row; flex-wrap: wrap; align-items: center;
+    position: static;
+    margin: 0;
+    padding: var(--space-4) 0 0;
   }
-  .dialog-actions button { width: 100%; }
+  .dialog-actions button { width: auto; }
+  .dialog-actions .btn-primary { flex: 1 1 auto; }
+  .dialog-actions .btn-secondary { flex: 0 0 auto; }
 }
 
 /* ── Outreach log ─────────────────────────────────────────────────────────── */
@@ -487,7 +469,7 @@
 .log-actions button {
   font-size: var(--text-xs);
   padding: var(--space-1) var(--space-3);
-  min-height: 36px;
+  min-height: var(--tap-min);
   margin: 0;
 }
 
@@ -552,7 +534,7 @@
 .contact-item__actions button {
   font-size: var(--text-xs);
   padding: var(--space-1) var(--space-2);
-  min-height: 36px;
+  min-height: var(--tap-min);
   margin: 0;
 }
 
@@ -575,19 +557,12 @@
   align-self: flex-start;
   font-size: var(--text-sm);
   padding: var(--space-2) var(--space-3);
-  min-height: 44px;
+  min-height: var(--tap-min);
   margin: 0;
 }
 
-/* ── Responsive tweaks ──────────────────────────────────────────────────── */
-@media (max-width: 480px) {
-  .template-grid {
-    grid-template-columns: 1fr;
-  }
-  .contacts-grid {
-    grid-template-columns: 1fr;
-  }
-}
+/* .template-grid / .contacts-grid use auto-fill minmax(), so they collapse to a
+   single column on phones with no max-width override needed. */
 
 @media (prefers-reduced-motion: reduce) {
   .filter-chip,

@@ -1,8 +1,10 @@
 /* components/filter-sheet.css — area filters: inline card on desktop,
    modal bottom-sheet on mobile. Used by pages/areas.html.
    Class names + the #filter-sheet id are preserved from the page <style> block. */
+/* Mobile-first: the trigger row (opens the modal sheet) shows by default and is
+   hidden from tablet up, where the filters render inline as a card. */
 .filter-trigger-row {
-  display: none;
+  display: flex;
   align-items: center; gap: var(--space-3);
   margin-bottom: var(--space-3);
 }
@@ -15,21 +17,19 @@
   padding: 0.2rem 0.55rem; border: 1px solid var(--hairline);
   border-radius: 99px; color: var(--ink); font-weight: 500; font-size: var(--text-xs);
 }
-.filter-trigger-row button { margin: 0; min-height: 44px; }
+.filter-trigger-row button { margin: 0; min-height: var(--tap-min); }
 
 /* Dialog defaults already styled in base.css. Add filter-sheet header/footer. */
 dialog.filter-sheet > article > header {
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
 }
 dialog.filter-sheet > article > header h2 { margin: 0; font-size: var(--text-xl); }
-dialog.filter-sheet > article > header button#filter-sheet-close { min-height: 44px; }
+dialog.filter-sheet > article > header button#filter-sheet-close { min-height: var(--tap-min); }
 dialog.filter-sheet > article > form > .filter-row + .filter-row { margin-top: var(--space-3); }
 .filter-sheet-count { margin: 0; font-size: var(--text-sm); }
 
-@media (max-width: 767.98px) {
-  .filter-trigger-row { display: flex; }
-}
 @media (min-width: 768px) {
+  .filter-trigger-row { display: none; }
   /* Show the dialog inline as a card. */
   dialog.filter-sheet[open] {
     display: block; position: static;

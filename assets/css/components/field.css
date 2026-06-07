@@ -2,7 +2,11 @@
    Loaded via @import from base.css. */
 
 .field-list { margin: 0; }
-.field-list .field-view { display: grid; grid-template-columns: 9rem 1fr; gap: 0.5rem 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--pico-muted-border-color); }
+/* Mobile-first: label stacked over value; two-column from tablet portrait up. */
+.field-list .field-view { display: grid; grid-template-columns: 1fr; gap: 0.25rem; padding: 0.45rem 0; border-bottom: 1px solid var(--pico-muted-border-color); }
+@media (min-width: 768px) {
+  .field-list .field-view { grid-template-columns: 9rem 1fr; gap: 0.5rem 1rem; }
+}
 .field-list .field-view:last-child { border-bottom: 0; }
 .field-list dt { color: var(--pico-muted-color); font-size: 0.85rem; margin: 0; }
 .field-list dd { margin: 0; }

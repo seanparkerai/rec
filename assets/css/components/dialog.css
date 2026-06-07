@@ -1,38 +1,53 @@
-/* components/dialog.css — Pico-themed <dialog> + mobile fullscreen.
-   Loaded via @import from base.css. */
+/* components/dialog.css — Pico-themed <dialog>.
+   Loaded via @import from base.css.
+   Mobile-first: fullscreen sheet on phones; centered card from tablet (768) up. */
 
 dialog {
-  max-width: min(560px, calc(100vw - var(--space-6)));
-  width: 100%;
-  border: 1px solid var(--hairline); border-radius: var(--rec-radius-lg);
+  /* Phone base: fullscreen. */
+  width: 100%; max-width: 100%;
+  height: 100svh; max-height: 100svh;
+  margin: 0;
+  border: 0; border-radius: 0;
   background: var(--paper); color: var(--ink);
   padding: 0;
-  box-shadow: var(--rec-shadow-lg);
 }
 dialog::backdrop {
   background: color-mix(in oklch, var(--ink) 35%, transparent);
   -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
 }
-dialog > article { margin: 0; padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); max-height: 80svh; }
+dialog > article {
+  margin: 0; display: flex; flex-direction: column; gap: var(--space-4);
+  max-height: none; height: 100%;
+  padding: max(var(--space-4), env(safe-area-inset-top))
+           max(var(--space-4), env(safe-area-inset-right))
+           max(var(--space-4), env(safe-area-inset-bottom))
+           max(var(--space-4), env(safe-area-inset-left));
+}
 dialog > article > header { flex-shrink: 0; }
 dialog > article > footer { flex-shrink: 0; padding-top: var(--space-4); border-top: 1px solid var(--hairline); margin-top: var(--space-2); }
 dialog > article > form { overflow-y: auto; flex: 1; min-height: 0; margin: 0; }
 .dialog-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
 .dialog-head h2 { margin: 0; }
-.dialog-head button { margin: 0; min-height: 44px; }
+.dialog-head button { margin: 0; min-height: var(--tap-min); }
 .dialog-foot { display: flex; justify-content: space-between; gap: var(--space-3); }
-@media (max-width: 640px) {
+
+/* Tablet and up: centered card. */
+@media (min-width: 768px) {
   dialog {
-    max-width: 100vw; width: 100vw;
-    max-height: 100svh; height: 100svh;
-    border-radius: 0; border: 0;
-    margin: 0;
+    width: 100%; max-width: min(560px, calc(100% - var(--space-6)));
+    height: auto; max-height: none;
+    margin: auto;
+    border: 1px solid var(--hairline); border-radius: var(--rec-radius-lg);
+    box-shadow: var(--rec-shadow-lg);
   }
   dialog > article {
-    max-height: none; height: 100%;
-    padding: max(var(--space-4), env(safe-area-inset-top))
-             max(var(--space-4), env(safe-area-inset-right))
-             max(var(--space-4), env(safe-area-inset-bottom))
-             max(var(--space-4), env(safe-area-inset-left));
+    max-height: 80svh; height: auto;
+    padding: var(--space-6);
   }
+}
+
+/* Short-viewport (landscape phones): cap chrome so the dialog never exceeds
+   the viewport and its body scrolls instead. */
+@media (max-height: 600px) {
+  dialog > article { max-height: 100svh; gap: var(--space-3); }
 }

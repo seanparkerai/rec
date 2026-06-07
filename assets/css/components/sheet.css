@@ -2,9 +2,10 @@
    Loaded via @import from base.css.
 
    .sheet         — generic vertical sheet (head / handle / body structure).
-   .sheet--map    — the Apple-Maps 3-detent sheet on pages/map.html: a side
-                    panel on desktop, a peek/mid/full bottom-sheet ≤800px.
-                    JS drives detents via data-detent on #map-side. */
+   .sheet--map    — the Apple-Maps 3-detent sheet on pages/map.html. Mobile-first:
+                    a peek/mid/full bottom-sheet by default, reverting to a static
+                    side panel from laptop (1024) up. JS drives detents via
+                    data-detent on #map-side. */
 
 .sheet { display: flex; flex-direction: column; gap: var(--space-3); min-height: 0; }
 .sheet .sheet-handle { display: none; }
@@ -13,46 +14,70 @@
 .sheet .sheet-head .num { color: var(--ink-muted); font-size: var(--text-sm); }
 .sheet .sheet-body { overflow-y: auto; flex: 1; min-height: 0; }
 
-.sheet--map { padding: var(--space-4) var(--space-6); }
+/* ---- .sheet--map: mobile-first 3-detent bottom sheet ---------------- */
+.sheet--map {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  z-index: 40;
+  height: 92svh;
+  border-radius: var(--rec-radius-lg) var(--rec-radius-lg) 0 0;
+  border: 1px solid var(--hairline);
+  border-bottom: 0;
+  background: var(--paper);
+  box-shadow: var(--rec-shadow-lg);
+  padding: 0 max(var(--space-4), env(safe-area-inset-left))
+           max(var(--space-4), env(safe-area-inset-bottom))
+           max(var(--space-4), env(safe-area-inset-right));
+  transform: translateY(calc(100% - 6rem));
+  transition: transform 320ms var(--ease-out);
+  will-change: transform;
+}
+.sheet--map[data-detent="mid"]  { transform: translateY(calc(100% - 46svh)); }
+.sheet--map[data-detent="full"] { transform: translateY(0); }
+.sheet--map .sheet-handle {
+  display: block; width: 40px; height: 5px;
+  border: 0; padding: 0; margin: var(--space-3) auto var(--space-2);
+  border-radius: 999px; background: var(--hairline-strong);
+  cursor: pointer; flex-shrink: 0;
+}
+.sheet--map .sheet-handle:hover,
+.sheet--map .sheet-handle:focus-visible { background: var(--ink-subtle); }
+/* Peek-state head: tappable, hairline divider, "↑ tap to expand" hint */
+.sheet--map .sheet-head {
+  padding: var(--space-2) 0 var(--space-3);
+  margin: 0;
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sheet--map .sheet-head h2 { font-size: var(--text-base); }
+.sheet--map .sheet-head::after {
+  content: "↑"; color: var(--ink-subtle); font-size: var(--text-sm);
+  margin-left: auto; transition: transform 280ms var(--ease-out);
+}
+.sheet--map[data-detent="mid"]  .sheet-head::after { transform: rotate(45deg); }
+.sheet--map[data-detent="full"] .sheet-head::after { transform: rotate(180deg); }
 
-@media (max-width: 800px) {
+/* Short-viewport (landscape phones): keep the mid detent reachable without
+   the sheet covering the whole map. */
+@media (max-height: 600px) {
+  .sheet--map { height: 96svh; }
+  .sheet--map[data-detent="mid"] { transform: translateY(calc(100% - 70svh)); }
+}
+
+/* Laptop and up: revert to a static in-flow side panel. */
+@media (min-width: 1024px) {
   .sheet--map {
-    position: fixed; left: 0; right: 0; bottom: 0;
-    z-index: 40;
-    height: 92svh;
-    border-radius: var(--rec-radius-lg) var(--rec-radius-lg) 0 0;
-    border: 1px solid var(--hairline);
-    border-bottom: 0;
-    background: var(--paper);
-    box-shadow: var(--rec-shadow-lg);
-    padding: 0 var(--space-4) max(var(--space-4), env(safe-area-inset-bottom));
-    transform: translateY(calc(100% - 6rem));
-    transition: transform 320ms var(--ease-out);
-    will-change: transform;
+    position: static; transform: none; height: auto;
+    z-index: auto;
+    border: 0; border-radius: 0; box-shadow: none;
+    padding: var(--space-4) var(--space-6);
+    will-change: auto;
   }
-  .sheet--map[data-detent="mid"]  { transform: translateY(calc(100% - 46svh)); }
-  .sheet--map[data-detent="full"] { transform: translateY(0); }
-  .sheet--map .sheet-handle {
-    display: block; width: 40px; height: 5px;
-    border: 0; padding: 0; margin: var(--space-3) auto var(--space-2);
-    border-radius: 999px; background: var(--hairline-strong);
-    cursor: pointer; flex-shrink: 0;
-  }
-  .sheet--map .sheet-handle:hover,
-  .sheet--map .sheet-handle:focus-visible { background: var(--ink-subtle); }
-  /* Peek-state head: tappable, hairline divider, "↑ tap to expand" hint */
+  .sheet--map .sheet-handle { display: none; }
   .sheet--map .sheet-head {
-    padding: var(--space-2) 0 var(--space-3);
-    margin: 0;
-    border-bottom: 1px solid var(--hairline);
-    flex-shrink: 0; cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+    padding: 0; border-bottom: 0; cursor: default;
+    align-items: baseline;
   }
-  .sheet--map .sheet-head h2 { font-size: var(--text-base); }
-  .sheet--map .sheet-head::after {
-    content: "↑"; color: var(--ink-subtle); font-size: var(--text-sm);
-    margin-left: auto; transition: transform 280ms var(--ease-out);
-  }
-  .sheet--map[data-detent="mid"]  .sheet-head::after { transform: rotate(45deg); }
-  .sheet--map[data-detent="full"] .sheet-head::after { transform: rotate(180deg); }
+  .sheet--map .sheet-head h2 { font-size: var(--text-lg); }
+  .sheet--map .sheet-head::after { content: none; }
 }

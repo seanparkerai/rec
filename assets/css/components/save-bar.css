@@ -11,9 +11,11 @@
   border-top: 1px solid var(--hairline);
 }
 [data-editing-criteria] .criteria-save-bar { display: flex; gap: var(--space-3); justify-content: flex-end; align-items: center; }
-.criteria-save-bar .criteria-save-status { margin: 0 auto 0 0; color: var(--ink-muted); font-size: var(--text-sm); }
-.criteria-save-bar button { margin: 0; min-height: 44px; }
-@media (max-width: 480px) {
-  .criteria-save-bar .criteria-save-status { display: none; }
-  .criteria-save-bar button { flex: 1 1 auto; }
+/* Mobile-first: hide the status text and let buttons fill the row; from
+   phone-landscape (480) up, show the status and let buttons size to content. */
+.criteria-save-bar .criteria-save-status { display: none; margin: 0 auto 0 0; color: var(--ink-muted); font-size: var(--text-sm); }
+.criteria-save-bar button { margin: 0; min-height: var(--tap-min); flex: 1 1 auto; }
+@media (min-width: 480px) {
+  .criteria-save-bar .criteria-save-status { display: block; }
+  .criteria-save-bar button { flex: 0 0 auto; }
 }

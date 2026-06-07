@@ -1,9 +1,11 @@
 /* components/tile.css — auto-fit tile grid + individual tile.
    Loaded via @import from base.css. Migrated verbatim from dashboard.css. */
 
+/* Mobile-first: 2-col on phones (matches .stat-strip), auto-fit row from tablet
+   portrait (768) up — no layout transition inside the 600–800 iPad band. */
 .tiles {
   display: grid; gap: 0;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-columns: 1fr 1fr;
   border-top: 1px solid var(--hairline);
   border-bottom: 1px solid var(--hairline);
   margin: var(--space-6) 0;
@@ -15,7 +17,8 @@
   background: var(--paper);
   min-width: 0;
 }
-.tile:first-child { border-left: 0; }
+.tile:nth-child(odd) { border-left: 0; }
+.tile:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
 .tile .tile-label {
   font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--ink-muted); margin: 0;
@@ -29,8 +32,8 @@
 }
 .tile .tile-value.accent { color: var(--accent-ink); }
 .tile .tile-sub { font-size: var(--text-xs); color: var(--ink-subtle); margin: 0; }
-@media (max-width: 480px) {
-  .tiles { grid-template-columns: 1fr 1fr; }
-  .tile:nth-child(odd) { border-left: 0; }
-  .tile:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+@media (min-width: 768px) {
+  .tiles { grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+  .tile { border-left: 1px solid var(--hairline); border-top: 0; }
+  .tile:first-child { border-left: 0; }
 }

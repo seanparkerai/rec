@@ -172,6 +172,8 @@ for (const file of cssFiles) {
   for (const block of text.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const selector = block[1];
     const body = block[2];
+    // Pseudo-elements (::before/::after) are decorative, never tap targets.
+    if (/::(before|after|marker|placeholder|selection|backdrop)\b/.test(selector)) continue;
     const interactive =
       /(?:^|[\s,>+~])(?:button|a|input|select|textarea)(?:[\s.:,\[]|$)/.test(selector) ||
       /\.(?:btn|chip|nav-toggle|tap)\b/.test(selector) ||

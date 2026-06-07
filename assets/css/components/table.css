@@ -1,8 +1,21 @@
 /* components/table.css — finance/breakdown table primitive.
    Loaded via @import from base.css. */
 
-.table-wrap { overflow-x: auto; }
-.table-wrap table { width: 100%; margin: 0; font-size: var(--text-sm); }
+/* Horizontal scroll with snap + a self-hiding edge shadow (Lea Verou's
+   scroll-shadow trick): the paper "cover" layers (background-attachment: local)
+   ride the content and reveal the fixed shadow layers only when overflowing. */
+.table-wrap {
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  background:
+    linear-gradient(to right, var(--paper), transparent) 0 0 / 1.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--paper), transparent) 100% 0 / 1.5rem 100% no-repeat local,
+    linear-gradient(to right, color-mix(in oklch, var(--ink) 12%, transparent), transparent) 0 0 / 0.75rem 100% no-repeat scroll,
+    linear-gradient(to left, color-mix(in oklch, var(--ink) 12%, transparent), transparent) 100% 0 / 0.75rem 100% no-repeat scroll;
+}
+.table-wrap table { width: 100%; margin: 0; font-size: var(--text-sm); background: var(--paper); }
+.table-wrap th:first-child, .table-wrap td:first-child { scroll-snap-align: start; }
 .table-wrap th, .table-wrap td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--pico-muted-border-color); vertical-align: top; }
 .table-wrap th.num, .table-wrap td.num { text-align: right; white-space: nowrap; }
 .table-wrap tfoot td { border-top: 2px solid var(--pico-muted-border-color); border-bottom: 0; }
