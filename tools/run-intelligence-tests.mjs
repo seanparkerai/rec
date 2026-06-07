@@ -87,6 +87,7 @@ const { register: registerRefinementPersistence } = await import('../tests/refin
 const { register: registerRefinementView } = await import('../tests/refinement-view.test.js');
 const { register: registerRefinementScope } = await import('../tests/refinement-scope.test.js');
 const { register: registerReactionProvenance } = await import('../tests/reaction-provenance.test.js');
+const { runResponsiveLint } = await import('./lint-responsive.mjs');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
 await registerAffordability({ test, assert, assertEqual, fixtures });
@@ -136,6 +137,14 @@ await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });
 await registerRefinementScope({ test, assert, assertEqual });
 await registerReactionProvenance({ test, assert, assertEqual });
+
+await test('responsive lint (no new violations vs baseline)', () => {
+  const { regressions } = runResponsiveLint();
+  assert(
+    regressions.length === 0,
+    `responsive lint regressions:\n${regressions.map((r) => `  ${r.fingerprint} (live ${r.live} > baseline ${r.baseline})`).join('\n')}`,
+  );
+});
 
 // Run Supabase sync tests
 async function runSyncTests() {

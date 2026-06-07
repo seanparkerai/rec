@@ -105,3 +105,52 @@ Adopted at v2 plan adoption. Every page and component in the v2 overhaul must re
 3. **Always show, then explain** — numbers in mono come first; prose lives in `<details>` or a right-rail caption. Verdicts over essays.
 4. **No graphic without a verdict** — every chart annotates an answer (e.g. *"you hit target in March 2027"*). No decoration. If a chart has no caption-as-answer, replace it with a number or remove it.
 5. **Visual cues replace text** — banding (comfortable / stretch / tight / out-of-reach), coloured fit dots, money-flow bars instead of category lists. Existing accent / ink / paper palette only; derive shades via `color-mix`. Never a seven-pastel palette to differentiate categories.
+
+---
+
+## 6. Responsive doctrine
+
+The contract for the systematic mobile-responsiveness overhaul. Enforced where mechanical by
+`tools/lint-responsive.mjs` (count-based baseline in `tools/lint-responsive.allow.json`, wired into
+`node tools/run-intelligence-tests.mjs`); the rest is hand-off + device QA.
+
+1. **Breakpoints — `min-width` only.** Canonical **480 / 768 / 1024 / 1280**. Layout `max-width` media
+   queries are banned (`r-no-max-width-media`); `prefers-*`, `orientation`, and `*-height` queries are
+   exempt — those are the sanctioned short-viewport queries, not layout breakpoints. 480 =
+   phone-landscape/phablet (1→2 col); 768 = tablet portrait (iPad 768/810/834 all land here); 1024 =
+   tablet-landscape/laptop (sticky rails/TOC spine); 1280 = outer gutters / 3-up only.
+2. **iPad 600–800 band rule.** No layout transition may land inside 600–800. Two-step grids only: 1→2 at
+   480, 2→N at 768. Anything currently breaking at 540/600/640/720/800/899/900/960 moves to 480 (only if
+   it truly fits phone-landscape) or 768.
+3. **Landscape / short-viewport — two axes.** *Width:* every fixed/sticky/full-bleed element uses
+   `max(<scale>, env(safe-area-inset-left))` and `-right` (the notch goes to the side in landscape), plus
+   `-top`/`-bottom`. *Height:* full-height regions use `@media (max-height: 600px)` (add
+   `and (orientation: landscape)` only where it must not also fire on a short *portrait* phone) to drop
+   vertical padding to `--space-2/3`, collapse decorative panels, cap modal/sheet/lightbox chrome, and
+   make full-height splits scroll. Height query, not orientation alone — tall tablets-in-landscape must
+   not be penalised.
+4. **Touch targets** ≥ **44×44** (`--tap-min`); absolute floor 24×24 (`--tap-min-floor`) with ≥24px
+   spacing. Sub-controls may be 32px only when spaced ≥24px apart. `r-tap-target` flags interactive
+   selectors carrying a literal size < 44px.
+5. **`dvh`/`svh`** for full-height regions — `dvh` for live height, `svh` only where layout must not jump
+   as browser chrome hides (peek-sheets); never raw `vh` (`r-no-raw-vh`); one idiom per element.
+6. **Container-query-first for components** (`container-type: inline-size`); media queries reserved for
+   page-level layout. Keep the sanctioned `@container card (max-width: 360px)`.
+7. **No inline `style=`** in markup or JS-emitted HTML (`r-no-inline-style-attr`, `r-no-style-assign`).
+   Static → a CSS class in the relevant partial. Genuinely dynamic numeric values →
+   `el.style.setProperty('--x', v)` + a CSS rule consuming `var(--x)` (the existing
+   `--seasoning-pct`/`--marker-pct` pattern). `.style.setProperty('--…')` is the one allowed JS style call.
+8. **SVG charts** keep `viewBox` + `preserveAspectRatio`, sized `width: 100%; height: auto` (+`max-height`);
+   JS draws in viewBox space and sets no pixel root size. **Fixed `px` font-size is allowed only on SVG
+   `text`** — concretely, only inside the SVG-drawing JS modules `assets/js/**/section-*.js` and
+   `*-visuals.js` (the `r-no-fixed-font-px` convention). Everywhere else, fixed-px font-size is flagged.
+9. **iOS input-zoom.** Any focusable control (`input`/`select`/`textarea`) resolves to **≥16px** effective
+   font at mobile, or Safari zoom-jumps on focus. Floor relevant `clamp()` minimums at `1rem`.
+10. **Reduced motion.** All transitions/animations honour `@media (prefers-reduced-motion: reduce)`.
+11. **Modal a11y.** Fullscreen-rebased dialog/sheet/drawer must focus-trap, set background `inert`, and
+    lock scroll while open. Any part living in guard-railed JS is surfaced as a §14 item, not skipped.
+
+### Full-bleed widths
+`100vw` is banned (`r-no-100vw`); the fix is **`100%`** (scrollbar-aware), never `100dvw` — `100dvw`
+re-introduces the horizontal-scroll overflow the rule exists to eliminate. Gutter math
+(`calc(100vw - …)`) migrates to `calc(100% - …)`.
