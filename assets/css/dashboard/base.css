@@ -115,6 +115,10 @@
 /* Chart canvas placeholder sizing (shared) — fluid, capped. */
 .chart-wrap { position: relative; height: clamp(200px, 45vw, 320px); }
 .chart-wrap canvas { max-height: clamp(200px, 45vw, 320px); }
+@media (max-height: 600px) {
+  .chart-wrap { height: clamp(160px, 38svh, 240px); }
+  .chart-wrap canvas { max-height: clamp(160px, 38svh, 240px); }
+}
 
 /* Simple list inside cards (kept; non-dashboard pages still use it) */
 .mini-list { list-style: none; margin: 0; padding: 0; }

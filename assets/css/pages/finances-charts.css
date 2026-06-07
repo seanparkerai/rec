@@ -2,6 +2,15 @@
 
 .chart-wrap--tall { height: clamp(220px, 50vw, 320px); }
 .chart-wrap--tall canvas { max-height: clamp(220px, 50vw, 320px); }
+
+/* Short-viewport (landscape phones): cap the tallest charts so they never
+   consume the whole viewport; SVG keeps its aspect ratio via viewBox. */
+@media (max-height: 600px) {
+  .chart-wrap--tall { height: clamp(180px, 40svh, 240px); }
+  .chart-wrap--tall canvas { max-height: clamp(180px, 40svh, 240px); }
+  .ticker-treemap { max-height: 50svh; }
+  .epoch-comparison, .deposit-risk-waterfall { max-height: 45svh; }
+}
 .chart-caption {
   font-size: var(--text-sm);
   color: var(--ink-muted);
