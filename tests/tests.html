@@ -72,7 +72,17 @@
       await test(`partial ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
 
     // --- pages reachable ---
-    const ALL_PAGES = ['index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html', 'pages/areas.html', 'pages/area-detail.html', 'pages/house-types.html', 'pages/journey.html', 'pages/finances.html', 'pages/map.html', 'pages/listings.html', 'pages/outreach.html', 'pages/ask.html'];
+    // Every shipped page that is free of inline style="" / <style> blocks (debug.html
+    // is deliberately excluded — it carries dev-only inline styles). The inline-style,
+    // <style>-block and horizontal-scroll smoke tests below all iterate this list.
+    const ALL_PAGES = [
+      'index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html',
+      'pages/areas.html', 'pages/area-detail.html', 'pages/area-review.html', 'pages/house-types.html',
+      'pages/journey.html', 'pages/finances.html', 'pages/investments.html', 'pages/map.html',
+      'pages/listings.html', 'pages/saved-listings.html', 'pages/property.html', 'pages/outreach.html',
+      'pages/ask.html', 'pages/refinement.html', 'pages/report.html', 'pages/data-sync.html',
+      'pages/setup.html', 'pages/login.html',
+    ];
     for (const p of ALL_PAGES)
       await test(`page ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));
 
@@ -126,11 +136,47 @@
       assert(readLocal('__selftest__') === null, 'cleanup failed');
     });
 
-    // --- responsive smoke: no horizontal scroll at current viewport (acts as a 320px proxy when resized) ---
+    // --- responsive smoke: no horizontal scroll at current viewport ----------------
+    //
+    // MANUAL MULTI-WIDTH PROCEDURE (no headless browser in CI — run by hand):
+    //   1. Serve the site:  python3 -m http.server  →  open this page per target page.
+    //   2. With DevTools device toolbar (or window resize), step through each width and
+    //      confirm the page neither scrolls sideways nor clips content:
+    //        320 (small phone) · 390 (iPhone) · 768 (tablet portrait) ·
+    //        1024 (tablet landscape / small laptop) · 1280 (desktop baseline) ·
+    //        landscape 844×390 (phone rotated — checks max-height:600px landscape rules).
+    //   3. Repeat for the key pages: Home, Finances, Map, Listing dossier, Login,
+    //      Areas, Outreach (dialog open), and one form page (Profile / Data-sync).
+    // The assertion below only sees the CURRENT window width, so it is a proxy: it
+    // catches overflow at whatever width the developer has the window sized to. Resize
+    // to 320px before running to exercise the tightest case.
     await test('no horizontal scroll on this page', () => {
       const d = document.documentElement;
       // allow 1px sub-pixel tolerance
       assert(d.scrollWidth <= d.clientWidth + 1, `scrollWidth ${d.scrollWidth} > clientWidth ${d.clientWidth}`);
+    });
+
+    // --- responsive smoke: no key container overflows the viewport at current width --
+    // Best-effort, honest about limits: this only inspects the width the window is
+    // CURRENTLY at (it cannot reflow to 320px on its own). It localises which landmark /
+    // wrapper is wider than the viewport — the usual culprit for the page-level sideways
+    // scroll checked above (a min-width grid track, an un-wrapped row, a too-wide block).
+    // Elements with overflow-x auto/scroll/hidden are SKIPPED: they contain their own
+    // overflow (a scrollable <pre>/table or an intentional chip row) and do not push the
+    // page wider, so flagging them would be a false positive.
+    await test('no key container overflows viewport (current width)', () => {
+      const vw = document.documentElement.clientWidth;
+      const sels = ['main', '.container', 'header', 'nav', 'footer', 'table', 'pre', '.tiles', '.cell'];
+      const offenders = [];
+      for (const sel of sels) {
+        for (const el of document.querySelectorAll(sel)) {
+          if (el.scrollWidth <= vw + 1) continue;
+          const ox = getComputedStyle(el).overflowX;
+          if (ox === 'auto' || ox === 'scroll' || ox === 'hidden') continue; // self-contained
+          offenders.push(`${sel} (${el.id || el.className || 'el'}: ${el.scrollWidth}px > ${vw}px)`);
+        }
+      }
+      assert(offenders.length === 0, `overflowing at ${vw}px: ${offenders.slice(0, 6).join('; ')}`);
     });
 
     // --- a11y smoke: skip-link is fetchable from the header partial ---

@@ -405,6 +405,14 @@ main.container {
 .muted { color: var(--ink-muted); }
 .row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
 .mt-0 { margin-top: 0; } .mb-0 { margin-bottom: 0; }
+.mt-2 { margin-top: var(--space-2); } .mt-4 { margin-top: var(--space-4); } .mt-5 { margin-top: var(--space-5); }
+.mb-2 { margin-bottom: var(--space-2); } .mb-4 { margin-bottom: var(--space-4); }
+
+/* "Moved" redirect stub — used by setup.html (tools relocated to data-sync). */
+.page-moved { max-width: 35rem; padding-top: var(--space-16); }
+.page-moved__eyebrow { font-family: var(--font-data); font-size: var(--text-xs); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-3); }
+.page-moved__title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 500; letter-spacing: -0.02em; margin-bottom: var(--space-4); }
+.page-moved__lead { color: var(--ink-muted); font-size: var(--text-base); line-height: 1.6; margin-bottom: var(--space-8); }
 
 /* Keep focused elements clear of the sticky header + nav (SC 2.4.11 Focus Not Obscured) */
 :focus-visible { scroll-margin-top: 6rem; }

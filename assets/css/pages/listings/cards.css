@@ -198,7 +198,7 @@
 }
 .listing-status__label { white-space: nowrap; }
 .listing-status {
-  font-family: var(--font-body); font-size: var(--text-xs);
+  font-family: var(--font-body); font-size: 1rem; /* ≥16px: no iOS focus-zoom */
   min-height: 32px; padding: 0.2rem 0.5rem;
   border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
   background: var(--paper); color: var(--ink);
@@ -213,7 +213,7 @@
 .listing-rating__label { white-space: nowrap; }
 .listing-rating {
   font-family: var(--font-data); font-feature-settings: "tnum";
-  font-size: var(--text-xs); min-height: 32px; padding: 0.2rem 0.5rem;
+  font-size: 1rem; /* ≥16px: no iOS focus-zoom */ min-height: 32px; padding: 0.2rem 0.5rem;
   border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
   background: var(--paper); color: var(--ink);
 }

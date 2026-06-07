@@ -43,7 +43,7 @@
 .listings-filter[hidden] { display: none; }
 .listings-filter__search {
   width: 100%; min-height: var(--tap-min); margin: 0;
-  font-size: var(--text-sm);
+  font-size: 1rem; /* ≥16px: no iOS focus-zoom */
 }
 .listings-filter__facets {
   display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-2);
@@ -56,7 +56,7 @@
   font-size: var(--text-xs); color: var(--ink-muted);
   text-transform: uppercase; letter-spacing: 0.04em;
 }
-.listings-filter__field select { min-height: var(--tap-min); margin: 0; font-size: var(--text-sm); }
+.listings-filter__field select { min-height: var(--tap-min); margin: 0; font-size: 1rem; } /* ≥16px: no iOS focus-zoom */
 .listings-filter__clear { flex: 0 0 auto; min-height: var(--tap-min); margin: 0; }
 
 @media (min-width: 768px) {
@@ -108,7 +108,7 @@
 .listings-fetch-token-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .listings-fetch-token-row input {
   flex: 1 1 16rem; min-height: var(--tap-min); margin: 0;
-  font-family: var(--font-data); font-size: var(--text-sm);
+  font-family: var(--font-data); font-size: 1rem; /* ≥16px: no iOS focus-zoom */
 }
 .listings-fetch-token-row button {
   min-height: var(--tap-min); margin: 0; padding: 0.4rem 0.9rem;

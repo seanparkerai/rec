@@ -93,6 +93,8 @@
 }
 .cell-foot a { color: var(--ink); text-decoration: none; font-weight: 500; }
 .cell-foot a:hover { color: var(--accent); }
+/* Split variant: actions pushed to opposite ends, wrapping on narrow widths. */
+.cell-foot--split { justify-content: space-between; flex-wrap: wrap; gap: var(--space-2); }
 
 /* .tiles / .tile primitive migrated to components/tile.css (Phase 9D). */
 

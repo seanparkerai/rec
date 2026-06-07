@@ -21,7 +21,7 @@
 .ladder-inputs label > span { color: var(--ink-muted); font-size: var(--text-xs); }
 .ladder-inputs input {
   margin: 0; padding: var(--space-2) var(--space-3);
-  font-family: var(--font-data);
+  font-family: var(--font-data); font-size: 1rem; /* ≥16px: no iOS focus-zoom */
   border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
   background: var(--paper); color: var(--ink); min-height: var(--tap-min);
 }

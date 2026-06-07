@@ -140,7 +140,7 @@
     </div>
     <p class="refresh-row">Last Supabase update times. <button id="btn-refresh-status">Refresh</button></p>
 
-    <div class="btn-row" style="margin-top:var(--space-5)">
+    <div class="btn-row mt-5">
       <button type="button" id="btn-validate">Validate alignment</button>
     </div>
 
@@ -268,7 +268,7 @@
       <p class="fetch-token-hint">PAT needs <code>workflow</code> scope. Stored in this browser only — never sent to Supabase.</p>
       <div class="fetch-token-connected" id="fetch-token-connected" hidden>
         <span class="fetch-token-connected-label">PAT saved</span>
-        <button type="button" id="btn-clear-token" class="outline secondary" style="font-size:var(--text-xs);padding:var(--space-1) var(--space-3);min-height:32px">Forget</button>
+        <button type="button" id="btn-clear-token" class="outline secondary btn-forget">Forget</button>
       </div>
     </div>
 
@@ -386,12 +386,12 @@
       <button type="button" id="btn-check-schema">Check schema</button>
     </div>
 
-    <div class="schema-list" id="schema-list" aria-live="polite" style="margin-top:var(--space-4)">
+    <div class="schema-list mt-4" id="schema-list" aria-live="polite">
       <!-- populated by JS -->
     </div>
 
     <div class="schema-migration-prompt" id="schema-migration-prompt">
-      <p class="prompt-label" style="margin-bottom:var(--space-2)">Missing tables detected. Paste this into Supabase SQL Editor:</p>
+      <p class="prompt-label mb-2">Missing tables detected. Paste this into Supabase SQL Editor:</p>
       <div class="prompt-box">
         <pre id="schema-migration-content"></pre>
         <button type="button" class="copy-btn" id="btn-copy-schema-prompt">Copy</button>
@@ -429,7 +429,7 @@
             <pre id="gen-client-content"></pre>
             <button type="button" class="copy-btn" data-copy-id="gen-client-content">Copy</button>
           </div>
-          <p class="config-hint" style="margin-top:var(--space-2)">Create the file, paste the content, commit and push. GitHub Pages will deploy it automatically.</p>
+          <p class="config-hint mt-2">Create the file, paste the content, commit and push. GitHub Pages will deploy it automatically.</p>
         </div>
       </div>
 
@@ -447,9 +447,9 @@
               <label>Supabase UID</label>
               <input type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" class="member-uid" spellcheck="false" />
             </div>
-            <div style="padding-bottom:0">
+            <div class="member-row__action">
               <label>&nbsp;</label>
-              <button type="button" class="outline secondary btn-remove-member" style="display:none">Remove</button>
+              <button type="button" class="outline secondary btn-remove-member" hidden>Remove</button>
             </div>
           </div>
         </div>
@@ -463,7 +463,7 @@
             <pre id="gen-member-content"></pre>
             <button type="button" class="copy-btn" data-copy-id="gen-member-content">Copy</button>
           </div>
-          <p class="config-hint" style="margin-top:var(--space-2)">After running this SQL, listed users can read and write household data.</p>
+          <p class="config-hint mt-2">After running this SQL, listed users can read and write household data.</p>
         </div>
       </div>
 
