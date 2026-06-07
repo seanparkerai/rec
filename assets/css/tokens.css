@@ -91,6 +91,16 @@
   --space-16: 4rem;
   --space-24: 6rem;
 
+  /* ---- Touch targets (WCAG 2.5.8) ------------------------------------ */
+  --tap-min:       2.75rem; /* 44px — preferred interactive target */
+  --tap-min-floor: 1.5rem;  /* 24px — absolute floor, only when spaced ≥24px */
+
+  /* ---- Responsive doctrine reference (see DESIGN.md §6) --------------
+     Canonical breakpoints are min-width only: 480 / 768 / 1024 / 1280.
+     Short-viewport (landscape) handling keys off max-height: 600px.
+     CSS @media cannot read custom properties, so these live as a comment
+     for humans + the responsive lint, not as tokens. -------------------- */
+
   /* ---- Radius / elevation -------------------------------------------- */
   --rec-radius:    12px;
   --rec-radius-sm:  8px;
