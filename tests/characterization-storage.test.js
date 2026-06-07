@@ -88,4 +88,16 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(await S.saveCriteria(criteria), true);
     assertEqual(JSON.stringify(await S.getCriteria()), JSON.stringify(criteria));
   });
+
+  // journey_progress has no seed JSON: empty cache + no Supabase → defaults to { tasks: {} }.
+  await test('characterization/storage getJourneyProgress defaults to { tasks: {} } when empty', async () => {
+    removeLocal('journey-progress');
+    assertEqual(JSON.stringify(await S.getJourneyProgress()), JSON.stringify({ tasks: {} }));
+  });
+
+  await test('characterization/storage saveJourneyProgress→getJourneyProgress round-trips via the cache', async () => {
+    const prog = { tasks: { 'finances.budget.1': true } };
+    assertEqual(await S.saveJourneyProgress(prog), true);
+    assertEqual(JSON.stringify(await S.getJourneyProgress()), JSON.stringify(prog));
+  });
 }

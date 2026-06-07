@@ -23,7 +23,7 @@ export async function saveGoals(d)            { return _save('goals',    'goals'
 // data/journey.json). Source of truth = Supabase; no seed JSON — tick-state
 // starts empty like shortlist/zones. Defaults to { tasks: {} } when absent.
 export async function getJourneyProgress(opts = {}) {
-  return _get('journey-progress', 'journey_progress', null, opts.onUpdate || null) ?? { tasks: {} };
+  return (await _get('journey-progress', 'journey_progress', null, opts.onUpdate || null)) ?? { tasks: {} };
 }
 export async function saveJourneyProgress(d)  { return _save('journey-progress', 'journey_progress', d); }
 

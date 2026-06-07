@@ -1,38 +1,145 @@
-/* pages/journey.css — journey page interactive checklists. */
+/* pages/journey.css — buying-journey timeline (vertical rail + step modal).
+   Anchor: Stripe-docs (calm, precise, restrained). The current-node pulse is the
+   single accent motion; everything else is hairlines and whitespace. The modal
+   reuses the .check-list / .check-row* rows defined at the foot of this file. */
 
-.article > .card { display: block; }
-.article > .card + .card { margin-top: var(--space-4); }
-.check-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-4); flex-wrap: wrap; }
-.check-section-head h2 { margin: 0; }
-.check-progress { display: flex; flex-direction: column; gap: var(--space-1); min-width: 12rem; }
-.progress.small { height: 6px; }
-.next-hint {
-  margin: 0 0 var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  border-left: 3px solid var(--accent);
-  background: color-mix(in oklch, var(--accent) 7%, var(--paper));
-  color: var(--ink); font-size: var(--text-sm); line-height: 1.4;
-  border-radius: 0 var(--rec-radius) var(--rec-radius) 0;
+/* ── Page-head progress ──────────────────────────────────────────────────── */
+.tl-progress {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--space-2) var(--space-4); margin: 0 0 var(--space-6);
 }
-.next-hint .next-key {
-  display: inline-block;
-  font-size: var(--text-xs); letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--ink-muted); font-weight: 500; margin-right: var(--space-2);
+.tl-overall {
+  font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-lg); color: var(--ink);
 }
-.next-hint.is-done {
-  border-left-color: var(--ink-subtle);
-  background: color-mix(in oklch, var(--ink-subtle) 8%, var(--paper));
-  color: var(--ink-muted);
+.tl-current { color: var(--ink-muted); font-size: var(--text-sm); }
+
+/* Visually-hidden polite live region for tick announcements. */
+.tl-status-live {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
+/* ── Timeline rail + phases ──────────────────────────────────────────────── */
+.timeline { list-style: none; margin: 0; padding: 0; }
+.tl-phase {
+  position: relative; padding-left: var(--space-6); padding-bottom: var(--space-8);
+}
+.tl-phase:last-child { padding-bottom: 0; }
+/* The continuous hairline rail (node centre = 8px from left → 2px line at 7px). */
+.tl-phase::before {
+  content: ""; position: absolute; left: 7px; top: 4px; bottom: 0;
+  width: 2px; background: var(--hairline);
+}
+.tl-phase:last-child::before { display: none; }
+
+.tl-node {
+  position: absolute; left: 0; top: 2px; z-index: 1;
+  width: 1rem; height: 1rem; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--hairline);
+}
+.tl-phase--done .tl-node { background: var(--accent); border-color: var(--accent); }
+.tl-phase--current .tl-node { background: var(--paper); border-color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .tl-phase--current .tl-node { animation: journey-pulse 1800ms var(--ease-out) infinite; }
+}
+
+.tl-eyebrow {
+  margin: 0; font-size: var(--text-xs); letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-muted); font-weight: 500;
+}
+.tl-phase-title { margin: var(--space-1) 0 0; font-size: var(--text-lg); }
+.tl-phase-summary {
+  margin: var(--space-1) 0 0; max-width: 60ch;
+  color: var(--ink-muted); font-size: var(--text-sm); line-height: 1.5;
+}
+
+/* ── Step rows (the tappable nodes) ──────────────────────────────────────── */
+.tl-steps { list-style: none; margin: var(--space-3) 0 0; padding: 0; }
+.tl-step {
+  display: flex; align-items: center; gap: var(--space-3);
+  width: 100%; min-height: 44px; padding: var(--space-2);
+  background: transparent; border: 0; border-top: 1px solid var(--hairline);
+  font: inherit; color: var(--ink); text-align: left; cursor: pointer;
+  border-radius: var(--rec-radius-sm);
+  transition: background 120ms var(--ease-out);
+}
+.tl-step-row:first-child .tl-step { border-top: 0; }
+.tl-step:hover { background: color-mix(in oklch, var(--accent) 6%, var(--paper)); }
+.tl-step:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+
+.tl-step-dot {
+  flex-shrink: 0; width: 0.5rem; height: 0.5rem; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--hairline);
+}
+.tl-step--done .tl-step-dot { background: var(--accent); border-color: var(--accent); }
+.tl-step--current .tl-step-dot { border-color: var(--accent); }
+
+.tl-step-title { flex: 1; min-width: 0; line-height: 1.4; }
+.tl-step--current .tl-step-title { font-weight: 600; }
+.tl-step--done .tl-step-title { color: var(--ink-muted); text-decoration: line-through; }
+.tl-step-count {
+  flex-shrink: 0; font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); color: var(--ink-muted);
+}
+
+/* ── Step modal ──────────────────────────────────────────────────────────── */
+.step-modal, .reset-modal {
+  position: fixed; border: 0; padding: 0;
+  background: var(--paper); color: var(--ink);
+  border-radius: var(--rec-radius); box-shadow: var(--rec-shadow-lg);
+}
+.step-modal { max-width: 32rem; width: calc(100% - var(--space-4)); }
+.reset-modal { max-width: 24rem; width: calc(100% - var(--space-4)); }
+.step-modal::backdrop, .reset-modal::backdrop {
+  background: color-mix(in oklch, var(--ink) 45%, transparent);
+}
+.step-modal-panel { padding: var(--space-4); }
+.step-modal-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--space-3); margin-bottom: var(--space-2);
+}
+.step-modal-head h2 { margin: 0; font-size: var(--text-lg); }
+.step-modal-close {
+  flex-shrink: 0; min-width: 44px; min-height: 44px;
+  border: 0; background: transparent; color: var(--ink-muted);
+  font-size: 1.5rem; line-height: 1; cursor: pointer; border-radius: var(--rec-radius-sm);
+}
+.step-modal-close:hover { color: var(--ink); }
+.step-modal-close:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.step-modal-blurb { margin: 0 0 var(--space-3); color: var(--ink-muted); font-size: var(--text-sm); line-height: 1.5; }
+.step-modal-link { margin: 0 0 var(--space-3); }
+.tl-step-link { font-size: var(--text-sm); }
+.step-modal-foot {
+  margin-top: var(--space-3); padding-top: var(--space-3);
+  border-top: 1px solid var(--hairline);
+}
+.step-modal-progress {
+  font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); color: var(--ink-muted);
+}
+
+/* Reset confirm dialog. */
+.reset-modal-panel { padding: var(--space-4); }
+.reset-modal-panel h2 { margin: 0 0 var(--space-2); font-size: var(--text-base); }
+.reset-modal-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-4); }
+
+/* Mobile: the step modal becomes a full-width bottom sheet in the thumb zone. */
+@media (max-width: 480px) {
+  .step-modal {
+    inset: auto 0 0 0; width: 100%; max-width: none; margin: 0;
+    border-radius: var(--rec-radius) var(--rec-radius) 0 0;
+  }
+  .step-modal-panel { padding-bottom: max(var(--space-4), env(safe-area-inset-bottom)); }
+}
+
+/* ── Sub-checklist rows (reused by the step modal) ───────────────────────── */
 .check-list { list-style: none; margin: 0; padding: 0; }
-.check-row-item { padding: var(--space-2) 0; border-top: 1px solid var(--pico-muted-border-color); }
+.check-row-item { padding: var(--space-2) 0; border-top: 1px solid var(--hairline); }
 .check-row-item:first-child { border-top: 0; }
-.check-row-item.is-done .check-title { text-decoration: line-through; color: var(--pico-muted-color); }
-.check-row-item .check-row { display: flex; align-items: flex-start; gap: var(--space-3); margin: 0; min-height: auto; cursor: pointer; }
+.check-row-item.is-done .check-title { text-decoration: line-through; color: var(--ink-muted); }
+.check-row-item .check-row { display: flex; align-items: flex-start; gap: var(--space-3); margin: 0; min-height: 44px; cursor: pointer; }
 .check-row-item input[type="checkbox"] { margin-top: 0.2rem; width: 1.15rem; height: 1.15rem; flex-shrink: 0; }
 .check-label { flex: 1; }
 .check-title { display: block; font-weight: 500; line-height: 1.4; }
 .check-meta { margin: 0.35rem 0 0; font-size: var(--text-xs); display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
-.meta-chip { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--pico-secondary-background); font-size: var(--text-xs); }
-.meta-timing { background: var(--accent); color: var(--accent-contrast); }

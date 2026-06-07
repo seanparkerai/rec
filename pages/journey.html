@@ -4,7 +4,7 @@
   <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Checklists · rec</title>
+  <title>Buying journey · rec</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
@@ -22,66 +22,47 @@
     <header class="page-head has-actions">
       <div>
         <p class="eyebrow">End to end</p>
-        <h1>Checklists</h1>
-        <p class="lead">Three checklists — viewing, buying, moving — to track every step. Your tick state persists locally.</p>
+        <h1>Buying journey</h1>
+        <p class="lead">The whole journey from first budget to keys in hand. Tap any step to see what to do and tick it off — your progress syncs across devices.</p>
       </div>
       <div class="page-actions">
-        <button id="btn-reset-all" class="outline secondary">Clear all checks</button>
+        <button id="btn-reset-all" class="outline secondary">Clear all ticks</button>
       </div>
     </header>
 
-    <section class="tile-card tile-journey" aria-labelledby="journey-overview-h">
-      <header class="tile-head">
-        <h2 id="journey-overview-h">Where you are</h2>
-        <span class="num" id="journey-overall">— done</span>
-      </header>
-      <ul class="journey-track" id="journey-track"></ul>
-      <div class="journey-next">
-        <span class="journey-next-label">Next</span>
-        <span class="journey-next-text" id="journey-next-text">Loading&hellip;</span>
-        <button type="button" class="journey-tick" id="journey-next-tick" aria-label="Mark next action done" disabled>&check;</button>
-      </div>
-    </section>
+    <p class="tl-progress">
+      <span class="tl-overall" id="tl-overall">— done</span>
+      <span class="tl-current" id="tl-current"></span>
+    </p>
+    <p class="tl-status-live" id="tl-status-live" aria-live="polite"></p>
 
-    <div class="article">
-      <section class="card">
-        <header class="check-section-head">
-          <h2>Viewing checklist</h2>
-          <div class="check-progress">
-            <span class="muted" id="progress-viewing">0 / 0 done</span>
-            <div class="progress small"><span id="bar-viewing"></span></div>
-          </div>
+    <ol class="timeline" id="timeline" aria-label="Buying journey timeline"></ol>
+
+    <dialog id="step-modal" class="step-modal" aria-labelledby="step-modal-title">
+      <article class="step-modal-panel">
+        <header class="step-modal-head">
+          <h2 id="step-modal-title">Step</h2>
+          <button type="button" id="step-modal-close" class="step-modal-close" aria-label="Close">&times;</button>
         </header>
-        <p class="next-hint" id="next-viewing" hidden></p>
-        <ul class="check-list" id="list-viewing"></ul>
-      </section>
+        <p class="step-modal-blurb" id="step-modal-blurb" hidden></p>
+        <p class="step-modal-link" id="step-modal-link" hidden></p>
+        <ul class="check-list" id="step-modal-tasks"></ul>
+        <footer class="step-modal-foot">
+          <span class="step-modal-progress" id="step-modal-progress">0 of 0 done</span>
+        </footer>
+      </article>
+    </dialog>
 
-      <section class="card">
-        <header class="check-section-head">
-          <h2>Buying process</h2>
-          <div class="check-progress">
-            <span class="muted" id="progress-process">0 / 0 done</span>
-            <div class="progress small"><span id="bar-process"></span></div>
-          </div>
-        </header>
-        <p class="next-hint" id="next-process" hidden></p>
-        <ul class="check-list" id="list-process"></ul>
-      </section>
-
-      <section class="card">
-        <header class="check-section-head">
-          <h2>Moving &amp; packing</h2>
-          <div class="check-progress">
-            <span class="muted" id="progress-moving">0 / 0 done</span>
-            <div class="progress small"><span id="bar-moving"></span></div>
-          </div>
-        </header>
-        <p class="next-hint" id="next-moving" hidden></p>
-        <ul class="check-list" id="list-moving"></ul>
-      </section>
-    </div>
-
-    <p class="cell-foot" style="margin-top:var(--space-4)"><a data-nav="pages/outreach.html?templateId=A5">Email your affordability to a broker &rarr;</a></p>
+    <dialog id="reset-modal" class="reset-modal" aria-labelledby="reset-modal-title">
+      <article class="reset-modal-panel">
+        <h2 id="reset-modal-title">Clear all ticks?</h2>
+        <p class="muted">This unticks every task across the whole buying journey. It can't be undone.</p>
+        <div class="reset-modal-actions">
+          <button type="button" id="reset-cancel" class="outline secondary">Cancel</button>
+          <button type="button" id="reset-confirm" class="contrast">Clear all ticks</button>
+        </div>
+      </article>
+    </dialog>
   </main>
 
   <div data-include="components/footer.html"></div>

@@ -1,190 +1,230 @@
-// page-journey.js — three interactive checklists (viewing, buying process, moving & packing).
-// Checked state is persisted in localStorage separately from the canonical data/checklists.json.
+// page-journey.js — the buying-journey timeline. One long vertical rail of phases;
+// each step row is tappable and opens a <dialog> with a sub-checklist you tick off.
+// Tick state ({ tasks: { taskId: true } }) persists per household in Supabase
+// (journey_progress) with a localStorage write-through cache + background revalidation.
 import { loadJSON } from './data-loader.js';
-import { _internal } from './storage.js';
+import { getJourneyProgress, saveJourneyProgress } from './storage.js';
+import { url } from './config.js';
 import { esc, byId as $ } from './dom.js';
+import {
+  stepProgress, stepIsDone, phaseProgress, phaseIsDone,
+  overall, currentStep,
+} from './journey/progress.js';
 
-const STATE_KEY = 'journey-checks'; // namespace handled by storage._internal
+let journey = null;
+let state = { tasks: {} };
+let openPair = null;       // { phase, step } currently in the modal
+let lastTrigger = null;    // step row that opened the modal (for focus return)
 
-let state = { viewing: {}, process: {}, moving: {} };
-let data = null;
-
-function loadState() {
-  const s = _internal.readLocal(STATE_KEY);
-  if (s && typeof s === 'object') state = { viewing: {}, process: {}, moving: {}, ...s };
+// ── Helpers ───────────────────────────────────────────────────────────────
+function outreachLink(task) {
+  if (!task.outreachTemplateId) return '';
+  const id = esc(task.outreachTemplateId);
+  return `<a href="outreach.html?templateId=${id}" data-nav="pages/outreach.html?templateId=${id}" class="journey-outreach-link" aria-label="Open email template for this step">&rarr; Email</a>`;
 }
 
-function saveState() {
-  _internal.writeLocal(STATE_KEY, state);
+function announce(msg) {
+  const el = $('tl-status-live');
+  if (el) el.textContent = msg;
 }
 
-function labelFor(section, item) {
-  return section === 'moving' ? (item.task || '') : (item.item || '');
+// ── Render: timeline ────────────────────────────────────────────────────────
+function stepState(step, current) {
+  if (stepIsDone(state, step)) return 'done';
+  if (current && current.step === step) return 'current';
+  return 'upcoming';
 }
 
-function outreachFor(item) {
-  if (!item.outreachTemplateId) return '';
-  return `<a href="outreach.html?templateId=${item.outreachTemplateId}" data-nav="pages/outreach.html?templateId=${item.outreachTemplateId}" class="journey-outreach-link" aria-label="Open email template for this step">&rarr; Email</a>`;
+function phaseState(phase, current) {
+  if (phaseIsDone(state, phase)) return 'done';
+  if (current && current.phase === phase) return 'current';
+  return 'upcoming';
 }
 
-function metaFor(item) {
-  const bits = [];
-  if (item.timing) bits.push(`<span class="meta-chip meta-timing">${esc(item.timing)}</span>`);
-  if (item.importance) bits.push(`<span class="meta-chip">${esc(item.importance)}</span>`);
-  if (item.notes) bits.push(`<span class="muted">${esc(item.notes)}</span>`);
-  return bits.length ? `<p class="check-meta">${bits.join(' ')}</p>` : '';
+function renderTimeline() {
+  const current = currentStep(journey, state);
+
+  const html = journey.phases.map((phase, pi) => {
+    const pp = phaseProgress(state, phase);
+    const pState = phaseState(phase, current);
+    const steps = phase.steps.map((step) => {
+      const sp = stepProgress(state, step);
+      const sState = stepState(step, current);
+      return `
+        <li class="tl-step-row">
+          <button type="button" class="tl-step tl-step--${sState}"
+                  data-phase="${esc(phase.id)}" data-step="${esc(step.id)}"
+                  aria-haspopup="dialog">
+            <span class="tl-step-dot" aria-hidden="true"></span>
+            <span class="tl-step-title">${esc(step.title)}</span>
+            <span class="tl-step-count">${sState === 'done' ? 'done' : `${sp.done}/${sp.total}`}</span>
+          </button>
+        </li>`;
+    }).join('');
+
+    return `
+      <li class="tl-phase tl-phase--${pState}">
+        <div class="tl-phase-head">
+          <span class="tl-node" aria-hidden="true"></span>
+          <div class="tl-phase-meta">
+            <p class="tl-eyebrow">Phase ${pi + 1} · ${pp.done}/${pp.total} steps</p>
+            <h2 class="tl-phase-title">${esc(phase.title)}</h2>
+            <p class="tl-phase-summary">${esc(phase.summary)}</p>
+          </div>
+        </div>
+        <ul class="tl-steps">${steps}</ul>
+      </li>`;
+  }).join('');
+
+  $('timeline').innerHTML = html;
+
+  // Wire each step row to open its modal.
+  document.querySelectorAll('.tl-step').forEach((btn) => {
+    btn.addEventListener('click', () => openStep(btn.dataset.phase, btn.dataset.step, btn));
+  });
+
+  renderHeadProgress(current);
 }
 
-function renderSection(section) {
-  const items = data[section] || [];
-  const checks = state[section] || {};
-  const html = items.map((item, i) => {
-    const id = `${section}-${i}`;
-    const checked = !!checks[i];
-    const label = labelFor(section, item);
+function renderHeadProgress(current = currentStep(journey, state)) {
+  const o = overall(journey, state);
+  const overallEl = $('tl-overall');
+  if (overallEl) overallEl.textContent = `${o.done} / ${o.total} done`;
+  const currentEl = $('tl-current');
+  if (currentEl) {
+    currentEl.textContent = current
+      ? `Where you are: ${current.step.title}`
+      : 'Every step ticked off — congratulations.';
+  }
+}
+
+// ── Modal ───────────────────────────────────────────────────────────────────
+function lookup(phaseId, stepId) {
+  const phase = journey.phases.find((p) => p.id === phaseId);
+  const step = phase?.steps.find((s) => s.id === stepId) || null;
+  return phase && step ? { phase, step } : null;
+}
+
+function renderModalBody() {
+  if (!openPair) return;
+  const { step } = openPair;
+  const sp = stepProgress(state, step);
+
+  $('step-modal-title').textContent = step.title;
+  const blurbEl = $('step-modal-blurb');
+  blurbEl.textContent = step.blurb || '';
+  blurbEl.hidden = !step.blurb;
+
+  const linkEl = $('step-modal-link');
+  if (step.link) {
+    linkEl.hidden = false;
+    linkEl.innerHTML = `<a href="${esc(url(step.link))}" class="tl-step-link">Open the related page &rarr;</a>`;
+  } else {
+    linkEl.hidden = true;
+    linkEl.innerHTML = '';
+  }
+
+  $('step-modal-tasks').innerHTML = step.tasks.map((task) => {
+    const checked = !!state.tasks[task.id];
+    const note = task.note ? `<p class="check-meta"><span class="muted">${esc(task.note)}</span></p>` : '';
     return `
       <li class="check-row-item${checked ? ' is-done' : ''}">
-        <label class="check-row" for="${id}">
-          <input type="checkbox" id="${id}" data-section="${section}" data-index="${i}" ${checked ? 'checked' : ''} />
+        <label class="check-row">
+          <input type="checkbox" data-task-id="${esc(task.id)}" ${checked ? 'checked' : ''} />
           <span class="check-label">
-            <span class="check-title">${esc(label)}</span>
-            ${metaFor(item)}
+            <span class="check-title">${esc(task.label)}</span>
+            ${note}
           </span>
-          ${outreachFor(item)}
+          ${outreachLink(task)}
         </label>
-      </li>
-    `;
-  }).join('');
-  return html;
-}
-
-function progress(section) {
-  const total = (data[section] || []).length;
-  const done = Object.values(state[section] || {}).filter(Boolean).length;
-  return { done, total, pct: total ? Math.round((done / total) * 100) : 0 };
-}
-
-function nextItem(section) {
-  const items = data[section] || [];
-  const checks = state[section] || {};
-  for (let i = 0; i < items.length; i++) {
-    if (!checks[i]) return { item: items[i], index: i };
-  }
-  return null;
-}
-
-function renderNextHint(section) {
-  const el = $(`next-${section}`);
-  if (!el) return;
-  const total = (data[section] || []).length;
-  if (!total) { el.hidden = true; return; }
-  const next = nextItem(section);
-  if (!next) {
-    el.hidden = false;
-    el.classList.add('is-done');
-    el.innerHTML = `<span class="next-key">All done</span>Nothing left in this section — well played.`;
-    return;
-  }
-  el.hidden = false;
-  el.classList.remove('is-done');
-  const label = labelFor(section, next.item);
-  const timing = next.item.timing ? ` <span class="muted">· ${esc(next.item.timing)}</span>` : '';
-  el.innerHTML = `<span class="next-key">Unlocks next</span>${esc(label)}${timing}`;
-}
-
-function renderTopTrack() {
-  const trackEl = $('journey-track');
-  const overall = $('journey-overall');
-  const nextText = $('journey-next-text');
-  const nextTick = $('journey-next-tick');
-  if (!trackEl) return;
-
-  const sections = [
-    { key: 'viewing', label: 'Viewing' },
-    { key: 'process', label: 'Buying process' },
-    { key: 'moving',  label: 'Moving' },
-  ];
-  const stats = sections.map((s) => ({ ...s, ...progress(s.key) }));
-  const totalDone = stats.reduce((n, s) => n + s.done, 0);
-  const totalAll  = stats.reduce((n, s) => n + s.total, 0);
-  if (overall) overall.textContent = `${totalDone}/${totalAll} done`;
-  const currentIdx = stats.findIndex((s) => s.pct < 100);
-
-  trackEl.innerHTML = stats.map((s, i) => {
-    const mod = s.pct >= 100 && s.total > 0 ? '--done'
-              : i === currentIdx ? '--current' : '';
-    return `
-      <li class="journey-track__node ${mod ? 'journey-track__node' + mod : ''}">
-        <span class="journey-track__label">${esc(s.label)}</span>
-        <span class="journey-track__count">${s.done}/${s.total}</span>
-      </li>
-    `;
+      </li>`;
   }).join('');
 
-  // Next action across sections (priority: viewing → process → moving).
-  let next = null;
-  for (const s of sections) {
-    const n = nextItem(s.key);
-    if (n) { next = { section: s.key, ...n }; break; }
-  }
-  if (!next) {
-    if (nextText) nextText.textContent = 'All steps ticked off — nice work.';
-    if (nextTick) nextTick.disabled = true;
-    return;
-  }
-  if (nextText) nextText.textContent = labelFor(next.section, next.item);
-  if (nextTick) {
-    nextTick.disabled = false;
-    nextTick.onclick = () => {
-      state[next.section] = state[next.section] || {};
-      state[next.section][next.index] = true;
-      saveState();
-      renderAll();
-    };
-  }
+  $('step-modal-progress').textContent = `${sp.done} of ${sp.total} done`;
 }
 
-function renderAll() {
-  ['viewing', 'process', 'moving'].forEach((section) => {
-    $(`list-${section}`).innerHTML = renderSection(section);
-    const p = progress(section);
-    $(`progress-${section}`).textContent = `${p.done} / ${p.total} done`;
-    $(`bar-${section}`).style.width = `${p.pct}%`;
-    renderNextHint(section);
-  });
-
-  renderTopTrack();
-
-  document.querySelectorAll('input[type="checkbox"][data-section]').forEach((box) => {
-    box.addEventListener('change', (e) => {
-      const section = box.dataset.section;
-      const i = Number(box.dataset.index);
-      state[section] = state[section] || {};
-      if (box.checked) state[section][i] = true; else delete state[section][i];
-      saveState();
-      renderAll();
-    });
-  });
+function openStep(phaseId, stepId, trigger) {
+  const pair = lookup(phaseId, stepId);
+  if (!pair) return;
+  openPair = pair;
+  lastTrigger = trigger || null;
+  renderModalBody();
+  const dialog = $('step-modal');
+  if (!dialog.open) dialog.showModal();
 }
 
+function closeStep() {
+  const dialog = $('step-modal');
+  if (dialog.open) dialog.close();
+}
+
+function onTaskToggle(e) {
+  const box = e.target.closest('input[type="checkbox"][data-task-id]');
+  if (!box) return;
+  const id = box.dataset.taskId;
+  if (box.checked) state.tasks[id] = true;
+  else delete state.tasks[id];
+  saveJourneyProgress(state); // optimistic, fire-and-forget (toast on Supabase error)
+  // Update in place so the toggled checkbox keeps keyboard focus (no modal re-render).
+  box.closest('.check-row-item')?.classList.toggle('is-done', box.checked);
+  if (openPair) {
+    const sp = stepProgress(state, openPair.step);
+    $('step-modal-progress').textContent = `${sp.done} of ${sp.total} done`;
+  }
+  renderTimeline(); // refresh the underlying rail (counts + node states)
+  const o = overall(journey, state);
+  announce(`${o.done} of ${o.total} tasks done`);
+}
+
+// ── Reset (native confirm dialog) ────────────────────────────────────────────
 function attachActions() {
-  $('btn-reset-all').addEventListener('click', () => {
-    if (!confirm('Clear all checked items across viewing, buying process, and moving?')) return;
-    state = { viewing: {}, process: {}, moving: {} };
-    saveState();
-    renderAll();
+  const dialog = $('step-modal');
+
+  // Task ticks (delegated so re-rendered checkboxes stay wired).
+  $('step-modal-tasks').addEventListener('change', onTaskToggle);
+
+  // Close: button, backdrop click, Esc (Esc handled natively by <dialog>).
+  $('step-modal-close').addEventListener('click', closeStep);
+  dialog.addEventListener('click', (e) => {
+    if (e.target !== dialog) return; // inner content has its own target
+    const r = dialog.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    if (!inside) closeStep();
+  });
+  // Return focus to the step row that opened the modal (SC 2.4.11).
+  dialog.addEventListener('close', () => { openPair = null; lastTrigger?.focus(); });
+
+  // Clear-all uses a confirmation <dialog>, never window.confirm.
+  $('btn-reset-all').addEventListener('click', () => $('reset-modal').showModal());
+  $('reset-cancel').addEventListener('click', () => $('reset-modal').close());
+  $('reset-confirm').addEventListener('click', () => {
+    state = { tasks: {} };
+    saveJourneyProgress(state);
+    $('reset-modal').close();
+    renderTimeline();
+    announce('All ticks cleared.');
   });
 }
 
+// ── Init ──────────────────────────────────────────────────────────────────
 async function init() {
   try {
-    data = await loadJSON('checklists');
-    loadState();
-    renderAll();
+    journey = await loadJSON('journey');
+    // Re-render when a fresher row arrives from Supabase (cross-device sync).
+    state = await getJourneyProgress({
+      onUpdate: (fresh) => {
+        state = fresh && typeof fresh === 'object' && fresh.tasks ? fresh : { tasks: {} };
+        renderTimeline();
+        if (openPair) renderModalBody();
+      },
+    }) || { tasks: {} };
+    if (!state.tasks || typeof state.tasks !== 'object') state = { tasks: {} };
+    renderTimeline();
     attachActions();
   } catch (e) {
     console.error('journey init error', e);
-    $('list-viewing').innerHTML = '<p class="muted">Failed to load checklists.</p>';
+    const tl = $('timeline');
+    if (tl) tl.innerHTML = '<p class="muted">Failed to load the buying journey.</p>';
   }
 }
 
