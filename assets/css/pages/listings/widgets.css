@@ -35,7 +35,7 @@
 .listing-save-row { margin: var(--space-1) 0 0; display: grid; gap: var(--space-1); }
 .listing-save, .deck-save {
   font-family: var(--font-body); font-weight: 600; font-size: var(--text-sm);
-  min-height: 40px; padding: 0.4rem 1.1rem; cursor: pointer;
+  min-height: var(--tap-min); padding: 0.4rem 1.1rem; cursor: pointer;
   color: var(--paper); border: 1px solid transparent; border-radius: var(--rec-radius-sm);
   background: color-mix(in oklch, var(--accent) 82%, var(--ink));
   transition: background 0.12s, opacity 0.12s;
@@ -71,7 +71,7 @@
 /* ── Rightmove buttons (Stage 6 — clear, external, distinct from dossier) ──── */
 .btn-rm {
   display: inline-flex; align-items: center; gap: 0.25rem; width: max-content;
-  min-height: 40px; padding: 0.35rem 0.9rem;
+  min-height: var(--tap-min); padding: 0.35rem 0.9rem;
   font-family: var(--font-body); font-size: var(--text-sm); font-weight: 600;
   text-decoration: none; cursor: pointer;
   color: color-mix(in oklch, var(--accent) 85%, var(--ink));
@@ -86,9 +86,9 @@
 .listing-card__links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-1); }
 .btn-map {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px; min-height: 40px; flex-shrink: 0;
+  width: var(--tap-min); height: var(--tap-min); min-height: var(--tap-min); flex-shrink: 0;
   color: var(--ink-muted);
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--rec-radius-sm);
   background: transparent;
   text-decoration: none;
@@ -123,7 +123,7 @@
 }
 .reviewed-collapse__summary {
   display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer;
-  min-height: 44px; font-family: var(--font-body); font-weight: 600; color: var(--ink-muted);
+  min-height: var(--tap-min); font-family: var(--font-body); font-weight: 600; color: var(--ink-muted);
   list-style-position: inside;
 }
 .reviewed-collapse__summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }

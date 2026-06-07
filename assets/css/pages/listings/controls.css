@@ -6,7 +6,10 @@
 /* ── Controls bar ─────────────────────────────────────────────────────────── */
 .listings-controls {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: var(--space-3); margin: 0 0 var(--space-3);
+  gap: var(--space-2); margin: 0 0 var(--space-3);
+}
+@media (min-width: 768px) {
+  .listings-controls { gap: var(--space-3); }
 }
 .listings-summary {
   margin: 0; font-family: var(--font-data); font-feature-settings: "tnum";
@@ -25,7 +28,7 @@
 .listings-toggle {
   display: inline-flex; align-items: center; gap: var(--space-2);
   font-size: var(--text-sm); color: var(--ink-muted);
-  min-height: 44px; /* touch target (§10) */
+  min-height: var(--tap-min); /* touch target (§10) */
   margin: 0;
 }
 .listings-toggle input { margin: 0; }
@@ -39,7 +42,7 @@
 }
 .listings-filter[hidden] { display: none; }
 .listings-filter__search {
-  width: 100%; min-height: 44px; margin: 0;
+  width: 100%; min-height: var(--tap-min); margin: 0;
   font-size: var(--text-sm);
 }
 .listings-filter__facets {
@@ -53,8 +56,8 @@
   font-size: var(--text-xs); color: var(--ink-muted);
   text-transform: uppercase; letter-spacing: 0.04em;
 }
-.listings-filter__field select { min-height: 44px; margin: 0; font-size: var(--text-sm); }
-.listings-filter__clear { flex: 0 0 auto; min-height: 44px; margin: 0; }
+.listings-filter__field select { min-height: var(--tap-min); margin: 0; font-size: var(--text-sm); }
+.listings-filter__clear { flex: 0 0 auto; min-height: var(--tap-min); margin: 0; }
 
 @media (min-width: 768px) {
   .listings-filter__field { flex: 0 1 11rem; }
@@ -66,12 +69,12 @@
    listings-fetch.js). Dedup is guaranteed downstream, so re-pulling is always safe. */
 /* Confirm-before-fetch dialog footer: buttons inline-right, not stacked full-width. */
 .confirm-dialog .dialog-foot { display: flex; justify-content: flex-end; gap: var(--space-3); }
-.confirm-dialog .dialog-foot button { margin: 0; min-height: 44px; width: auto; }
+.confirm-dialog .dialog-foot button { margin: 0; min-height: var(--tap-min); width: auto; }
 
 .listings-fetch-group { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
 .listings-fetch-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-  min-height: 44px; padding: 0.4rem 0.9rem; /* full 44px touch target (§10) */
+  min-height: var(--tap-min); padding: 0.4rem 0.9rem; /* full 44px touch target (§10) */
   font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
   color: var(--paper); cursor: pointer;
   background: color-mix(in oklch, var(--accent) 80%, var(--ink));
@@ -104,11 +107,11 @@
 }
 .listings-fetch-token-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .listings-fetch-token-row input {
-  flex: 1 1 16rem; min-height: 44px; margin: 0;
+  flex: 1 1 16rem; min-height: var(--tap-min); margin: 0;
   font-family: var(--font-data); font-size: var(--text-sm);
 }
 .listings-fetch-token-row button {
-  min-height: 44px; margin: 0; padding: 0.4rem 0.9rem;
+  min-height: var(--tap-min); margin: 0; padding: 0.4rem 0.9rem;
   font-size: var(--text-sm); white-space: nowrap;
 }
 .listings-fetch-token-hint { margin: var(--space-2) 0 0; font-size: var(--text-xs); color: var(--ink-muted); }

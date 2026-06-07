@@ -36,12 +36,12 @@
 .conflict-prompt__adjust {
   font-size: var(--text-sm); font-weight: 500; white-space: nowrap;
   color: color-mix(in oklch, var(--accent) 80%, var(--ink)); text-decoration: none;
-  min-height: 44px; display: inline-flex; align-items: center;
+  min-height: var(--tap-min); display: inline-flex; align-items: center;
 }
 .conflict-prompt__adjust:hover, .conflict-prompt__adjust:focus-visible { color: var(--accent); }
 .conflict-prompt__dismiss {
   font-family: var(--font-body); font-size: var(--text-xs);
-  min-height: 44px; padding: 0.25rem 0.65rem; cursor: pointer;
+  min-height: var(--tap-min); padding: 0.25rem 0.65rem; cursor: pointer;
   border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
   background: var(--paper); color: var(--ink-muted);
 }
@@ -52,7 +52,7 @@
 .listings-modes { display: inline-flex; gap: 0; border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm); overflow: hidden; }
 .listings-mode {
   font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
-  min-height: 44px; padding: 0.4rem 0.9rem; /* §10 touch target */
+  min-height: var(--tap-min); padding: 0.4rem 0.9rem; /* §10 touch target */
   background: var(--paper); color: var(--ink-muted);
   border: 0; border-right: 1px solid var(--hairline); cursor: pointer;
   transition: background 0.12s, color 0.12s;
@@ -136,7 +136,7 @@
 .deck-done__hint { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--ink-muted); }
 .deck-done__browse {
   font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
-  min-height: 44px; padding: 0.4rem 1rem; cursor: pointer;
+  min-height: var(--tap-min); padding: 0.4rem 1rem; cursor: pointer;
   color: var(--paper); border: 0; border-radius: var(--rec-radius-sm);
   background: color-mix(in oklch, var(--accent) 80%, var(--ink));
 }
@@ -149,8 +149,6 @@
   .deck-media { aspect-ratio: auto; height: 100%; min-height: 16rem; }
 }
 
-/* ── Mobile (§10 mobile-first refinement) ─────────────────────────────────── */
-@media (max-width: 768px) {
-  .listings-controls { gap: var(--space-2); }
-}
+/* (Mobile controls gap is now the base; the wider gap lives in controls.css's
+   min-width:768 block.) */
 

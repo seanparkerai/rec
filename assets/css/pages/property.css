@@ -4,7 +4,7 @@
    classes from listings.css. Tokens only, mobile-first, no hard-coded hex. */
 
 .dossier-back {
-  display: inline-flex; align-items: center; min-height: 44px;
+  display: inline-flex; align-items: center; min-height: var(--tap-min);
   font-size: var(--text-sm); color: var(--ink-muted); text-decoration: none;
 }
 .dossier-back:hover, .dossier-back:focus-visible { color: var(--accent); }
@@ -14,7 +14,7 @@
 .dossier__main { min-width: 0; display: grid; gap: var(--space-5, 2rem); align-content: start; }
 .dossier__rail { display: grid; gap: var(--space-4); align-content: start; }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .dossier { grid-template-columns: minmax(0, 1fr) 22rem; gap: var(--space-6); }
   .dossier__rail { position: sticky; top: var(--space-4); }
 }
@@ -93,7 +93,7 @@
 /* The shared .btn-map is a fixed 40px icon square in the feed; on the dossier it
    carries a label, so let it grow and show its text. */
 .dossier-head__actions .btn-map {
-  width: auto; min-height: 44px; gap: var(--space-2); padding: 0 var(--space-3);
+  width: auto; min-height: var(--tap-min); gap: var(--space-2); padding: 0 var(--space-3);
   font-family: var(--font-body); font-size: var(--text-sm);
 }
 .btn-map__text { white-space: nowrap; }
@@ -111,8 +111,9 @@
 .dossier-gallery__expand:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 
 /* ── Full-screen lightbox (native <dialog>) ───────────────────────────────── */
+/* 100% (scrollbar-aware), never 100vw/100dvw — avoids horizontal overflow. */
 .lightbox {
-  width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh;
+  width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh;
   margin: 0; padding: 0; border: 0; background: transparent; color: var(--paper);
 }
 .lightbox::backdrop { background: color-mix(in oklch, var(--ink) 88%, transparent); backdrop-filter: blur(2px); }
@@ -146,6 +147,13 @@
 .lightbox__nav:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 .lightbox__nav--prev { left: var(--space-3); }
 .lightbox__nav--next { right: var(--space-3); }
+/* Short-viewport (landscape phones): trim the lightbox chrome so the image
+   keeps maximum height and controls don't crowd the frame. */
+@media (max-height: 600px) {
+  .lightbox__bar { padding-top: max(var(--space-2), env(safe-area-inset-top)); padding-bottom: var(--space-2); }
+  .lightbox__stage { padding: var(--space-3) var(--space-6); }
+  .lightbox__close { width: var(--tap-min); height: var(--tap-min); }
+}
 @media (prefers-reduced-motion: reduce) {
   .dossier-gallery__expand, .lightbox__close, .lightbox__nav { transition: none; }
 }
@@ -203,12 +211,12 @@
   border: 1px solid var(--hairline); border-radius: var(--rec-radius); background: var(--paper);
 }
 .dossier-card__name { margin: 0; font-family: var(--font-display); font-size: var(--text-lg); color: var(--ink); }
-.dossier-card__link { font-size: var(--text-sm); font-weight: 500; color: color-mix(in oklch, var(--accent) 80%, var(--ink)); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.dossier-card__link { font-size: var(--text-sm); font-weight: 500; color: color-mix(in oklch, var(--accent) 80%, var(--ink)); text-decoration: none; min-height: var(--tap-min); display: inline-flex; align-items: center; }
 .dossier-card__link:hover, .dossier-card__link:focus-visible { color: var(--accent); }
 
 /* Stage 6a: prominent Rightmove CTA at the top of the dossier (in the header).
    A filled primary variant of the shared .btn-rm so it's the most obvious action. */
-.dossier-head__rm { margin-top: var(--space-2); min-height: 44px; }
+.dossier-head__rm { margin-top: var(--space-2); min-height: var(--tap-min); }
 .btn-rm--primary {
   color: var(--paper); font-weight: 600;
   background: color-mix(in oklch, var(--accent) 82%, var(--ink));
@@ -217,17 +225,24 @@
 .btn-rm--primary:hover { color: var(--paper); background: var(--accent); border-color: transparent; }
 
 .dossier-actions .listing-react { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
-.dossier-actions .listing-react__btn { min-height: 44px; }
+.dossier-actions .listing-react__btn { min-height: var(--tap-min); }
 .dossier-actions .listing-status-wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
 .dossier-actions .listing-status { flex: 1; }
 
-/* On mobile the action card pins to the thumb zone (§10). */
-@media (max-width: 899px) {
+/* Mobile-first: the action card pins to the thumb zone (§10); it un-pins at
+   laptop (1024) where the rail itself becomes sticky. */
+.dossier-actions {
+  position: sticky; bottom: 0; z-index: 5;
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  border-radius: var(--rec-radius) var(--rec-radius) 0 0;
+  box-shadow: 0 -1px 0 var(--hairline);
+}
+@media (min-width: 1024px) {
   .dossier-actions {
-    position: sticky; bottom: 0; z-index: 5;
-    padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
-    border-radius: var(--rec-radius) var(--rec-radius) 0 0;
-    box-shadow: 0 -1px 0 var(--hairline);
+    position: static; z-index: auto;
+    padding-bottom: var(--space-4);
+    border-radius: var(--rec-radius);
+    box-shadow: none;
   }
 }
 

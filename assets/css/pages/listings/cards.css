@@ -1,7 +1,7 @@
 /* ── List + media cards (overhauled) ──────────────────────────────────────────
    Editorial media rows: a cover-cropped photo + a generously-spaced content
    column. Hairline-bordered (NOT shadow-floated SaaS cards per DESIGN.md §3).
-   Mobile-first: photo on top, stacking; ≥640px the photo moves to the left. ── */
+   Mobile-first: photo on top, stacking; ≥768px the photo moves to the left. ── */
 .listing-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
 
 .listing-card {
@@ -52,17 +52,17 @@
 .listing-card__title-link:hover { color: var(--accent); }
 .listing-card__title-link:focus-visible { outline: var(--focus-ring); outline-offset: 2px; border-radius: 2px; }
 .listing-card__place { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
-.listing-card__meta { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-subtle); }
+.listing-card__meta { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-subtle); overflow-wrap: anywhere; }
 .listing-card__open {
-  width: max-content; min-height: 44px; display: inline-flex; align-items: center;
+  width: max-content; min-height: var(--tap-min); display: inline-flex; align-items: center;
   font-size: var(--text-sm); font-weight: 500; text-decoration: none;
   color: color-mix(in oklch, var(--accent) 80%, var(--ink));
 }
 .listing-card__open:hover { color: var(--accent); }
 .listing-card__open:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 
-/* Desktop: photo to the left, content to the right (horizontal media row). */
-@media (min-width: 640px) {
+/* Tablet portrait and up: photo left, content right (horizontal media row). */
+@media (min-width: 768px) {
   .listing-card { grid-template-columns: 18rem 1fr; }
   .listing-media, .listing-media--none { aspect-ratio: auto; height: 100%; min-height: 13.5rem; }
 }
@@ -162,7 +162,7 @@
 .listing-react-toggle[open] > .reaction-picker--row { width: 100%; margin-top: var(--space-2); }
 .listing-react { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
 /* Row-variant verbs read as proper buttons (comfortable 40px target, §10/§11). */
-.reaction-picker--row .listing-react__btn { min-height: 40px; padding: 0.4rem 0.95rem; font-size: var(--text-sm); }
+.reaction-picker--row .listing-react__btn { min-height: var(--tap-min); padding: 0.4rem 0.95rem; font-size: var(--text-sm); }
 .listing-react__btn,
 .listing-chip {
   font-family: var(--font-body); font-size: var(--text-xs); line-height: 1.2;
