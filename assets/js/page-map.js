@@ -1,7 +1,7 @@
 // page-map.js — Leaflet + Geoman interactive map.
 // Renders OSM tiles, drops markers for areas with coords, exposes draw/edit/delete tools, persists
 // any drawn shapes as GeoJSON in localStorage via storage.getDrawnZones / saveDrawnZones.
-// Leaflet & Geoman are loaded via <script> tags in pages/map.html, so we use window.L here.
+// Leaflet & Geoman are loaded via <script> tags in pages/areas.html, so we use window.L here.
 import { getAreas, getShortlist, getDrawnZones, saveDrawnZones, getFinances, getCriteria } from './storage.js';
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
@@ -45,12 +45,63 @@ function init() {
   drawLayer = L.featureGroup().addTo(map);
 
   setupGeoman();
+  addFullscreenControl();
   loadSavedZones();
   loadAreaMarkers();
-  loadShortlistPanel();
   attachActions();
   wireGeofenceToggle();
-  attachSheet();
+}
+
+// ---- Fullscreen control: expand the map card to fill the screen ----
+// A custom Leaflet bar button (top-right) toggling the native Fullscreen API on
+// the .map-card. invalidateSize() on fullscreenchange so Leaflet re-lays-out at
+// the new size and no grey tiles linger.
+function addFullscreenControl() {
+  if (!map) return;
+  const card = document.querySelector('.map-card');
+  if (!card) return;
+
+  const ctl = L.control({ position: 'topright' });
+  let btn = null;
+  ctl.onAdd = () => {
+    const bar = L.DomUtil.create('div', 'leaflet-bar map-fullscreen');
+    btn = L.DomUtil.create('a', 'map-fullscreen-btn', bar);
+    btn.href = '#';
+    btn.setAttribute('role', 'button');
+    btn.setAttribute('aria-pressed', 'false');
+    setBtnState(false);
+    L.DomEvent.on(btn, 'click', (e) => {
+      L.DomEvent.preventDefault(e);
+      L.DomEvent.stopPropagation(e);
+      toggleFullscreen();
+    });
+    L.DomEvent.disableClickPropagation(bar);
+    return bar;
+  };
+  ctl.addTo(map);
+
+  function setBtnState(active) {
+    if (!btn) return;
+    btn.textContent = active ? '⤧' : '⤢';
+    btn.title = active ? 'Exit fullscreen' : 'Fullscreen map';
+    btn.setAttribute('aria-label', active ? 'Exit fullscreen map' : 'Fullscreen map');
+    btn.setAttribute('aria-pressed', String(active));
+  }
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.();
+    } else {
+      card.requestFullscreen?.();
+    }
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    const active = document.fullscreenElement === card;
+    setBtnState(active);
+    // Let the layout settle, then ask Leaflet to recompute the canvas size.
+    setTimeout(() => { if (map) map.invalidateSize(); }, 80);
+  });
 }
 
 function setupGeoman() {
@@ -229,84 +280,12 @@ async function loadAreaMarkers() {
       ? geofenceLayer.getBounds().extend(cluster.getBounds())
       : cluster.getBounds();
     if (withCoords.length >= 3) map.fitBounds(fitTarget, { padding: [40, 40] });
-    addLegend();
     const approxCount = withCoords.filter((a) => a.coordsSource === 'postcode-outward-approx').length;
     const approxNote = approxCount ? ` <span class="muted">(${approxCount} at approximate postcode-area centroid; run <code>node tools/geocode-areas.mjs</code> for precise village locations.)</span>` : '';
     $('map-status').innerHTML = `Showing <strong>${withCoords.length}</strong> of <strong>${areas.length}</strong> areas; <strong>${activeGeofences}</strong> active geofences (listings catchment, ≈3 mi radius); ${shortlist.size} shortlisted.${approxNote}`;
   } catch (e) {
     console.error('marker load error', e);
   }
-}
-
-let legendControl = null;
-function addLegend() {
-  if (legendControl || !map) return;
-  legendControl = L.control({ position: 'bottomright' });
-  legendControl.onAdd = () => {
-    const div = L.DomUtil.create('div', 'map-legend');
-    div.innerHTML = `
-      <strong class="map-legend__title">Status</strong>
-      <ul class="map-legend__list">
-        <li><span class="legend-dot legend-dot--shortlisted"></span>Shortlisted</li>
-        <li><span class="legend-dot legend-dot--researched"></span>Researched</li>
-        <li><span class="legend-dot legend-dot--partial"></span>Partial</li>
-        <li><span class="legend-dot legend-dot--stub"></span>Stub / directory</li>
-        <li class="map-legend__geofence-item"><span class="legend-dot legend-dot--geofence"></span>Listings geofence (≈3&nbsp;mi)</li>
-      </ul>
-    `;
-    return div;
-  };
-  legendControl.addTo(map);
-}
-
-async function loadShortlistPanel() {
-  try {
-    const ids = new Set(await getShortlist());
-    const areas = await getAreas();
-    const list = areas.filter((a) => ids.has(a.id));
-    const panel = $('shortlist-panel');
-    const countEl = $('sheet-count');
-    if (countEl) countEl.textContent = `${list.length} ${list.length === 1 ? 'area' : 'areas'}`;
-    if (!list.length) {
-      panel.innerHTML = `<p class="map-shortlist-empty">No shortlisted areas yet. Star areas in the <a href="${url('pages/areas.html')}">directory</a>.</p>`;
-      return;
-    }
-    panel.innerHTML = `<ol class="area-list map-shortlist">${list.map((a, i) => `
-      <li class="area-row">
-        <span class="area-index">${String(i + 1).padStart(2, '0')}</span>
-        <div>
-          <p class="area-name">
-            <a href="${url('pages/area-detail.html')}?id=${encodeURIComponent(a.id)}">${esc(a.name)}</a>
-          </p>
-          <p class="area-place">
-            <span>${esc(a.town)}</span><span class="sep">·</span><span class="num">${esc(a.postcode)}</span>
-          </p>
-        </div>
-      </li>
-    `).join('')}</ol>`;
-  } catch (e) { console.error('shortlist panel error', e); }
-}
-
-// ---- Bottom-sheet handle: cycle peek → mid → full on tap ----------
-function attachSheet() {
-  const sheet = $('map-side');
-  const handle = $('sheet-handle');
-  if (!sheet || !handle) return;
-  const order = ['peek', 'mid', 'full'];
-  const cycle = () => {
-    const cur = sheet.dataset.detent || 'peek';
-    const next = order[(order.indexOf(cur) + 1) % order.length];
-    sheet.dataset.detent = next;
-    handle.setAttribute('aria-expanded', String(next !== 'peek'));
-    // Let Leaflet redraw after the CSS transition settles.
-    setTimeout(() => { if (map) map.invalidateSize(); }, 360);
-  };
-  handle.addEventListener('click', cycle);
-  // Tap on header (h2) also cycles for a generous touch target.
-  sheet.querySelector('.sheet-head')?.addEventListener('click', (e) => {
-    if (e.target.closest('a, button')) return;
-    cycle();
-  });
 }
 
 function attachActions() {

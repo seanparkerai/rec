@@ -212,7 +212,15 @@ function applyStateToControls() {
 }
 
 function attachControls() {
-  $('search').addEventListener('input', (e) => { state.search = e.target.value; rerender(); });
+  $('search').addEventListener('input', (e) => {
+    state.search = e.target.value;
+    // A search should always reveal its matches: auto-expand the collapsed list.
+    if (state.search.trim()) {
+      const disclosure = document.getElementById('area-disclosure');
+      if (disclosure) disclosure.open = true;
+    }
+    rerender();
+  });
   $('filter-county').addEventListener('change', (e) => {
     state.county = e.target.value;
     updateSubRegions();
