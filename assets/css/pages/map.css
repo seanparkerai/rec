@@ -1,20 +1,23 @@
-/* pages/map.css — map page layout + Leaflet theming. */
+/* pages/map.css — map page layout + Leaflet theming.
+   Mobile-first: single column, map-dominant; two-column split only at laptop
+   (1024) — removes the old 768–800 dead zone. Live map uses dvh; the bottom
+   sheet (components/sheet.css) keeps svh. */
 
-.map-layout {
-  display: grid; gap: var(--space-4);
-  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
-}
-@media (max-width: 800px) {
-  .map-layout { display: block; }
-  .map-card { height: calc(100svh - 12rem); }
-}
-
-.map-card { padding: 0; overflow: hidden; gap: 0; }
+.map-layout { display: block; }
+.map-card { padding: 0; overflow: hidden; gap: 0; height: calc(100dvh - 12rem); }
 .map-canvas {
-  height: 65dvh; min-height: 400px; width: 100%;
-  border-radius: var(--rec-radius);
+  height: 100%; min-height: 0; width: 100%;
+  border-radius: 0;
   background: var(--paper-2);
 }
+/* On the map page, hide the summary tiles and trim the page-head so the map breathes. */
+.map-page-tiles { display: none; }
+body:has(.map-canvas) .page-head { margin-bottom: var(--space-3); }
+body:has(.map-canvas) .page-head h1 { font-size: var(--text-xl); }
+body:has(.map-canvas) .page-head .lead { display: none; }
+body:has(.map-canvas) .page-head .eyebrow { display: none; }
+
+/* ---- Leaflet theming (width-independent) -------------------------- */
 .leaflet-container { font-family: var(--font-body); background: var(--paper-2); }
 .leaflet-popup-content-wrapper {
   background: var(--paper); color: var(--ink);
@@ -28,7 +31,7 @@
 .leaflet-popup-content a { color: var(--accent-ink); text-decoration: none; }
 .leaflet-popup-content a:hover { text-decoration: underline; }
 .leaflet-popup-close-button { color: var(--ink-muted) !important; }
-.leaflet-control-attribution { background: color-mix(in oklch, var(--paper) 85%, transparent) !important; color: var(--ink-muted) !important; font-size: 10px !important; }
+.leaflet-control-attribution { background: color-mix(in oklch, var(--paper) 85%, transparent) !important; color: var(--ink-muted) !important; font-size: var(--text-xs) !important; }
 .leaflet-control-attribution a { color: var(--ink-muted) !important; }
 .leaflet-bar a { background: var(--paper) !important; color: var(--ink) !important; border-color: var(--hairline) !important; }
 .leaflet-bar a:hover { background: var(--paper-2) !important; }
@@ -43,20 +46,23 @@
 }
 .map-toggle input { accent-color: var(--accent); inline-size: 1.1rem; block-size: 1.1rem; margin: 0; }
 
-@media (max-width: 800px) {
-  .map-canvas { height: 100%; min-height: 0; border-radius: 0; }
-}
-
 /* Bottom-sheet primitive (.sheet / .sheet--map) now lives in components/sheet.css */
 
-@media (max-width: 800px) {
-  /* Hide the desktop top-of-card stat tiles strip on mobile so the map can breathe */
-  .map-page-tiles { display: none; }
-  /* Tighten the page-head on the map page on mobile so the map dominates */
-  body:has(.map-canvas) .page-head { margin-bottom: var(--space-3); }
-  body:has(.map-canvas) .page-head h1 { font-size: var(--text-xl); }
-  body:has(.map-canvas) .page-head .lead { display: none; }
-  body:has(.map-canvas) .page-head .eyebrow { display: none; }
+/* ---- Laptop and up: side-by-side map + panel split --------------- */
+@media (min-width: 1024px) {
+  .map-layout { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); }
+  .map-card { height: auto; }
+  .map-canvas { height: 65dvh; min-height: 400px; border-radius: var(--rec-radius); }
+  .map-page-tiles { display: grid; }
+  body:has(.map-canvas) .page-head { margin-bottom: var(--space-6); }
+  body:has(.map-canvas) .page-head h1 { font-size: var(--text-3xl); }
+  body:has(.map-canvas) .page-head .lead { display: block; }
+  body:has(.map-canvas) .page-head .eyebrow { display: block; }
+}
+
+/* Short-viewport landscape: give the live map more height vs the page chrome. */
+@media (max-height: 600px) and (orientation: landscape) {
+  .map-card { height: calc(100dvh - 6rem); }
 }
 
 /* ---- Home dashboard: journey progress widget ---- */
