@@ -58,7 +58,7 @@
 .tl-steps { list-style: none; margin: var(--space-3) 0 0; padding: 0; }
 .tl-step {
   display: flex; align-items: center; gap: var(--space-3);
-  width: 100%; min-height: 44px; padding: var(--space-2);
+  width: 100%; min-height: var(--tap-min); padding: var(--space-2);
   background: transparent; border: 0; border-top: 1px solid var(--hairline);
   font: inherit; color: var(--ink); text-align: left; cursor: pointer;
   border-radius: var(--rec-radius-sm);
@@ -89,19 +89,38 @@
   background: var(--paper); color: var(--ink);
   border-radius: var(--rec-radius); box-shadow: var(--rec-shadow-lg);
 }
-.step-modal { max-width: 32rem; width: calc(100% - var(--space-4)); }
+/* Mobile-first: the step modal is a full-width bottom sheet in the thumb zone;
+   it becomes a centered card from phone-landscape (480) up. */
+.step-modal {
+  inset: auto 0 0 0; width: 100%; max-width: none; margin: 0;
+  border-radius: var(--rec-radius) var(--rec-radius) 0 0;
+}
+@media (min-width: 480px) {
+  .step-modal {
+    inset: auto; margin: auto;
+    width: calc(100% - var(--space-4)); max-width: 32rem;
+    border-radius: var(--rec-radius);
+  }
+}
 .reset-modal { max-width: 24rem; width: calc(100% - var(--space-4)); }
 .step-modal::backdrop, .reset-modal::backdrop {
   background: color-mix(in oklch, var(--ink) 45%, transparent);
 }
-.step-modal-panel { padding: var(--space-4); }
+.step-modal-panel { padding: var(--space-4); padding-bottom: max(var(--space-4), env(safe-area-inset-bottom)); }
+@media (min-width: 480px) {
+  .step-modal-panel { padding-bottom: var(--space-4); }
+}
+/* Short-viewport: let the panel scroll instead of overflowing. */
+@media (max-height: 600px) {
+  .step-modal-panel { max-height: 100svh; overflow-y: auto; }
+}
 .step-modal-head {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: var(--space-3); margin-bottom: var(--space-2);
 }
 .step-modal-head h2 { margin: 0; font-size: var(--text-lg); }
 .step-modal-close {
-  flex-shrink: 0; min-width: 44px; min-height: 44px;
+  flex-shrink: 0; min-width: var(--tap-min); min-height: var(--tap-min);
   border: 0; background: transparent; color: var(--ink-muted);
   font-size: 1.5rem; line-height: 1; cursor: pointer; border-radius: var(--rec-radius-sm);
 }
@@ -124,21 +143,15 @@
 .reset-modal-panel h2 { margin: 0 0 var(--space-2); font-size: var(--text-base); }
 .reset-modal-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-4); }
 
-/* Mobile: the step modal becomes a full-width bottom sheet in the thumb zone. */
-@media (max-width: 480px) {
-  .step-modal {
-    inset: auto 0 0 0; width: 100%; max-width: none; margin: 0;
-    border-radius: var(--rec-radius) var(--rec-radius) 0 0;
-  }
-  .step-modal-panel { padding-bottom: max(var(--space-4), env(safe-area-inset-bottom)); }
-}
+/* (The bottom-sheet form is now the base; centered card lives in the
+   min-width:480 blocks above.) */
 
 /* ── Sub-checklist rows (reused by the step modal) ───────────────────────── */
 .check-list { list-style: none; margin: 0; padding: 0; }
 .check-row-item { padding: var(--space-2) 0; border-top: 1px solid var(--hairline); }
 .check-row-item:first-child { border-top: 0; }
 .check-row-item.is-done .check-title { text-decoration: line-through; color: var(--ink-muted); }
-.check-row-item .check-row { display: flex; align-items: flex-start; gap: var(--space-3); margin: 0; min-height: 44px; cursor: pointer; }
+.check-row-item .check-row { display: flex; align-items: flex-start; gap: var(--space-3); margin: 0; min-height: var(--tap-min); cursor: pointer; }
 .check-row-item input[type="checkbox"] { margin-top: 0.2rem; width: 1.15rem; height: 1.15rem; flex-shrink: 0; }
 .check-label { flex: 1; }
 .check-title { display: block; font-weight: 500; line-height: 1.4; }

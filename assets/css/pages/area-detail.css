@@ -6,9 +6,10 @@
 
 .area-detail-village { margin: 0 0 var(--space-1); font-size: var(--text-sm); }
 
-.proscons { display: grid; gap: var(--space-4); grid-template-columns: 1fr 1fr; }
+/* Mobile-first: single column; pros/cons side-by-side from tablet portrait up. */
+.proscons { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
 .proscons h3 { margin-top: 0; font-size: var(--text-base); }
-@media (max-width: 600px) { .proscons { grid-template-columns: 1fr; } }
+@media (min-width: 768px) { .proscons { grid-template-columns: 1fr 1fr; } }
 
 .image-gallery {
   display: grid; gap: var(--space-3);

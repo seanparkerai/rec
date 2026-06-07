@@ -1,7 +1,4 @@
 {
-  "r-canonical-bp|assets/css/pages/area-detail.css|max-width: 600px": 1,
-  "r-canonical-bp|assets/css/pages/house-types.css|min-width: 720px": 1,
-  "r-no-100vw|assets/css/pages/property.css|100vw": 1,
   "r-no-inline-style-attr|assets/js/dashboard/tile-deposit.js|style=\"background:${MINI_FLOW_COLORS[name]}\"": 1,
   "r-no-inline-style-attr|assets/js/dashboard/tile-deposit.js|style=\"width:${w.toFixed(2)}%;background:${MINI_FLOW_COLORS[": 1,
   "r-no-inline-style-attr|assets/js/finances/section-breakdowns.js|style=\"width:${pct.toFixed(1)}%\"": 1,
@@ -32,8 +29,6 @@
   "r-no-inline-style-attr|assets/js/page-profile.js|style=\"font-size:var(--text-xs);color:var(--ink-muted);text-": 2,
   "r-no-inline-style-attr|assets/js/page-refinement.js|style=\"width:${m.pct}%\"": 1,
   "r-no-inline-style-attr|assets/js/page-report.js|style=\"font-size:var(--text-sm)\"": 1,
-  "r-no-max-width-media|assets/css/pages/area-detail.css|@media (max-width: 600px)": 1,
-  "r-no-max-width-media|assets/css/pages/journey.css|@media (max-width: 480px)": 1,
   "r-no-style-assign|assets/js/dashboard/tile-deposit.js|.style.strokeDashoffset =": 1,
   "r-no-style-assign|assets/js/finances/section-deposit.js|.style.width =": 1,
   "r-no-style-assign|assets/js/outreach/toast.js|.style.background =": 1,

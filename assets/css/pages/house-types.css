@@ -4,7 +4,7 @@
   display: grid; gap: var(--space-8) var(--space-6);
   grid-template-columns: 1fr;
 }
-@media (min-width: 720px) {
+@media (min-width: 768px) {
   .ht-grid { grid-template-columns: 1fr 1fr; gap: var(--space-12) var(--space-8); }
 }
 .ht-card {

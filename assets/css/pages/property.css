@@ -111,7 +111,7 @@
 .dossier-gallery__expand:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 
 /* ── Full-screen lightbox (native <dialog>) ───────────────────────────────── */
-/* 100% (scrollbar-aware), never 100vw/100dvw — avoids horizontal overflow. */
+/* Use 100% (scrollbar-aware), not viewport-width units — avoids horizontal overflow. */
 .lightbox {
   width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh;
   margin: 0; padding: 0; border: 0; background: transparent; color: var(--paper);
