@@ -46,7 +46,7 @@
 .report-band {
   font-family: var(--font-display);
   font-size: var(--text-4xl);
-  font-weight: 700;
+  font-weight: 600;
   line-height: var(--leading-tight);
   color: var(--ink);
   margin: 0 0 var(--space-3);
@@ -102,7 +102,7 @@
   font-family: var(--font-data);
   font-size: var(--text-base);
   color: var(--accent);
-  font-weight: 700;
+  font-weight: 600;
   padding-top: 0.1em;
 }
 .kp-point {
@@ -198,10 +198,13 @@
 .sort-active { color: var(--accent); }
 
 /* ── Village ranking filters ───────────────────────────────────────────── */
+/* Mobile-first: stacked filters, full-width search; inline row from 480 up. */
 .rank-filters {
-  display: flex; flex-wrap: wrap; gap: var(--space-3);
-  align-items: center;
+  display: flex; flex-direction: column; align-items: stretch; gap: var(--space-3);
   margin-bottom: var(--space-3);
+}
+@media (min-width: 480px) {
+  .rank-filters { flex-direction: row; flex-wrap: wrap; align-items: center; }
 }
 .rank-filter-label {
   font-size: var(--text-xs);
@@ -217,13 +220,12 @@
   font-size: var(--text-sm);
   background: var(--paper);
   color: var(--ink);
-  min-height: 44px;
+  min-height: var(--tap-min);
   margin: 0;
 }
-.rank-search { min-width: 14rem; }
-@media (max-width: 480px) {
-  .rank-filters { flex-direction: column; align-items: stretch; }
-  .rank-search  { min-width: 0; width: 100%; }
+.rank-search { min-width: 0; width: 100%; }
+@media (min-width: 480px) {
+  .rank-search { min-width: 14rem; width: auto; }
 }
 
 /* ── Badges ────────────────────────────────────────────────────────────── */
@@ -281,11 +283,15 @@
 }
 
 /* ── Timing & negotiation dl ───────────────────────────────────────────── */
+/* Mobile-first: stacked dt/dd; two-column from phone-landscape up. */
 .report-dl {
   display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: var(--space-1) var(--space-4);
+  grid-template-columns: 1fr;
+  gap: 0;
   margin: 0;
+}
+@media (min-width: 480px) {
+  .report-dl { grid-template-columns: max-content 1fr; gap: var(--space-1) var(--space-4); }
 }
 .report-dl dt {
   font-size: var(--text-sm);
@@ -298,10 +304,12 @@
   margin: 0;
   padding: var(--space-1) 0;
 }
-@media (max-width: 480px) {
-  .report-dl { grid-template-columns: 1fr; gap: 0; }
-  .report-dl dt { padding-bottom: 0; }
-  .report-dl dd { padding-top: 0; padding-bottom: var(--space-3); }
+/* Phone: tighten the stacked dt/dd rhythm. */
+.report-dl dt { padding-bottom: 0; }
+.report-dl dd { padding-top: 0; padding-bottom: var(--space-3); }
+@media (min-width: 480px) {
+  .report-dl dt { padding-bottom: var(--space-1); }
+  .report-dl dd { padding-top: var(--space-1); padding-bottom: var(--space-1); }
 }
 
 /* ── Risk flags ────────────────────────────────────────────────────────── */

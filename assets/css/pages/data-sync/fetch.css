@@ -5,7 +5,7 @@
   gap: var(--space-4);
   padding: var(--space-3) var(--space-4);
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--rec-radius-sm);
   margin-bottom: var(--space-4);
   flex-wrap: wrap;
@@ -13,7 +13,7 @@
 .fetch-token-label {
   font-size: var(--text-xs);
   color: var(--ink-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   flex-shrink: 0;
 }
 .fetch-token-input-row {
@@ -24,7 +24,7 @@
   min-width: 0;
 }
 .fetch-token-input-row input {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--rec-radius-sm);
@@ -44,7 +44,7 @@
   flex: 1;
 }
 .fetch-token-connected-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   color: var(--accent);
   flex: 1;
@@ -57,7 +57,7 @@
   gap: var(--space-5);
   padding: var(--space-4) var(--space-5);
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--rec-radius-sm);
   margin-bottom: var(--space-4);
   flex-wrap: wrap;
@@ -70,7 +70,7 @@
   gap: var(--space-2);
 }
 .fetch-prereq-step {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   color: var(--ink-muted);
   font-weight: 500;
@@ -89,24 +89,24 @@
 
 .fetch-cost-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-4);
 }
-@media (max-width: 768px) { .fetch-cost-grid { grid-template-columns: 1fr; } }
+@media (min-width: 768px) { .fetch-cost-grid { grid-template-columns: 1fr 1fr; } }
 
 .fetch-cost-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--rec-radius);
   padding: var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
-.fetch-cost-card--caution { border-color: color-mix(in oklch, oklch(65% 0.16 70) 40%, var(--border)); }
+.fetch-cost-card--caution { border-color: color-mix(in oklch, oklch(65% 0.16 70) 40%, var(--hairline)); }
 
 .fetch-cost-mode {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   color: var(--accent);
   font-weight: 500;
@@ -128,7 +128,7 @@
 .fetch-cost-detail strong { color: var(--ink); }
 
 .fetch-dry-note {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   color: oklch(50% 0.14 70);
   background: color-mix(in oklch, oklch(65% 0.16 70) 8%, transparent);
@@ -145,11 +145,11 @@
 }
 
 .fetch-log {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   line-height: 1.8;
   background: color-mix(in oklch, var(--ink) 4%, var(--paper));
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--rec-radius-sm);
   padding: var(--space-4);
   min-height: 60px;
@@ -167,7 +167,7 @@
 
 /* ── Confirm dialogs ─────────────────────────────────────────── */
 .fetch-dialog {
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--rec-radius);
   padding: 0;
   background: var(--paper);
@@ -178,11 +178,11 @@
 .fetch-dialog::backdrop {
   background: color-mix(in oklch, var(--ink) 55%, transparent);
 }
-.fetch-dialog--caution { border-color: color-mix(in oklch, oklch(65% 0.16 70) 40%, var(--border)); }
+.fetch-dialog--caution { border-color: color-mix(in oklch, oklch(65% 0.16 70) 40%, var(--hairline)); }
 
 .dialog-head {
   padding: var(--space-5) var(--space-6) var(--space-4);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--hairline);
 }
 .dialog-title {
   font-family: var(--font-display);
@@ -209,18 +209,18 @@
   gap: var(--space-1) var(--space-4);
   margin: 0;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--rec-radius-sm);
   padding: var(--space-4);
 }
 .dialog-cost dt {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   color: var(--ink-muted);
   align-self: center;
 }
 .dialog-cost dd {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-size: var(--text-xs);
   color: var(--ink);
   font-weight: 500;
@@ -244,15 +244,18 @@
   min-height: 16px;
   accent-color: var(--accent);
 }
+/* Mobile-first: stacked (primary action last/top) full-width; inline row at 480. */
 .dialog-foot {
   display: flex;
+  flex-direction: column-reverse;
   justify-content: flex-end;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-6) var(--space-5);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--hairline);
   flex-wrap: wrap;
 }
-@media (max-width: 480px) {
-  .dialog-foot { flex-direction: column-reverse; }
-  .dialog-foot button { width: 100%; }
+.dialog-foot button { width: 100%; }
+@media (min-width: 480px) {
+  .dialog-foot { flex-direction: row; }
+  .dialog-foot button { width: auto; }
 }
