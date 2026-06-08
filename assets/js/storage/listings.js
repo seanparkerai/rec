@@ -110,6 +110,24 @@ export async function addHouseholdAreaByCatalog(area_id, added_via = 'catalog-ma
   }
 }
 
+// De-select an area for the current household (hard delete of the link — the global
+// catalog row is untouched). Used by the onboarding wizard's Areas step.
+export async function removeHouseholdArea(area_id) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid || !area_id) return false;
+  try {
+    const { error } = await sb.from('household_areas')
+      .delete().eq('household_id', hid).eq('area_id', area_id);
+    if (error) throw error;
+    _invalidateHouseholdAreas();
+    return true;
+  } catch (e) {
+    console.error('storage: removeHouseholdArea', e.message);
+    _toast(`Sync error (areas): ${e.message}`, true);
+    return false;
+  }
+}
+
 // Create a provisional, inactive household-onboarding stub on the global catalog
 // and link it to the current household. The gated areas INSERT policy only admits
 // rows with source='household-onboarding' AND active=false, so this is the only
