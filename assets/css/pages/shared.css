@@ -38,3 +38,9 @@
   border-radius: 0 var(--rec-radius-sm) var(--rec-radius-sm) 0;
 }
 .ht-shortlist .num { color: var(--accent-ink, var(--ink)); font-weight: 500; }
+
+/* Your Profile data-guard: keep #main hidden until page-profile-page.js confirms a
+   populated household (mirrors auth-guard's data-auth-state pending pattern). The
+   coordinator clears the attribute on success, or navigates to setup.html before
+   anything renders, so an empty household never flashes synthetic placeholder data. */
+html[data-profile-state="pending"] #main { visibility: hidden; }

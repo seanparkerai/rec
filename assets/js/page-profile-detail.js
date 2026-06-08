@@ -2,7 +2,7 @@
 // Renders person, employment, credit, debts, pension + followup checklist.
 // Anchor: Stripe-docs editorial article (restrained, field-list layout).
 
-import { loadJSON } from './data-loader.js';
+import { getProfile } from './storage.js';
 import { esc, byId as $, setText as _setText, setHTML } from './dom.js';
 
 const setText = (id, v) => _setText(id, v, { fallback: '—' });
@@ -12,7 +12,7 @@ const orDash = (v) => nullish(v) ? '<span class="muted">not yet captured</span>'
 
 async function init() {
   let profile;
-  try { profile = await loadJSON('profile'); } catch (e) {
+  try { profile = await getProfile(); } catch (e) {
     console.error('profile load error', e);
     return;
   }

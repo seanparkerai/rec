@@ -84,7 +84,7 @@
         {
           "id": "criteria",
           "title": "Lock in your search criteria",
-          "link": "pages/criteria.html",
+          "link": "pages/profile.html#search",
           "tasks": [
             { "id": "search.criteria.1", "label": "Separate your must-haves from your nice-to-haves" },
             { "id": "search.criteria.2", "label": "Set your target areas and your price ceiling" }
