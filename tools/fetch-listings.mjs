@@ -51,6 +51,7 @@ import {
   haversineKm,
   MILES_PER_KM,
 } from './listings-normalise.mjs';
+import { isFetchEligible, deriveOutcode } from '../assets/js/areas/area-enrich.js';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
 import { probationDropIds, reprobeThisRun } from '../assets/js/refinement/scope.js';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
@@ -131,6 +132,44 @@ function flattenVillages(outcodeMap) {
   const all = [];
   for (const arr of outcodeMap.values()) for (const v of arr) all.push(v);
   return all;
+}
+
+/**
+ * Turn household-linked Supabase area rows into fetcher village entries (same shape
+ * as loadOutcodeMap values). A household-onboarding stub is never materialised to a
+ * repo file (sync-areas-from-supabase skips it), so the fetcher reads it live and
+ * merges it in here — making a newly-added, accurately-located area eligible for the
+ * very next run with no commit/promotion. INCLUSION is driven by isFetchEligible
+ * (coords + derivable outcode + county confirmed), NOT by the active flag (a stub is
+ * always active:false by RLS), so the repo's active===false skip never excludes it.
+ * Rows whose id is already in the repo set (curated catalog-match links) are dropped
+ * — they are already covered by loadOutcodeMap. Un-enriched / county-flagged stubs are
+ * dropped here and stay "Researching". Pure (no network) so it unit-tests without
+ * Supabase.
+ * @param {Array<{id:string,data:object}>} rows  joined areas rows for the household.
+ * @param {Set<string>} repoIds  ids already present in the repo outcode map.
+ * @returns {Array} village entries: { id, name, outcode, lat, lng, geofenceRadiusKm?, searchRadiusMi?, rightmove? }
+ */
+function householdRowsToVillages(rows, repoIds = new Set()) {
+  const out = [];
+  const seen = new Set();
+  for (const r of rows || []) {
+    const data = r?.data || {};
+    const id = r?.id || data.id;
+    if (!id || seen.has(id) || repoIds.has(id)) continue;
+    if (!isFetchEligible(data)) continue;
+    const outcode = String(deriveOutcode(data.postcode) || '').toUpperCase();
+    if (!outcode) continue;
+    out.push({
+      id, name: data.name, outcode,
+      lat: Number(data.coords.lat), lng: Number(data.coords.lng),
+      geofenceRadiusKm: data.geofenceRadiusMi != null ? Number(data.geofenceRadiusMi) / MILES_PER_KM : undefined,
+      searchRadiusMi: data.searchRadiusMi != null ? Number(data.searchRadiusMi) : undefined,
+      rightmove: data.rightmove || undefined,
+    });
+    seen.add(id);
+  }
+  return out;
 }
 
 const DEFAULT_SEARCH_MI = 3;
@@ -378,6 +417,33 @@ async function restGetOne(table, select) {
   return rows[0] ?? null;
 }
 
+// Household-added areas (service-role read). The onboarding/Areas flow inserts an
+// accurately-located stub (source='household-onboarding', active=false) and links it
+// via household_areas; those stubs are intentionally NOT materialised to repo files,
+// so the fetcher reads them live here and merges the eligible ones into the target
+// set. Returns the joined [{ id, data }] rows, or [] when unreadable/empty so a read
+// outage never crashes or silently widens the run (it just behaves as repo-only L1).
+async function loadHouseholdAreas() {
+  if (!SERVICE_KEY) return [];
+  const headers = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` };
+  try {
+    const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=area_id`;
+    const laRes = await fetch(laUrl, { headers });
+    if (!laRes.ok) throw new Error(`GET household_areas failed: ${laRes.status}`);
+    const links = await laRes.json();
+    const ids = [...new Set((links || []).map((l) => l.area_id).filter(Boolean))];
+    if (!ids.length) return [];
+    const inList = ids.map((i) => `"${i}"`).join(',');
+    const aUrl = `${SUPABASE_URL}/rest/v1/areas?id=in.(${inList})&select=id,data`;
+    const aRes = await fetch(aUrl, { headers });
+    if (!aRes.ok) throw new Error(`GET areas failed: ${aRes.status}`);
+    return await aRes.json();
+  } catch (e) {
+    console.warn('household areas load failed:', e.message);
+    return [];
+  }
+}
+
 // Stage 6 enforcement: the household-scoped areas the user paused via "Stop searching".
 // Read-only here (the portal writes these rows). Returns [] when unreadable so a probation
 // outage never silently widens the scrape (the scraper just behaves as un-pruned L1).
@@ -444,6 +510,22 @@ async function main() {
   }
 
   const outcodeMap = await loadOutcodeMap();
+  // Merge household-added areas (Supabase, service-role) that postcodes.io has
+  // accurately located. Done BEFORE pruning so they are equally subject to learned
+  // prunes + probation, then flow through clustering / resolve / geofence exactly like
+  // curated villages. No commit, no promotion: a stub added minutes ago is in this run.
+  const repoIds = new Set(flattenVillages(outcodeMap).map((v) => v.id));
+  const householdRows = await loadHouseholdAreas();
+  const householdVillages = householdRowsToVillages(householdRows, repoIds);
+  for (const v of householdVillages) {
+    if (!outcodeMap.has(v.outcode)) outcodeMap.set(v.outcode, []);
+    const arr = outcodeMap.get(v.outcode);
+    if (!arr.some((x) => x.id === v.id)) arr.push(v);
+  }
+  if (householdRows.length) {
+    const skipped = householdRows.length - householdVillages.length;
+    console.log(`household areas: +${householdVillages.length} eligible merged${skipped > 0 ? ` · ${skipped} linked row(s) skipped (curated/un-enriched/county-flagged)` : ''}`);
+  }
   // L7.5: honour learned prunes (surfaced + accepted upstream; here we just obey).
   // Areas set active:false are already dropped in loadOutcodeMap; a learned spec may
   // additionally carry dropAreas / dropOutcodes.
@@ -595,4 +677,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, householdRowsToVillages, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };

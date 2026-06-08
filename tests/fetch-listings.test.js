@@ -3,7 +3,7 @@
 // threaded into the Rightmove URL, the post-filter drops excluded types and
 // stale listings, learned-favourite outcodes are processed first, and the
 // always-on baseline (price cap, min beds, dontShow) is verified.
-import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
+import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, householdRowsToVillages, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-05-31T00:00:00Z');
@@ -63,6 +63,41 @@ export async function register({ test, assert, assertEqual }) {
     const cluster = buildSearchTargets(map, 'cluster');
     assert(cluster.every((t) => t.locationIdentifier && t.radiusMiles != null), 'fully-tight → disk searches with a radius');
     assert(cluster.length <= 2, 'never more searches than villages');
+  });
+
+  // ── household-added areas merged at run-time (Part B) ──
+  test('fetch-listings: householdRowsToVillages includes only located, non-repo stubs', () => {
+    const rows = [
+      // eligible: coords + full postcode (→ outcode) + located source
+      { id: 'alresford-hampshire', data: { name: 'Alresford', postcode: 'SO24 9AB', coords: { lat: 51.09, lng: -1.16 }, coordsSource: 'postcodes-io:places+reverse', geofenceRadiusMi: 3, searchRadiusMi: 3, source: 'household-onboarding', active: false } },
+      // un-enriched: coords-only soft-fail (no postcode) → skipped, stays Researching
+      { id: 'foo-surrey', data: { name: 'Foo', postcode: null, coords: { lat: 51.2, lng: -0.5 }, coordsSource: 'postcodes-io-provisional', source: 'household-onboarding', active: false } },
+      // county-flagged → skipped
+      { id: 'charlwood-hampshire', data: { name: 'Charlwood', postcode: 'RH6 0AA', coords: { lat: 51.15, lng: -0.22 }, coordsSource: 'postcodes-io:county-mismatch', source: 'household-onboarding', active: false } },
+      // missing coords → skipped
+      { id: 'bar-kent', data: { name: 'Bar', postcode: 'ME1 1AA', coords: null, coordsSource: 'postcodes-io:places+reverse', source: 'household-onboarding', active: false } },
+      // already in the repo (curated catalog-match link) → skipped (covered by loadOutcodeMap)
+      { id: 'oakley-rg23', data: { name: 'Oakley', postcode: 'RG23 7AA', coords: { lat: 51.27, lng: -1.17 }, coordsSource: 'postcodes-io:places+reverse' } },
+    ];
+    const repoIds = new Set(['oakley-rg23']);
+    const out = householdRowsToVillages(rows, repoIds);
+    assertEqual(out.length, 1, 'only the located, non-repo stub is merged');
+    const v = out[0];
+    assertEqual(v.id, 'alresford-hampshire');
+    assertEqual(v.outcode, 'SO24', 'outcode derived from the full postcode (not stored)');
+    assertEqual(v.lat, 51.09); assertEqual(v.lng, -1.16);
+    assert(v.geofenceRadiusKm > 4 && v.geofenceRadiusKm < 5, '3mi geofence → ~4.8km');
+    assertEqual(v.searchRadiusMi, 3, 'search radius carried for clustering');
+  });
+
+  test('fetch-listings: householdRowsToVillages is safe on empty / dup input', () => {
+    assertEqual(householdRowsToVillages([], new Set()).length, 0);
+    assertEqual(householdRowsToVillages(null, new Set()).length, 0);
+    const dup = [
+      { id: 'x-hants', data: { name: 'X', postcode: 'SO24 9AB', coords: { lat: 51, lng: -1 }, coordsSource: 'postcodes-io:postcode' } },
+      { id: 'x-hants', data: { name: 'X', postcode: 'SO24 9AB', coords: { lat: 51, lng: -1 }, coordsSource: 'postcodes-io:postcode' } },
+    ];
+    assertEqual(householdRowsToVillages(dup, new Set()).length, 1, 'deduped by id');
   });
 
   test('fetch-listings: buildSearchUrl is plain L1 without a spec', () => {

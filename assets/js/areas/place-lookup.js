@@ -4,6 +4,7 @@
 // haversine logic it relies on lives in ./area-match.js and is unit-tested in the
 // Node harness. Consumed by the onboarding wizard (Phase 3) and any "add an area" UI.
 import { matchCatalogArea, postcodeDistrict } from './area-match.js';
+import { enrichPatch } from './area-enrich.js';
 import { getAreaCatalog, addHouseholdAreaByCatalog, createAreaStubAndLink } from '../storage.js';
 
 const API = 'https://api.postcodes.io';
@@ -87,6 +88,36 @@ export function debouncedLookup(cb, ms = 300) {
   };
 }
 
+// Accurately locate a chosen candidate via postcodes.io so the stub it becomes
+// carries everything the fetcher needs (full postcode → outcode, correct town,
+// refined county, accurate coords). A PLACE candidate is reverse-geocoded against
+// its pin; a POSTCODE candidate uses its full postcode's forward record (uniform
+// shape). Fails SOFT — any network/HTTP failure yields a coords-only patch so the
+// Areas step never crashes. Pure transform lives in area-enrich.js (Node-tested);
+// this is only the network wrapper. Returns the additive field patch.
+export async function enrichPlace(candidate) {
+  if (!candidate) return {};
+  let pcRecord = null;
+  try {
+    if (candidate.kind === 'postcode' && candidate.postcode) {
+      const j = await _getJSON(`${API}/postcodes/${encodeURIComponent(candidate.postcode)}`);
+      pcRecord = j?.result ?? null;
+    } else if (candidate.lat != null && candidate.lng != null) {
+      // Reverse-geocode the accurate /places pin → nearest postcode (postcode,
+      // outcode, admin_district → town, admin_county → county cross-check).
+      let j = await _getJSON(`${API}/postcodes?lon=${candidate.lng}&lat=${candidate.lat}&limit=1`);
+      if (!(j?.result?.length)) {
+        // Empty (rural pin with no nearby postcode in the default radius) → widen once.
+        j = await _getJSON(`${API}/postcodes?lon=${candidate.lng}&lat=${candidate.lat}&limit=1&radius=2000&wideSearch=true`);
+      }
+      pcRecord = j?.result?.[0] ?? null;
+    }
+  } catch {
+    pcRecord = null; // soft-fail → coords-only provisional stub
+  }
+  return enrichPatch(candidate, pcRecord);
+}
+
 // Match-or-create: link the chosen place to an EXISTING catalog area when it is
 // clearly the same village (name+county align AND within ~1.5km OR same postcode
 // district), otherwise create a provisional household-onboarding stub. The optional
@@ -103,6 +134,10 @@ export async function selectPlace(place, { confirm } = {}) {
       return { action: linked ? 'linked' : 'failed', area: match };
     }
   }
-  const stub = await createAreaStubAndLink(place);
+  // New area: accurately locate it (postcodes.io) so it is instantly eligible for
+  // the next Rightmove run, then persist the enriched stub. Enrichment overrides the
+  // raw candidate fields (correct town/county/postcode/coords/coordsSource + radii).
+  const patch = await enrichPlace(place);
+  const stub = await createAreaStubAndLink({ ...place, ...patch });
   return { action: stub ? 'created' : 'failed', area: stub };
 }

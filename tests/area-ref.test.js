@@ -30,6 +30,33 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(isLiveArea(stub), false);
   });
 
+  // A household stub that postcodes.io has accurately located (coords + derivable
+  // outcode + county confirmed) is LIVE — it is in the very next fetch run despite
+  // active:false. This is the enrichment-aware classification.
+  const locatedStub = {
+    id: 'alresford-hampshire', name: 'Alresford', town: 'Winchester', county: 'Hampshire',
+    postcode: 'SO24 9AB', coords: { lat: 51.09, lng: -1.16 },
+    coordsSource: 'postcodes-io:places+reverse', geofenceRadiusMi: 3, searchRadiusMi: 3,
+    status: 'stub', active: false, source: 'household-onboarding', verified: false,
+  };
+  test('area-ref: a LOCATED household stub reads as Live (in the next run despite active:false)', () => {
+    assertEqual(isPendingArea(locatedStub), false);
+    assertEqual(isLiveArea(locatedStub), true);
+  });
+
+  test('area-ref: a county-flagged household stub stays Researching', () => {
+    const flagged = { ...locatedStub, coordsSource: 'postcodes-io:county-mismatch' };
+    assertEqual(isPendingArea(flagged), true, 'county mismatch → pending');
+    // …and so does a coords-only soft-fail stub (no postcode yet).
+    const provisional = { ...locatedStub, postcode: null, coordsSource: 'postcodes-io-provisional' };
+    assertEqual(isPendingArea(provisional), true, 'un-located → pending');
+  });
+
+  test('area-ref: a pruned CURATED area is still pending (enrichment rule is household-only)', () => {
+    assert(isPendingArea({ id: 'x', active: false, source: 'curated', coords: { lat: 51, lng: -1 }, postcode: 'SO24 9AB' }),
+      'active:false curated stays pending even when it has coords+postcode');
+  });
+
   test('area-ref: active===false alone marks pending even without the onboarding source', () => {
     assert(isPendingArea({ id: 'x', active: false, source: 'curated' }), 'pruned area is pending');
   });
