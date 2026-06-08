@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9898,
-    "lng": -1.6599
+    "lat": 50.9905,
+    "lng": -1.631
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:historic-england-NHLE-1471898 Landford-Wood-Mission-Hall 50.9907,-1.632;ons-postcode SP5-2ES Landsbrook-Farm 50.990119,-1.630177;gap~143m; id-misspelled-lanford-vs-Landford; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

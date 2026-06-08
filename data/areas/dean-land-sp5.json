@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0048,
-    "lng": -1.8878
+    "lat": 50.96626,
+    "lng": -2.01255
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SP5-5PD;ukpostcodecheck-SP5-5PD;xcheck-doogal-SP5-5PA-SixpennyHandley(id-spells Dean Land=Deanland,locality in Sixpenny Handley); 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

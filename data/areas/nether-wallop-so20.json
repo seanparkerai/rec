@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Stockbridge",
   "coords": {
-    "lat": 51.137,
-    "lng": -1.558
+    "lat": 51.1279,
+    "lng": -1.57268
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-osgrid-SU300366;genuki-SU300365;cross-check-81m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

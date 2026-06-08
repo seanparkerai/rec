@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1448,
-    "lng": -1.7839
+    "lat": 51.12365,
+    "lng": -1.83003
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:ukcitymap;wikipedia-osgrid-SU123372(VillageHall);centroid-rejected-parish-spread; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

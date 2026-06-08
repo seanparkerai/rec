@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0775,
-    "lng": -0.9846
+    "lat": 51.07302,
+    "lng": -1.0316
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-os-grid SU67943-30856;ropley-1839-tithe-map charlwood-lane-junction;cross-check adjacent monkwood SU667309; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

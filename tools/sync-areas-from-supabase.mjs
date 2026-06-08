@@ -172,6 +172,15 @@ async function restGetAreas() {
 // ── plan + apply (pure-ish; exported for tests) ───────────────────────────────
 export async function materialise(rows, { prune = false, dryRun = false } = {}) {
   await mkdir(AREAS_DIR, { recursive: true });
+  // Skip household-onboarding stubs (Phase 2): rows the onboarding wizard creates at
+  // RUNTIME in the live DB (source='household-onboarding', active=false, inserted via the
+  // gated member INSERT policy). They are per-household provisional rows, NOT curated
+  // catalog content, so they must NOT be materialised into committed repo files or the
+  // parity snapshot — the parity test already excludes them by the same predicate
+  // (tests/areas-db-repo-parity.test.js isOnboardingStub). Filtering here keeps the
+  // materialiser and the test in lockstep: a member-added stub never becomes a repo file.
+  const skipped = rows.filter((r) => r.data?.source === 'household-onboarding').map((r) => r.id);
+  rows = rows.filter((r) => r.data?.source !== 'household-onboarding');
   const dumpIds = new Set(rows.map((r) => r.id));
   const written = [];
   const unchanged = [];
@@ -208,7 +217,7 @@ export async function materialise(rows, { prune = false, dryRun = false } = {}) 
   const curSnap = existsSync(SNAPSHOT) ? await readFile(SNAPSHOT, 'utf8') : null;
   if (curSnap !== snapText) { snapshotWritten = true; if (!dryRun) await writeFile(SNAPSHOT, snapText); }
 
-  return { written, unchanged, removed, snapshotWritten, total: rows.length };
+  return { written, unchanged, removed, skipped, snapshotWritten, total: rows.length };
 }
 
 async function main() {
@@ -233,9 +242,10 @@ async function main() {
   console.log(`DB rows: ${rows.length} · prune: ${prune ? 'on' : 'off'}${dryRun ? ' · DRY-RUN' : ''}`);
 
   const r = await materialise(rows, { prune, dryRun });
-  console.log(`\nwritten ${r.written.length} · unchanged ${r.unchanged.length} · removed ${r.removed.length} · snapshot ${r.snapshotWritten ? 'updated' : 'unchanged'}`);
+  console.log(`\nwritten ${r.written.length} · unchanged ${r.unchanged.length} · removed ${r.removed.length} · skipped ${r.skipped.length} (household-onboarding) · snapshot ${r.snapshotWritten ? 'updated' : 'unchanged'}`);
   if (r.written.length) console.log(`  written: ${r.written.slice(0, 20).join(', ')}${r.written.length > 20 ? ` … (+${r.written.length - 20})` : ''}`);
   if (r.removed.length) console.log(`  removed (id no longer in DB): ${r.removed.join(', ')}`);
+  if (r.skipped.length) console.log(`  skipped (household-onboarding stubs, not materialised): ${r.skipped.join(', ')}`);
   if (dryRun) console.log('\nDRY-RUN — nothing written.');
 }
 

@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.1213,
-    "lng": -1.764
+    "lat": 51.11728,
+    "lng": -1.74344
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki-stmary-SU1805435364;historic-england-1184486-SU180353;agree-1m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

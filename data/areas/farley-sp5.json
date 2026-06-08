@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.003,
-    "lng": -1.747
+    "lat": 51.0652,
+    "lng": -1.68049
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:genuki SU225296;historic-england farley-primary-school SU224295 36m-agree;wikipedia-grid SU225293 rejected-300m-south-outlier; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

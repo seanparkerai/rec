@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0113,
-    "lng": -1.8435
+    "lat": 51.03342,
+    "lng": -1.82499
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre 51.03342,-1.82499;historic-england-NHLE-1355728 Homington-Farmhouse 51.0337,-1.8245;cross-check HE-Homington-Bridge 51.035,-1.8238 gap~46m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

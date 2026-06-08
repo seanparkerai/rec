@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0049,
-    "lng": -1.7914
+    "lat": 51.03405,
+    "lng": -1.77605
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-StAndrew-SU158261;doogal-SP5-4HP-Nunton;cross-check-144m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

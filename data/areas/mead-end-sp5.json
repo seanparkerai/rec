@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9798,
-    "lng": -1.7598
+    "lat": 51.01475,
+    "lng": -1.96511
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SP5-5BW-MeadEnd;ukpostcodecheck-SP5-5BW;xcheck-wikipedia-Bowerchalke-parish(hamlet on N fringe); 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

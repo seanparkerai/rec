@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0398,
-    "lng": -1.2683
+    "lat": 51.02803,
+    "lng": -1.2064
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-osopennames-centre;getthedata-osopostcode-SO21-1JZ;cross-check-ukpostcodecheck-32m-gap37m; 2026-06-05",
   "houseTypeIds": [],
   "status": "partial",
   "priceSummary": {
@@ -38,63 +38,63 @@
   ],
   "schools": [
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934",
       "name": "Owslebury Primary School",
-      "phase": "Primary",
       "type": "State (Community)",
+      "phase": "Primary",
       "ofsted": "Good (2022)",
-      "distance": "0.6 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+      "distance": "0.6 mi"
     },
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115874",
       "name": "Cheriton Primary School",
-      "phase": "Primary",
       "type": "State (Community)",
+      "phase": "Primary",
       "ofsted": "Good (2025)",
-      "distance": "2.6 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/115874"
+      "distance": "2.6 mi"
     },
     {
+      "url": "https://reports.ofsted.gov.uk/provider/23/136451",
       "name": "Kings' School, Winchester",
-      "phase": "Secondary",
       "type": "State (Comprehensive)",
+      "phase": "Secondary",
       "ofsted": "Good (2023)",
-      "distance": "5.7 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/23/136451"
+      "distance": "5.7 mi"
     }
   ],
   "transport": {
+    "roads": "Longwood Dean Lane (single-track); B2177 ~2 mi; M3 J11 ~6 mi; A31/A272 ~3 mi",
     "commutes": [
       {
         "to": "London Waterloo",
-        "time": "1h 4m (fastest)",
         "mode": "drive to Winchester or Shawford + direct train (SWR)",
+        "time": "1h 4m (fastest)",
         "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
       },
       {
         "to": "Winchester (by road)",
-        "time": "~15m",
         "mode": "drive (Morestead/Twyford lanes)",
+        "time": "~15m",
         "source": "https://www.google.com/maps"
       },
       {
         "to": "Southampton (by road)",
-        "time": "~25m",
         "mode": "drive (B2177/M3 J11)",
+        "time": "~25m",
         "source": "https://www.google.com/maps"
       }
     ],
-    "nearestStation": "Shawford (5.1 mi)",
-    "roads": "Longwood Dean Lane (single-track); B2177 ~2 mi; M3 J11 ~6 mi; A31/A272 ~3 mi"
+    "nearestStation": "Shawford (5.1 mi)"
   },
   "prices": {
-    "avgSold12Mo": 712724,
-    "avgDetached": 1058605,
-    "avgSemi": 541803,
-    "avgTerraced": 488613,
-    "avgBungalow": null,
-    "avgFlat": null,
+    "asOf": "2026-05",
     "source": "https://www.rightmove.co.uk/house-prices/so21.html",
-    "asOf": "2026-05"
+    "avgFlat": null,
+    "avgSemi": 541803,
+    "avgBungalow": null,
+    "avgDetached": 1058605,
+    "avgSold12Mo": 712724,
+    "avgTerraced": 488613
   },
   "thingsToDo": [
     "Walking and cycling the South Downs lanes around Longwood Estate",
@@ -105,16 +105,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://whatpub.com/pubs/HAS/00337/ship-inn-owslebury",
       "name": "The Ship Inn, Owslebury",
       "type": "Country pub with rooms",
-      "notes": "Half a mile away in Owslebury; oldest pub in the area",
-      "url": "https://whatpub.com/pubs/HAS/00337/ship-inn-owslebury"
+      "notes": "Half a mile away in Owslebury; oldest pub in the area"
     },
     {
+      "url": "https://www.thephoenixtwyford.co.uk/",
       "name": "The Phoenix, Twyford",
       "type": "Village pub",
-      "notes": "2 miles north-west in Twyford; full menu",
-      "url": "https://www.thephoenixtwyford.co.uk/"
+      "notes": "2 miles north-west in Twyford; full menu"
     }
   ],
   "pros": [
@@ -136,34 +136,34 @@
   "images": [],
   "sources": [
     {
-      "title": "GetTheData — Where is Lane End SO21",
-      "url": "https://www.getthedata.com/lane-end-so21/where-is-lane-end-so21"
+      "url": "https://www.getthedata.com/lane-end-so21/where-is-lane-end-so21",
+      "title": "GetTheData — Where is Lane End SO21"
     },
     {
-      "title": "StreetCheck — SO21 1JX (Lane End)",
-      "url": "https://www.streetcheck.co.uk/postcode/so211jx"
+      "url": "https://www.streetcheck.co.uk/postcode/so211jx",
+      "title": "StreetCheck — SO21 1JX (Lane End)"
     },
     {
-      "title": "Ofsted — Owslebury Primary School",
-      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934",
+      "title": "Ofsted — Owslebury Primary School"
     },
     {
-      "title": "Ofsted — Cheriton Primary School",
-      "url": "https://reports.ofsted.gov.uk/provider/21/115874"
+      "url": "https://reports.ofsted.gov.uk/provider/21/115874",
+      "title": "Ofsted — Cheriton Primary School"
     },
     {
-      "title": "Rightmove — SO21 house prices",
-      "url": "https://www.rightmove.co.uk/house-prices/so21.html"
+      "url": "https://www.rightmove.co.uk/house-prices/so21.html",
+      "title": "Rightmove — SO21 house prices"
     },
     {
-      "title": "Trainline — Winchester to London Waterloo",
-      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo",
+      "title": "Trainline — Winchester to London Waterloo"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1595079",
+    "resolvedAt": "2026-06-02T21:15:11.818Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:11.818Z"
+    "locationIdentifier": "POSTCODE^1595079"
   }
 }

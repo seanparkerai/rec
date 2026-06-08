@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.056,
-    "lng": -1.1482
+    "lat": 51.0475,
+    "lng": -1.1492
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre 51.04758;historic-england-NHLE-1095118 6-Hinton-Hill 51.0474,-1.1493;cross-check HE-Hinton-Ampner-Place 51.0455,-1.1488 gap~20m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
@@ -30,20 +30,20 @@
   ],
   "schools": [
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Hinton Ampner area primary catchment school",
-      "phase": "Primary",
       "type": "State",
+      "phase": "Primary",
       "ofsted": null,
-      "distance": "~1-5 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~1-5 miles"
     },
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Winchester area secondary catchment school",
-      "phase": "Secondary",
       "type": "State",
+      "phase": "Secondary",
       "ofsted": null,
-      "distance": "~4-10 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~4-10 miles"
     }
   ],
   "transport": {
@@ -51,20 +51,20 @@
       {
         "to": "Winchester",
         "mode": "Drive",
-        "typical": "~15-35 min",
-        "notes": "Varies by exact address and route choice"
+        "notes": "Varies by exact address and route choice",
+        "typical": "~15-35 min"
       },
       {
         "to": "Southampton",
         "mode": "Drive",
-        "typical": "~30-60 min",
-        "notes": "Typically via A-road/M27 corridor where relevant"
+        "notes": "Typically via A-road/M27 corridor where relevant",
+        "typical": "~30-60 min"
       }
     ]
   },
   "prices": {
-    "summary": "SO24 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "asOf": "2026-05",
+    "summary": "SO24 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO24.html"
   },
   "thingsToDo": [
@@ -89,26 +89,26 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Hinton Ampner",
-      "url": "https://en.wikipedia.org/wiki/Hinton_Ampner"
+      "url": "https://en.wikipedia.org/wiki/Hinton_Ampner",
+      "label": "Wikipedia — Hinton Ampner"
     },
     {
-      "label": "Hampshire County Council — Find a school",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
+      "label": "Hampshire County Council — Find a school"
     },
     {
-      "label": "Rightmove House Prices SO24",
-      "url": "https://www.rightmove.co.uk/house-prices/SO24.html"
+      "url": "https://www.rightmove.co.uk/house-prices/SO24.html",
+      "label": "Rightmove House Prices SO24"
     },
     {
-      "label": "National Rail journey/station information",
-      "url": "https://www.nationalrail.co.uk/"
+      "url": "https://www.nationalrail.co.uk/",
+      "label": "National Rail journey/station information"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^4355206",
+    "resolvedAt": "2026-06-02T21:15:00.064Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:00.064Z"
+    "locationIdentifier": "POSTCODE^4355206"
   }
 }

@@ -10,12 +10,17 @@
   "settlementType": "",
   "subRegion": "",
   "coords": {
-    "lat": 51.0732,
-    "lng": -1.0879
+    "lat": 51.07776,
+    "lng": -1.03649
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:doogal-SO24-0HA-charlwood-lane;getthedata-os-open-SO24-0HA;agree-1m;ropley-east-tisted-namesake; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
+  "priceSummary": null,
+  "councilTaxBand": null,
+  "geofenceRadiusMi": 3,
+  "searchRadiusMi": 3,
+  "active": true,
   "overview": "A small hamlet in the East Hampshire district, mostly in the large civil parish of Ropley and partially in East Tisted. Charlwood lies in the Hampshire Downs on the western side of the A32, roughly between Ropley village and East Tisted, with Lyeway and Monkwood as its nearest neighbouring hamlets. The name is recorded in 1218 as 'Cherlewde' — 'wood of the free peasant' (Old English ceorl + wudu). Charlwood House (oldest building in the hamlet, shown on a 1635 estate map of Rotherfield Park) anchors the settlement; there was an associated brick kiln and clay pit, part of the wider Ropley/East Tisted brick-making industry. The hamlet has no shop, school, pub or active church of its own. SO24 0HA (Charlwood Lane) had 15 usually resident at the 2021 census; the wider hamlet remains very small.",
   "character": "Working-farm hamlet with a couple of period houses and a handful of post-war additions on Charlwood Lane and the adjoining lanes; surrounded by arable downland and ancient woodland. No public realm of its own — village life is at Ropley.",
   "amenities": [
@@ -28,53 +33,53 @@
   ],
   "schools": [
     {
+      "url": "https://www.ropley.hants.sch.uk/",
       "name": "Ropley Church of England Primary School",
       "phase": "Primary",
       "ofsted": "Good",
-      "distance": "1.6 mi",
-      "url": "https://www.ropley.hants.sch.uk/"
+      "distance": "1.6 mi"
     },
     {
+      "url": "https://www.perins.hants.sch.uk/",
       "name": "Perins School (Alresford)",
       "phase": "Secondary",
       "ofsted": "Good",
-      "distance": "5.0 mi",
-      "url": "https://www.perins.hants.sch.uk/"
+      "distance": "5.0 mi"
     },
     {
+      "url": "https://www.eggars.net/",
       "name": "Eggar's School (Alton)",
       "phase": "Secondary",
       "ofsted": "Good",
-      "distance": "5.5 mi",
-      "url": "https://www.eggars.net/"
+      "distance": "5.5 mi"
     }
   ],
   "transport": {
-    "nearestStation": "Alton (5.5 mi)",
+    "roads": "A32 (Alton–Fareham) ~1 mi east; A31 (M3 to Winchester) ~5 mi north at Alton; A272 (Winchester–Petersfield) ~2 mi south",
     "commutes": [
       {
         "to": "London Waterloo",
-        "time": "1h 6m – 1h 18m direct",
         "mode": "drive to Alton + direct South Western Railway (Alton branch)",
+        "time": "1h 6m – 1h 18m direct",
         "source": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
       },
       {
         "to": "Winchester",
-        "time": "~25m",
         "mode": "drive via A31 / A272",
+        "time": "~25m",
         "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/alton"
       }
     ],
-    "roads": "A32 (Alton–Fareham) ~1 mi east; A31 (M3 to Winchester) ~5 mi north at Alton; A272 (Winchester–Petersfield) ~2 mi south"
+    "nearestStation": "Alton (5.5 mi)"
   },
   "prices": {
-    "avgSold12Mo": null,
-    "avgDetached": null,
-    "avgSemi": null,
-    "avgTerraced": null,
-    "avgFlat": null,
+    "asOf": "2026-05",
     "source": "https://www.rightmove.co.uk/house-prices/so24-0ha.html",
-    "asOf": "2026-05"
+    "avgFlat": null,
+    "avgSemi": null,
+    "avgDetached": null,
+    "avgSold12Mo": null,
+    "avgTerraced": null
   },
   "thingsToDo": [
     "Mid Hants 'Watercress Line' heritage railway from Ropley to Alresford and Alton",
@@ -85,16 +90,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://www.anchorinnlowerfarringdon.co.uk/",
       "name": "The Anchor Inn",
       "type": "Country pub",
-      "notes": "Free house in Lower Farringdon, ~3 mi north on the A32",
-      "url": "https://www.anchorinnlowerfarringdon.co.uk/"
+      "notes": "Free house in Lower Farringdon, ~3 mi north on the A32"
     },
     {
+      "url": "https://www.thepubwithnoname.uk/",
       "name": "The Pub With No Name (White Horse)",
       "type": "Country pub with rooms",
-      "notes": "17th-century pub at Priors Dean, ~3 mi south; reopened 2023 under Charlie Kearns and Eddie Tyrwhitt-Drake",
-      "url": "https://www.thepubwithnoname.uk/"
+      "notes": "17th-century pub at Priors Dean, ~3 mi south; reopened 2023 under Charlie Kearns and Eddie Tyrwhitt-Drake"
     }
   ],
   "pros": [
@@ -112,42 +117,40 @@
     "Mix of estate-tied tenancies and freehold; freehold availability is unpredictable"
   ],
   "whoItSuits": "Country-house buyers wanting a working downland hamlet between Alton and Alresford, with the heritage-rail line for occasional leisure and easy A31/A272 access. Strong fit for retirees, equestrian households and home-workers happy with two-car / drive-everywhere life. Not for first-time buyers, who will find both the stock thin and the entry pricing well into the country-cottage range.",
+  "broadbandMedianMbps": null,
   "nearestStation": "Alton (5.5 mi)",
   "primarySupermarket": "Waitrose New Alresford, West Street (~5 mi); Sainsbury's Alton (~5.5 mi)",
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Charlwood, Hampshire",
-      "url": "https://en.wikipedia.org/wiki/Charlwood,_Hampshire"
+      "url": "https://en.wikipedia.org/wiki/Charlwood,_Hampshire",
+      "label": "Wikipedia — Charlwood, Hampshire"
     },
     {
-      "label": "Streetlist — SO24 0HA (Charlwood Lane)",
-      "url": "https://www.streetlist.co.uk/so/so24/so24-0/so24-0ha"
+      "url": "https://www.streetlist.co.uk/so/so24/so24-0/so24-0ha",
+      "label": "Streetlist — SO24 0HA (Charlwood Lane)"
     },
     {
-      "label": "South Western Railway — Alton to London Waterloo",
-      "url": "https://www.thetrainline.com/train-times/alton-to-london-waterloo"
+      "url": "https://www.thetrainline.com/train-times/alton-to-london-waterloo",
+      "label": "South Western Railway — Alton to London Waterloo"
     },
     {
-      "label": "Ropley CofE Primary School",
-      "url": "https://www.ropley.hants.sch.uk/"
+      "url": "https://www.ropley.hants.sch.uk/",
+      "label": "Ropley CofE Primary School"
     },
     {
-      "label": "Mid Hants Watercress Line",
-      "url": "https://www.watercressline.co.uk/"
+      "url": "https://www.watercressline.co.uk/",
+      "label": "Mid Hants Watercress Line"
     },
     {
-      "label": "East Hants DC — Council Tax 2026/27 (Ropley parish)",
-      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf",
+      "label": "East Hants DC — Council Tax 2026/27 (Ropley parish)"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1234130",
+    "resolvedAt": "2026-06-02T21:14:28.407Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:28.407Z"
-  },
-  "geofenceRadiusMi": 3,
-  "searchRadiusMi": 3,
-  "active": true
+    "locationIdentifier": "POSTCODE^1234130"
+  }
 }

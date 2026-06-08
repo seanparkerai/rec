@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Alton",
   "coords": {
-    "lat": 51.04,
-    "lng": -1.0199
+    "lat": 50.9554,
+    "lng": -1.0651
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:HistoricEngland-ChiddenFarmhouse-SU657177;xcheck-ChiddenFarmCottage(50.9546,-1.0655)~95m;LowerChiddenFarmhouse(50.9564,-1.062);NOTE-DB-outcode-GU34-but-Chidden-actually-PO7-Hambledon-parish; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
@@ -30,33 +30,33 @@
   ],
   "schools": [
     {
+      "url": "https://reports.ofsted.gov.uk/",
       "name": "Hambledon Primary School",
       "phase": "Primary",
       "ofsted": "Outstanding",
-      "distance": "2.2 mi",
-      "url": "https://reports.ofsted.gov.uk/"
+      "distance": "2.2 mi"
     }
   ],
   "transport": {
+    "roads": "B2150 ~2 mi; A3 (Petersfield) ~6 mi; A32 (Droxford) ~4 mi",
     "commutes": [
       {
         "to": "London Waterloo (via Petersfield)",
-        "time": "~1h 10m + drive",
         "mode": "drive + train (South Western Railway)",
+        "time": "~1h 10m + drive",
         "source": "https://www.nationalrail.co.uk/"
       }
     ],
-    "nearestStation": "Petersfield (~6.3 mi)",
-    "roads": "B2150 ~2 mi; A3 (Petersfield) ~6 mi; A32 (Droxford) ~4 mi"
+    "nearestStation": "Petersfield (~6.3 mi)"
   },
   "prices": {
-    "avgSold12Mo": 736541,
-    "avgDetached": null,
-    "avgSemi": null,
-    "avgTerraced": null,
-    "avgFlat": null,
+    "asOf": "2026-05",
     "source": "https://checkmypostcode.uk/po74te",
-    "asOf": "2026-05"
+    "avgFlat": null,
+    "avgSemi": null,
+    "avgDetached": null,
+    "avgSold12Mo": 736541,
+    "avgTerraced": null
   },
   "thingsToDo": [
     "Walking the South Downs Way (parish boundary)",
@@ -67,16 +67,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://www.batandball.co.uk/",
       "name": "The Bat and Ball Inn, Broadhalfpenny Down",
       "type": "Country pub / cricket museum",
-      "notes": "On the site of the 18th-century Hambledon Club",
-      "url": "https://www.batandball.co.uk/"
+      "notes": "On the site of the 18th-century Hambledon Club"
     },
     {
+      "url": "https://thevineathambledon.co.uk/",
       "name": "The Vine at Hambledon",
       "type": "Village pub",
-      "notes": "Two miles south in Hambledon",
-      "url": "https://thevineathambledon.co.uk/"
+      "notes": "Two miles south in Hambledon"
     }
   ],
   "pros": [
@@ -105,9 +105,9 @@
     "https://reports.ofsted.gov.uk/"
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1493104",
+    "resolvedAt": "2026-06-02T21:14:30.565Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:30.565Z"
+    "locationIdentifier": "POSTCODE^1493104"
   }
 }

@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0889,
-    "lng": -0.946
+    "lat": 51.09693,
+    "lng": -0.94318
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-osgrid-SU741336;genuki-SU741337;cross-check-102m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

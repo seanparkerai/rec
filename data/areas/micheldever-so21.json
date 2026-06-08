@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.1202,
-    "lng": -1.2329
+    "lat": 51.14857,
+    "lng": -1.26559
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-osgrid-SU5146639068;genuki-SU514391;cross-check-73m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {
@@ -42,63 +42,63 @@
   ],
   "schools": [
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/133292",
       "name": "Micheldever CofE Primary School",
-      "phase": "Primary",
       "type": "State (Voluntary Controlled, Dever Valley Federation)",
+      "phase": "Primary",
       "ofsted": "Good (2022)",
-      "distance": "in village",
-      "url": "https://reports.ofsted.gov.uk/provider/21/133292"
+      "distance": "in village"
     },
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438",
       "name": "Henry Beaufort School (catchment)",
-      "phase": "Secondary",
       "type": "State (Comprehensive)",
+      "phase": "Secondary",
       "ofsted": "Good (2023)",
-      "distance": "5.0 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+      "distance": "5.0 mi"
     },
     {
+      "url": "https://reports.ofsted.gov.uk/provider/22/130688",
       "name": "Peter Symonds College (16-18)",
-      "phase": "Sixth Form",
       "type": "State (Sixth-form college)",
+      "phase": "Sixth Form",
       "ofsted": "Outstanding (2019)",
-      "distance": "5.5 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/22/130688"
+      "distance": "5.5 mi"
     }
   ],
   "transport": {
+    "roads": "A33 (parish edge); A303 ~5 mi; M3 J9 (Winchester) ~7 mi",
     "commutes": [
       {
         "to": "London Waterloo",
-        "time": "1h 13m (direct, 1 train/hour)",
         "mode": "drive 2.4 mi to Micheldever station + direct train (SWR)",
+        "time": "1h 13m (direct, 1 train/hour)",
         "source": "https://en.wikipedia.org/wiki/Micheldever_railway_station"
       },
       {
         "to": "Winchester",
-        "time": "12m",
         "mode": "direct train from Micheldever (SWR)",
+        "time": "12m",
         "source": "https://www.thetrainline.com/stations/micheldever"
       },
       {
         "to": "Basingstoke",
-        "time": "~20m",
         "mode": "drive (A33/M3)",
+        "time": "~20m",
         "source": "https://www.google.com/maps"
       }
     ],
-    "nearestStation": "Micheldever (2.4 mi)",
-    "roads": "A33 (parish edge); A303 ~5 mi; M3 J9 (Winchester) ~7 mi"
+    "nearestStation": "Micheldever (2.4 mi)"
   },
   "prices": {
-    "avgSold12Mo": 712724,
-    "avgDetached": 1058605,
-    "avgSemi": 541803,
-    "avgTerraced": 488613,
-    "avgBungalow": null,
-    "avgFlat": null,
+    "asOf": "2026-05",
     "source": "https://www.rightmove.co.uk/house-prices/so21.html",
-    "asOf": "2026-05"
+    "avgFlat": null,
+    "avgSemi": 541803,
+    "avgBungalow": null,
+    "avgDetached": 1058605,
+    "avgSold12Mo": 712724,
+    "avgTerraced": 488613
   },
   "thingsToDo": [
     "Micheldever Wood bluebell walk (William Cobbett's 'one of the finest oak woods in England')",
@@ -109,16 +109,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://www.facebook.com/halfmoonmicheldever/",
       "name": "Half Moon and Spread Eagle",
       "type": "Village pub",
-      "notes": "Eighteenth-century drovers' inn; food and ales",
-      "url": "https://www.facebook.com/halfmoonmicheldever/"
+      "notes": "Eighteenth-century drovers' inn; food and ales"
     },
     {
+      "url": "https://whatpub.com/pubs/HAS/00111/dove-inn-micheldever-station",
       "name": "The Dove Inn, Micheldever Station",
       "type": "Village pub",
-      "notes": "2 miles north at the station village",
-      "url": "https://whatpub.com/pubs/HAS/00111/dove-inn-micheldever-station"
+      "notes": "2 miles north at the station village"
     }
   ],
   "pros": [
@@ -142,34 +142,34 @@
   "images": [],
   "sources": [
     {
-      "title": "Wikipedia — Micheldever",
-      "url": "https://en.wikipedia.org/wiki/Micheldever"
+      "url": "https://en.wikipedia.org/wiki/Micheldever",
+      "title": "Wikipedia — Micheldever"
     },
     {
-      "title": "Wikipedia — Micheldever railway station",
-      "url": "https://en.wikipedia.org/wiki/Micheldever_railway_station"
+      "url": "https://en.wikipedia.org/wiki/Micheldever_railway_station",
+      "title": "Wikipedia — Micheldever railway station"
     },
     {
-      "title": "Micheldever Villages — village history",
-      "url": "https://www.micheldevervillages.org/micheldever-village"
+      "url": "https://www.micheldevervillages.org/micheldever-village",
+      "title": "Micheldever Villages — village history"
     },
     {
-      "title": "Ofsted — Micheldever CofE Primary School",
-      "url": "https://reports.ofsted.gov.uk/provider/21/133292"
+      "url": "https://reports.ofsted.gov.uk/provider/21/133292",
+      "title": "Ofsted — Micheldever CofE Primary School"
     },
     {
-      "title": "Ofsted — Henry Beaufort School",
-      "url": "https://reports.ofsted.gov.uk/provider/21/116438"
+      "url": "https://reports.ofsted.gov.uk/provider/21/116438",
+      "title": "Ofsted — Henry Beaufort School"
     },
     {
-      "title": "Rightmove — SO21 house prices",
-      "url": "https://www.rightmove.co.uk/house-prices/so21.html"
+      "url": "https://www.rightmove.co.uk/house-prices/so21.html",
+      "title": "Rightmove — SO21 house prices"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1389536",
+    "resolvedAt": "2026-06-02T21:15:26.818Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:26.818Z"
+    "locationIdentifier": "POSTCODE^1389536"
   }
 }

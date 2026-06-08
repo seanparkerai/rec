@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.054,
-    "lng": -1.488
+    "lat": 51.0922,
+    "lng": -1.5136
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:historic-england-NHLE-1339061 All-Saints-Houghton 51.0922,-1.5139;getthedata-postcode SO20-6LJ Church-Lane 51.091446,-1.513268;gap~97m;xcheck HE-Old-Rectory 51.0922,-1.5133; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
@@ -30,20 +30,20 @@
   ],
   "schools": [
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Houghton area primary catchment school",
-      "phase": "Primary",
       "type": "State",
+      "phase": "Primary",
       "ofsted": null,
-      "distance": "~1-5 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~1-5 miles"
     },
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Winchester area secondary catchment school",
-      "phase": "Secondary",
       "type": "State",
+      "phase": "Secondary",
       "ofsted": null,
-      "distance": "~4-10 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~4-10 miles"
     }
   ],
   "transport": {
@@ -51,20 +51,20 @@
       {
         "to": "Winchester",
         "mode": "Drive",
-        "typical": "~15-35 min",
-        "notes": "Varies by exact address and route choice"
+        "notes": "Varies by exact address and route choice",
+        "typical": "~15-35 min"
       },
       {
         "to": "Southampton",
         "mode": "Drive",
-        "typical": "~30-60 min",
-        "notes": "Typically via A-road/M27 corridor where relevant"
+        "notes": "Typically via A-road/M27 corridor where relevant",
+        "typical": "~30-60 min"
       }
     ]
   },
   "prices": {
-    "summary": "SO20 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "asOf": "2026-05",
+    "summary": "SO20 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO20.html"
   },
   "thingsToDo": [
@@ -89,26 +89,26 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Houghton",
-      "url": "https://en.wikipedia.org/wiki/Houghton"
+      "url": "https://en.wikipedia.org/wiki/Houghton",
+      "label": "Wikipedia — Houghton"
     },
     {
-      "label": "Hampshire County Council — Find a school",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
+      "label": "Hampshire County Council — Find a school"
     },
     {
-      "label": "Rightmove House Prices SO20",
-      "url": "https://www.rightmove.co.uk/house-prices/SO20.html"
+      "url": "https://www.rightmove.co.uk/house-prices/SO20.html",
+      "label": "Rightmove House Prices SO20"
     },
     {
-      "label": "National Rail journey/station information",
-      "url": "https://www.nationalrail.co.uk/"
+      "url": "https://www.nationalrail.co.uk/",
+      "label": "National Rail journey/station information"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^800205",
+    "resolvedAt": "2026-06-02T21:15:01.250Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:01.250Z"
+    "locationIdentifier": "POSTCODE^800205"
   }
 }

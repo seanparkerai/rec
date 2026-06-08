@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0622,
-    "lng": -1.0234
+    "lat": 51.0375,
+    "lng": -1.03866
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-osgrid-SU675269;britainexpress-holytrinity-SU676270;cross-check-141m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
