@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0622,
-    "lng": -1.4762
+    "lat": 51.0776,
+    "lng": -1.4868
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:historic-england-NHLE-1296870 St-Peter-St-Paul-church 51.0772,-1.487;getthedata-postcode SO20-6PW Romsey-Road 51.077588,-1.487662;gap~63m;xcheck getthedata SO20-6PZ 51.0779,-1.4852; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
@@ -30,20 +30,20 @@
   ],
   "schools": [
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "King's Somborne area primary catchment school",
-      "phase": "Primary",
       "type": "State",
+      "phase": "Primary",
       "ofsted": null,
-      "distance": "~1-5 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~1-5 miles"
     },
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Winchester area secondary catchment school",
-      "phase": "Secondary",
       "type": "State",
+      "phase": "Secondary",
       "ofsted": null,
-      "distance": "~4-10 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~4-10 miles"
     }
   ],
   "transport": {
@@ -51,20 +51,20 @@
       {
         "to": "Winchester",
         "mode": "Drive",
-        "typical": "~15-35 min",
-        "notes": "Varies by exact address and route choice"
+        "notes": "Varies by exact address and route choice",
+        "typical": "~15-35 min"
       },
       {
         "to": "Southampton",
         "mode": "Drive",
-        "typical": "~30-60 min",
-        "notes": "Typically via A-road/M27 corridor where relevant"
+        "notes": "Typically via A-road/M27 corridor where relevant",
+        "typical": "~30-60 min"
       }
     ]
   },
   "prices": {
-    "summary": "SO20 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "asOf": "2026-05",
+    "summary": "SO20 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO20.html"
   },
   "thingsToDo": [
@@ -89,26 +89,26 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — King's Somborne",
-      "url": "https://en.wikipedia.org/wiki/Kings_Somborne"
+      "url": "https://en.wikipedia.org/wiki/Kings_Somborne",
+      "label": "Wikipedia — King's Somborne"
     },
     {
-      "label": "Hampshire County Council — Find a school",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
+      "label": "Hampshire County Council — Find a school"
     },
     {
-      "label": "Rightmove House Prices SO20",
-      "url": "https://www.rightmove.co.uk/house-prices/SO20.html"
+      "url": "https://www.rightmove.co.uk/house-prices/SO20.html",
+      "label": "Rightmove House Prices SO20"
     },
     {
-      "label": "National Rail journey/station information",
-      "url": "https://www.nationalrail.co.uk/"
+      "url": "https://www.nationalrail.co.uk/",
+      "label": "National Rail journey/station information"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^800204",
+    "resolvedAt": "2026-06-02T21:15:07.303Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:07.303Z"
+    "locationIdentifier": "POSTCODE^800204"
   }
 }

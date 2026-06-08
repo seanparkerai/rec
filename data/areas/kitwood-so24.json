@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0618,
-    "lng": -1.131
+    "lat": 51.09378,
+    "lng": -1.04833
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-SO24-0FH-KitwoodRoad;ukpostcodecheck-SO24-0DB-KitwoodLane;xcheck-wikipedia-OS-SU66616-33840-junction(dispersed hamlet,Four Marks/Ropley); 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

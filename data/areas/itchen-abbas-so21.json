@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0933,
-    "lng": -1.2356
+    "lat": 51.09394,
+    "lng": -1.23779
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-centre 51.09394,-1.23779;historic-england-NHLE-1156216 Old-Post-Cottage 51.0937,-1.2378;gap~27m;xcheck HE-St-John-church 51.0914,-1.2381; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
@@ -30,20 +30,20 @@
   ],
   "schools": [
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Itchen Abbas area primary catchment school",
-      "phase": "Primary",
       "type": "State",
+      "phase": "Primary",
       "ofsted": null,
-      "distance": "~1-5 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~1-5 miles"
     },
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Winchester area secondary catchment school",
-      "phase": "Secondary",
       "type": "State",
+      "phase": "Secondary",
       "ofsted": null,
-      "distance": "~4-10 miles",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~4-10 miles"
     }
   ],
   "transport": {
@@ -51,20 +51,20 @@
       {
         "to": "Winchester",
         "mode": "Drive",
-        "typical": "~15-35 min",
-        "notes": "Varies by exact address and route choice"
+        "notes": "Varies by exact address and route choice",
+        "typical": "~15-35 min"
       },
       {
         "to": "Southampton",
         "mode": "Drive",
-        "typical": "~30-60 min",
-        "notes": "Typically via A-road/M27 corridor where relevant"
+        "notes": "Typically via A-road/M27 corridor where relevant",
+        "typical": "~30-60 min"
       }
     ]
   },
   "prices": {
-    "summary": "SO21 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "asOf": "2026-05",
+    "summary": "SO21 housing values generally reflect constrained village supply and demand from households seeking rural settings with town access.",
     "sourceUrl": "https://www.rightmove.co.uk/house-prices/SO21.html"
   },
   "thingsToDo": [
@@ -89,26 +89,26 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Itchen Abbas",
-      "url": "https://en.wikipedia.org/wiki/Itchen_Abbas"
+      "url": "https://en.wikipedia.org/wiki/Itchen_Abbas",
+      "label": "Wikipedia — Itchen Abbas"
     },
     {
-      "label": "Hampshire County Council — Find a school",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
+      "label": "Hampshire County Council — Find a school"
     },
     {
-      "label": "Rightmove House Prices SO21",
-      "url": "https://www.rightmove.co.uk/house-prices/SO21.html"
+      "url": "https://www.rightmove.co.uk/house-prices/SO21.html",
+      "label": "Rightmove House Prices SO21"
     },
     {
-      "label": "National Rail journey/station information",
-      "url": "https://www.nationalrail.co.uk/"
+      "url": "https://www.nationalrail.co.uk/",
+      "label": "National Rail journey/station information"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1233807",
+    "resolvedAt": "2026-06-02T21:15:02.289Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:02.289Z"
+    "locationIdentifier": "POSTCODE^1233807"
   }
 }

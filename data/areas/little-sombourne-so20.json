@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0737,
-    "lng": -1.473
+    "lat": 51.09324,
+    "lng": -1.45447
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:CCT-All-Saints-church OS-grid SU383328 51.093237,-1.454474;historic-england-NHLE-1296752 Little-Somborne-House 51.094081,-1.454136;gap~97m; id-misspelled-sombourne-vs-Somborne; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {
@@ -40,63 +40,63 @@
   ],
   "schools": [
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115921",
       "name": "King's Somborne Church of England Primary School",
-      "phase": "Primary",
       "type": "State (Voluntary Aided)",
-      "ofsted": "Good (2022)",
-      "distance": "1.2 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/115921"
-    },
-    {
-      "name": "Sparsholt Church of England Primary School",
       "phase": "Primary",
-      "type": "State (Voluntary Controlled)",
-      "ofsted": "Good (2023)",
-      "distance": "3.0 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/116309"
+      "ofsted": "Good (2022)",
+      "distance": "1.2 mi"
     },
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116309",
+      "name": "Sparsholt Church of England Primary School",
+      "type": "State (Voluntary Controlled)",
+      "phase": "Primary",
+      "ofsted": "Good (2023)",
+      "distance": "3.0 mi"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116440",
       "name": "Test Valley School (Stockbridge)",
-      "phase": "Secondary",
       "type": "State (Comprehensive)",
+      "phase": "Secondary",
       "ofsted": "Good (2022)",
-      "distance": "4.0 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/116440"
+      "distance": "4.0 mi"
     }
   ],
   "transport": {
+    "roads": "B3049 (parish edge); A30 ~3 mi; A3057 ~2 mi; M3 J9 ~10 mi",
     "commutes": [
       {
         "to": "London Waterloo",
-        "time": "1h 23m",
         "mode": "drive to Winchester (8 mi) + direct train (SWR)",
+        "time": "1h 23m",
         "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
       },
       {
         "to": "Salisbury",
-        "time": "~30m",
         "mode": "drive (A30 via Stockbridge)",
+        "time": "~30m",
         "source": "https://www.google.com/maps"
       },
       {
         "to": "Southampton",
-        "time": "~25m",
         "mode": "drive (A3057 then M27)",
+        "time": "~25m",
         "source": "https://www.google.com/maps"
       }
     ],
-    "nearestStation": "Winchester (7.9 mi)",
-    "roads": "B3049 (parish edge); A30 ~3 mi; A3057 ~2 mi; M3 J9 ~10 mi"
+    "nearestStation": "Winchester (7.9 mi)"
   },
   "prices": {
-    "avgSold12Mo": 743688,
-    "avgDetached": 950371,
-    "avgSemi": 472304,
-    "avgTerraced": 403667,
-    "avgBungalow": null,
-    "avgFlat": null,
+    "asOf": "2026-05",
     "source": "https://www.rightmove.co.uk/house-prices/so20.html",
-    "asOf": "2026-05"
+    "avgFlat": null,
+    "avgSemi": 472304,
+    "avgBungalow": null,
+    "avgDetached": 950371,
+    "avgSold12Mo": 743688,
+    "avgTerraced": 403667
   },
   "thingsToDo": [
     "All Saints' Church, Little Somborne (Grade II* Saxon-Norman)",
@@ -107,16 +107,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://www.thecrowninnkingssomborne.co.uk/",
       "name": "The Crown Inn, King's Somborne",
       "type": "Village pub with rooms",
-      "notes": "1 mile away in King's Somborne; the local",
-      "url": "https://www.thecrowninnkingssomborne.co.uk/"
+      "notes": "1 mile away in King's Somborne; the local"
     },
     {
+      "url": "https://www.thegreyhoundonthetest.co.uk/",
       "name": "The Greyhound on the Test, Stockbridge",
       "type": "Inn and restaurant",
-      "notes": "Award-winning chalk-stream pub (4 mi north)",
-      "url": "https://www.thegreyhoundonthetest.co.uk/"
+      "notes": "Award-winning chalk-stream pub (4 mi north)"
     }
   ],
   "pros": [
@@ -140,30 +140,30 @@
   "images": [],
   "sources": [
     {
-      "title": "Test Valley BC — King's Somborne, Little Somborne and Ashley Parish Profile 2021",
-      "url": "https://www.testvalley.gov.uk/assets/attach/15335/kings-somborne-little-somborne-and-ashley-parish-profile-2021.pdf"
+      "url": "https://www.testvalley.gov.uk/assets/attach/15335/kings-somborne-little-somborne-and-ashley-parish-profile-2021.pdf",
+      "title": "Test Valley BC — King's Somborne, Little Somborne and Ashley Parish Profile 2021"
     },
     {
-      "title": "Wikipedia — All Saints Church, Little Somborne",
-      "url": "https://en.wikipedia.org/wiki/All_Saints_Church,_Little_Somborne"
+      "url": "https://en.wikipedia.org/wiki/All_Saints_Church,_Little_Somborne",
+      "title": "Wikipedia — All Saints Church, Little Somborne"
     },
     {
-      "title": "King's Somborne Parish Council — About",
-      "url": "https://kingssomborne-pc.gov.uk/about-2/"
+      "url": "https://kingssomborne-pc.gov.uk/about-2/",
+      "title": "King's Somborne Parish Council — About"
     },
     {
-      "title": "Rightmove — SO20 house prices",
-      "url": "https://www.rightmove.co.uk/house-prices/so20.html"
+      "url": "https://www.rightmove.co.uk/house-prices/so20.html",
+      "title": "Rightmove — SO20 house prices"
     },
     {
-      "title": "Trainline — Winchester to London Waterloo",
-      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo",
+      "title": "Trainline — Winchester to London Waterloo"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1233779",
+    "resolvedAt": "2026-06-02T21:15:17.860Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:17.860Z"
+    "locationIdentifier": "POSTCODE^1233779"
   }
 }

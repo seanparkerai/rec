@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0813,
-    "lng": -1.1995
+    "lat": 51.08226,
+    "lng": -1.20101
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:ukpostcodecheck-ONS-SO24-0RE-OvingtonHolt;whatpub-bushinn-SU5611031846;cross-check-115m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

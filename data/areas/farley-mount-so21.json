@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0513,
-    "lng": -1.3823
+    "lat": 51.05893,
+    "lng": -1.42634
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-os-grid SU403290 monument-summit;christophersomerville+walkingbritain horse-monument-403290;gap42m noted-hill-not-village; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
@@ -30,12 +30,12 @@
   ],
   "schools": [
     {
+      "url": "https://www.hants.gov.uk/educationandlearning/findaschool",
       "name": "Sparsholt College area schools cluster (nearest practical options)",
-      "phase": "Mixed catchment",
       "type": "State/Independent mix",
+      "phase": "Mixed catchment",
       "ofsted": null,
-      "distance": "~4-8 miles depending on school",
-      "url": "https://www.hants.gov.uk/educationandlearning/findaschool"
+      "distance": "~4-8 miles depending on school"
     }
   ],
   "transport": {
@@ -43,20 +43,20 @@
       {
         "to": "Winchester",
         "mode": "Drive",
-        "typical": "~20-30 min",
-        "notes": "Via rural routes toward A272/A34"
+        "notes": "Via rural routes toward A272/A34",
+        "typical": "~20-30 min"
       },
       {
         "to": "Basingstoke",
         "mode": "Drive",
-        "typical": "~35-50 min",
-        "notes": "Route choice via A303/A34"
+        "notes": "Route choice via A303/A34",
+        "typical": "~35-50 min"
       }
     ]
   },
   "prices": {
-    "summary": "RG25 values vary widely; homes around the Farley Mount hinterland are sparse and typically benchmarked against nearby Winchester-rural markets.",
     "asOf": "2026-05",
+    "summary": "RG25 values vary widely; homes around the Farley Mount hinterland are sparse and typically benchmarked against nearby Winchester-rural markets.",
     "sourceUrl": "https://www.rightmove.co.uk/house-prices/RG25.html"
   },
   "thingsToDo": [
@@ -81,22 +81,22 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Farley Mount",
-      "url": "https://en.wikipedia.org/wiki/Farley_Mount"
+      "url": "https://en.wikipedia.org/wiki/Farley_Mount",
+      "label": "Wikipedia — Farley Mount"
     },
     {
-      "label": "Hampshire County Council — Farley Mount Country Park",
-      "url": "https://www.hants.gov.uk/thingstodo/countryside/finder/farleymount"
+      "url": "https://www.hants.gov.uk/thingstodo/countryside/finder/farleymount",
+      "label": "Hampshire County Council — Farley Mount Country Park"
     },
     {
-      "label": "Visit Hampshire — Farley Mount Monument",
-      "url": "https://www.visit-hampshire.co.uk/things-to-do/farley-mount-monument-p1414861"
+      "url": "https://www.visit-hampshire.co.uk/things-to-do/farley-mount-monument-p1414861",
+      "label": "Visit Hampshire — Farley Mount Monument"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^4511249",
+    "resolvedAt": "2026-06-02T21:14:51.220Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:51.220Z"
+    "locationIdentifier": "POSTCODE^4511249"
   }
 }

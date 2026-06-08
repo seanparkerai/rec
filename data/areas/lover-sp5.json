@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.99,
-    "lng": -1.7474
+    "lat": 50.97993,
+    "lng": -1.70366
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-osgrid-SU209201;getthedata-SP5-2PN-BesomerDrove-Lover;cross-check-85m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

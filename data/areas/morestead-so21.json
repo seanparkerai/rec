@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 51.0428,
-    "lng": -1.2752
+    "lat": 51.0265,
+    "lng": -1.2746
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:historicengland-MoresteadChurch-SU5097125483;historicengland-crossroads-milestone-SU509255;cross-check-128m(wiki-SU5025-square); 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {
@@ -39,63 +39,63 @@
   ],
   "schools": [
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116307",
       "name": "Twyford St Mary's Church of England Primary School",
-      "phase": "Primary",
       "type": "State (Voluntary Aided)",
-      "ofsted": "Good (2023)",
-      "distance": "1.6 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/116307"
-    },
-    {
-      "name": "Owslebury Primary School",
       "phase": "Primary",
-      "type": "State (Community)",
-      "ofsted": "Good (2022)",
-      "distance": "1.7 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+      "ofsted": "Good (2023)",
+      "distance": "1.6 mi"
     },
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934",
+      "name": "Owslebury Primary School",
+      "type": "State (Community)",
+      "phase": "Primary",
+      "ofsted": "Good (2022)",
+      "distance": "1.7 mi"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/23/136451",
       "name": "Kings' School, Winchester",
-      "phase": "Secondary",
       "type": "State (Comprehensive)",
+      "phase": "Secondary",
       "ofsted": "Good (2023)",
-      "distance": "3.5 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/23/136451"
+      "distance": "3.5 mi"
     }
   ],
   "transport": {
+    "roads": "B3404 (Morestead Road); B2177 ~1 mi; M3 J11 ~3 mi; A31 ~3 mi",
     "commutes": [
       {
         "to": "London Waterloo",
-        "time": "1h 4m (fastest) / 1h 23m (average)",
         "mode": "drive to Winchester (3 mi) + direct train (SWR)",
+        "time": "1h 4m (fastest) / 1h 23m (average)",
         "source": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
       },
       {
         "to": "Southampton (by road)",
-        "time": "~25m",
         "mode": "drive (B2177/M3 J11)",
+        "time": "~25m",
         "source": "https://www.google.com/maps"
       },
       {
         "to": "Winchester (by road)",
-        "time": "~10m",
         "mode": "drive (B3404)",
+        "time": "~10m",
         "source": "https://www.google.com/maps"
       }
     ],
-    "nearestStation": "Winchester (3.0 mi)",
-    "roads": "B3404 (Morestead Road); B2177 ~1 mi; M3 J11 ~3 mi; A31 ~3 mi"
+    "nearestStation": "Winchester (3.0 mi)"
   },
   "prices": {
-    "avgSold12Mo": 712724,
-    "avgDetached": 1058605,
-    "avgSemi": 541803,
-    "avgTerraced": 488613,
-    "avgBungalow": null,
-    "avgFlat": null,
+    "asOf": "2026-05",
     "source": "https://www.rightmove.co.uk/house-prices/so21.html",
-    "asOf": "2026-05"
+    "avgFlat": null,
+    "avgSemi": 541803,
+    "avgBungalow": null,
+    "avgDetached": 1058605,
+    "avgSold12Mo": 712724,
+    "avgTerraced": 488613
   },
   "thingsToDo": [
     "Walking St Catherine's Hill and Twyford Down (2 mi)",
@@ -106,16 +106,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://www.thephoenixtwyford.co.uk/",
       "name": "The Phoenix, Twyford",
       "type": "Village pub",
-      "notes": "1.5 mi north; full menu and rooms",
-      "url": "https://www.thephoenixtwyford.co.uk/"
+      "notes": "1.5 mi north; full menu and rooms"
     },
     {
+      "url": "https://whatpub.com/pubs/HAS/00337/ship-inn-owslebury",
       "name": "The Ship Inn, Owslebury",
       "type": "Country pub with rooms",
-      "notes": "1.7 mi south-east in Owslebury",
-      "url": "https://whatpub.com/pubs/HAS/00337/ship-inn-owslebury"
+      "notes": "1.7 mi south-east in Owslebury"
     }
   ],
   "pros": [
@@ -139,34 +139,34 @@
   "images": [],
   "sources": [
     {
-      "title": "Wikipedia — Morestead",
-      "url": "https://en.wikipedia.org/wiki/Morestead"
+      "url": "https://en.wikipedia.org/wiki/Morestead",
+      "title": "Wikipedia — Morestead"
     },
     {
-      "title": "British History Online — Parishes: Morestead",
-      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp329-330"
+      "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp329-330",
+      "title": "British History Online — Parishes: Morestead"
     },
     {
-      "title": "South Downs Gateway Churches",
-      "url": "https://www.sdgateway.org.uk/"
+      "url": "https://www.sdgateway.org.uk/",
+      "title": "South Downs Gateway Churches"
     },
     {
-      "title": "Ofsted — Owslebury Primary School",
-      "url": "https://reports.ofsted.gov.uk/provider/21/115934"
+      "url": "https://reports.ofsted.gov.uk/provider/21/115934",
+      "title": "Ofsted — Owslebury Primary School"
     },
     {
-      "title": "Rightmove — SO21 house prices",
-      "url": "https://www.rightmove.co.uk/house-prices/so21.html"
+      "url": "https://www.rightmove.co.uk/house-prices/so21.html",
+      "title": "Rightmove — SO21 house prices"
     },
     {
-      "title": "Trainline — Winchester to London Waterloo",
-      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo"
+      "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo",
+      "title": "Trainline — Winchester to London Waterloo"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^800358",
+    "resolvedAt": "2026-06-02T21:15:31.341Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:31.341Z"
+    "locationIdentifier": "POSTCODE^800358"
   }
 }

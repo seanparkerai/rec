@@ -389,10 +389,10 @@
     "name": "Charlwood",
     "postcode": "GU34",
     "coords": {
-      "lat": 51.0775,
-      "lng": -0.9846
+      "lat": 51.07302,
+      "lng": -1.0316
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-os-grid SU67943-30856;ropley-1839-tithe-map charlwood-lane-junction;cross-check adjacent monkwood SU667309; 2026-06-05",
     "active": true
   },
   {
@@ -400,10 +400,10 @@
     "name": "Charlwood",
     "postcode": "SO24",
     "coords": {
-      "lat": 51.0732,
-      "lng": -1.0879
+      "lat": 51.07776,
+      "lng": -1.03649
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:doogal-SO24-0HA-charlwood-lane;getthedata-os-open-SO24-0HA;agree-1m;ropley-east-tisted-namesake; 2026-06-05",
     "active": true
   },
   {
@@ -422,10 +422,10 @@
     "name": "Chidden",
     "postcode": "GU34",
     "coords": {
-      "lat": 51.04,
-      "lng": -1.0199
+      "lat": 50.9554,
+      "lng": -1.0651
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:HistoricEngland-ChiddenFarmhouse-SU657177;xcheck-ChiddenFarmCottage(50.9546,-1.0655)~95m;LowerChiddenFarmhouse(50.9564,-1.062);NOTE-DB-outcode-GU34-but-Chidden-actually-PO7-Hambledon-parish; 2026-06-05",
     "active": true
   },
   {
@@ -499,10 +499,10 @@
     "name": "Colemore",
     "postcode": "GU32",
     "coords": {
-      "lat": 51.0547,
-      "lng": -1.0506
+      "lat": 51.0713,
+      "lng": -0.99372
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:HistoricEngland-StPeterAdVincula-Colemore-SU706307;GENUKI-SU706307(51.07130,-0.99372)-exact-agree;NOTE-DB-outcode-GU32-but-Colemore-village-centre-is-GU34(parish-spans-both); 2026-06-05",
     "active": true
   },
   {
@@ -510,10 +510,10 @@
     "name": "Colemore",
     "postcode": "GU34",
     "coords": {
-      "lat": 51.0547,
-      "lng": -1.0506
+      "lat": 51.0713,
+      "lng": -0.99372
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:HistoricEngland-StPeterAdVincula-Colemore-SU706307;GENUKI-SU706307(51.07130,-0.99372)-exact-agree; 2026-06-05",
     "active": true
   },
   {
@@ -543,10 +543,10 @@
     "name": "Coombe",
     "postcode": "GU32",
     "coords": {
-      "lat": 50.9901,
-      "lng": -0.9907
+      "lat": 50.98093,
+      "lng": -1.05621
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:gazetteer.org.uk-abc SU6634-2059 10fig;wikipedia-os-grid SU662205 6fig 176m-by-grid-coarseness;cross-check east-meon-cp SW-of-village; 2026-06-05",
     "active": true
   },
   {
@@ -565,10 +565,10 @@
     "name": "Dean Land",
     "postcode": "SP5",
     "coords": {
-      "lat": 51.0048,
-      "lng": -1.8878
+      "lat": 50.96626,
+      "lng": -2.01255
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SP5-5PD;ukpostcodecheck-SP5-5PD;xcheck-doogal-SP5-5PA-SixpennyHandley(id-spells Dean Land=Deanland,locality in Sixpenny Handley); 2026-06-05",
     "active": true
   },
   {
@@ -741,10 +741,10 @@
     "name": "Farley Mount",
     "postcode": "SO21",
     "coords": {
-      "lat": 51.0513,
-      "lng": -1.3823
+      "lat": 51.05893,
+      "lng": -1.42634
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-os-grid SU403290 monument-summit;christophersomerville+walkingbritain horse-monument-403290;gap42m noted-hill-not-village; 2026-06-05",
     "active": true
   },
   {
@@ -752,10 +752,10 @@
     "name": "Farley",
     "postcode": "SP5",
     "coords": {
-      "lat": 51.003,
-      "lng": -1.747
+      "lat": 51.0652,
+      "lng": -1.68049
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki SU225296;historic-england farley-primary-school SU224295 36m-agree;wikipedia-grid SU225293 rejected-300m-south-outlier; 2026-06-05",
     "active": true
   },
   {
@@ -763,10 +763,10 @@
     "name": "Filmore Hill",
     "postcode": "GU34",
     "coords": {
-      "lat": 51.0937,
-      "lng": -1.0265
+      "lat": 51.04215,
+      "lng": -1.05787
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-postcode GU34-3NX 51.042151,-1.057865;historic-england-NHLE-1351173 Filmore-Hill-Farmhouse 51.0418,-1.0585;gap~61m; 2026-06-05",
     "active": true
   },
   {
@@ -840,10 +840,10 @@
     "name": "Froxfield Green",
     "postcode": "GU34",
     "coords": {
-      "lat": 51.0344,
-      "lng": -0.9763
+      "lat": 51.02519,
+      "lng": -0.99839
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikidata-Q5506264;wikipedia-osgrid-SU703256;warmemorial-SU704255-53-141m; note:record-outcode-GU34-but-village-GU32-parish-spans-both; 2026-06-05",
     "active": true
   },
   {
@@ -884,10 +884,10 @@
     "name": "Hampworth",
     "postcode": "SP5",
     "coords": {
-      "lat": 50.9775,
-      "lng": -1.665
+      "lat": 50.97559,
+      "lng": -1.65409
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-os-grid SU244196 cuckoo-inn;whatpub-camra-satnav 50.97589,-1.65433 74m-agree;NOTE id-misspelled-actual-name-Hamptworth; 2026-06-05",
     "active": true
   },
   {
@@ -906,10 +906,10 @@
     "name": "Hinton Ampner",
     "postcode": "SO24",
     "coords": {
-      "lat": 51.056,
-      "lng": -1.1482
+      "lat": 51.0475,
+      "lng": -1.1492
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre 51.04758;historic-england-NHLE-1095118 6-Hinton-Hill 51.0474,-1.1493;cross-check HE-Hinton-Ampner-Place 51.0455,-1.1488 gap~20m; 2026-06-05",
     "active": true
   },
   {
@@ -917,10 +917,10 @@
     "name": "Homington",
     "postcode": "SP5",
     "coords": {
-      "lat": 51.0113,
-      "lng": -1.8435
+      "lat": 51.03342,
+      "lng": -1.82499
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre 51.03342,-1.82499;historic-england-NHLE-1355728 Homington-Farmhouse 51.0337,-1.8245;cross-check HE-Homington-Bridge 51.035,-1.8238 gap~46m; 2026-06-05",
     "active": true
   },
   {
@@ -928,10 +928,10 @@
     "name": "Houghton",
     "postcode": "SO20",
     "coords": {
-      "lat": 51.054,
-      "lng": -1.488
+      "lat": 51.0922,
+      "lng": -1.5136
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:historic-england-NHLE-1339061 All-Saints-Houghton 51.0922,-1.5139;getthedata-postcode SO20-6LJ Church-Lane 51.091446,-1.513268;gap~97m;xcheck HE-Old-Rectory 51.0922,-1.5133; 2026-06-05",
     "active": true
   },
   {
@@ -950,10 +950,10 @@
     "name": "Itchen Abbas",
     "postcode": "SO21",
     "coords": {
-      "lat": 51.0933,
-      "lng": -1.2356
+      "lat": 51.09394,
+      "lng": -1.23779
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre 51.09394,-1.23779;historic-england-NHLE-1156216 Old-Post-Cottage 51.0937,-1.2378;gap~27m;xcheck HE-St-John-church 51.0914,-1.2381; 2026-06-05",
     "active": true
   },
   {
@@ -961,10 +961,10 @@
     "name": "Kilmeston",
     "postcode": "SO24",
     "coords": {
-      "lat": 51.046,
-      "lng": -1.1629
+      "lat": 51.0335,
+      "lng": -1.1585
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:ons-postcode SO24-0NL Church-Cottages 51.033127,-1.15879;historic-england-NHLE-1156439 Kilmeston-Manor 51.0339,-1.1583;gap~92m;xcheck GENUKI-grid SU590260 51.0303,-1.1600; 2026-06-05",
     "active": true
   },
   {
@@ -983,10 +983,10 @@
     "name": "King's Somborne",
     "postcode": "SO20",
     "coords": {
-      "lat": 51.0622,
-      "lng": -1.4762
+      "lat": 51.0776,
+      "lng": -1.4868
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:historic-england-NHLE-1296870 St-Peter-St-Paul-church 51.0772,-1.487;getthedata-postcode SO20-6PW Romsey-Road 51.077588,-1.487662;gap~63m;xcheck getthedata SO20-6PZ 51.0779,-1.4852; 2026-06-05",
     "active": true
   },
   {
@@ -1005,10 +1005,10 @@
     "name": "Kitwood",
     "postcode": "SO24",
     "coords": {
-      "lat": 51.0618,
-      "lng": -1.131
+      "lat": 51.09378,
+      "lng": -1.04833
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SO24-0FH-KitwoodRoad;ukpostcodecheck-SO24-0DB-KitwoodLane;xcheck-wikipedia-OS-SU66616-33840-junction(dispersed hamlet,Four Marks/Ropley); 2026-06-05",
     "active": true
   },
   {
@@ -1038,10 +1038,10 @@
     "name": "Lane End",
     "postcode": "SO21",
     "coords": {
-      "lat": 51.0398,
-      "lng": -1.2683
+      "lat": 51.02803,
+      "lng": -1.2064
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-osopennames-centre;getthedata-osopostcode-SO21-1JZ;cross-check-ukpostcodecheck-32m-gap37m; 2026-06-05",
     "active": true
   },
   {
@@ -1049,10 +1049,10 @@
     "name": "Lanford Wood",
     "postcode": "SP5",
     "coords": {
-      "lat": 50.9898,
-      "lng": -1.6599
+      "lat": 50.9905,
+      "lng": -1.631
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:historic-england-NHLE-1471898 Landford-Wood-Mission-Hall 50.9907,-1.632;ons-postcode SP5-2ES Landsbrook-Farm 50.990119,-1.630177;gap~143m; id-misspelled-lanford-vs-Landford; 2026-06-05",
     "active": true
   },
   {
@@ -1060,10 +1060,10 @@
     "name": "Leckford",
     "postcode": "SO20",
     "coords": {
-      "lat": 51.1263,
-      "lng": -1.4913
+      "lat": 51.1372,
+      "lng": -1.4668
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-OS-grid SU374377 51.137356,-1.466819;historic-england-NHLE-1093179 Church-Cottage 51.137058,-1.466708;gap~34m; 2026-06-05",
     "active": true
   },
   {
@@ -1093,10 +1093,10 @@
     "name": "Little Sombourne",
     "postcode": "SO20",
     "coords": {
-      "lat": 51.0737,
-      "lng": -1.473
+      "lat": 51.09324,
+      "lng": -1.45447
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:CCT-All-Saints-church OS-grid SU383328 51.093237,-1.454474;historic-england-NHLE-1296752 Little-Somborne-House 51.094081,-1.454136;gap~97m; id-misspelled-sombourne-vs-Somborne; 2026-06-05",
     "active": true
   },
   {
@@ -1104,10 +1104,10 @@
     "name": "Little Wishford",
     "postcode": "SP2",
     "coords": {
-      "lat": 51.0498,
-      "lng": -1.8572
+      "lat": 51.12429,
+      "lng": -1.88979
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:historicengland-LittleWishfordFarmhouse-SU0773436097;ukpostcodecheck-ONS-SP2-0PT-cottages;centroid-78m(farmstead-spread);id-namesake=Little Wishford Farm; 2026-06-05",
     "active": true
   },
   {
@@ -1148,10 +1148,10 @@
     "name": "Lover",
     "postcode": "SP5",
     "coords": {
-      "lat": 50.99,
-      "lng": -1.7474
+      "lat": 50.97993,
+      "lng": -1.70366
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU209201;getthedata-SP5-2PN-BesomerDrove-Lover;cross-check-85m; 2026-06-05",
     "active": true
   },
   {
@@ -1192,10 +1192,10 @@
     "name": "Mead End",
     "postcode": "SP5",
     "coords": {
-      "lat": 50.9798,
-      "lng": -1.7598
+      "lat": 51.01475,
+      "lng": -1.96511
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-SP5-5BW-MeadEnd;ukpostcodecheck-SP5-5BW;xcheck-wikipedia-Bowerchalke-parish(hamlet on N fringe); 2026-06-05",
     "active": true
   },
   {
@@ -1225,10 +1225,10 @@
     "name": "Micheldever",
     "postcode": "SO21",
     "coords": {
-      "lat": 51.1202,
-      "lng": -1.2329
+      "lat": 51.14857,
+      "lng": -1.26559
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU5146639068;genuki-SU514391;cross-check-73m; 2026-06-05",
     "active": true
   },
   {
@@ -1269,10 +1269,10 @@
     "name": "Middle Woodford",
     "postcode": "SP4",
     "coords": {
-      "lat": 51.1448,
-      "lng": -1.7839
+      "lat": 51.12365,
+      "lng": -1.83003
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:ukcitymap;wikipedia-osgrid-SU123372(VillageHall);centroid-rejected-parish-spread; 2026-06-05",
     "active": true
   },
   {
@@ -1291,10 +1291,10 @@
     "name": "Morestead",
     "postcode": "SO21",
     "coords": {
-      "lat": 51.0428,
-      "lng": -1.2752
+      "lat": 51.0265,
+      "lng": -1.2746
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:historicengland-MoresteadChurch-SU5097125483;historicengland-crossroads-milestone-SU509255;cross-check-128m(wiki-SU5025-square); 2026-06-05",
     "active": true
   },
   {
@@ -1302,10 +1302,10 @@
     "name": "Nether Wallop",
     "postcode": "SO20",
     "coords": {
-      "lat": 51.137,
-      "lng": -1.558
+      "lat": 51.1279,
+      "lng": -1.57268
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU300366;genuki-SU300365;cross-check-81m; 2026-06-05",
     "active": true
   },
   {
@@ -1346,10 +1346,10 @@
     "name": "Northington",
     "postcode": "SO24",
     "coords": {
-      "lat": 51.0985,
-      "lng": -1.1672
+      "lat": 51.13398,
+      "lng": -1.19386
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre;getthedata-SO24-9TH(51.13359,-1.19333);wikipedia-osgrid-SU5687337410; centroid-rejected-5km-south; 2026-06-05",
     "active": true
   },
   {
@@ -1357,10 +1357,10 @@
     "name": "Nunton",
     "postcode": "SP5",
     "coords": {
-      "lat": 51.0049,
-      "lng": -1.7914
+      "lat": 51.03405,
+      "lng": -1.77605
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-StAndrew-SU158261;doogal-SP5-4HP-Nunton;cross-check-144m; 2026-06-05",
     "active": true
   },
   {
@@ -1412,10 +1412,10 @@
     "name": "Ovington",
     "postcode": "SO24",
     "coords": {
-      "lat": 51.0813,
-      "lng": -1.1995
+      "lat": 51.08226,
+      "lng": -1.20101
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:ukpostcodecheck-ONS-SO24-0RE-OvingtonHolt;whatpub-bushinn-SU5611031846;cross-check-115m; 2026-06-05",
     "active": true
   },
   {
@@ -1467,10 +1467,10 @@
     "name": "Preshaw",
     "postcode": "SO32",
     "coords": {
-      "lat": 50.9781,
-      "lng": -1.192
+      "lat": 51.006,
+      "lng": -1.1823
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:HistoricEngland-PreshawHouse-1095544;getthedata-osopostcode-SO32-1SU-PreshawEstate;gap111m; 2026-06-05",
     "active": true
   },
   {
@@ -1489,10 +1489,10 @@
     "name": "Privett",
     "postcode": "GU34",
     "coords": {
-      "lat": 51.0622,
-      "lng": -1.0234
+      "lat": 51.0375,
+      "lng": -1.03866
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU675269;britainexpress-holytrinity-SU676270;cross-check-141m; 2026-06-05",
     "active": true
   },
   {
@@ -1533,10 +1533,10 @@
     "name": "Ropley",
     "postcode": "SO24",
     "coords": {
-      "lat": 51.0479,
-      "lng": -1.1068
+      "lat": 51.08314,
+      "lng": -1.08202
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:getthedata-centre-SU644319;doogal-SO24-0DS-centre-postcode;cross-check-47m; 2026-06-05",
     "active": true
   },
   {
@@ -1544,10 +1544,10 @@
     "name": "Selborne",
     "postcode": "GU34",
     "coords": {
-      "lat": 51.0889,
-      "lng": -0.946
+      "lat": 51.09693,
+      "lng": -0.94318
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU741336;genuki-SU741337;cross-check-102m; 2026-06-05",
     "active": true
   },
   {
@@ -1709,10 +1709,10 @@
     "name": "Steep Marsh",
     "postcode": "GU32",
     "coords": {
-      "lat": 50.9971,
-      "lng": -0.9653
+      "lat": 51.03036,
+      "lng": -0.93839
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:wikipedia-osgrid-SU7454226202;historic-england-steep-cluster;listings-centroid-rejected-3km; 2026-06-05",
     "active": true
   },
   {
@@ -2105,10 +2105,10 @@
     "name": "Winterbourne Gunner",
     "postcode": "SP4",
     "coords": {
-      "lat": 51.1213,
-      "lng": -1.764
+      "lat": 51.11728,
+      "lng": -1.74344
     },
-    "coordsSource": "os-opendata:place-centre",
+    "coordsSource": "web-verified:genuki-stmary-SU1805435364;historic-england-1184486-SU180353;agree-1m; 2026-06-05",
     "active": true
   },
   {

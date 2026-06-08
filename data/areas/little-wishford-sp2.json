@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 51.0498,
-    "lng": -1.8572
+    "lat": 51.12429,
+    "lng": -1.88979
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:historicengland-LittleWishfordFarmhouse-SU0773436097;ukpostcodecheck-ONS-SP2-0PT-cottages;centroid-78m(farmstead-spread);id-namesake=Little Wishford Farm; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

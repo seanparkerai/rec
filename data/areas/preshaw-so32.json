@@ -10,10 +10,10 @@
   "settlementType": "Non-City",
   "subRegion": "Winchester",
   "coords": {
-    "lat": 50.9781,
-    "lng": -1.192
+    "lat": 51.006,
+    "lng": -1.1823
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:HistoricEngland-PreshawHouse-1095544;getthedata-osopostcode-SO32-1SU-PreshawEstate;gap111m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

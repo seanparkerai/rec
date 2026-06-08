@@ -169,11 +169,19 @@ function verifyArea(area, { villages, centroids }) {
   const flags = [];      // hard flags → non-zero exit
   const notes = [];      // soft notes (name_unconfirmed etc.)
 
-  // Check 1 — source sanity.
+  // Check 1 — source sanity. coordsSource should name where the point came from (a
+  // place/postcode centre, a geocode, or a web-verified fix), NOT a coarse outcode/
+  // district centroid leaked in as a placeholder. Match the outcode-centroid marker
+  // PRECISELY ("outcode-centroid" / "outcode centre"): a web-verified provenance note
+  // that merely MENTIONS the word (e.g. "…DB-outcode-GU34-but-village-GU32-parish-spans-both…")
+  // is documentation, not a coarse source, and must not trip this flag. Coords that
+  // actually sit on a district centroid are caught geometrically by Check 2.
   const src = String(area.coordsSource || '').toLowerCase();
-  const sourceOk = src.includes('place-centre') || src.includes('postcode') || src.includes('geocode');
+  const sourceOk = src.includes('place-centre') || src.includes('postcode')
+    || src.includes('geocode') || src.includes('web-verified') || src.includes('verified');
+  const isOutcodeCentroid = /outcode[-\s]?centr/.test(src);
   if (!area.coordsSource) flags.push('no_coords_source');
-  else if (src.includes('outcode')) flags.push('outcode_centroid_source');
+  else if (isOutcodeCentroid && !sourceOk) flags.push('outcode_centroid_source');
 
   if (!coords) { flags.push('no_coords'); return { id, name, outcode, coords, flags, notes, checks: {} }; }
 

@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Salisbury",
   "coords": {
-    "lat": 50.9775,
-    "lng": -1.665
+    "lat": 50.97559,
+    "lng": -1.65409
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-os-grid SU244196 cuckoo-inn;whatpub-camra-satnav 50.97589,-1.65433 74m-agree;NOTE id-misspelled-actual-name-Hamptworth; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

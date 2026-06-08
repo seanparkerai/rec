@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0344,
-    "lng": -0.9763
+    "lat": 51.02519,
+    "lng": -0.99839
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikidata-Q5506264;wikipedia-osgrid-SU703256;warmemorial-SU704255-53-141m; note:record-outcode-GU34-but-village-GU32-parish-spans-both; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,

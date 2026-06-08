@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 50.9971,
-    "lng": -0.9653
+    "lat": 51.03036,
+    "lng": -0.93839
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:wikipedia-osgrid-SU7454226202;historic-england-steep-cluster;listings-centroid-rejected-3km; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
@@ -34,60 +34,60 @@
   ],
   "schools": [
     {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116319",
       "name": "Steep Church of England Voluntary Controlled Primary School",
       "phase": "Primary",
       "ofsted": "Good quality of education; Outstanding behaviour and early years (Oct 2024)",
-      "distance": "0.7–0.9 mi",
-      "url": "https://reports.ofsted.gov.uk/provider/21/116319"
+      "distance": "0.7–0.9 mi"
     },
     {
+      "url": "https://www.bedales.org.uk/",
       "name": "Bedales School",
       "phase": "Independent (3–18, boarding and day)",
       "ofsted": null,
-      "distance": "0.8 mi",
-      "url": "https://www.bedales.org.uk/"
+      "distance": "0.8 mi"
     },
     {
+      "url": "https://www.churcherscollege.com/",
       "name": "Churcher's College",
       "phase": "Independent (3–18)",
       "ofsted": null,
-      "distance": "1.2 mi",
-      "url": "https://www.churcherscollege.com/"
+      "distance": "1.2 mi"
     },
     {
+      "url": "https://www.tps.hants.sch.uk/",
       "name": "The Petersfield School",
       "phase": "Secondary",
       "ofsted": "Good",
-      "distance": "2.3 mi",
-      "url": "https://www.tps.hants.sch.uk/"
+      "distance": "2.3 mi"
     }
   ],
   "transport": {
+    "roads": "A272 (Petersfield–Winchester) at the south of the parish; A3 (London–Portsmouth) ~2 mi east at Petersfield",
     "commutes": [
       {
         "to": "London Waterloo",
-        "time": "1h 2m – 1h 17m direct",
         "mode": "drive/cycle to Petersfield + direct South Western Railway",
+        "time": "1h 2m – 1h 17m direct",
         "source": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
       },
       {
         "to": "Portsmouth Harbour",
-        "time": "~30m",
         "mode": "Petersfield + direct South Western Railway",
+        "time": "~30m",
         "source": "https://www.southwesternrailway.com/travelling-with-us/at-the-station/petersfield"
       }
     ],
-    "nearestStation": "Petersfield (1.3 mi)",
-    "roads": "A272 (Petersfield–Winchester) at the south of the parish; A3 (London–Portsmouth) ~2 mi east at Petersfield"
+    "nearestStation": "Petersfield (1.3 mi)"
   },
   "prices": {
-    "avgSold12Mo": null,
-    "avgDetached": null,
-    "avgSemi": null,
-    "avgTerraced": null,
-    "avgFlat": null,
+    "asOf": "2026-05",
     "source": "https://www.rightmove.co.uk/house-prices/gu32-2bp.html",
-    "asOf": "2026-05"
+    "avgFlat": null,
+    "avgSemi": null,
+    "avgDetached": null,
+    "avgSold12Mo": null,
+    "avgTerraced": null
   },
   "thingsToDo": [
     "Hangers Way walking onto Shoulder of Mutton Hill",
@@ -98,16 +98,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://www.theharrowinnsteep.co.uk/",
       "name": "The Harrow Inn",
       "type": "Traditional pub",
-      "notes": "16th-century Grade II listed; cask ale from the barrel; ploughman's only; cash, no Wi-Fi",
-      "url": "https://www.theharrowinnsteep.co.uk/"
+      "notes": "16th-century Grade II listed; cask ale from the barrel; ploughman's only; cash, no Wi-Fi"
     },
     {
+      "url": "https://www.thecricketerssteep.co.uk/",
       "name": "The Cricketers Inn",
       "type": "Country pub with rooms",
-      "notes": "Pub in Steep village, dining and accommodation",
-      "url": "https://www.thecricketerssteep.co.uk/"
+      "notes": "Pub in Steep village, dining and accommodation"
     }
   ],
   "pros": [
@@ -131,34 +131,34 @@
   "images": [],
   "sources": [
     {
-      "label": "Wikipedia — Steep Marsh",
-      "url": "https://en.wikipedia.org/wiki/Steep_Marsh"
+      "url": "https://en.wikipedia.org/wiki/Steep_Marsh",
+      "label": "Wikipedia — Steep Marsh"
     },
     {
-      "label": "Wikipedia — Steep, Hampshire",
-      "url": "https://en.wikipedia.org/wiki/Steep,_Hampshire"
+      "url": "https://en.wikipedia.org/wiki/Steep,_Hampshire",
+      "label": "Wikipedia — Steep, Hampshire"
     },
     {
-      "label": "Ofsted — Steep CofE VC Primary",
-      "url": "https://reports.ofsted.gov.uk/provider/21/116319"
+      "url": "https://reports.ofsted.gov.uk/provider/21/116319",
+      "label": "Ofsted — Steep CofE VC Primary"
     },
     {
-      "label": "The Harrow Inn",
-      "url": "https://www.theharrowinnsteep.co.uk/about.html"
+      "url": "https://www.theharrowinnsteep.co.uk/about.html",
+      "label": "The Harrow Inn"
     },
     {
-      "label": "South Western Railway — Petersfield to London Waterloo",
-      "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo"
+      "url": "https://www.southwesternrailway.com/train-times/petersfield-to-london-waterloo",
+      "label": "South Western Railway — Petersfield to London Waterloo"
     },
     {
-      "label": "East Hants DC — Council Tax 2026/27 (Steep parish)",
-      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+      "url": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf",
+      "label": "East Hants DC — Council Tax 2026/27 (Steep parish)"
     }
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1492956",
+    "resolvedAt": "2026-06-02T21:15:59.218Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:59.218Z"
+    "locationIdentifier": "POSTCODE^1492956"
   }
 }

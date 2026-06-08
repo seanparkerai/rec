@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Alton",
   "coords": {
-    "lat": 51.0937,
-    "lng": -1.0265
+    "lat": 51.04215,
+    "lng": -1.05787
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:getthedata-postcode GU34-3NX 51.042151,-1.057865;historic-england-NHLE-1351173 Filmore-Hill-Farmhouse 51.0418,-1.0585;gap~61m; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": {
@@ -38,46 +38,46 @@
   ],
   "schools": [
     {
+      "url": "https://reports.ofsted.gov.uk/",
       "name": "West Meon Church of England Voluntary Controlled Primary School",
       "phase": "Primary",
       "ofsted": null,
-      "distance": "2.4 mi",
-      "url": "https://reports.ofsted.gov.uk/"
+      "distance": "2.4 mi"
     },
     {
+      "url": "https://reports.ofsted.gov.uk/",
       "name": "Perins School (secondary, Alresford)",
       "phase": "Secondary",
       "ofsted": null,
-      "distance": "5.7 mi",
-      "url": "https://reports.ofsted.gov.uk/"
+      "distance": "5.7 mi"
     }
   ],
   "transport": {
+    "roads": "A272 ~1 mi; A3 (Petersfield) ~7 mi; A32 ~4 mi",
     "commutes": [
       {
         "to": "London Waterloo (via Petersfield)",
-        "time": "~1h 10m + drive",
         "mode": "drive + train",
+        "time": "~1h 10m + drive",
         "source": "https://www.nationalrail.co.uk/"
       },
       {
         "to": "Winchester (by road)",
-        "time": "~30m",
         "mode": "drive (A272)",
+        "time": "~30m",
         "source": "https://www.streetcheck.co.uk/postcode/gu343nx"
       }
     ],
-    "nearestStation": "Petersfield (~6.8 mi)",
-    "roads": "A272 ~1 mi; A3 (Petersfield) ~7 mi; A32 ~4 mi"
+    "nearestStation": "Petersfield (~6.8 mi)"
   },
   "prices": {
-    "avgSold12Mo": null,
-    "avgDetached": 849394,
-    "avgSemi": 488523,
-    "avgTerraced": null,
-    "avgFlat": null,
+    "asOf": "2025",
     "source": "https://zestate.co.uk/address/Filmore-Hill-Farmhouse-Filmore-Hill-Privett-ALTON-Hampshire-GU34-3NX/11517613/",
-    "asOf": "2025"
+    "avgFlat": null,
+    "avgSemi": 488523,
+    "avgDetached": 849394,
+    "avgSold12Mo": null,
+    "avgTerraced": null
   },
   "thingsToDo": [
     "South Downs Way walking from Stoner Hill",
@@ -88,16 +88,16 @@
   ],
   "placesToEat": [
     {
+      "url": "https://www.thepubwithnoname.co.uk/",
       "name": "The Pub With No Name (White Horse Inn), Priors Dean",
       "type": "Country pub",
-      "notes": "Famously named for its missing sign, ~3 mi north",
-      "url": "https://www.thepubwithnoname.co.uk/"
+      "notes": "Famously named for its missing sign, ~3 mi north"
     },
     {
+      "url": "https://www.thethomaslord.co.uk/",
       "name": "The Thomas Lord, West Meon",
       "type": "Gastropub",
-      "notes": "Mains around £18–£26, two miles south-west",
-      "url": "https://www.thethomaslord.co.uk/"
+      "notes": "Mains around £18–£26, two miles south-west"
     }
   ],
   "pros": [
@@ -126,9 +126,9 @@
     "https://en.wikipedia.org/wiki/Privett_(disambiguation)"
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^356774",
+    "resolvedAt": "2026-06-02T21:14:52.793Z",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:52.793Z"
+    "locationIdentifier": "POSTCODE^356774"
   }
 }

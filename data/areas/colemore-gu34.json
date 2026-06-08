@@ -10,10 +10,10 @@
   "settlementType": "",
   "subRegion": "Petersfield",
   "coords": {
-    "lat": 51.0547,
-    "lng": -1.0506
+    "lat": 51.0713,
+    "lng": -0.99372
   },
-  "coordsSource": "os-opendata:place-centre",
+  "coordsSource": "web-verified:HistoricEngland-StPeterAdVincula-Colemore-SU706307;GENUKI-SU706307(51.07130,-0.99372)-exact-agree; 2026-06-05",
   "houseTypeIds": [],
   "status": "researched",
   "priceSummary": null,
