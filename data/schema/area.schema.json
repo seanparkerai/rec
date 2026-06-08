@@ -164,6 +164,8 @@
     },
     "geofenceRadiusMi": { "type": ["number", "null"] },
     "searchRadiusMi": { "type": ["number", "null"] },
-    "active": { "type": "boolean" }
+    "active": { "type": "boolean" },
+    "verified": { "type": "boolean" },
+    "source": { "type": "string", "enum": ["curated", "household-onboarding"] }
   }
 }

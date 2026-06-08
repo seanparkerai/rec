@@ -84,6 +84,12 @@
     "_class": "user-state",
     "_note": "v3 L4/L5: distilled preference weights, one row/household (derived = Layer 2 from the reaction log; overrides = Layer 3 manual/AI; dismissals = L5 conflict-prompt quiet-until map, added by migration learned_preferences_dismissals_l5). 1 row present, recomputed from the reaction log as of 2026-06-03 (0 at table creation 2026-05-31). Recomputed user-state — Supabase wins; snapshot pulled live via MCP. Tracked sync table #19 (17 user-state + 2 content). 2026-06-05 (Refinement Stage 5): overrides/dismissals confirmed EMPTY ({}); the Approach-B display-hide lever stores hide rules under overrides.__refinement_hidden (reserved key, skipped by effectiveWeights, preserved by recomputeLearnedPreferences). updated_at bumped to 15:19:38 by a hide/undo round-trip verification that was fully reverted (content unchanged)."
   },
+  "household_areas": {
+    "count": 196,
+    "last_synced_at": "2026-06-08T00:00:00Z",
+    "_class": "user-state",
+    "_note": "Phase 2: per-household area SELECTION layer (relational: household_id, area_id, added_via, status; PK (household_id,area_id); RLS via is_household_member()). NOT a blob — composed by storage.js#getHouseholdAreas, which resolves each linked area_id against the repo catalog (curated) or the Supabase areas.data row (household-onboarding stub). Owner household (9628b44f) seeded 2026-06-08 with all 196 curated catalog areas (added_via='curated-seed') so their view is unchanged. New households start EMPTY until onboarding (Phase 3). Tracked sync table (20th user-state). Created by migration household_areas_and_gated_stub_insert; the same migration added a gated areas INSERT policy (members may insert only source='household-onboarding' + active=false stubs — curated catalog stays read-only). The areas mirror itself was NOT backfilled/re-materialised in this phase (owner decision: existing 145-row DB↔repo content drift deferred to a separate reconciliation), so the areas block below is unchanged."
+  },
   "area_confirmations": {
     "count": 1,
     "last_synced_at": "2026-06-04T16:23:26Z",

@@ -23,17 +23,19 @@ test('snapshot file exists and is valid JSON', async () => {
   assert(typeof parsed === 'object', 'snapshot must be an object');
 });
 
-test('snapshot includes all 21 tracked tables', async () => {
+test('snapshot includes all 22 tracked tables', async () => {
   const path = resolve(root, 'data/snapshots/sync-state.json');
   const snapshot = JSON.parse(await readFile(path, 'utf8'));
-  // Canonical: 19 user-state + 2 content mirrors = 21 tracked tables.
+  // Canonical: 20 user-state + 2 content mirrors = 22 tracked tables.
   // Source of truth for this list is docs/SUPABASE_SYNC.md §0. Keep in sync.
+  // (Phase 2 added household_areas — the per-household area SELECTION layer.)
   const expected = [
     'profile', 'criteria', 'finances', 'goals', 'shortlist', 'zones',
     'journey_checks', 'journey_progress', 'contacts', 'outreach',
     'readiness_checklist', 'investments_accounts', 'investments_history',
     'debts_credit_cards', 'debts_student_loans', 'debts_other',
     'listing_reactions', 'learned_preferences', 'area_confirmations',
+    'household_areas',
     'areas', 'house_types',
   ];
   for (const table of expected) {

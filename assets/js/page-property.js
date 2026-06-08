@@ -6,7 +6,7 @@
 // history, area context, the full description, and the reaction/status controls.
 // No outreach — that lives elsewhere and is intentionally not joined here.
 import {
-  getListing, getFinances, getCriteria, getAreas,
+  getListing, getFinances, getCriteria, getHouseholdAreas,
   getListingReactions, saveListingReaction,
   getShortlistStatuses, setShortlistStatus,
   getLearnedPreferences, recomputeLearnedPreferences,
@@ -346,7 +346,7 @@ async function render() {
   if (!listing) { notFound(mount, 'Listing not found'); return; }
 
   const [rawFinances, criteria, areas, reactions, statuses, learned, ratings] = await Promise.all([
-    getFinances(), getCriteria(), getAreas(), getListingReactions(), getShortlistStatuses(), getLearnedPreferences(),
+    getFinances(), getCriteria(), getHouseholdAreas(), getListingReactions(), getShortlistStatuses(), getLearnedPreferences(),
     getListingRatings(),
   ]);
   const finances = rawFinances ? deriveFinances(rawFinances) : null;

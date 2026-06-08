@@ -1,5 +1,5 @@
 // page-areas.js — areas directory: search, filter, sort, shortlist toggle, fit verdict.
-import { getAreas, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
+import { getHouseholdAreas, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
@@ -246,7 +246,7 @@ function attachControls() {
 
 async function init() {
   try {
-    areas = await getAreas();
+    areas = await getHouseholdAreas();
     shortlist = new Set(await getShortlist());
     try { finData = await getFinances(); } catch (e) { console.error('finances fetch', e); }
     try { criData = await getCriteria(); } catch (e) { console.error('criteria fetch', e); }

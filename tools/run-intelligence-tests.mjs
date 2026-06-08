@@ -56,6 +56,7 @@ const { register: registerPurgeListings } = await import('../tests/purge-listing
 const { register: registerVerifyAreaCoords } = await import('../tests/verify-area-coords.test.js');
 const { register: registerBackfillGeofence } = await import('../tests/backfill-geofence.test.js');
 const { register: registerResolveAreas } = await import('../tests/resolve-areas.test.js');
+const { register: registerAreaMatch } = await import('../tests/area-match.test.js');
 const { register: registerListingFit } = await import('../tests/listing-fit.test.js');
 const { register: registerListingReactions } = await import('../tests/listing-reactions.test.js');
 const { register: registerListingFlags } = await import('../tests/listing-flags.test.js');
@@ -135,6 +136,7 @@ await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });
 await registerRefinementScope({ test, assert, assertEqual });
 await registerReactionProvenance({ test, assert, assertEqual });
+await registerAreaMatch({ test, assert, assertEqual });
 
 await test('responsive lint (no new violations vs baseline)', () => {
   const { regressions } = runResponsiveLint();

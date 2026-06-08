@@ -2,7 +2,7 @@
 // Renders OSM tiles, drops markers for areas with coords, exposes draw/edit/delete tools, persists
 // any drawn shapes as GeoJSON in localStorage via storage.getDrawnZones / saveDrawnZones.
 // Leaflet & Geoman are loaded via <script> tags in pages/areas.html, so we use window.L here.
-import { getAreas, getShortlist, getDrawnZones, saveDrawnZones, getFinances, getCriteria } from './storage.js';
+import { getHouseholdAreas, getShortlist, getDrawnZones, saveDrawnZones, getFinances, getCriteria } from './storage.js';
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
@@ -218,7 +218,7 @@ function buildGeofenceLayer(areasWithCoords, shortlist) {
 
 async function loadAreaMarkers() {
   try {
-    const areas = await getAreas();
+    const areas = await getHouseholdAreas();
     let finances = null, criteria = null;
     try { finances = await getFinances(); } catch (_) {}
     try { criteria = await getCriteria(); } catch (_) {}

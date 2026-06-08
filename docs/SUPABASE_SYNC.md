@@ -59,6 +59,21 @@ isoTimestamp } }`). Created by migration `area_confirmations_step5`. RLS allows 
 read + insert + update. It is tracked sync table #20. Physical table count is now **25**
 (the 23 curated above + the un-curated `reports` table + the live-content `listings` table).
 
+**Phase 2 addition (2026-06-08):** `household_areas` — a **user-state**, **relational** table (NOT a
+blob): `(household_id, area_id, added_via, status)`, PK `(household_id, area_id)`, RLS via
+`is_household_member()` (SELECT/INSERT/UPDATE/DELETE). It is the per-household area **selection**
+layer over the global `areas` catalog — it does **not** touch `scrape_probation` or the global
+`areas.active` flag. Composed by `storage.js#getHouseholdAreas` (resolves each linked `area_id`
+against the repo catalog, falling back to the Supabase `areas.data` row for `source='household-onboarding'`
+stubs). Created by migration `household_areas_and_gated_stub_insert`, which also added a **gated
+`areas` INSERT policy** (an authenticated member may insert only provisional rows with
+`source='household-onboarding'` AND `active=false`; no UPDATE/DELETE policy, so the curated catalog
+stays read-only). The owner household was seeded with all 196 curated areas (`added_via='curated-seed'`);
+new households start empty until onboarding. It is **tracked sync table #21** — making the tracked set
+**22** (20 user-state + 2 content). The `areas` mirror was deliberately **not** backfilled or
+re-materialised in this phase. (Note: the earlier "18 user-state / 20 tracked" figure above predates
+`journey_progress` and this table; the enforced source is `tests/supabase-sync.test.js`, now at 22.)
+
 ---
 
 ## 1. Source-of-truth matrix

@@ -6,7 +6,7 @@
 // no new tokens, no new CSS file. Editing a card's reaction here (e.g. switching it
 // off Like) re-saves through storage and drops it from the page on the next paint.
 import {
-  getListings, getReactionLog, getCriteria, getFinances, getAreas,
+  getListings, getReactionLog, getCriteria, getFinances, getHouseholdAreas,
   getLearnedPreferences, saveListingReaction,
   getListingRatings, setListingRating,
 } from './storage.js';
@@ -128,7 +128,7 @@ async function render() {
     // includeOutOfArea: a listing you deliberately saved must resolve to its live
     // row (cover photo, fresh price) even if it sits outside the discovery
     // geofence — your saved list isn't subject to the feed's discovery filter.
-    getListings({ limit: null, includeOutOfArea: true }), getReactionLog(), getCriteria(), getFinances(), getAreas(), getLearnedPreferences(),
+    getListings({ limit: null, includeOutOfArea: true }), getReactionLog(), getCriteria(), getFinances(), getHouseholdAreas(), getLearnedPreferences(),
     getListingRatings(),
   ]);
   const finances = rawFinances ? deriveFinances(rawFinances) : null;
