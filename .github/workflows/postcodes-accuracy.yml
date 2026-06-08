@@ -1,0 +1,26 @@
+# postcodes-accuracy.yml — manual diagnostic: run the postcodes.io accuracy probe
+# from a GitHub runner (open internet, unlike the sandboxed Claude session). This is
+# a dry run of the same mechanism a future stub→curated auto-promotion job would use
+# to fetch an area's pin from postcodes.io. Read-only: hits postcodes.io, prints how
+# far the "Whiteley" answer lands from the curated ground truth, writes nothing.
+#
+# Trigger: workflow_dispatch only — tap "Run workflow" in the Actions tab (or it is
+# dispatched programmatically). No schedule, no secrets.
+name: postcodes.io accuracy probe
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Probe postcodes.io accuracy for Whiteley
+        run: node tools/test-postcodes-accuracy.mjs
