@@ -134,18 +134,30 @@ export async function removeHouseholdArea(area_id) {
 // shape a member can add — the curated catalog stays read-only. If a stub with the
 // same id already exists (another household added it first), we link to it rather
 // than fail. Returns the stub record (or null on error).
-export async function createAreaStubAndLink({ name, county = null, lat = null, lng = null }) {
+// The optional enrichment fields (town, postcode, coords, coordsSource, geofence/
+// searchRadiusMi) are merged additively (P: household-area enrichment) — when the
+// caller has located the place via postcodes.io they make the stub instantly
+// fetch-eligible; when absent the stub falls back to the original coords-only,
+// provisional shape so the flow still works offline. The DB write shape (gated INSERT)
+// is unchanged.
+export async function createAreaStubAndLink({
+  name, county = null, lat = null, lng = null,
+  town = null, postcode = null, coords = null, coordsSource = null,
+  geofenceRadiusMi = null, searchRadiusMi = null,
+}) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid || !name) return null;
   const id = slugifyArea(name, county);
   if (!id) return null;
-  const coords = (lat != null && lng != null) ? { lat: Number(lat), lng: Number(lng) } : null;
+  const resolvedCoords = coords || ((lat != null && lng != null) ? { lat: Number(lat), lng: Number(lng) } : null);
   const data = {
-    id, name, town: county, county, postcode: null,
-    coords, coordsSource: 'postcodes-io-provisional',
+    id, name, town: town || county, county, postcode: postcode || null,
+    coords: resolvedCoords, coordsSource: coordsSource || 'postcodes-io-provisional',
     houseTypeIds: [], status: 'stub', active: false,
     verified: false, source: 'household-onboarding',
   };
+  if (geofenceRadiusMi != null) data.geofenceRadiusMi = geofenceRadiusMi;
+  if (searchRadiusMi != null) data.searchRadiusMi = searchRadiusMi;
   try {
     const { error: aErr } = await sb.from('areas').insert({ id, data });
     // A duplicate id means the stub (or a curated area) already exists — link to it.

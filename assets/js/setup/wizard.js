@@ -10,6 +10,7 @@ import { stepCompleteness, overallCompleteness, fieldValue } from './completenes
 import { makeAutosaver, getNested, setNested } from './autosave.js';
 import { focusFirst, announce, updateProgress } from './a11y.js';
 import { debouncedLookup, selectPlace } from '../areas/place-lookup.js';
+import { isFetchEligible } from '../areas/area-enrich.js';
 
 const BLOBS = ['profile', 'criteria', 'finances', 'goals'];
 const coerce = (type, raw) => {
@@ -245,7 +246,9 @@ export function createWizard(root, { state, accessors, areaApi, onFinish }) {
             input.value = ''; clear(results); paintChosen(); refreshGateUI();
             status.textContent = res.action === 'linked'
               ? `Linked to our researched area: ${a.name}.`
-              : `Added ${a.name} — we’ll enrich it later.`;
+              : isFetchEligible(res.area)
+                ? `Added ${a.name} — it’s now included in your next property search.`
+                : `Added ${a.name} — we’ll finish locating it shortly.`;
           } else {
             status.textContent = 'Could not add that place — please try again.';
           }

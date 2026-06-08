@@ -7,19 +7,21 @@
 // and importable from any tile/page. This is the ONE place that decides what an area
 // reference looks like; components must not re-derive name/town or hard-filter on
 // `active:true` to decide whether to SHOW a household-selected area.
+import { isFetchEligible } from './area-enrich.js';
 
-// A household-onboarding stub is "pending": it was provisionally added by the user
-// (source='household-onboarding'), is not yet in the fetch catchment (active:false),
-// and carries an early research status. We treat ANY of those as pending so a stub is
-// never mistaken for a live, fetchable area. `active===false` always wins (an area the
-// pipeline has pruned is not fetchable, regardless of source); when `active` is absent
-// we fall back to the research status. A curated area (active!==false) is live even at
-// `partial` status, matching "curated & fetchable".
+// A household-onboarding stub starts "pending" (provisionally added, not yet
+// located) but becomes LIVE the moment postcodes.io has accurately located it —
+// coords + a derivable outcode + county confirmed (isFetchEligible) — because it is
+// then included in the very next Rightmove run despite active:false. An un-enriched
+// stub, or one flagged for a county mismatch, stays pending ("Researching") until it
+// is located/confirmed. For NON-household areas the prior rule holds: `active===false`
+// (a pipeline-pruned curated area) is pending; when `active` is absent we fall back to
+// the research status; a curated area (active!==false) is live even at `partial`.
 const _STUB_STATUSES = new Set(['directory', 'stub', 'drafted', 'partial']);
 
 export function isPendingArea(area) {
   if (!area) return false;
-  if (area.source === 'household-onboarding') return true;
+  if (area.source === 'household-onboarding') return !isFetchEligible(area);
   if (area.active === false) return true;
   if (area.active == null && _STUB_STATUSES.has(area.status)) return true;
   return false;
