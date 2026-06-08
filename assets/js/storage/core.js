@@ -212,5 +212,11 @@ const _writeLocalEnhanced = (k, v) => {
 
 export const _internal = { key, readLocal, writeLocal: _writeLocalEnhanced, removeLocal };
 
+// hasRealUserData — true only when a blob is a populated, non-sample row.
+// A fresh household with no Supabase row gets the redacted `_SAMPLE` fixture
+// seeded into cache by _get(); callers use this to tell "real data" apart from
+// that placeholder (profile data-guard, wizard resume path). See CLAUDE.md §18.
+export const hasRealUserData = (b) => !!b && !b._SAMPLE;
+
 // Internal helpers shared with sibling storage modules (not part of the public surface).
 export { readLocal, writeLocal, removeLocal, _initSb, _getHid, _toast, _sbGet, _sbUpsert, _get, _save, _normShortlist };

@@ -3,7 +3,7 @@
 // 45-function public surface so no page/module import needs to change. Per §16/§17,
 // storage.js is split behind a byte-identical shim, never rewritten — the localStorage +
 // Supabase write-through behaviour is unchanged; only the file layout moved.
-export { getCurrentUser, signOut, _internal } from './storage/core.js';
+export { getCurrentUser, signOut, _internal, hasRealUserData } from './storage/core.js';
 export * from './storage/user-state.js';
 export * from './storage/listings.js';
 export * from './storage/outreach.js';

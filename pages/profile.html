@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending');document.documentElement.setAttribute('data-profile-state','pending')</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Profile · GR</title>
+  <title>Your Profile · GR</title>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
@@ -15,94 +16,265 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <div data-include="../components/header.html"></div>
-  <div data-include="../components/nav.html"></div>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
 
-  <main id="main" class="container" data-page="profile-detail">
-    <div class="page-head">
-      <h1>Your profile</h1>
-      <p class="muted">Single source of truth for your mortgage application. Loaded from your secure Supabase database.</p>
+  <main id="main" class="container">
+    <header class="page-head">
+      <p class="eyebrow">Your profile</p>
+      <h1>Your Profile</h1>
+      <p class="lead">Single source of truth for your search and your mortgage application — who&rsquo;s buying, the full application detail, and the filters that cut a portal listing in or out. Loaded from your secure Supabase database.</p>
+    </header>
+
+    <div class="about-layout">
+      <nav class="about-toc" aria-label="On this page">
+        <ol>
+          <li><a href="#profile">About you</a></li>
+          <li><a href="#detail">Application detail</a></li>
+          <li><a href="#search">Search criteria</a></li>
+        </ol>
+      </nav>
+
+      <div>
+        <!-- ============================== ABOUT YOU =============================== -->
+        <section class="about-section" id="profile" data-page="profile" aria-labelledby="h-about">
+          <header class="section-head">
+            <div>
+              <h2 id="h-about">About you <span class="chip" id="p-overlay-badge" hidden>Local edits</span></h2>
+            </div>
+            <div class="page-actions">
+              <button id="p-btn-edit">Edit profile</button>
+            </div>
+          </header>
+
+          <dl class="stat-strip" aria-label="Headline figures">
+            <div><dt>Max property</dt> <dd class="num" id="tile-budget">—</dd></div>
+            <div><dt>Deposit target</dt><dd class="num" id="tile-deposit">—</dd></div>
+            <div><dt>Saved to date</dt><dd class="num" id="tile-saved">—</dd></div>
+            <div><dt>Moving window</dt><dd class="is-text" id="tile-window">—</dd></div>
+          </dl>
+
+          <p class="status-line" id="p-status" aria-live="polite"></p>
+          <p class="lead" id="headline-lead" hidden></p>
+
+          <article class="article" id="article-view" aria-label="Profile sections">
+            <section class="article-section" id="sec-buyer">
+              <h3>Who&rsquo;s buying</h3>
+              <dl class="field-list" id="dl-buyer"></dl>
+            </section>
+            <section class="article-section" id="sec-lifestyle">
+              <h3>How we want to live</h3>
+              <dl class="field-list" id="dl-lifestyle"></dl>
+            </section>
+            <section class="article-section" id="sec-priorities">
+              <h3>Priorities</h3>
+              <ul class="chip-grid" id="chips-priorities"></ul>
+            </section>
+            <section class="article-section" id="sec-dealbreakers">
+              <h3>Deal-breakers</h3>
+              <ul class="chip-grid" id="chips-dealbreakers"></ul>
+            </section>
+            <section class="article-section" id="sec-notes">
+              <h3>Notes</h3>
+              <p class="prose" id="p-notes"></p>
+            </section>
+          </article>
+
+          <dialog id="edit-dialog" aria-labelledby="edit-title">
+            <article>
+              <header class="dialog-head">
+                <h2 id="edit-title">Edit profile</h2>
+                <button type="button" class="outline secondary" id="dlg-close" aria-label="Close">Cancel</button>
+              </header>
+              <form id="edit-form" method="dialog">
+                <div id="edit-fields"></div>
+              </form>
+              <footer class="dialog-foot">
+                <button type="button" class="outline secondary" id="p-btn-reset">Reset to defaults</button>
+                <button type="button" id="p-btn-save">Save</button>
+              </footer>
+            </article>
+          </dialog>
+        </section>
+
+        <!-- =========================== APPLICATION DETAIL ========================== -->
+        <section class="about-section" id="detail" data-page="profile-detail" aria-labelledby="h-detail">
+          <header class="section-head">
+            <div>
+              <h2 id="h-detail">Application detail</h2>
+              <p class="muted">The full record your mortgage application draws on. Loaded from your secure Supabase database.</p>
+            </div>
+          </header>
+
+          <!-- Person -->
+          <section class="profile-section card" aria-labelledby="ps-person">
+            <h3 id="ps-person">Personal details</h3>
+            <dl class="profile-dl" id="dl-person">
+              <div class="field-view"><dt>Full name</dt><dd id="p-name">—</dd></div>
+              <div class="field-view"><dt>Date of birth</dt><dd id="p-dob">—</dd></div>
+              <div class="field-view"><dt>Email</dt><dd id="p-email">—</dd></div>
+              <div class="field-view"><dt>Address</dt><dd id="p-address">—</dd></div>
+              <div class="field-view"><dt>Nationality</dt><dd id="p-nationality">—</dd></div>
+              <div class="field-view"><dt>Living arrangement</dt><dd id="p-living">—</dd></div>
+              <div class="field-view"><dt>Dependents</dt><dd id="p-dependents">—</dd></div>
+              <div class="field-view"><dt>Monthly household contribution</dt><dd id="p-contribution">—</dd></div>
+            </dl>
+          </section>
+
+          <!-- Things to check -->
+          <section class="profile-section card" aria-labelledby="ps-checklist">
+            <h3 id="ps-checklist">Things to check before applying</h3>
+            <p class="muted">Items surfaced from <code>_followUp</code> notes in your profile data.</p>
+            <ul class="followup-list" id="p-followup-list" aria-label="Items to action before mortgage application">
+              <li class="muted">Loading&hellip;</li>
+            </ul>
+          </section>
+
+          <!-- Employment -->
+          <section class="profile-section card" aria-labelledby="ps-employment">
+            <h3 id="ps-employment">Employment</h3>
+            <dl class="profile-dl" id="dl-employment">
+              <div class="field-view"><dt>Employer</dt><dd id="p-employer">—</dd></div>
+              <div class="field-view"><dt>Role</dt><dd id="p-role">—</dd></div>
+              <div class="field-view"><dt>Start date</dt><dd id="p-startdate">—</dd></div>
+              <div class="field-view"><dt>Type</dt><dd id="p-emptype">—</dd></div>
+              <div class="field-view"><dt>Probation</dt><dd id="p-probation">—</dd></div>
+              <div class="field-view"><dt>Work pattern</dt><dd id="p-workpattern">—</dd></div>
+              <div class="field-view"><dt>Job stability</dt><dd id="p-stability">—</dd></div>
+              <div class="field-view"><dt>Years in field</dt><dd id="p-yearsfield">—</dd></div>
+            </dl>
+          </section>
+
+          <!-- Credit -->
+          <section class="profile-section card" aria-labelledby="ps-credit">
+            <h3 id="ps-credit">Credit profile</h3>
+            <p class="muted" id="p-credit-note"></p>
+            <dl class="profile-dl" id="dl-credit">
+              <div class="field-view"><dt>Experian score</dt><dd id="p-experian">—</dd></div>
+              <div class="field-view"><dt>Equifax score</dt><dd id="p-equifax">—</dd></div>
+              <div class="field-view"><dt>TransUnion score</dt><dd id="p-transunion">—</dd></div>
+              <div class="field-view"><dt>On electoral roll</dt><dd id="p-electoral">—</dd></div>
+              <div class="field-view"><dt>Adverse history</dt><dd id="p-adverse">—</dd></div>
+            </dl>
+          </section>
+
+          <!-- Debts -->
+          <section class="profile-section card" aria-labelledby="ps-debts">
+            <h3 id="ps-debts">Debts</h3>
+            <dl class="profile-dl" id="dl-debts">
+              <div class="field-view"><dt>Credit cards</dt><dd id="p-creditcards">—</dd></div>
+              <div class="field-view"><dt>Student loan</dt><dd id="p-studentloan">—</dd></div>
+              <div class="field-view"><dt>Car finance</dt><dd id="p-carfinance">—</dd></div>
+              <div class="field-view"><dt>Regular overdraft</dt><dd id="p-overdraft">—</dd></div>
+            </dl>
+          </section>
+
+          <!-- Pension -->
+          <section class="profile-section card" aria-labelledby="ps-pension">
+            <h3 id="ps-pension">Pension</h3>
+            <dl class="profile-dl" id="dl-pension">
+              <div class="field-view"><dt>Status</dt><dd id="p-pension-status">—</dd></div>
+              <div class="field-view"><dt>Employee contribution</dt><dd id="p-pension-ee">—</dd></div>
+              <div class="field-view"><dt>Employer contribution</dt><dd id="p-pension-er">—</dd></div>
+              <div class="field-view"><dt>Current pot value</dt><dd id="p-pension-pot">—</dd></div>
+            </dl>
+          </section>
+        </section>
+
+        <!-- ============================ SEARCH CRITERIA =========================== -->
+        <section class="about-section" id="search" data-page="criteria" aria-labelledby="h-search">
+          <header class="section-head has-actions">
+            <div>
+              <h2 id="h-search">Search criteria <span class="chip" id="overlay-badge" hidden>Local edits</span></h2>
+              <p class="muted">Must-haves vs nice-to-haves, property types, budget, mortgage assumptions.</p>
+            </div>
+            <div class="page-actions">
+              <button id="btn-edit">Edit</button>
+              <button id="btn-save" hidden>Save</button>
+              <button id="btn-cancel" class="secondary" hidden>Cancel</button>
+              <button id="btn-reset" class="outline secondary" hidden>Reset to defaults</button>
+            </div>
+          </header>
+
+          <p class="muted status-line" id="status" aria-live="polite"></p>
+
+          <section class="tiles" aria-label="Key figures">
+            <div class="tile">
+              <p class="tile-label">Max property price</p>
+              <p class="tile-value accent" id="tile-max-price">—</p>
+              <p class="tile-sub">budget</p>
+            </div>
+            <div class="tile">
+              <p class="tile-label">Min bedrooms</p>
+              <p class="tile-value" id="tile-min-beds">—</p>
+              <p class="tile-sub">requirement</p>
+            </div>
+            <div class="tile">
+              <p class="tile-label">Must-haves</p>
+              <p class="tile-value" id="tile-must-count">0</p>
+              <p class="tile-sub">priorities</p>
+            </div>
+            <div class="tile">
+              <p class="tile-label">Nice-to-haves</p>
+              <p class="tile-value" id="tile-nice-count">0</p>
+              <p class="tile-sub">weighted</p>
+            </div>
+          </section>
+
+          <div class="dash-grid">
+            <section class="card span-6" id="card-budget"></section>
+            <section class="card span-6" id="card-size"></section>
+            <section class="card span-6" id="card-types"></section>
+            <section class="card span-6" id="card-tenure"></section>
+            <section class="card span-6" id="card-features"></section>
+            <section class="card span-6" id="card-condition"></section>
+            <section class="card span-6" id="card-freshness"></section>
+            <section class="card span-6" id="card-keywords"></section>
+            <section class="card span-6" id="card-mortgage"></section>
+            <section class="card span-12" id="card-priorities"></section>
+          </div>
+        </section>
+      </div>
     </div>
 
-    <!-- Person -->
-    <section class="profile-section card" aria-labelledby="ps-person">
-      <h2 id="ps-person">Personal details</h2>
-      <dl class="profile-dl" id="dl-person">
-        <div class="field-view"><dt>Full name</dt><dd id="p-name">—</dd></div>
-        <div class="field-view"><dt>Date of birth</dt><dd id="p-dob">—</dd></div>
-        <div class="field-view"><dt>Email</dt><dd id="p-email">—</dd></div>
-        <div class="field-view"><dt>Address</dt><dd id="p-address">—</dd></div>
-        <div class="field-view"><dt>Nationality</dt><dd id="p-nationality">—</dd></div>
-        <div class="field-view"><dt>Living arrangement</dt><dd id="p-living">—</dd></div>
-        <div class="field-view"><dt>Dependents</dt><dd id="p-dependents">—</dd></div>
-        <div class="field-view"><dt>Monthly household contribution</dt><dd id="p-contribution">—</dd></div>
-      </dl>
-    </section>
+    <p class="cell-foot mt-4"><a data-nav="pages/areas.html">Browse matching areas &rarr;</a></p>
 
-    <!-- v3: Things to check (promoted to rank 2 — shows actions before known data) -->
-    <section class="profile-section card" aria-labelledby="ps-checklist">
-      <h2 id="ps-checklist">Things to check before applying</h2>
-      <p class="muted">Items surfaced from <code>_followUp</code> notes in your profile data.</p>
-      <ul class="followup-list" id="p-followup-list" aria-label="Items to action before mortgage application">
-        <li class="muted">Loading&hellip;</li>
-      </ul>
-    </section>
-
-    <!-- Employment -->
-    <section class="profile-section card" aria-labelledby="ps-employment">
-      <h2 id="ps-employment">Employment</h2>
-      <dl class="profile-dl" id="dl-employment">
-        <div class="field-view"><dt>Employer</dt><dd id="p-employer">—</dd></div>
-        <div class="field-view"><dt>Role</dt><dd id="p-role">—</dd></div>
-        <div class="field-view"><dt>Start date</dt><dd id="p-startdate">—</dd></div>
-        <div class="field-view"><dt>Type</dt><dd id="p-emptype">—</dd></div>
-        <div class="field-view"><dt>Probation</dt><dd id="p-probation">—</dd></div>
-        <div class="field-view"><dt>Work pattern</dt><dd id="p-workpattern">—</dd></div>
-        <div class="field-view"><dt>Job stability</dt><dd id="p-stability">—</dd></div>
-        <div class="field-view"><dt>Years in field</dt><dd id="p-yearsfield">—</dd></div>
-      </dl>
-    </section>
-
-    <!-- Credit -->
-    <section class="profile-section card" aria-labelledby="ps-credit">
-      <h2 id="ps-credit">Credit profile</h2>
-      <p class="muted" id="p-credit-note"></p>
-      <dl class="profile-dl" id="dl-credit">
-        <div class="field-view"><dt>Experian score</dt><dd id="p-experian">—</dd></div>
-        <div class="field-view"><dt>Equifax score</dt><dd id="p-equifax">—</dd></div>
-        <div class="field-view"><dt>TransUnion score</dt><dd id="p-transunion">—</dd></div>
-        <div class="field-view"><dt>On electoral roll</dt><dd id="p-electoral">—</dd></div>
-        <div class="field-view"><dt>Adverse history</dt><dd id="p-adverse">—</dd></div>
-      </dl>
-    </section>
-
-    <!-- Debts -->
-    <section class="profile-section card" aria-labelledby="ps-debts">
-      <h2 id="ps-debts">Debts</h2>
-      <dl class="profile-dl" id="dl-debts">
-        <div class="field-view"><dt>Credit cards</dt><dd id="p-creditcards">—</dd></div>
-        <div class="field-view"><dt>Student loan</dt><dd id="p-studentloan">—</dd></div>
-        <div class="field-view"><dt>Car finance</dt><dd id="p-carfinance">—</dd></div>
-        <div class="field-view"><dt>Regular overdraft</dt><dd id="p-overdraft">—</dd></div>
-      </dl>
-    </section>
-
-    <!-- Pension -->
-    <section class="profile-section card" aria-labelledby="ps-pension">
-      <h2 id="ps-pension">Pension</h2>
-      <dl class="profile-dl" id="dl-pension">
-        <div class="field-view"><dt>Status</dt><dd id="p-pension-status">—</dd></div>
-        <div class="field-view"><dt>Employee contribution</dt><dd id="p-pension-ee">—</dd></div>
-        <div class="field-view"><dt>Employer contribution</dt><dd id="p-pension-er">—</dd></div>
-        <div class="field-view"><dt>Current pot value</dt><dd id="p-pension-pot">—</dd></div>
-      </dl>
-    </section>
-
+    <div class="criteria-save-bar" aria-hidden="false">
+      <span class="criteria-save-status">Editing — unsaved changes are kept locally on Save.</span>
+      <button type="button" class="secondary" id="save-bar-cancel">Cancel</button>
+      <button type="button" id="save-bar-save">Save</button>
+    </div>
   </main>
 
-  <div data-include="../components/footer.html"></div>
-
+  <div data-include="components/footer.html"></div>
   <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-profile.js"></script>
+  <script type="module" src="../assets/js/page-criteria.js"></script>
   <script type="module" src="../assets/js/page-profile-detail.js"></script>
+  <script type="module" src="../assets/js/page-profile-page.js"></script>
+  <script>
+    // Highlight current TOC entry on scroll.
+    (() => {
+      const links = document.querySelectorAll('.about-toc a');
+      const map = new Map();
+      links.forEach((a) => {
+        const id = a.getAttribute('href').slice(1);
+        const sec = document.getElementById(id);
+        if (sec) map.set(sec, a);
+      });
+      if (!map.size) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          const a = map.get(e.target);
+          if (!a) return;
+          if (e.isIntersecting) {
+            links.forEach((x) => x.removeAttribute('aria-current'));
+            a.setAttribute('aria-current', 'true');
+          }
+        });
+      }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+      map.forEach((_a, sec) => io.observe(sec));
+    })();
+  </script>
 </body>
 </html>
