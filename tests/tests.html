@@ -43,8 +43,8 @@
     await test('url() resolves data path', () => assert(url('data/areas.json').endsWith('/data/areas.json')));
 
     // --- data load + schema ---
-    await test('profile.json loads & valid', async () => { const e = schema.validateProfile(await loadJSON('profile')); assert(e.length === 0, e.join('; ')); });
-    await test('criteria.json loads & valid', async () => { const e = schema.validateCriteria(await loadJSON('criteria')); assert(e.length === 0, e.join('; ')); });
+    await test('profile sample loads & valid', async () => { const e = schema.validateProfile(await loadJSON('fixtures/profile.sample')); assert(e.length === 0, e.join('; ')); });
+    await test('criteria sample loads & valid', async () => { const e = schema.validateCriteria(await loadJSON('fixtures/criteria.sample')); assert(e.length === 0, e.join('; ')); });
     await test('areas.json loads & valid', async () => { const e = schema.validateAreas(await loadJSON('areas')); assert(e.length === 0, e.join('; ')); });
     await test('per-area detail files load & valid (sampled + all "researched")', async () => {
       const index = await loadJSON('areas');
@@ -64,7 +64,7 @@
       assert(errs.length === 0, errs.join('; '));
     });
     await test('house-types.json loads & valid', async () => { const e = schema.validateHouseTypes(await loadJSON('house-types')); assert(e.length === 0, e.join('; ')); });
-    await test('finances.json loads & valid', async () => { const e = schema.validateFinances(await loadJSON('finances')); assert(e.length === 0, e.join('; ')); });
+    await test('finances sample loads & valid', async () => { const e = schema.validateFinances(await loadJSON('fixtures/finances.sample')); assert(e.length === 0, e.join('; ')); });
     await test('checklists.json loads & valid', async () => { const e = schema.validateChecklists(await loadJSON('checklists')); assert(e.length === 0, e.join('; ')); });
 
     // --- partials reachable ---
@@ -76,7 +76,7 @@
     // inline-style, <style>-block and horizontal-scroll smoke tests below all
     // iterate this list.
     const ALL_PAGES = [
-      'index.html', 'pages/about-search.html', 'pages/profile.html', 'pages/criteria.html',
+      'index.html', 'pages/profile.html',
       'pages/areas.html', 'pages/area-detail.html',
       'pages/journey.html', 'pages/finances.html',
       'pages/listings.html', 'pages/saved-listings.html', 'pages/property.html', 'pages/outreach.html',
@@ -248,14 +248,14 @@
     // Derived WITH investments so totals reflect the user's reality: cash + ISA earmark.
     // Gift cards are NOT in totalSavings (they aren't deposit-eligible) — tracked
     // separately as giftCardsTotal.
-    const rawFinances = await loadJSON('finances');
+    const rawFinances = await loadJSON('fixtures/finances.sample');
     let rawInvestments = null;
-    try { rawInvestments = await loadJSON('investments'); } catch { /* optional */ }
+    try { rawInvestments = await loadJSON('fixtures/investments.sample'); } catch { /* optional */ }
     const fixtures = {
       finances: deriveFinances(rawFinances, { investments: rawInvestments }),
       rawFinances,
       investments: rawInvestments,
-      criteria: await loadJSON('criteria'),
+      criteria: await loadJSON('fixtures/criteria.sample'),
     };
     await registerFinanceDerive({ test, assert, assertEqual, fixtures });
     await registerAffordability({ test, assert, assertEqual, fixtures });

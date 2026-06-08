@@ -1,6 +1,5 @@
 // page-criteria.js — render the editable search criteria form with all filters.
 import { getCriteria, saveCriteria, _internal } from './storage.js';
-import { loadJSON } from './data-loader.js';
 import { esc, byId } from './dom.js';
 import { gbp, listView, listEdit, fieldView, fieldEdit, setNestedValue } from './criteria/form.js';
 
@@ -347,9 +346,9 @@ function saveEdit() {
 }
 
 async function resetToDefaults() {
-  if (!confirm('Reset criteria to the repo defaults? Your local edits will be cleared.')) return;
+  if (!confirm('Discard local criteria edits and reload from your saved data? This cannot be undone.')) return;
   localStorage.removeItem('rec:criteria');
-  current = await loadJSON('criteria');
+  current = await getCriteria();
   renderAll();
   setStatus('Reset to repo defaults.', 'ok');
 }

@@ -2,7 +2,6 @@
 // Read view = article sections with field lists + chip grids.
 // Edit = native <dialog> with all fields, save persists via storage.js.
 import { getProfile, saveProfile, getCriteria, getFinances, _internal } from './storage.js';
-import { loadJSON } from './data-loader.js';
 import { esc, byId } from './dom.js';
 
 const gbp = (n) => new Intl.NumberFormat('en-GB', {
@@ -178,9 +177,9 @@ async function saveEdit() {
 }
 
 async function resetToDefaults() {
-  if (!confirm('Reset profile to the repo defaults? Your local edits will be cleared.')) return;
+  if (!confirm('Discard local profile edits and reload from your saved data? This cannot be undone.')) return;
   localStorage.removeItem('rec:profile');
-  current = await loadJSON('profile');
+  current = await getProfile();
   closeEdit();
   renderAll();
   const fin = await getFinances();

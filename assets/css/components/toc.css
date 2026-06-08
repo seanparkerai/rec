@@ -1,6 +1,6 @@
 /* components/toc.css — editorial spine + in-page table of contents.
    Stripe-docs anchor. Two consumers:
-     - pages/about-search.html (.about-layout / .about-toc / .about-section)
+     - pages/profile.html      (.about-layout / .about-toc / .about-section)
      - pages/area-detail.html  (.area-layout / .area-toc / .article-section)
    Class names are preserved from their original page-level <style> blocks so
    the TOC active-link scripts (querySelectorAll('.about-toc a' / '.area-toc a'))
@@ -8,7 +8,7 @@
    Mobile-first: a horizontal scrollable chip row by default, becoming a sticky
    vertical spine from laptop (1024) up. */
 
-/* ---- about-search ---------------------------------------------------- */
+/* ---- profile (.about-* class names preserved) ------------------------- */
 .about-layout { display: grid; gap: var(--space-6); }
 .about-toc {
   overflow-x: auto; -webkit-overflow-scrolling: touch;

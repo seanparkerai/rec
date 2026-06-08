@@ -728,7 +728,7 @@ async function render() {
           el('p', { class: 'conflict-prompt__hint' }, c.suggestion),
         ]),
         el('div', { class: 'conflict-prompt__actions' }, [
-          el('a', { class: 'conflict-prompt__adjust', href: `${url('pages/about-search.html')}#search` }, 'Adjust criteria →'),
+          el('a', { class: 'conflict-prompt__adjust', href: `${url('pages/profile.html')}#search` }, 'Adjust criteria →'),
           dismiss,
         ]),
       ]));

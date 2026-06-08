@@ -1,5 +1,5 @@
 /* components/save-bar.css — sticky bottom save bar for inline edit modes.
-   Toggled by [data-editing-criteria] on <html>. Used by pages/about-search.html.
+   Toggled by [data-editing-criteria] on <html>. Used by the criteria section of pages/profile.html.
    Class names preserved from the original page <style> block. */
 [data-editing-criteria] body { padding-bottom: 6rem; }
 .criteria-save-bar {

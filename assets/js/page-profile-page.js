@@ -1,5 +1,5 @@
 // page-profile-page.js — coordinator for the unified "Your Profile" page.
-// Replaces the old page-about-search.js save-bar proxy and adds the data-guard.
+// Replaces the previous save-bar proxy module and adds the data-guard.
 //
 // 1. Data-guard (runs before render): an empty household — no Supabase row, so
 //    getProfile() returns the redacted `_SAMPLE` fixture (or null) — is routed to
@@ -8,7 +8,7 @@
 //    <head> script, mirroring auth-guard.js); this module clears it once a populated
 //    household is confirmed, or navigates away to setup before anything is visible.
 // 2. Save-bar proxy: the sticky bottom bar delegates to the criteria section's own
-//    Cancel/Save buttons (as page-about-search.js did).
+//    Cancel/Save buttons (preserving the prior save-bar proxy behaviour).
 import { getProfile, hasRealUserData } from './storage.js';
 import { url } from './config.js';
 import { byId, on } from './dom.js';
