@@ -1,6 +1,6 @@
 import { assessAffordability } from '../affordability.js';
 import { gbp } from '../format.js';
-import { getShortlist, getAreas } from '../storage.js';
+import { getShortlist, getHouseholdAreas } from '../storage.js';
 import { esc, byId as $, setText } from '../dom.js';
 
 function fitDotClass(verdict) {
@@ -22,7 +22,7 @@ function priceFor(area) {
 export async function renderShortlist(financesData, criteria) {
   try {
     const shortlist = await getShortlist();
-    const areas = await getAreas();
+    const areas = await getHouseholdAreas();
     const items = shortlist.length
       ? areas.filter((a) => shortlist.includes(a.id))
       : areas.slice(0, 5);

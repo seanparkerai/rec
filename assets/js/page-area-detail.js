@@ -1,5 +1,5 @@
 // page-area-detail.js — renders a single area by ?id=, using the 9-category framework.
-import { getAreas, getAreaDetail, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
+import { getAreaCatalog, getAreaDetail, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
 import { url } from './config.js';
 import { gbp } from './format.js';
 import { assessAffordability } from './affordability.js';
@@ -333,7 +333,7 @@ async function init() {
     let a = null;
     try { a = await getAreaDetail(id); } catch (_) { /* fall through */ }
     if (!a) {
-      const areas = await getAreas();
+      const areas = await getAreaCatalog();
       a = areas.find((x) => x.id === id) || null;
     }
     if (!a) { renderNotFound(id); return; }

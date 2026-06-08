@@ -6,7 +6,7 @@
 // and a personal-status select on the shortlist record. Learned preferences
 // (using these reactions) arrive in L4.
 import {
-  getListings, getCriteria, getFinances, getAreas,
+  getListings, getCriteria, getFinances, getHouseholdAreas,
   saveListingReaction,
   getShortlistStatuses, setShortlistStatus,
   getLearnedPreferences, recomputeLearnedPreferences,
@@ -496,7 +496,7 @@ async function render() {
   if (!listEl) return;
 
   const [listings, criteria, rawFinances, areas, statuses, learned, reactionLogInit, ratings] = await Promise.all([
-    getListings({ limit: null }), getCriteria(), getFinances(), getAreas(),
+    getListings({ limit: null }), getCriteria(), getFinances(), getHouseholdAreas(),
     getShortlistStatuses(), getLearnedPreferences(), getReactionLog(),
     getListingRatings(),
   ]);

@@ -1,16 +1,151 @@
 // storage/listings.js (REFACTOR P8): content + listings + learned-prefs split from storage.js -
 // areas/house-types, reviewed marker, reports, live listings, reaction log, learned weights.
 import {
-  readLocal, writeLocal, _initSb, _getHid, _toast, _normShortlist,
+  readLocal, writeLocal, removeLocal, _initSb, _getHid, _toast, _normShortlist,
 } from './core.js';
 import { loadJSON } from '../data-loader.js';
 import { normaliseReaction, latestPerListing } from '../listings/reactions.js';
 import { deriveWeights } from '../learned-preferences.js';
+import { slugifyArea } from '../areas/area-match.js';
 
-// Read-only, repo-owned content (no Supabase — served from data/ in the repo).
-export async function getAreas()        { return await loadJSON('areas'); }
+// Re-exported on the storage surface so callers (e.g. the onboarding wizard) can
+// derive a stub id without reaching into areas/area-match.js directly.
+export { slugifyArea };
+
+// ── Area CATALOG (read-only, repo-owned content) ───────────────────────────
+// The full global catalog of area records, served from data/areas.json in the
+// repo. This is the canonical area directory + map/list source for admin views,
+// by-id lookups (area-detail), and as the resolution table for getHouseholdAreas
+// below. Per-household SELECTION lives in the household_areas table (getHouseholdAreas).
+export async function getAreaCatalog()  { return await loadJSON('areas'); }
 export async function getAreaDetail(id) { return await loadJSON(`data/areas/${id}.json`); }
 export async function getHouseTypes()   { return await loadJSON('house-types'); }
+
+// ── Per-household area SELECTION (household_areas join) ─────────────────────
+// Composes the array of area RECORDS a household has selected, in the SAME shape
+// the catalog returns, so every consumer (listings, map, property, areas page,
+// shortlist tile…) keeps working unchanged. Resolution per linked area_id:
+//   1. repo catalog (curated areas — the common case), else
+//   2. the Supabase areas.data row (a household-onboarding stub not yet in the repo).
+// Curated repo areas carry no verified/source key (they are not re-materialised),
+// so they default to verified:true / source:'curated'; stubs carry their own
+// verified:false / source:'household-onboarding'. Pipeline-owned fields
+// (id, coords, coordsSource, active, geofence/searchRadiusMi, houseTypeIds) are
+// never altered. Offline / pre-auth / no-household → falls back to the full catalog
+// so local dev + tests still render.
+const _HA_KEY = 'household-areas';
+const _withProvenance = (rec, addedVia) => ({
+  ...rec,
+  verified: rec.verified ?? true,
+  source: rec.source ?? 'curated',
+  _addedVia: addedVia,
+});
+
+async function _composeHouseholdAreas() {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return null; // no household context — caller falls back to catalog
+  const { data, error } = await sb
+    .from('household_areas')
+    .select('area_id, added_via, status')
+    .eq('household_id', hid)
+    .eq('status', 'active');
+  if (error) throw error;
+  const links = data ?? [];
+  if (links.length === 0) return [];
+  const catalog = await getAreaCatalog();
+  const byId = new Map((catalog || []).map((a) => [a.id, a]));
+  const missing = links.filter((l) => !byId.has(l.area_id)).map((l) => l.area_id);
+  const stubById = new Map();
+  if (missing.length) {
+    const { data: stubs } = await sb.from('areas').select('id, data').in('id', missing);
+    for (const r of stubs ?? []) stubById.set(r.id, { ...(r.data || {}), id: r.id });
+  }
+  const out = [];
+  for (const l of links) {
+    const rec = byId.get(l.area_id) ?? stubById.get(l.area_id);
+    if (rec) out.push(_withProvenance(rec, l.added_via));
+  }
+  return out;
+}
+
+export async function getHouseholdAreas({ onUpdate } = {}) {
+  const cached = readLocal(_HA_KEY);
+  if (cached !== null) {
+    _composeHouseholdAreas().then((fresh) => {
+      if (fresh === null) return;
+      if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
+        writeLocal(_HA_KEY, fresh);
+        if (onUpdate) onUpdate(fresh);
+      }
+    }).catch(() => {});
+    return cached;
+  }
+  let fresh = null;
+  try { fresh = await _composeHouseholdAreas(); }
+  catch (e) { console.error('storage: read household_areas', e.message); }
+  if (fresh === null) return await getAreaCatalog(); // offline / pre-auth fallback
+  writeLocal(_HA_KEY, fresh);
+  return fresh;
+}
+
+const _invalidateHouseholdAreas = () => removeLocal(_HA_KEY);
+
+// Link an EXISTING catalog area (curated or an already-created stub) to the
+// current household. Idempotent (upsert on the composite PK).
+export async function addHouseholdAreaByCatalog(area_id, added_via = 'catalog-match') {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid || !area_id) return false;
+  try {
+    const { error } = await sb.from('household_areas').upsert(
+      { household_id: hid, area_id, added_via, status: 'active' },
+      { onConflict: 'household_id,area_id' }
+    );
+    if (error) throw error;
+    _invalidateHouseholdAreas();
+    return true;
+  } catch (e) {
+    console.error('storage: addHouseholdAreaByCatalog', e.message);
+    _toast(`Sync error (areas): ${e.message}`, true);
+    return false;
+  }
+}
+
+// Create a provisional, inactive household-onboarding stub on the global catalog
+// and link it to the current household. The gated areas INSERT policy only admits
+// rows with source='household-onboarding' AND active=false, so this is the only
+// shape a member can add — the curated catalog stays read-only. If a stub with the
+// same id already exists (another household added it first), we link to it rather
+// than fail. Returns the stub record (or null on error).
+export async function createAreaStubAndLink({ name, county = null, lat = null, lng = null }) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid || !name) return null;
+  const id = slugifyArea(name, county);
+  if (!id) return null;
+  const coords = (lat != null && lng != null) ? { lat: Number(lat), lng: Number(lng) } : null;
+  const data = {
+    id, name, town: county, county, postcode: null,
+    coords, coordsSource: 'postcodes-io-provisional',
+    houseTypeIds: [], status: 'stub', active: false,
+    verified: false, source: 'household-onboarding',
+  };
+  try {
+    const { error: aErr } = await sb.from('areas').insert({ id, data });
+    // A duplicate id means the stub (or a curated area) already exists — link to it.
+    if (aErr && !/duplicate|already exists|23505/i.test(aErr.message || '')) throw aErr;
+    const { error: lErr } = await sb.from('household_areas').upsert(
+      { household_id: hid, area_id: id, added_via: 'place-lookup', status: 'active' },
+      { onConflict: 'household_id,area_id' }
+    );
+    if (lErr) throw lErr;
+    _invalidateHouseholdAreas();
+    return { ...data };
+  } catch (e) {
+    console.error('storage: createAreaStubAndLink', e.message);
+    _toast(`Sync error (area stub): ${e.message}`, true);
+    return null;
+  }
+}
+
 // ── Reviewed-listings marker (Browse collapse UX, v3 L4) ───────────────────
 // Which listings the user has SAVED/rounded-off in Browse, so reviewed cards can
 // collapse to the bottom "Reviewed (N)" section. Intentionally a LOCAL-ONLY

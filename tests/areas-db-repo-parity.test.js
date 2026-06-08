@@ -41,11 +41,19 @@ export async function register({ test, assert, assertEqual }) {
     assert(Array.isArray(snap) && snap.length > 0, 'areas snapshot is empty');
   });
 
-  const snap = existsSync(join(root, snapPath)) ? readJson(snapPath) : [];
+  // Phase 2: household-onboarding stubs (added_via='place-lookup', source
+  // 'household-onboarding', active=false) are created at RUNTIME in the live DB and are
+  // NOT materialised into the repo — they have no per-area file and are not in the
+  // snapshot. Exclude them from the DB⇄repo comparison so a member-added stub can never
+  // trip this curated-catalog parity gate (forward guard — a no-op until/unless a stub is
+  // ever materialised, since curated areas carry no `source` key).
+  const isOnboardingStub = (rec) => !!rec && rec.source === 'household-onboarding';
+  const snap = (existsSync(join(root, snapPath)) ? readJson(snapPath) : []).filter((r) => !isOnboardingStub(r));
   const snapById = new Map(snap.map((r) => [r.id, r]));
   const fileIds = readdirSync(join(root, 'data/areas'))
     .filter((f) => f.endsWith('.json'))
-    .map((f) => f.replace(/\.json$/, ''));
+    .map((f) => f.replace(/\.json$/, ''))
+    .filter((id) => !isOnboardingStub(readJson(`data/areas/${id}.json`)));
 
   test('areas-parity: every per-area file id is backed by a DB snapshot row', () => {
     const orphanFiles = fileIds.filter((id) => !snapById.has(id));
