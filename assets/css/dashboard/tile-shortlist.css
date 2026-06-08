@@ -13,3 +13,36 @@
 .tile-shortlist .shortlist-list li {
   grid-template-columns: 1.75rem 0.7rem 1fr auto;
 }
+
+/* Per-area live/pending status pill (household-scoped area refs). The TEXT label
+   ("Live" / "Researching") is the primary, non-colour-only signal (CLAUDE.md §11);
+   colour/border only reinforce it. Sits in the row's trailing `auto` column. */
+.sl-status {
+  justify-self: end;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--rec-radius-sm);
+  border: 1px solid transparent;
+  font-size: var(--text-xs);
+  line-height: 1;
+  white-space: nowrap;
+}
+.sl-status--live {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border-color: color-mix(in oklch, var(--accent) 35%, transparent);
+}
+.sl-status--pending {
+  background: var(--surface-sunken);
+  color: var(--ink-1);
+  border-color: var(--hairline-strong);
+}
+/* "N areas researching — listings coming soon" lead, shown when nothing is live. */
+.sl-note {
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+  padding-block: var(--space-1);
+}
+/* Single-cell list notes (empty / "coming soon" lead) span the full row so they
+   are not squeezed into the narrow index track of the 4-column row grid. */
+.tile-shortlist .shortlist-list .empty-note,
+.tile-shortlist .shortlist-list .sl-note { grid-column: 1 / -1; }
