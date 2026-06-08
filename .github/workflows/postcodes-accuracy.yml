@@ -1,15 +1,20 @@
 # postcodes-accuracy.yml — manual diagnostic: run the postcodes.io accuracy probe
-# from a GitHub runner (open internet, unlike the sandboxed Claude session). This is
-# a dry run of the same mechanism a future stub→curated auto-promotion job would use
-# to fetch an area's pin from postcodes.io. Read-only: hits postcodes.io, prints how
-# far the "Whiteley" answer lands from the curated ground truth, writes nothing.
+# from a GitHub runner (open internet, unlike the sandboxed Claude session). A dry
+# run of the same network + disambiguation path a future stub→curated auto-promotion
+# job would use to fetch an area's pin from postcodes.io. Read-only: hits postcodes.io,
+# measures the miss against each area's curated ground truth, writes nothing.
 #
-# Trigger: workflow_dispatch only — tap "Run workflow" in the Actions tab (or it is
-# dispatched programmatically). No schedule, no secrets.
+# Trigger: workflow_dispatch only — tap "Run workflow" in the Actions tab. No schedule,
+# no secrets. Leave "area_ids" blank to probe the default 5-area sample.
 name: postcodes.io accuracy probe
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      area_ids:
+        description: 'Space/comma-separated area ids to probe (blank = default 5-area sample)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -22,5 +27,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Probe postcodes.io accuracy for Whiteley
-        run: node tools/test-postcodes-accuracy.mjs
+      - name: Probe postcodes.io accuracy
+        run: node tools/test-postcodes-accuracy.mjs ${{ inputs.area_ids }}
