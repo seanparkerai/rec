@@ -504,6 +504,17 @@ async function render() {
   const areasById = new Map((areas || []).map((a) => [a.id, a]));
   const now = new Date();
 
+  // Household radius preference: hide listings beyond the chosen distance.
+  // Applied as a pre-filter inside paint() so it composes with the other hides
+  // (affordability gate, junk, refinements, decided) and is counted separately.
+  // Null distance_mi = pass through (not yet backfilled — don't hide it).
+  const searchRadiusMi = Number(criteria?.location?.searchRadiusMi ?? 3);
+  const passesRadiusFilter = (listing) => {
+    if (listing.distance_mi == null) return true;
+    if (searchRadiusMi === 0) return listing.geofence_pass === true;
+    return Number(listing.distance_mi) <= searchRadiusMi;
+  };
+
   // Layer 2 ⊕ Layer 3 → the effective weights fed (per-listing) into scoring.
   let overrides = learned?.overrides || {};
   let effective = effectiveWeights(learned?.derived || {}, overrides);
@@ -769,7 +780,9 @@ async function render() {
       if (summaryEl) clear(summaryEl);
       return;
     }
-    const scoredRows = listings.map((listing) => ({ listing, scored: scoreOf(listing), area: areaOf(listing) }));
+    const radiusFiltered = listings.filter(passesRadiusFilter);
+    const hiddenByRadiusCount = listings.length - radiusFiltered.length;
+    const scoredRows = radiusFiltered.map((listing) => ({ listing, scored: scoreOf(listing), area: areaOf(listing) }));
     const gated = scoredRows.filter((r) => r.scored.gated);
     // Refresh the per-listing score cache the controls read, then let the shared
     // module do the search/filter/sort (default 'fit' = score desc, recency tiebreak —
@@ -838,7 +851,7 @@ async function render() {
       hiddenRefCount,
       decidedCount,
       dupCount,
-      hiddenByFilter: Math.max(0, listings.length - visible.length - gatedCount - hiddenJunkCount - hiddenRefCount - decidedCount - dupCount),
+      hiddenByFilter: Math.max(0, listings.length - visible.length - hiddenByRadiusCount - gatedCount - hiddenJunkCount - hiddenRefCount - decidedCount - dupCount),
     };
     renderSummary();
   }
