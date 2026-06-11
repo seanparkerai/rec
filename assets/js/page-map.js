@@ -203,6 +203,7 @@ function matchedPriceForMap(area, criteria) {
 // At 0 ("village boundary only") no ring is drawn — the filter is geofence_pass based.
 function buildGeofenceLayer(areasWithCoords, shortlist, displayRadiusMi = null) {
   const accent = getCSSVar('--accent') || '#2e7d5b';
+  const paper = getCSSVar('--paper') || '#ffffff';
   const layer = L.featureGroup();
   areasWithCoords.forEach((a) => {
     if (a.active === false) return; // pruned from the fetch → not in the catchment
@@ -210,13 +211,15 @@ function buildGeofenceLayer(areasWithCoords, shortlist, displayRadiusMi = null) 
     const miles = (displayRadiusMi != null && displayRadiusMi > 0) ? displayRadiusMi : nativeMiles;
     if (miles === 0) return; // 0 mi = village boundary only; no ring to draw
     const isShort = shortlist.has(a.id);
+    const isStub = !a.status || a.status === 'stub' || a.status === 'directory';
+    const ringColor = isStub ? paper : accent;
     L.circle([a.coords.lat, a.coords.lng], {
       radius: miles * MILES_TO_M,
       interactive: false,
-      color: accent,
+      color: ringColor,
       weight: isShort ? 1.5 : 1,
       opacity: isShort ? 0.7 : 0.4,
-      fillColor: accent,
+      fillColor: ringColor,
       fillOpacity: isShort ? 0.12 : 0.06,
     }).addTo(layer);
   });
