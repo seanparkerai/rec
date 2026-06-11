@@ -220,14 +220,44 @@ const _LISTING_COLS = 'rightmove_id, url, title, address, postcode, outcode, are
 // cap) — the rows are paginated so nothing "ages out" of view as the table
 // grows past a single page. A numeric `limit` keeps the legacy capped behaviour
 // for callers (e.g. the next-best-action tile) that only want a recent sample.
-export async function getListings({ limit = 200, status = null, includeOutOfArea = false } = {}) {
+//
+// `scopeToHousehold` (default true): the `listings` table is shared, public-read
+// content keyed by `area_id` (one fetcher writes it for every household). A
+// listing therefore "belongs" to a household only when its `area_id` is one the
+// household has selected. Without this scope every household reads the whole
+// table — a brand-new user who has only just picked their areas (and whose areas
+// the fetcher hasn't run for yet) would otherwise see every other household's
+// listings instead of an empty feed. The saved view opts out (`false`) so a
+// deliberately-saved home still resolves its live row even after its area is
+// deselected.
+export async function getListings({ limit = 200, status = null, includeOutOfArea = false, scopeToHousehold = true } = {}) {
   const sb = await _initSb();
   if (!sb) return [];
+  // Resolve the household's selected area_ids. A logged-in household with no
+  // selection yet owns no listings → return []. With no household context
+  // (offline / pre-auth / local dev) we leave the scope open so tests and the
+  // signed-out shell still render, mirroring getHouseholdAreas()'s fallback.
+  let areaIds = null;
+  if (scopeToHousehold) {
+    const hid = await _getHid();
+    if (hid) {
+      const { data: links, error: laErr } = await sb
+        .from('household_areas')
+        .select('area_id')
+        .eq('household_id', hid)
+        .eq('status', 'active');
+      if (laErr) { console.error('storage: read household_areas (scope)', laErr.message); return []; }
+      areaIds = (links ?? []).map((l) => l.area_id);
+      if (areaIds.length === 0) return []; // no areas chosen → no listings belong here yet
+    }
+  }
   // Each query starts from the same base; we rebuild it per page so the filters
   // and ordering are applied consistently across the .range() window.
   const buildQuery = () => {
     let q = sb.from('listings').select(_LISTING_COLS).order('first_seen', { ascending: false });
     if (status) q = q.eq('status', status);
+    // Scope to the household's selected areas (see the doc comment above).
+    if (areaIds) q = q.in('area_id', areaIds);
     // L7: only show listings inside a target-village geofence. Exclude
     // geofence_pass === false; a null verdict (a not-yet-backfilled row) is
     // treated as pass so nothing vanishes before the backfill lands.
