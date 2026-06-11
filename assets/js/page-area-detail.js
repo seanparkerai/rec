@@ -1,5 +1,5 @@
 // page-area-detail.js — renders a single area by ?id=, using the 9-category framework.
-import { getAreaCatalog, getAreaDetail, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
+import { getAreaCatalog, getAreaDetail, getHouseholdAreas, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
 import { url } from './config.js';
 import { gbp } from './format.js';
 import { assessAffordability } from './affordability.js';
@@ -331,10 +331,22 @@ async function init() {
 
   try {
     let a = null;
+    // 1. Curated repo detail file (data/areas/<id>.json) — the common case.
     try { a = await getAreaDetail(id); } catch (_) { /* fall through */ }
+    // 2. Repo catalog index — curated areas without a full detail file.
     if (!a) {
       const areas = await getAreaCatalog();
       a = areas.find((x) => x.id === id) || null;
+    }
+    // 3. The household's own selection — a member-added stub lives ONLY in the
+    //    Supabase areas row (via household_areas), never in the repo, so it must be
+    //    resolved here or the page wrongly 404s. Renders with "research pending"
+    //    placeholders for the unwritten sections.
+    if (!a) {
+      try {
+        const household = await getHouseholdAreas();
+        a = (household || []).find((x) => x.id === id) || null;
+      } catch (_) { /* fall through to not-found */ }
     }
     if (!a) { renderNotFound(id); return; }
     await renderArea(a);

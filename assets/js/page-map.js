@@ -7,6 +7,7 @@ import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
 import { esc, byId as $ } from './dom.js';
+import { isLiveArea } from './areas/area-ref.js';
 
 const HAMPS_WILTS_CENTRE = [51.05, -1.6];
 const DEFAULT_ZOOM = 9;
@@ -193,11 +194,16 @@ function matchedPriceForMap(area, criteria) {
 
 // Build the real listings catchment: a circle of each area's geofenceRadiusMi (default
 // 3 mi) around its centre. This mirrors what the fetcher actually does — listings are
-// attributed to the nearest ACTIVE area whose geofence they fall inside
-// (tools/listings-normalise.mjs `withinGeofence`). Areas with `active:false` are pruned
-// from the fetch (tools/fetch-listings.mjs), so they are NOT part of the catchment and
-// are deliberately omitted here. Circles are non-interactive so clicks reach the markers
-// on top, and overlaps compound into a denser fill — a readable picture of coverage.
+// attributed to the nearest LIVE area whose geofence they fall inside
+// (tools/listings-normalise.mjs `withinGeofence`). INCLUSION must match the fetcher's
+// own predicate (tools/fetch-listings.mjs): a curated area is in the catchment unless
+// pipeline-pruned (`active:false`), and a household-onboarding stub is in the catchment
+// the moment it is accurately located (`isFetchEligible`) — DESPITE its mandatory
+// `active:false` (the RLS INSERT policy forces that flag on member-added stubs). So the
+// gate here is `isLiveArea`, NOT a raw `active===false` check, which previously dropped
+// every located household stub and left it ring-less. Circles are non-interactive so
+// clicks reach the markers on top, and overlaps compound into a denser fill — a readable
+// picture of coverage.
 // displayRadiusMi overrides each area's native geofenceRadiusMi with the household's
 // chosen display radius. Pass null to use per-area native radii (the default/fallback).
 // At 0 ("village boundary only") no ring is drawn — the filter is geofence_pass based.
@@ -206,7 +212,7 @@ function buildGeofenceLayer(areasWithCoords, shortlist, displayRadiusMi = null) 
   const paper = getCSSVar('--paper') || '#ffffff';
   const layer = L.featureGroup();
   areasWithCoords.forEach((a) => {
-    if (a.active === false) return; // pruned from the fetch → not in the catchment
+    if (!isLiveArea(a)) return; // not in the fetch catchment (pruned, or an un-located stub)
     const nativeMiles = Number(a.geofenceRadiusMi) > 0 ? Number(a.geofenceRadiusMi) : DEFAULT_GEOFENCE_MI;
     const miles = (displayRadiusMi != null && displayRadiusMi > 0) ? displayRadiusMi : nativeMiles;
     if (miles === 0) return; // 0 mi = village boundary only; no ring to draw
@@ -252,7 +258,7 @@ async function loadAreaMarkers() {
 
     // Geofence catchment underlay — drawn before the markers so the dots sit on top.
     geofenceLayer = buildGeofenceLayer(withCoords, shortlist, displayRadiusMi);
-    const activeGeofences = withCoords.filter((a) => a.active !== false).length;
+    const activeGeofences = withCoords.filter((a) => isLiveArea(a)).length;
     if ($('toggle-geofences')?.checked ?? true) geofenceLayer.addTo(map);
 
     const cluster = L.featureGroup();
