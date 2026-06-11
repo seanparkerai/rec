@@ -16,7 +16,7 @@
   },
   "location": {
     "areaSource": "data/areas.json (sample area directory)",
-    "searchRadiusMiles": 1
+    "searchRadiusMi": 3
   },
   "propertyTypes": ["Detached", "Bungalow", "Semi-detached", "Terraced"],
   "propertyTypePrefs": {

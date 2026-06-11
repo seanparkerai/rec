@@ -1,5 +1,5 @@
 // page-areas.js — areas directory: search, filter, sort, shortlist toggle, fit verdict.
-import { getHouseholdAreas, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
+import { getHouseholdAreas, getShortlist, saveShortlist, getFinances, getCriteria, saveCriteria } from './storage.js';
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
@@ -9,6 +9,7 @@ let areas = [];
 let shortlist = new Set();
 let finData = null;
 let criData = null;
+let searchRadiusMi = 3; // household preference; persisted via criteria.location.searchRadiusMi
 
 const state = {
   search: '',
@@ -209,6 +210,7 @@ function applyStateToControls() {
   if ($('sort')) $('sort').value = state.sort;
   if ($('filter-fit')) $('filter-fit').value = state.fit;
   if ($('only-shortlisted')) $('only-shortlisted').checked = state.onlyShortlisted;
+  if ($('search-radius')) $('search-radius').value = String(searchRadiusMi);
 }
 
 function attachControls() {
@@ -230,8 +232,20 @@ function attachControls() {
   $('sort').addEventListener('change', (e) => { state.sort = e.target.value; rerender(); });
   $('filter-fit')?.addEventListener('change', (e) => { state.fit = e.target.value; rerender(); });
   $('only-shortlisted').addEventListener('change', (e) => { state.onlyShortlisted = e.target.checked; rerender(); });
+  $('search-radius')?.addEventListener('change', async (e) => {
+    searchRadiusMi = Number(e.target.value);
+    const next = { ...(criData || {}), location: { ...(criData?.location || {}), searchRadiusMi } };
+    criData = next;
+    saveCriteria(next);
+    window.dispatchEvent(new CustomEvent('search-radius-changed', { detail: { searchRadiusMi } }));
+  });
   $('btn-clear').addEventListener('click', () => {
     Object.assign(state, URL_DEFAULTS);
+    searchRadiusMi = 3;
+    const next = { ...(criData || {}), location: { ...(criData?.location || {}), searchRadiusMi: 3 } };
+    criData = next;
+    saveCriteria(next);
+    window.dispatchEvent(new CustomEvent('search-radius-changed', { detail: { searchRadiusMi: 3 } }));
     updateSubRegions();
     applyStateToControls();
     rerender();
@@ -249,7 +263,10 @@ async function init() {
     areas = await getHouseholdAreas();
     shortlist = new Set(await getShortlist());
     try { finData = await getFinances(); } catch (e) { console.error('finances fetch', e); }
-    try { criData = await getCriteria(); } catch (e) { console.error('criteria fetch', e); }
+    try {
+      criData = await getCriteria();
+      searchRadiusMi = Number(criData?.location?.searchRadiusMi ?? 3);
+    } catch (e) { console.error('criteria fetch', e); }
     $('total-count').textContent = areas.length;
     readStateFromURL();
     populateFilters();

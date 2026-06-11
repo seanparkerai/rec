@@ -2,7 +2,7 @@
 // Renders OSM tiles, drops markers for areas with coords, exposes draw/edit/delete tools, persists
 // any drawn shapes as GeoJSON in localStorage via storage.getDrawnZones / saveDrawnZones.
 // Leaflet & Geoman are loaded via <script> tags in pages/areas.html, so we use window.L here.
-import { getHouseholdAreas, getShortlist, getDrawnZones, saveDrawnZones, getFinances, getCriteria } from './storage.js';
+import { getHouseholdAreas, getShortlist, getDrawnZones, saveDrawnZones, getFinances, getCriteria, saveCriteria } from './storage.js';
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
@@ -16,6 +16,8 @@ const DEFAULT_GEOFENCE_MI = 3;      // resolve-areas.mjs default; ≈ the 4.8 km
 let map = null;
 let drawLayer = null;
 let geofenceLayer = null;           // the real per-area listings catchment (active areas only)
+let _areasWithCoords = [];          // populated by loadAreaMarkers; used for geofence redraws
+let _shortlistSet = new Set();      // populated by loadAreaMarkers; used for geofence styling
 
 function init() {
   if (!window.L) {
@@ -196,12 +198,17 @@ function matchedPriceForMap(area, criteria) {
 // from the fetch (tools/fetch-listings.mjs), so they are NOT part of the catchment and
 // are deliberately omitted here. Circles are non-interactive so clicks reach the markers
 // on top, and overlaps compound into a denser fill — a readable picture of coverage.
-function buildGeofenceLayer(areasWithCoords, shortlist) {
+// displayRadiusMi overrides each area's native geofenceRadiusMi with the household's
+// chosen display radius. Pass null to use per-area native radii (the default/fallback).
+// At 0 ("village boundary only") no ring is drawn — the filter is geofence_pass based.
+function buildGeofenceLayer(areasWithCoords, shortlist, displayRadiusMi = null) {
   const accent = getCSSVar('--accent') || '#2e7d5b';
   const layer = L.featureGroup();
   areasWithCoords.forEach((a) => {
     if (a.active === false) return; // pruned from the fetch → not in the catchment
-    const miles = Number(a.geofenceRadiusMi) > 0 ? Number(a.geofenceRadiusMi) : DEFAULT_GEOFENCE_MI;
+    const nativeMiles = Number(a.geofenceRadiusMi) > 0 ? Number(a.geofenceRadiusMi) : DEFAULT_GEOFENCE_MI;
+    const miles = (displayRadiusMi != null && displayRadiusMi > 0) ? displayRadiusMi : nativeMiles;
+    if (miles === 0) return; // 0 mi = village boundary only; no ring to draw
     const isShort = shortlist.has(a.id);
     L.circle([a.coords.lat, a.coords.lng], {
       radius: miles * MILES_TO_M,
@@ -234,8 +241,14 @@ async function loadAreaMarkers() {
 
     const shortlist = new Set(await getShortlist());
 
+    // Populate module-level refs so the search-radius-changed listener can redraw.
+    _areasWithCoords = withCoords;
+    _shortlistSet = shortlist;
+
+    const displayRadiusMi = Number(criteria?.location?.searchRadiusMi ?? 3);
+
     // Geofence catchment underlay — drawn before the markers so the dots sit on top.
-    geofenceLayer = buildGeofenceLayer(withCoords, shortlist);
+    geofenceLayer = buildGeofenceLayer(withCoords, shortlist, displayRadiusMi);
     const activeGeofences = withCoords.filter((a) => a.active !== false).length;
     if ($('toggle-geofences')?.checked ?? true) geofenceLayer.addTo(map);
 
@@ -308,6 +321,14 @@ function wireGeofenceToggle() {
     if (!geofenceLayer || !map) return;
     if (cb.checked) geofenceLayer.addTo(map);
     else map.removeLayer(geofenceLayer);
+  });
+  // Redraw geofence rings when the household's search radius preference changes.
+  window.addEventListener('search-radius-changed', (e) => {
+    if (!map || !_areasWithCoords.length) return;
+    const newRadius = Number(e.detail?.searchRadiusMi ?? 3);
+    if (geofenceLayer) map.removeLayer(geofenceLayer);
+    geofenceLayer = buildGeofenceLayer(_areasWithCoords, _shortlistSet, newRadius);
+    if (cb.checked) geofenceLayer.addTo(map);
   });
 }
 
