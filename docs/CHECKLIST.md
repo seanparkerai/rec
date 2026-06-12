@@ -41,6 +41,25 @@ insets, and the no-horizontal-scroll / skip-link smoke tests all landed.
 
 ---
 
+## Repo organisation pass (2026-06-12) — folders & files only, no code changes
+
+- [x] Root cleanup: deleted `backups/`, `design-previews/`, `artifacts/` (one-off historical
+      artifacts; preserved in git history); `scripts/import-trading212.mjs` →
+      `tools/import-trading212.mjs` (all Node tooling now in `tools/`); `/backups/` gitignored.
+- [x] Docs: 7 completed/one-off docs moved to `docs/archive/` (JOURNEY_TIMELINE_PLAN,
+      LISTINGS_REVIEW_GROUPS_PLAN, V3_LISTINGS_PLAN, SUPABASE_MIGRATION, REFACTOR_NOTES,
+      STRICT_Codex_Prompt_Remaining_Areas, audit-notes → AUDIT_NOTES); new `docs/README.md`
+      index of the 12 live docs.
+- [x] Supabase dir: applied add-on DDL (`schema-additions` / `schema-listings` /
+      `schema-multi-reason`) moved to `supabase/archive/` (verified live via `list_tables`
+      2026-06-12); new `supabase/README.md` states `schema.sql` is reference-only and MCP
+      migration history is canonical (§18.5).
+- Out of scope by owner decision: `tests/` stays flat; runtime JS stays put
+  (`outreach-renderer.js` / `outreach-store.js` / `learned-preferences.js` into their feature
+  folders remains a possible future phase). Harness 611/611 green throughout.
+
+---
+
 ## Listings reaction-save fix (2026-06-05) — reaction-log truncation
 Root cause: `listing_reactions` is append-only (3,631 rows live); `getReactionLog()` read it
 with no `ORDER BY`/pagination, so Supabase returned only the oldest ~1,000 rows. Result: 26 of

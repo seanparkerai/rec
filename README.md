@@ -77,6 +77,8 @@ Supabase, recomputed from the reaction log.
 
 ## Project docs
 
+Full index of live docs: [`docs/README.md`](docs/README.md). Highlights:
+
 - `docs/PLAN.md` — the master development plan.
 - `docs/CHECKLIST.md` — live progress tracker.
 - `docs/CONTEXT.md` — research context (UK buying process, tech choices, regional info).
