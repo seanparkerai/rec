@@ -52,6 +52,8 @@ const { register: registerListingsNormalise } = await import('../tests/listings-
 const { register: registerListingsClassify } = await import('../tests/listings-classify.test.js');
 const { register: registerListingsSuppress } = await import('../tests/listings-suppress.test.js');
 const { register: registerListingsFeedSuppression } = await import('../tests/listings-feed-suppression.test.js');
+const { register: registerListingsFeedPartition } = await import('../tests/listings-feed-partition.test.js');
+const { register: registerListingsPickerState } = await import('../tests/listings-picker-state.test.js');
 const { register: registerPurgeListings } = await import('../tests/purge-listings.test.js');
 const { register: registerVerifyAreaCoords } = await import('../tests/verify-area-coords.test.js');
 const { register: registerBackfillGeofence } = await import('../tests/backfill-geofence.test.js');
@@ -105,6 +107,8 @@ await registerListingsNormalise({ test, assert, assertEqual, fixtures });
 await registerListingsClassify({ test, assert, assertEqual });
 await registerListingsSuppress({ test, assert, assertEqual });
 await registerListingsFeedSuppression({ test, assert, assertEqual });
+await registerListingsFeedPartition({ test, assert, assertEqual });
+await registerListingsPickerState({ test, assert, assertEqual });
 await registerPurgeListings({ test, assert, assertEqual });
 await registerVerifyAreaCoords({ test, assert, assertEqual, fixtures });
 await registerBackfillGeofence({ test, assert, assertEqual, fixtures });
