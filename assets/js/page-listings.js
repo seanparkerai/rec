@@ -781,9 +781,18 @@ async function render() {
     if (retraining) { scheduleRetrain(); return; }
     retraining = true;
     try {
+      // One paged fetch per retrain: the recompute returns the log it trained on,
+      // so the conflict detector reuses those rows instead of re-fetching the
+      // whole table a second time (P11b).
       const res = await recomputeLearnedPreferences({ now: new Date() });
-      if (res) { overrides = res.overrides || {}; effective = effectiveWeights(res.derived || {}, overrides); dismissals = res.dismissals || dismissals; hiddenRules = hiddenRulesFromOverrides(overrides); scoreCache.clear(); }
-      reactionLog = await getReactionLog();
+      if (res) {
+        overrides = res.overrides || {};
+        effective = effectiveWeights(res.derived || {}, overrides);
+        dismissals = res.dismissals || dismissals;
+        hiddenRules = hiddenRulesFromOverrides(overrides);
+        scoreCache.clear();
+        reactionLog = res.log || reactionLog;
+      }
     } catch { /* surfaced via storage toast */ }
     retraining = false;
     updateLearning();
