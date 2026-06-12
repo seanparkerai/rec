@@ -531,8 +531,11 @@ export async function dismissConflict(key, dismissedUntil) {
 
 // Recompute path: read the full append-only reaction log (with snapshots), run
 // the pure deriveWeights(), persist the new `derived`, PRESERVE `overrides`.
-// Returns the fresh { derived, overrides } so callers re-rank immediately.
-export async function recomputeLearnedPreferences({ now } = {}) {
+// Returns the fresh { derived, overrides, dismissals, log } so callers re-rank
+// immediately AND reuse the rows it trained on (the log) without a second paged
+// refetch of the whole table. A caller that already holds a fresh full log may
+// pass it as `log` to skip the internal fetch entirely (P11b, additive).
+export async function recomputeLearnedPreferences({ now, log = null } = {}) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return null;
   let rows = [];
@@ -541,7 +544,7 @@ export async function recomputeLearnedPreferences({ now } = {}) {
     // Paged: deriveWeights() must train on the WHOLE append-only log, not the
     // oldest ~1000 rows a single select would return.
     const [reactRows, slRes] = await Promise.all([
-      _fetchAllReactionRows(sb, hid, {
+      Array.isArray(log) ? log : _fetchAllReactionRows(sb, hid, {
         select: 'id, listing_id, reaction, reason, reasons, created_at, listing_snapshot',
         ascending: true,
       }),
@@ -562,5 +565,5 @@ export async function recomputeLearnedPreferences({ now } = {}) {
   const overrides = existing.overrides ?? {};
   const dismissals = existing.dismissals ?? {};
   await saveLearnedPreferences({ derived, overrides, dismissals });
-  return { derived, overrides, dismissals };
+  return { derived, overrides, dismissals, log: rows };
 }

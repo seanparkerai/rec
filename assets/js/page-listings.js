@@ -21,7 +21,8 @@ import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listings/fit.js';
 import { classifyListing, HIDE_LABELS } from './listings/flags.js';
 import { PERSONAL_STATUSES, latestPerListing } from './listings/reactions.js';
-import { decidedSets, isDecided, dedupeByFingerprint, foldDecision } from './listings/suppress.js';
+import { decidedSets, isDecided, foldDecision } from './listings/suppress.js';
+import { partitionFeed } from './listings/feed-partition.js';
 import { buildReasonPicker } from './listings/reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
@@ -155,7 +156,9 @@ function buildMedia(listing, base, href) {
   const inner = listing.image_url
     ? (() => {
         const img = el('img', {
-          class: `${base}__img`, src: listing.image_url, alt: '',
+          // Inside the labelled dossier link the image is decorative (alt="" avoids
+          // a double announcement); standalone it carries the property as its alt.
+          class: `${base}__img`, src: listing.image_url, alt: href ? '' : `Photo of ${title}`,
           loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
         });
         const box = el('div', { class: base }, [img]);
@@ -205,6 +208,8 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
         buildReasonPicker({
           variant: 'row',
           current: ctx.reaction,
+          draft: ctx.draft || null,
+          onDraftChange: ctx.onDraftChange || null,
           onSave: (d) => ctx.onSave(listing, d),
         }),
         buildStatus(listing, ctx.status, (status) => ctx.onStatus(listing, status)),
@@ -272,8 +277,12 @@ function buildReviewedGroup(cfg, rows, buildCard) {
     built = true;
     for (const r of rows) list.appendChild(buildCard(r));
   };
+  list.setAttribute('aria-label', `${cfg.title} — reviewed listings`);
   const details = el('details', { class: `reviewed-collapse reviewed-collapse--${cfg.mod}` }, [
-    el('summary', { class: 'reviewed-collapse__summary' }, [
+    el('summary', {
+      class: 'reviewed-collapse__summary',
+      'aria-label': `${cfg.title}: ${rows.length} reviewed listing${rows.length === 1 ? '' : 's'}`,
+    }, [
       el('span', { class: 'reviewed-collapse__title' }, cfg.title),
       el('span', { class: 'reviewed-collapse__count num' }, String(rows.length)),
     ]),
@@ -473,6 +482,8 @@ function buildDeckCard(listing, scored, area, handlers) {
     buildReasonPicker({
       variant: 'deck',
       current: handlers.current || null,
+      draft: handlers.draft || null,
+      onDraftChange: handlers.onDraftChange || null,
       onSave: (d) => handlers.onSave(d),
     }),
   ].filter(Boolean));
@@ -561,11 +572,11 @@ async function render() {
     return s;
   };
 
-  // Shared search/sort/filter (same module as the saved view). Score and rating are
-  // read from the per-paint cache below so sorting never re-runs the fit engine.
-  let scoreById = new Map();
+  // Shared search/sort/filter (same module as the saved view). Score and rating
+  // read through the memoised scoreOf cache above, so sorting never re-runs the
+  // fit engine.
   const controls = createListingsControls({
-    scoreOf: (l) => scoreById.get(l.rightmove_id) ?? 0,
+    scoreOf: (l) => scoreOf(l).score,
     ratingOf: (l) => Number(ratings[l.rightmove_id]) || 0,
     areaNameOf: (l) => areaOf(l)?.name || '',
     onChange: () => { if (mode === 'browse') paint(); },
@@ -597,15 +608,31 @@ async function render() {
     has_parking:   l.has_parking   ?? inferParking(l.description),
   });
 
+  // In-progress (un-saved) picker drafts, keyed by rightmove_id. The picker calls
+  // onDraftChange on every tap; an async repaint (retrain completion, a
+  // reactions-changed event) rebuilds the card WITH the stashed draft, so a tapped
+  // Reject + reason chips survive the rebuild instead of "randomly deselecting".
+  const pickerDrafts = new Map();
+  const draftCtx = (id) => ({
+    draft: pickerDrafts.get(String(id)) || null,
+    onDraftChange: (d) => {
+      if (d) pickerDrafts.set(String(id), d);
+      else pickerDrafts.delete(String(id));
+    },
+  });
+
   // Persist ONLY on Save (one clean consolidated row per finished decision). Verb
   // taps in the picker stay local — writing them too would double-count in the
   // full-log training (deriveWeights reads every row) and a no-reasons verb row
   // would dilute the attributed Save row. Append-only + snapshot-durable intact.
+  // THROWS on a failed write so the picker lands in its error state — a silent
+  // false return used to render "Saved ✓" over a lost reaction.
   const onSave = async (listing, { reaction, reasons }) => {
     const ok = await saveListingReaction({
       listing_id: listing.rightmove_id, reaction, reasons, listing_snapshot: snapshotOf(listing),
     });
-    if (!ok) return false;
+    if (!ok) throw new Error('Could not save your decision — check your connection and try again.');
+    pickerDrafts.delete(String(listing.rightmove_id));
     reactions[listing.rightmove_id] = {
       reaction,
       reason: reaction === 'reject' ? (reasons?.[0]?.key ?? null) : null,
@@ -618,32 +645,52 @@ async function render() {
     foldDecision(decided, listing.rightmove_id, reaction, listing, liveById);
     reviewedSet.add(String(listing.rightmove_id));
     addReviewedListing(listing.rightmove_id);
-    return true;
   };
   const onStatus = async (listing, status) => {
     const ok = await setShortlistStatus(listing.rightmove_id, status);
     if (ok) { if (status) statuses[listing.rightmove_id] = status; else delete statuses[listing.rightmove_id]; }
   };
+  // Every programmatic repaint (save, retrain completion, cross-page reaction
+  // event) preserves the reading position: the reacted card's slot collapses and
+  // the rows below slide up (inbox-style), with no jump to top.
+  function repaintPreservingScroll() {
+    const y = window.scrollY;
+    paint();
+    window.scrollTo({ top: y });
+  }
+
   // Browse rows: persist, then re-partition the feed so the just-decided property
   // LEAVES the active list immediately — like/reject are suppressed from the feed
   // (by id AND physical-property fingerprint, so a re-list is caught too), and a
   // pass drops into the collapsed "Passed" group. paint() is the single source of
   // truth for that split (and refreshes the summary), so we repaint rather than
-  // hand-maintain the DOM. Scroll is preserved: the reacted card is in view, its
-  // slot collapses, and the rows below slide up (inbox-style), with no jump to top.
+  // hand-maintain the DOM. A failed save THROWS out of onSave before any of this
+  // runs — the picker shows the error and the feed stays put.
   // Like the deck path, a browse reaction also schedules the debounced retrain so
   // the model learns from browse decisions live (parity with deckOnSave).
   const browseOnSave = async (listing, d) => {
-    const ok = await onSave(listing, d);
-    if (!ok) return false;
-    const y = window.scrollY;
-    paint();                 // re-partitions + calls renderSummary()
-    window.scrollTo({ top: y });
+    await onSave(listing, d);
+    repaintPreservingScroll(); // re-partitions + calls renderSummary()
+    flagDecisionDestination(d.reaction);
     updateReviewCount();
     updateLearning();
     scheduleRetrain();
-    return true;
   };
+
+  // After a Save the card leaves the active list — show WHERE it went: flash the
+  // matching reviewed group when it's on screen (a pass lands in "Passed"; likes/
+  // rejects appear under "Show hidden"), else the summary line whose counts just
+  // moved. One-shot class, motion-safe in CSS.
+  function flagDecisionDestination(reaction) {
+    const group = listEl.querySelector(`.reviewed-collapse--${REVIEWED_MOD[reaction] || 'reviewed'}`);
+    const target = group || summaryEl;
+    if (!target) return;
+    const cls = group ? 'reviewed-collapse--received' : 'listings-summary--received';
+    target.classList.remove(cls);
+    void target.offsetWidth; // restart the animation when saves come back-to-back
+    target.classList.add(cls);
+    setTimeout(() => target.classList.remove(cls), 1300);
+  }
 
   // The recent "wave" the cold-start deck reviews: added within RECENCY_DAYS and
   // not affordability-gated (gating is learning-independent, so the wave is
@@ -756,103 +803,134 @@ async function render() {
   async function runRetrain() {
     if (retraining) { scheduleRetrain(); return; }
     retraining = true;
+    // Repaint only when the retrain actually moved the model: if the effective
+    // weights and refinement rules come back identical, the feed's scores and
+    // hides are unchanged and the (post-save) paint already on screen is correct —
+    // skipping the repaint also means an un-saved draft on another card is never
+    // disturbed for nothing.
+    let changed = false;
     try {
+      // One paged fetch per retrain: the recompute returns the log it trained on,
+      // so the conflict detector reuses those rows instead of re-fetching the
+      // whole table a second time (P11b).
       const res = await recomputeLearnedPreferences({ now: new Date() });
-      if (res) { overrides = res.overrides || {}; effective = effectiveWeights(res.derived || {}, overrides); dismissals = res.dismissals || dismissals; hiddenRules = hiddenRulesFromOverrides(overrides); scoreCache.clear(); }
-      reactionLog = await getReactionLog();
+      if (res) {
+        const before = JSON.stringify([effective, hiddenRules]);
+        overrides = res.overrides || {};
+        effective = effectiveWeights(res.derived || {}, overrides);
+        dismissals = res.dismissals || dismissals;
+        hiddenRules = hiddenRulesFromOverrides(overrides);
+        reactionLog = res.log || reactionLog;
+        changed = JSON.stringify([effective, hiddenRules]) !== before;
+        if (changed) {
+          scoreCache.clear();
+          hiddenRulesRev += 1; // invalidates every cached card's sig
+        }
+      }
     } catch { /* surfaced via storage toast */ }
     retraining = false;
     updateLearning();
     updateConflicts();
-    if (mode === 'browse') paint();
+    if (changed && mode === 'browse') repaintPreservingScroll();
   }
 
   // ── Browse mode ─────────────────────────────────────────────────────────
+  // ── keyed card cache (P11c) ────────────────────────────────────────────────
+  // paint() used to clear+rebuild every card on each repaint (every search
+  // keystroke, filter change, save, retrain). Cards are now keyed by rightmove_id
+  // and reused when their render inputs are unchanged — `sig` captures every
+  // input that can vary within a session (reaction, status, score/verdict,
+  // refinement rules via hiddenRulesRev; the listing rows themselves are
+  // immutable once fetched). A card with an in-progress picker draft is ALWAYS
+  // reused (never rebuilt mid-edit); its stale sig is kept so the rebuild happens
+  // once the draft resolves.
+  const cardCache = new Map(); // id → { node, sig }
+  let hiddenRulesRev = 0; // bumped whenever hiddenRules / learned weights change
+
   function paint() {
-    clear(listEl);
     const includeOOR = !!(showOOR && showOOR.checked);
     const includeHidden = !!(showHidden && showHidden.checked);
     if (!listings.length) {
-      listEl.appendChild(el('li', { class: 'listings-empty' }, [
+      listEl.replaceChildren(el('li', { class: 'listings-empty' }, [
         el('p', {}, 'No listings yet.'),
         el('p', { class: 'listings-empty__hint' }, 'The daily fetch (fetch-listings workflow) hasn’t populated the listings table yet — tap “Fetch new listings” above to run it on GitHub, or check the Apify / Supabase secrets are set.'),
       ]));
       if (summaryEl) clear(summaryEl);
       return;
     }
-    const radiusFiltered = listings.filter(passesRadiusFilter);
-    const hiddenByRadiusCount = listings.length - radiusFiltered.length;
-    const scoredRows = radiusFiltered.map((listing) => ({ listing, scored: scoreOf(listing), area: areaOf(listing) }));
-    const gated = scoredRows.filter((r) => r.scored.gated);
-    // Refresh the per-listing score cache the controls read, then let the shared
-    // module do the search/filter/sort (default 'fit' = score desc, recency tiebreak —
-    // identical to the prior hand-rolled ordering).
-    scoreById = new Map(scoredRows.map((r) => [r.listing.rightmove_id, r.scored.score]));
-    const rowById = new Map(scoredRows.map((r) => [r.listing.rightmove_id, r]));
-    // Three independent hides, all reversible: the affordability gate (out-of-reach),
-    // the junk classifier (auction / over-55), and confirmed refinements (Stage 5 — a
-    // value the user chose to hide). Gated rows are counted first; junk and refinement
-    // are counted among rows that survived the gate. A listing both junk AND
-    // refinement-hidden is counted only as junk (no double-count). All three are
-    // revealed together by the "Show hidden" toggle.
-    const afford = includeOOR ? scoredRows : scoredRows.filter((r) => !r.scored.gated);
-    const isJunk = (r) => classifyListing(r.listing).hide;
-    const isRefHidden = (r) => listingHiddenByRefinement(r.listing, hiddenRules);
-    const junkRows = afford.filter(isJunk);
-    const refHiddenRows = afford.filter((r) => !isJunk(r) && isRefHidden(r));
-    const pool = includeHidden ? afford : afford.filter((r) => !isJunk(r) && !isRefHidden(r));
-    // Suppress already-decided properties (latest reaction like/reject) by id AND by
-    // physical-property fingerprint, so a re-list under a new rightmove_id is caught;
-    // `pass` stays resurfaceable. Then collapse same-fingerprint duplicates to one
-    // representative. "Show hidden" reveals the decided rows alongside junk.
-    const undecided = includeHidden ? pool : pool.filter((r) => !isDecidedListing(r.listing));
-    const deduped = dedupeByFingerprint(undecided, (r) => r.listing);
-    const decidedCount = pool.length - undecided.length;
-    const dupCount = undecided.length - deduped.length;
-    const visible = controls
-      .apply(deduped.map((r) => r.listing))
-      .map((l) => rowById.get(l.rightmove_id))
-      .filter(Boolean);
 
-    // Stage 4: partition into still-to-review (top, fit-ranked) and reviewed
-    // (collapsed at the bottom). Reviewed = a Saved consolidated decision.
+    // Pure partition pipeline (listings/feed-partition.js — unit-tested): radius →
+    // gate → junk/refinement → decided suppression → dedupe → controls → reviewed
+    // split + summary counts. Identical maths to the previous inline version.
+    const feed = partitionFeed(listings, {
+      passesRadius: passesRadiusFilter,
+      scoreOf,
+      areaOf,
+      includeOOR,
+      includeHidden,
+      isJunk: (l) => classifyListing(l).hide,
+      isRefHidden: (l) => listingHiddenByRefinement(l, hiddenRules),
+      isDecided: isDecidedListing,
+      isReviewed,
+      reactionOf: (id) => reactions[id] || null,
+      applyControls: (ls) => controls.apply(ls),
+    });
+
     const rowCtx = (r, reviewed) => buildRow(r.listing, 0, r.scored, r.area, {
       reaction: reactions[r.listing.rightmove_id] || null,
       status: statuses[r.listing.rightmove_id] || '',
       reviewed, onSave: browseOnSave, onStatus, hiddenRules,
+      ...draftCtx(r.listing.rightmove_id),
     });
-    const unreviewed = visible.filter((r) => !isReviewed(r.listing.rightmove_id));
-    const reviewed = visible.filter((r) => isReviewed(r.listing.rightmove_id));
+    // Reuse the cached card when its inputs are unchanged, or unconditionally
+    // while it carries an un-saved picker draft.
+    const cardFor = (r, reviewed) => {
+      const id = String(r.listing.rightmove_id);
+      const rx = reactions[id];
+      const sig = `${reviewed ? 1 : 0}|${rx?.reaction ?? ''}|${rx?.created_at ?? ''}|${statuses[id] ?? ''}|${r.scored.score}|${r.scored.verdict}|${hiddenRulesRev}`;
+      const hit = cardCache.get(id);
+      if (hit && (hit.sig === sig || pickerDrafts.has(id))) return hit.node;
+      const node = rowCtx(r, reviewed);
+      cardCache.set(id, { node, sig });
+      return node;
+    };
 
-    unreviewed.forEach((r) => listEl.appendChild(rowCtx(r, false)));
-
-    if (reviewed.length) {
-      // Split the reviewed pile by the user's verdict (Liked / Passed / Rejected)
-      // so a finished session lands on a consolidated, scannable split — Liked open,
-      // the rest collapsed. Editing a card in place (change verb → Save) re-saves
-      // and, on the next paint, moves it to the matching group.
-      const byVerb = { like: [], pass: [], reject: [] };
-      for (const r of reviewed) {
-        const verb = reactions[r.listing.rightmove_id]?.reaction;
-        (byVerb[verb] || byVerb.pass).push(r);
-      }
-      for (const cfg of REVIEWED_GROUPS) {
-        if (byVerb[cfg.key].length) listEl.appendChild(buildReviewedGroup(cfg, byVerb[cfg.key], (r) => rowCtx(r, true)));
-      }
+    // Capture focus + reviewed-group open state before the commit (moving nodes
+    // through a fragment drops focus; group shells are rebuilt each paint).
+    const active = document.activeElement;
+    const refocus = active && listEl.contains(active) ? active : null;
+    const openByMod = {};
+    for (const d of listEl.querySelectorAll('details.reviewed-collapse')) {
+      for (const cfg of REVIEWED_GROUPS) if (d.classList.contains(`reviewed-collapse--${cfg.mod}`)) openByMod[cfg.key] = d.open;
     }
 
-    const gatedCount = includeOOR ? 0 : gated.length;
-    const hiddenJunkCount = includeHidden ? 0 : junkRows.length;
-    const hiddenRefCount = includeHidden ? 0 : refHiddenRows.length;
-    lastBrowse = {
-      visible,
-      gatedCount,
-      hiddenJunkCount,
-      hiddenRefCount,
-      decidedCount,
-      dupCount,
-      hiddenByFilter: Math.max(0, listings.length - visible.length - hiddenByRadiusCount - gatedCount - hiddenJunkCount - hiddenRefCount - decidedCount - dupCount),
-    };
+    const frag = document.createDocumentFragment();
+    feed.unreviewed.forEach((r) => frag.appendChild(cardFor(r, false)));
+    if (feed.reviewed.length) {
+      // Split the reviewed pile by the user's verdict (Liked / Passed / Rejected)
+      // so a finished session lands on a consolidated, scannable split. Editing a
+      // card in place (change verb → Save) re-saves and, on the next paint, moves
+      // it to the matching group. Cards inside stay build-on-toggle; a group the
+      // user expanded stays expanded across repaints.
+      for (const cfg of REVIEWED_GROUPS) {
+        if (!feed.byVerb[cfg.key].length) continue;
+        frag.appendChild(buildReviewedGroup(
+          { ...cfg, open: openByMod[cfg.key] ?? cfg.open },
+          feed.byVerb[cfg.key],
+          (r) => cardFor(r, true),
+        ));
+      }
+    }
+    listEl.replaceChildren(frag);
+    // A reused node is detached+reattached by the commit, which drops focus —
+    // restore it so keyboard flow (Tab through cards) survives a repaint.
+    if (refocus && refocus.isConnected) refocus.focus();
+
+    // Evict cache entries for properties no longer in the feed at all.
+    const liveIds = new Set(feed.visible.map((r) => String(r.listing.rightmove_id)));
+    for (const id of cardCache.keys()) if (!liveIds.has(id)) cardCache.delete(id);
+
+    lastBrowse = { visible: feed.visible, ...feed.counts };
     renderSummary();
   }
 
@@ -861,13 +939,11 @@ async function render() {
   // un-reviewed card, so the deck reviews the recent wave one finished decision
   // at a time.
   const deckOnSave = async (cur, d) => {
-    const ok = await onSave(cur, d);
-    if (!ok) return false;
+    await onSave(cur, d); // throws on failure → picker error state, deck stays put
     paintDeck();
     updateReviewCount();
     updateLearning();
     scheduleRetrain();
-    return true;
   };
   function paintDeck() {
     if (!deckEl) return;
@@ -898,6 +974,7 @@ async function render() {
       current: reactions[next.rightmove_id] || null,
       onSave: (d) => deckOnSave(next, d),
       hiddenRules,
+      ...draftCtx(next.rightmove_id),
     }));
   }
 
@@ -935,7 +1012,8 @@ async function render() {
     };
     foldDecision(decided, listing_id, reaction, null, liveById);
     reviewedSet.add(String(listing_id));
-    if (mode === 'browse') paint();
+    pickerDrafts.delete(String(listing_id)); // the decision landed elsewhere — drop any stale draft
+    if (mode === 'browse') repaintPreservingScroll();
   });
 
   wireReturnTracking(listEl, 'listings');
