@@ -3,7 +3,7 @@
 // threaded into the Rightmove URL, the post-filter drops excluded types and
 // stale listings, learned-favourite outcodes are processed first, and the
 // always-on baseline (price cap, min beds, dontShow) is verified.
-import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, householdRowsToVillages, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
+import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, priceBandForAreas, targetNeedsFoundation, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-05-31T00:00:00Z');
@@ -261,6 +261,47 @@ export async function register({ test, assert, assertEqual }) {
     // Empty / missing inputs degrade to the fallback band.
     const empty = priceBandForAreas([], new Map(), new Map());
     assertEqual(empty.min, BASELINE_PRICE_MIN); assertEqual(empty.max, BASELINE_PRICE_MAX);
+  });
+
+  // ── search-target dedupe ──
+  test('fetch-listings: dedupeSearchTargets merges targets sharing one identifier', () => {
+    const targets = [
+      { label: 'GU32:flexcombe-gu32+0', outcode: 'GU32', locationIdentifier: 'POSTCODE^356091', radiusMiles: 3, areas: [{ id: 'flexcombe-gu32' }] },
+      { label: 'GU33:flexcombe-gu33+0', outcode: 'GU33', locationIdentifier: 'POSTCODE^356091', radiusMiles: 5, areas: [{ id: 'flexcombe-gu33' }] },
+      { label: 'PO14', outcode: 'PO14', locationIdentifier: null, radiusMiles: null, areas: [{ id: 'stubbington-hampshire' }] },
+      { label: 'PO15', outcode: 'PO15', locationIdentifier: null, radiusMiles: null, areas: [{ id: 'whiteley-po15' }] },
+    ];
+    const out = dedupeSearchTargets(targets);
+    assertEqual(out.length, 3, 'one duplicate search dropped');
+    const merged = out.find((t) => t.locationIdentifier === 'POSTCODE^356091');
+    assertEqual(merged.radiusMiles, 5, 'widest radius kept');
+    assertEqual(merged.areas.length, 2, 'areas unioned so band/geofence cover both');
+    assert(out.filter((t) => !t.locationIdentifier).length === 2, 'outcode fallbacks untouched');
+  });
+
+  // ── automatic first-fetch backfill ──
+  test('fetch-listings: targetNeedsFoundation flags never-fetched areas only', () => {
+    const covered = new Set(['bishop-s-waltham-so32', 'waltham-chase-so32']);
+    assert(!targetNeedsFoundation({ areas: [{ id: 'bishop-s-waltham-so32' }] }, covered), 'covered target → daily window');
+    assert(targetNeedsFoundation({ areas: [{ id: 'hill-head-hampshire' }] }, covered), 'uncovered area → backfill');
+    assert(targetNeedsFoundation({ areas: [{ id: 'waltham-chase-so32' }, { id: 'hill-head-hampshire' }] }, covered), 'mixed target → backfill');
+    assert(!targetNeedsFoundation({ areas: [] }, covered), 'no areas → no backfill');
+  });
+
+  test('fetch-listings: foundation opt omits the recency window, keeps band + filters', () => {
+    const url = buildSearchUrl('POSTCODE^1', null, { foundation: true, radiusMiles: 3, priceMin: 330000, priceMax: 400000 });
+    assert(!url.includes('maxDaysSinceAdded'), 'no recency param on a backfill pull');
+    assert(url.includes('minPrice=330000') && url.includes('maxPrice=400000'), 'band still applied');
+    assert(url.includes('radius=3') && url.includes('dontShow='), 'radius + exclusions still applied');
+    const daily = buildSearchUrl('POSTCODE^1', null, { radiusMiles: 3 });
+    assert(daily.includes('maxDaysSinceAdded='), 'daily window unchanged without the opt');
+  });
+
+  test('fetch-listings: householdRowsToVillages keeps the full postcode for tight resolution', () => {
+    const rows = [{ id: 'stub-hants', data: { name: 'Stub', postcode: 'PO14 2LJ', coords: { lat: 50.8, lng: -1.2 }, coordsSource: 'postcodes-io:places+reverse', source: 'household-onboarding', active: false } }];
+    const [v] = householdRowsToVillages(rows, new Set());
+    assertEqual(v.postcode, 'PO14 2LJ', 'full postcode carried (not just the outcode)');
+    assertEqual(v.outcode, 'PO14');
   });
 
   test('fetch-listings: focus outcodes are processed first, none dropped', () => {
