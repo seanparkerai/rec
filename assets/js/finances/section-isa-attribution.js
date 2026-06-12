@@ -10,7 +10,7 @@ export async function renderISAAttribution(finData) {
   if (!history) return;
   const perf = analysePerformance(history);
   if (perf.isStub) {
-    el.innerHTML = '<p class="muted">ISA history not yet imported — run <code>node scripts/import-trading212.mjs</code> with your T212 export to see the breakdown.</p>';
+    el.innerHTML = '<p class="muted">ISA history not yet imported — run <code>node tools/import-trading212.mjs</code> with your T212 export to see the breakdown.</p>';
     return;
   }
   const total = perf.netContributed + perf.dividendsReceived + perf.interestEarned + Math.max(0, perf.unrealisedGain);

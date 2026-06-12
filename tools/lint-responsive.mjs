@@ -50,7 +50,6 @@ function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
     const rel = relative(__root, full).replaceAll('\\', '/');
-    if (rel.startsWith('design-previews/')) continue;
     const st = statSync(full);
     if (st.isDirectory()) walk(full, out);
     else out.push(rel);

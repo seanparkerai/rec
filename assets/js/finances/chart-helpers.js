@@ -31,7 +31,7 @@ export function setStub(sectionId, captionId) {
   const card = document.getElementById(sectionId);
   if (!card) return;
   const wrap = card.querySelector('.chart-wrap') || card.querySelector('svg');
-  if (wrap && wrap.tagName === 'DIV') wrap.innerHTML = '<p class="muted">ISA history not yet imported — run <code>node scripts/import-trading212.mjs</code> to populate this chart.</p>';
+  if (wrap && wrap.tagName === 'DIV') wrap.innerHTML = '<p class="muted">ISA history not yet imported — run <code>node tools/import-trading212.mjs</code> to populate this chart.</p>';
   if (wrap && wrap.tagName === 'svg') wrap.replaceChildren();
   const cap = document.getElementById(captionId);
   if (cap) cap.textContent = 'Run the Trading 212 importer to see this chart.';

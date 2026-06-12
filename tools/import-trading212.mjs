@@ -2,7 +2,7 @@
 // import-trading212.mjs — one-shot Trading 212 CSV → JSON aggregator.
 //
 // Usage:
-//   node scripts/import-trading212.mjs path/to/export1.csv [path/to/export2.csv ...]
+//   node tools/import-trading212.mjs path/to/export1.csv [path/to/export2.csv ...]
 //
 // Writes to: data/imports/trading212-history.json
 
@@ -120,7 +120,7 @@ function round2(n) { return Math.round(n * 100) / 100; }
 async function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
-    console.error('Usage: node scripts/import-trading212.mjs path/to/csv1.csv [csv2.csv ...]');
+    console.error('Usage: node tools/import-trading212.mjs path/to/csv1.csv [csv2.csv ...]');
     process.exit(1);
   }
 

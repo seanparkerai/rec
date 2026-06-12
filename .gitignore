@@ -31,3 +31,4 @@ data/imports/trading212-history.json
 
 # Local safety backups (never commit)
 data/_backup/
+/backups/
