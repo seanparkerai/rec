@@ -183,7 +183,9 @@ async function render() {
     const ok = await saveListingReaction({
       listing_id: listing.rightmove_id, reaction, reasons, listing_snapshot: snapshotOf(listing),
     });
-    if (!ok) return false;
+    // Throw on a failed write so the picker shows its error state instead of a
+    // false "Saved ✓" over a lost reaction.
+    if (!ok) throw new Error('Could not save your decision — check your connection and try again.');
     const key = String(listing.rightmove_id);
     if (reaction === 'like') {
       reactions[key] = { reaction, reason: null, reasons: reasons || [], created_at: new Date().toISOString() };

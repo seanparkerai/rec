@@ -205,6 +205,8 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
         buildReasonPicker({
           variant: 'row',
           current: ctx.reaction,
+          draft: ctx.draft || null,
+          onDraftChange: ctx.onDraftChange || null,
           onSave: (d) => ctx.onSave(listing, d),
         }),
         buildStatus(listing, ctx.status, (status) => ctx.onStatus(listing, status)),
@@ -473,6 +475,8 @@ function buildDeckCard(listing, scored, area, handlers) {
     buildReasonPicker({
       variant: 'deck',
       current: handlers.current || null,
+      draft: handlers.draft || null,
+      onDraftChange: handlers.onDraftChange || null,
       onSave: (d) => handlers.onSave(d),
     }),
   ].filter(Boolean));
@@ -597,15 +601,31 @@ async function render() {
     has_parking:   l.has_parking   ?? inferParking(l.description),
   });
 
+  // In-progress (un-saved) picker drafts, keyed by rightmove_id. The picker calls
+  // onDraftChange on every tap; an async repaint (retrain completion, a
+  // reactions-changed event) rebuilds the card WITH the stashed draft, so a tapped
+  // Reject + reason chips survive the rebuild instead of "randomly deselecting".
+  const pickerDrafts = new Map();
+  const draftCtx = (id) => ({
+    draft: pickerDrafts.get(String(id)) || null,
+    onDraftChange: (d) => {
+      if (d) pickerDrafts.set(String(id), d);
+      else pickerDrafts.delete(String(id));
+    },
+  });
+
   // Persist ONLY on Save (one clean consolidated row per finished decision). Verb
   // taps in the picker stay local — writing them too would double-count in the
   // full-log training (deriveWeights reads every row) and a no-reasons verb row
   // would dilute the attributed Save row. Append-only + snapshot-durable intact.
+  // THROWS on a failed write so the picker lands in its error state — a silent
+  // false return used to render "Saved ✓" over a lost reaction.
   const onSave = async (listing, { reaction, reasons }) => {
     const ok = await saveListingReaction({
       listing_id: listing.rightmove_id, reaction, reasons, listing_snapshot: snapshotOf(listing),
     });
-    if (!ok) return false;
+    if (!ok) throw new Error('Could not save your decision — check your connection and try again.');
+    pickerDrafts.delete(String(listing.rightmove_id));
     reactions[listing.rightmove_id] = {
       reaction,
       reason: reaction === 'reject' ? (reasons?.[0]?.key ?? null) : null,
@@ -618,31 +638,35 @@ async function render() {
     foldDecision(decided, listing.rightmove_id, reaction, listing, liveById);
     reviewedSet.add(String(listing.rightmove_id));
     addReviewedListing(listing.rightmove_id);
-    return true;
   };
   const onStatus = async (listing, status) => {
     const ok = await setShortlistStatus(listing.rightmove_id, status);
     if (ok) { if (status) statuses[listing.rightmove_id] = status; else delete statuses[listing.rightmove_id]; }
   };
+  // Every programmatic repaint (save, retrain completion, cross-page reaction
+  // event) preserves the reading position: the reacted card's slot collapses and
+  // the rows below slide up (inbox-style), with no jump to top.
+  function repaintPreservingScroll() {
+    const y = window.scrollY;
+    paint();
+    window.scrollTo({ top: y });
+  }
+
   // Browse rows: persist, then re-partition the feed so the just-decided property
   // LEAVES the active list immediately — like/reject are suppressed from the feed
   // (by id AND physical-property fingerprint, so a re-list is caught too), and a
   // pass drops into the collapsed "Passed" group. paint() is the single source of
   // truth for that split (and refreshes the summary), so we repaint rather than
-  // hand-maintain the DOM. Scroll is preserved: the reacted card is in view, its
-  // slot collapses, and the rows below slide up (inbox-style), with no jump to top.
+  // hand-maintain the DOM. A failed save THROWS out of onSave before any of this
+  // runs — the picker shows the error and the feed stays put.
   // Like the deck path, a browse reaction also schedules the debounced retrain so
   // the model learns from browse decisions live (parity with deckOnSave).
   const browseOnSave = async (listing, d) => {
-    const ok = await onSave(listing, d);
-    if (!ok) return false;
-    const y = window.scrollY;
-    paint();                 // re-partitions + calls renderSummary()
-    window.scrollTo({ top: y });
+    await onSave(listing, d);
+    repaintPreservingScroll(); // re-partitions + calls renderSummary()
     updateReviewCount();
     updateLearning();
     scheduleRetrain();
-    return true;
   };
 
   // The recent "wave" the cold-start deck reviews: added within RECENCY_DAYS and
@@ -764,7 +788,7 @@ async function render() {
     retraining = false;
     updateLearning();
     updateConflicts();
-    if (mode === 'browse') paint();
+    if (mode === 'browse') repaintPreservingScroll();
   }
 
   // ── Browse mode ─────────────────────────────────────────────────────────
@@ -820,6 +844,7 @@ async function render() {
       reaction: reactions[r.listing.rightmove_id] || null,
       status: statuses[r.listing.rightmove_id] || '',
       reviewed, onSave: browseOnSave, onStatus, hiddenRules,
+      ...draftCtx(r.listing.rightmove_id),
     });
     const unreviewed = visible.filter((r) => !isReviewed(r.listing.rightmove_id));
     const reviewed = visible.filter((r) => isReviewed(r.listing.rightmove_id));
@@ -861,13 +886,11 @@ async function render() {
   // un-reviewed card, so the deck reviews the recent wave one finished decision
   // at a time.
   const deckOnSave = async (cur, d) => {
-    const ok = await onSave(cur, d);
-    if (!ok) return false;
+    await onSave(cur, d); // throws on failure → picker error state, deck stays put
     paintDeck();
     updateReviewCount();
     updateLearning();
     scheduleRetrain();
-    return true;
   };
   function paintDeck() {
     if (!deckEl) return;
@@ -898,6 +921,7 @@ async function render() {
       current: reactions[next.rightmove_id] || null,
       onSave: (d) => deckOnSave(next, d),
       hiddenRules,
+      ...draftCtx(next.rightmove_id),
     }));
   }
 
@@ -935,7 +959,8 @@ async function render() {
     };
     foldDecision(decided, listing_id, reaction, null, liveById);
     reviewedSet.add(String(listing_id));
-    if (mode === 'browse') paint();
+    pickerDrafts.delete(String(listing_id)); // the decision landed elsewhere — drop any stale draft
+    if (mode === 'browse') repaintPreservingScroll();
   });
 
   wireReturnTracking(listEl, 'listings');
