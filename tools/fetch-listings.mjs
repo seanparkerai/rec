@@ -20,11 +20,6 @@
 //   FOUNDATION_MODE=1 (optional)               — 14-day backfill: sets the recency
 //                                                window to 14 days for one-time pulls;
 //                                                print a dry-run cost estimate first
-//   FOUNDATION_RESULTS (optional)              — per-target result cap for the AUTOMATIC
-//                                                first-fetch backfill (default 150): a
-//                                                target containing an area with no listing
-//                                                rows yet runs once without the recency
-//                                                window, then reverts to the daily window
 //   APIFY_MAX_BUDGET_USD (optional)            — hard USD spend cap passed to the Apify
 //                                                actor; Apify self-terminates at this
 //                                                limit (default 25). PPE actors stop
@@ -80,11 +75,6 @@ const VALID_DAYS = new Set([1, 3, 7, 14]);
 const MAX_DAYS_SINCE_ADDED = FOUNDATION_MODE ? null : (Number(process.env.MAX_DAYS_SINCE_ADDED) || 3);
 
 const RESULTS_PER_OUTCODE = Number(process.env.RESULTS_PER_OUTCODE) || 50;  // cap per target (lower = cheaper on pay-per-event actors)
-// Result cap for a per-target first-fetch backfill (an area with no listings yet
-// pulls its standing stock once, then reverts to the daily window — see
-// targetNeedsFoundation). Larger than the daily cap because it replaces a manual
-// FOUNDATION_MODE run for newly-onboarded areas.
-const FOUNDATION_RESULTS = Number(process.env.FOUNDATION_RESULTS) || 150;
 // Hard USD spend cap: passed to Apify as maxBudget. PPE actors self-terminate — no overrun possible.
 const APIFY_MAX_BUDGET_USD = Number(process.env.APIFY_MAX_BUDGET_USD) || 25;
 
@@ -353,11 +343,9 @@ async function resolveTightIdFromPostcode(fullPostcode) {
 // learned `spec` (v3 L4) can only tighten these, never loosen them.
 // The price band comes from opts.priceMin/priceMax (the per-target union of
 // linked households' budgets), defaulting to the fallback BASELINE_PRICE_MIN/MAX.
-// opts.days overrides the recency window (used by tests; production passes via spec);
-// opts.foundation=true omits the recency param entirely (standing-stock backfill
-// for a target containing a never-fetched area).
+// opts.days overrides the recency window (used by tests; production passes via spec).
 function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
-  const rawDays = opts.foundation ? null : (opts.days ?? spec?.recencyDays ?? MAX_DAYS_SINCE_ADDED);
+  const rawDays = opts.days ?? spec?.recencyDays ?? MAX_DAYS_SINCE_ADDED;
   // Coerce to nearest valid Rightmove value; null = omit (foundation pull — all listings).
   const days = rawDays == null ? null : (VALID_DAYS.has(Number(rawDays)) ? Number(rawDays) : 14);
   // locationIdentifier MUST stay outside URLSearchParams — URLSearchParams encodes ^ as %5E
@@ -413,14 +401,14 @@ function orderOutcodesByFocus(outcodes, spec) {
 }
 
 // ── Apify actor ──────────────────────────────────────────────────────────────
-async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null, { foundation = false } = {}) {
+async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null) {
   if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
   const url =
     `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
     `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
   const input = {
-    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max, foundation }) }],
-    maxItems: foundation ? FOUNDATION_RESULTS : RESULTS_PER_OUTCODE,
+    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max }) }],
+    maxItems: RESULTS_PER_OUTCODE,
     monitoringMode: false,
     includePriceHistory: false,
     maxBudget: APIFY_MAX_BUDGET_USD,   // USD hard cap; actor self-terminates at limit
@@ -598,54 +586,6 @@ async function persistStubRightmove(row, rightmove) {
   }
 }
 
-// Paged service-role GET (PostgREST caps result sets); throws on HTTP error.
-async function restGetAllPaged(pathAndQuery, { pageSize = 1000, maxPages = 100 } = {}) {
-  const headers = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` };
-  const all = [];
-  for (let page = 0; page < maxPages; page++) {
-    const sep = pathAndQuery.includes('?') ? '&' : '?';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${pathAndQuery}${sep}limit=${pageSize}&offset=${page * pageSize}`, { headers });
-    if (!res.ok) throw new Error(`GET ${pathAndQuery} failed: ${res.status}`);
-    const rows = await res.json();
-    all.push(...(rows || []));
-    if (!rows || rows.length < pageSize) break;
-  }
-  return all;
-}
-
-// Area ids whose standing stock is already in the system: any area with a
-// listing row, plus any area with a sync_log `backfill` marker (written after
-// its first-fetch pull — so a genuinely-empty village backfills exactly once
-// instead of re-pulling forever). ok:false on any failure so an outage can
-// never misread "no coverage" and trigger a surprise full backfill.
-async function loadCoveredAreaIds() {
-  const covered = new Set();
-  if (!SERVICE_KEY) return { covered, ok: false };
-  try {
-    const listingRows = await restGetAllPaged('listings?select=area_id');
-    for (const r of listingRows) if (r?.area_id) covered.add(r.area_id);
-    const markers = await restGetAllPaged('sync_log?select=row_id&table_name=eq.listings&action=eq.backfill');
-    for (const r of markers) if (r?.row_id) covered.add(r.row_id);
-    return { covered, ok: true };
-  } catch (e) {
-    console.warn('coverage load failed:', e.message);
-    return { covered, ok: false };
-  }
-}
-
-/**
- * A target needs a one-off standing-stock (foundation) pull when any of its
- * areas has never produced a listing: the daily recency window only ever sees
- * NEWLY-LISTED stock, so a just-onboarded area's standing market stays
- * invisible until someone remembers a manual FOUNDATION_MODE run (observed:
- * household onboarding 2026-06-11 → villages with 1 listing each). Self-healing
- * and bounded: once the area has listing rows — or a sync_log backfill marker,
- * written even when the pull found nothing — the target reverts to the daily
- * window. Pure.
- */
-function targetNeedsFoundation(target, covered) {
-  return (target?.areas || []).some((a) => !covered.has(a.id));
-}
 
 // Stage 6 enforcement: the household-scoped areas the user paused via "Stop searching".
 // Read-only here (the portal writes these rows). Returns [] when unreadable so a probation
@@ -796,16 +736,10 @@ async function main() {
     targets = [...targets.filter((t) => focus.has(t.outcode)), ...targets.filter((t) => !focus.has(t.outcode))];
   }
   if (FETCH_LIMIT) targets = targets.slice(0, FETCH_LIMIT);
-  // First-fetch backfill: targets containing a never-fetched area run once
-  // without the recency window. Skipped entirely in FOUNDATION_MODE (already a
-  // full pull) and on coverage-read failure (ok:false → daily window for all).
-  const coverage = FOUNDATION_MODE ? { covered: new Set(), ok: false } : await loadCoveredAreaIds();
-  const foundationCount = coverage.ok ? targets.filter((t) => targetNeedsFoundation(t, coverage.covered)).length : 0;
-  if (foundationCount) console.log(`first-fetch backfill: ${foundationCount} target(s) contain never-fetched areas → standing-stock pull (cap ${FOUNDATION_RESULTS}/target)`);
-  const worstCaseResults = targets.reduce((sum, t) => sum + (coverage.ok && targetNeedsFoundation(t, coverage.covered) ? FOUNDATION_RESULTS : RESULTS_PER_OUTCODE), 0);
+  const worstCaseResults = targets.length * RESULTS_PER_OUTCODE;
   const estimatedCostUSD = (worstCaseResults / 1000) * 2;
   console.log(`targets: ${targets.length} (${SEARCH_MODE}) · active villages: ${ALL_ACTIVE.length}`);
-  console.log(`cost estimate: ${targets.length} targets → ${worstCaseResults} worst-case results → ~$${estimatedCostUSD.toFixed(2)} USD (@$2/1k) · hard cap: $${APIFY_MAX_BUDGET_USD}`);
+  console.log(`cost estimate: ${targets.length} targets × ${RESULTS_PER_OUTCODE} results = ${worstCaseResults} worst-case results → ~$${estimatedCostUSD.toFixed(2)} USD (@$2/1k) · hard cap: $${APIFY_MAX_BUDGET_USD}`);
   if (DRY_RUN) console.log('DRY RUN — no Apify calls or writes will be made');
 
   const now = new Date();
@@ -818,8 +752,7 @@ async function main() {
     try {
       const locId = target.locationIdentifier || await resolveLocationId(oc);
       const band = priceBandForAreas(areas.map((a) => a.id), areaHouseholds, budgets);
-      const foundation = coverage.ok && targetNeedsFoundation(target, coverage.covered);
-      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles, band, { foundation });
+      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles, band);
       totalRaw += raw.length;
 
       const normalised = raw.map((r) => normaliseRawListing(r, { outcode: oc, source: SOURCE, now })).filter(Boolean);
@@ -862,10 +795,8 @@ async function main() {
       // Diagnostic only: how many of the rejected were also out of the coarse region.
       const outOfRegion = geo.filter((x) => !x.g.pass && !isInOutcode(x.l, { outcode: oc, areaCoords: areas })).length;
 
-      // v3 L4: apply the learned post-filter (excluded types + recency). A
-      // foundation pull deliberately fetches old stock, so the spec's recency
-      // window is lifted for it (type exclusions still apply).
-      const onSpec = filterListingsBySpec(inBuffer, foundation && spec ? { ...spec, recencyDays: null } : spec, now);
+      // v3 L4: apply the learned post-filter (excluded types + recency).
+      const onSpec = filterListingsBySpec(inBuffer, spec, now);
       const filteredOut = inBuffer.length - onSpec.length;
 
       const deduped = dedupeByRightmoveId(onSpec);          // area_id already set by the geofence
@@ -875,8 +806,7 @@ async function main() {
 
       const radiusNote = target.radiusMiles != null ? ` r=${target.radiusMiles.toFixed(1)}mi` : '';
       const bandNote = (band.min !== BASELINE_PRICE_MIN || band.max !== BASELINE_PRICE_MAX) ? ` ${fmtPrice(band.min)}–${fmtPrice(band.max)}` : '';
-      const foundationNote = foundation ? ' · backfill' : '';
-      console.log(`── ${target.label} (${locId}${radiusNote}${bandNote}${foundationNote}): raw ${raw.length}${offBaseline ? ` → baseline ${inBaseline.length} [-${offBaseline} off-baseline]` : ''} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
+      console.log(`── ${target.label} (${locId}${radiusNote}${bandNote}): raw ${raw.length}${offBaseline ? ` → baseline ${inBaseline.length} [-${offBaseline} off-baseline]` : ''} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
 
       if (DRY_RUN) {
         for (const l of deduped.slice(0, 5)) {
@@ -912,17 +842,6 @@ async function main() {
         })));
         totalWritten += payload.length;
       }
-
-      // Mark this target's first-fetch areas as backfilled (even when the pull
-      // found nothing — that IS the answer) so the next run reverts them to the
-      // daily window. In-memory too, for later targets sharing an area this run.
-      if (foundation) {
-        const newlyCovered = areas.filter((a) => !coverage.covered.has(a.id));
-        if (newlyCovered.length) {
-          await syncLog(newlyCovered.map((a) => ({ table_name: 'listings', actor: 'system', action: 'backfill', row_id: a.id })));
-          for (const a of newlyCovered) coverage.covered.add(a.id);
-        }
-      }
     } catch (e) {
       console.log(`── ${target.label}: ✗ ${e.message}`);
       failures.push(target.label);
@@ -945,4 +864,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, priceBandForAreas, targetNeedsFoundation, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
