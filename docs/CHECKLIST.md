@@ -58,7 +58,7 @@ Fix = paginate the reaction reads (minimal patch; no schema change, no rejected 
 ---
 
 ## v3 — Live Listings (active)
-Plan: `docs/V3_LISTINGS_PLAN.md`. Build order L0→L6; minimum-lovable = L0–L4.
+Plan: `docs/archive/V3_LISTINGS_PLAN.md`. Build order L0→L6; minimum-lovable = L0–L4.
 
 - [x] **L0 — Probe spike** (throwaway): validated source. Actor `dhrumil~rightmove-scraper`,
       field mapping locked, in-region listings confirmed. Probe + workflow now deleted (replaced by L1).
