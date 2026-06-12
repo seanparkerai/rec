@@ -72,45 +72,63 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
   // ── reasons (multi-select primaries + optional sub-reason rows) ─────────────
   const reasonsEl = el('div', { class: 'listing-reasons', role: 'group', 'aria-label': 'Why? (optional — a tagged reason trains far better)' });
 
-  function renderReasons() {
-    reasonsEl.replaceChildren();
-    const vocab = reasonsForVerb(draft.verb);
-    reasonsEl.hidden = vocab.length === 0;
-    if (!vocab.length) return;
-    reasonsEl.setAttribute('aria-label', draft.verb === 'like' ? 'What did you like? (optional)' : 'Why reject? (optional)');
-    for (const r of vocab) {
-      const on = draft.primary.includes(r.key);
+  // Chip rows are built ONCE per verb vocabulary (lazily, on the first time that
+  // verb needs them) and cached; verb switches re-parent the cached rows and a
+  // pure sync pass updates aria-pressed/hidden from the draft — no tree rebuild
+  // on every tap (P11c). Sub-reason rows exist from the start, [hidden] until
+  // their primary is active, so toggling a primary is attribute-only work.
+  const panels = new Map(); // verb → [{ key, row, chip, subRow, subChips }]
+  function buildPanel(verb) {
+    return reasonsForVerb(verb).map((r) => {
       const chip = el('button', {
-        type: 'button', class: 'listing-chip', 'data-reason': r.key, 'aria-pressed': String(on),
+        type: 'button', class: 'listing-chip', 'data-reason': r.key, 'aria-pressed': 'false',
       }, r.label);
       const subs = subReasonsFor(r.key);
-      let subRow = null;
-      if (on && subs.length) {
-        const active = draft.subs[r.key] || [];
-        const subChips = subs.map((s) => el('button', {
-          type: 'button', class: 'listing-subchip', 'data-sub': s.key, 'data-parent': r.key,
-          'aria-pressed': String(active.includes(s.key)),
-        }, s.label));
-        subRow = el('div', { class: 'listing-subreasons', role: 'group', 'aria-label': `Refine: ${r.label}` }, subChips);
+      const subChips = subs.map((s) => el('button', {
+        type: 'button', class: 'listing-subchip', 'data-sub': s.key, 'data-parent': r.key,
+        'aria-pressed': 'false',
+      }, s.label));
+      const subRow = subs.length
+        ? el('div', { class: 'listing-subreasons', role: 'group', 'aria-label': `Refine: ${r.label}`, hidden: true }, subChips)
+        : null;
+      const row = el('div', { class: 'listing-reason' }, [chip, subRow].filter(Boolean));
+      return { key: r.key, row, chip, subRow, subChips };
+    });
+  }
+  function syncPanel(verb) {
+    for (const p of panels.get(verb) || []) {
+      const on = draft.primary.includes(p.key);
+      p.chip.setAttribute('aria-pressed', String(on));
+      if (p.subRow) {
+        p.subRow.hidden = !on;
+        const active = draft.subs[p.key] || [];
+        for (const c of p.subChips) c.setAttribute('aria-pressed', String(active.includes(c.dataset.sub)));
       }
-      reasonsEl.append(el('div', { class: 'listing-reason' }, [chip, subRow].filter(Boolean)));
     }
+  }
+  function renderReasons() {
+    const verb = draft.verb;
+    const vocab = reasonsForVerb(verb);
+    reasonsEl.hidden = vocab.length === 0;
+    if (!vocab.length) { reasonsEl.replaceChildren(); return; }
+    reasonsEl.setAttribute('aria-label', verb === 'like' ? 'What did you like? (optional)' : 'Why reject? (optional)');
+    if (!panels.has(verb)) panels.set(verb, buildPanel(verb));
+    reasonsEl.replaceChildren(...panels.get(verb).map((p) => p.row));
+    syncPanel(verb);
   }
 
   reasonsEl.addEventListener('click', (e) => {
     const sub = e.target.closest('[data-sub]');
     if (sub) {
-      const parent = sub.dataset.parent;
-      const key = sub.dataset.sub;
-      setDraft(toggleSub(draft, parent, key));
-      sub.setAttribute('aria-pressed', String((draft.subs[parent] || []).includes(key)));
+      setDraft(toggleSub(draft, sub.dataset.parent, sub.dataset.sub));
+      syncPanel(draft.verb);
       markDirty();
       return;
     }
     const chip = e.target.closest('[data-reason]');
     if (!chip) return;
     setDraft(togglePrimary(draft, chip.dataset.reason));
-    renderReasons();
+    syncPanel(draft.verb);
     markDirty();
   });
 
