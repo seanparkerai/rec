@@ -3,7 +3,7 @@
 // threaded into the Rightmove URL, the post-filter drops excluded types and
 // stale listings, learned-favourite outcodes are processed first, and the
 // always-on baseline (price cap, min beds, dontShow) is verified.
-import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, householdRowsToVillages, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
+import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, householdRowsToVillages, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-05-31T00:00:00Z');
@@ -209,6 +209,58 @@ export async function register({ test, assert, assertEqual }) {
   test('fetch-listings: no spec is a pass-through filter', () => {
     const rows = [{ rightmove_id: 'a' }, { rightmove_id: 'b' }];
     assertEqual(filterListingsBySpec(rows, null, NOW).length, 2);
+  });
+
+  // ── per-household budget bands (union per search target) ──
+  test('fetch-listings: buildSearchUrl honours a per-target price band', () => {
+    const url = buildSearchUrl('OUTCODE^1', null, { priceMin: 330000, priceMax: 400000 });
+    assert(url.includes('minPrice=330000'), 'band floor applied');
+    assert(url.includes('maxPrice=400000'), 'band ceiling applied');
+    // A household band may sit OUTSIDE the fallback band — it must still win.
+    const wide = buildSearchUrl('OUTCODE^1', null, { priceMin: 200000, priceMax: 500000 });
+    assert(wide.includes('minPrice=200000'), 'band may go below the fallback floor');
+    assert(wide.includes('maxPrice=500000'), 'band may exceed the fallback ceiling');
+    // No band → fallback baseline, exactly as before.
+    const plain = buildSearchUrl('OUTCODE^1');
+    assert(plain.includes(`minPrice=${BASELINE_PRICE_MIN}`) && plain.includes(`maxPrice=${BASELINE_PRICE_MAX}`), 'fallback band without opts');
+  });
+
+  test('fetch-listings: learned spec tightens within the band, never loosens it', () => {
+    const band = { priceMin: 330000, priceMax: 400000 };
+    const tighter = buildSearchUrl('OUTCODE^1', { priceMin: 350000, priceMax: 390000 }, band);
+    assert(tighter.includes('minPrice=350000') && tighter.includes('maxPrice=390000'), 'spec narrows inside the band');
+    const looser = buildSearchUrl('OUTCODE^1', { priceMin: 100000, priceMax: 999999 }, band);
+    assert(looser.includes('minPrice=330000') && looser.includes('maxPrice=400000'), 'spec cannot widen past the band');
+  });
+
+  test('fetch-listings: priceBandForAreas unions every linked household budget', () => {
+    const areaHouseholds = new Map([
+      ['solo-a', new Set(['h1'])],
+      ['solo-b', new Set(['h2'])],
+      ['shared', new Set(['h1', 'h2'])],
+      ['nobudget', new Set(['h3'])],          // linked household with no stored budget
+    ]);
+    const budgets = new Map([
+      ['h1', { min: 250000, max: 425000 }],
+      ['h2', { min: 330000, max: 400000 }],
+    ]);
+    const one = priceBandForAreas(['solo-b'], areaHouseholds, budgets);
+    assertEqual(one.min, 330000); assertEqual(one.max, 400000);
+    const both = priceBandForAreas(['solo-a', 'solo-b'], areaHouseholds, budgets);
+    assertEqual(both.min, 250000, 'lowest minimum across households');
+    assertEqual(both.max, 425000, 'highest maximum across households');
+    const shared = priceBandForAreas(['shared'], areaHouseholds, budgets);
+    assertEqual(shared.min, 250000); assertEqual(shared.max, 425000);
+    // Unlinked area → fallback band unchanged.
+    const unlinked = priceBandForAreas(['nowhere'], areaHouseholds, budgets);
+    assertEqual(unlinked.min, BASELINE_PRICE_MIN); assertEqual(unlinked.max, BASELINE_PRICE_MAX);
+    // A linked-but-unbudgeted household folds the fallback in (coverage never shrinks).
+    const folded = priceBandForAreas(['solo-b', 'nobudget'], areaHouseholds, budgets);
+    assertEqual(folded.min, Math.min(330000, BASELINE_PRICE_MIN));
+    assertEqual(folded.max, Math.max(400000, BASELINE_PRICE_MAX));
+    // Empty / missing inputs degrade to the fallback band.
+    const empty = priceBandForAreas([], new Map(), new Map());
+    assertEqual(empty.min, BASELINE_PRICE_MIN); assertEqual(empty.max, BASELINE_PRICE_MAX);
   });
 
   test('fetch-listings: focus outcodes are processed first, none dropped', () => {

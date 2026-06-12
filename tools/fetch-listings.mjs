@@ -80,6 +80,10 @@ const APIFY_MAX_BUDGET_USD = Number(process.env.APIFY_MAX_BUDGET_USD) || 25;
 
 // Always-on baseline source filters — injected into EVERY Rightmove search URL.
 // Never removed, only tightened by the learned spec.
+// PRICE is the exception: the live band per search target is the UNION of the
+// linked households' budgets (criteria.budget.{min,max} — lowest min, highest
+// max, see priceBandForAreas). BASELINE_PRICE_MIN/MAX is the FALLBACK band,
+// used when an area has no linked household or a budget can't be read.
 const BASELINE_PRICE_MIN = 250000;
 const BASELINE_PRICE_MAX = 425000;
 const BASELINE_MIN_BEDS = 2;
@@ -278,9 +282,11 @@ async function resolveLocationId(outcode) {
   return id;
 }
 
-// Build the Rightmove search URL. Always-on baseline (BASELINE_PRICE_MAX,
-// BASELINE_MIN_BEDS, BASELINE_DONT_SHOW) is injected into every call — a
+// Build the Rightmove search URL. Always-on baseline (BASELINE_MIN_BEDS,
+// BASELINE_DONT_SHOW, property-type allow-list) is injected into every call — a
 // learned `spec` (v3 L4) can only tighten these, never loosen them.
+// The price band comes from opts.priceMin/priceMax (the per-target union of
+// linked households' budgets), defaulting to the fallback BASELINE_PRICE_MIN/MAX.
 // opts.days overrides the recency window (used by tests; production passes via spec).
 function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   const rawDays = opts.days ?? spec?.recencyDays ?? MAX_DAYS_SINCE_ADDED;
@@ -293,16 +299,19 @@ function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
     sortType: '6',                 // newest first
   });
   if (days != null) params.set('maxDaysSinceAdded', String(days));
-  // Always-on baseline: hard price cap, minimum beds, excluded categories, and the
+  // Always-on baseline: price band, minimum beds, excluded categories, and the
   // house+bungalow allow-list (excludes the whole flat family + land + park-home at source).
-  params.set('minPrice', String(BASELINE_PRICE_MIN));
-  params.set('maxPrice', String(BASELINE_PRICE_MAX));
+  // The band is the per-target household-budget union when supplied; fallback otherwise.
+  const priceMin = Number(opts.priceMin) || BASELINE_PRICE_MIN;
+  const priceMax = Number(opts.priceMax) || BASELINE_PRICE_MAX;
+  params.set('minPrice', String(priceMin));
+  params.set('maxPrice', String(priceMax));
   params.set('minBedrooms', String(BASELINE_MIN_BEDS));
   params.set('dontShow', BASELINE_DONT_SHOW);
   params.set('propertyTypes', BASELINE_PROPERTY_TYPES.join(','));
-  // A learned spec can tighten (raise minPrice, lower maxPrice, raise minBeds) within the baseline.
-  if (spec?.priceMin && spec.priceMin > BASELINE_PRICE_MIN) params.set('minPrice', String(spec.priceMin));
-  if (spec?.priceMax && spec.priceMax < BASELINE_PRICE_MAX) params.set('maxPrice', String(spec.priceMax));
+  // A learned spec can tighten (raise minPrice, lower maxPrice, raise minBeds) within the band.
+  if (spec?.priceMin && spec.priceMin > priceMin) params.set('minPrice', String(spec.priceMin));
+  if (spec?.priceMax && spec.priceMax < priceMax) params.set('maxPrice', String(spec.priceMax));
   if (spec?.minBeds && spec.minBeds > BASELINE_MIN_BEDS) params.set('minBedrooms', String(spec.minBeds));
   // L7.4: a search radius (miles) turns a point identifier (POSTCODE^/REGION^/
   // STATION^) into a tight disk — so a sparse outcode stops returning Andover.
@@ -336,13 +345,13 @@ function orderOutcodesByFocus(outcodes, spec) {
 }
 
 // ── Apify actor ──────────────────────────────────────────────────────────────
-async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null) {
+async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null) {
   if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
   const url =
     `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
     `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
   const input = {
-    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles }) }],
+    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max }) }],
     maxItems: RESULTS_PER_OUTCODE,
     monitoringMode: false,
     includePriceHistory: false,
@@ -421,28 +430,86 @@ async function restGetOne(table, select) {
 // accurately-located stub (source='household-onboarding', active=false) and links it
 // via household_areas; those stubs are intentionally NOT materialised to repo files,
 // so the fetcher reads them live here and merges the eligible ones into the target
-// set. Returns the joined [{ id, data }] rows, or [] when unreadable/empty so a read
-// outage never crashes or silently widens the run (it just behaves as repo-only L1).
+// set. Returns { rows, links }: the joined [{ id, data }] area rows plus the raw
+// household_id↔area_id links (for per-target budget bands). Empty on failure so a
+// read outage never crashes or silently widens the run (it just behaves as repo-only L1).
 async function loadHouseholdAreas() {
-  if (!SERVICE_KEY) return [];
+  if (!SERVICE_KEY) return { rows: [], links: [] };
   const headers = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` };
   try {
-    const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=area_id`;
+    const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=household_id,area_id`;
     const laRes = await fetch(laUrl, { headers });
     if (!laRes.ok) throw new Error(`GET household_areas failed: ${laRes.status}`);
-    const links = await laRes.json();
-    const ids = [...new Set((links || []).map((l) => l.area_id).filter(Boolean))];
-    if (!ids.length) return [];
+    const links = (await laRes.json()) || [];
+    const ids = [...new Set(links.map((l) => l.area_id).filter(Boolean))];
+    if (!ids.length) return { rows: [], links };
     const inList = ids.map((i) => `"${i}"`).join(',');
     const aUrl = `${SUPABASE_URL}/rest/v1/areas?id=in.(${inList})&select=id,data`;
     const aRes = await fetch(aUrl, { headers });
     if (!aRes.ok) throw new Error(`GET areas failed: ${aRes.status}`);
-    return await aRes.json();
+    return { rows: await aRes.json(), links };
   } catch (e) {
     console.warn('household areas load failed:', e.message);
-    return [];
+    return { rows: [], links: [] };
   }
 }
+
+// Per-household budget bands (service-role read): criteria.budget.{min,max} for
+// every household. A row without a positive max is skipped (treated as
+// unbudgeted → fallback band); a missing/invalid min falls back to
+// BASELINE_PRICE_MIN so a max-only budget never opens the floor to £0.
+// Returns Map household_id → { min, max }; empty on failure (fallback band).
+async function loadHouseholdBudgets() {
+  const budgets = new Map();
+  if (!SERVICE_KEY) return budgets;
+  try {
+    const url = `${SUPABASE_URL}/rest/v1/criteria?select=household_id,data`;
+    const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
+    if (!res.ok) throw new Error(`GET criteria failed: ${res.status}`);
+    for (const r of (await res.json()) || []) {
+      const b = r?.data?.budget || {};
+      const min = Number(b.min), max = Number(b.max);
+      if (!r?.household_id || !(Number.isFinite(max) && max > 0)) continue;
+      budgets.set(r.household_id, { min: Number.isFinite(min) && min > 0 ? min : BASELINE_PRICE_MIN, max });
+    }
+    return budgets;
+  } catch (e) {
+    console.warn('household budgets load failed:', e.message);
+    return budgets;
+  }
+}
+
+/**
+ * Union price band for one search target: scrutinise every household linked to
+ * any of the target's areas and take the LOWEST budget.min and HIGHEST
+ * budget.max across them, so a single Rightmove search covers all of them. A
+ * linked household with no stored budget folds in the fallback band (its
+ * coverage never shrinks); a target whose areas have no household links at all
+ * gets the fallback band unchanged. Pure — unit-tests without Supabase.
+ * @param {Array<string>} areaIds  the target's area ids
+ * @param {Map<string,Set<string>>} areaHouseholds  area_id → linked household ids
+ * @param {Map<string,{min:number,max:number}>} budgets  household_id → band
+ * @returns {{min:number,max:number}}
+ */
+function priceBandForAreas(areaIds, areaHouseholds, budgets, fallback = { min: BASELINE_PRICE_MIN, max: BASELINE_PRICE_MAX }) {
+  const households = new Set();
+  for (const id of areaIds || []) {
+    for (const h of areaHouseholds?.get(id) || []) households.add(h);
+  }
+  let min = Infinity, max = -Infinity, anyBudget = false, anyUnbudgeted = households.size === 0;
+  for (const h of households) {
+    const b = budgets?.get(h);
+    if (b && Number.isFinite(b.min) && Number.isFinite(b.max) && b.min <= b.max) {
+      min = Math.min(min, b.min); max = Math.max(max, b.max); anyBudget = true;
+    } else {
+      anyUnbudgeted = true;
+    }
+  }
+  if (!anyBudget || anyUnbudgeted) { min = Math.min(min, fallback.min); max = Math.max(max, fallback.max); }
+  return { min, max };
+}
+
+const fmtPrice = (v) => `£${v % 1000 === 0 ? `${v / 1000}k` : v.toLocaleString('en-GB')}`;
 
 // Stage 6 enforcement: the household-scoped areas the user paused via "Stop searching".
 // Read-only here (the portal writes these rows). Returns [] when unreadable so a probation
@@ -515,7 +582,7 @@ async function main() {
   // prunes + probation, then flow through clustering / resolve / geofence exactly like
   // curated villages. No commit, no promotion: a stub added minutes ago is in this run.
   const repoIds = new Set(flattenVillages(outcodeMap).map((v) => v.id));
-  const householdRows = await loadHouseholdAreas();
+  const { rows: householdRows, links: householdLinks } = await loadHouseholdAreas();
   const householdVillages = householdRowsToVillages(householdRows, repoIds);
   for (const v of householdVillages) {
     if (!outcodeMap.has(v.outcode)) outcodeMap.set(v.outcode, []);
@@ -526,6 +593,17 @@ async function main() {
     const skipped = householdRows.length - householdVillages.length;
     console.log(`household areas: +${householdVillages.length} eligible merged${skipped > 0 ? ` · ${skipped} linked row(s) skipped (curated/un-enriched/county-flagged)` : ''}`);
   }
+  // Per-target price bands: every household linked to a target's areas
+  // contributes its budget; each search runs with the union (lowest min,
+  // highest max) so one search serves all interested households.
+  const budgets = await loadHouseholdBudgets();
+  const areaHouseholds = new Map();
+  for (const l of householdLinks || []) {
+    if (!l?.area_id || !l?.household_id) continue;
+    if (!areaHouseholds.has(l.area_id)) areaHouseholds.set(l.area_id, new Set());
+    areaHouseholds.get(l.area_id).add(l.household_id);
+  }
+  console.log(`household budgets: ${budgets.size} loaded (${[...budgets.values()].map((b) => `${fmtPrice(b.min)}–${fmtPrice(b.max)}`).join(', ') || 'none'}) · fallback band ${fmtPrice(BASELINE_PRICE_MIN)}–${fmtPrice(BASELINE_PRICE_MAX)}`);
   // L7.5: honour learned prunes (surfaced + accepted upstream; here we just obey).
   // Areas set active:false are already dropped in loadOutcodeMap; a learned spec may
   // additionally carry dropAreas / dropOutcodes.
@@ -575,15 +653,17 @@ async function main() {
     const areas = target.areas || [];
     try {
       const locId = target.locationIdentifier || await resolveLocationId(oc);
-      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles);
+      const band = priceBandForAreas(areas.map((a) => a.id), areaHouseholds, budgets);
+      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles, band);
       totalRaw += raw.length;
 
       const normalised = raw.map((r) => normaliseRawListing(r, { outcode: oc, source: SOURCE, now })).filter(Boolean);
 
       // Hard baseline gate (houses+bungalows · price band · ≥2 beds). The Apify
       // actor honours the search-URL type/price filters only loosely, so this is
-      // the GUARANTEE: out-of-baseline rows never reach the geofence or the upsert.
-      const inBaseline = normalised.filter((l) => passesBaseline(l, { priceMin: BASELINE_PRICE_MIN, priceMax: BASELINE_PRICE_MAX }));
+      // the GUARANTEE: out-of-band rows never reach the geofence or the upsert.
+      // The price band is the same per-target household-budget union as the search URL.
+      const inBaseline = normalised.filter((l) => passesBaseline(l, { priceMin: band.min, priceMax: band.max }));
       const offBaseline = normalised.length - inBaseline.length;
       totalOffBaseline += offBaseline;
 
@@ -596,7 +676,7 @@ async function main() {
         (l) => !NEW_BUILD_RE.test(l.title ?? '') && !NEW_BUILD_RE.test(l.description ?? '')
       );
       const newBuildDropped = inBaseline.length - notNewBuild.length;
-      if (newBuildDropped > 0) log(`  ↳ dropped ${newBuildDropped} new-build listing(s) (text match)`);
+      if (newBuildDropped > 0) console.log(`  ↳ dropped ${newBuildDropped} new-build listing(s) (text match)`);
 
       // L7: the DECISIVE gate is the coordinate geofence against the GLOBAL active
       // village set — not the 20km isInOutcode wrong-region guard (kept only as a
@@ -627,7 +707,8 @@ async function main() {
       totalFlagged += flagged;
 
       const radiusNote = target.radiusMiles != null ? ` r=${target.radiusMiles.toFixed(1)}mi` : '';
-      console.log(`── ${target.label} (${locId}${radiusNote}): raw ${raw.length}${offBaseline ? ` → baseline ${inBaseline.length} [-${offBaseline} off-baseline]` : ''} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
+      const bandNote = (band.min !== BASELINE_PRICE_MIN || band.max !== BASELINE_PRICE_MAX) ? ` ${fmtPrice(band.min)}–${fmtPrice(band.max)}` : '';
+      console.log(`── ${target.label} (${locId}${radiusNote}${bandNote}): raw ${raw.length}${offBaseline ? ` → baseline ${inBaseline.length} [-${offBaseline} off-baseline]` : ''} → in-buffer ${inBuffer.length}${filteredOut ? ` → on-spec ${onSpec.length}` : ''} → unique ${deduped.length}${rejected ? `  [${rejected} out-of-buffer, ${outOfRegion} out-of-region]` : ''}${flagged ? ` · ${flagged} flagged` : ''}`);
 
       if (DRY_RUN) {
         for (const l of deduped.slice(0, 5)) {
@@ -677,4 +758,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, householdRowsToVillages, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, householdRowsToVillages, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
