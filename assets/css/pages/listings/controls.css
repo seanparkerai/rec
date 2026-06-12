@@ -116,3 +116,12 @@
 }
 .listings-fetch-token-hint { margin: var(--space-2) 0 0; font-size: var(--text-xs); color: var(--ink-muted); }
 
+
+/* P11d: after a Save whose card leaves the feed (liked/rejected are suppressed),
+   the summary line — whose counts just moved — pulses once to show where the
+   decision landed. Animation collapses under the global reduced-motion rule. */
+@keyframes summary-received {
+  0%   { background: color-mix(in oklch, var(--accent) 14%, transparent); }
+  100% { background: transparent; }
+}
+.listings-summary--received { animation: summary-received 1.2s var(--ease-out) 1; border-radius: var(--rec-radius-sm); }

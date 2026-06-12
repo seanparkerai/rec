@@ -226,3 +226,26 @@
   .listing-media-link:hover .listing-media__img,
   .deck-media-link:hover .deck-media__img { transition: none; }
 }
+
+/* ── P11d: save states + post-save destination + coarse-pointer targets ────── */
+
+/* Save in flight: the picker quiets while the row is being persisted. */
+.reaction-picker.is-saving { opacity: 0.65; }
+.reaction-picker.is-saving .listing-save,
+.reaction-picker.is-saving .deck-save { cursor: progress; }
+
+/* Where the decision went: the receiving reviewed group pulses once after a Save
+   (colour paired with the moving count, never colour-only; the global
+   prefers-reduced-motion rule collapses the animation). */
+@keyframes reviewed-received {
+  0%   { background: color-mix(in oklch, var(--accent) 14%, transparent); }
+  100% { background: transparent; }
+}
+.reviewed-collapse--received { animation: reviewed-received 1.2s var(--ease-out) 1; }
+
+/* Reason chips meet the 44px preferred target on touch devices; the dense 32/28px
+   sizing (≥24px floor with spacing, §11) is kept for fine pointers. */
+@media (pointer: coarse) {
+  .listing-chip,
+  .listing-subchip { min-height: var(--tap-min); }
+}

@@ -175,6 +175,8 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
     const reasons = reasonsArray(draft);
     saveBtn.disabled = true;
     saveBtn.textContent = 'Saving…';
+    wrap.classList.add('is-saving');
+    wrap.setAttribute('aria-busy', 'true');
     try {
       // A coordinator that signals failure by returning false (rather than
       // throwing) must still land in the error state — never a false "Saved ✓".
@@ -184,6 +186,9 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
     } catch (e) {
       markError(e);
       saveBtn.disabled = false;
+    } finally {
+      wrap.classList.remove('is-saving');
+      wrap.removeAttribute('aria-busy');
     }
   });
 

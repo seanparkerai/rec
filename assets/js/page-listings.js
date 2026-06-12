@@ -156,7 +156,9 @@ function buildMedia(listing, base, href) {
   const inner = listing.image_url
     ? (() => {
         const img = el('img', {
-          class: `${base}__img`, src: listing.image_url, alt: '',
+          // Inside the labelled dossier link the image is decorative (alt="" avoids
+          // a double announcement); standalone it carries the property as its alt.
+          class: `${base}__img`, src: listing.image_url, alt: href ? '' : `Photo of ${title}`,
           loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
         });
         const box = el('div', { class: base }, [img]);
@@ -275,8 +277,12 @@ function buildReviewedGroup(cfg, rows, buildCard) {
     built = true;
     for (const r of rows) list.appendChild(buildCard(r));
   };
+  list.setAttribute('aria-label', `${cfg.title} — reviewed listings`);
   const details = el('details', { class: `reviewed-collapse reviewed-collapse--${cfg.mod}` }, [
-    el('summary', { class: 'reviewed-collapse__summary' }, [
+    el('summary', {
+      class: 'reviewed-collapse__summary',
+      'aria-label': `${cfg.title}: ${rows.length} reviewed listing${rows.length === 1 ? '' : 's'}`,
+    }, [
       el('span', { class: 'reviewed-collapse__title' }, cfg.title),
       el('span', { class: 'reviewed-collapse__count num' }, String(rows.length)),
     ]),
@@ -665,10 +671,26 @@ async function render() {
   const browseOnSave = async (listing, d) => {
     await onSave(listing, d);
     repaintPreservingScroll(); // re-partitions + calls renderSummary()
+    flagDecisionDestination(d.reaction);
     updateReviewCount();
     updateLearning();
     scheduleRetrain();
   };
+
+  // After a Save the card leaves the active list — show WHERE it went: flash the
+  // matching reviewed group when it's on screen (a pass lands in "Passed"; likes/
+  // rejects appear under "Show hidden"), else the summary line whose counts just
+  // moved. One-shot class, motion-safe in CSS.
+  function flagDecisionDestination(reaction) {
+    const group = listEl.querySelector(`.reviewed-collapse--${REVIEWED_MOD[reaction] || 'reviewed'}`);
+    const target = group || summaryEl;
+    if (!target) return;
+    const cls = group ? 'reviewed-collapse--received' : 'listings-summary--received';
+    target.classList.remove(cls);
+    void target.offsetWidth; // restart the animation when saves come back-to-back
+    target.classList.add(cls);
+    setTimeout(() => target.classList.remove(cls), 1300);
+  }
 
   // The recent "wave" the cold-start deck reviews: added within RECENCY_DAYS and
   // not affordability-gated (gating is learning-independent, so the wave is
