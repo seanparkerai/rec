@@ -1,7 +1,7 @@
 # Model Refinement Engine — maintenance README
 
-> Short operational guide for the refinement engine (Stages 1–9). The full design +
-> staged history is in `docs/REFINEMENT_PLAN.md`; live schema facts are in
+> Short operational guide for the refinement engine (Stages 1–9, shipped). The full design +
+> staged history is archived at `docs/archive/REFINEMENT_PLAN.md`; live schema facts are in
 > `docs/SCHEMA_NOTES.md`. This file is the "how it fits together / how to operate it" map.
 
 ## What it does

@@ -1,5 +1,5 @@
 // refinement/view.js — PURE view-model builders for the Refinement control panel
-// (Stage 4, read-only; docs/REFINEMENT_PLAN.md §4). No DOM, no I/O — takes the rows
+// (Stage 4, read-only; docs/archive/REFINEMENT_PLAN.md §4). No DOM, no I/O — takes the rows
 // from storage.getRefinementSuggestions() + the run meta and returns plain objects the
 // page renderer turns into markup. Kept pure so the formatting (plain-English copy,
 // the volume-artefact note, the confidence meter, the inbox cap/ranking) is unit-tested.

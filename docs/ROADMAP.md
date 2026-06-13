@@ -1,6 +1,8 @@
 # v3 Roadmap
 
-v2 covers the visual-first overhaul of seven existing pages plus an intelligence engine (affordability, money-flow, savings-velocity). Three v3 capabilities were scaffolded in v2 as placeholder pages. One has now shipped; two remain.
+v2 covered the visual-first overhaul of seven existing pages plus an intelligence engine
+(affordability, money-flow, savings-velocity). Three v3 capabilities were scaffolded in v2 as
+placeholder pages. Two have shipped; one remains.
 
 ---
 
@@ -17,39 +19,28 @@ v2 covers the visual-first overhaul of seven existing pages plus an intelligence
 - Outreach log persists via `storage.js`; Supabase `contacts` and `outreach` tables added.
 - Contacts CRUD (agents / brokers / solicitors / surveyors) in a collapsible directory.
 - Deep-linked from area-detail verdict strip (A1), finances affordability widget (A5), and seven journey checklist rows.
-- Nav chip removed; feature is live.
+
+### Live listings + self-learning feed — `pages/listings.html`
+
+**Shipped** (v3 L0–L6 + convergence P1–P7 + the Model Refinement Engine). A live Rightmove feed
+(Apify actor → `tools/fetch-listings.mjs` → Supabase `listings`) filtered by a single baseline gate,
+ranked by an explainable fit score from the v2 affordability engine, with an append-only reaction
+log (`listing_reactions`), distilled learned preferences (base-rate calibrated · recency-decayed ·
+reason-attributed), feed suppression/dedup, a per-listing dossier page (`pages/property.html`), and
+a statistics-gated refinement engine that *proposes* stopping areas/types (notify-only, reversible).
+Operating guide: `docs/REFINEMENT_README.md`; build record: `docs/archive/V3_LISTINGS_PLAN.md` +
+`docs/archive/REFINEMENT_PLAN.md`.
 
 ---
 
 ## Still to come
 
-### Live listings — `pages/listings.html`
-
-**Goal.** Replace manual area research with live property listings filtered to the user's criteria and ranked by affordability fit.
-
-**What it does**
-- Pulls open listings (sale + lettings) for the user's shortlisted areas.
-- Ranks each listing with a fit dot from the v2 affordability engine (`assessAffordability(listing.price, finances, criteria)`).
-- Shows price history, council-tax band, LISA eligibility inline on each listing row.
-- "Saved" listings persist via `assets/js/storage.js`; deltas (price drops, new matches against the user's criteria) trigger an in-app badge.
-
-**Data it needs**
-- A listings feed. Candidates: Rightmove via Apify, Zoopla developer API, OnTheMarket public RSS, Land Registry price-paid for historical baselines.
-- Per-listing geolocation to match against shortlisted area polygons.
-- A daily-refresh job (out of scope for a zero-build static site — likely a small fetch worker behind a JSON cache).
-
-**v2 surface it slots into**
-- Placeholder page at `pages/listings.html` (Phase 5). Nav already carries `Listings (soon)`.
-- The dashboard's shortlist tile will gain a "new listings since last visit" indicator once the feed is wired up.
-
----
-
-## Ask — `pages/ask.html`
+### Ask — `pages/ask.html`
 
 **Goal.** A natural-language interface over the whole dataset — e.g. *"show me the most affordable shortlisted areas with an outstanding primary school"*.
 
 **What it does**
-- Parses NL queries into structured filters over `criteria.json`, the areas index, and listings.
+- Parses NL queries into structured filters over the criteria, the areas index, and listings.
 - Returns ranked results with the same fit-dot vocabulary used everywhere else in the app.
 - Suggestion-chip examples on the empty state replicate common queries.
 
@@ -64,6 +55,9 @@ v2 covers the visual-first overhaul of seven existing pages plus an intelligence
 
 ## What's deliberately not on this roadmap
 
-- A backend / auth layer. The migration target is a single login + remote storage; that's a v4 concern, not v3.
-- A native mobile wrapper. The web app should already be a 5-star mobile experience by the end of v2.
-- A second visual direction. The Stripe-docs / Linear-dense anchors are the contract; v3 features must inherit, not introduce a third.
+- A native mobile wrapper. The web app is already built mobile-first (DESIGN.md §6).
+- A second visual direction. The Stripe-docs / Linear-dense anchors are the contract; new features
+  must inherit, not introduce a third.
+
+*(The "backend / auth layer is a v4 concern" note from the original v3 plan is obsolete — Supabase
+auth + RLS shipped in Phase 10 and is the live backend; see CLAUDE.md §17–§18.)*

@@ -1,5 +1,5 @@
 // refinement/scope.js — PURE scrape-scope derivation for the probation lever
-// (docs/REFINEMENT_PLAN.md §6 enforcement + §8 invariant). No I/O. The scraper
+// (docs/archive/REFINEMENT_PLAN.md §6 enforcement + §8 invariant). No I/O. The scraper
 // (tools/fetch-listings.mjs, service role) and the invariant checker
 // (tools/refinement-scope-check.mjs) both consume these helpers, so the scope maths is
 // unit-tested once and reused.

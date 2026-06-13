@@ -1,5 +1,5 @@
 // tests/refinement-engine.test.js — Stage 2 of the Model Refinement Engine
-// (docs/REFINEMENT_PLAN.md §2). Exercises the PURE statistical core in isolation:
+// (docs/archive/REFINEMENT_PLAN.md §2). Exercises the PURE statistical core in isolation:
 // normalisation, time-decayed counts, Wilson lower bound (with small-n continuity
 // correction), baseline/lift, the one-sided two-proportion test, Benjamini-Hochberg
 // FDR, the five gates, confidence tiers, ranking, and the volume_artefact flag.

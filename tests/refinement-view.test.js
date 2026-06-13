@@ -1,5 +1,5 @@
 // tests/refinement-view.test.js — Stage 4 read-only control panel view-models
-// (docs/REFINEMENT_PLAN.md §4). Exercises the PURE view layer: value humanisation,
+// (docs/archive/REFINEMENT_PLAN.md §4). Exercises the PURE view layer: value humanisation,
 // the card view-model (incl. the volume-artefact note, §2.8), status classification,
 // the inbox ranking + MAX_INBOX cap, and the model-confidence meter states.
 import {

@@ -92,6 +92,7 @@ const { register: registerRefinementScope } = await import('../tests/refinement-
 const { register: registerReactionProvenance } = await import('../tests/reaction-provenance.test.js');
 const { register: registerAreaRef } = await import('../tests/area-ref.test.js');
 const { register: registerAreaEnrich } = await import('../tests/area-enrich.test.js');
+const { register: registerDocsConsistency } = await import('../tests/docs-consistency.test.js');
 const { runResponsiveLint } = await import('./lint-responsive.mjs');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
@@ -147,6 +148,7 @@ await registerAreaMatch({ test, assert, assertEqual });
 await registerAreaRef({ test, assert, assertEqual });
 await registerAreaEnrich({ test, assert, assertEqual });
 await registerSetupWizard({ test, assert, assertEqual });
+await registerDocsConsistency({ test, assert, assertEqual });
 
 await test('responsive lint (no new violations vs baseline)', () => {
   const { regressions } = runResponsiveLint();

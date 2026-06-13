@@ -1,4 +1,4 @@
-// refinement/persistence.js — Stage 3 planning layer (docs/REFINEMENT_PLAN.md §3).
+// refinement/persistence.js — Stage 3 planning layer (docs/archive/REFINEMENT_PLAN.md §3).
 // PURE: turns an engine run + current DB state into a set of intended mutations
 // (suggestion upserts + one run-audit row + a sync_log entry). It does NO I/O — the
 // driver (tools/refinement-run.mjs) or Claude-via-MCP executes the plan. NOTIFY-ONLY:
