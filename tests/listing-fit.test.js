@@ -19,6 +19,19 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assert(r.affordability, 'affordability surfaced even when gated');
   });
 
+  test('listing-fit: a price below budget.min is gated to reject', () => {
+    // fixture budget.min is 180000; a known sub-minimum price gates out of the feed.
+    const r = scoreListingFit({ listing: mk({ price: 150000 }), finances, criteria });
+    assertEqual(r.verdict, 'reject');
+    assertEqual(r.gated, true);
+    assert(r.contributions.some((c) => c.signal === 'budget-floor'), 'below-min reason surfaced');
+  });
+
+  test('listing-fit: an unknown (zero/absent) price does not trip the below-min gate', () => {
+    const r = scoreListingFit({ listing: mk({ price: 0 }), finances, criteria });
+    assertEqual(r.gated, false);
+  });
+
   test('listing-fit: an affordable, in-criteria home is not gated and is scored', () => {
     const r = scoreListingFit({ listing: mk(), finances, criteria });
     assertEqual(r.gated, false);
