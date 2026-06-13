@@ -1,5 +1,5 @@
 // refinement/config.js — single source of truth for the Model Refinement Engine's
-// tunable numbers (docs/REFINEMENT_PLAN.md §5). The engine (./engine.js) is pure and
+// tunable numbers (docs/archive/REFINEMENT_PLAN.md §5). The engine (./engine.js) is pure and
 // reads everything from a resolved config object; nothing is hard-coded downstream.
 //
 // Two classes of constant:
@@ -9,7 +9,7 @@
 //     the §2 spec (Wilson z, small-n continuity threshold, tier boundaries, FDR family
 //     mode, and the "volume artefact" thresholds).
 //
-// If you change a number here, reconcile docs/REFINEMENT_PLAN.md §5 in the same commit.
+// If you change a number here, reconcile docs/archive/REFINEMENT_PLAN.md §5 in the same commit.
 
 /** The four preset-controlled levers (plan §5 preset matrix). */
 export const PRESETS = {

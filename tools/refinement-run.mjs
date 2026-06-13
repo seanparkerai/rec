@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // refinement-run.mjs — Stage 3 scheduled job driver for the Model Refinement Engine
-// (docs/REFINEMENT_PLAN.md §3). Snapshots reactions → runs the pure engine → plans the
+// (docs/archive/REFINEMENT_PLAN.md §3). Snapshots reactions → runs the pure engine → plans the
 // persistence writes → EMITS idempotent SQL. It never executes DDL/DML itself: the
 // caller runs the emitted SQL (Claude via the Supabase MCP connector in this sandbox;
 // CI via `psql`). NOTIFY-ONLY — the plan touches only refinement_suggestions /

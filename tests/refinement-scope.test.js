@@ -1,5 +1,5 @@
 // tests/refinement-scope.test.js — Stage 6 enforcement + Stage 8 invariant
-// (docs/REFINEMENT_PLAN.md §6/§8). PURE scope maths: active-area derivation, probation
+// (docs/archive/REFINEMENT_PLAN.md §6/§8). PURE scope maths: active-area derivation, probation
 // subtraction, the exploration re-probe cadence, and the drift invariant.
 import {
   activeAreaIds, probationAreaSet, reprobeThisRun, probationDropIds, scopeInvariant,

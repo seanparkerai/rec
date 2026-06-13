@@ -1,12 +1,11 @@
 # CHECKLIST — live progress tracker
 
-Tick items as completed and **commit**. To resume in a fresh chat: read this file, then `docs/PLAN.md` +
+Tick items as completed and **commit**. To resume in a fresh chat: read this file, then
 `docs/CONTEXT.md`, run `node tools/area-status.mjs`, run tests, continue at the first unchecked box.
 
-> **▶ ACTIVE PLAN — Model Refinement Engine ("the decision plan"):** full staged
-> plan + live checklist + progress log live in **`docs/REFINEMENT_PLAN.md`**; live schema
-> facts in **`docs/SCHEMA_NOTES.md`**. If asked to *"pick up the decision plan work,"*
-> open `REFINEMENT_PLAN.md` and follow its RESUME banner.
+> **▶ Model Refinement Engine ("the decision plan") — SHIPPED:** the full staged
+> plan + progress log are archived at **`docs/archive/REFINEMENT_PLAN.md`**; live schema
+> facts in **`docs/SCHEMA_NOTES.md`**. Operate the engine via **`docs/REFINEMENT_README.md`**.
 > **Current state (2026-06-05):** **ALL STAGES 1–9 COMPLETE.** Full engine: schema →
 > pure engine → persistence job → control panel → display-hide lever (Approach B,
 > `learned_preferences.overrides`) → scrape-pause lever + probation + scraper enforcement
