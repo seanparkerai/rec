@@ -1,0 +1,55 @@
+# backfill-areas — manual standing-stock pull for a specific set of areas.
+# Uses FOUNDATION_MODE=1 (omits maxDaysSinceAdded → all currently listed stock)
+# and AREA_IDS to restrict to only the named areas, keeping Apify spend tight.
+#
+# Pre-filled for Suzanne's 7 areas — edit area_ids at dispatch time to target
+# any other subset. Always dry-run first to review projected cost.
+#
+# Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
+# SUPABASE_SERVICE_ROLE_KEY.
+name: backfill-areas
+
+on:
+  workflow_dispatch:
+    inputs:
+      area_ids:
+        description: 'Comma-separated area IDs to backfill (curated or household stubs)'
+        type: string
+        default: 'bishop-s-waltham-so32,waltham-chase-so32,hill-head-hampshire,stubbington-hampshire,titchfield-hampshire,titchfield-common-hampshire,wickham-and-knowle-hampshire'
+      dry_run:
+        description: 'Preview only — resolve targets and estimate cost, no Apify calls or writes'
+        type: boolean
+        default: true
+      results_per_target:
+        description: 'Max listings per search target'
+        type: string
+        default: '100'
+      apify_budget_usd:
+        description: 'Hard USD spend cap (actor self-terminates at limit; no overrun on PPE actors)'
+        type: string
+        default: '5'
+
+permissions:
+  contents: read
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Backfill areas
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          FOUNDATION_MODE: '1'
+          SEARCH_MODE: cluster
+          RESULTS_PER_OUTCODE: ${{ inputs.results_per_target }}
+          APIFY_MAX_BUDGET_USD: ${{ inputs.apify_budget_usd }}
+          AREA_IDS: ${{ inputs.area_ids }}
+        run: node tools/fetch-listings.mjs
