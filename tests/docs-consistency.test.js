@@ -21,6 +21,9 @@ const SCANNED_DOCS = [
   'docs/README.md',
   'docs/SUPABASE_SYNC.md',
   'docs/REFINEMENT_README.md',
+  '.claude/skills/resume/SKILL.md',
+  '.claude/skills/area-research/SKILL.md',
+  '.claude/skills/sync-check/SKILL.md',
 ];
 
 // Deliberate mentions of paths that do not exist (historical references,
