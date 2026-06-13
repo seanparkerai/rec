@@ -1,0 +1,41 @@
+# suzanne-backfill — one-click standing-stock pull for Suzanne's 7 areas.
+#
+# No inputs. Tap "Run workflow" and it fetches every property currently listed
+# (FOUNDATION_MODE=1 — all stock, not just recently added) across Suzanne's
+# areas, restricted by AREA_IDS so nothing else is fetched, and writes the
+# matches straight into the Supabase `listings` table.
+#
+# Cost: 7 areas × 100 results worst case ≈ $1.40; hard-capped at $5 (the Apify
+# actor self-terminates at the cap — no overrun possible).
+#
+# Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
+# SUPABASE_SERVICE_ROLE_KEY.
+name: suzanne-backfill
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Backfill Suzanne's areas
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: '0'
+          FOUNDATION_MODE: '1'
+          SEARCH_MODE: cluster
+          RESULTS_PER_OUTCODE: '100'
+          APIFY_MAX_BUDGET_USD: '5'
+          AREA_IDS: 'bishop-s-waltham-so32,waltham-chase-so32,hill-head-hampshire,stubbington-hampshire,titchfield-hampshire,titchfield-common-hampshire,wickham-and-knowle-hampshire'
+        run: node tools/fetch-listings.mjs
