@@ -9,7 +9,7 @@ The single source of truth for how this app looks. Read this before any UI chang
 Two named anchors. Every view is one or the other — never both, never neither.
 
 ### Stripe-docs (long-form, editorial)
-For content-led views: `pages/profile.html` (detailed profile view), `pages/about-search.html` (the profile + criteria summary/edit surface; `#about` reads as long-form), `pages/area-detail.html`, `pages/house-types.html`, `pages/journey.html`.
+For content-led views: `pages/profile.html` (the profile + criteria summary/edit surface), `pages/area-detail.html`, `pages/property.html` (listing dossier), `pages/journey.html`, `pages/outreach.html`.
 
 - Single-column reading width (≤68ch) on mobile, two-column (content + sticky rail) ≥768 px.
 - Display headings in Fraunces with optical sizing; generous leading (1.5–1.6 body, 1.15 display).
@@ -18,7 +18,7 @@ For content-led views: `pages/profile.html` (detailed profile view), `pages/abou
 - Inline figures with caption + licence; sources as footnotes with tap previews.
 
 ### Linear-dense (data-rich UI)
-For tools and data: `index.html`, `pages/about-search.html#search` (criteria; `pages/criteria.html` is a redirect into it), `pages/areas.html`, `pages/finances.html`, `pages/map.html`.
+For tools and data: `index.html`, `pages/areas.html`, `pages/finances.html`, `pages/listings.html`, `pages/saved-listings.html`, `pages/refinement.html`, `pages/report.html`.
 
 - Compact rhythm: tight rows, dense tables, monospace numerals.
 - Asymmetric / bento layouts — never a uniform grid of identical cards.
@@ -101,7 +101,7 @@ Before merging any UI change:
 Adopted at v2 plan adoption. Every page and component in the v2 overhaul must reinforce these:
 
 1. **At-a-glance precedence** — every page answers its core question in the first 600 px of viewport. No scroll for the lead verdict.
-2. **No isolated calculators** — every calculator on a page shares inputs from `data/finances.json` + `data/criteria.json` and updates together. The four siloed widgets on the current finances page are the anti-pattern.
+2. **No isolated calculators** — every calculator on a page shares inputs from the canonical finances + criteria state (Supabase via `storage.js`) and updates together. The four siloed widgets on the old finances page were the anti-pattern.
 3. **Always show, then explain** — numbers in mono come first; prose lives in `<details>` or a right-rail caption. Verdicts over essays.
 4. **No graphic without a verdict** — every chart annotates an answer (e.g. *"you hit target in March 2027"*). No decoration. If a chart has no caption-as-answer, replace it with a number or remove it.
 5. **Visual cues replace text** — banding (comfortable / stretch / tight / out-of-reach), coloured fit dots, money-flow bars instead of category lists. Existing accent / ink / paper palette only; derive shades via `color-mix`. Never a seven-pastel palette to differentiate categories.
