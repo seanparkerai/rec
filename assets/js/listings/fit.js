@@ -68,7 +68,13 @@ export function scoreListingFit({ listing, finances, criteria, area, learnedPref
     councilTaxBand: listing?.council_tax ?? area?.councilTaxBand,
   });
 
-  // 1. HARD GATE.
+  const bMin = Number(criteria?.budget?.min) || 0;
+  const bMax = Number(criteria?.budget?.max) || 0;
+
+  // 1. HARD GATES. Two symmetric price gates bound the default feed, plus the
+  // affordability gate. A gated row is hidden by default and revealable via the
+  // "Show out of reach" toggle (feed-partition's includeOOR). A KNOWN price
+  // (price > 0) gates; an unknown/0 price never does.
   if (affordability.verdict === 'out-of-reach') {
     return {
       verdict: 'reject',
@@ -79,6 +85,24 @@ export function scoreListingFit({ listing, finances, criteria, area, learnedPref
         label: 'Out of reach',
         delta: -1,
         detail: affordability.headline,
+      }],
+      affordability,
+    };
+  }
+
+  // Below the user's own price floor: a known price under budget.min is gated,
+  // mirroring the over-ceiling treatment, so sub-minimum homes never surface in
+  // the default feed (they are still revealable via "Show out of reach").
+  if (bMin && price && price < bMin) {
+    return {
+      verdict: 'reject',
+      score: 0,
+      gated: true,
+      contributions: [{
+        signal: 'budget-floor',
+        label: `£${price.toLocaleString('en-GB')} — under your £${bMin.toLocaleString('en-GB')} minimum`,
+        delta: -1,
+        detail: 'Below your minimum budget',
       }],
       affordability,
     };
@@ -108,9 +132,7 @@ export function scoreListingFit({ listing, finances, criteria, area, learnedPref
   else if (typeIn(prefs.preferred, type)) add('type', `${type} — a preferred type`, W.typePreferred);
   else if (typeIn(prefs.acceptable, type)) add('type', `${type} — acceptable`, W.typeAcceptable);
 
-  // Price vs budget window.
-  const bMin = Number(criteria?.budget?.min) || 0;
-  const bMax = Number(criteria?.budget?.max) || 0;
+  // Price vs budget window (bMin/bMax hoisted above for the price gates).
   if (bMax && price > bMax) add('price', `£${price.toLocaleString('en-GB')} — over your £${bMax.toLocaleString('en-GB')} ceiling`, W.priceOverBudget);
   else if (price && (!bMin || price >= bMin) && (!bMax || price <= bMax)) add('price', 'Within your budget window', W.priceInBudget);
 
