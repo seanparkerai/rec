@@ -73,6 +73,12 @@ const FOUNDATION_MODE = process.env.FOUNDATION_MODE === '1' || process.env.FOUND
 // Daily mode: 3-day overlap so a missed cron self-heals.
 const VALID_DAYS = new Set([1, 3, 7, 14]);
 const MAX_DAYS_SINCE_ADDED = FOUNDATION_MODE ? null : (Number(process.env.MAX_DAYS_SINCE_ADDED) || 3);
+// AREA_IDS: optional comma-separated list of area IDs to restrict the fetch to.
+// When set, only areas in this list are fetched (curated or household stubs).
+// Applied after all sources are merged and pruned — unmatched outcodes are dropped.
+const AREA_IDS = process.env.AREA_IDS
+  ? new Set(process.env.AREA_IDS.split(',').map((s) => s.trim()).filter(Boolean))
+  : null;
 
 const RESULTS_PER_OUTCODE = Number(process.env.RESULTS_PER_OUTCODE) || 50;  // cap per target (lower = cheaper on pay-per-event actors)
 // Hard USD spend cap: passed to Apify as maxBudget. PPE actors self-terminate — no overrun possible.
@@ -724,6 +730,16 @@ async function main() {
     console.log(`learned prune: -${dropAreas.size} areas · -${dropOutcodes.size} outcodes`);
   }
   if (!DRY_RUN && reprobed.length) await markReprobed(reprobed, runIndex);
+  // AREA_IDS scope: restrict the fetch to a specific subset of area IDs.
+  // Applies to both curated repo areas and household stubs.
+  if (AREA_IDS?.size) {
+    for (const [oc, arr] of [...outcodeMap]) {
+      const kept = arr.filter((v) => AREA_IDS.has(v.id));
+      if (!kept.length) outcodeMap.delete(oc);
+      else outcodeMap.set(oc, kept);
+    }
+    console.log(`area scope: restricted to ${AREA_IDS.size} specified area ID(s) (AREA_IDS)`);
+  }
   const ALL_ACTIVE = flattenVillages(outcodeMap);          // global geofence index
   // L7.4: build search targets for the chosen mode (outcode|village|cluster), then
   // order by learned focus (by outcode) and cap with FETCH_LIMIT.
