@@ -11,68 +11,48 @@ the table in §1 as authoritative — every data type in the app belongs to exac
 
 ## 0. Canonical table inventory (single source of truth)
 
-**Live schema = 23 curated tables** (verified via `list_tables` 2026-05-31, all RLS-enabled):
+**Live schema = 30 tables in `public`** (verified via `list_tables` 2026-06-12, **all RLS-enabled**).
+**22 are "tracked"** for the sync contract — **20 user-state + 2 content mirrors** — and appear in
+`data/snapshots/sync-state.json`. The enforced list lives in `tests/supabase-sync.test.js`; any other
+doc, test, or rule that states a different count is wrong and must be reconciled to this section.
 
-- **18 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
-  `finances`, `goals`, `shortlist`, `zones`, `journey_checks`, `contacts`, `outreach`,
-  `readiness_checklist`, `investments_accounts`, `investments_history`, `debts_credit_cards`,
-  `debts_student_loans`, `debts_other`, `listing_reactions`, `learned_preferences`,
-  `area_confirmations`.
-- **2 content mirrors** (source of truth = repo JSON): `areas` (195 rows), `house_types` (15 rows).
+- **20 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
+  `finances`, `goals`, `shortlist`, `zones`, `journey_checks`, `journey_progress`, `contacts`,
+  `outreach`, `readiness_checklist`, `investments_accounts`, `investments_history`,
+  `debts_credit_cards`, `debts_student_loans`, `debts_other`, `listing_reactions` (**append-only**:
+  every like/pass/reject + optional reason + `listing_snapshot` is a new row; RLS read+insert only),
+  `learned_preferences` (one row/household: `derived` Layer-2 weights recomputed from the reaction
+  log + `overrides` Layer-3 intent + dismissals), `area_confirmations` (blob of user-confirmed area
+  locations), `household_areas` (**relational**, PK `(household_id, area_id)` — the per-household
+  area *selection* layer over the global `areas` catalog; composed by `storage.js#getHouseholdAreas`;
+  its migration also added a gated `areas` INSERT policy for `source='household-onboarding'`
+  provisional stubs only).
+- **2 content mirrors**: `areas` (**DB-canonical** since the 2026-06-04 §18.5 relaxation —
+  `data/areas/<id>.json` is a materialised view) and `house_types` (repo-JSON-canonical, mirrored).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.
+- **5 untracked** (never git-synced): `listings` (live content, see below), `reports` (un-curated),
+  and the engine-managed refinement tables `refinement_suggestions`, `refinement_runs`,
+  `scrape_probation` (see `docs/REFINEMENT_README.md`).
 
-**20 of the 23 are "tracked"** for the sync contract (18 user-state + 2 content) and appear in
-`data/snapshots/sync-state.json`. Note: `checklists` and `outreach_templates` have **no** mirror
-table — those catalogues are repo-JSON-only. Any other doc, test, or rule that states a different
-count is wrong and must be reconciled to this section.
+Note: `checklists` and `outreach_templates` have **no** mirror table — those catalogues are
+repo-JSON-only.
 
-**v3 L1 addition (2026-05-30):** `listings` — a new **live-content** class (see §1).
-Created by migration `listings_l1`. It is **not** one of the tracked git-synced
-tables and is **not** mirrored to/from repo JSON: it is written exclusively by
-`tools/fetch-listings.mjs` (service role) and changes hourly, so it has no
-review/cite value the way `areas` does. Both writers (`fetch-listings.mjs` and the
+**`listings` — the live-content class (v3, see §1).** Written exclusively by
+`tools/fetch-listings.mjs` (service role) and changing hourly, it has no review/cite value the way
+`areas` does, so it is not mirrored to/from repo JSON. Both writers (`fetch-listings.mjs` and the
 backfill `import-apify-runs.mjs`) apply the `passesBaseline` gate
-(`assets/js/listings/classify.js`), and the row is also **purged — not only appended** —
-by `tools/purge-listings.mjs` (baseline-violating / rejected-and-old / stale; never a
-liked row) and by user-approved one-off MCP cleanups. The reject SIGNAL that drives feed
-suppression lives in the append-only `listing_reactions` log, NOT in `listings`, so purging
-a heavy listings row never loses suppression. *(2026-06-04: a one-off MCP purge dropped
-1,671 not-liked baseline-violators, 3,086→1,415; then a user-approved removed-area purge dropped
-551 not-liked listings across the 9 inactive areas, 1,415→864 — ever-liked rows always kept;
-`listing_reactions` untouched at 3,244.)*
+(`assets/js/listings/classify.js`), and rows are also **purged — not only appended** — by
+`tools/purge-listings.mjs` (baseline-violating / rejected-and-old / stale; **never a liked row**) and
+by user-approved one-off MCP cleanups. The reject SIGNAL that drives feed suppression lives in the
+append-only `listing_reactions` log, NOT in `listings`, so purging a heavy listings row never loses
+suppression.
 
-**v3 L3 addition (2026-05-30):** `listing_reactions` — a **user-state** table (per household_id),
-but **append-only**: every reaction (like/pass/reject + optional reject reason + `listing_snapshot`)
-is a new row; the latest row per listing is the current reaction. Created by migration
-`listing_reactions_l3`. RLS allows household members to read + insert only (no update/delete). It is
-tracked sync table #18.
-
-**v3 L4 addition (2026-05-31):** `learned_preferences` — a **user-state** table (one row per
-household_id), holding the distilled `derived` weights (Layer 2, recomputed from the
-`listing_reactions` log — base-rate calibrated · recency decayed · traceable) and the `overrides`
-(Layer 3, manual/AI intent). Created by migration `learned_preferences_l4`. RLS allows household
-members to read + insert + update. It is tracked sync table #19.
-
-**v3 Step5 addition (2026-05-31):** `area_confirmations` — a **user-state** table (one blob row per
-household_id), holding the map of explicitly user-confirmed area locations (`{ confirmed: { areaId:
-isoTimestamp } }`). Created by migration `area_confirmations_step5`. RLS allows household members to
-read + insert + update. It is tracked sync table #20. Physical table count is now **25**
-(the 23 curated above + the un-curated `reports` table + the live-content `listings` table).
-
-**Phase 2 addition (2026-06-08):** `household_areas` — a **user-state**, **relational** table (NOT a
-blob): `(household_id, area_id, added_via, status)`, PK `(household_id, area_id)`, RLS via
-`is_household_member()` (SELECT/INSERT/UPDATE/DELETE). It is the per-household area **selection**
-layer over the global `areas` catalog — it does **not** touch `scrape_probation` or the global
-`areas.active` flag. Composed by `storage.js#getHouseholdAreas` (resolves each linked `area_id`
-against the repo catalog, falling back to the Supabase `areas.data` row for `source='household-onboarding'`
-stubs). Created by migration `household_areas_and_gated_stub_insert`, which also added a **gated
-`areas` INSERT policy** (an authenticated member may insert only provisional rows with
-`source='household-onboarding'` AND `active=false`; no UPDATE/DELETE policy, so the curated catalog
-stays read-only). The owner household was seeded with all 196 curated areas (`added_via='curated-seed'`);
-new households start empty until onboarding. It is **tracked sync table #21** — making the tracked set
-**22** (20 user-state + 2 content). The `areas` mirror was deliberately **not** backfilled or
-re-materialised in this phase. (Note: the earlier "18 user-state / 20 tracked" figure above predates
-`journey_progress` and this table; the enforced source is `tests/supabase-sync.test.js`, now at 22.)
+*History (collapsed):* `listings` / `listing_reactions` landed v3 L1/L3 (2026-05-30),
+`learned_preferences` L4 and `area_confirmations` Step 5 (2026-05-31), `household_areas` +
+the gated stub-INSERT policy in Phase 2 (2026-06-08, migration
+`household_areas_and_gated_stub_insert`); `journey_progress` joined the tracked set alongside it.
+The owner household was seeded with all curated areas (`added_via='curated-seed'`); new households
+start empty until onboarding.
 
 ---
 
@@ -82,9 +62,9 @@ re-materialised in this phase. (Note: the earlier "18 user-state / 20 tracked" f
 |-------|----------------|-----------------|--------|--------|
 | **User state** | `profile`, `criteria`, `finances`, `shortlist`, `zones`, `journey_checks`, `contacts`, `outreach` — **no repo JSON file** | Supabase row (one per household_id) | Portal via `storage.js`, OR Claude via MCP `execute_sql` | `storage.js` reads with localStorage write-through cache |
 | **Test fixtures** | `data/fixtures/*.sample.json` | Repo file (git-versioned, redacted) | Claude only | Test harness (`tools/run-intelligence-tests.mjs`) and fresh-install fallback in `storage.js` |
-| **Content (per-area)** | `data/areas/<id>.json` | Repo file (git-versioned) | Claude only | App fetches the JSON; Supabase `areas` mirror table answers ad-hoc queries |
+| **Content (per-area)** | Supabase `areas` table + materialised `data/areas/<id>.json` | **Supabase `areas`** (DB-canonical, §18.5 relaxation 2026-06-04) | Claude via MCP UPSERT, then `tools/sync-areas-from-supabase.mjs` re-materialises the files | App fetches the JSON; `tests/areas-db-repo-parity.test.js` guards file↔DB parity |
 | **Content (catalogues)** | `data/house-types.json`, `data/checklists.json`, `data/outreach-templates.json` | Repo file | Claude only | App fetches the JSON; only `house_types` has a Supabase mirror table — `checklists` / `outreach_templates` are repo-JSON-only (no mirror) |
-| **Index** | `data/areas.json` | Derived from per-area files via `tools/build-areas.mjs` | Build tool | App fetches the JSON; Supabase `areas` mirror table |
+| **Index** | `data/areas.json` | Derived from `data/source/villages.csv` + the materialised per-area files via `tools/build-areas.mjs` | Build tool | App fetches the JSON |
 | **Live content (v3)** | `listings` (Supabase only — no repo file) | Supabase (fetcher-written) | `tools/fetch-listings.mjs` via service-role REST UPSERT (`on_conflict=rightmove_id`) | `storage.js#getListings` → listings page. NOT git-versioned; not a tracked table |
 | **User state (append-only, v3 L3)** | `listing_reactions` (Supabase only — no repo file) | Supabase (per household_id) | Portal via `storage.js#saveListingReaction` (INSERT — append-only); Claude via MCP `execute_sql` INSERT | `storage.js#getListingReactions` reduces the log to the latest reaction per listing. Tracked table #18 |
 | **User state (recomputed, v3 L4)** | `learned_preferences` (Supabase only — no repo file) | Supabase (per household_id) | Portal via `storage.js#saveLearnedPreferences` / `recomputeLearnedPreferences` (UPSERT); Claude via MCP `execute_sql` UPSERT | `storage.js#getLearnedPreferences` → `{ derived, overrides }`; `derived` recomputed from the reaction log, `overrides` preserved. Tracked table #19 |
@@ -119,7 +99,7 @@ If any of steps 1–4 fails or surfaces an unexpected change, **stop and check w
 | Trigger | What Claude does |
 |---------|------------------|
 | User says "update my finances with X" | `mcp__supabase__execute_sql` UPSERT to `finances` row · re-SELECT to verify · update local snapshot |
-| User says "research area X" | Edit `data/areas/<id>.json` via `Write` tool · UPSERT JSON into `areas` mirror table · update snapshot |
+| User says "research area X" | Write the record to the Supabase `areas` row via MCP UPSERT · `node tools/sync-areas-from-supabase.mjs` to materialise the file · `node tools/build-areas.mjs` · update snapshot (§18.5 DB-first path) |
 | User says "add a new house type" | Edit `data/house-types.json` · UPSERT into `house_types` mirror · update snapshot |
 | Claude refactors a calculator | No Supabase write — code only |
 | Claude touches `supabase/schema.sql` | NOT allowed via direct edit — open a phase, draft the migration, apply via `mcp__supabase__apply_migration` |
@@ -141,12 +121,14 @@ If any of steps 1–4 fails or surfaces an unexpected change, **stop and check w
 
 ## 3. Why this design
 
-**Why content lives in repo JSON, not Supabase as primary**
+**Why content is git-materialised even where the DB is canonical**
 
-Areas are reviewable, diff-able, cite-able content. Git history is the source of truth for
-"what changed, when, by whom, with what sources". Stashing 195 area records in a JSONB column would
-collapse that history into opaque database rows. The mirror table exists for query convenience
-(fast filters, joins with shortlist / user state), not as the canonical store.
+Areas are reviewable, diff-able, cite-able content. Since the 2026-06-04 §18.5 relaxation the
+Supabase `areas` table is the canonical store (one write path, queryable, joinable with user state),
+but every change is immediately materialised back into `data/areas/<id>.json` so git history keeps
+recording "what changed, when, by whom, with what sources" — the parity test makes drift impossible
+to commit. The other catalogues (`house_types`, `checklists`, `outreach-templates`) remain
+repo-canonical: they change rarely and review-by-diff is their natural workflow.
 
 **Why user state lives in Supabase, not repo JSON**
 
@@ -168,7 +150,8 @@ universe as the user.
 
 | Symptom | Cause | Recovery |
 |---------|-------|----------|
-| `tests/supabase-sync.test.js` fails: "count mismatch on areas" | A content file edit didn't mirror | Re-run the UPSERT for the missing rows; do not commit until green |
+| `tests/areas-db-repo-parity.test.js` fails (area file ≠ DB) | A per-area file was edited by hand, or a DB write wasn't materialised | The DB wins (§18.5): re-run `node tools/sync-areas-from-supabase.mjs` + `build-areas`; do not commit until green |
+| `tests/supabase-sync.test.js` fails: "count mismatch on house_types" | A content file edit didn't mirror | Re-run the UPSERT for the missing rows; do not commit until green |
 | `tests/supabase-sync.test.js` fails: "user-state row missing" | Brand-new household never saved the relevant page | Acceptable if the page hasn't been visited; mark the row optional in the test fixture |
 | Session-start freshness check shows user-state newer than expected | User edited in the portal since last session | Pull + surface; never overwrite without explicit confirm |
 | MCP `execute_sql` returns `permission denied` | RLS rejected the write — household_id mismatch | Re-fetch the user's household_id via the auth path; do not bypass RLS |

@@ -60,7 +60,7 @@ All visual values come from `assets/css/tokens.css`. Component CSS **never** har
 
 ---
 
-## 3. Bans (verbatim from `CLAUDE.md` §9)
+## 3. Bans (this list is authoritative — `CLAUDE.md` §9 defers here)
 
 Do not ship any of these:
 
