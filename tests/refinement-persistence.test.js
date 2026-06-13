@@ -1,5 +1,5 @@
 // tests/refinement-persistence.test.js — Stage 3 persistence/planning layer
-// (docs/REFINEMENT_PLAN.md §3). Proves the three acceptance points deterministically:
+// (docs/archive/REFINEMENT_PLAN.md §3). Proves the three acceptance points deterministically:
 //   • running the job twice advances runs_qualified correctly (read-back loop);
 //   • a dismissed value stays dismissed (no re-nag);
 //   • nothing in the plan mutates listings / criteria / zones (notify-only).

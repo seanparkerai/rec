@@ -1,5 +1,5 @@
 // refinement/engine.js — the pure, deterministic statistical core of the Model
-// Refinement Engine (docs/REFINEMENT_PLAN.md §2). Snapshot in → ranked candidate
+// Refinement Engine (docs/archive/REFINEMENT_PLAN.md §2). Snapshot in → ranked candidate
 // refinements out. NO UI, NO Supabase, NO scope mutation, NO randomness, NO clock
 // reads except the `now` you pass. Stage 3 wraps this with persistence + logging.
 //

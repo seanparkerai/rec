@@ -1,6 +1,6 @@
 # SCHEMA_NOTES.md — live schema discovery for the Model Refinement Engine
 
-> **Stage 1 deliverable** (see `docs/REFINEMENT_PLAN.md`). Captured **2026-06-05**
+> **Stage 1 deliverable** (see `docs/archive/REFINEMENT_PLAN.md`). Captured **2026-06-05**
 > by reading the live Supabase project `qxmyrahqsopmaeokxdub` (`rec`) via MCP —
 > not assumed. Re-verify with `mcp__supabase__list_tables` if shapes look stale.
 > Household in use: `9628b44f-447e-4c5b-bbbc-b2ce51efbbbe` (single household, 1 member).
@@ -170,7 +170,7 @@
   tables assertion (green) and avoids a meaningless freshness check on regenerated data.
 
 ## 9. Config constants — status
-- Section 5 of `docs/REFINEMENT_PLAN.md` holds the agreed defaults (Cautious
+- Section 5 of `docs/archive/REFINEMENT_PLAN.md` holds the agreed defaults (Cautious
   preset shipped). These are **Luke's documented choices**; treated as confirmed
   for the Stage 1 migration (the constants live in a Stage 2 config module, not in
   the schema, so the migration does not depend on them). Flagged in the session

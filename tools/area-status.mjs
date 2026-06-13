@@ -27,7 +27,7 @@ const idIdx        = args.indexOf('--id');
 const ONLY_ID      = idIdx >= 0 ? args[idIdx + 1] : null;
 
 if (!fs.existsSync(AREAS_DIR)) {
-  console.error(`No data/areas/ directory — run: node tools/migrate-areas.mjs`);
+  console.error(`No data/areas/ directory — run: node tools/sync-areas-from-supabase.mjs`);
   process.exit(1);
 }
 

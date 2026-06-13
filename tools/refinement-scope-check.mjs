@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // refinement-scope-check.mjs — Stage 8 invariant check for the scrape-scope lever
-// (docs/REFINEMENT_PLAN.md §8). Re-derives scope correctness from the source of truth
+// (docs/archive/REFINEMENT_PLAN.md §8). Re-derives scope correctness from the source of truth
 // (active areas in data/areas/*.json MINUS scrape_probation) and reports drift:
 //   • probationedButActive — areas the user paused that the scraper would still pull
 //     (the scraper MUST drop these; expected EMPTY once §6 enforcement is live & ran);
