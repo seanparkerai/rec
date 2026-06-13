@@ -64,7 +64,8 @@ every session**. These rules exist to keep work safe, resumable, and high qualit
 - Write area/house content **only after detailed, place-specific and type-specific web searches**
   (exact place name + exact property type). Record sources in each record's `sources[]`.
 - Use **only openly-licensed images** (Wikimedia Commons, Geograph CC, Unsplash, official tourism),
-  **downloaded** into `assets/img/{areas,house-types}/`, with `credit` + `licence` recorded in the JSON.
+  **downloaded** into `assets/img/{areas,house-types}/` (directories created on first download —
+  imagery work is still queued in `docs/CHECKLIST.md`), with `credit` + `licence` recorded in the JSON.
 - Never hotlink unattributed copyrighted search-engine images.
 
 ## 8. Resume protocol (start here in a fresh chat)

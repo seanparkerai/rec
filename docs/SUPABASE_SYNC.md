@@ -13,7 +13,8 @@ the table in §1 as authoritative — every data type in the app belongs to exac
 
 **Live schema = 30 tables in `public`** (verified via `list_tables` 2026-06-12, **all RLS-enabled**).
 **22 are "tracked"** for the sync contract — **20 user-state + 2 content mirrors** — and appear in
-`data/snapshots/sync-state.json`. The enforced list lives in `tests/supabase-sync.test.js`; any other
+`data/snapshots/sync-state.json` (the snapshot also carries a high-water entry for the untracked
+`listings` table). The enforced list lives in `tests/supabase-sync.test.js`; any other
 doc, test, or rule that states a different count is wrong and must be reconciled to this section.
 
 - **20 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
