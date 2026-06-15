@@ -32,16 +32,29 @@
   [data-loading="true"]::after { animation: none; }
 }
 
-/* Mobile-first: the bento stays a single full-width column at every width
-   (base.css sets `grid-template-columns: 1fr`). A landscape phone is still a
-   phone — we never cram tiles into multiple columns. Each tile uses its OWN
-   internal width for side-by-side content (deposit arc, money-flow panels…)
-   via the per-tile `@container (min-width: 720px)` rules, so wide tiles stay
-   rich without splitting the page into squished column slivers.
+/* Bento layout — mobile & tablet (≤1023px) stay a single full-width column
+   (base.css sets `grid-template-columns: 1fr`): every tile readable, no slivers,
+   and nothing transitions inside the banned iPad 600–800 band. Multi-column only
+   from laptop up.
 
-   NB: an earlier 12-column grid here only assigned spans to 7 of 13 tiles,
-   so the rest collapsed to ~1/12-width slivers in landscape. Keeping one
-   column guarantees every tile is full width. */
+   Span discipline (learned from the old 12-col grid that left 6/13 tiles as
+   ~1/12-width slivers): every tile auto-places into ONE track by default, and
+   ONLY the two tiles whose internals go side-by-side at the `@container
+   (min-width: 720px)` threshold — the deposit arc and the money-flow panels —
+   span two tracks, so they're always wide enough and never squeezed. Band
+   labels keep `grid-column: 1 / -1`, so each band starts a fresh row and the
+   grouping is preserved (no dense packing leaking tiles across bands). */
+@media (min-width: 1024px) {
+  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bento > .tile-deposit,
+  .bento > .tile-flow { grid-column: span 2; }
+}
+@media (min-width: 1280px) {
+  .bento { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bento > .tile-deposit,
+  .bento > .tile-flow { grid-column: span 2; }
+}
+
 @container (min-width: 720px) {
   .tile-deposit .ring { width: 11rem; height: 11rem; }
 }
