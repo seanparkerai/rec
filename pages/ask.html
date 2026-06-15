@@ -51,10 +51,21 @@
 
     <form id="ask-composer" class="ask-composer" autocomplete="off">
       <label class="ask-visually-hidden" for="ask-input">Ask a question</label>
-      <textarea id="ask-input" class="ask-input" rows="2" enterkeyhint="send"
-        placeholder="Ask anything about your search&hellip;"></textarea>
-      <button id="ask-send" type="submit" class="ask-send">Send</button>
-      <button id="ask-stop" type="button" class="ask-stop" hidden>Stop</button>
+      <div class="ask-field">
+        <textarea id="ask-input" class="ask-input" rows="1" enterkeyhint="send"
+          placeholder="Ask anything about your search&hellip;"></textarea>
+        <button id="ask-send" type="submit" class="ask-send" aria-label="Send message">
+          <svg class="ask-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+            fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5" /><path d="m5 12 7-7 7 7" />
+          </svg>
+        </button>
+        <button id="ask-stop" type="button" class="ask-stop" aria-label="Stop generating" hidden>
+          <svg class="ask-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="6" y="6" width="12" height="12" rx="2.5" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
     </form>
 
     <p class="ask-disclaimer">
