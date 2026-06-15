@@ -60,8 +60,13 @@ function applyTheme(saved) {
 }
 function updateToggle(btn) {
   const dark = effectiveTheme() === 'dark';
-  btn.textContent = dark ? '☀︎ Light' : '☾ Dark';
+  // Toggle state via attribute + label only — the sun/moon SVGs are swapped by
+  // CSS keyed on [aria-pressed]. Never write glyph characters into the button
+  // (the old '☾'/'☀︎' fell back to a tofu box in UI fonts without those glyphs).
+  btn.setAttribute('aria-pressed', String(dark));
   btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  const label = btn.querySelector('.theme-toggle__label');
+  if (label) label.textContent = dark ? 'Light' : 'Dark';
 }
 function initTheme() {
   applyTheme(localStorage.getItem(THEME_KEY));

@@ -107,16 +107,20 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
    never turns the page into a scroll container or breaks sticky descendants). */
 html, body { overflow-x: clip; }
 
-/* ---- Header (static — scrolls away with the page; not sticky) ---- */
+/* ---- Header (sticky — stays reachable on long pages; nav is always one tap
+   away without scrolling to the top). Translucent paper + backdrop blur so the
+   scrolled content reads through it. ---- */
 .site-header {
-  position: static; z-index: 20;
+  position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--rec-gap);
   padding-block: var(--space-3);
   /* Reserve room on the left for the fixed burger so the brand never sits under it. */
   padding-inline: max(calc(var(--space-2) + var(--tap-min) + var(--space-2)), env(safe-area-inset-left)) max(clamp(0.75rem, 3vw, 2rem), env(safe-area-inset-right));
   padding-top: max(var(--space-3), env(safe-area-inset-top));
-  background: var(--paper);
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(150%) blur(10px);
+          backdrop-filter: saturate(150%) blur(10px);
   border-bottom: 1px solid var(--hairline);
 }
 
@@ -183,6 +187,7 @@ html, body { overflow-x: clip; }
 }
 #theme-toggle {
   width: auto; min-height: var(--tap-min); min-width: var(--tap-min);
+  display: inline-flex; align-items: center; gap: var(--space-2);
   padding: 0 var(--space-3); margin: 0;
   background: transparent; color: var(--ink-muted);
   border: 1px solid var(--hairline);
@@ -191,6 +196,11 @@ html, body { overflow-x: clip; }
   transition: color 120ms var(--ease-out), border-color 120ms var(--ease-out), background 120ms var(--ease-out);
 }
 #theme-toggle:hover { color: var(--ink); border-color: var(--hairline-strong); background: var(--paper-2); }
+/* SVG sun/moon icons swap with the active theme (no glyph characters → no tofu).
+   Pressed = dark active → offer the sun (go light); unpressed → offer the moon. */
+#theme-toggle .icon { inline-size: 1.125rem; block-size: 1.125rem; flex: 0 0 auto; display: none; }
+#theme-toggle[aria-pressed="false"] .icon--moon { display: block; }
+#theme-toggle[aria-pressed="true"] .icon--sun { display: block; }
 
 /* ---- Sidebar nav drawer (native <dialog>, opened by the burger) ---- */
 .nav-drawer {
@@ -416,6 +426,8 @@ main.container {
 
 /* Keep focused elements clear of the sticky header + nav (SC 2.4.11 Focus Not Obscured) */
 :focus-visible { scroll-margin-top: 6rem; }
+/* In-page anchor jumps (TOC, #section links) must land below the sticky header. */
+:target { scroll-margin-top: calc(var(--header-h, 4rem) + var(--space-4)); }
 
 /* ---- Profile page: field lists, edit rows, action bar ---- */
 .page-actions button { margin: 0; min-height: var(--tap-min); padding: 0.5rem 0.95rem; font-size: var(--text-sm); }
