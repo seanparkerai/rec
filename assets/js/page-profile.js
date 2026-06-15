@@ -2,6 +2,7 @@
 // Read view = article sections with field lists + chip grids.
 // Edit = native <dialog> with all fields, save persists via storage.js.
 import { getProfile, saveProfile, getCriteria, getFinances, _internal } from './storage.js';
+import { normalizeProfile, canonicalProfile, employmentDisplay, creditDisplay, householdDisplay } from './profile-schema.js';
 import { esc, byId } from './dom.js';
 
 const gbp = (n) => new Intl.NumberFormat('en-GB', {
@@ -15,15 +16,15 @@ let current = null;
 const dlg = () => $('edit-dialog');
 
 const TEXT_FIELDS = [
-  { key: 'headline',        label: 'Headline (one-line summary)',    type: 'textarea' },
-  { key: 'buyers',          label: 'Who is buying',                  type: 'text' },
-  { key: 'household',       label: 'Household',                      type: 'text' },
-  { key: 'employment',      label: 'Employment',                     type: 'text' },
-  { key: 'creditProfile',   label: 'Credit profile',                 type: 'text' },
-  { key: 'lifestyle',       label: 'Lifestyle',                      type: 'textarea' },
-  { key: 'locationFocus',   label: 'Location focus',                 type: 'text' },
-  { key: 'movingTimeline',  label: 'Moving timeline / window',       type: 'text' },
-  { key: 'notes',           label: 'Notes',                          type: 'textarea' },
+  { key: 'headline',          label: 'Headline (one-line summary)',  type: 'textarea' },
+  { key: 'buyers',            label: 'Who is buying',                type: 'text' },
+  { key: 'householdSummary',  label: 'Household',                    type: 'text' },
+  { key: 'employmentSummary', label: 'Employment',                   type: 'text' },
+  { key: 'creditSummary',     label: 'Credit profile',               type: 'text' },
+  { key: 'lifestyle',         label: 'Lifestyle',                    type: 'textarea' },
+  { key: 'locationFocus',     label: 'Location focus',               type: 'text' },
+  { key: 'movingTimeline',    label: 'Moving timeline / window',     type: 'text' },
+  { key: 'notes',             label: 'Notes',                        type: 'textarea' },
 ];
 const ARRAY_FIELDS = [
   { key: 'priorities',   label: 'Priorities' },
@@ -64,9 +65,9 @@ function renderAll() {
   if (lead) lead.textContent = current.headline || 'Who you are, how you want to live, what you\'re looking for.';
   renderFieldList($('dl-buyer'), [
     ['Buyers', current.buyers],
-    ['Household', current.household],
-    ['Employment', current.employment],
-    ['Credit profile', current.creditProfile],
+    ['Household', householdDisplay(current)],
+    ['Employment', employmentDisplay(current)],
+    ['Credit profile', creditDisplay(current)],
   ]);
   renderFieldList($('dl-lifestyle'), [
     ['Lifestyle', current.lifestyle],
@@ -166,7 +167,7 @@ function closeEdit() {
 }
 
 async function saveEdit() {
-  current = collectDialog();
+  current = canonicalProfile(collectDialog());
   saveProfile(current);
   closeEdit();
   renderAll();
@@ -179,7 +180,7 @@ async function saveEdit() {
 async function resetToDefaults() {
   if (!confirm('Discard local profile edits and reload from your saved data? This cannot be undone.')) return;
   localStorage.removeItem('rec:profile');
-  current = await getProfile();
+  current = normalizeProfile(await getProfile());
   closeEdit();
   renderAll();
   const fin = await getFinances();
@@ -199,7 +200,7 @@ function setStatus(msg, kind = '') {
 async function init() {
   if (!$('p-btn-edit')) return;
   try {
-    current = await getProfile();
+    current = normalizeProfile(await getProfile());
     const fin = await getFinances();
     const crit = await getCriteria();
     renderTiles(crit, fin);

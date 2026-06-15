@@ -1,6 +1,7 @@
 // page-outreach.js — outreach page coordinator.
 // All feature logic delegated to assets/js/outreach/ modules.
 import { getProfile, getCriteria, getFinances } from './storage.js';
+import { normalizeProfile } from './profile-schema.js';
 import { getLog, getContacts } from './outreach-store.js';
 import { state } from './outreach/state.js';
 import { renderGrid } from './outreach/grid.js';
@@ -18,6 +19,10 @@ async function init() {
     getContacts(),
     getLog(),
   ]);
+
+  // Canonical shape exposes the flat fields outreach templates resolve
+  // (profile.firstName / lastName / mobile / email / postcode).
+  state.profile = normalizeProfile(state.profile);
 
   renderGrid();
   bindFilters();
