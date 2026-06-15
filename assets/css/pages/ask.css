@@ -132,8 +132,13 @@
 }
 .ask-input {
   flex: 1 1 auto; margin: 0; resize: none;
+  /* Explicit full width + min-width:0 so the field fills the row and can shrink
+     in the flex container. This MUST come before field-sizing: an explicit width
+     overrides field-sizing's content-based width (which otherwise collapses an
+     empty textarea to ~0px); height stays auto so it still grows with content. */
+  width: 100%; min-width: 0;
   min-height: var(--tap-min);
-  /* Grow with content (modern browsers); degrades to a 1-row scroller elsewhere. */
+  /* Grow with content height where supported; degrades to a scroller elsewhere. */
   field-sizing: content; max-height: 12.5rem;
   /* >=16px font keeps iOS from zooming the field on focus. */
   font-size: 1rem; line-height: 1.45;
