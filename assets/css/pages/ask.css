@@ -220,7 +220,13 @@ main.ask-page {
 .ask-send[disabled] { opacity: 0.4; cursor: not-allowed; }
 .ask-stop { background: var(--paper-2); color: var(--ink-1); border: 1px solid var(--hairline-strong); }
 .ask-stop:hover { background: var(--paper-3); }
-.ask-icon { width: 1.3rem; height: 1.3rem; display: block; }
+/* Size the glyph on the element AND the raw <svg> so an unstyled/cached state can
+   never let the icon expand to fill its box (an inline SVG with no intrinsic size
+   otherwise stretches to the container width). */
+.ask-icon,
+.ask-send svg, .ask-stop svg {
+  width: 1.3rem; height: 1.3rem; flex: 0 0 auto; display: block;
+}
 
 .ask-disclaimer {
   flex: 0 0 auto;
