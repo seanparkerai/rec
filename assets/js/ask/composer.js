@@ -7,9 +7,9 @@
 export function createComposer({ form, textarea, sendBtn, stopBtn, chips }, { onSubmit, onStop }) {
   let streaming = false;
 
-  // The textarea grows with its content via CSS `field-sizing: content` (see
-  // assets/css/pages/ask.css) — no JS height manipulation (responsive doctrine
-  // bans direct .style assignment).
+  // The textarea is a fixed couple of rows tall and scrolls internally past its
+  // max-height (see assets/css/pages/ask.css) — no JS height manipulation (the
+  // responsive doctrine bans direct .style assignment).
 
   const canSend = () => !streaming && textarea.value.trim().length > 0 && navigator.onLine !== false;
 

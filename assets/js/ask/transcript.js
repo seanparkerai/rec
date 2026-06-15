@@ -25,7 +25,19 @@ const TOOL_LABELS = {
 export function createTranscript(rootEl) {
   const root = rootEl;
 
-  const scrollToEnd = () => { root.scrollTop = root.scrollHeight; };
+  // The transcript lives in normal document flow (the page scrolls, the composer
+  // is sticky) — so auto-scroll drives the document's scrolling element, not the
+  // transcript node. Only follow new content when the reader is already near the
+  // bottom, so streaming tokens never yank the view away from someone scrolled up.
+  const scroller = () => document.scrollingElement || document.documentElement;
+  const nearBottom = () => {
+    const s = scroller();
+    return (s.scrollHeight - s.scrollTop - s.clientHeight) < 160;
+  };
+  const scrollToEnd = (force = false) => {
+    if (!force && !nearBottom()) return;
+    requestAnimationFrame(() => { const s = scroller(); s.scrollTop = s.scrollHeight; });
+  };
 
   function bubble(role) {
     const el = document.createElement('article');
@@ -42,7 +54,7 @@ export function createTranscript(rootEl) {
   function appendUser(text) {
     const { body } = bubble('user');
     body.textContent = text;
-    scrollToEnd();
+    scrollToEnd(true);
   }
 
   // Render a finished assistant message (e.g. when reloading a saved thread).
@@ -50,7 +62,7 @@ export function createTranscript(rootEl) {
     const { body } = bubble('assistant');
     body.innerHTML = mdToSafeHtml(text);
     if (tools.length) body.appendChild(sourcesLine(tools));
-    scrollToEnd();
+    scrollToEnd(true);
   }
 
   // Begin a streaming assistant message; returns a small controller.
@@ -85,7 +97,7 @@ export function createTranscript(rootEl) {
         if (status.isConnected) status.remove();
         content.innerHTML = mdToSafeHtml(raw);
         if (tools.length) body.appendChild(sourcesLine(tools));
-        scrollToEnd();
+        scrollToEnd(true);
         return { text: raw, tools: [...tools] };
       },
       error(message) {
@@ -95,7 +107,7 @@ export function createTranscript(rootEl) {
         err.setAttribute('role', 'alert');
         err.textContent = message;
         body.appendChild(err);
-        scrollToEnd();
+        scrollToEnd(true);
         return { text: raw, tools: [...tools] };
       },
     };
