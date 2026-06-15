@@ -85,7 +85,8 @@ Deno.serve(async (req) => {
 
           if (!res.ok || !res.body) {
             const detail = await safeText(res);
-            send({ type: "error", message: `Anthropic API error (${res.status})`, detail });
+            console.error(`anthropic error ${res.status}: ${detail}`);
+            send({ type: "error", message: `Anthropic API error (${res.status}): ${detail}`, detail });
             break;
           }
 
