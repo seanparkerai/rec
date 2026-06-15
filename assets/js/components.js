@@ -4,6 +4,16 @@ import { url, STORAGE_NS } from './config.js';
 import { signOut, getCurrentUser } from './storage.js';
 import './auth-guard.js';
 
+// Always-HTTPS guard: if the page is served over plain http on a real host,
+// upgrade to https immediately. Localhost/loopback is exempt so `python3 -m
+// http.server` dev still works. (Primary enforcement is GitHub Pages "Enforce
+// HTTPS" — this is a client-side belt-and-braces that also keeps the Ask
+// Edge Function's https-only CORS origin matching.)
+if (location.protocol === 'http:' &&
+    !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location.hostname)) {
+  location.replace(location.href.replace(/^http:/, 'https:'));
+}
+
 const THEME_KEY = `${STORAGE_NS}:theme`;
 
 /* ---------- Partial includes: <div data-include="components/header.html"></div> ---------- */
