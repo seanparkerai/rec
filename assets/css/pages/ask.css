@@ -151,10 +151,15 @@ main.ask-page {
 .ask-chip:hover { background: var(--paper-3); border-color: var(--hairline-strong); }
 
 /* ---- Composer (pinned to the viewport bottom) ------------------------ */
+/* Reimplemented as a single rounded "field" that *contains* the action button
+   (the modern chat pattern). Structuring it this way — rather than a textarea
+   and a sibling button in a flex row — is also what keeps Pico's `button {
+   width: 100% }` default from collapsing the input: the button is a fixed,
+   self-sized circle inside the field, never a flex sibling competing for width. */
 .ask-composer {
   position: sticky; bottom: 0; z-index: 5;
   flex: 0 0 auto;
-  display: flex; align-items: flex-end; gap: var(--space-2);
+  display: flex;
   margin: 0;
   /* Safe-area inset clears the iPhone home indicator; a touch of top padding +
      a blurred paper backdrop reads as a floating bar over the scrolled thread. */
@@ -164,30 +169,58 @@ main.ask-page {
           backdrop-filter: saturate(160%) blur(12px);
   border-top: 1px solid var(--hairline);
 }
-.ask-input {
-  /* Conventional textarea: full width, visible border, a couple of roomy rows
-     tall, internal scroll past max-height (no JS height juggling). */
-  flex: 1 1 auto; min-width: 0; width: 100%;
-  margin: 0; resize: none;
-  /* ~2.5 comfortable lines so the field reads as a proper compose box, not a
-     squashed single row; grows to 40svh then scrolls internally. */
-  min-height: 3.5rem; max-height: 40svh; overflow-y: auto;
-  /* >=16px keeps iOS Safari from zooming the field on focus. */
-  font-size: 1rem; line-height: 1.5;
-  padding: var(--space-3);
+
+/* The unified field: hairline pill holding the textarea + the send/stop button.
+   align-items:flex-end keeps the button pinned to the bottom as the text grows. */
+.ask-field {
+  flex: 1 1 auto; min-width: 0;
+  display: flex; align-items: flex-end; gap: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  background: var(--paper);
   border: 1px solid var(--hairline-strong);
   border-radius: var(--rec-radius-lg);
-  background: var(--paper);
-  color: var(--ink);
+  transition: border-color 120ms var(--ease-out), box-shadow 120ms var(--ease-out);
 }
+.ask-field:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+/* Borderless textarea inside the field. Scoped under .ask-field so it overrides
+   the dashboard placeholder `.ask-input` (tile-ask.css) by specificity, not load
+   order. ~2 comfortable rows tall, then scrolls internally (no JS height juggling
+   — the responsive doctrine bans direct .style assignment). */
+.ask-field .ask-input {
+  flex: 1 1 auto; min-width: 0; align-self: stretch;
+  margin: 0; resize: none;
+  min-height: 2.75rem; max-height: 40svh; overflow-y: auto;
+  padding: var(--space-2) 0; /* vertical breathing room; field owns the inset */
+  /* >=16px keeps iOS Safari from zooming the field on focus. */
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.5;
+  color: var(--ink); background: transparent;
+  border: 0; border-radius: 0; cursor: text;
+}
+/* Pico draws a focus ring/box-shadow on form fields; the ring now lives on the
+   field wrapper, so neutralise it on the inner control. */
+.ask-field .ask-input:focus { outline: none; box-shadow: none; }
+.ask-field .ask-input::placeholder { color: var(--ink-subtle); }
+
+/* Action button: a fixed-size circle that never participates in the width fight.
+   Explicit width/height beat Pico's `button { width: 100% }`. */
 .ask-send, .ask-stop {
   margin: 0; flex-shrink: 0;
-  min-height: var(--tap-min); min-width: var(--tap-min);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--rec-radius-lg);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--tap-min); height: var(--tap-min); padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 120ms var(--ease-out), opacity 120ms var(--ease-out);
 }
-.ask-send[disabled] { opacity: 0.5; cursor: not-allowed; }
+.ask-send { background: var(--accent); color: var(--accent-contrast); border: 1px solid transparent; }
+.ask-send:hover:not([disabled]) { background: var(--accent-hover); }
+.ask-send[disabled] { opacity: 0.4; cursor: not-allowed; }
 .ask-stop { background: var(--paper-2); color: var(--ink-1); border: 1px solid var(--hairline-strong); }
+.ask-stop:hover { background: var(--paper-3); }
+.ask-icon { width: 1.3rem; height: 1.3rem; display: block; }
 
 .ask-disclaimer {
   flex: 0 0 auto;
@@ -255,7 +288,7 @@ main.ask-page {
 @media (max-height: 600px) {
   main.ask-page { padding-block: var(--space-2) 0; }
   .ask-empty { padding-block: var(--space-2); }
-  .ask-input { max-height: 32svh; }
+  .ask-field .ask-input { max-height: 32svh; }
 }
 
 /* ---- >=768px: roomier reading column, centred history panel ---------- */
