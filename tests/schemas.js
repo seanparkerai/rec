@@ -1,24 +1,26 @@
 // schemas.js — tiny JSON shape validators. Each returns an array of error strings ([] = valid).
+import { canonicalProfile } from '../assets/js/profile-schema.js';
+
 const typeOf = (v) => (Array.isArray(v) ? 'array' : v === null ? 'null' : typeof v);
 
 function check(errors, cond, msg) { if (!cond) errors.push(msg); }
 
+// Validates against the single canonical profile schema (assets/js/profile-schema.js).
+// Any historical layout (flat-full, nested, summary-only) is normalisable, so we
+// assert the canonical invariants on the normalised form.
 export function validateProfile(o) {
   const e = [];
   check(e, typeOf(o) === 'object', 'profile must be an object');
   if (typeOf(o) !== 'object') return e;
-  // Accept either the legacy simple format or the new structured format.
-  const isNewFormat = 'person' in o || 'employment' in o || 'creditProfile' in o;
-  if (isNewFormat) {
-    check(e, typeOf(o.person) === 'object', 'profile.person must be an object');
-    check(e, typeOf(o.employment) === 'object', 'profile.employment must be an object');
-    check(e, typeOf(o.creditProfile) === 'object', 'profile.creditProfile must be an object');
-    check(e, typeOf(o.debts) === 'object', 'profile.debts must be an object');
-  } else {
-    check(e, typeOf(o.priorities) === 'array', 'profile.priorities must be an array');
-    check(e, typeOf(o.dealBreakers) === 'array', 'profile.dealBreakers must be an array');
-    check(e, 'locationFocus' in o, 'profile.locationFocus missing');
-  }
+  const c = canonicalProfile(o);
+  check(e, typeOf(c.person) === 'object', 'profile.person must be an object');
+  check(e, typeOf(c.person.address) === 'object', 'profile.person.address must be an object');
+  check(e, typeOf(c.household) === 'object', 'profile.household must be an object');
+  check(e, typeOf(c.employment) === 'object', 'profile.employment must be an object');
+  check(e, typeOf(c.creditProfile) === 'object', 'profile.creditProfile must be an object');
+  check(e, typeOf(c.debts) === 'object', 'profile.debts must be an object');
+  check(e, typeOf(c.priorities) === 'array', 'profile.priorities must be an array');
+  check(e, typeOf(c.dealBreakers) === 'array', 'profile.dealBreakers must be an array');
   return e;
 }
 

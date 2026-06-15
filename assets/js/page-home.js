@@ -1,6 +1,7 @@
 // page-home.js — dashboard coordinator.
 // All tile rendering is delegated to assets/js/dashboard/tile-*.js modules.
 import { getFinances, getProfile, getCriteria, getInvestments } from './storage.js';
+import { normalizeProfile } from './profile-schema.js';
 import { deriveFinances } from './finance-derive.js';
 import { byId } from './dom.js';
 
@@ -73,7 +74,7 @@ async function init() {
       onUpdate: (fresh) => renderAll(deriveFinances(fresh, { investments: rawInvestments })),
     });
   } catch (e) { console.error('finances error', e); }
-  try { profile = await getProfile(); } catch (e) { console.error('profile error', e); }
+  try { profile = normalizeProfile(await getProfile()); } catch (e) { console.error('profile error', e); }
   try { criteria = await getCriteria(); } catch (e) { console.error('criteria error', e); }
 
   const financesData = deriveFinances(rawFinances, { investments: rawInvestments });
