@@ -10,13 +10,16 @@ import {
   saveListingReaction,
   getShortlistStatuses, setShortlistStatus,
   getLearnedPreferences, recomputeLearnedPreferences,
-  getReactionLog, dismissConflict,
+  getReactionLog,
   getReviewedListings, addReviewedListing,
-  getListingRatings,
+  getListingRatings, getScrapeProbation,
 } from './storage.js';
 import { createListingsControls } from './listings/controls.js';
 import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
-import { detectConflicts, dismissUntil } from './meta-observations.js';
+import { loadCombinedSuggestions } from './suggestions/sources.js';
+import { suggestionListHTML } from './suggestions/card.js';
+import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
+import { createConfirm } from './suggestions/confirm.js';
 import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listings/fit.js';
 import { classifyListing, HIDE_LABELS } from './listings/flags.js';
@@ -26,7 +29,7 @@ import { partitionFeed } from './listings/feed-partition.js';
 import { buildReasonPicker } from './listings/reactions-ui.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
-  diversifySelection, listingBucketKey, describeSignal, trainingProgress, deriveSearchSpec,
+  diversifySelection, listingBucketKey, describeSignal, trainingProgress,
   inferOutdoorSpace, inferParking,
 } from './learned-preferences.js';
 import { hiddenRulesFromOverrides, listingHiddenByRefinement, matchingHideRule } from './refinement/view.js';
@@ -506,10 +509,10 @@ async function render() {
   const modeBtns = [...main.querySelectorAll('[data-mode]')];
   if (!listEl) return;
 
-  const [listings, criteria, rawFinances, areas, statuses, learned, reactionLogInit, ratings] = await Promise.all([
+  const [listings, criteria, rawFinances, areas, statuses, learned, reactionLogInit, ratings, probationRows] = await Promise.all([
     getListings({ limit: null }), getCriteria(), getFinances(), getHouseholdAreas(),
     getShortlistStatuses(), getLearnedPreferences(), getReactionLog(),
-    getListingRatings(),
+    getListingRatings(), getScrapeProbation(),
   ]);
   const finances = rawFinances ? deriveFinances(rawFinances) : null;
   const areasById = new Map((areas || []).map((a) => [a.id, a]));
@@ -519,11 +522,19 @@ async function render() {
   // Applied as a pre-filter inside paint() so it composes with the other hides
   // (affordability gate, junk, refinements, decided) and is counted separately.
   // Null distance_mi = pass through (not yet backfilled — don't hide it).
-  const searchRadiusMi = Number(criteria?.location?.searchRadiusMi ?? 3);
+  const normArea = (s) => String(s ?? '').trim().toLowerCase();
+  let searchRadiusMi = Number(criteria?.location?.searchRadiusMi ?? 3);
+  // Per-area radius overrides (set by Apply on a "tighten" suggestion) win over the
+  // global radius for their area; the rest fall back to the household default.
+  let radiusOverrides = criteria?.location?.areaRadiusOverrides || {};
+  // Areas the household has stopped searching (scrape probation) are suppressed from the
+  // feed immediately so Apply has instant effect, not just on the next scrape.
+  let probationSet = new Set((probationRows || []).map((p) => normArea(p.value)));
   const passesRadiusFilter = (listing) => {
     if (listing.distance_mi == null) return true;
-    if (searchRadiusMi === 0) return listing.geofence_pass === true;
-    return Number(listing.distance_mi) <= searchRadiusMi;
+    const r = Number(radiusOverrides[listing.area_id] ?? searchRadiusMi);
+    if (r === 0) return listing.geofence_pass === true;
+    return Number(listing.distance_mi) <= r;
   };
 
   // Layer 2 ⊕ Layer 3 → the effective weights fed (per-listing) into scoring.
@@ -757,40 +768,76 @@ async function render() {
     for (const node of nodes) summaryEl.appendChild(node);
   }
 
-  // ── conflict prompts (L5) — likes that contradict stated criteria ─────────
-  // area_id → { name, geofenceRadiusMi } for the L7.5 tighten/stop prompts.
-  const areasMeta = {};
-  for (const a of (areas || [])) areasMeta[a.id] = { name: a.name, geofenceRadiusMi: a.geofenceRadiusMi };
+  // ── Refinement suggestions (L5 + engine) — the SHARED inbox ───────────────
+  // The same combined suggestions render here and on the Trends page (one model, one
+  // card, one set of Apply/Snooze/Dismiss actions — suggestions/*). Apply performs the
+  // real rule change (tighten a village radius, stop searching an area, re-accept/exclude
+  // a type, raise budget, lower beds) and the feed reflects it immediately.
+  const confirm = createConfirm({ reprobeRuns: 6 });
+  let suggestionsById = new Map();
+  const announceSug = (text) => {
+    const r = main.querySelector('[data-sug-live]');
+    if (r) { r.textContent = ''; r.textContent = text; }
+  };
 
-  function updateConflicts() {
-    if (!conflictsEl) return;
-    clear(conflictsEl);
-    // L7.5: derive area/outcode prune candidates from the live learned weights so
-    // the "stop searching" prompt only ever appears for a strong-negative signal.
-    const searchSpec = deriveSearchSpec(effective, criteria, { recencyDays: RECENCY_DAYS });
-    const conflicts = detectConflicts(reactionLog, criteria, {
-      now: new Date(), dismissals, areas: areasMeta,
-      pruneCandidates: { areas: searchSpec.dropAreas, outcodes: searchSpec.dropOutcodes },
-    });
-    for (const c of conflicts) {
-      const dismiss = el('button', { type: 'button', class: 'conflict-prompt__dismiss' }, 'Dismiss for 14 days');
-      dismiss.addEventListener('click', async () => {
-        const until = dismissUntil(new Date());
-        dismissals = { ...dismissals, [c.key]: until };
-        await dismissConflict(c.key, until);
-        updateConflicts();
-      });
-      conflictsEl.appendChild(el('div', { class: 'conflict-prompt', role: 'note' }, [
-        el('div', { class: 'conflict-prompt__body' }, [
-          el('p', { class: 'conflict-prompt__msg' }, c.message),
-          el('p', { class: 'conflict-prompt__hint' }, c.suggestion),
-        ]),
-        el('div', { class: 'conflict-prompt__actions' }, [
-          el('a', { class: 'conflict-prompt__adjust', href: `${url('pages/profile.html')}#search` }, 'Adjust criteria →'),
-          dismiss,
-        ]),
-      ]));
+  // Re-read the feed-affecting state that an Apply may have changed (criteria budget/
+  // beds/excluded types, per-area radius overrides, learned hide rules, probation) and
+  // repaint — so the list updates the instant a suggestion is applied.
+  async function refreshFeedState() {
+    const [freshCriteria, freshLearned, probationRows2] = await Promise.all([
+      getCriteria(), getLearnedPreferences(), getScrapeProbation(),
+    ]);
+    if (freshCriteria) {
+      criteria.budget = freshCriteria.budget;
+      criteria.size = freshCriteria.size;
+      criteria.propertyTypePrefs = freshCriteria.propertyTypePrefs;
+      criteria.location = freshCriteria.location;
+      searchRadiusMi = Number(freshCriteria?.location?.searchRadiusMi ?? 3);
+      radiusOverrides = freshCriteria?.location?.areaRadiusOverrides || {};
     }
+    overrides = freshLearned?.overrides || overrides;
+    effective = effectiveWeights(freshLearned?.derived || {}, overrides);
+    hiddenRules = hiddenRulesFromOverrides(overrides);
+    probationSet = new Set((probationRows2 || []).map((p) => normArea(p.value)));
+    scoreCache.clear();
+    hiddenRulesRev += 1;
+    if (mode === 'browse') paint();
+  }
+
+  async function updateConflicts() {
+    if (!conflictsEl) return;
+    const { combined } = await loadCombinedSuggestions({ now: new Date() });
+    suggestionsById = new Map(combined.map((n) => [n.id, n]));
+    conflictsEl.innerHTML = suggestionListHTML(combined);
+  }
+
+  async function handleSuggestionAction(btn) {
+    const n = suggestionsById.get(btn.dataset.sugId);
+    if (!n) return;
+    const action = btn.dataset.action;
+    if (action === 'apply') {
+      const run = async () => {
+        const ok = await applySuggestion(n);
+        if (ok) { announceSug(`Applied: ${n.label}.`); await refreshFeedState(); await updateConflicts(); }
+        else announceSug('Could not apply that right now — please try again.');
+        return ok;
+      };
+      if (n.confirm) confirm.open({ action: n.confirmAction, dimension: n.dimension, value: n.value || n.areaId, label: n.label, onConfirm: run });
+      else { btn.disabled = true; await run(); }
+      return;
+    }
+    btn.disabled = true;
+    const ok = action === 'snooze' ? await snoozeSuggestionUnified(n) : await dismissSuggestionUnified(n);
+    if (ok) { announceSug(action === 'snooze' ? `Snoozed ${n.label} for 30 days.` : `Dismissed ${n.label}.`); await updateConflicts(); }
+    else { btn.disabled = false; announceSug('Could not do that right now — please try again.'); }
+  }
+
+  if (conflictsEl) {
+    confirm.wire();
+    conflictsEl.addEventListener('click', (e) => {
+      const btn = e.target.closest?.('[data-action]');
+      if (btn) handleSuggestionAction(btn);
+    });
   }
 
   // ── debounced authoritative re-training (full reaction log) ─────────────
@@ -869,7 +916,7 @@ async function render() {
       includeOOR,
       includeHidden,
       isJunk: (l) => classifyListing(l).hide,
-      isRefHidden: (l) => listingHiddenByRefinement(l, hiddenRules),
+      isRefHidden: (l) => listingHiddenByRefinement(l, hiddenRules) || probationSet.has(normArea(l.area_id)),
       isDecided: isDecidedListing,
       isReviewed,
       reactionOf: (id) => reactions[id] || null,

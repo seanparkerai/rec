@@ -1,0 +1,58 @@
+// suggestions/apply.js — the action router for a NormalizedSuggestion. Turns a one-click
+// Apply / Snooze / Dismiss into the right storage write, branching on source + apply.fn.
+// Storage writers are injected (default = the real storage layer) so the router is unit
+// testable without touching Supabase.
+import {
+  setAreaRadiusOverride, raiseBudgetMax, lowerMinBeds, acceptPropertyType, excludePropertyType,
+  stopSearchingArea, hideSuggestion, snoozeSuggestion, dismissSuggestion, setConflictState,
+} from '../storage.js';
+import { dismissUntil } from '../meta-observations.js';
+
+export const SNOOZE_DAYS = 30;
+// Far-future timestamp = a permanent dismiss in the learned_preferences.dismissals map
+// (detectConflicts treats any future `until` as suppressed; this one never elapses).
+export const DISMISS_SENTINEL = '9999-12-31T00:00:00.000Z';
+
+const DEFAULT_DEPS = {
+  setAreaRadiusOverride, raiseBudgetMax, lowerMinBeds, acceptPropertyType, excludePropertyType,
+  stopSearchingArea, hideSuggestion, snoozeSuggestion, dismissSuggestion, setConflictState,
+};
+
+/** Perform a suggestion's Apply action. Returns true on success. */
+export async function applySuggestion(n, deps = DEFAULT_DEPS) {
+  const a = n?.apply;
+  if (!a || !a.fn) return false;
+  const ar = a.args || {};
+  switch (a.fn) {
+    case 'setAreaRadius': return deps.setAreaRadiusOverride(ar.areaId, ar.miles);
+    case 'stopArea':      return deps.stopSearchingArea({ value: ar.value });
+    case 'raiseBudget':   return deps.raiseBudgetMax(ar.value);
+    case 'lowerMinBeds':  return deps.lowerMinBeds(ar.value);
+    case 'acceptType': {
+      const vals = ar.values && ar.values.length ? ar.values : [ar.value];
+      let ok = true;
+      for (const v of vals) ok = (await deps.acceptPropertyType(v)) && ok;
+      return ok;
+    }
+    case 'excludeType': {
+      const ok = await deps.excludePropertyType(ar.value);
+      // An engine type suggestion ALSO hides matching listings from the feed (the engine
+      // lever); the criteria exclusion keeps the criteria form in sync.
+      if (n.source === 'engine') await deps.hideSuggestion({ dimension: 'property_type', value: ar.value });
+      return ok;
+    }
+    default: return false;
+  }
+}
+
+/** Snooze a suggestion for 30 days (engine → row status; live → dismissals object). */
+export async function snoozeSuggestionUnified(n, deps = DEFAULT_DEPS) {
+  if (n.source === 'engine') return deps.snoozeSuggestion({ dimension: n.dimension, value: n.value, days: SNOOZE_DAYS });
+  return deps.setConflictState(n.id, { kind: 'snooze', until: dismissUntil(new Date(), SNOOZE_DAYS) });
+}
+
+/** Dismiss a suggestion permanently (engine → row status; live → far-future dismissals). */
+export async function dismissSuggestionUnified(n, deps = DEFAULT_DEPS) {
+  if (n.source === 'engine') return deps.dismissSuggestion({ dimension: n.dimension, value: n.value });
+  return deps.setConflictState(n.id, { kind: 'dismiss', until: DISMISS_SENTINEL });
+}

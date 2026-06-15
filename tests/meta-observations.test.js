@@ -117,6 +117,10 @@ export async function register({ test, assert, assertEqual }) {
     const areas = { 'wherwell-sp11': { name: 'Wherwell', geofenceRadiusMi: 5 } };
     const c = detectConflicts(reactions, criteria, { now: NOW, areas }).find((x) => x.kind === 'tighten-buffer');
     assert(c, 'tighten suggestion raised'); assert(/Tighten Wherwell to ~2 mi/.test(c.suggestion), c && c.suggestion);
+    // The Apply action needs the proposed radius + which area to apply it to.
+    assertEqual(c.proposed, 2, 'exposes the proposed radius');
+    assertEqual(c.areaId, 'wherwell-sp11', 'exposes the area id');
+    assertEqual(c.threshold, 5, 'carries the current radius');
   });
 
   test('meta-obs: tighten-buffer stays quiet when likes already use the buffer', () => {
@@ -130,6 +134,7 @@ export async function register({ test, assert, assertEqual }) {
     const opts = { now: NOW, areas: { 'hatherden-sp11': { name: 'Hatherden' } }, pruneCandidates: { areas: ['hatherden-sp11'], outcodes: [] } };
     const c = detectConflicts(reactions, criteria, opts).find((x) => x.kind === 'stop-searching');
     assert(c, 'prune suggestion raised'); assert(/Stop searching Hatherden/.test(c.suggestion), c && c.suggestion);
+    assertEqual(c.areaId, 'hatherden-sp11', 'exposes the area id for Apply');
   });
 
   test('meta-obs: stop-searching NEVER fires where you have also liked', () => {
@@ -143,5 +148,23 @@ export async function register({ test, assert, assertEqual }) {
     const opts = { now: NOW, pruneCandidates: { areas: ['hatherden-sp11'], outcodes: [] } };
     const dismissals = { 'prune-area:hatherden-sp11': dismissUntil(NOW) };
     assert(!detectConflicts(reactions, criteria, { ...opts, dismissals }).some((x) => x.kind === 'stop-searching'), 'dismissed stays quiet');
+  });
+
+  // ── unified Snooze/Dismiss: the new object dismissal form ──────────────────
+  test('meta-obs: an object-form { until } dismissal suppresses like a legacy ISO string', () => {
+    // Likes are recent relative to both NOW and the +6-day check (inside CONFLICT_RECENCY_DAYS).
+    const reactions = many(4, { price: 460_000 }, 0);
+    // 5-day snooze stored as an object, not a bare ISO string.
+    const snooze = { 'conflict:over-budget': { kind: 'snooze', until: dismissUntil(NOW, 5) } };
+    assert(!detectConflicts(reactions, criteria, { now: NOW, dismissals: snooze }).some((c) => c.kind === 'over-budget'), 'object snooze suppresses within window');
+    const later = new Date(NOW.getTime() + 6 * DAY);
+    assert(detectConflicts(reactions, criteria, { now: later, dismissals: snooze }).some((c) => c.kind === 'over-budget'), 'returns after the object snooze elapses');
+  });
+
+  test('meta-obs: a far-future object dismissal stays quiet indefinitely', () => {
+    const reactions = many(4, { price: 460_000 });
+    const dismiss = { 'conflict:over-budget': { kind: 'dismiss', until: '9999-12-31T00:00:00Z' } };
+    const farLater = new Date('2030-01-01T00:00:00Z');
+    assert(!detectConflicts(reactions, criteria, { now: farLater, dismissals: dismiss }).some((c) => c.kind === 'over-budget'), 'permanent dismiss stays quiet');
   });
 }

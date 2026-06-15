@@ -73,11 +73,19 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
   const likes = likeRows(reactions);
   const out = [];
 
-  const push = (key, kind, evalRes, message, suggestion, threshold) => {
+  // A dismissal entry is either a legacy ISO string (the original "dismiss for 14
+  // days") OR the richer object form { kind:'snooze'|'dismiss', until } written by
+  // the unified Snooze/Dismiss controls. Both resolve to a future-or-past timestamp.
+  const untilMs = (v) => {
+    if (!v) return 0;
+    const iso = typeof v === 'object' ? v.until : v;
+    const t = new Date(iso).getTime();
+    return Number.isFinite(t) ? t : 0;
+  };
+  const push = (key, kind, evalRes, message, suggestion, threshold, extra = {}) => {
     if (!evalRes.triggered) return;
-    const until = dismissals[key];
-    if (until && new Date(until).getTime() > now.getTime()) return; // still dismissed
-    out.push({ key, kind, message, suggestion, count: evalRes.count, share: evalRes.share, threshold, reaction_ids: evalRes.reaction_ids });
+    if (untilMs(dismissals[key]) > now.getTime()) return; // still snoozed / dismissed
+    out.push({ key, kind, message, suggestion, count: evalRes.count, share: evalRes.share, threshold, reaction_ids: evalRes.reaction_ids, ...extra });
   };
 
   // 1. Over budget — likes priced above criteria.budget.max.
@@ -85,9 +93,11 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
   if (maxBudget) {
     const withPrice = likes.filter((r) => Number(r.listing_snapshot?.price) > 0);
     const over = withPrice.filter((r) => Number(r.listing_snapshot.price) > maxBudget);
+    // Proposed new ceiling = the priciest home you've liked, so every liked home fits.
+    const maxOver = over.length ? Math.max(...over.map((r) => Number(r.listing_snapshot.price))) : 0;
     push('conflict:over-budget', 'over-budget', evaluate(over, withPrice, now, cfg),
       `You've liked ${over.length} home${over.length === 1 ? '' : 's'} above your £${maxBudget.toLocaleString('en-GB')} budget ceiling.`,
-      'Raise your budget, or keep it as a hard filter — your call.', maxBudget);
+      'Raise your budget, or keep it as a hard filter — your call.', maxBudget, { proposed: maxOver });
   }
 
   // 2. Excluded type — likes of a property type marked excluded.
@@ -97,9 +107,13 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
     const isExcluded = (t) => { const n = norm(t); return excluded.some((e) => n.includes(e) || e.includes(n)); };
     const bad = withType.filter((r) => isExcluded(r.listing_snapshot.property_type));
     const types = [...new Set(bad.map((r) => r.listing_snapshot.property_type))].join(', ');
+    // The criteria.excluded entries that actually matched — Apply re-accepts exactly these.
+    const excludedMatched = excluded.filter((e) => bad.some((r) => {
+      const n = norm(r.listing_snapshot.property_type); return n.includes(e) || e.includes(n);
+    }));
     push('conflict:excluded-type', 'excluded-type', evaluate(bad, withType, now, cfg),
       `You keep liking ${types || 'types'} — which you marked as excluded.`,
-      'Add the type back to your accepted list, or keep excluding it.', types);
+      'Add the type back to your accepted list, or keep excluding it.', types, { excludedMatched });
   }
 
   // 3. Below the bed minimum — likes with fewer beds than criteria.size.minBeds.
@@ -107,9 +121,11 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
   if (minBeds) {
     const withBeds = likes.filter((r) => r.listing_snapshot?.beds != null && Number.isFinite(Number(r.listing_snapshot.beds)));
     const small = withBeds.filter((r) => Number(r.listing_snapshot.beds) < minBeds);
+    // Proposed new minimum = the smallest liked home, so every liked home clears the bar.
+    const minLiked = small.length ? Math.min(...small.map((r) => Number(r.listing_snapshot.beds))) : minBeds;
     push('conflict:below-min-beds', 'below-min-beds', evaluate(small, withBeds, now, cfg),
       `You've liked ${small.length} home${small.length === 1 ? '' : 's'} below your ${minBeds}-bed minimum.`,
-      'Lower your bed minimum, or keep it firm.', minBeds);
+      'Lower your bed minimum, or keep it firm.', minBeds, { proposed: minLiked });
   }
 
   // ── L7.5 geofence tuning — surfaced as recommendations, NEVER silent edits. ──
@@ -135,7 +151,7 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
     if (proposed + cfg.TIGHTEN_MARGIN_MI > radius) continue;   // not worth tightening
     push(`tighten:${areaId}`, 'tighten-buffer', evaluate(rows, rows, now, cfg),
       `Every home you've liked in ${meta.name || areaId} is within ${maxLiked.toFixed(1)} mi of the village — your search there reaches ${radius} mi.`,
-      `Tighten ${meta.name || areaId} to ~${proposed} mi?`, radius);
+      `Tighten ${meta.name || areaId} to ~${proposed} mi?`, radius, { proposed, areaId });
   }
 
   // 5. Stop searching — an area/outcode you keep rejecting with NO likes, flagged as
@@ -149,7 +165,7 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
     const name = areasMeta[areaId]?.name || areaId;
     push(`prune-area:${areaId}`, 'stop-searching', evaluate(bad, bad, now, cfg),
       `You've passed on ${bad.length} home${bad.length === 1 ? '' : 's'} in ${name} and liked none.`,
-      `Stop searching ${name} (set it aside), or keep it in?`, 0);
+      `Stop searching ${name} (set it aside), or keep it in?`, 0, { areaId });
   }
   for (const oc of cand.outcodes || []) {
     const ocn = norm(oc);
@@ -157,7 +173,7 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
     const bad = rejects.filter((r) => norm(r.listing_snapshot?.outcode) === ocn);
     push(`prune-outcode:${ocn}`, 'stop-searching', evaluate(bad, bad, now, cfg),
       `You've passed on ${bad.length} home${bad.length === 1 ? '' : 's'} in ${String(oc).toUpperCase()} and liked none.`,
-      `Stop searching ${String(oc).toUpperCase()}, or keep it in?`, 0);
+      `Stop searching ${String(oc).toUpperCase()}, or keep it in?`, 0, { outcode: String(oc).toUpperCase() });
   }
 
   return out;

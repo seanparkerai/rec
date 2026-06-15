@@ -19,6 +19,8 @@ let drawLayer = null;
 let geofenceLayer = null;           // the real per-area listings catchment (active areas only)
 let _areasWithCoords = [];          // populated by loadAreaMarkers; used for geofence redraws
 let _shortlistSet = new Set();      // populated by loadAreaMarkers; used for geofence styling
+let _globalRadius = DEFAULT_GEOFENCE_MI;   // household default radius (criteria.location.searchRadiusMi)
+let _radiusOverrides = {};          // per-area radius overrides (criteria.location.areaRadiusOverrides)
 
 function init() {
   if (!window.L) {
@@ -206,14 +208,18 @@ function matchedPriceForMap(area, criteria) {
 // picture of coverage.
 // displayRadiusMi overrides each area's native geofenceRadiusMi with the household's
 // chosen display radius. Pass null to use per-area native radii (the default/fallback).
+// `overrides` is a per-area map (areaId → miles) set by Apply on a "tighten" suggestion;
+// an override wins over both displayRadiusMi and the native radius for that one area.
 // At 0 ("village boundary only") no ring is drawn — the filter is geofence_pass based.
-function buildGeofenceLayer(areasWithCoords, shortlist, displayRadiusMi = null) {
+function buildGeofenceLayer(areasWithCoords, shortlist, displayRadiusMi = null, overrides = {}) {
   const accent = getCSSVar('--accent') || '#2e7d5b';
   const layer = L.featureGroup();
   areasWithCoords.forEach((a) => {
     if (!isLiveArea(a)) return; // not in the fetch catchment (pruned, or an un-located stub)
     const nativeMiles = Number(a.geofenceRadiusMi) > 0 ? Number(a.geofenceRadiusMi) : DEFAULT_GEOFENCE_MI;
-    const miles = (displayRadiusMi != null && displayRadiusMi > 0) ? displayRadiusMi : nativeMiles;
+    const ov = overrides ? Number(overrides[a.id]) : NaN;
+    const miles = Number.isFinite(ov) ? ov                                   // per-area override wins
+      : (displayRadiusMi != null && displayRadiusMi > 0) ? displayRadiusMi : nativeMiles;
     if (miles === 0) return; // 0 mi = village boundary only; no ring to draw
     const isShort = shortlist.has(a.id);
     L.circle([a.coords.lat, a.coords.lng], {
@@ -252,9 +258,11 @@ async function loadAreaMarkers() {
     _shortlistSet = shortlist;
 
     const displayRadiusMi = Number(criteria?.location?.searchRadiusMi ?? 3);
+    _globalRadius = displayRadiusMi;
+    _radiusOverrides = criteria?.location?.areaRadiusOverrides || {};
 
     // Geofence catchment underlay — drawn before the markers so the dots sit on top.
-    geofenceLayer = buildGeofenceLayer(withCoords, shortlist, displayRadiusMi);
+    geofenceLayer = buildGeofenceLayer(withCoords, shortlist, displayRadiusMi, _radiusOverrides);
     const activeGeofences = withCoords.filter((a) => isLiveArea(a)).length;
     if ($('toggle-geofences')?.checked ?? true) geofenceLayer.addTo(map);
 
@@ -328,12 +336,19 @@ function wireGeofenceToggle() {
     if (cb.checked) geofenceLayer.addTo(map);
     else map.removeLayer(geofenceLayer);
   });
-  // Redraw geofence rings when the household's search radius preference changes.
+  // Redraw geofence rings when a radius preference changes — either the global radius
+  // (no areaId) or a single area's override (Apply on a "tighten" suggestion).
   window.addEventListener('search-radius-changed', (e) => {
     if (!map || !_areasWithCoords.length) return;
-    const newRadius = Number(e.detail?.searchRadiusMi ?? 3);
+    const d = e.detail || {};
+    if (d.areaId) {
+      if (d.searchRadiusMi == null) delete _radiusOverrides[d.areaId];
+      else _radiusOverrides = { ..._radiusOverrides, [d.areaId]: Number(d.searchRadiusMi) };
+    } else {
+      _globalRadius = Number(d.searchRadiusMi ?? 3);
+    }
     if (geofenceLayer) map.removeLayer(geofenceLayer);
-    geofenceLayer = buildGeofenceLayer(_areasWithCoords, _shortlistSet, newRadius);
+    geofenceLayer = buildGeofenceLayer(_areasWithCoords, _shortlistSet, _globalRadius, _radiusOverrides);
     if (cb.checked) geofenceLayer.addTo(map);
   });
 }
