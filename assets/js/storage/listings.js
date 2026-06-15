@@ -529,6 +529,27 @@ export async function dismissConflict(key, dismissedUntil) {
   return saveLearnedPreferences({ derived: prev.derived || {}, overrides: prev.overrides || {}, dismissals });
 }
 
+// Unified Snooze/Dismiss for a LIVE conflict (not engine-backed): store the richer
+// object form { kind:'snooze'|'dismiss', until } so the Trends view can label snoozed
+// vs dismissed live conflicts. detectConflicts() reads both this and the legacy ISO
+// string. Preserves derived + overrides like dismissConflict.
+export async function setConflictState(key, { kind, until } = {}) {
+  if (!key || !until) return false;
+  const prev = readLocal('learned-preferences') || (await _sbGetLearnedPrefs()) || {};
+  const dismissals = { ...(prev.dismissals || {}), [key]: { kind: kind || 'dismiss', until } };
+  return saveLearnedPreferences({ derived: prev.derived || {}, overrides: prev.overrides || {}, dismissals });
+}
+
+/** Clear a live-conflict snooze/dismiss so it can re-surface (the undo). */
+export async function clearConflictState(key) {
+  if (!key) return false;
+  const prev = readLocal('learned-preferences') || (await _sbGetLearnedPrefs()) || {};
+  const dismissals = { ...(prev.dismissals || {}) };
+  if (!(key in dismissals)) return true;
+  delete dismissals[key];
+  return saveLearnedPreferences({ derived: prev.derived || {}, overrides: prev.overrides || {}, dismissals });
+}
+
 // Recompute path: read the full append-only reaction log (with snapshots), run
 // the pure deriveWeights(), persist the new `derived`, PRESERVE `overrides`.
 // Returns the fresh { derived, overrides, dismissals, log } so callers re-rank

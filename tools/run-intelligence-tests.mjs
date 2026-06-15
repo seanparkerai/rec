@@ -90,6 +90,8 @@ const { register: registerRefinementPersistence } = await import('../tests/refin
 const { register: registerRefinementView } = await import('../tests/refinement-view.test.js');
 const { register: registerRefinementScope } = await import('../tests/refinement-scope.test.js');
 const { register: registerReactionProvenance } = await import('../tests/reaction-provenance.test.js');
+const { register: registerSuggestionsModel } = await import('../tests/suggestions-model.test.js');
+const { register: registerSuggestionsApply } = await import('../tests/suggestions-apply.test.js');
 const { register: registerAreaRef } = await import('../tests/area-ref.test.js');
 const { register: registerAreaEnrich } = await import('../tests/area-enrich.test.js');
 const { register: registerDocsConsistency } = await import('../tests/docs-consistency.test.js');
@@ -146,6 +148,8 @@ await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });
 await registerRefinementScope({ test, assert, assertEqual });
 await registerReactionProvenance({ test, assert, assertEqual });
+await registerSuggestionsModel({ test, assert, assertEqual });
+await registerSuggestionsApply({ test, assert, assertEqual });
 await registerAreaMatch({ test, assert, assertEqual });
 await registerAreaRef({ test, assert, assertEqual });
 await registerAreaEnrich({ test, assert, assertEqual });
