@@ -4,9 +4,9 @@
   <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Ask (soon) · GR</title>
+  <title>Ask · GR</title>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
-  <meta name="description" content="Natural-language interface over your shortlist, criteria, and finances — coming in v3." />
+  <meta name="description" content="Ask plain-English questions about your finances, budget, saved homes, live listings, areas and trends — and draft outreach messages." />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
@@ -16,53 +16,62 @@
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to main content</a>
   <div data-include="components/header.html"></div>
   <div data-include="components/nav.html"></div>
 
-  <main id="main" class="container">
-    <header class="page-head">
-      <p class="eyebrow">Coming in v3</p>
-      <h1>Ask anything</h1>
-      <p class="lead">A natural-language interface over the whole dataset — your shortlist, criteria, finances, and (once Phase 5 lands) live listings. Type questions, get ranked answers.</p>
+  <main id="main" class="container ask-page">
+    <header class="ask-head">
+      <div class="ask-head__row">
+        <div>
+          <p class="eyebrow">Buyer toolkit</p>
+          <h1>Ask</h1>
+        </div>
+        <div class="ask-head__actions">
+          <button id="ask-new" type="button" class="ask-head__btn">New chat</button>
+          <button id="ask-history-open" type="button" class="ask-head__btn">History</button>
+        </div>
+      </div>
+      <p class="lead">Ask plain-English questions about your finances, budget, saved homes, live listings, areas and trends — or get help drafting an outreach message. Answers pull from your own data.</p>
     </header>
 
-    <section class="placeholder-illus" aria-hidden="true">
-      <p class="placeholder-illus__caption">Search · structured filters · ranked results</p>
-    </section>
+    <section id="ask-transcript" class="ask-transcript" aria-label="Conversation"></section>
 
-    <section class="placeholder-card">
-      <h2>Try a question</h2>
-      <div class="ask-input-wrap">
-        <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="ask-caption" />
-        <p class="ask-caption" id="ask-caption">Disabled until v3 — examples below show the kind of query this will handle.</p>
-      </div>
-      <ul class="ask-chips" aria-label="Example queries">
-        <li><span class="ask-chip">chain-free 3-beds near Winchester under &pound;400k</span></li>
-        <li><span class="ask-chip">most affordable shortlisted areas with an outstanding primary school</span></li>
-        <li><span class="ask-chip">cottages priced LISA-eligible within a 25-min commute</span></li>
-        <li><span class="ask-chip">what would a +&pound;500/mo savings boost do to my move date?</span></li>
-        <li><span class="ask-chip">show me everything where the stretched payment stays under &pound;1,900/mo</span></li>
+    <section id="ask-empty" class="ask-empty">
+      <h2 class="ask-empty__title">Try a question</h2>
+      <ul class="ask-chips" aria-label="Example questions">
+        <li><button type="button" class="ask-chip" data-chip>What&rsquo;s my stretch monthly payment, and how does it compare to a comfortable one?</button></li>
+        <li><button type="button" class="ask-chip" data-chip>Show 3-bed homes under &pound;400k near Winchester</button></li>
+        <li><button type="button" class="ask-chip" data-chip>Which of my saved homes have I rated 8 or higher?</button></li>
+        <li><button type="button" class="ask-chip" data-chip>How big is my deposit gap and roughly when do I hit my target?</button></li>
+        <li><button type="button" class="ask-chip" data-chip>What property types do I tend to reject?</button></li>
+        <li><button type="button" class="ask-chip" data-chip>Draft a viewing email for an estate agent</button></li>
       </ul>
     </section>
 
-    <section class="placeholder-card">
-      <h2>What this will do</h2>
-      <ul class="placeholder-list">
-        <li>Parse natural-language queries into structured filters over <code>data/criteria.json</code>, the areas index, and listings.</li>
-        <li>Return ranked results with the same fit-dot vocabulary used everywhere else in the app.</li>
-        <li>Cite the data it used — area ids, finance lines, criteria fields — so you can trust the answer.</li>
-        <li>Falls back gracefully when a query doesn&rsquo;t resolve to anything.</li>
-      </ul>
-    </section>
+    <form id="ask-composer" class="ask-composer" autocomplete="off">
+      <label class="ask-visually-hidden" for="ask-input">Ask a question</label>
+      <textarea id="ask-input" class="ask-input" rows="1" enterkeyhint="send"
+        placeholder="Ask anything about your search&hellip;"></textarea>
+      <button id="ask-send" type="submit" class="ask-send">Send</button>
+      <button id="ask-stop" type="button" class="ask-stop" hidden>Stop</button>
+    </form>
 
-    <section class="placeholder-foot">
-      <p class="placeholder-foot__note">
-        Full v3 roadmap in <a data-nav="docs/ROADMAP.md">docs/ROADMAP.md</a>.
-      </p>
-    </section>
+    <p class="ask-disclaimer">
+      Answers are informational, not regulated financial or legal advice. Figures come from your saved data and the live listings feed.
+    </p>
   </main>
+
+  <dialog id="ask-history" class="ask-history" aria-label="Saved conversations">
+    <div class="ask-history__head">
+      <h2 class="ask-history__title">Conversations</h2>
+      <button id="ask-history-close" type="button" class="ask-history__close" aria-label="Close">&times;</button>
+    </div>
+    <ul id="ask-history-list" class="ask-history__list"></ul>
+  </dialog>
 
   <div data-include="components/footer.html"></div>
   <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-ask.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 v2 covered the visual-first overhaul of seven existing pages plus an intelligence engine
 (affordability, money-flow, savings-velocity). Three v3 capabilities were scaffolded in v2 as
-placeholder pages. Two have shipped; one remains.
+placeholder pages. All three have now shipped.
 
 ---
 
@@ -31,25 +31,23 @@ a statistics-gated refinement engine that *proposes* stopping areas/types (notif
 Operating guide: `docs/REFINEMENT_README.md`; build record: `docs/archive/V3_LISTINGS_PLAN.md` +
 `docs/archive/REFINEMENT_PLAN.md`.
 
+### Ask — `pages/ask.html`
+
+**Shipped** (natural-language assistant). A signed-in household member asks plain-English questions
+about finances, budget, saved homes, live listings, areas, trends, and outreach drafting; answers are
+produced by Claude (Anthropic API) from a **Supabase Edge Function** (`supabase/functions/ask/`) that
+holds the API key as a secret, verifies the user's JWT, gives Claude **read-only, RLS-scoped tools**
+over the household's own data, runs the tool-use loop, and **streams** the answer back over SSE.
+The browser renders the streamed markdown (escape-first sanitiser) and persists each thread to the
+`ask_conversations` table. No Anthropic key ever reaches the browser. Default model
+`claude-sonnet-4-6`. Operating guide: `docs/ASK.md`.
+
 ---
 
 ## Still to come
 
-### Ask — `pages/ask.html`
-
-**Goal.** A natural-language interface over the whole dataset — e.g. *"show me the most affordable shortlisted areas with an outstanding primary school"*.
-
-**What it does**
-- Parses NL queries into structured filters over the criteria, the areas index, and listings.
-- Returns ranked results with the same fit-dot vocabulary used everywhere else in the app.
-- Suggestion-chip examples on the empty state replicate common queries.
-
-**Data it needs**
-- An LLM. Candidates: Claude API via a small server-side worker, or in-browser via a hosted endpoint.
-- A schema-aware prompt that knows the data model (`docs/CONTEXT.md`, `data/schema/*`, the per-area files).
-
-**v2 surface it slots into**
-- Placeholder page at `pages/ask.html` (Phase 5). The dashboard's ask-anything tile (Phase 3, tile 8) links here.
+*(Nothing outstanding from the original v3 placeholder set — Outreach, Listings, and Ask have all
+shipped.)*
 
 ---
 

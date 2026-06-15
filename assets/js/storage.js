@@ -8,3 +8,4 @@ export * from './storage/user-state.js';
 export * from './storage/listings.js';
 export * from './storage/outreach.js';
 export * from './storage/refinement.js';
+export * from './storage/ask.js';

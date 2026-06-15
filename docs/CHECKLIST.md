@@ -60,7 +60,10 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       mono columns (Phase 6 follow-up).
 - [ ] **B4 — Shortlist single source:** make `getShortlist()` Supabase-first — touches
       `storage.js` (§16 guard → separate named phase).
-- [ ] Ask page (LLM interface) — the remaining v3 capability; see `docs/ROADMAP.md`.
+- [x] Ask page (LLM interface) — shipped. Supabase Edge Function (`supabase/functions/ask/`) +
+      client modules (`assets/js/ask/*`, `page-ask.js`) + `ask_conversations` table; see
+      `docs/ASK.md`. **Admin handoff remaining:** create the Anthropic API key, set the
+      `ANTHROPIC_API_KEY` Supabase secret, deploy the `ask` function, then smoke-test on the live site.
 
 ### Future organisation (optional, owner-deferred)
 - [ ] Folderize `outreach-renderer.js` / `outreach-store.js` / `learned-preferences.js` into their
