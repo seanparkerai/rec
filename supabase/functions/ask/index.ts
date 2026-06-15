@@ -14,10 +14,17 @@ import { TOOLS, runTool, type ToolCtx } from "./tools.ts";
 import { buildSystemPrompt } from "./prompt.ts";
 
 const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
-const DEFAULT_MODEL = "claude-sonnet-4-6";
-const ALLOWED_MODELS = new Set(["claude-sonnet-4-6", "claude-haiku-4-5", "claude-opus-4-8"]);
+// This is a thin natural-language front-end over the household's own Supabase
+// data: pick a read-only tool, pass sane args, narrate a compact result. The
+// "smart" work (affordability, ranking, dedup, template fill) is deterministic
+// in pure.js, not the model — exactly the cheapest-tier workload (Ask plan P1-2).
+// Default to Haiku 4.5 (lowest cost); keep Sonnet 4.6 as an optional, non-default
+// manual step-up; Opus is intentionally NOT reachable. No thinking parameter is
+// sent, so thinking stays off on both models (zero thinking tokens billed).
+const DEFAULT_MODEL = "claude-haiku-4-5";
+const ALLOWED_MODELS = new Set(["claude-haiku-4-5", "claude-sonnet-4-6"]);
 const MAX_TOOL_LOOPS = 6;
-const MAX_TOKENS = 1500;
+const MAX_TOKENS = 1024;            // runaway backstop behind the P1-3 brevity contract
 const MAX_HISTORY_TURNS = 24;        // cap conversation length sent upstream
 const MAX_TURN_CHARS = 16_000;       // per-turn hard char cap (abuse guard)
 
@@ -69,7 +76,7 @@ Deno.serve(async (req) => {
       const send = (o: unknown) => controller.enqueue(enc.encode(`data: ${JSON.stringify(o)}\n\n`));
       // deno-lint-ignore no-explicit-any
       const convo: any[] = [...messages];
-      const usageTotals = { input: 0, output: 0 };
+      const usageTotals = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, thinking: 0 };
 
       try {
         for (let i = 0; i < MAX_TOOL_LOOPS; i++) {
@@ -93,6 +100,9 @@ Deno.serve(async (req) => {
           const { assistantBlocks, stopReason, usage } = await relayAnthropicSSE(res, send);
           usageTotals.input += usage.input;
           usageTotals.output += usage.output;
+          usageTotals.cacheRead += usage.cacheRead;
+          usageTotals.cacheWrite += usage.cacheWrite;
+          usageTotals.thinking += usage.thinking;
 
           if (stopReason !== "tool_use") {
             send({ type: "done", usage: usageTotals });
@@ -127,7 +137,12 @@ Deno.serve(async (req) => {
         // Post-response usage logging must not delay the close (EdgeRuntime.waitUntil
         // is provided by the Supabase runtime; absent off-platform, so guard it).
         const logUsage = () =>
-          console.log(`ask usage household=${householdId} model=${model} in=${usageTotals.input} out=${usageTotals.output}`);
+          console.log(
+            `ask usage household=${householdId} model=${model} ` +
+            `in=${usageTotals.input} out=${usageTotals.output} ` +
+            `cache_read=${usageTotals.cacheRead} cache_write=${usageTotals.cacheWrite} ` +
+            `thinking=${usageTotals.thinking}`,
+          );
         // deno-lint-ignore no-explicit-any
         const edge = (globalThis as any).EdgeRuntime;
         if (edge?.waitUntil) edge.waitUntil(Promise.resolve().then(logUsage));
@@ -146,7 +161,7 @@ Deno.serve(async (req) => {
 // client as {type:'text'} events, accumulates the assistant content blocks (text +
 // tool_use with their streamed input_json), and captures stop_reason + token usage.
 // deno-lint-ignore no-explicit-any
-async function relayAnthropicSSE(res: Response, send: (o: unknown) => void): Promise<{ assistantBlocks: any[]; stopReason: string; usage: { input: number; output: number } }> {
+async function relayAnthropicSSE(res: Response, send: (o: unknown) => void): Promise<{ assistantBlocks: any[]; stopReason: string; usage: { input: number; output: number; cacheRead: number; cacheWrite: number; thinking: number } }> {
   const reader = res.body!.getReader();
   const dec = new TextDecoder();
   let buf = "";
@@ -154,13 +169,19 @@ async function relayAnthropicSSE(res: Response, send: (o: unknown) => void): Pro
   const blocks: any[] = [];           // by content index
   const partials: string[] = [];      // accumulating tool_use input json, by index
   let stopReason = "end_turn";
-  const usage = { input: 0, output: 0 };
+  // cacheRead/cacheWrite prove prompt caching is working (P1-4); thinking should
+  // be 0 on every turn since no thinking parameter is sent (P1-2).
+  const usage = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, thinking: 0 };
 
   const handle = (evt: any) => {
     switch (evt?.type) {
-      case "message_start":
-        usage.input += evt.message?.usage?.input_tokens ?? 0;
+      case "message_start": {
+        const u = evt.message?.usage ?? {};
+        usage.input += u.input_tokens ?? 0;
+        usage.cacheRead += u.cache_read_input_tokens ?? 0;
+        usage.cacheWrite += u.cache_creation_input_tokens ?? 0;
         break;
+      }
       case "content_block_start": {
         const cb = evt.content_block ?? {};
         blocks[evt.index] = cb.type === "tool_use"
@@ -190,6 +211,7 @@ async function relayAnthropicSSE(res: Response, send: (o: unknown) => void): Pro
       case "message_delta":
         if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
         usage.output += evt.usage?.output_tokens ?? 0;
+        usage.thinking += evt.usage?.output_tokens_details?.thinking_tokens ?? 0;
         break;
       case "error":
         send({ type: "error", message: evt.error?.message ?? "stream error" });

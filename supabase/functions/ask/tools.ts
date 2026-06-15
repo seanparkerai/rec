@@ -15,7 +15,7 @@
 //   listing_reactions: append-only (reaction in like/pass/reject + reasons).
 
 import {
-  rankAndFilterListings, searchAreasPure, shapeFinancesSummary, renderOutreachDraft,
+  rankAndFilterListings, buildListingsQuery, searchAreasPure, shapeFinancesSummary, renderOutreachDraft,
 } from "./pure.js";
 
 // deno-lint-ignore no-explicit-any
@@ -45,8 +45,10 @@ export const TOOLS = [
       "Filter the live listings feed and return ranked summaries WITH fit verdicts (strong/possible/" +
       "stretch/weak) and reason chips. Use for anything about what is currently for sale. Never returns " +
       "the whole table — always a small ranked slice.",
+    strict: true,
     input_schema: {
       type: "object",
+      additionalProperties: false,
       properties: {
         maxPrice: { type: "number", description: "max asking price (£)" },
         minPrice: { type: "number", description: "min asking price (£)" },
@@ -61,8 +63,10 @@ export const TOOLS = [
   {
     name: "get_listing",
     description: "Get one listing's full dossier by its Rightmove id.",
+    strict: true,
     input_schema: {
       type: "object",
+      additionalProperties: false,
       properties: { rightmove_id: { type: "string" } },
       required: ["rightmove_id"],
     },
@@ -86,8 +90,10 @@ export const TOOLS = [
     description:
       "Search the researched area catalogue (village profiles: overview, town, county, status) by free " +
       "text and/or county/town. Use for questions about candidate areas/villages.",
+    strict: true,
     input_schema: {
       type: "object",
+      additionalProperties: false,
       properties: {
         query: { type: "string" },
         county: { type: "string" },
@@ -99,8 +105,10 @@ export const TOOLS = [
   {
     name: "get_area",
     description: "Get one area's full researched record by its area id (e.g. 'winchester-so23').",
+    strict: true,
     input_schema: {
       type: "object",
+      additionalProperties: false,
       properties: { area_id: { type: "string" } },
       required: ["area_id"],
     },
@@ -191,19 +199,28 @@ export async function runTool(name: string, input: any, ctx: ToolCtx): Promise<u
         };
       }
       case "query_listings": {
-        const [criteria, listings] = await Promise.all([
-          getBlob(ctx, "criteria"),
-          ctx.supabase.from("listings").select(
-            "rightmove_id, address, area_id, postcode, outcode, price, beds, baths, " +
-            "property_type, tenure, status, title, description, url",
-          ).then((r: any) => r.data ?? []),
-        ]);
-        return rankAndFilterListings(listings, inp, criteria ?? {});
+        // Push the cheap/indexed predicates down to Postgres and fetch a bounded
+        // candidate window; pure.js still does the ranking/dedup/gating (P1-1).
+        const plan = buildListingsQuery(inp);
+        let q = ctx.supabase.from("listings").select(plan.columns);
+        for (const fl of plan.filters) {
+          if (fl.kind === "eq") q = q.eq(fl.col, fl.value);
+          else if (fl.kind === "or") q = q.or(fl.expr);
+        }
+        q = q.order(plan.order.col, { ascending: plan.order.ascending }).limit(plan.limit);
+        const [criteria, res] = await Promise.all([getBlob(ctx, "criteria"), q]);
+        if (res.error) throw res.error;
+        return rankAndFilterListings(res.data ?? [], inp, criteria ?? {});
       }
       case "get_listing": {
         if (!inp.rightmove_id) return { error: "rightmove_id is required" };
+        // Select only the fields an answer needs — never raw_json / price_history's
+        // siblings — so we don't ship the whole source payload back as input tokens (P2-1).
         const { data } = await ctx.supabase
-          .from("listings").select("*").eq("rightmove_id", String(inp.rightmove_id)).limit(1);
+          .from("listings").select(
+            "rightmove_id, url, title, address, postcode, outcode, area_id, price, beds, baths, " +
+            "property_type, tenure, epc, council_tax, status, description, added_date, price_history",
+          ).eq("rightmove_id", String(inp.rightmove_id)).limit(1);
         return data?.[0] ?? { error: "listing not found" };
       }
       case "get_saved_properties": {
@@ -211,17 +228,18 @@ export async function runTool(name: string, input: any, ctx: ToolCtx): Promise<u
         return sl ?? { ids: [], status: {}, ratings: {} };
       }
       case "get_reactions_summary": {
-        const counts: Record<string, number> = {};
-        for (const verb of ["like", "pass", "reject"]) {
-          const { count } = await ctx.supabase
-            .from("listing_reactions")
-            .select("id", { count: "exact", head: true })
-            .eq("household_id", ctx.householdId).eq("reaction", verb);
-          counts[verb] = count ?? 0;
+        // One grouped read (RPC) for the like/pass/reject counts instead of three
+        // sequential head counts (P2-2); learned prefs in parallel.
+        const [{ data: rows }, { data: lp }] = await Promise.all([
+          ctx.supabase.rpc("ask_reaction_counts", { hh: ctx.householdId }),
+          ctx.supabase
+            .from("learned_preferences")
+            .select("derived, overrides").eq("household_id", ctx.householdId).limit(1),
+        ]);
+        const counts: Record<string, number> = { like: 0, pass: 0, reject: 0 };
+        for (const r of (rows ?? []) as { reaction: string; n: number }[]) {
+          counts[r.reaction] = Number(r.n) || 0;
         }
-        const { data: lp } = await ctx.supabase
-          .from("learned_preferences")
-          .select("derived, overrides").eq("household_id", ctx.householdId).limit(1);
         return { counts, learned: lp?.[0]?.derived ?? null, overrides: lp?.[0]?.overrides ?? null };
       }
       case "search_areas": {

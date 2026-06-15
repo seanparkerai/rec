@@ -101,12 +101,22 @@ The function source is version-controlled here; **do not hand-edit it in the Sup
 - **Prompt-injection** — listing/area text is treated as data, not instructions; tools are read-only,
   so injection cannot escalate to writes or key exposure. Streamed markdown is rendered through an
   escape-first sanitiser (`transcript.js#mdToSafeHtml`).
-- **Spend bounds** — `MAX_TOKENS` (1500), tool-loop cap (6), history cap (24 turns) + per-turn char
-  cap (16k), prompt caching on the static block (~90% cheaper repeats), token-usage logging, plus the
-  Anthropic Console hard cap. A typical data Q&A turn is a few cents. Sonnet 4.6 ≈ $3/$15 per 1M
-  in/out tokens; Haiku 4.5 ≈ $1/$5; Opus 4.8 ≈ $5/$25.
-- **Model** — default `claude-sonnet-4-6`; the browser may request `claude-haiku-4-5` (cheap) or
-  `claude-opus-4-8` (deep), validated against an allow-list in `index.ts`.
+- **Spend bounds** — `MAX_TOKENS` (1024, a runaway backstop behind the system-prompt brevity
+  contract), tool-loop cap (6), history cap (24 turns) + per-turn char cap (16k), prompt caching on
+  the static block (~90% cheaper repeats), token-usage logging (now incl. `cache_read` / `cache_write`
+  / `thinking` so the cache hit-rate is visible), plus the Anthropic Console hard cap. A typical data
+  Q&A turn is a fraction of a cent on Haiku. Haiku 4.5 ≈ $1/$5 per 1M in/out tokens; Sonnet 4.6 ≈ $3/$15.
+- **Model** — default `claude-haiku-4-5` (this is a constrained tool-routing + short-narration
+  workload — the cheapest tier — and the deterministic work lives in `pure.js`, not the model). No
+  `thinking` parameter is sent, so thinking stays off (zero thinking tokens). `claude-sonnet-4-6`
+  remains an optional, non-default manual step-up; **`claude-opus-4-8` is removed from the allow-list**
+  (its default-on thinking against a shared `max_tokens` ceiling is the wrong shape for a lookup
+  front-end). A request for any other model falls back to the Haiku default.
+- **Strict tool use** — the fully-specified tools (`query_listings`, `get_listing`, `search_areas`,
+  `get_area`) set `strict: true` + `additionalProperties: false`, so the model's tool arguments are
+  schema-valid by construction. `draft_outreach` stays non-strict (its `listing`/`contact`/`extra`
+  params are intentionally free-form). Smoke-test after deploy to confirm the current API line needs
+  no beta header for `strict`.
 
 ## 6. Gotchas
 
@@ -114,5 +124,9 @@ The function source is version-controlled here; **do not hand-edit it in the Sup
   terminal `done`/`error` event is always emitted so the client never hangs.
 - **History growth**: persist + send only the final user/assistant **text** turns, not intermediate
   tool blocks; tools re-run each turn (small payloads, fresh answers).
-- **Model strings drift**: confirm current model ids before launch; `claude-sonnet-4-6` is the
-  intended default.
+- **Model strings drift**: confirm current model ids before launch; `claude-haiku-4-5` is the
+  intended default, with `claude-sonnet-4-6` as the optional manual step-up.
+- **Listings query push-down**: `query_listings` now narrows the candidate set in Postgres (live
+  status, indexed price/area predicates, bounded `.limit(200)`) and only selects `description` on a
+  keyword search; `pure.js` still does all ranking/gating, so the model boundary is unchanged. Price
+  predicates keep `price IS NULL` rows so unpriced listings survive exactly as before.

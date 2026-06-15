@@ -583,4 +583,25 @@ DROP TRIGGER IF EXISTS trg_touch_ask_conversations ON ask_conversations;
 CREATE TRIGGER trg_touch_ask_conversations BEFORE UPDATE ON ask_conversations
   FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 
+-- -----------------------------------------------------------------------
+-- Helper: ask_reaction_counts() — Ask edge function get_reactions_summary.
+-- Collapses the three per-reaction COUNT round-trips into one grouped read.
+-- SECURITY INVOKER (not DEFINER) so Row Level Security still scopes the rows to
+-- the calling household. Applied via MCP migration `ask_reaction_counts_rpc`.
+-- -----------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.ask_reaction_counts(hh uuid)
+RETURNS TABLE(reaction text, n bigint)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = public
+AS $$
+  SELECT lr.reaction, count(*)::bigint
+  FROM public.listing_reactions lr
+  WHERE lr.household_id = hh
+  GROUP BY lr.reaction
+$$;
+
+GRANT EXECUTE ON FUNCTION public.ask_reaction_counts(uuid) TO authenticated;
+
 COMMIT;

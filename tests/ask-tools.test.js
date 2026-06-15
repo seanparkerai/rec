@@ -4,7 +4,7 @@
 // (pure.js is a plain ESM module loadable in both Deno and Node); wired into
 // run-intelligence-tests.mjs.
 import {
-  rankAndFilterListings, scoreListingFit, searchAreasPure,
+  rankAndFilterListings, buildListingsQuery, scoreListingFit, searchAreasPure,
   shapeFinancesSummary, renderOutreachDraft, bandForScore,
 } from '../supabase/functions/ask/pure.js';
 
@@ -85,6 +85,54 @@ export async function register({ test, assert, assertEqual }) {
     }));
     const out = rankAndFilterListings(many, { limit: 999 }, criteria);
     assert(out.listings.length <= 25, `expected <=25, got ${out.listings.length}`);
+  });
+
+  // ── buildListingsQuery (P1-1 push-down) ───────────────────────────────────
+  test('ask-tools: buildListingsQuery selects description ONLY on a keyword search', () => {
+    const plain = buildListingsQuery({ area: 'winchester' });
+    assert(!/description/.test(plain.columns), 'no description without a keyword');
+    assertEqual(plain.wantsKeyword, false);
+    const kw = buildListingsQuery({ keyword: 'period' });
+    assert(/description/.test(kw.columns), 'description requested on keyword search');
+    assertEqual(kw.wantsKeyword, true);
+  });
+
+  test('ask-tools: buildListingsQuery defaults to live rows and pushes indexed predicates', () => {
+    const q = buildListingsQuery({ maxPrice: 400000, minPrice: 250000, area: 'winchester' });
+    const eq = q.filters.find((f) => f.kind === 'eq');
+    assertEqual(eq.col, 'status');
+    assertEqual(eq.value, 'live');
+    // Price predicates keep price-NULL rows so unpriced listings survive (parity with pure.js).
+    assert(q.filters.some((f) => f.kind === 'or' && f.expr === 'price.lte.400000,price.is.null'), 'maxPrice OR-null');
+    assert(q.filters.some((f) => f.kind === 'or' && f.expr === 'price.gte.250000,price.is.null'), 'minPrice OR-null');
+    assert(q.filters.some((f) => f.kind === 'or' && /area_id\.ilike\.%winchester%/.test(f.expr)), 'area ilike push-down');
+    assertEqual(q.limit, 200);
+  });
+
+  test('ask-tools: buildListingsQuery omits the status filter when includeHidden is set', () => {
+    const q = buildListingsQuery({ includeHidden: true });
+    assert(!q.filters.some((f) => f.kind === 'eq' && f.col === 'status'), 'no live-only filter when includeHidden');
+  });
+
+  test('ask-tools: buildListingsQuery sanitises the area term out of the .or() filter', () => {
+    // Commas in the expr are legitimate filter separators; the TERM itself must be
+    // free of the punctuation that would break PostgREST's .or() grammar.
+    const q = buildListingsQuery({ area: 'Mill, (Lane)' });
+    const or = q.filters.find((f) => f.kind === 'or' && /ilike/.test(f.expr));
+    assert(!/[()]/.test(or.expr), 'no parentheses survive into the filter');
+    assert(/%Mill Lane%/.test(or.expr), 'separators collapsed to a single space inside the ilike pattern');
+  });
+
+  test('ask-tools: push-down candidate set + ranker yields the same verdicts as filtering the full table', () => {
+    // The DB now hands pure.js a pre-narrowed live/in-price candidate window; the
+    // ranked verdicts must match ranking the full table with the same filters.
+    const candidates = listings.filter((l) => l.status === 'live' && (!l.price || l.price <= 425000));
+    const pushed = rankAndFilterListings(candidates, { maxPrice: 425000 }, criteria);
+    const whole = rankAndFilterListings(listings, { maxPrice: 425000 }, criteria);
+    assertEqual(
+      pushed.listings.map((l) => `${l.rightmove_id}:${l.fit}`).join('|'),
+      whole.listings.map((l) => `${l.rightmove_id}:${l.fit}`).join('|'),
+    );
   });
 
   // ── searchAreasPure ───────────────────────────────────────────────────────

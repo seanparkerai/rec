@@ -175,6 +175,61 @@ export function rankAndFilterListings(rows, filters = {}, criteria = {}) {
   };
 }
 
+// ── Listings query push-down (Ask plan P1-1) ──────────────────────────────────
+// The candidate listings set is bounded server-side (indexed price/area/status
+// predicates) BEFORE pure.js ranks it, so the edge↔DB payload stays small as the
+// scrape grows. This is a Supabase-efficiency win, not a token win — the model
+// still only ever sees the ≤25 ranked summaries rankAndFilterListings returns.
+// The select list and predicates are computed here (pure + unit-tested); tools.ts
+// only applies them to the RLS-scoped query builder.
+
+const LISTING_BASE_COLS =
+  'rightmove_id, address, area_id, postcode, outcode, price, beds, baths, ' +
+  'property_type, tenure, status, title, url';
+
+// Strip characters that would break a PostgREST `.or()` filter string (commas
+// and parentheses separate/group filters; the value rides inside an ilike
+// pattern). The model supplies `area`, but sanitising keeps the filter well-formed.
+function sanitizeFilterTerm(s) {
+  return String(s ?? '').replace(/[,()*%\\]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Build the bounded Supabase query plan for query_listings: which columns to
+ * select (description ONLY when a keyword search needs it) and which cheap,
+ * indexed predicates to push to Postgres. minBeds / propertyType / keyword are
+ * deliberately LEFT to pure.js (not indexed; substring/two-way logic), so the
+ * push-down only narrows on the selective indexed columns and the nuanced rest
+ * runs over a small set. Price predicates keep `price IS NULL` rows so unpriced
+ * listings survive exactly as rankAndFilterListings would have kept them.
+ * @returns {{ columns, wantsKeyword, filters: Array, order, limit }}
+ */
+export function buildListingsQuery(inp = {}) {
+  const wantsKeyword = typeof inp.keyword === 'string' && inp.keyword.trim().length > 0;
+  const columns = wantsKeyword ? `${LISTING_BASE_COLS}, description` : LISTING_BASE_COLS;
+  const filters = [];
+
+  // Default to live rows unless explicitly told to include hidden ones.
+  if (!inp.includeHidden) filters.push({ kind: 'eq', col: 'status', value: 'live' });
+
+  // Indexed price push-downs — guarded so an unpriced row isn't dropped server-side.
+  const maxP = Number(inp.maxPrice);
+  if (maxP) filters.push({ kind: 'or', expr: `price.lte.${maxP},price.is.null` });
+  const minP = Number(inp.minPrice);
+  if (minP) filters.push({ kind: 'or', expr: `price.gte.${minP},price.is.null` });
+
+  // Area substring across the indexed/text columns the pure ranker also searches.
+  const area = sanitizeFilterTerm(inp.area);
+  if (area) {
+    filters.push({
+      kind: 'or',
+      expr: `area_id.ilike.%${area}%,outcode.ilike.%${area}%,postcode.ilike.%${area}%,address.ilike.%${area}%`,
+    });
+  }
+
+  return { columns, wantsKeyword, filters, order: { col: 'price', ascending: true }, limit: 200 };
+}
+
 /**
  * Search the area catalogue by free text + simple filters. Each area row is the
  * Supabase areas.data blob (overview, town, county, schools, prices, etc.).
