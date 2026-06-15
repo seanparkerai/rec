@@ -123,13 +123,14 @@ Deno.serve(async (req) => {
         send({ type: "error", message: String((e as Error)?.message ?? e) });
       } finally {
         controller.close();
-        // Post-response usage logging must not delay the close.
-        try {
-          // @ts-ignore EdgeRuntime is provided by the Supabase runtime.
-          EdgeRuntime?.waitUntil?.(Promise.resolve(
-            console.log(`ask usage household=${householdId} model=${model} in=${usageTotals.input} out=${usageTotals.output}`),
-          ));
-        } catch { /* logging is best-effort */ }
+        // Post-response usage logging must not delay the close (EdgeRuntime.waitUntil
+        // is provided by the Supabase runtime; absent off-platform, so guard it).
+        const logUsage = () =>
+          console.log(`ask usage household=${householdId} model=${model} in=${usageTotals.input} out=${usageTotals.output}`);
+        // deno-lint-ignore no-explicit-any
+        const edge = (globalThis as any).EdgeRuntime;
+        if (edge?.waitUntil) edge.waitUntil(Promise.resolve().then(logUsage));
+        else logUsage();
       }
     },
   });
