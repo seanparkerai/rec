@@ -165,14 +165,16 @@ main.ask-page {
   border-top: 1px solid var(--hairline);
 }
 .ask-input {
-  /* Conventional textarea: full width, visible border, a couple of rows tall,
-     internal scroll past max-height (no JS height juggling). */
+  /* Conventional textarea: full width, visible border, a couple of roomy rows
+     tall, internal scroll past max-height (no JS height juggling). */
   flex: 1 1 auto; min-width: 0; width: 100%;
   margin: 0; resize: none;
-  min-height: var(--tap-min); max-height: 40svh; overflow-y: auto;
+  /* ~2.5 comfortable lines so the field reads as a proper compose box, not a
+     squashed single row; grows to 40svh then scrolls internally. */
+  min-height: 3.5rem; max-height: 40svh; overflow-y: auto;
   /* >=16px keeps iOS Safari from zooming the field on focus. */
-  font-size: 1rem; line-height: 1.45;
-  padding: var(--space-2) var(--space-3);
+  font-size: 1rem; line-height: 1.5;
+  padding: var(--space-3);
   border: 1px solid var(--hairline-strong);
   border-radius: var(--rec-radius-lg);
   background: var(--paper);
