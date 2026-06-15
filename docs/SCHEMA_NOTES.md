@@ -169,6 +169,21 @@
   sync snapshot. Keeping them untracked preserves the offline sync test's 20-tracked-
   tables assertion (green) and avoids a meaningless freshness check on regenerated data.
 
+## 10. `ask_conversations` (0 rows at creation) — Ask feature chat threads
+- Added 2026-06-15 via migration `create_ask_conversations` (Ask plan Phase 1).
+  Columns: `id uuid PK`, `household_id uuid NOT NULL → households(id) ON DELETE
+  CASCADE`, `title text DEFAULT 'New chat'`, `messages jsonb DEFAULT '[]'`
+  (array of `{ role, content, ts }` — only the final user/assistant TEXT turns;
+  intermediate tool blocks are never persisted), `created_at`, `updated_at`
+  (touch trigger `trg_touch_ask_conversations`).
+- **RLS:** one `FOR ALL` policy `"household members manage ask_conversations"`
+  `USING/ WITH CHECK is_household_member(household_id)` — read+write scoped to the
+  household, same pattern as `area_confirmations`. Covering index
+  `idx_ask_conversations_household`.
+- **Class:** user-state (tracked, 21st). Browser owns persistence via
+  `assets/js/storage/ask.js` (write-through cache → Supabase); the Edge Function
+  `ask` only *reads* user state, never writes here. See `docs/ASK.md`.
+
 ## 9. Config constants — status
 - Section 5 of `docs/archive/REFINEMENT_PLAN.md` holds the agreed defaults (Cautious
   preset shipped). These are **Luke's documented choices**; treated as confirmed

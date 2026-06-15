@@ -96,6 +96,12 @@
     "_class": "user-state",
     "_note": "v3 Step5: per-household area location review confirmations blob ({ confirmed: { areaId: isoTimestamp } }), one row/household. 1 row present (count was previously 191 — a copy-paste error from the areas block, corrected 2026-06-03 against live via MCP). Tracked sync table #20 (18 user-state + 2 content). 2026-06-04 (Phase 2): value-preserving id-key remap (narrow §18.4 relaxation) carrying 6 area-id migrations — lake-sp3->lake-sp4, ugford-sp4->ugford-sp2, little-langford-sp4->little-langford-sp3, steeple-langford-sp4->steeple-langford-sp3, monkwood-gu34->monkwood-so24, totford-so20->totford-so24 — original confirmation timestamps preserved."
   },
+  "ask_conversations": {
+    "count": 0,
+    "last_synced_at": null,
+    "_class": "user-state",
+    "_note": "Ask feature: natural-language assistant chat threads (id, household_id, title, messages jsonb [{role,content,ts}], created_at, updated_at). RLS via is_household_member() (FOR ALL). Browser-owned persistence (storage/ask.js write-through); the Edge Function 'ask' only READS user state. 0 rows until first conversation saved. Tracked sync table (21st user-state)."
+  },
   "listings": {
     "count": 652,
     "last_synced_at": "2026-06-04T23:55:00Z",

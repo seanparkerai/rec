@@ -93,6 +93,8 @@ const { register: registerReactionProvenance } = await import('../tests/reaction
 const { register: registerAreaRef } = await import('../tests/area-ref.test.js');
 const { register: registerAreaEnrich } = await import('../tests/area-enrich.test.js');
 const { register: registerDocsConsistency } = await import('../tests/docs-consistency.test.js');
+const { register: registerAskTools } = await import('../tests/ask-tools.test.js');
+const { register: registerAskStorage } = await import('../tests/ask-storage.test.js');
 const { runResponsiveLint } = await import('./lint-responsive.mjs');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
@@ -149,6 +151,8 @@ await registerAreaRef({ test, assert, assertEqual });
 await registerAreaEnrich({ test, assert, assertEqual });
 await registerSetupWizard({ test, assert, assertEqual });
 await registerDocsConsistency({ test, assert, assertEqual });
+await registerAskTools({ test, assert, assertEqual, fixtures });
+await registerAskStorage({ test, assert, assertEqual });
 
 await test('responsive lint (no new violations vs baseline)', () => {
   const { regressions } = runResponsiveLint();

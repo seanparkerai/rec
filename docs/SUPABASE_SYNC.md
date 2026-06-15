@@ -11,13 +11,13 @@ the table in §1 as authoritative — every data type in the app belongs to exac
 
 ## 0. Canonical table inventory (single source of truth)
 
-**Live schema = 30 tables in `public`** (verified via `list_tables` 2026-06-12, **all RLS-enabled**).
-**22 are "tracked"** for the sync contract — **20 user-state + 2 content mirrors** — and appear in
+**Live schema = 31 tables in `public`** (verified via `list_tables` 2026-06-15, **all RLS-enabled**).
+**23 are "tracked"** for the sync contract — **21 user-state + 2 content mirrors** — and appear in
 `data/snapshots/sync-state.json` (the snapshot also carries a high-water entry for the untracked
 `listings` table). The enforced list lives in `tests/supabase-sync.test.js`; any other
 doc, test, or rule that states a different count is wrong and must be reconciled to this section.
 
-- **20 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
+- **21 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
   `finances`, `goals`, `shortlist`, `zones`, `journey_checks`, `journey_progress`, `contacts`,
   `outreach`, `readiness_checklist`, `investments_accounts`, `investments_history`,
   `debts_credit_cards`, `debts_student_loans`, `debts_other`, `listing_reactions` (**append-only**:
@@ -27,7 +27,10 @@ doc, test, or rule that states a different count is wrong and must be reconciled
   locations), `household_areas` (**relational**, PK `(household_id, area_id)` — the per-household
   area *selection* layer over the global `areas` catalog; composed by `storage.js#getHouseholdAreas`;
   its migration also added a gated `areas` INSERT policy for `source='household-onboarding'`
-  provisional stubs only).
+  provisional stubs only), `ask_conversations` (Ask feature — natural-language assistant chat
+  threads; one row/conversation: `title` + `messages` jsonb of the final user/assistant text turns;
+  RLS via `is_household_member()`, FOR ALL. Browser-owned persistence via `storage/ask.js`; the Edge
+  Function `ask` only *reads* user state).
 - **2 content mirrors**: `areas` (**DB-canonical** since the 2026-06-04 §18.5 relaxation —
   `data/areas/<id>.json` is a materialised view) and `house_types` (repo-JSON-canonical, mirrored).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.

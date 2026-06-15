@@ -553,4 +553,34 @@ CREATE INDEX IF NOT EXISTS idx_refinement_suggestions_household ON refinement_su
 CREATE INDEX IF NOT EXISTS idx_refinement_runs_household        ON refinement_runs (household_id);
 CREATE INDEX IF NOT EXISTS idx_scrape_probation_household       ON scrape_probation (household_id);
 
+-- -----------------------------------------------------------------------
+-- ask_conversations (Ask feature — natural-language assistant chat threads)
+-- User-state class (per household_id). The live DDL is applied via
+-- mcp__supabase apply_migration (create_ask_conversations); this block is the
+-- reference mirror only (CLAUDE.md §17). Threads persist the final user/assistant
+-- TEXT turns; intermediate tool blocks are not stored (re-run per turn).
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS ask_conversations (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  household_id uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  title        text NOT NULL DEFAULT 'New chat',
+  messages     jsonb NOT NULL DEFAULT '[]'::jsonb,   -- [{ role, content, ts }]
+  created_at   timestamptz NOT NULL DEFAULT now(),
+  updated_at   timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE ask_conversations ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "household members manage ask_conversations" ON ask_conversations;
+CREATE POLICY "household members manage ask_conversations"
+  ON ask_conversations FOR ALL
+  USING (is_household_member(household_id))
+  WITH CHECK (is_household_member(household_id));
+
+CREATE INDEX IF NOT EXISTS idx_ask_conversations_household ON ask_conversations (household_id);
+
+DROP TRIGGER IF EXISTS trg_touch_ask_conversations ON ask_conversations;
+CREATE TRIGGER trg_touch_ask_conversations BEFORE UPDATE ON ask_conversations
+  FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+
 COMMIT;

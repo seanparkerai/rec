@@ -203,3 +203,24 @@ export function validateChecklists(o) {
   check(e, typeOf(o.moving) === 'array', 'checklists.moving must be an array');
   return e;
 }
+
+// Ask feature — an ask_conversations row. `messages` is the persisted thread:
+// only the final user/assistant TEXT turns ({ role:'user'|'assistant', content,
+// ts }); intermediate tool blocks are never stored (CLAUDE.md Ask plan §9).
+const ASK_ROLES = ['user', 'assistant'];
+export function validateAskConversation(o) {
+  const e = [];
+  check(e, typeOf(o) === 'object', 'conversation must be an object');
+  if (typeOf(o) !== 'object') return e;
+  check(e, typeof o.id === 'string' && o.id.length > 0, 'conversation.id must be a non-empty string');
+  check(e, typeof o.title === 'string', 'conversation.title must be a string');
+  check(e, typeOf(o.messages) === 'array', 'conversation.messages must be an array');
+  if (typeOf(o.messages) === 'array') {
+    o.messages.forEach((m, i) => {
+      check(e, typeOf(m) === 'object', `conversation.messages[${i}] must be an object`);
+      check(e, ASK_ROLES.includes(m?.role), `conversation.messages[${i}].role must be user|assistant`);
+      check(e, typeof m?.content === 'string', `conversation.messages[${i}].content must be a string`);
+    });
+  }
+  return e;
+}
