@@ -95,7 +95,7 @@ function renderCredit(p) {
 }
 
 function renderDebts(p) {
-  const debts = p?.debts ?? {};
+  const debts = p.debts ?? {};
 
   const cards = debts.creditCards ?? [];
   if (cards.length === 0) {
@@ -119,7 +119,7 @@ function renderDebts(p) {
 }
 
 function renderPension(p) {
-  const pen = p?.pension ?? {};
+  const pen = p.pension ?? {};
   setText('p-pension-status', pen.workplacePensionStatus);
   const ee = pen.employeeContributionPct != null
     ? `${pen.employeeContributionPct}% (${gbp(pen.employeeContributionMonthly)}/mo)`
@@ -146,7 +146,7 @@ function renderFollowUp(p) {
   const sl = debts?.studentLoan;
   if (sl && sl.balance === null && sl._followUp) items.push(sl._followUp);
 
-  const pen = p?.pension ?? {};
+  const pen = p.pension ?? {};
   if (pen.currentPotValue === null && pen._followUp) items.push(pen._followUp);
 
   const el = $('p-followup-list');
