@@ -98,6 +98,17 @@
 
     <ol class="listing-list" data-listings aria-label="Live listings ranked by fit"></ol>
     <section class="review-deck" data-review-deck aria-label="Review recent listings" hidden></section>
+
+    <!-- Shared suggestion actions: live announcements + the "removes N listings" confirm -->
+    <p data-sug-live class="ref-sr-only" role="status" aria-live="polite"></p>
+    <dialog id="ref-confirm" class="ref-dialog" aria-labelledby="ref-confirm-title">
+      <h2 id="ref-confirm-title" class="ref-dialog__title">Apply this change?</h2>
+      <p id="ref-confirm-msg" class="ref-dialog__msg"></p>
+      <footer class="ref-dialog__actions">
+        <button type="button" id="ref-confirm-cancel" class="ref-dialog__btn ref-dialog__btn--ghost">Cancel</button>
+        <button type="button" id="ref-confirm-ok" class="ref-dialog__btn ref-dialog__btn--primary">Apply</button>
+      </footer>
+    </dialog>
   </main>
 
   <div data-include="components/footer.html"></div>

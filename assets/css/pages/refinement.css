@@ -63,6 +63,10 @@
 .ref-card--probable { border-left-color: color-mix(in oklch, var(--accent) 45%, var(--hairline)); }
 .ref-card--confident { border-left-color: color-mix(in oklch, var(--accent) 70%, var(--hairline)); }
 .ref-card--strong { border-left-color: var(--accent); }
+/* Live, real-time observations (the shared inbox, also shown on the Listings page). */
+.ref-card--live { border-left-color: color-mix(in oklch, var(--accent) 55%, var(--hairline)); }
+.ref-tier--live { color: var(--ink-muted); border-color: var(--hairline); background: var(--surface-sunken); }
+.ref-card__hint { margin: var(--space-2) 0 0; font-size: var(--text-sm); color: var(--ink-muted); }
 
 .ref-card__head {
   display: flex;
@@ -167,6 +171,10 @@
   background: var(--accent-soft);
   color: var(--accent-ink);
 }
+/* Apply = the primary, do-the-thing action on a suggestion (accent-filled). */
+.ref-action--apply { border-color: var(--accent); background: var(--accent); color: var(--accent-contrast); }
+.ref-action--apply:hover { background: var(--accent-hover); }
+.ref-action--apply:disabled { opacity: 0.6; cursor: progress; }
 .ref-action:hover { background: var(--surface-sunken); }
 .ref-action--hide:hover { background: color-mix(in oklch, var(--accent) 22%, var(--paper)); }
 .ref-action:focus-visible { outline: none; box-shadow: var(--focus-ring); }

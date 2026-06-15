@@ -14,14 +14,18 @@
 //     scraper-side enforcement (subtract probation + re-probe) is a separate change.
 // Forming cards stay read-only.
 import {
-  getRefinementSuggestions, getRefinementMeta, getScrapeProbation,
-  hideSuggestion, unhideSuggestion, countMatchingListings,
+  getRefinementMeta, getScrapeProbation,
+  hideSuggestion, unhideSuggestion,
   stopSearchingArea, bringBackArea,
   dismissSuggestion, undismissSuggestion, snoozeSuggestion, unsnoozeSuggestion,
   getRefinementPreset, setRefinementPreset, resetTraining,
   getReactionLog,
 } from './storage.js';
-import { classifySuggestions, buildConfidenceMeter, probationStatusLabel, PRESET_OPTIONS } from './refinement/view.js';
+import { loadCombinedSuggestions } from './suggestions/sources.js';
+import { suggestionListHTML } from './suggestions/card.js';
+import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
+import { createConfirm } from './suggestions/confirm.js';
+import { buildConfidenceMeter, probationStatusLabel, PRESET_OPTIONS } from './refinement/view.js';
 import { provenanceSummary } from './listings/reaction-provenance.js';
 import { resolveConfig } from './refinement/config.js';
 import { esc, byId as $, on } from './dom.js';
@@ -144,80 +148,40 @@ function setCount(id, n) {
   if (el) el.textContent = String(n);
 }
 
-// ── confirm dialog (hide + stop-searching) ───────────────────────────────────
-// Native <dialog>: showModal() + close(), Escape, and click-outside (CLAUDE.md §11).
-// `pending.action` ('hide' | 'stop') routes the confirm button to the right writer.
-let pending = null;
-
-const COPY = {
-  hide: {
-    title: (label) => `Hide ${label}?`,
-    confirm: 'Hide from view',
-    busy: 'Hiding…',
-    message: (label, n) => {
-      const noun = n === 1 ? 'listing' : 'listings';
-      return `This removes ${n} matching ${noun} from your feed. You can undo anytime — nothing is deleted.`;
-    },
-  },
-  stop: {
-    title: (label) => `Stop searching ${label}?`,
-    confirm: 'Stop searching',
-    busy: 'Pausing…',
-    message: (label, n) => {
-      const noun = n === 1 ? 'listing' : 'listings';
-      return `You'll stop receiving new listings in ${label} (${n} ${noun} currently shown). We'll quietly re-check it every ${cfg.PROBATION_REPROBE_RUNS} scraper runs in case it's worth bringing back. You can undo anytime.`;
-    },
-  },
-};
-
-function closeConfirm() {
-  $('ref-confirm')?.close();
-  pending = null;
-}
-
-async function openConfirm({ action, dimension, value, label }) {
-  const dlg = $('ref-confirm');
-  const copy = COPY[action];
-  if (!dlg || !copy) return;
-  pending = { action, dimension, value, label };
-  $('ref-confirm-title').textContent = copy.title(label);
-  const msg = $('ref-confirm-msg');
-  msg.textContent = 'Counting matching listings…';
-  const okBtn = $('ref-confirm-ok');
-  if (okBtn) { okBtn.disabled = true; okBtn.textContent = copy.confirm; }
-  dlg.classList.toggle('ref-dialog--danger', action === 'stop');
-  dlg.showModal();
-  // For "stop" the relevant count is the area's current listings; for "hide" it's the
-  // matching property-type/area listings — both via countMatchingListings.
-  const n = await countMatchingListings({ dimension, value });
-  if (!pending || pending.value !== value || pending.dimension !== dimension || pending.action !== action) return;
-  msg.textContent = copy.message(label, n);
-  if (okBtn) okBtn.disabled = false;
-}
-
-function wireDialog(refresh) {
-  const dlg = $('ref-confirm');
-  if (!dlg) return;
-  on($('ref-confirm-cancel'), 'click', closeConfirm);
-  on(dlg, 'click', (e) => { if (e.target === dlg) closeConfirm(); });
-  on(dlg, 'cancel', () => { pending = null; }); // native Escape
-  on($('ref-confirm-ok'), 'click', async () => {
-    if (!pending) return;
-    const { action, dimension, value, label } = pending;
-    const btn = $('ref-confirm-ok');
-    if (btn) { btn.disabled = true; btn.textContent = COPY[action].busy; }
-    const ok = action === 'stop'
-      ? await stopSearchingArea({ value, reprobeEveryRuns: cfg.PROBATION_REPROBE_RUNS })
-      : await hideSuggestion({ dimension, value, count: 0 });
-    closeConfirm();
-    if (ok) { announce(action === 'stop' ? `Stopped searching ${label}.` : `${label} hidden from your feed.`); await refresh(); }
-    else announce('Could not apply that right now — please try again.');
-  });
-}
+// ── confirm dialog (shared with the Listings page — suggestions/confirm.js) ───
+// Native <dialog> #ref-confirm: the "removes N listings" modal for the higher-stakes
+// Apply actions (Stop searching an area / Hide a property type). The OK button runs an
+// injected onConfirm(), so this page supplies the writer + refresh.
+const confirm = createConfirm({ reprobeRuns: cfg.PROBATION_REPROBE_RUNS });
+// The shared inbox's NormalizedSuggestions, by id — looked up on a card-action click.
+let suggestionsById = new Map();
 
 function announce(text) {
   const region = $('ref-live');
   if (region) { region.textContent = ''; region.textContent = text; }
+}
+
+// The shared inbox card's Apply / Snooze / Dismiss (cards carry data-sug-id). Apply on a
+// stop-area or hide-type routes through the confirm modal; everything else is one-tap.
+async function handleInboxAction(btn, refresh) {
+  const n = suggestionsById.get(btn.dataset.sugId);
+  if (!n) return;
+  const action = btn.dataset.action;
+  if (action === 'apply') {
+    const run = async () => {
+      const ok = await applySuggestion(n);
+      if (ok) { announce(`Applied: ${n.label}.`); await refresh(); }
+      else announce('Could not apply that right now — please try again.');
+      return ok;
+    };
+    if (n.confirm) confirm.open({ action: n.confirmAction, dimension: n.dimension, value: n.value || n.areaId, label: n.label, onConfirm: run });
+    else { btn.disabled = true; await run(); }
+    return;
+  }
+  btn.disabled = true;
+  const ok = action === 'snooze' ? await snoozeSuggestionUnified(n) : await dismissSuggestionUnified(n);
+  if (ok) { announce(action === 'snooze' ? `Snoozed ${n.label} for 30 days.` : `Dismissed ${n.label}.`); await refresh(); }
+  else { btn.disabled = false; announce('Could not do that right now — please try again.'); }
 }
 
 // Delegated action handler for the per-card buttons (hide / stop / restore / bring-back).
@@ -226,12 +190,20 @@ function wireActions(refresh) {
   on(main, 'click', async (e) => {
     const btn = e.target.closest?.('[data-action]');
     if (!btn) return;
+    // Shared inbox cards (combined live + engine) carry data-sug-id → unified router.
+    if (btn.dataset.sugId) { await handleInboxAction(btn, refresh); return; }
     const action = btn.dataset.action;
     const dimension = btn.dataset.dim;
     const value = btn.dataset.value;
     const label = btn.dataset.label || value;
     if (action === 'hide' || action === 'stop') {
-      openConfirm({ action, dimension, value, label });
+      confirm.open({ action, dimension, value, label, onConfirm: async () => {
+        const ok = action === 'stop'
+          ? await stopSearchingArea({ value, reprobeEveryRuns: cfg.PROBATION_REPROBE_RUNS })
+          : await hideSuggestion({ dimension, value, count: 0 });
+        if (ok) { announce(action === 'stop' ? `Stopped searching ${label}.` : `${label} hidden from your feed.`); await refresh(); }
+        else announce('Could not apply that right now — please try again.');
+      } });
       return;
     }
     // One-tap, reversible actions (two-way doors — no confirm needed).
@@ -295,18 +267,25 @@ function wireTraining() {
 }
 
 async function refresh() {
-  const [rows, meta, probation, preset, reactionLog] = await Promise.all([
-    getRefinementSuggestions(), getRefinementMeta(), getScrapeProbation(), getRefinementPreset(), getReactionLog(),
+  const [{ combined, groups }, meta, probation, preset, reactionLog] = await Promise.all([
+    loadCombinedSuggestions({ now: new Date() }),
+    getRefinementMeta(), getScrapeProbation(), getRefinementPreset(), getReactionLog(),
   ]);
   renderReactions(reactionLog);
   renderMeter(meta);
   renderPresets(preset);
 
-  const groups = classifySuggestions(rows || []);
-  const probByKey = new Map((probation || []).map((p) => [`${p.dimension}:${String(p.value).trim().toLowerCase()}`, p]));
+  // The inbox is the SHARED, combined set (engine actionable + live conflicts) — the
+  // same cards the Listings page shows. The other buckets stay engine-only.
+  suggestionsById = new Map(combined.map((n) => [n.id, n]));
+  const inboxEl = $('ref-inbox');
+  if (inboxEl) {
+    inboxEl.innerHTML = combined.length
+      ? suggestionListHTML(combined)
+      : emptyHTML("Nothing to confirm yet. The engine is watching your feedback and will only suggest a change when the evidence is strong.");
+  }
 
-  renderList('ref-inbox', groups.inbox,
-    "Nothing to confirm yet. The engine is watching your feedback and will only suggest a change when the evidence is strong.", 'inbox');
+  const probByKey = new Map((probation || []).map((p) => [`${p.dimension}:${String(p.value).trim().toLowerCase()}`, p]));
   renderList('ref-forming', groups.forming,
     "No patterns forming yet — keep reacting to listings and they'll appear here.", 'forming');
   renderList('ref-active', groups.active,
@@ -317,12 +296,12 @@ async function refresh() {
   renderList('ref-snoozed', groups.snoozed, "Nothing snoozed.", 'snoozed');
   renderList('ref-dismissed', groups.dismissed, "Nothing dismissed.", 'dismissed');
 
-  setCount('ref-inbox-count', groups.counts.actionable);
+  setCount('ref-inbox-count', combined.length);
   setCount('ref-forming-count', groups.counts.forming);
 }
 
 async function init() {
-  wireDialog(refresh);
+  confirm.wire();
   wireActions(refresh);
   wireTraining();
   try {
