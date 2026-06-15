@@ -27,8 +27,10 @@ main.ask-page {
 .ask-head__actions { display: flex; gap: var(--space-2); flex-shrink: 0; }
 .ask-head__btn {
   margin: 0;
+  display: inline-flex; align-items: center; gap: var(--space-2);
   min-height: var(--tap-min);
   padding: var(--space-1) var(--space-3);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   background: var(--paper-2);
   color: var(--ink-1);
@@ -37,6 +39,7 @@ main.ask-page {
   cursor: pointer;
 }
 .ask-head__btn:hover { background: var(--paper-3); }
+.ask-head__icon { inline-size: 1rem; block-size: 1rem; flex: 0 0 auto; }
 /* Phone: reclaim vertical space for the conversation — the intro reads in the
    empty state's chips. The lead returns from tablet portrait up. */
 .ask-head .lead { display: none; }
@@ -138,10 +141,16 @@ main.ask-page {
 .ask-empty[hidden] { display: none; }
 .ask-empty__title { font-size: var(--text-lg); margin: 0 0 var(--space-3); }
 .ask-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+/* Belt-and-braces marker reset: a UA/framework `li` marker would otherwise leave
+   a stray square left of each chip even with list-style:none on the parent. */
+.ask-chips > li { margin: 0; list-style: none; }
+.ask-chips > li::marker { content: ""; }
 .ask-chip {
   margin: 0; text-align: left;
   min-height: var(--tap-min);
   padding: var(--space-2) var(--space-3);
+  /* Prose, not data — keep the body sans (mono is reserved for numerals/data). */
+  font-family: var(--font-body);
   font-size: var(--text-sm); line-height: 1.35;
   color: var(--ink-1); background: var(--paper-2);
   border: 1px solid var(--hairline); border-radius: var(--rec-radius);
@@ -206,11 +215,18 @@ main.ask-page {
 .ask-field .ask-input::placeholder { color: var(--ink-subtle); }
 
 /* Action button: a fixed-size circle that never participates in the width fight.
-   Explicit width/height beat Pico's `button { width: 100% }`. */
-.ask-send, .ask-stop {
-  margin: 0; flex-shrink: 0;
+   Scoped under .ask-field so the selector is (0,2,0) — it outranks Pico's bare
+   `button`/`[type=submit]` width:100% element rules by specificity, not by load
+   order. max-inline-size is a hard cap: even an un-scoped width:100% can never
+   expand the circle to fill the row (the bug this file shipped before). */
+.ask-field .ask-send,
+.ask-field .ask-stop {
+  margin: 0;
+  flex: 0 0 var(--tap-min);
   display: inline-flex; align-items: center; justify-content: center;
-  width: var(--tap-min); height: var(--tap-min); padding: 0;
+  inline-size: var(--tap-min); block-size: var(--tap-min);
+  min-inline-size: var(--tap-min); max-inline-size: var(--tap-min);
+  padding: 0;
   border-radius: 50%;
   cursor: pointer;
   transition: background 120ms var(--ease-out), opacity 120ms var(--ease-out);
