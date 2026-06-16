@@ -26,6 +26,9 @@
 > be re-thought. This freedom is bounded only by the *process* (the §3 safety protocol, the §4 rail
 > protocol, the §5 test net, and the owner gates in §3.10) — never by a presumption that the current
 > shape is correct. Treat today's structure as the best previous answer, not the final one.
+>
+> **External validation pass applied 2026-06-16; finance/web-platform/API claims checked against
+> primary sources current to June 2026 — see commit.**
 
 ---
 
