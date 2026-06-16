@@ -5,8 +5,26 @@
 #
 # Triggers:
 #   - workflow_dispatch: tap "Run workflow" in the Actions tab (phone-friendly).
-#   - schedule: daily at 06:00 UTC (24-hour recency window, MAX_DAYS_SINCE_ADDED=1).
-#     Comment out the `schedule` block to pause.
+#   - schedule: daily at 12:00 NOON Europe/London (England local time), DST-safe.
+#     24-hour recency window, MAX_DAYS_SINCE_ADDED=1. Comment out the `schedule`
+#     block to pause.
+#
+# Why two cron lines for one daily run (READ THIS before "simplifying"):
+#   GitHub Actions cron is UTC-only — it has no timezone field — so a single fixed
+#   cron cannot mean "noon London" year-round: London is UTC+1 in summer (BST) and
+#   UTC+0 in winter (GMT). We therefore schedule BOTH candidate UTC ticks:
+#       0 11 * * *  → 12:00 London while BST is in effect (summer)
+#       0 12 * * *  → 12:00 London while GMT is in effect (winter)
+#   and the first job step ("Noon Europe/London gate") checks the real local hour
+#   via the OS tz database (TZ=Europe/London) and SKIPS the off-season tick. Result:
+#   exactly one run per day, at 12:00 England time, with the DST boundary handled
+#   automatically and forever. Manual (workflow_dispatch) and push runs bypass the
+#   gate and always proceed.
+#
+#   Caveat (GitHub's, not ours): scheduled workflows are best-effort and can start
+#   late under platform load — sometimes by many minutes. The gate guarantees the
+#   CALENDAR/timezone is correct; it cannot make GitHub's queue punctual to the
+#   second. For a hard SLA, trigger from an external scheduler via workflow_dispatch.
 #
 # Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
 # SUPABASE_SERVICE_ROLE_KEY.
@@ -61,7 +79,11 @@ on:
         type: string
         default: '25'
   schedule:
-    - cron: '0 6 * * *'
+    # Both ticks target 12:00 Europe/London; the gate step keeps only the in-season
+    # one (11:00 UTC in summer/BST, 12:00 UTC in winter/GMT). Do NOT collapse to one
+    # line — see the header comment.
+    - cron: '0 11 * * *'  # 12:00 London during BST (summer)
+    - cron: '0 12 * * *'  # 12:00 London during GMT (winter)
   # Pushing a change to THIS file on main kicks off one immediate run.
   push:
     branches: [main]
@@ -75,11 +97,36 @@ jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
+      # DST-safe noon gate. Scheduled runs fire from TWO crons (11:00 + 12:00 UTC);
+      # only the one that is actually 12:00 in Europe/London should proceed. Manual
+      # (workflow_dispatch) and push runs are never gated — they always run.
+      - name: Noon Europe/London gate
+        id: gate
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "Trigger=${{ github.event_name }} (manual/push) — bypassing noon gate, proceeding."
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          NOW_LONDON=$(TZ='Europe/London' date '+%Y-%m-%d %H:%M:%S %Z (%:z)')
+          HOUR_LONDON=$(TZ='Europe/London' date '+%H')
+          echo "Europe/London now: $NOW_LONDON"
+          if [ "$HOUR_LONDON" = "12" ]; then
+            echo "It is the noon hour in England — proceeding with the daily fetch."
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Off-season cron tick (London hour=$HOUR_LONDON, not 12) — the other daily cron will run at noon London. Skipping this tick."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@v4
+        if: steps.gate.outputs.run == 'true'
       - uses: actions/setup-node@v4
+        if: steps.gate.outputs.run == 'true'
         with:
           node-version: '20'
       - name: Fetch listings
+        if: steps.gate.outputs.run == 'true'
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
