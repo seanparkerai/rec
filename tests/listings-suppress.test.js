@@ -1,7 +1,8 @@
 // tests/listings-suppress.test.js — pure feed suppression + de-duplication over
 // the physical-property fingerprint. Verifies that a property decided under one
 // rightmove_id (like/reject) is suppressed even when re-listed under another id,
-// that `pass` never suppresses, and that duplicate rows collapse to one rep.
+// that `pass` now suppresses like `reject` (passed/rejected moved to their own page),
+// and that duplicate rows collapse to one rep.
 import { decidedSets, isDecided, dedupeByFingerprint } from '../assets/js/listings/suppress.js';
 import { propertyFingerprint } from '../assets/js/listings/classify.js';
 
@@ -13,10 +14,10 @@ export async function register({ test, assert, assertEqual }) {
     ['300', { reaction: 'pass',   listing_snapshot: snap('Whitsbury Road, Fordingbridge', 3, 'Detached') }],
   ]);
 
-  test('suppress: decidedSets includes like+reject ids, never pass', () => {
+  test('suppress: decidedSets includes like, pass and reject ids', () => {
     const { ids } = decidedSets(latest);
     assert(ids.has('100') && ids.has('200'), 'like + reject ids present');
-    assertEqual(ids.has('300'), false, 'a passed listing is NOT decided');
+    assertEqual(ids.has('300'), true, 'a passed listing is now decided too');
   });
 
   test('suppress: decidedSets captures the property fingerprint from snapshots', () => {
@@ -33,10 +34,13 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(isDecided(twin, sets), true, 're-list suppressed by fingerprint');
   });
 
-  test('suppress: a passed property may resurface; a coarse address only matches by id', () => {
+  test('suppress: a passed property is decided by id and fingerprint, like a reject', () => {
     const sets = decidedSets(latest);
-    // Whitsbury Road was only PASSED → not decided.
-    assertEqual(isDecided({ rightmove_id: '300', address: 'Whitsbury Road, Fordingbridge', beds: 3, property_type: 'Detached' }, sets), false);
+    // Whitsbury Road was PASSED → now decided; its re-list under a new id is also
+    // caught by fingerprint (pass suppresses the feed exactly like reject).
+    assertEqual(isDecided({ rightmove_id: '300', address: 'Whitsbury Road, Fordingbridge', beds: 3, property_type: 'Detached' }, sets), true);
+    const passTwin = { rightmove_id: '997', address: 'Whitsbury Road, Fordingbridge', beds: 3, property_type: 'Detached House' };
+    assertEqual(isDecided(passTwin, sets), true, 're-list of a passed property is suppressed by fingerprint');
     // Direct id match always suppresses (even when the row can't be fingerprinted).
     assertEqual(isDecided({ rightmove_id: '100', address: '', beds: 2, property_type: 'Flat' }, sets), true);
   });

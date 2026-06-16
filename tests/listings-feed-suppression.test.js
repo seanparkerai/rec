@@ -30,22 +30,22 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(latest.get('300').reaction, 'pass');
   });
 
-  test('feed: decided = latest like/reject; a pass is never decided', () => {
+  test('feed: decided = latest like/pass/reject', () => {
     const decided = decidedSets(latestPerListing(log));
     assert(decided.ids.has('100') && decided.ids.has('200'), 'reject + like are decided');
-    assertEqual(decided.ids.has('300'), false, 'a pass stays resurfaceable');
+    assertEqual(decided.ids.has('300'), true, 'a pass is now decided too');
   });
 
-  test('feed: a re-list under a NEW id is suppressed by fingerprint; a passed one is not', () => {
+  test('feed: a re-list under a NEW id is suppressed by fingerprint, for likes and passes alike', () => {
     const decided = decidedSets(latestPerListing(log));
     // 200 (Augustus Avenue) was LIKED; it re-lists under a new id with new type text.
     const likedTwin = { rightmove_id: '999', address: 'Augustus Avenue, Fordingbridge, SP6', beds: 2, property_type: 'Terraced House' };
     assertEqual(isDecided(likedTwin, decided), true, 're-list of a liked property is suppressed');
-    // 300 (Whitsbury Road) was only PASSED — its re-list is NOT suppressed (pass may
-    // resurface), even though the address is specific enough to fingerprint.
+    // 300 (Whitsbury Road) was PASSED — its re-list is now ALSO suppressed (pass
+    // suppresses the feed like reject; passed homes live on the Rejected page).
     const passTwin = { rightmove_id: '998', address: 'Whitsbury Road, Fordingbridge, SP6', beds: 3, property_type: 'Detached' };
     assert(propertyFingerprint(passTwin), 'precondition: the passed address IS fingerprintable');
-    assertEqual(isDecided(passTwin, decided), false, 'a passed property may resurface');
+    assertEqual(isDecided(passTwin, decided), true, 're-list of a passed property is suppressed by fingerprint');
   });
 
   test('feed: decidedSets falls back to the live row for the fingerprint', () => {
@@ -102,13 +102,13 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(isDecided(reListed, decided), true, 're-list of the just-liked property is suppressed by fingerprint');
   });
 
-  test('event-fold: a pass event never decides', () => {
+  test('event-fold: a pass event decides by id and fingerprint, like reject', () => {
     const decided = decidedSets(latestPerListing(log));
     const liveById = new Map([
       ['888', { rightmove_id: '888', address: 'X Road, Fordingbridge', beds: 2, property_type: 'Flat' }],
     ]);
     foldDecision(decided, '888', 'pass', liveById.get('888'), liveById);
-    assertEqual(decided.ids.has('888'), false, 'pass stays resurfaceable');
-    assertEqual(isDecided(liveById.get('888'), decided), false, 'a passed property is never suppressed');
+    assertEqual(decided.ids.has('888'), true, 'a pass now suppresses the feed');
+    assertEqual(isDecided(liveById.get('888'), decided), true, 'a passed property is suppressed');
   });
 }

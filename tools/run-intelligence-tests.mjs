@@ -53,6 +53,7 @@ const { register: registerListingsClassify } = await import('../tests/listings-c
 const { register: registerListingsSuppress } = await import('../tests/listings-suppress.test.js');
 const { register: registerListingsFeedSuppression } = await import('../tests/listings-feed-suppression.test.js');
 const { register: registerListingsFeedPartition } = await import('../tests/listings-feed-partition.test.js');
+const { register: registerRejectedView } = await import('../tests/rejected-view.test.js');
 const { register: registerListingsPickerState } = await import('../tests/listings-picker-state.test.js');
 const { register: registerPurgeListings } = await import('../tests/purge-listings.test.js');
 const { register: registerVerifyAreaCoords } = await import('../tests/verify-area-coords.test.js');
@@ -114,6 +115,7 @@ await registerListingsClassify({ test, assert, assertEqual });
 await registerListingsSuppress({ test, assert, assertEqual });
 await registerListingsFeedSuppression({ test, assert, assertEqual });
 await registerListingsFeedPartition({ test, assert, assertEqual });
+await registerRejectedView({ test, assert, assertEqual });
 await registerListingsPickerState({ test, assert, assertEqual });
 await registerPurgeListings({ test, assert, assertEqual });
 await registerVerifyAreaCoords({ test, assert, assertEqual, fixtures });

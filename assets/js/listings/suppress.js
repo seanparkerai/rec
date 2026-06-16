@@ -7,18 +7,21 @@
 // fingerprint) as decided/duplicate, independent of which listing id it wears.
 //
 // Policy (per the v3 design + the household's instruction):
-//   • A property whose LATEST reaction is `like` or `reject` is DECIDED → never
-//     shown again as a fresh card (matched by id AND fingerprint, so re-lists are
-//     caught). The reject signal lives forever in the append-only log, so this is
-//     durable even after the heavy listings row is purged.
-//   • `pass` is a soft skip — NOT decided, may resurface (matches "pass is
-//     unlabelled / never trains").
+//   • A property whose LATEST reaction is `like`, `pass`, or `reject` is DECIDED →
+//     never shown again as a fresh card (matched by id AND fingerprint, so re-lists
+//     are caught). The signal lives forever in the append-only log, so this is
+//     durable even after the heavy listings row is purged. Likes are surfaced on the
+//     Saved page; passes/rejects on the dedicated Rejected page.
+//   • `pass` suppresses the feed exactly like `reject` (the household moved passed
+//     and rejected properties off the feed onto their own page). It still carries NO
+//     training signal — `pass` is absent from GRADED_REACTIONS — so feed suppression
+//     and learning stay decoupled.
 //   • Among undecided rows, same-fingerprint duplicates collapse to ONE.
 
 import { propertyFingerprint } from './classify.js';
 
 /** Reactions that "decide" a property (remove it from the fresh feed). */
-const DECIDING = new Set(['like', 'reject']);
+const DECIDING = new Set(['like', 'pass', 'reject']);
 
 /**
  * Build the suppression sets from a latest-reaction-per-listing map.

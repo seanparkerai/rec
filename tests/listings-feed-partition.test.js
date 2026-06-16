@@ -1,9 +1,11 @@
 // tests/listings-feed-partition.test.js — the pure Browse-feed partition pipeline
 // (assets/js/listings/feed-partition.js, P11c — extracted verbatim from the
 // page-listings paint()). Pins the suppression/visibility invariants and the
-// summary-count arithmetic: pass never suppresses, decided rows hide unless
-// "Show hidden", junk vs refinement never double-counts, unknown verbs fold into
-// the Passed group, and no count can go negative.
+// summary-count arithmetic: partitionFeed suppresses exactly what its injected
+// isDecided reports (deciding now lives upstream — DECIDING covers like/pass/reject,
+// and the page pre-filters the decided pile before calling in), decided rows hide
+// unless "Show hidden", junk vs refinement never double-counts, unknown verbs fold
+// into the Passed group, and no count can go negative.
 import { partitionFeed } from '../assets/js/listings/feed-partition.js';
 
 export async function register({ test, assert, assertEqual }) {
@@ -20,16 +22,16 @@ export async function register({ test, assert, assertEqual }) {
     ...over,
   });
 
-  test('feed-partition: a passed listing stays visible and lands in byVerb.pass, never decided', () => {
+  test('feed-partition: suppression follows the injected isDecided (stubbed false here)', () => {
     const listings = [L('1'), L('2')];
     const out = partitionFeed(listings, deps({
-      isDecided: () => false, // pass NEVER reaches the decided set (suppress.js DECIDING)
+      isDecided: () => false, // deciding lives upstream (suppress.js DECIDING); stubbed here
       isReviewed: (id) => String(id) === '1',
       reactionOf: (id) => (String(id) === '1' ? { reaction: 'pass' } : null),
     }));
     assertEqual(out.visible.length, 2);
-    assertEqual(out.counts.decidedCount, 0, 'a pass is not a decision');
-    assertEqual(out.byVerb.pass.length, 1, 'the passed row groups under Passed');
+    assertEqual(out.counts.decidedCount, 0, 'nothing is decided when isDecided is false');
+    assertEqual(out.byVerb.pass.length, 1, 'the reviewed row groups under its verb');
     assertEqual(out.unreviewed.length, 1);
   });
 

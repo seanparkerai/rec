@@ -259,43 +259,10 @@ function buildRow(listing, idx, scored, area, ctx = {}) {
 // Reaction verb → reviewed-card modifier (green "actioned" tint, distinct per verb).
 const REVIEWED_MOD = { like: 'liked', reject: 'rejected', pass: 'passed' };
 
-// Reviewed listings are split by the user's verdict so the end of a session lands
-// on a tidy, consolidated home: Liked, then Passed, then Rejected — all collapsed
-// by default so a finished session is a compact set of summaries, not a long feed.
-const REVIEWED_GROUPS = [
-  { key: 'like',   title: 'Liked',    mod: 'liked',    open: false },
-  { key: 'pass',   title: 'Passed',   mod: 'passed',   open: false },
-  { key: 'reject', title: 'Rejected', mod: 'rejected', open: false },
-];
-
-// One collapsible group (a <li> in the listings <ol>) of reviewed cards. The cards
-// are built lazily on first expand (build-on-toggle): a finished session can hold
-// many reviewed rows across three collapsed groups, and building every card upfront
-// is wasted work. `rows` are raw row-contexts; `buildCard(r)` makes the card <li>.
-function buildReviewedGroup(cfg, rows, buildCard) {
-  const list = el('ul', { class: 'listings reviewed-list' });
-  let built = false;
-  const fill = () => {
-    if (built) return;
-    built = true;
-    for (const r of rows) list.appendChild(buildCard(r));
-  };
-  list.setAttribute('aria-label', `${cfg.title} — reviewed listings`);
-  const details = el('details', { class: `reviewed-collapse reviewed-collapse--${cfg.mod}` }, [
-    el('summary', {
-      class: 'reviewed-collapse__summary',
-      'aria-label': `${cfg.title}: ${rows.length} reviewed listing${rows.length === 1 ? '' : 's'}`,
-    }, [
-      el('span', { class: 'reviewed-collapse__title' }, cfg.title),
-      el('span', { class: 'reviewed-collapse__count num' }, String(rows.length)),
-    ]),
-    list,
-  ]);
-  details.open = cfg.open;
-  if (details.open) fill();               // an initially-open group builds immediately
-  details.addEventListener('toggle', () => { if (details.open) fill(); });
-  return el('li', { class: 'reviewed-collapse-item' }, [details]);
-}
+// Reviewed (Liked/Passed/Rejected) groups were removed from the Browse feed: a
+// decided property now leaves the feed entirely (suppress.js DECIDING covers
+// like/pass/reject) and is surfaced on the Saved page (likes) or the dedicated
+// Rejected page (passes/rejects). The feed renders only still-to-review listings.
 
 // The listings summary makes the review pipeline legible at a glance: how many
 // are still to review vs already handled (liked / passed / rejected), plus the
@@ -567,6 +534,15 @@ async function render() {
   const decided = decidedSets(latest, liveById);
   const isDecidedListing = (l) => isDecided(l, decided);
 
+  // Perf + declutter (the core of this feature): a property whose latest reaction is
+  // like/pass/reject is "decided" — drop the entire decided pile from the working set
+  // up front so the fit engine never scores it and it never renders in the feed.
+  // Likes live on the Saved page; passes/rejects on the Rejected page. Reactions made
+  // DURING this visit are still suppressed live by partitionFeed's isDecided (the
+  // `decided` set grows via foldDecision), so a row reacted on this visit also leaves
+  // the feed immediately without a reload.
+  const feedListings = listings.filter((l) => !isDecidedListing(l));
+
   const areaOf = (l) => (l.area_id ? areasById.get(l.area_id) : null);
   // Fit scoring is the per-paint hot path (every sort/filter calls paint(), which
   // scores every listing). Memoise per rightmove_id so repeated paints reuse the
@@ -766,6 +742,9 @@ async function render() {
     const { visible, gatedCount, hiddenJunkCount, hiddenRefCount, hiddenByFilter, decidedCount, dupCount } = lastBrowse;
     const nodes = buildSummary({ ...summaryCounts(visible), gated: gatedCount, hiddenJunk: hiddenJunkCount, hiddenByRefinement: hiddenRefCount, hiddenByFilter, decided: decidedCount, dup: dupCount });
     for (const node of nodes) summaryEl.appendChild(node);
+    // Route to where passed/rejected properties now live (off the feed).
+    summaryEl.appendChild(el('span', { class: 'listings-summary__sep', 'aria-hidden': 'true' }, '·'));
+    summaryEl.appendChild(el('a', { class: 'listings-summary__link', href: url('pages/rejected.html') }, 'Passed & rejected →'));
   }
 
   // ── Refinement suggestions (L5 + engine) — the SHARED inbox ───────────────
@@ -909,7 +888,7 @@ async function render() {
     // Pure partition pipeline (listings/feed-partition.js — unit-tested): radius →
     // gate → junk/refinement → decided suppression → dedupe → controls → reviewed
     // split + summary counts. Identical maths to the previous inline version.
-    const feed = partitionFeed(listings, {
+    const feed = partitionFeed(feedListings, {
       passesRadius: passesRadiusFilter,
       scoreOf,
       areaOf,
@@ -942,31 +921,26 @@ async function render() {
       return node;
     };
 
-    // Capture focus + reviewed-group open state before the commit (moving nodes
-    // through a fragment drops focus; group shells are rebuilt each paint).
+    // Capture focus before the commit (moving nodes through a fragment drops focus).
     const active = document.activeElement;
     const refocus = active && listEl.contains(active) ? active : null;
-    const openByMod = {};
-    for (const d of listEl.querySelectorAll('details.reviewed-collapse')) {
-      for (const cfg of REVIEWED_GROUPS) if (d.classList.contains(`reviewed-collapse--${cfg.mod}`)) openByMod[cfg.key] = d.open;
-    }
 
+    // The feed renders only still-to-review listings. Decided properties (like/pass/
+    // reject) are filtered out of the working set above and live on the Saved /
+    // Rejected pages, so there is no reviewed split to render here any more.
     const frag = document.createDocumentFragment();
     feed.unreviewed.forEach((r) => frag.appendChild(cardFor(r, false)));
-    if (feed.reviewed.length) {
-      // Split the reviewed pile by the user's verdict (Liked / Passed / Rejected)
-      // so a finished session lands on a consolidated, scannable split. Editing a
-      // card in place (change verb → Save) re-saves and, on the next paint, moves
-      // it to the matching group. Cards inside stay build-on-toggle; a group the
-      // user expanded stays expanded across repaints.
-      for (const cfg of REVIEWED_GROUPS) {
-        if (!feed.byVerb[cfg.key].length) continue;
-        frag.appendChild(buildReviewedGroup(
-          { ...cfg, open: openByMod[cfg.key] ?? cfg.open },
-          feed.byVerb[cfg.key],
-          (r) => cardFor(r, true),
-        ));
-      }
+    if (!feed.unreviewed.length) {
+      frag.appendChild(el('li', { class: 'listings-empty' }, [
+        el('p', {}, 'Nothing left to review here.'),
+        el('p', { class: 'listings-empty__hint' }, [
+          'Properties you’ve passed or rejected are on the ',
+          el('a', { href: url('pages/rejected.html') }, 'Rejected'),
+          ' page; the ones you liked are on ',
+          el('a', { href: url('pages/saved-listings.html') }, 'Saved'),
+          '.',
+        ]),
+      ]));
     }
     listEl.replaceChildren(frag);
     // A reused node is detached+reattached by the commit, which drops focus —
