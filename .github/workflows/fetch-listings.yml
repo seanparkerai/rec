@@ -58,7 +58,11 @@
 #
 # Cost guardrail: APIFY_MAX_BUDGET_USD (default 25) is passed to the actor as
 # maxBudget — Apify self-terminates at the cap. No overrun is possible on PPE actors.
-# Daily top-up (24h, cluster): ~50 results → ~$0.10/run. Foundation (14d): ~$4 worst-case.
+# results_per_target (maxItems) caps each search at 200 listings; a 24h cluster
+# normally returns far fewer NEW qualifying listings than that, so the cap is
+# headroom (full coverage), not the typical bill. Typical daily top-up (24h,
+# cluster): a few tens of results → ~$0.10/run. Foundation (14d): ~$4 worst-case;
+# the $25 maxBudget bounds any run regardless of the cap.
 name: fetch-listings
 
 on:
@@ -96,7 +100,7 @@ on:
       results_per_target:
         description: 'Max listings per search target (lower = cheaper on pay-per-event actors)'
         type: string
-        default: '50'
+        default: '200'
       cluster_cap_mi:
         description: 'Cluster disk cap (miles). Lower = tighter/less paid noise but more searches. 5≈69, 7≈43, 9≈34 searches.'
         type: string
@@ -243,6 +247,6 @@ jobs:
           APIFY_MAX_BUDGET_USD: ${{ inputs.apify_budget_usd || '25' }}
           SEARCH_MODE: ${{ inputs.search_mode || 'cluster' }}
           FETCH_LIMIT: ${{ inputs.fetch_limit || '0' }}
-          RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '50' }}
+          RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '200' }}
           CLUSTER_CAP_MI: ${{ inputs.cluster_cap_mi || '7' }}
         run: node tools/fetch-listings.mjs
