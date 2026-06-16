@@ -685,6 +685,13 @@ All nav links carry `data-nav="pages/foo.html"` (app-root-relative). **Flow:**
 - **Button UI:** theme toggle has two SVG icons (moon, sun), swapped by CSS `[aria-pressed]` attribute selector (lines 201–203: when pressed=false show moon, when true show sun). Label text set to "Dark" or "Light" (line 69, JS-driven).
 - **Known smell:** label text mutation (line 69 `querySelector('.theme-toggle__label').textContent = …`) is fragile — if HTML markup changes (class name removed, element moved), toggle breaks silently (icon still swaps, label doesn't, aria-label updated).
 
+> **✅ External validation — Pico v2 theming (C6):** Confirmed. Overriding `--pico-*` custom properties
+> with `[data-theme]` + `prefers-color-scheme` is **exactly Pico v2's documented theming approach** — the
+> project is using the framework as intended. Two notes: (1) a zero-build (CDN) Pico **cannot tree-shake
+> unused components** (that needs the SASS build), so the full CSS ships — accept it or move to a SASS
+> build as its own phase; (2) verify overridden variable names match Pico v2's current
+> `{component}-{state}-{property}` scheme, since names changed from v1. (picocss.com/docs/css-variables, /v2.)
+
 #### 4. Font loading & feature activation
 **Source:** `assets/css/fonts.css` (`@font-face` declarations before `base.css`). **Self-hosted woff2 subsets,** `font-display: swap` (render fallback immediately, swap when WOFF2 parses). **Families:**
 - **Fraunces:** 400/600, variable optical sizing (11–144 range).
@@ -828,6 +835,15 @@ All nav links carry `data-nav="pages/foo.html"` (app-root-relative). **Flow:**
 - Token value typo (e.g., `oklch(99% 0.005 var(--hue-papery))`) → CSS invalid, property ignored, cascades wrong colour.
 - Hardcoded hex in component CSS (DESIGN.md §3 ban) → not resolved from tokens, can't adapt to theme (design debt, caught by linting).
 **Rationale:** OKLCH perceptual uniformity means lightness shifts are consistent across hues (dark mode swap is arithmetic, not colour-by-colour tweaking). `color-mix` is mathematically pure (no magic hex remapping). Single-accent discipline (emerald only) keeps palette calm + accessible.
+
+> **✅/⚠️ External validation (C1):** OKLCH + `color-mix()` is **confirmed best practice for 2026**
+> (now Baseline). **But add a fallback requirement:** guard the **base** tokens (`--paper`, `--ink`,
+> `--accent`, `--danger`) with `@supports (color: oklch(0 0 0)) { … }` or a plain hex/`rgb()` fallback
+> declared *before* the OKLCH value, so a browser that doesn't support OKLCH/`color-mix` can't blank
+> the whole palette (the current edge-case at lines 824–825 — "value invalid, property ignored" — would
+> otherwise cascade white/transparent). Note: editing `tokens.css` is a guard-railed §16 change, so the
+> fallback work is its own named phase. ⚠️ correction required in code (tokens.css). (caniuse;
+> modern-css.com, Feb 2026.)
 **Acceptance criteria (NEW tests, §5):** (1) all `--*` vars defined in both `:root` and `[data-theme="dark"]` (linting assertion, NEW); (2) `color-mix` syntax valid (CSS parser, NEW); (3) contrast ≥3:1 on interactive elements (text + button outlines), ≥4.5:1 on body text, measured in both light + dark (difficult without rendering, hand-off to developer QA but capture ratios in constants for assertions); (4) no hardcoded hex values in component CSS (grep linting, NEW); (5) accent tone difference between themes is mathematically consistent (L and C changes only, not H) (assertion on parsed OKLCH values).
 **Style/UX/a11y choice:** OKLCH perceptual-uniformity is future-proofing (will work correctly on HDR displays); `color-mix` is CSS-native (no preprocessing, no build step). Contrast ≥4.5:1 exceeds WCAG AA (WCAG: ≥4.5:1 for normal text, ≥3:1 for large text + UI components); hand-verified on developer QA (no automated screenshot tool).
 
@@ -909,6 +925,12 @@ All nav links carry `data-nav="pages/foo.html"` (app-root-relative). **Flow:**
 **Acceptance criteria (NEW tests, §5):** (1) burger click opens drawer (`dialog.open` assertion); (2) backdrop click closes drawer (synthetic click on ::backdrop, assert closed); (3) nav link click closes drawer (click synthetic link, assert closed); (4) focus trapped inside drawer (Tab key cycles through nav items only, characterization); (5) aria-expanded reflects state (assertion on aria-expanded attribute); (6) slide animation runs 220ms (computed style getAnimationDuration, may skip if hard to mock); (7) short-viewport (max-height 600px) doesn't collapse nav items below 44px (style linting or computed style check).
 **Style/UX/a11y choice:** Native `<dialog>` is WCAG-compliant (automatic focus trap, backdrop, semantics). Slide animation (CSS) is performance-friendly (GPU-accelerated). 44px min-height maintained even in short viewports respects touch-target minimum (§2 WCAG).
 
+> **✅ External validation — target size (C2):** Confirmed, with a clarification. WCAG 2.2 **AA** SC
+> 2.5.8 minimum is **24×24 CSS px**; the project's preferred **44×44 is AAA SC 2.5.5 / native-platform
+> guidance**, so it **exceeds the AA floor** (state this explicitly rather than implying 44 is the AA
+> requirement). Ensure the **hit area** (including padding), not just the visual box, meets the size —
+> the floor is about the interactive target, not the icon. (W3C WAI; TetraLogical, Oct 2023.)
+
 #### H. Skip-link & landmarks (first focusable element, proper heading structure)
 **Rule:** Page starts with skip-link (visually hidden, visible on focus), points to `<main id="main">`; header/nav/footer are proper landmarks.
 **Trigger:** HTML structure in index.html + CSS in base.css.
@@ -939,6 +961,11 @@ All nav links carry `data-nav="pages/foo.html"` (app-root-relative). **Flow:**
 **Acceptance criteria (NEW tests, §5):** (1) skip-link exists + is first focusable element in tab order (DOM order assertion); (2) skip-link href="#main" points to existing `<main id="main">` element (document.getElementById('main') not null); (3) skip-link is hidden initially (`getComputedStyle().transform` contains translateY), visible on `:focus-visible` (synthesize focus, assert computed style changes); (4) landmarks present: one `<header>`, one `<nav>`, one `<main>`, one `<footer>` (DOM structure linting); (5) focus moves to `<main>` or first focusable inside it after skip-link click (integration: synthesize click, assert focus changed); (6) scroll-margin-top reserves header height on `:target` (style rule assertion).
 **Style/UX/a11y choice:** CSS-only skip-link (no JS) is performant + robust. Transform-based hiding (not display: none) keeps element in layout (accessible to AT). Focus-visible-only (not :focus) respects mouse users (no purple focus ring on click).
 
+> **✅ External validation — focus (C3):** Confirmed. SC 2.4.11 **Focus Not Obscured (Minimum) is AA**
+> — correctly relied on by the `scroll-margin-top: --header-h` rule. The "Focus Appearance" size/contrast
+> criterion is **AAA**, so the project's 3px focus ring already **exceeds the AA floor**. No change
+> required beyond this citation. (W3C WAI, WCAG 2.2.)
+
 #### I. Motion & reduced-motion (animation 0.01ms override, CSS-only orchestration)
 **Rule:** All page animations honour `prefers-reduced-motion: reduce` (WCAG §2.3.3). Named transitions (e.g., area-title morph, nav drawer slide) are CSS-driven, duration defined in tokens.
 **Trigger:** CSS loads base.css; animations applied by JS via `.style.viewTransitionName` or CSS `animation` property.
@@ -946,6 +973,14 @@ All nav links carry `data-nav="pages/foo.html"` (app-root-relative). **Flow:**
 **Precise logic** (base.css, lines 56–81):
 - Global reduced-motion rule (lines 74–80): `@media (prefers-reduced-motion: reduce)` sets all `animation-duration` / `animation-iteration-count` / `transition-duration` to 0.01ms (effectively instant), `scroll-behavior: auto` (no smooth scroll).
 - **View transitions** (lines 57–71): `@view-transition { navigation: auto; }` enables cross-document transitions (280ms, ease-out). Named `area-title` transition (400ms) for list-to-detail morph. Both reduced-motion-aware (inherit the 0.01ms from global rule).
+
+> **✅ External validation — View Transitions (C5):** Confirmed as **progressive enhancement**
+> (Chromium + Safari 18.2+; Firefox no-ops gracefully — so the cross-document `@view-transition` is
+> safe to ship). Two pitfalls to enforce: (1) every `view-transition-name` must be **unique per page**
+> for the `area-title` morph — **duplicate names throw and skip the transition** entirely, so a list
+> with two elements sharing `area-title` will break it; (2) confirm `prefers-reduced-motion` **also
+> suppresses the VT** (it does inherit the global 0.01ms rule, but assert it explicitly in the test
+> layer). (CSS-Tricks 2026; TestMu, May 2026.)
 - **Timing tokens** (tokens.css, lines 121–122): `--ease-out`, `--ease-in-out` cubic-bezier curves (no animation durations in tokens — durations are in CSS rules or JS, tokens hold easing only).
 - **Nav drawer animation** (base.css, line 219): `[open]` applies `@keyframes nav-drawer-in` 220ms ease-out (respected by reduced-motion rule above).
 **Outputs:** On `prefers-reduced-motion: reduce`: all animations instant (0.01ms), page changes appear to snap (no smooth transitions). On normal preference: smooth animations at defined durations.
@@ -1032,6 +1067,15 @@ All nav links carry `data-nav="pages/foo.html"` (app-root-relative). **Flow:**
 - **import-layer.test.js** — guards module import architecture (page/tile/finance/outreach modules must NOT import supabase-client directly). Runs in harness.
 
 - **lint-responsive.mjs** — enforces DESIGN.md §6 responsive breakpoints (480/768/1024/1280 min-width only, no max-width media, tap targets ≥44px, no raw 100vw, no fixed-px font outside SVG, no inline styles, notch-aware). Count-based baseline in `lint-responsive.allow.json`. **Fragile:** count-based masking.
+
+> **✅ External validation — container queries / dvh-svh / breakpoints (C4):** Confirmed (all Baseline).
+> Caveats to enforce: (1) keep **sensible defaults outside `@container` blocks** so a browser without
+> container-query support still gets a usable layout (it skips the `@container` rules); (2) **don't
+> animate height with `dvh`** (the dynamic unit causes jank as the URL bar shows/hides) — use `svh` or a
+> fixed value for animated heights, and keep a `vh` fallback; (3) the **480/768/1024/1280** ladder and
+> the "no transition in the iPad 600–800 band" rule are validated as **defensible judgment calls** — but
+> note the ladder **differs from Pico v2's defaults (576/768/1024/1280/1536)**, so label it as a
+> deliberate project choice in DESIGN.md to avoid future confusion. (caniuse; web.dev, 2026.)
 
 - **tests.html** (browser harness, developer-run) — smoke checks: component shell injection, theme toggle, nav drawer, auth-guard redirect (not run in CI, hand-executed by developer).
 
