@@ -61,11 +61,13 @@ export function partitionFeed(listings, {
   const refHiddenRows = afford.filter((r) => !isJunk(r.listing) && isRefHidden(r.listing));
   const pool = includeHidden ? afford : afford.filter((r) => !isJunk(r.listing) && !isRefHidden(r.listing));
 
-  // Suppress already-decided properties (latest reaction like/reject) by id AND by
-  // physical-property fingerprint, so a re-list under a new rightmove_id is caught;
-  // `pass` stays resurfaceable. Then collapse same-fingerprint duplicates to one
-  // representative. "Show hidden" reveals the decided rows alongside junk.
-  const undecided = includeHidden ? pool : pool.filter((r) => !isDecided(r.listing));
+  // Suppress already-decided properties (latest reaction like/pass/reject) by id AND
+  // by physical-property fingerprint, so a re-list under a new rightmove_id is caught.
+  // This suppression is UNCONDITIONAL: unlike out-of-reach / junk / refinement, the
+  // "Show hidden" toggle does NOT reveal decided rows — liked homes live on the Saved
+  // page and passed/rejected ones on the Rejected page, and never return to this feed.
+  // Then collapse same-fingerprint duplicates to one representative.
+  const undecided = pool.filter((r) => !isDecided(r.listing));
   const deduped = dedupeByFingerprint(undecided, (r) => r.listing);
   const decidedCount = pool.length - undecided.length;
   const dupCount = undecided.length - deduped.length;

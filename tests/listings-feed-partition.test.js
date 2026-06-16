@@ -35,15 +35,17 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(out.unreviewed.length, 1);
   });
 
-  test('feed-partition: decided (like/reject) rows are suppressed unless includeHidden', () => {
+  test('feed-partition: decided (like/pass/reject) rows are ALWAYS suppressed, even with "Show hidden"', () => {
     const listings = [L('1'), L('2'), L('3')];
     const isDecided = (l) => l.rightmove_id !== '3';
     const hidden = partitionFeed(listings, deps({ isDecided }));
     assertEqual(hidden.visible.length, 1, 'only the undecided row renders');
     assertEqual(hidden.counts.decidedCount, 2);
+    // Unlike junk / out-of-reach / refinement, "Show hidden" does NOT bring decided
+    // rows back — they are permanently rehomed to the Saved / Rejected pages.
     const shown = partitionFeed(listings, deps({ isDecided, includeHidden: true }));
-    assertEqual(shown.visible.length, 3, '"Show hidden" reveals the decided rows');
-    assertEqual(shown.counts.decidedCount, 0);
+    assertEqual(shown.visible.length, 1, '"Show hidden" still hides decided rows');
+    assertEqual(shown.counts.decidedCount, 2);
   });
 
   test('feed-partition: junk + refinement-hidden counts once (as junk); gate counted first', () => {
