@@ -16,6 +16,7 @@ Live operating docs for this repo, one line each. Historical material lives in
 | [`SCHEMA_NOTES.md`](SCHEMA_NOTES.md) | Live Supabase schema facts discovered via MCP (refinement-engine Stage 1). |
 | [`REFINEMENT_README.md`](REFINEMENT_README.md) | How the refinement engine fits together and how to operate it. |
 | [`ASK.md`](ASK.md) | The Ask assistant — how it works, the tool catalogue, and how to deploy/operate it. |
+| [`FETCH_SCHEDULE.md`](FETCH_SCHEDULE.md) | Daily Rightmove fetch — timing, the two cooperating triggers, and DST-safe scheduling. |
 | [`USER_PROFILE.md`](USER_PROFILE.md) | Pointer doc: buyer profile lives in Supabase only, never in repo JSON. |
 
 `archive/` holds completed plans, one-off migration instructions, superseded progress logs and
