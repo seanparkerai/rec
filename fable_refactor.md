@@ -540,6 +540,26 @@ and update the governing doc — never drift silently below them.
   research, with `sources[]`. Never auto-generate. Only openly-licensed imagery, credited + licensed.
 - **The feature-description standard (§6).** Every behaviour you ship is described and vetted to §6.
 
+### 8.1 External validation — process (G1–G5)
+
+The validation review confirmed the document's process choices and recommends making a few of them
+**mechanical** rather than prose:
+
+- **G1 — Trunk-based development:** Confirmed (DORA research). **Add:** enforce **branch protection +
+  required green CI on `main`**, and treat **every merge as deployable** (GitHub Pages deploys on push).
+- **G2 — ADRs:** Confirmed (Michael Nygard, 2011). **Add:** create **`docs/adr/NNNN-*.md`** with a
+  standard template + `status` field, and **map every guard-rail / rail-change decision (§4) to an
+  ADR** — this turns the §4 "rail-change protocol" into a concrete, reviewable artefact.
+- **G3 — Conventional Commits:** Confirmed. **Add `commitlint` in CI** (optionally
+  `release-please`/`changesets`).
+- **G4 — Guard-rail protocol (§4):** Confirmed as sound. **Make it mechanical:** a rail change =
+  **an ADR (G2) + a green run of the rebuilt suite**, enforced by branch protection + required CI —
+  not by prose alone.
+- **G5 — Incremental refactoring (strangler/characterization):** Confirmed (Fowler/Feathers); no change.
+
+(Sources: DORA *Accelerate*; Nygard "Documenting Architecture Decisions", 2011; conventionalcommits.org;
+Fowler & Feathers, 2004.)
+
 ---
 
 ## 9. Living program checklist (Fable maintains this)
