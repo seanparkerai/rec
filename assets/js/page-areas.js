@@ -1,5 +1,5 @@
 // page-areas.js — areas directory: search, filter, sort, shortlist toggle, fit verdict.
-import { getHouseholdAreas, getShortlist, saveShortlist, getFinances, getCriteria, saveCriteria } from './storage.js';
+import { getHouseholdAreas, setHouseholdAreaStatus, getShortlist, saveShortlist, getFinances, getCriteria, saveCriteria } from './storage.js';
 import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
@@ -18,11 +18,13 @@ const state = {
   sort: 'name',
   fit: 'all',
   onlyShortlisted: false,
+  showPaused: false,   // paused (inactive) areas are hidden until the user opts in
 };
 
 // ---- URL <-> state sync (shareable filter links) -------------------
-const URL_KEYS = { search: 'q', county: 'county', subRegion: 'sub', sort: 'sort', fit: 'fit', onlyShortlisted: 'starred' };
-const URL_DEFAULTS = { search: '', county: 'all', subRegion: 'all', sort: 'name', fit: 'all', onlyShortlisted: false };
+const URL_KEYS = { search: 'q', county: 'county', subRegion: 'sub', sort: 'sort', fit: 'fit', onlyShortlisted: 'starred', showPaused: 'paused' };
+const URL_DEFAULTS = { search: '', county: 'all', subRegion: 'all', sort: 'name', fit: 'all', onlyShortlisted: false, showPaused: false };
+const BOOL_KEYS = new Set(['onlyShortlisted', 'showPaused']);
 
 function readStateFromURL() {
   const p = new URLSearchParams(location.search);
@@ -32,6 +34,7 @@ function readStateFromURL() {
   if (p.has('sort')) state.sort = p.get('sort') || 'name';
   if (p.has('fit')) state.fit = p.get('fit') || 'all';
   if (p.has('starred')) state.onlyShortlisted = p.get('starred') === '1';
+  if (p.has('paused')) state.showPaused = p.get('paused') === '1';
 }
 
 function writeStateToURL() {
@@ -39,7 +42,7 @@ function writeStateToURL() {
   for (const [k, urlKey] of Object.entries(URL_KEYS)) {
     const v = state[k];
     if (v === URL_DEFAULTS[k]) continue;                 // omit defaults
-    if (k === 'onlyShortlisted') { if (v) p.set(urlKey, '1'); continue; }
+    if (BOOL_KEYS.has(k)) { if (v) p.set(urlKey, '1'); continue; }
     if (v) p.set(urlKey, v);
   }
   const qs = p.toString();
@@ -103,6 +106,7 @@ function verdictFor(area) {
 function applyFilters() {
   const s = state.search.toLowerCase();
   let out = areas.filter((a) => {
+    if (!state.showPaused && a._status === 'inactive') return false;  // paused areas hidden by default
     if (state.county !== 'all' && a.county !== state.county) return false;
     if (state.subRegion !== 'all' && a.subRegion !== state.subRegion) return false;
     if (state.onlyShortlisted && !shortlist.has(a.id)) return false;
@@ -136,21 +140,23 @@ function renderCards(list) {
   }
   grid.innerHTML = list.map((a, i) => {
     const starred = shortlist.has(a.id);
+    const paused = a._status === 'inactive';
     const detailUrl = url('pages/area-detail.html') + `?id=${encodeURIComponent(a.id)}`;
     const statusBadge = a.status && a.status !== 'directory'
       ? `<span class="badge-status">${esc(a.status)}</span>`
       : '';
+    const pausedBadge = paused ? `<span class="badge-status badge-status--paused">Paused</span>` : '';
     const fit = verdictFor(a);
     const fitDot = `<span class="fit-dot fit-dot--${fit}" title="Affordability fit: ${fit}" aria-label="Affordability fit: ${fit}"></span>`;
     const { price, label } = matchedPrice(a, criData);
     const bedFit = price ? `<span class="bed-fit"><span class="bed-fit-type">${esc(label || '—')}</span> <span class="num">${esc(gbp(price))}</span></span>` : '<span class="bed-fit bed-fit--empty">—</span>';
     const ctBand = a.councilTaxBand ? `<span class="ct-band">${esc(a.councilTaxBand)}</span>` : '<span class="ct-band ct-band--empty">—</span>';
     return `
-      <li class="area-row area-row--v2">
+      <li class="area-row area-row--v2 ${paused ? 'area-row--paused' : ''}">
         <span class="area-index">${String(i + 1).padStart(3, '0')}</span>
         ${fitDot}
         <div class="area-row__main">
-          <p class="area-name"><a href="${detailUrl}">${esc(a.name)}</a>${statusBadge}</p>
+          <p class="area-name"><a href="${detailUrl}">${esc(a.name)}</a>${statusBadge}${pausedBadge}</p>
           <p class="area-place">
             <span>${esc(a.town)}</span>
             <span class="sep">·</span>
@@ -161,18 +167,29 @@ function renderCards(list) {
         </div>
         ${bedFit}
         ${ctBand}
-        <button type="button" class="star-btn ${starred ? 'is-starred' : ''}"
-                data-id="${esc(a.id)}"
-                aria-pressed="${starred}"
-                aria-label="${starred ? 'Remove from shortlist' : 'Add to shortlist'}">
-          ${starred ? '★' : '☆'}
-        </button>
+        <div class="area-row__actions">
+          <button type="button" class="area-status-btn ${paused ? 'is-paused' : ''}"
+                  data-status-id="${esc(a.id)}"
+                  aria-pressed="${paused}"
+                  aria-label="${paused ? `Reactivate ${esc(a.name)}` : `Pause ${esc(a.name)}`}">
+            ${paused ? 'Resume' : 'Pause'}
+          </button>
+          <button type="button" class="star-btn ${starred ? 'is-starred' : ''}"
+                  data-id="${esc(a.id)}"
+                  aria-pressed="${starred}"
+                  aria-label="${starred ? 'Remove from shortlist' : 'Add to shortlist'}">
+            ${starred ? '★' : '☆'}
+          </button>
+        </div>
       </li>
     `;
   }).join('');
 
   grid.querySelectorAll('.star-btn').forEach((btn) => {
     btn.addEventListener('click', () => toggleShortlist(btn.dataset.id));
+  });
+  grid.querySelectorAll('.area-status-btn').forEach((btn) => {
+    btn.addEventListener('click', () => toggleAreaStatus(btn.dataset.statusId));
   });
 
   // Named view transition: tag the title of the row being navigated to so
@@ -192,8 +209,26 @@ function toggleShortlist(id) {
   updateCounts();
 }
 
+// Pause/resume an area for the household. Optimistic: flip the local _status and
+// re-render immediately (a pause drops the row out of the default view), then
+// persist; revert on failure (storage surfaces its own error toast).
+async function toggleAreaStatus(id) {
+  const area = areas.find((a) => a.id === id);
+  if (!area) return;
+  const prev = area._status === 'inactive' ? 'inactive' : 'active';
+  const next = prev === 'inactive' ? 'active' : 'inactive';
+  area._status = next;
+  rerender();
+  updateCounts();
+  const ok = await setHouseholdAreaStatus(id, next);
+  if (!ok) { area._status = prev; rerender(); updateCounts(); }
+}
+
 function updateCounts() {
   $('shortlist-count').textContent = shortlist.size;
+  const pausedCount = areas.filter((a) => a._status === 'inactive').length;
+  const pausedEl = $('paused-count');
+  if (pausedEl) pausedEl.textContent = pausedCount;
 }
 
 function rerender() {
@@ -210,6 +245,7 @@ function applyStateToControls() {
   if ($('sort')) $('sort').value = state.sort;
   if ($('filter-fit')) $('filter-fit').value = state.fit;
   if ($('only-shortlisted')) $('only-shortlisted').checked = state.onlyShortlisted;
+  if ($('show-paused')) $('show-paused').checked = state.showPaused;
   if ($('search-radius')) $('search-radius').value = String(searchRadiusMi);
 }
 
@@ -232,6 +268,7 @@ function attachControls() {
   $('sort').addEventListener('change', (e) => { state.sort = e.target.value; rerender(); });
   $('filter-fit')?.addEventListener('change', (e) => { state.fit = e.target.value; rerender(); });
   $('only-shortlisted').addEventListener('change', (e) => { state.onlyShortlisted = e.target.checked; rerender(); });
+  $('show-paused')?.addEventListener('change', (e) => { state.showPaused = e.target.checked; rerender(); });
   $('search-radius')?.addEventListener('change', async (e) => {
     searchRadiusMi = Number(e.target.value);
     const next = { ...(criData || {}), location: { ...(criData?.location || {}), searchRadiusMi } };
@@ -260,14 +297,17 @@ function attachControls() {
 
 async function init() {
   try {
-    areas = await getHouseholdAreas();
+    // includeInactive so paused areas remain listed (behind the "Show paused"
+    // filter) and can be reactivated; the map + listings still read the default
+    // active-only path so a paused area drops off them immediately.
+    areas = await getHouseholdAreas({ includeInactive: true });
     shortlist = new Set(await getShortlist());
     try { finData = await getFinances(); } catch (e) { console.error('finances fetch', e); }
     try {
       criData = await getCriteria();
       searchRadiusMi = Number(criData?.location?.searchRadiusMi ?? 3);
     } catch (e) { console.error('criteria fetch', e); }
-    $('total-count').textContent = areas.length;
+    $('total-count').textContent = areas.filter((a) => a._status !== 'inactive').length;
     readStateFromURL();
     populateFilters();
     updateSubRegions({ preserve: true });

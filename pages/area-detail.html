@@ -29,7 +29,9 @@
         <p class="lead" id="area-meta"></p>
       </div>
       <div class="page-actions">
+        <button id="btn-area-status" class="outline" hidden>Active — pause</button>
         <button id="btn-star" aria-pressed="false">☆ Add to shortlist</button>
+        <button id="btn-area-remove" class="outline secondary" hidden>Remove from my areas</button>
       </div>
     </header>
 
@@ -135,6 +137,16 @@
       <a data-nav="pages/areas.html">&larr; Back to areas</a>
       <a data-nav="pages/outreach.html?templateId=A1">Request a viewing &rarr;</a>
     </footer>
+    <dialog id="confirm-remove" aria-labelledby="confirm-remove-h">
+      <article>
+        <header><h2 id="confirm-remove-h">Remove this area?</h2></header>
+        <p>This removes the area from your areas list and your listings feed. You can add it again later. To keep it but stop searching it for now, use <strong>Pause</strong> instead.</p>
+        <footer>
+          <button class="outline secondary" id="confirm-remove-no" autofocus>Cancel</button>
+          <button id="confirm-remove-yes">Remove area</button>
+        </footer>
+      </article>
+    </dialog>
   </main>
 
   <div data-include="components/footer.html"></div>

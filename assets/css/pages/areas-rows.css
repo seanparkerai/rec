@@ -37,6 +37,28 @@
   .area-row--v2 .ct-band { display: inline-flex; }
 }
 
+/* Active/inactive (paused) area management */
+.area-row__actions { display: inline-flex; align-items: center; gap: var(--space-2); }
+.area-row--paused { opacity: 0.62; }
+.area-row--paused .area-name a { color: var(--ink-muted); }
+.badge-status--paused {
+  background: color-mix(in oklch, var(--ink) 8%, var(--paper));
+  color: var(--ink-muted);
+  border-color: var(--hairline);
+}
+.area-status-btn {
+  height: var(--tap-min); min-height: var(--tap-min);
+  display: inline-flex; align-items: center;
+  padding: 0 var(--space-3);
+  background: transparent; border: 1px solid var(--hairline);
+  border-radius: var(--rec-radius-sm);
+  font-size: var(--text-xs); letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--ink-muted); cursor: pointer; white-space: nowrap;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.area-status-btn:hover { color: var(--accent); border-color: var(--accent); }
+.area-status-btn.is-paused { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+
 /* Area-detail Phase 4b additions */
 .area-verdict-strip {
   display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);

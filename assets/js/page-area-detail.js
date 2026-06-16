@@ -1,5 +1,5 @@
 // page-area-detail.js — renders a single area by ?id=, using the 9-category framework.
-import { getAreaCatalog, getAreaDetail, getHouseholdAreas, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
+import { getAreaCatalog, getAreaDetail, getHouseholdAreas, setHouseholdAreaStatus, removeHouseholdArea, getShortlist, saveShortlist, getFinances, getCriteria } from './storage.js';
 import { url } from './config.js';
 import { gbp } from './format.js';
 import { assessAffordability } from './affordability.js';
@@ -324,12 +324,64 @@ function renderNotFound(id) {
   `;
 }
 
+// Per-household area controls: an Active/Paused toggle (reversible) + a hard
+// Remove. Shown ONLY for an area the current household actually has linked — the
+// link record carries _status (the offline/pre-auth catalog fallback does not),
+// so that is the membership signal. Pausing flips household_areas.status to
+// 'inactive' (hidden from listings + excluded from fetch demand, still listed for
+// reactivation); Remove hard-deletes the link behind a <dialog> confirm.
+function attachAreaMembership(a, household) {
+  const statusBtn = $('btn-area-status');
+  const removeBtn = $('btn-area-remove');
+  const member = (household || []).find((x) => x.id === a.id);
+  if (!member || !member._status) {
+    if (statusBtn) statusBtn.hidden = true;
+    if (removeBtn) removeBtn.hidden = true;
+    return;
+  }
+  let status = member._status === 'inactive' ? 'inactive' : 'active';
+  const paintStatus = () => {
+    const paused = status === 'inactive';
+    statusBtn.hidden = false;
+    statusBtn.setAttribute('aria-pressed', String(paused));
+    statusBtn.classList.toggle('is-paused', paused);
+    statusBtn.textContent = paused ? 'Paused — reactivate' : 'Active — pause';
+  };
+  paintStatus();
+  statusBtn.addEventListener('click', async () => {
+    const next = status === 'inactive' ? 'active' : 'inactive';
+    statusBtn.disabled = true;
+    const ok = await setHouseholdAreaStatus(a.id, next);
+    statusBtn.disabled = false;
+    if (ok) { status = next; paintStatus(); }
+  });
+
+  removeBtn.hidden = false;
+  const dlg = $('confirm-remove');
+  removeBtn.addEventListener('click', () => dlg?.showModal());
+  $('confirm-remove-no')?.addEventListener('click', () => dlg?.close());
+  $('confirm-remove-yes')?.addEventListener('click', async () => {
+    const yes = $('confirm-remove-yes');
+    yes.disabled = true;
+    const ok = await removeHouseholdArea(a.id);
+    yes.disabled = false;
+    dlg?.close();
+    if (ok) location.href = url('pages/areas.html');
+  });
+}
+
 async function init() {
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
   if (!id) { renderNotFound('(no id)'); return; }
 
   try {
+    // The household's own selection (incl. paused) — fetched once, reused for both
+    // stub resolution and the membership controls. includeInactive so a PAUSED stub
+    // still resolves here (it lives only in the Supabase areas row) rather than 404ing.
+    let household = [];
+    try { household = (await getHouseholdAreas({ includeInactive: true })) || []; } catch (_) { /* pre-auth/offline */ }
+
     let a = null;
     // 1. Curated repo detail file (data/areas/<id>.json) — the common case.
     try { a = await getAreaDetail(id); } catch (_) { /* fall through */ }
@@ -342,14 +394,10 @@ async function init() {
     //    Supabase areas row (via household_areas), never in the repo, so it must be
     //    resolved here or the page wrongly 404s. Renders with "research pending"
     //    placeholders for the unwritten sections.
-    if (!a) {
-      try {
-        const household = await getHouseholdAreas();
-        a = (household || []).find((x) => x.id === id) || null;
-      } catch (_) { /* fall through to not-found */ }
-    }
+    if (!a) a = household.find((x) => x.id === id) || null;
     if (!a) { renderNotFound(id); return; }
     await renderArea(a);
+    attachAreaMembership(a, household);
 
     // Phase 4b: verdict strip + foot mini-afford widget — best-effort if
     // finances/criteria load successfully.

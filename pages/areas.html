@@ -27,7 +27,7 @@
       <div>
         <p class="eyebrow">Directory</p>
         <h1>Areas</h1>
-        <p class="lead">Towns and villages across Hampshire &amp; Wiltshire — <strong class="num" id="total-count">191</strong> in the directory, <strong class="num" id="shortlist-count">0</strong> shortlisted.</p>
+        <p class="lead">Your areas — <strong class="num" id="total-count">0</strong> active, <strong class="num" id="paused-count">0</strong> paused, <strong class="num" id="shortlist-count">0</strong> shortlisted.</p>
       </div>
       <div class="page-actions">
         <label class="map-toggle"><input type="checkbox" id="toggle-geofences" checked /> Geofences</label>
@@ -119,6 +119,10 @@
               <input type="checkbox" id="only-shortlisted" />
               <span>Show shortlisted only</span>
             </label>
+            <label class="check-row">
+              <input type="checkbox" id="show-paused" />
+              <span>Show paused areas</span>
+            </label>
             <button type="button" id="btn-clear" class="outline secondary">Clear filters</button>
           </div>
         </form>
@@ -178,10 +182,12 @@
         const c = document.getElementById('filter-county')?.value;
         const s = document.getElementById('filter-subregion')?.value;
         const sl = document.getElementById('only-shortlisted')?.checked;
+        const paused = document.getElementById('show-paused')?.checked;
         if (q) parts.push(`<span class="filter-pill">“${q}”</span>`);
         if (c && c !== 'all') parts.push(`<span class="filter-pill">${c}</span>`);
         if (s && s !== 'all') parts.push(`<span class="filter-pill">${s}</span>`);
         if (sl) parts.push(`<span class="filter-pill">★ shortlisted</span>`);
+        if (paused) parts.push(`<span class="filter-pill">incl. paused</span>`);
         active.innerHTML = parts.length ? parts.join('') : 'No filters set.';
         if (sheetCount && resultCount) sheetCount.textContent = resultCount.textContent || '0';
       }
