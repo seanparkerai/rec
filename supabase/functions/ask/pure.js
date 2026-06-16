@@ -264,25 +264,56 @@ export function searchAreasPure(areas, q = {}) {
 }
 
 /**
+ * Deposit savings = cash savings (savings.current) + the earmarked portion of the
+ * Trading 212 ISA. FAITHFUL MIRROR of assets/js/finance-derive.js#computeDepositSavings
+ * — the Deno deploy boundary forbids importing it across the repo, so the math is
+ * duplicated here and pinned in lockstep by tests/ask-tools.test.js (parity assertion
+ * against deriveFinances). Change BOTH together or the parity test fails. This is the
+ * direct fix for the "£0 saved" answer when a household's deposit lives in the ISA.
+ */
+export function computeDepositSavings(finances, investments) {
+  const n = (v) => { const x = Number(v); return Number.isFinite(x) ? x : 0; };
+  const r2 = (x) => Math.round(x * 100) / 100;
+  const cash = n(finances?.savings?.current);
+  const isa = investments?.trading212ISA;
+  if (!isa) return r2(cash);
+  const isaTotal = n(isa.currentPortfolioValue);
+  const pct = n(isa.earmarkPct);
+  const isaForDeposit = pct > 0 ? r2((isaTotal * pct) / 100) : isaTotal;
+  return r2(cash + isaForDeposit);
+}
+
+/**
  * Shape the raw finances blob into a compact, quotable summary. Pulls the real
  * stored figures (no invention); the model interprets them. Mirrors the fields
  * the dashboard reads — deposit target, savings position, monthly contribution,
  * estimated mortgage payment — plus a derived deposit gap + naive months-to-target.
+ *
+ * `depositSaved` is cash + earmarked ISA (computeDepositSavings) so it matches the
+ * browser dashboard exactly. Pass the investments record ({ trading212ISA }) for the
+ * ISA to count; without it, only cash is counted. The earmarked ISA is also surfaced
+ * (cashSavings + earmarkedIsa) so the model can name where the deposit is held.
  */
-export function shapeFinancesSummary(raw) {
+export function shapeFinancesSummary(raw, investments = null) {
   const f = raw || {};
   const target = Number(f.goal?.targetDeposit) || 0;
-  const current = Number(f.savings?.current) || 0;
+  const cash = Number(f.savings?.current) || 0;
+  const depositSaved = computeDepositSavings(f, investments);
   const monthly = Number(f.savings?.monthlyContribution) || 0;
-  const gap = Math.max(0, target - current);
+  const gap = Math.max(0, Math.round((target - depositSaved) * 100) / 100);
   const monthsToTarget = monthly > 0 ? Math.ceil(gap / monthly) : null;
+  const isa = investments?.trading212ISA || null;
   return {
     currency: f.currency || 'GBP',
     firstTimeBuyer: f.firstTimeBuyer ?? null,
     income: f.income ?? null,
     targetPropertyPrice: f.goal?.targetPropertyPrice ?? null,
     targetDeposit: target || null,
-    depositSaved: current,
+    depositSaved,
+    cashSavings: cash,
+    earmarkedIsa: isa
+      ? { currentValue: Number(isa.currentPortfolioValue) || 0, earmarkPct: Number(isa.earmarkPct) || 0 }
+      : null,
     depositGap: gap,
     monthlyContribution: monthly,
     monthsToTarget,

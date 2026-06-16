@@ -5,7 +5,8 @@
 import { includedSteps, visibleFields, STEPS } from '../assets/js/setup/steps.js';
 import { requiredGate, validateField } from '../assets/js/setup/validate.js';
 import { stepCompleteness, overallCompleteness } from '../assets/js/setup/completeness.js';
-import { setNested, getNested } from '../assets/js/setup/autosave.js';
+import { setNested, getNested, setLineValue, getLineValue } from '../assets/js/setup/autosave.js';
+import { deriveFinances } from '../assets/js/finance-derive.js';
 
 export async function register({ test, assert, assertEqual }) {
   // ── branching ────────────────────────────────────────────────────────────────
@@ -73,6 +74,61 @@ export async function register({ test, assert, assertEqual }) {
     const oc = overallCompleteness({ profile: { person: { fullName: 'A' } }, criteria: {}, finances: {}, goals: {}, areaCount: 1 });
     assert(oc.percent >= 0 && oc.percent <= 100, 'percent in range');
     assert(oc.total > 0, 'has countable fields');
+  });
+
+  // ── write contract (Phase 3): wizard writes ONLY canonical, derivation-safe keys ──
+  // Mirrors wizard.js#writeField routing: blob-prefix split, then setLineValue for
+  // money-line fields, setNested otherwise. Guards against re-introducing the dead
+  // scalar keys (savings.totalSavings, outgoings.*, goals.deposit.target) the readers
+  // never consumed and that derivation silently overwrote.
+  const BLOBS = ['profile', 'criteria', 'finances', 'goals'];
+  const fieldByPath = (p) => STEPS.flatMap((s) => s.fields).find((f) => f.path === p);
+  const applyField = (state, field, value) => {
+    const [head, ...rest] = field.path.split('.');
+    if (!BLOBS.includes(head)) return;
+    if (field.type === 'money-line') setLineValue(state[head], rest.join('.'), { lineId: field.lineId, label: field.lineLabel, value });
+    else setNested(state[head], rest.join('.'), value);
+  };
+
+  test('setup/contract: savings/outgoings/deposit-target write only canonical keys + round-trip through deriveFinances', () => {
+    const state = { profile: {}, criteria: {}, finances: {}, goals: {} };
+    applyField(state, fieldByPath('finances.savings.current'), 30000);
+    applyField(state, fieldByPath('finances.savings.monthlyContribution'), 2000);
+    applyField(state, fieldByPath('finances.goal.targetDeposit'), 40000);
+    applyField(state, fieldByPath('finances.expenses'), 1500);
+    applyField(state, fieldByPath('finances.ongoingBills'), 1200);
+
+    // Canonical raw keys present; derived/legacy keys NOT written.
+    assertEqual(state.finances.savings.current, 30000);
+    assert(!('totalSavings' in state.finances.savings), 'derived totalSavings must not be written as input');
+    assert(!('outgoings' in state.finances), 'dead outgoings scalar bag must not be created');
+    assertEqual(state.finances.goal.targetDeposit, 40000);
+    assert(!state.goals.deposit, 'parallel goals.deposit.target must not be written');
+
+    // Outgoings landed in the arrays the app actually sums, as labelled entries.
+    const exp = state.finances.expenses.find((e) => e._lineId === 'onboarding-essentials');
+    const bill = state.finances.ongoingBills.find((e) => e._lineId === 'onboarding-housing');
+    assert(exp && exp.monthly === 1500 && exp.item, 'essentials → labelled finances.expenses entry');
+    assert(bill && bill.monthly === 1200 && bill.item, 'rent/mortgage → labelled finances.ongoingBills entry');
+
+    // Survives derivation (the wizard's old totalSavings write was silently zeroed here).
+    const d = deriveFinances(state.finances, { investments: { trading212ISA: { currentPortfolioValue: 10000, earmarkPct: 100 } } });
+    assertEqual(d.savings.totalSavings, 40000); // 30000 cash + 10000 earmarked ISA
+    assertEqual(d.expensesTotal.monthly, 1500);
+    assertEqual(d.ongoingBillsTotal.monthly, 1200);
+    assertEqual(d.goal.targetDeposit, 40000);
+  });
+
+  test('setup/line: money-line upsert re-edits in place, clears on empty, preserves user rows', () => {
+    const fin = { expenses: [{ item: 'User row', monthly: 99 }] };
+    setLineValue(fin, 'expenses', { lineId: 'onboarding-essentials', label: 'Essential outgoings', value: 1500 });
+    setLineValue(fin, 'expenses', { lineId: 'onboarding-essentials', label: 'Essential outgoings', value: 1600 });
+    assertEqual(fin.expenses.filter((e) => e._lineId === 'onboarding-essentials').length, 1);
+    assertEqual(getLineValue(fin, 'expenses', 'onboarding-essentials'), 1600);
+    assertEqual(fin.expenses.find((e) => e.item === 'User row').monthly, 99);
+    setLineValue(fin, 'expenses', { lineId: 'onboarding-essentials', value: '' });
+    assertEqual(getLineValue(fin, 'expenses', 'onboarding-essentials'), undefined);
+    assertEqual(fin.expenses.length, 1);
   });
 
   // ── autosave merge (no clobber) ─────────────────────────────────────────────────

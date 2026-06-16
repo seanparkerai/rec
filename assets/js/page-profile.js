@@ -1,7 +1,8 @@
 // page-profile.js — anchor: Stripe-docs editorial article.
 // Read view = article sections with field lists + chip grids.
 // Edit = native <dialog> with all fields, save persists via storage.js.
-import { getProfile, saveProfile, getCriteria, getFinances, _internal } from './storage.js';
+import { getProfile, saveProfile, getCriteria, _internal } from './storage.js';
+import { getDerivedFinances } from './finance-load.js';
 import { normalizeProfile, canonicalProfile, employmentDisplay, creditDisplay, householdDisplay } from './profile-schema.js';
 import { esc, byId } from './dom.js';
 
@@ -32,13 +33,16 @@ const ARRAY_FIELDS = [
 ];
 
 // ---- view rendering -------------------------------------------------
+// `finances` here is ALWAYS the enriched object from getDerivedFinances, so
+// savings.totalSavings is the canonical cash + earmarked-ISA figure (never the raw,
+// underived shape that read £0). A missing figure renders "—", never a misleading £0.
 function renderTiles(criteria, finances) {
   const max = criteria?.budget?.max || 0;
   const dep = criteria?.budget?.targetDeposit || 0;
-  const saved = finances?.savings?.totalSavings ?? finances?.savings?.current ?? 0;
-  const tb = $('tile-budget'); if (tb) tb.textContent = gbp(max);
-  const td = $('tile-deposit'); if (td) td.textContent = gbp(dep);
-  const ts = $('tile-saved'); if (ts) ts.textContent = gbp(saved);
+  const saved = finances?.savings?.totalSavings;
+  const tb = $('tile-budget'); if (tb) tb.textContent = max ? gbp(max) : '—';
+  const td = $('tile-deposit'); if (td) td.textContent = dep ? gbp(dep) : '—';
+  const ts = $('tile-saved'); if (ts) ts.textContent = Number.isFinite(saved) ? gbp(saved) : '—';
   const tw = $('tile-window'); if (tw) tw.textContent = current?.movingTimeline || '—';
 }
 
@@ -171,7 +175,7 @@ async function saveEdit() {
   saveProfile(current);
   closeEdit();
   renderAll();
-  const fin = await getFinances();
+  const fin = await getDerivedFinances();
   const crit = await getCriteria();
   renderTiles(crit, fin);
   setStatus('Saved locally.', 'ok');
@@ -183,7 +187,7 @@ async function resetToDefaults() {
   current = normalizeProfile(await getProfile());
   closeEdit();
   renderAll();
-  const fin = await getFinances();
+  const fin = await getDerivedFinances();
   const crit = await getCriteria();
   renderTiles(crit, fin);
   setStatus('Reset to repo defaults.', 'ok');
@@ -201,7 +205,7 @@ async function init() {
   if (!$('p-btn-edit')) return;
   try {
     current = normalizeProfile(await getProfile());
-    const fin = await getFinances();
+    const fin = await getDerivedFinances();
     const crit = await getCriteria();
     renderTiles(crit, fin);
     renderAll();

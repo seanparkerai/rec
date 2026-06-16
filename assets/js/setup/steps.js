@@ -104,8 +104,11 @@ export const STEPS = [
     id: 'outgoings-debts',
     title: 'Outgoings & debts',
     fields: [
-      { path: 'finances.outgoings.monthlyEssentials', label: 'Monthly essential outgoings', type: 'currency', inputmode: 'numeric', help: 'Bills, food, transport, childcare.' },
-      { path: 'finances.outgoings.rentOrMortgage', label: 'Current rent / mortgage (monthly)', type: 'currency', inputmode: 'numeric' },
+      // money-line fields land in the arrays the app actually sums (finances.expenses /
+      // ongoingBills as { item, monthly, annual }), as a single re-editable labelled entry —
+      // NOT the dead scalar keys (monthlyEssentials/rentOrMortgage) no reader consumed.
+      { path: 'finances.expenses', type: 'money-line', lineId: 'onboarding-essentials', lineLabel: 'Essential outgoings', label: 'Monthly essential outgoings', inputmode: 'numeric', help: 'Bills, food, transport, childcare.' },
+      { path: 'finances.ongoingBills', type: 'money-line', lineId: 'onboarding-housing', lineLabel: 'Current rent / mortgage', label: 'Current rent / mortgage (monthly)', inputmode: 'numeric' },
       { path: 'profile.debts.studentLoan.plan', label: 'Student loan plan', type: 'select', options: [
         { value: '', label: 'None' }, { value: 'Plan 1', label: 'Plan 1' }, { value: 'Plan 2', label: 'Plan 2' },
         { value: 'Plan 4', label: 'Plan 4' }, { value: 'Plan 5', label: 'Plan 5' }, { value: 'Postgraduate', label: 'Postgraduate' }] },
@@ -118,9 +121,13 @@ export const STEPS = [
     id: 'savings-deposit',
     title: 'Savings & deposit',
     fields: [
-      { path: 'finances.savings.totalSavings', label: 'Total savings to date', type: 'currency', inputmode: 'numeric' },
+      // Raw cash savings → savings.current (the canonical key deriveFinances reads).
+      // totalSavings is DERIVED (cash + earmarked ISA) and must never be written as input,
+      // or it is silently overwritten on the next read. An ISA deposit is captured separately.
+      { path: 'finances.savings.current', label: 'Total cash savings to date', type: 'currency', inputmode: 'numeric', help: 'Cash held outside investment accounts. ISA/investment savings are captured separately.' },
       { path: 'finances.savings.monthlyContribution', label: 'Saving per month', type: 'currency', inputmode: 'numeric' },
-      { path: 'goals.deposit.target', label: 'Deposit target', type: 'currency', inputmode: 'numeric', help: 'How much you’re aiming to put down.' },
+      // Single source for the deposit target — finances.goal.targetDeposit (finance-derive.js).
+      { path: 'finances.goal.targetDeposit', label: 'Deposit target', type: 'currency', inputmode: 'numeric', help: 'How much you’re aiming to put down.' },
       { path: 'finances.savings.lisaBalance', label: 'Lifetime ISA balance', type: 'currency', inputmode: 'numeric', when: (s) => s?.profile?.buyingSituation === 'first-time-buyer' },
     ],
   },

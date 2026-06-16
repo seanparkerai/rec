@@ -1,7 +1,11 @@
 import { gbp } from '../format.js';
 import { byId as $, setText } from '../dom.js';
+import { normalizeProfile } from '../profile-schema.js';
 
-export function renderLede(profile, criteria, financesData) {
+export function renderLede(rawProfile, criteria, financesData) {
+  // Normalise first so headline/locationFocus/movingTimeline resolve from any
+  // historical profile shape (flat/nested/summary) — never read as empty.
+  const profile = normalizeProfile(rawProfile);
   const max = criteria?.budget?.max || 0;
   const dep = financesData?.goal?.targetDeposit || 0;
   const beds = criteria?.size?.minBeds;

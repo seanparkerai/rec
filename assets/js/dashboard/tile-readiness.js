@@ -22,11 +22,17 @@ export async function renderReadinessTile(financesData) {
   try { checklist = await getReadinessChecklist(); } catch { checklist = []; }
   if (!goals) return;
 
-  const current = Number(financesData?.savings?.totalSavings ?? 0);
+  // `totalSavings` is the derived cash + earmarked-ISA figure; guard against a
+  // missing/NaN value so we never compute a misleading "0% of the way".
+  const savedRaw = financesData?.savings?.totalSavings;
+  const hasSaved = Number.isFinite(Number(savedRaw));
+  const current = hasSaved ? Number(savedRaw) : 0;
   const hoped = Number(goals?.deposit?.hopedFor ?? 0);
   const pct = hoped > 0 ? Math.min(100, Math.round((current / hoped) * 100)) : 0;
   elHeadline.textContent = hoped > 0
-    ? `You're ${pct}% of the way to your ${gbp(hoped)} deposit target.`
+    ? (hasSaved
+      ? `You're ${pct}% of the way to your ${gbp(hoped)} deposit target.`
+      : `Your ${gbp(hoped)} deposit target is set — savings not recorded yet.`)
     : 'Deposit target not set.';
 
   const monthly = Number(financesData?.savings?.monthlyContribution ?? 0);

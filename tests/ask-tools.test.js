@@ -5,8 +5,9 @@
 // run-intelligence-tests.mjs.
 import {
   rankAndFilterListings, buildListingsQuery, scoreListingFit, searchAreasPure,
-  shapeFinancesSummary, renderOutreachDraft, bandForScore,
+  shapeFinancesSummary, computeDepositSavings, renderOutreachDraft, bandForScore,
 } from '../supabase/functions/ask/pure.js';
+import { deriveFinances } from '../assets/js/finance-derive.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A small synthetic listings set (inline — there is no listings fixture file).
@@ -165,6 +166,41 @@ export async function register({ test, assert, assertEqual }) {
     const s = shapeFinancesSummary({ goal: { targetDeposit: 40000 }, savings: { current: 0, monthlyContribution: 0 } });
     assertEqual(s.monthsToTarget, null);
     assertEqual(s.depositGap, 40000);
+  });
+
+  test('ask-tools: finance summary counts the earmarked ISA + surfaces it (the "£0 saved" fix)', () => {
+    // £0 cash, deposit lives in a fully-earmarked ISA — Ask previously reported £0 saved.
+    const s = shapeFinancesSummary(
+      { goal: { targetDeposit: 40000 }, savings: { current: 0, monthlyContribution: 2000 } },
+      { trading212ISA: { currentPortfolioValue: 32994.45, earmarkPct: 100 } },
+    );
+    assertEqual(s.depositSaved, 32994.45);
+    assertEqual(s.cashSavings, 0);
+    assert(s.earmarkedIsa && s.earmarkedIsa.currentValue === 32994.45, 'ISA surfaced so the model can name it');
+    assertEqual(s.earmarkedIsa.earmarkPct, 100);
+    assertEqual(s.depositGap, Math.round((40000 - 32994.45) * 100) / 100);
+  });
+
+  // ── edge↔browser parity (regression lock, plan §4) ────────────────────────
+  test('ask-tools: shapeFinancesSummary.depositSaved === deriveFinances totalSavings across fixtures', () => {
+    const cases = [
+      // The regression: £0 cash + fully-earmarked ISA.
+      { fin: { savings: { current: 0 }, goal: { targetDeposit: 40000 } }, inv: { trading212ISA: { currentPortfolioValue: 32994.45, earmarkPct: 100 } } },
+      // Cash buffer + half-earmarked ISA.
+      { fin: { savings: { current: 2500 } }, inv: { trading212ISA: { currentPortfolioValue: 50000, earmarkPct: 50 } } },
+      // Cash only, no investments record (e.g. household f36e6215 after repair).
+      { fin: { savings: { current: 53000 } }, inv: null },
+      // ISA present with no earmark → full value counts.
+      { fin: { savings: { current: 1000 } }, inv: { trading212ISA: { currentPortfolioValue: 12000 } } },
+      // Nothing on record.
+      { fin: { savings: {} }, inv: null },
+    ];
+    for (const c of cases) {
+      const edge = shapeFinancesSummary(c.fin, c.inv).depositSaved;
+      const browser = deriveFinances(c.fin, { investments: c.inv }).savings.totalSavings;
+      assertEqual(edge, browser);
+      assertEqual(edge, computeDepositSavings(c.fin, c.inv));
+    }
   });
 
   // ── renderOutreachDraft ───────────────────────────────────────────────────

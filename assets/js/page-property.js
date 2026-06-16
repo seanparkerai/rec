@@ -6,13 +6,13 @@
 // history, area context, the full description, and the reaction/status controls.
 // No outreach — that lives elsewhere and is intentionally not joined here.
 import {
-  getListing, getFinances, getCriteria, getHouseholdAreas,
+  getListing, getCriteria, getHouseholdAreas,
   getListingReactions, saveListingReaction,
   getShortlistStatuses, setShortlistStatus,
   getLearnedPreferences, recomputeLearnedPreferences,
   getListingRatings, setListingRating,
 } from './storage.js';
-import { deriveFinances } from './finance-derive.js';
+import { getDerivedFinances } from './finance-load.js';
 import { scoreListingFit } from './listings/fit.js';
 import { effectiveWeights, listingLearnedPrefs, describeSignal } from './learned-preferences.js';
 import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from './listings/detail.js';
@@ -345,11 +345,10 @@ async function render() {
   const listing = await getListing(id);
   if (!listing) { notFound(mount, 'Listing not found'); return; }
 
-  const [rawFinances, criteria, areas, reactions, statuses, learned, ratings] = await Promise.all([
-    getFinances(), getCriteria(), getHouseholdAreas(), getListingReactions(), getShortlistStatuses(), getLearnedPreferences(),
+  const [finances, criteria, areas, reactions, statuses, learned, ratings] = await Promise.all([
+    getDerivedFinances(), getCriteria(), getHouseholdAreas(), getListingReactions(), getShortlistStatuses(), getLearnedPreferences(),
     getListingRatings(),
   ]);
-  const finances = rawFinances ? deriveFinances(rawFinances) : null;
   const area = (areas || []).find((a) => a.id === listing.area_id) || null;
   const effective = effectiveWeights(learned?.derived || {}, learned?.overrides || {});
   const scored = finances

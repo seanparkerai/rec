@@ -7,7 +7,7 @@ import { el, on, clear, esc } from '../dom.js';
 import { includedSteps, visibleFields } from './steps.js';
 import { validateField, requiredGate } from './validate.js';
 import { stepCompleteness, overallCompleteness, fieldValue } from './completeness.js';
-import { makeAutosaver, getNested, setNested } from './autosave.js';
+import { makeAutosaver, getNested, setNested, setLineValue } from './autosave.js';
 import { focusFirst, announce, updateProgress } from './a11y.js';
 import { debouncedLookup, selectPlace } from '../areas/place-lookup.js';
 import { isFetchEligible } from '../areas/area-enrich.js';
@@ -15,7 +15,7 @@ import { isFetchEligible } from '../areas/area-enrich.js';
 const BLOBS = ['profile', 'criteria', 'finances', 'goals'];
 const coerce = (type, raw) => {
   if (raw === '' || raw == null) return null;
-  if (type === 'number' || type === 'currency') { const n = Number(raw); return Number.isFinite(n) ? n : null; }
+  if (type === 'number' || type === 'currency' || type === 'money-line') { const n = Number(raw); return Number.isFinite(n) ? n : null; }
   return raw;
 };
 
@@ -114,7 +114,7 @@ export function createWizard(root, { state, accessors, areaApi, onFinish }) {
     } else if (field.type === 'textarea') {
       control = el('textarea', { id, name: field.path, rows: '3', 'aria-describedby': describedby }, String(value));
     } else {
-      const inputType = field.type === 'currency' || field.type === 'number' ? 'number'
+      const inputType = field.type === 'currency' || field.type === 'number' || field.type === 'money-line' ? 'number'
         : (field.type === 'email' ? 'email' : (field.type === 'date' ? 'date' : 'text'));
       control = el('input', {
         id, name: field.path, type: inputType,
@@ -293,7 +293,13 @@ export function createWizard(root, { state, accessors, areaApi, onFinish }) {
   function writeField(field, value) {
     const [head, ...rest] = field.path.split('.');
     if (!BLOBS.includes(head)) return;
-    setNested(state[head], rest.join('.'), value);
+    if (field.type === 'money-line') {
+      // Capture into the array the app actually sums (e.g. finances.expenses), as a
+      // single labelled, re-editable entry — not a dead scalar key.
+      setLineValue(state[head], rest.join('.'), { lineId: field.lineId, label: field.lineLabel, value });
+    } else {
+      setNested(state[head], rest.join('.'), value);
+    }
     saver.queue(head, state[head]);
     refreshGateUI();
     // keep the meter honest as the user types

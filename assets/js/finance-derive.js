@@ -20,6 +20,31 @@ const sum = (arr, key) => {
 const round2 = (n) => Math.round(n * 100) / 100;
 
 /**
+ * Deposit savings = liquid funds available to put toward the deposit:
+ *   cash savings (savings.current) + the earmarked portion of the Trading 212 ISA.
+ * If earmarkPct > 0 only that percentage of the ISA counts; otherwise (an ISA with no
+ * earmark) the full value counts. With no investments record at all, only cash counts.
+ *
+ * This is the SINGLE definition of "deposit savings". The Ask edge function mirrors it
+ * byte-for-byte in supabase/functions/ask/pure.js#computeDepositSavings (the Deno deploy
+ * boundary forbids a shared cross-repo import); tests/ask-tools.test.js pins the two in
+ * lockstep with a parity assertion. Change BOTH together or the parity test fails.
+ *
+ * @param {object} finances      raw finances record ({ savings: { current } }).
+ * @param {object} [investments] raw investments ({ trading212ISA: { currentPortfolioValue, earmarkPct } }).
+ * @returns {number} deposit savings, rounded to 2dp.
+ */
+export function computeDepositSavings(finances, investments) {
+  const cash = num(finances?.savings?.current);
+  const isa = investments?.trading212ISA;
+  if (!isa) return round2(cash);
+  const isaTotal = num(isa.currentPortfolioValue);
+  const pct = num(isa.earmarkPct);
+  const isaForDeposit = pct > 0 ? round2((isaTotal * pct) / 100) : isaTotal;
+  return round2(cash + isaForDeposit);
+}
+
+/**
  * Enrich a raw finances record with all derived totals + alias fields.
  *
  * Canonical raw keys (what consumers may rely on as inputs):
@@ -91,15 +116,10 @@ export function deriveFinances(raw, opts = {}) {
   //   - + earmarked portion of the Trading 212 ISA, if investments provided
   // Gift cards are NOT deposit-eligible (a solicitor doesn't take M&S vouchers);
   // they're tracked separately and offset the move-in shopping list.
-  const cashSavings = num(raw.savings?.current);
+  // Single source of truth for the savings total (cash + earmarked ISA) — see
+  // computeDepositSavings above. isaTotal is kept for the avg-deposit fallback below.
   const isaTotal = num(investments?.trading212ISA?.currentPortfolioValue);
-  const isaEarmarkPct = num(investments?.trading212ISA?.earmarkPct);
-  // If earmarkPct is set, only that portion counts toward the deposit.
-  // Otherwise (no investments / no earmark), count the full ISA value.
-  const isaForDeposit = investments?.trading212ISA
-    ? (isaEarmarkPct > 0 ? round2((isaTotal * isaEarmarkPct) / 100) : isaTotal)
-    : 0;
-  const totalSavings = round2(cashSavings + isaForDeposit);
+  const totalSavings = computeDepositSavings(raw, investments);
 
   const targetDeposit = num(raw.goal?.targetDeposit);
   const monthlyContribution = num(raw.savings?.monthlyContribution);

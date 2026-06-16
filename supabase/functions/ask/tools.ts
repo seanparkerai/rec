@@ -167,6 +167,31 @@ async function getBlob(ctx: ToolCtx, table: string): Promise<unknown> {
   return data?.[0]?.data ?? null;
 }
 
+// Investments account, shaped as { trading212ISA } exactly like the browser's
+// storage/user-state.js#getInvestments, so shapeFinancesSummary counts the
+// deposit-earmarked ISA. The `data` jsonb already holds the trading212ISA fields;
+// fall back to the relational columns if a row predates the jsonb blob.
+// deno-lint-ignore no-explicit-any
+async function getInvestments(ctx: ToolCtx): Promise<any> {
+  try {
+    const { data } = await ctx.supabase
+      .from("investments_accounts")
+      .select("data, current_value, earmark_pct, account_opened, account_type, provider")
+      .eq("household_id", ctx.householdId).limit(1);
+    const row = data?.[0];
+    if (!row) return null;
+    return {
+      trading212ISA: row.data ?? {
+        provider: row.provider,
+        accountType: row.account_type,
+        accountOpened: row.account_opened,
+        earmarkPct: Number(row.earmark_pct) || 0,
+        currentPortfolioValue: Number(row.current_value) || 0,
+      },
+    };
+  } catch (_e) { return null; }
+}
+
 let _templatesCache: unknown[] | null = null;
 async function getTemplates(ctx: ToolCtx): Promise<any[]> {
   if (_templatesCache) return _templatesCache as any[];
@@ -183,9 +208,10 @@ export async function runTool(name: string, input: any, ctx: ToolCtx): Promise<u
   try {
     switch (name) {
       case "get_finances_detail": {
-        const raw = await getBlob(ctx, "finances");
+        const [raw, inv] = await Promise.all([getBlob(ctx, "finances"), getInvestments(ctx)]);
         if (!raw) return { error: "no finances on record" };
-        return { summary: shapeFinancesSummary(raw), finances: raw };
+        // depositSaved = cash + earmarked ISA, matching the dashboard (computeDepositSavings).
+        return { summary: shapeFinancesSummary(raw, inv), finances: raw, investments: inv };
       }
       case "get_budget_breakdown": {
         const f = (await getBlob(ctx, "finances")) as any;

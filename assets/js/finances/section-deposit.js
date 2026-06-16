@@ -5,12 +5,15 @@ import { esc, byId as $, setText } from '../dom.js';
 
 export function renderTiles(finData) {
   const target = finData.goal?.targetDeposit || 0;
-  const saved = finData.savings?.totalSavings || 0;
-  const pct = fin.calcDepositProgress(saved, target);
-  const months = fin.calcMonthsToTarget(saved, target, finData.savings?.monthlyContribution || 0);
+  // `saved` is the derived cash + earmarked-ISA total. Distinguish a genuinely
+  // missing figure (render "—") from a real £0 so the tile never misleads.
+  const saved = finData.savings?.totalSavings;
+  const savedNum = Number.isFinite(saved) ? saved : 0;
+  const pct = fin.calcDepositProgress(savedNum, target);
+  const months = fin.calcMonthsToTarget(savedNum, target, finData.savings?.monthlyContribution || 0);
   setText('tile-progress', String(pct));
   const bar = $('progress-bar'); if (bar) bar.style.width = `${pct}%`;
-  setText('tile-saved', gbp(saved));
+  setText('tile-saved', Number.isFinite(saved) ? gbp(saved) : '—');
   const goalMo = Number(finData.savings?.monthlyContribution || 0);
   const avgMo = finData.savings?.avgMonthlyDepositEstimate;
   setText('tile-monthly', goalMo ? `${gbp(goalMo)} goal` : '—');

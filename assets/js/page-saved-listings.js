@@ -6,11 +6,11 @@
 // no new tokens, no new CSS file. Editing a card's reaction here (e.g. switching it
 // off Like) re-saves through storage and drops it from the page on the next paint.
 import {
-  getListings, getReactionLog, getCriteria, getFinances, getHouseholdAreas,
+  getListings, getReactionLog, getCriteria, getHouseholdAreas,
   getLearnedPreferences, saveListingReaction,
   getListingRatings, setListingRating,
 } from './storage.js';
-import { deriveFinances } from './finance-derive.js';
+import { getDerivedFinances } from './finance-load.js';
 import { scoreListingFit } from './listings/fit.js';
 import { effectiveWeights, listingLearnedPrefs } from './learned-preferences.js';
 import { latestPerListing, LIKE_REASONS, LIKE_SUBREASONS } from './listings/reactions.js';
@@ -124,15 +124,14 @@ async function render() {
 
   const filterBar = main.querySelector('[data-listings-filter]');
 
-  const [listings, log, criteria, rawFinances, areas, learned, ratings] = await Promise.all([
+  const [listings, log, criteria, finances, areas, learned, ratings] = await Promise.all([
     // includeOutOfArea + scopeToHousehold:false — a listing you deliberately saved
     // must resolve to its live row (cover photo, fresh price) even if it sits
     // outside the discovery geofence OR in an area you have since deselected; your
     // saved list is keyed off your own reactions, not the feed's area scope.
-    getListings({ limit: null, includeOutOfArea: true, scopeToHousehold: false }), getReactionLog(), getCriteria(), getFinances(), getHouseholdAreas(), getLearnedPreferences(),
+    getListings({ limit: null, includeOutOfArea: true, scopeToHousehold: false }), getReactionLog(), getCriteria(), getDerivedFinances(), getHouseholdAreas(), getLearnedPreferences(),
     getListingRatings(),
   ]);
-  const finances = rawFinances ? deriveFinances(rawFinances) : null;
   const areasById = new Map((areas || []).map((a) => [a.id, a]));
   const effective = effectiveWeights(learned?.derived || {}, learned?.overrides || {});
   const liveById = new Map((listings || []).map((l) => [String(l.rightmove_id), l]));

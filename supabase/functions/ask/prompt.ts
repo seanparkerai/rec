@@ -66,11 +66,37 @@ async function gatherContext(supabase: SB, householdId: string): Promise<string>
     } catch (_e) { return null; }
   };
 
+  // The investments row's `data` jsonb already carries the trading212ISA shape
+  // (currentPortfolioValue, earmarkPct); expose it under { trading212ISA } exactly as
+  // storage/user-state.js#getInvestments does, so the finance summary includes the
+  // deposit-earmarked ISA (the fix for "£0 saved" when the deposit lives in the ISA).
+  const investments = async () => {
+    try {
+      const { data } = await supabase
+        .from("investments_accounts")
+        .select("data, current_value, earmark_pct, account_opened, account_type, provider")
+        .eq("household_id", householdId).limit(1);
+      const row = data?.[0];
+      if (!row) return null;
+      return {
+        trading212ISA: row.data ?? {
+          provider: row.provider,
+          accountType: row.account_type,
+          accountOpened: row.account_opened,
+          earmarkPct: Number(row.earmark_pct) || 0,
+          currentPortfolioValue: Number(row.current_value) || 0,
+        },
+      };
+      // deno-lint-ignore no-explicit-any
+    } catch (_e) { return null; }
+  };
+
   // deno-lint-ignore no-explicit-any
-  const [criteria, finances, profile, shortlist, areas] = await Promise.all([
+  const [criteria, finances, profile, shortlist, areas, invest] = await Promise.all([
     blob("criteria"), blob("finances"), blob("profile"), blob("shortlist"),
     supabase.from("household_areas").select("area_id").eq("household_id", householdId)
       .then((r: any) => r.data ?? []).catch(() => []),
+    investments(),
   ]);
 
   const lines: string[] = ["ALWAYS-ON HOUSEHOLD CONTEXT (live snapshot — still call tools for detail/listings):"];
@@ -87,9 +113,12 @@ async function gatherContext(supabase: SB, householdId: string): Promise<string>
   }
 
   if (finances) {
-    const fs = shapeFinancesSummary(finances);
+    const fs = shapeFinancesSummary(finances, invest);
+    const isaClause = fs.earmarkedIsa
+      ? ` (incl. £${num(fs.earmarkedIsa.currentValue)} ISA earmarked ${fs.earmarkedIsa.earmarkPct}% for the deposit; £${num(fs.cashSavings)} cash)`
+      : "";
     lines.push(
-      `- Finances: deposit target £${num(fs.targetDeposit)}, saved £${num(fs.depositSaved)}, ` +
+      `- Finances: deposit target £${num(fs.targetDeposit)}, saved £${num(fs.depositSaved)}${isaClause}, ` +
       `gap £${num(fs.depositGap)}, monthly contribution £${num(fs.monthlyContribution)}` +
       `${fs.monthsToTarget != null ? `, ~${fs.monthsToTarget} months to target` : ""}.`,
     );

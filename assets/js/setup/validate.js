@@ -10,7 +10,7 @@ export function validateField(field, value) {
   const empty = value == null || value === '' || (Array.isArray(value) && value.length === 0);
   if (empty) return field.required ? { ok: false, error: `${field.label} is required` } : { ok: true };
   if (field.type === 'email' && !EMAIL_RE.test(String(value))) return { ok: false, error: 'Enter a valid email address' };
-  if ((field.type === 'number' || field.type === 'currency') && !Number.isFinite(Number(value))) {
+  if ((field.type === 'number' || field.type === 'currency' || field.type === 'money-line') && !Number.isFinite(Number(value))) {
     return { ok: false, error: 'Enter a number' };
   }
   return { ok: true };

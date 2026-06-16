@@ -1,7 +1,7 @@
 // finance-derive.test.js — exercises deriveFinances() against hand-computed values.
 // All inputs are synthetic round numbers (not real user data).
 
-import { deriveFinances, stripDerived } from '../assets/js/finance-derive.js';
+import { deriveFinances, stripDerived, computeDepositSavings } from '../assets/js/finance-derive.js';
 
 const RAW = {
   currency: 'GBP',
@@ -77,6 +77,27 @@ export async function register({ test, assert, assertEqual }) {
 
   await test('derive: shoppingTotal sums shoppingList[].cost', () => {
     assertEqual(deriveFinances(RAW).shoppingTotal, 1200);
+  });
+
+  // --- computeDepositSavings (shared single-definition helper) ---------------
+  await test('computeDepositSavings: cash only when no investments', () => {
+    assertEqual(computeDepositSavings({ savings: { current: 53000 } }, null), 53000);
+    assertEqual(computeDepositSavings({ savings: {} }, null), 0);
+  });
+
+  await test('computeDepositSavings: cash + earmarked ISA portion', () => {
+    assertEqual(computeDepositSavings({ savings: { current: 0 } }, { trading212ISA: { currentPortfolioValue: 32994.45, earmarkPct: 100 } }), 32994.45);
+    assertEqual(computeDepositSavings({ savings: { current: 2500 } }, { trading212ISA: { currentPortfolioValue: 50000, earmarkPct: 50 } }), 27500);
+  });
+
+  await test('computeDepositSavings: ISA with no earmark counts in full', () => {
+    assertEqual(computeDepositSavings({ savings: { current: 1000 } }, { trading212ISA: { currentPortfolioValue: 12000 } }), 13000);
+  });
+
+  await test('computeDepositSavings: drives deriveFinances totalSavings (same value)', () => {
+    const fin = { savings: { current: 2500 } };
+    const inv = { trading212ISA: { currentPortfolioValue: 50000, earmarkPct: 50 } };
+    assertEqual(deriveFinances(fin, { investments: inv }).savings.totalSavings, computeDepositSavings(fin, inv));
   });
 
   // --- Savings cross-resource ----------------------------------------------

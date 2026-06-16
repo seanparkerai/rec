@@ -6,7 +6,7 @@
 // and a personal-status select on the shortlist record. Learned preferences
 // (using these reactions) arrive in L4.
 import {
-  getListings, getCriteria, getFinances, getHouseholdAreas,
+  getListings, getCriteria, getHouseholdAreas,
   saveListingReaction,
   getShortlistStatuses, setShortlistStatus,
   getLearnedPreferences, recomputeLearnedPreferences,
@@ -14,13 +14,13 @@ import {
   getReviewedListings, addReviewedListing,
   getListingRatings, getScrapeProbation,
 } from './storage.js';
+import { getDerivedFinances } from './finance-load.js';
 import { createListingsControls } from './listings/controls.js';
 import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
 import { suggestionListHTML } from './suggestions/card.js';
 import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
 import { createConfirm } from './suggestions/confirm.js';
-import { deriveFinances } from './finance-derive.js';
 import { scoreListingFit } from './listings/fit.js';
 import { classifyListing, HIDE_LABELS } from './listings/flags.js';
 import { PERSONAL_STATUSES, latestPerListing } from './listings/reactions.js';
@@ -476,12 +476,11 @@ async function render() {
   const modeBtns = [...main.querySelectorAll('[data-mode]')];
   if (!listEl) return;
 
-  const [listings, criteria, rawFinances, areas, statuses, learned, reactionLogInit, ratings, probationRows] = await Promise.all([
-    getListings({ limit: null }), getCriteria(), getFinances(), getHouseholdAreas(),
+  const [listings, criteria, finances, areas, statuses, learned, reactionLogInit, ratings, probationRows] = await Promise.all([
+    getListings({ limit: null }), getCriteria(), getDerivedFinances(), getHouseholdAreas(),
     getShortlistStatuses(), getLearnedPreferences(), getReactionLog(),
     getListingRatings(), getScrapeProbation(),
   ]);
-  const finances = rawFinances ? deriveFinances(rawFinances) : null;
   const areasById = new Map((areas || []).map((a) => [a.id, a]));
   const now = new Date();
 

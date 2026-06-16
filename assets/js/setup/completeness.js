@@ -3,13 +3,16 @@
 // 'complete' only when every visible data field is filled, 'partial' when some are,
 // 'not-started' when none. Drives the global meter, per-step chips and the Review summary.
 import { visibleFields, includedSteps } from './steps.js';
-import { getNested } from './autosave.js';
+import { getNested, getLineValue } from './autosave.js';
 
 // Resolve a field's current value from the state, handling the special @-paths.
 export function fieldValue(state, field) {
   if (field.path === '@areas') return Number(state.areaCount) >= 1 ? state.areaCount : '';
   if (field.path === '@health-consent') return state?.profile?.consents?.health?.granted ? true : '';
   const [head, ...rest] = field.path.split('.');
+  // money-line fields live as a labelled entry inside an array (e.g. finances.expenses);
+  // read back the entry tagged with this field's lineId so re-renders show the value.
+  if (field.type === 'money-line') return getLineValue(state[head], rest.join('.'), field.lineId);
   return getNested(state[head], rest.join('.'));
 }
 
