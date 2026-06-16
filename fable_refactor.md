@@ -322,10 +322,14 @@ count-based (it masks which violation regressed). A new standard fixes these by 
   (render a partial in a headless DOM and assert structure/a11y), **end-to-end journey** (a scripted
   buyer path across pages), and **online/live** (Supabase round-trips, run deliberately, never skipped-
   as-passing).
-- **Real DOM testing in CI.** Stand up a headless DOM (e.g. `linkedom`/`jsdom` via the existing Node
-  runner, still zero-build for the shipped site) so component rendering, partial injection, and
-  accessibility (roles, labels, focus order) are asserted automatically — closing the "no browser"
-  gap that §3.7 currently works around by hand.
+- **Real DOM testing in CI.** Stand up a headless DOM (**`jsdom`** for fidelity — focus/dialog/ARIA —
+  and/or **`happy-dom`** for speed on bulk renders; via the existing Node runner, still zero-build for
+  the shipped site) so component rendering, partial injection, and accessibility (roles, labels, focus
+  order) are asserted automatically — closing the "no browser" gap that §3.7 currently works around by
+  hand.
+  > **⚠️ External validation (D1):** **Drop `linkedom`** from the DOM/a11y layer — it is an
+  > SSR/parser, incomplete for the interaction/focus/role assertions this layer needs. Use **jsdom**
+  > (fidelity) or **happy-dom** (speed) instead. (PkgPulse, Mar 2026; Steve Kinney, Mar 2026.)
 - **Online Supabase coverage, gated honestly.** Provide a path to run the online assertions against a
   disposable test project/branch in CI (or a documented local/MCP run), so the offline "skipped" rows
   become real passes. Never report an unrun online check as passing.
@@ -9866,9 +9870,23 @@ The existing harness (run-intelligence-tests.mjs) is a **flat, sequential collec
 4. **Online integration:** Does the Supabase sync ceremony actually work before a commit?
 5. **Semantic linting:** Are tone-of-voice, colour contrast, focus management correct (not just present)?
 
-**The mandate:** Replace the count-based lint baseline with **semantic lint** (violations by selector + property, not snippet); add a **headless DOM harness** (jsdom or linkedom) to test page rendering in CI; introduce **mutation testing** on finance + intelligence engines to catch missed boundaries; orchestrate **online Supabase tests** on a disposable CI project; structure tests in **layers** (unit → contract → characterization → integration → e2e) with clear entry points; provide a **strangler migration** (new harness beside old, port suite-by-suite, retire old when new is complete).
+**The mandate:** Replace the count-based lint baseline with **semantic lint** (violations by selector + property, not snippet); add a **headless DOM harness** (jsdom or happy-dom — not linkedom, see D1) to test page rendering in CI; introduce **mutation testing** on finance + intelligence engines to catch missed boundaries; orchestrate **online Supabase tests** on a disposable CI project; structure tests in **layers** (unit → contract → characterization → integration → e2e) with clear entry points; provide a **strangler migration** (new harness beside old, port suite-by-suite, retire old when new is complete).
 
 #### Layered architecture (five-tier testing)
+
+> **✅/➕ External validation — pyramid vs trophy (D5):** The layered hybrid is confirmed consistent with
+> current best practice. **Add two layers** (taking the architecture from five tiers to seven):
+> a **static-analysis base (Tier 0)** — the Testing Trophy's foundation — and a **small real-browser
+> top (Tier 6)** that replaces the current "E2E hand-off to QA" gaps. Both are **devDependencies only**;
+> the shipped site stays zero-build. (CircleCI, Apr 2026; Kent C. Dodds, "Testing Trophy".)
+
+**Tier 0: Static analysis / type-checking** (NEW — Testing Trophy base layer)  
+- `tsc --checkJs` over the ESM source with **JSDoc types** (no migration to `.ts` for the shipped site;
+  types live in JSDoc, checked at build/CI time only).
+- Catches type errors, undefined props, and contract drift before any test runs — the cheapest, broadest
+  layer.
+- Entry: `tsconfig.json` (`checkJs: true`, `noEmit: true`); runs as the first step of the single command.
+- devDependency only; never shipped.
 
 **Tier 1: Unit tests** (current, fine-grained)  
 - Single function in isolation with mocked dependencies.
@@ -9894,6 +9912,10 @@ The existing harness (run-intelligence-tests.mjs) is a **flat, sequential collec
   - Listings feed (normalise → classify → suppress → partition → sort) [NEW FILE per Phase A line 3173].
   - Asking cascade (conversation state, suggestion ranking, LLM tool calls) [NEW FILE per Phase A line 3175].
 
+> **✅ External validation (D3):** Characterization / golden-master testing is confirmed as the correct
+> named technique for pinning legacy behaviour before a refactor. (Michael Feathers, *Working
+> Effectively with Legacy Code*, 2004.)
+
 **Tier 4: Integration tests** (NEW)  
 - Multiple modules + Supabase mock (via test project or stubs), no browser DOM.
 - Example: `storage.js` fetches profile + criteria, cache updates, on-disk snapshot reflects latest.
@@ -9905,9 +9927,18 @@ The existing harness (run-intelligence-tests.mjs) is a **flat, sequential collec
 - Load a full page HTML, inject fixtures into Supabase mock, exercise page-*.js coordinator.
 - Example: load `pages/finances.html`, mock Supabase `getFinances()` + `getProfile()`, call page init, assert tiles render.
 - Entry: `tests/pages/**/*.test.js`
-- Runner: jsdom or linkedom (lightweight DOM simulation, no layout/paint engine).
+- Runner: jsdom (fidelity) or happy-dom (speed) — not linkedom (see D1; lightweight DOM simulation, no layout/paint engine).
 - Coverage goal: shell injection, tile rendering, data binding, error boundaries.
 - **Limitation:** jsdom has no layout (no responsive media query evaluation, no pixel positions). Visual regression still requires `tests/tests.html` + developer QA.
+
+**Tier 6: Real-browser smoke** (NEW — replaces the "E2E hand-off to QA" gap, D5)  
+- A **small** real-browser layer (**Playwright** or **Vitest browser mode**) for the things jsdom
+  cannot assert: the native `<dialog>` focus trap, **View Transitions** (incl. the unique-name pitfall,
+  C5), and computed **contrast**.
+- Keep it deliberately small (a handful of journeys + a11y assertions) — it is the narrow top of the
+  trophy, not a second full suite.
+- Entry: `tests/browser/**/*.spec.js`; devDependency only; never shipped.
+- Coverage goal: close the specific gaps DESIGN.md §13 currently hands to a human.
 
 #### New test infrastructure (tooling)
 
@@ -9950,6 +9981,20 @@ The existing harness (run-intelligence-tests.mjs) is a **flat, sequential collec
 - Output: list of survived mutations + suggested new tests.
 - Latency: ~2–5 minutes (63 mutants × harness time). Opt-in (not in default CI).
 
+> **✅ External validation — mutation testing (D2):** Confirmed, correctly scoped to finance +
+> intelligence (the two places a silent bug is costliest). Concrete **Stryker** guidance: set
+> `coverageAnalysis: "perTest"`; run **incrementally** (`--incremental` / `--mutate` on changed files);
+> exclude logging with `// Stryker disable`; scope `mutate` to `assets/js/finances/**`,
+> `assets/js/refinement/**` and `assets/js/learned-preferences/**`; set a **score threshold (~75–80%)
+> that breaks the build** — do **not** target 100%. Note Stryker needs a **supported runner**
+> (Jest/Mocha/Jasmine/Vitest) — if the custom `run-mutation-tests.mjs` stays, confirm Stryker can drive
+> it, otherwise adopt a supported runner for this layer. (Stryker docs; qaskills, Feb 2026.)
+
+> **✅ External validation — test runner (D6):** Consider **Vitest** for the rebuilt harness — native
+> ESM, jsdom/happy-dom environments (D1), browser mode (Tier 6 / D5), and a first-party Stryker plugin
+> (D2). It satisfies the "single command / zero-build site / test-only deps" invariant. **Not
+> mandatory** — if the custom runner is kept, just confirm Stryker can drive it (D2).
+
 #### Fixture & mock strategy
 
 **Fixtures (centralized):** `tests/fixtures.mjs`
@@ -9972,6 +10017,10 @@ The existing harness (run-intelligence-tests.mjs) is a **flat, sequential collec
 - Used by page-level tests to load + render.
 
 #### Migration strategy (strangler pattern)
+
+> **✅ External validation (D4):** The strangler-fig migration (new harness beside old, port suite by
+> suite, retire the old runner last) is confirmed as the correct named technique. (Martin Fowler,
+> "StranglerFigApplication", 2004.)
 
 **Phase 1: New harness alongside old (non-blocking)**
 - Create `tools/run-all-tests.mjs` (new unified harness).
