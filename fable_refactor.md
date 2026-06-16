@@ -8368,6 +8368,21 @@ Per §13, no Playwright in CI; developer hand-off via `/tests/tests.html`:
 - RLS policies use `is_household_member()` function (lines 51–63 of schema.sql) to check session user_id against household_members.
 - Outcome: Anon key is safe because the DB enforces per-household data isolation at the row level.
 
+> **✅/⚠️ External validation — key model (E1):** The "anon key is safe in the browser **iff** RLS is
+> enforced" claim is still **true** (Supabase docs). **But** Supabase is **retiring the legacy
+> anon/`service_role` JWT keys** in favour of `sb_publishable_*` (client-safe) and revocable
+> `sb_secret_*` (server-only). **Add a task** to (1) verify `supabase-client.js` ships an
+> `sb_publishable_*` key (and **never** a secret/`service_role` key), and (2) migrate the project off
+> the legacy keys if it hasn't already. Bonus: the new publishable key also **hides the OpenAPI
+> schema**. (Supabase Security Retro 2025; GitHub supabase/supabase#29260.)
+
+> **⚠️ External validation — RLS misconfiguration is the dominant failure mode (E2):** RLS
+> *enabled-but-misconfigured* (or silently disabled on a new table) is the dominant Supabase breach
+> class (CVE-2025-48757). Add to the **online** test layer an assertion that runs
+> `SELECT tablename FROM pg_tables WHERE schemaname='public' AND NOT rowsecurity;` and **fails if any
+> user-data table lacks RLS**; run the **Supabase Security Advisor** in CI; and consider column-level
+> security / moving any global tables off the exposed `public` schema. (vibeappscanner / PTKD, 2026.)
+
 ---
 
 #### Bidirectional sync contract (CLAUDE.md §18; full ceremony in docs/SUPABASE_SYNC.md §2–§3)
