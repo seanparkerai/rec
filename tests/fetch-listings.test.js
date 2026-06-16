@@ -3,7 +3,7 @@
 // threaded into the Rightmove URL, the post-filter drops excluded types and
 // stale listings, learned-favourite outcodes are processed first, and the
 // always-on baseline (price cap, min beds, dontShow) is verified.
-import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
+import { buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES } from '../tools/fetch-listings.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-05-31T00:00:00Z');
@@ -284,6 +284,35 @@ export async function register({ test, assert, assertEqual }) {
     const [v] = householdRowsToVillages(rows, new Set());
     assertEqual(v.postcode, 'PO14 2LJ', 'full postcode carried (not just the outcode)');
     assertEqual(v.outcode, 'PO14');
+  });
+
+  // ── demand gate: zero-household areas drop out of the scrape ──
+  test('fetch-listings: demandFilterOutcodeMap keeps only areas with active demand', () => {
+    const map = new Map([
+      ['SO24', [
+        { id: 'alresford-so24', name: 'Alresford' },     // wanted
+        { id: 'cheriton-so24', name: 'Cheriton' },        // nobody wants → dropped
+      ]],
+      ['RG23', [{ id: 'oakley-rg23', name: 'Oakley' }]],   // wanted (sole area in outcode)
+      ['PO14', [{ id: 'stubbington-po14', name: 'Stubbington' }]], // nobody wants → whole outcode dropped
+    ]);
+    const demand = new Set(['alresford-so24', 'oakley-rg23']);
+    const out = demandFilterOutcodeMap(map, demand);
+    assertEqual(out.get('SO24').length, 1, 'only the demanded area in SO24 survives');
+    assertEqual(out.get('SO24')[0].id, 'alresford-so24');
+    assert(out.has('RG23'), 'a demanded sole-area outcode survives');
+    assert(!out.has('PO14'), 'an outcode with zero demand is dropped entirely');
+    // Purity: the input map is untouched.
+    assertEqual(map.get('SO24').length, 2, 'input map not mutated');
+  });
+
+  test('fetch-listings: demandFilterOutcodeMap empties everything when demand is empty', () => {
+    // A SUCCESSFUL read returning zero active links means genuinely no demand → fetch
+    // nothing. (The caller only reaches here when householdAreasOk; a read FAILURE
+    // skips the filter so an outage never zeroes the run.)
+    const map = new Map([['SO24', [{ id: 'alresford-so24' }]]]);
+    const out = demandFilterOutcodeMap(map, new Set());
+    assertEqual(out.size, 0, 'no active household demand → no areas fetched');
   });
 
   test('fetch-listings: focus outcodes are processed first, none dropped', () => {

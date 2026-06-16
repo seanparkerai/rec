@@ -185,6 +185,29 @@ function householdRowsToVillages(rows, repoIds = new Set()) {
   return out;
 }
 
+/**
+ * Demand-gate the fetch set: keep only areas at least one ACTIVE household has
+ * linked (v.id ∈ demandSet). A curated area nobody currently searches drops out
+ * entirely — the fetch-side mirror of the per-household active/inactive pause, so
+ * the last household to pause/remove an area takes it out of the scraper (zero
+ * demand → no scrape). Household stubs are in the demand set by construction (they
+ * exist only because a household linked them). Returns a NEW Map (outcodes with no
+ * surviving area are dropped); the input is left untouched. The caller skips this
+ * filter entirely when the household_areas read failed, so a read outage can never
+ * zero a run. Pure — no network, no env.
+ * @param {Map<string, Array>} outcodeMap  outcode → village entries
+ * @param {Set<string>} demandSet  area_ids with ≥1 active household link
+ * @returns {Map<string, Array>} filtered copy
+ */
+function demandFilterOutcodeMap(outcodeMap, demandSet) {
+  const out = new Map();
+  for (const [oc, arr] of outcodeMap) {
+    const kept = (arr || []).filter((v) => demandSet.has(v.id));
+    if (kept.length) out.set(oc, kept);
+  }
+  return out;
+}
+
 const DEFAULT_SEARCH_MI = 3;
 const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 7;   // max disk radius (mi); lower = tighter/cheaper-per-result but more runs
 const SEARCH_MODE = (process.env.SEARCH_MODE || 'outcode').toLowerCase();
@@ -492,11 +515,15 @@ async function restGetOne(table, select) {
 // accurately-located stub (source='household-onboarding', active=false) and links it
 // via household_areas; those stubs are intentionally NOT materialised to repo files,
 // so the fetcher reads them live here and merges the eligible ones into the target
-// set. Returns { rows, links }: the joined [{ id, data }] area rows plus the raw
-// household_id↔area_id links (for per-target budget bands). Empty on failure so a
-// read outage never crashes or silently widens the run (it just behaves as repo-only L1).
+// set. Only status='active' links are read — a paused ('inactive') link drops out of
+// the demand set. Returns { rows, links, ok }: the joined [{ id, data }] area rows,
+// the raw household_id↔area_id links (for per-target budget bands + the demand gate),
+// and `ok` = whether the read SUCCEEDED. `ok` is the demand gate's safety latch:
+// only a successful read may prune curated areas to those with active demand; on a
+// failure (or no service key) ok=false so the run falls back to all curated areas
+// rather than silently zeroing out. Empty (never throws) so a read outage never crashes.
 async function loadHouseholdAreas() {
-  if (!SERVICE_KEY) return { rows: [], links: [] };
+  if (!SERVICE_KEY) return { rows: [], links: [], ok: false };
   const headers = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` };
   try {
     const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=household_id,area_id`;
@@ -504,15 +531,15 @@ async function loadHouseholdAreas() {
     if (!laRes.ok) throw new Error(`GET household_areas failed: ${laRes.status}`);
     const links = (await laRes.json()) || [];
     const ids = [...new Set(links.map((l) => l.area_id).filter(Boolean))];
-    if (!ids.length) return { rows: [], links };
+    if (!ids.length) return { rows: [], links, ok: true };   // genuine zero demand (read succeeded)
     const inList = ids.map((i) => `"${i}"`).join(',');
     const aUrl = `${SUPABASE_URL}/rest/v1/areas?id=in.(${inList})&select=id,data`;
     const aRes = await fetch(aUrl, { headers });
     if (!aRes.ok) throw new Error(`GET areas failed: ${aRes.status}`);
-    return { rows: await aRes.json(), links };
+    return { rows: await aRes.json(), links, ok: true };
   } catch (e) {
     console.warn('household areas load failed:', e.message);
-    return { rows: [], links: [] };
+    return { rows: [], links: [], ok: false };
   }
 }
 
@@ -658,13 +685,13 @@ async function main() {
     console.log('learned mode requested but no spec resolved — running as plain L1');
   }
 
-  const outcodeMap = await loadOutcodeMap();
+  let outcodeMap = await loadOutcodeMap();
   // Merge household-added areas (Supabase, service-role) that postcodes.io has
   // accurately located. Done BEFORE pruning so they are equally subject to learned
   // prunes + probation, then flow through clustering / resolve / geofence exactly like
   // curated villages. No commit, no promotion: a stub added minutes ago is in this run.
   const repoIds = new Set(flattenVillages(outcodeMap).map((v) => v.id));
-  const { rows: householdRows, links: householdLinks } = await loadHouseholdAreas();
+  const { rows: householdRows, links: householdLinks, ok: householdAreasOk } = await loadHouseholdAreas();
   const householdVillages = householdRowsToVillages(householdRows, repoIds);
   for (const v of householdVillages) {
     if (!outcodeMap.has(v.outcode)) outcodeMap.set(v.outcode, []);
@@ -702,6 +729,23 @@ async function main() {
     if (!l?.area_id || !l?.household_id) continue;
     if (!areaHouseholds.has(l.area_id)) areaHouseholds.set(l.area_id, new Set());
     areaHouseholds.get(l.area_id).add(l.household_id);
+  }
+  // Demand gate: an area (curated OR stub) is scraped only if at least one ACTIVE
+  // household has it linked. This is the fetch-side mirror of the per-household
+  // active/inactive pause — when the last interested household pauses or removes an
+  // area, its id leaves the demand set and the scraper stops fetching it entirely
+  // (zero households → no scrape). Stubs are in the demand set by construction.
+  // Gated on a SUCCESSFUL household_areas read (householdAreasOk): on a read outage
+  // (or no service key, e.g. a local DRY_RUN) we skip pruning and fetch every curated
+  // area, so a transient failure never silently zeroes the run.
+  if (householdAreasOk) {
+    const demandSet = new Set(areaHouseholds.keys());
+    const before = flattenVillages(outcodeMap).length;
+    outcodeMap = demandFilterOutcodeMap(outcodeMap, demandSet);
+    const after = flattenVillages(outcodeMap).length;
+    console.log(`demand gate: ${after}/${before} areas have ≥1 active household · ${before - after} zero-demand area(s) dropped`);
+  } else {
+    console.warn('demand gate: household_areas read unavailable — fetching all curated areas (no demand pruning)');
   }
   console.log(`household budgets: ${budgets.size} loaded (${[...budgets.values()].map((b) => `${fmtPrice(b.min)}–${fmtPrice(b.max)}`).join(', ') || 'none'}) · fallback band ${fmtPrice(BASELINE_PRICE_MIN)}–${fmtPrice(BASELINE_PRICE_MAX)}`);
   // L7.5: honour learned prunes (surfaced + accepted upstream; here we just obey).
@@ -880,4 +924,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
