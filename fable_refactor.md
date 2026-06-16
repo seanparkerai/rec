@@ -5426,7 +5426,7 @@ For each dimension:
    - **Point estimate:** `p_hat = k_eff / n_eff`.
    - **Wilson lower bound (§2.3):** `wilsonLowerBound(k_eff, n_eff, { z: 1.96, continuity: n_eff < 30 })` (engine.js line 51). Continuity correction (Newcombe 1998) applied below n_eff=30 for better small-sample coverage.
    - **Lift:** `lift = p_hat / p0` (p_hat vs baseline).
-   - **Two-proportion z-test p-value (§2.4):** one-sided test whether value is rejected more than rest-of-pool. Returns 1 (no evidence) on degenerate inputs (engine.js line 83).
+   - **Two-proportion z-test p-value (§2.4):** one-sided test whether value is rejected more than rest-of-pool. Returns 1 (no evidence) on degenerate inputs (engine.js line 83). ⚠️ **External validation (B3):** the normal-approximation z-test is unreliable at the small n this engine targets and is inconsistent with the small-sample Wilson bound — replace with **Fisher's exact test**; ⚠️ correction required in code (see §10.6 "main statistical weakness").
 3. **BH FDR (§2.5):** Sort all candidates in a dimension by p-value ascending. Largest rank i with `p_i ≤ (i/m)·q` passes; all ranks ≤ i marked `fdr_significant: true`. Set per-dimension if `FDR_PER_DIMENSION: true` (config.js line 43), else one pooled family across all dimensions.
 4. **Five gates (§2.6):**
    - **Gate 1:** `systemDecayed >= GLOBAL_MIN_FEEDBACK` AND `dimDecayed >= DIM_MIN_FEEDBACK`. (Prevents early noise.)
@@ -5557,6 +5557,9 @@ Algorithm:
 
 **Consequence:** User's recent reactions dominate the ranking; old dislikes fade if the user stops acting on them, allowing re-surfacing when the market or preferences shift.
 
+> **✅ External validation (B1):** Exponential time-decay is validated as **defensible** — a standard,
+> well-understood recency-weighting choice. No change required.
+
 #### 2. Wilson score interval (confidence bound)
 
 **What:** Lower bound of a 95% confidence interval for the reject rate, adjusted for small samples.
@@ -5582,6 +5585,10 @@ Algorithm:
 
 **Caveat:** Wilson lower = 0.88 (Cautious) still passes if p_hat = 0.85 and n = 50 (a real disproportionate signal). Below n=30, continuity correction shrinks the bound further, so true but small-sample signals may not qualify early.
 
+> **✅ External validation (B2):** The 95% Wilson lower bound with Newcombe continuity correction below
+> n ≈ 30 is validated as **defensible** — it is the recommended small-sample interval (Brown, Cai &
+> DasGupta 2001; Newcombe 1998) and the right tool for the small-n regime this engine targets.
+
 #### 3. Benjamini-Hochberg FDR control
 
 **What:** Protects against false positives when testing many candidates (area, type, etc.) simultaneously.
@@ -5599,6 +5606,17 @@ Algorithm:
 4. Ranks > i: `fdr_significant: false`.
 
 **Consequence:** With FDR_Q=0.05, expect ≤5% of flagged candidates to be false positives (under the null hypothesis that there are no true signals). Per-dimension FDR (separate families for area and type) is more sensitive than one pooled family; area refinements don't steal significance budget from type refinements.
+
+> **✅ External validation (B4):** Benjamini–Hochberg FDR is validated as **defensible** — the standard
+> multiple-comparisons control for this kind of many-candidate screening (Benjamini & Hochberg 1995).
+
+> **⚠️ External validation — main statistical weakness (B3):** the per-candidate p-value feeding BH-FDR
+> comes from a **two-proportion normal-approximation z-test** (engine.js, "value vs rest-of-pool"). The
+> normal approximation is **unreliable at small n** — exactly the regime this engine targets — and is
+> **inconsistent** with the deliberate choice of the small-sample-robust Wilson bound for the
+> confidence gate. **Recommendation:** replace the z-test with **Fisher's exact test** (or Barnard's
+> exact test) on the 2×2 "value vs rest-of-pool" table before BH-FDR. This is the single highest-value
+> statistical correction; schedule it as a §3/§4 phase. ⚠️ correction required in code.
 
 #### 4. Five deterministic gates (multi-layered filtering)
 
@@ -5630,6 +5648,12 @@ Algorithm:
 - Trade-off: Cautious delays by 5 runs (assuming weekly runs, ~35 days); Aggressive by 2 runs (~14 days).
 
 **Consequence of all gates:** A feature is actionable only if it passes all five gates. A feature passes Gate 3 alone does not surface unless it also passes Gates 1, 2, 4, 5. This layering is intentional and heavily tested (refinement-engine.test.js).
+
+> **✅ External validation (B6):** The parameter choices — the 300 decayed-reaction global gate, the
+> 10-reaction cold-start, and the 1.0/0.35 attribution weights — are validated as **reasonable tuning
+> defaults**, not derivable constants. They should be **calibrated empirically**: log each gate's
+> pass-rate per run (e.g. into the run-audit row) so the thresholds can be tuned against real data
+> rather than guessed.
 
 #### 5. Suggested sensitivity presets (Cautious/Balanced/Aggressive)
 
@@ -5710,6 +5734,29 @@ Algorithm:
 - Bar fill: CSS variable `--ref-pct` set to the percentage (page-refinement.js line 137).
 
 **Consequence:** Transparent feedback loop. User sees how many reactions they've given and how close they are to activating the engine. At 300 decayed reactions (~1 year of weekly reactions, or ~4 weeks of 75/week reactions), the meter is "full" and the engine is firing.
+
+#### ➕ Stronger statistical core (candidate) — external validation (B5)
+
+The validation review proposes a candidate redesign of the core that the gates approximate piecemeal.
+Treat this as an **option to weigh during intake**, not a mandated change — the gates' explainability
+is a real asset (see trade-off).
+
+- **Primary recommendation — Bayesian Beta-Bernoulli per feature value.** Model each feature value's
+  reject rate as a Beta posterior updated by its like/reject counts. Crucially, use the **global reject
+  base-rate as the prior** (not an implicit 50% / `Beta(1,1)` uniform) so the model does **not
+  over-flag at low base rates**. This single model **unifies** what the current engine splits across
+  three mechanisms — confidence (Gate 3), cold-start (Section 7), and disproportionality (Gate 4).
+- **Complementary options:**
+  - **Thompson sampling** for explore/exploit on *when to surface* a suggestion (Chapelle & Li 2011;
+    Russo et al. 2018).
+  - **A single regularised logistic regression** with a weakly-informative prior (Gelman et al. 2008)
+    as a unified taste model — this is the only candidate here that handles **feature correlation**,
+    which the current independent per-dimension discrimination ignores.
+  - **Bradley–Terry** only if pairwise "which of these two?" prompts are later added.
+- **Trade-off (state it explicitly):** Bayesian/logistic models are **better-calibrated at small n**
+  but **lose the explicit, explainable "gates"** the product currently exposes to the user. If
+  explainability is paramount, **keep the gates** and take the cheaper, high-value win: swap the
+  z-test for Fisher's exact test (B3).
 
 #### 9. Probation enforcement & re-probe cadence
 
