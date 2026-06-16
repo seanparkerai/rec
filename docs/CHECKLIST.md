@@ -48,6 +48,13 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       (§16-guarded, its own named phase). Scraper enforcement not yet live-run against Apify.
 
 ### UI / platform (each its own named phase)
+- [x] **Active/inactive areas** — per-household reversible pause + hard remove on the areas +
+      area-detail pages. `household_areas.status` ∈ {active, inactive, removed} (migration
+      `household_areas_status_inactive`); `setHouseholdAreaStatus` + `getHouseholdAreas({includeInactive})`
+      in `storage/listings.js`; paused areas hidden from the listings feed/map and excluded from the
+      fetcher's demand set. `tools/fetch-listings.mjs` now demand-gates the whole scrape
+      (`demandFilterOutcodeMap`): an area is fetched only if ≥1 active household links it (error-only
+      fallback to all-curated). Unit + sync tests added; verified end-to-end via MCP.
 - [ ] Design review checkpoint with user (appearance/tokens/layout) — view via Pages or
       `python3 -m http.server`.
 - [ ] Split `base.css` into the component partials + container queries on cards/sidebar
