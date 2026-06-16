@@ -31,17 +31,30 @@ in-workflow gate**, so they run immediately at noon.
 ### One-time setup you must do (storing the token)
 
 The function dispatches nothing until a GitHub token is in Vault. The token is a secret —
-create and store it yourself; never paste it into chat or commit it.
+create and store it yourself; never paste it into chat or commit it. **It lives only in
+Supabase Vault (server-side) — it is never sent to a browser or held on any device.**
 
-1. **Create a fine-grained GitHub Personal Access Token**
-   GitHub → *Settings → Developer settings → Personal access tokens → Fine-grained tokens
-   → Generate new token*.
-   - **Resource owner:** `seanparkerai`
-   - **Repository access:** *Only select repositories* → `seanparkerai/rec`
-   - **Permissions → Repository → Actions:** **Read and write** (this is what allows
-     `workflow_dispatch`).
-   - **Expiration:** your choice (note the renewal date; the trigger stops when it expires).
-   - Generate and copy the token (starts `github_pat_…`).
+1. **Create a GitHub Personal Access Token.** Pick ONE of:
+
+   - **Classic PAT — recommended for "always in place" (never expires).**
+     GitHub → *Settings → Developer settings → Personal access tokens → Tokens (classic)
+     → Generate new token (classic)*.
+     - **Scopes:** `workflow` + `repo` (`repo` is needed to dispatch on a private repo; if
+       `seanparkerai/rec` is public, `public_repo` + `workflow` suffices).
+     - **Expiration:** **No expiration** — so the trigger never lapses.
+     - Trade-off: classic tokens are account-wide in scope; this is mitigated by the token
+       living only in Vault.
+
+   - **Fine-grained PAT — more locked-down, but expires (≤ 366 days).**
+     GitHub → *…Personal access tokens → Fine-grained tokens → Generate new token*.
+     - **Resource owner:** `seanparkerai`; **Repository access:** *Only select repositories*
+       → `seanparkerai/rec`.
+     - **Permissions → Repository → Actions:** **Read and write**.
+     - Set a calendar reminder to rotate before it expires (re-run step 2 to update Vault),
+       or the trigger silently stops.
+
+   - **GitHub App — never expires AND repo-scoped (gold standard, more setup).** Ask if you
+     want this; it stores an App private key in Vault and mints short-lived tokens on demand.
 
 2. **Store it in Supabase Vault** — Supabase dashboard → *SQL Editor*, run (paste your
    token in place of `PASTE_TOKEN_HERE`):
@@ -63,6 +76,26 @@ create and store it yourself; never paste it into chat or commit it.
    new run triggered by `workflow_dispatch` within a few seconds.
 
    To rotate the token later, re-run step 2 with `vault.update_secret` (or delete + recreate).
+
+## 1b. Manual trigger from any device — `public.request_rightmove_fetch()`
+
+You can also fire a fetch on demand from **any device**, without a GitHub token on that
+device and without opening GitHub at all — you only need to be signed in to the portal
+(your normal Supabase login, available on any device).
+
+- **What it is:** a `SECURITY DEFINER` RPC, `public.request_rightmove_fetch()`, executable
+  **only by the `authenticated` role** (anon is denied). It reuses the same server-side
+  `private.dispatch_fetch_now()` helper, so the GitHub token never leaves Vault.
+- **Spam guard:** a 10-minute cooldown (tracked in `private.fetch_dispatch_state.last_manual_at`).
+- **Returns:** JSON `{ ok, status, request_id?, retry_after_seconds?, message }`.
+
+Call it from the browser via the Supabase client:
+```js
+const { data, error } = await supabase.rpc('request_rightmove_fetch');
+// data => { ok:true, status:'dispatched', request_id: …, message:'Fetch triggered…' }
+```
+A friendly "Fetch now" button wired to this RPC (through `storage.js`) is the intended
+front-end; until that ships you can call the RPC directly as above.
 
 ## 2. Backstop — GitHub `schedule` (free, imprecise)
 
