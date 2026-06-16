@@ -879,7 +879,7 @@ async function render() {
     if (!listings.length) {
       listEl.replaceChildren(el('li', { class: 'listings-empty' }, [
         el('p', {}, 'No listings yet.'),
-        el('p', { class: 'listings-empty__hint' }, 'The daily fetch (fetch-listings workflow) hasn’t populated the listings table yet — tap “Fetch new listings” above to run it on GitHub, or check the Apify / Supabase secrets are set.'),
+        el('p', { class: 'listings-empty__hint' }, 'The daily fetch hasn’t populated the listings table yet — tap 24hr / 3d / 7d above to pull now (runs server-side; no token needed), or check the Apify / Supabase secrets are set.'),
       ]));
       if (summaryEl) clear(summaryEl);
       return;

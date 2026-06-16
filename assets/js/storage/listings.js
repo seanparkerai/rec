@@ -176,6 +176,26 @@ export async function createAreaStubAndLink({
   }
 }
 
+// ── Trigger a Rightmove fetch (server-side dispatch via Vault token) ───────
+// The fetcher (tools/fetch-listings.mjs) needs the Apify + service-role secrets,
+// so it runs on a GitHub runner, not the browser. The listings-page 24hr/3d/7d
+// buttons call this, which invokes the `request_rightmove_fetch` RPC: a signed-in
+// user triggers the workflow_dispatch server-side, with the GitHub token held in
+// Supabase Vault — never in the browser. Returns the RPC's shaped result
+// { ok, status, request_id?, retry_after_seconds?, days?, message } so the UI can
+// report dispatched / cooldown / error uniformly. `days` ∈ {1,3,7,14} (recency window).
+export async function requestListingsFetch(days = 1) {
+  const sb = await _initSb();
+  if (!sb) return { ok: false, status: 'error', message: 'Not connected to the backend.' };
+  try {
+    const { data, error } = await sb.rpc('request_rightmove_fetch', { p_days: Number(days) });
+    if (error) return { ok: false, status: 'error', message: error.message };
+    return data ?? { ok: false, status: 'error', message: 'No response from the trigger.' };
+  } catch (e) {
+    return { ok: false, status: 'error', message: e.message };
+  }
+}
+
 // ── Reviewed-listings marker (Browse collapse UX, v3 L4) ───────────────────
 // Which listings the user has SAVED/rounded-off in Browse, so reviewed cards can
 // collapse to the bottom "Reviewed (N)" section. Intentionally a LOCAL-ONLY

@@ -96,26 +96,6 @@
 .listings-fetch-status.is-ok  { color: var(--positive); }
 .listings-fetch-status.is-err { color: var(--danger); }
 
-.listings-fetch-token {
-  flex-basis: 100%; width: 100%; margin: var(--space-2) 0 0; padding: var(--space-3);
-  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
-}
-.listings-fetch-token[hidden] { display: none; }
-.listings-fetch-token > label {
-  display: block; margin: 0 0 var(--space-2);
-  font-size: var(--text-sm); color: var(--ink);
-}
-.listings-fetch-token-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.listings-fetch-token-row input {
-  flex: 1 1 16rem; min-height: var(--tap-min); margin: 0;
-  font-family: var(--font-data); font-size: 1rem; /* ≥16px: no iOS focus-zoom */
-}
-.listings-fetch-token-row button {
-  min-height: var(--tap-min); margin: 0; padding: 0.4rem 0.9rem;
-  font-size: var(--text-sm); white-space: nowrap;
-}
-.listings-fetch-token-hint { margin: var(--space-2) 0 0; font-size: var(--text-xs); color: var(--ink-muted); }
-
 
 /* P11d: after a Save whose card leaves the feed (liked/rejected are suppressed),
    the summary line — whose counts just moved — pulses once to show where the
