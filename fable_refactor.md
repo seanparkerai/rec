@@ -2452,6 +2452,12 @@ RETURN ROUND(tax)
 
 **Source/Rationale:** GOV.UK SDLT bands, April 2025. Relief lost entirely above £500k (line 18 guard).
 
+> **✅ External validation (GOV.UK SDLT, current to June 2026):** CONFIRMED — no value change.
+> The FTB relief (£0 ≤ £300k, 5% on the £300k–£500k slice, none above £500k) and the standard bands
+> (0/2/5/10/12% at £125k/£250k/£925k/£1.5m) are correct for the post-1-April-2025 regime. Record
+> `SDLT_RULES_VALID_FROM = 2025-04-01` alongside the constants, and **re-check each Budget** (rates and
+> thresholds are fiscal-event variables, not permanent constants).
+
 **Outputs & Shape:**
 - Number (GBP, to nearest pound) — result of `Math.round(tax)`
 - 2-decimal precision pre-rounding (not persisted, but honoured in intermediate calcs)
@@ -2614,8 +2620,23 @@ RETURN (price > 0) AND (price ≤ £450,000)
 **Constants:**
 - Line 22: `£450,000` statutory cap (HM Treasury, current 2026)
 
+> **✅ External validation (GOV.UK Lifetime ISA, current to June 2026):** CONFIRMED — no change.
+> The LISA core constants (£4,000 annual contribution cap, 25% bonus capped at £1,000/yr, £450,000
+> property-price cap, 25% unauthorised-withdrawal charge) are all correct.
+
 **Cliff Warning (affordability.js, line 177–179):**
 If price > £450k, add to `whyVerdict`: "Price exceeds the £450k LISA cap — bonus forfeited."
+
+> **⚠️ External validation — LISA/SDLT cap mismatch + pending reform (add to surfaced facts) (A4):**
+> (a) The £450,000 LISA property cap does **not** align with the £500,000 SDLT FTB-relief ceiling. A
+> buyer targeting £450k–£500k **keeps** SDLT first-time-buyer relief but **loses** the LISA bonus and
+> pays the 25% withdrawal charge to access the funds. Surface a distinct warning in the affordability
+> widget (and the Ask "UK FTB facts") whenever a target sits in the £450k–£500k band — this is a
+> different, sharper failure than the existing simple "> £450k" cliff. (MoneySavingExpert, 26 Nov 2025.)
+> (b) **LISA reform is pending:** the Autumn Budget 2025 announced a consultation (early 2026) on a
+> replacement first-time-buyer ISA expected ~April 2028, with the £450k cap under review. LISA figures
+> must therefore **not** be presented as permanent — carry a one-line "rules under review" caveat.
+> (MoneySavingExpert, 26 Nov 2025; MoneyWeek, Jan 2026.)
 
 ---
 
