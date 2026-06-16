@@ -1278,7 +1278,7 @@ This expanded segment documents the complete design system, app shell, and navig
 | `assets/js/dashboard/tile-criteria.js` | Criteria prose + spec strip: formats property-type prefs + beds (range or single) + budget range + location into readable paragraph. Spec strip is a 6-row term-list: Beds / Budget / Deposit / EPC / Tenure / Window. If criteria missing, all fields show `—`. |
 | `assets/js/dashboard/tile-journey.js` | Buying journey track: fetches journey milestones from `data/journey.json` + household's task completion state from `storage.getJourneyProgress()`. Renders ordered milestone list with phase label + progress count (done/total). Current phase highlighted, completed phases dimmed. Next-action label + tick button (triggers `saveJourneyProgress()` to mark one task done, then re-renders). |
 | `assets/js/dashboard/tile-isa-ytd.js` | ISA YTD stat: fetches `getInvestmentsHistory()`, filters current-year months from `monthlySummary`, sums `net` contribution. Renders £ amount or `—` if no history. Populated into inline deposit-tile stat (index.html line 71, `id="isa-ytd-stat"`). |
-| `assets/js/dashboard/tile-savings-visuals.js` | Four SVG visualizations: (1) **Sparkline** — 12-month savings area+line chart, plots last 12 months of cumulative savings, dashed target line, caption shows avg monthly velocity + ETA month if crossing target. (2) **Scenarios fan** — 6 bars (−£500/mo, −£200/mo, baseline, +£200/mo, +£500/mo, +£5k windfall), each shows months-to-goal, baseline bar highlighted. Caption shows time saved by +£500/mo scenario. (3) **Net-worth donut** — pie chart of ISA + cash + LISA bonus + investments vs. gap-to-target, centre label shows effective deposit (total − debts). (4) **Withdrawal readiness** — progress bar from first ISA contribution to withdrawal-eligible date (seasoning rule), marker shows current date. |
+| `assets/js/dashboard/tile-savings-visuals.js` | Four SVG visualizations: (1) **Sparkline** — 12-month savings area+line chart, plots last 12 months of cumulative savings, dashed target line, caption shows avg monthly velocity + ETA month if crossing target. (2) **Scenarios fan** — 6 bars (−£500/mo, −£200/mo, baseline, +£200/mo, +£500/mo, +£5k windfall), each shows months-to-goal, baseline bar highlighted. Caption shows time saved by +£500/mo scenario. (3) **Net-worth donut** — pie chart of ISA + cash + LISA bonus + investments vs. gap-to-target, centre label shows effective deposit (total − debts). (4) **Withdrawal readiness** — progress bar from first contribution to the LISA-usable date (open ≥ 12 months from first contribution — ⚠️ code correction A3), marker shows current date. |
 | `assets/js/dashboard/tile-nba.js` | Next-Best-Action strip (v3 L5, self-contained async): scores 200 listings via `scoreListingFit()` with learned-preference weights, surfaces top 3 prioritized actions (e.g. "Review 3 new matched properties in Basingstoke"). Uses `computeNextBestActions()` from meta-observations engine. Loads listings/reactions/statuses/finances/criteria/learned prefs in parallel. Renders as a link-list above the bento; hidden if no actions. Catches errors silently and hides. |
 | `assets/css/dashboard.css` | @import shell (guard-railed §16, do NOT edit rules). Order: base, tile-card, tile-{deposit,affordability,money-flow,shortlist,journey,criteria,ask,extended,v3-visuals,nba}, then pages. |
 | `assets/css/dashboard/base.css` | Bento grid base (`.bento` = `display: grid; grid-template-columns: 1fr` on mobile, re-spec'd in tile-card.css media queries), lede prose styling, band labels (`.band-label` spanning full width), shortlist list styling, cell-foot link styling, legacy progress bar, utility classes. |
@@ -1331,7 +1331,7 @@ This expanded segment documents the complete design system, app shell, and navig
 | Savings Visuals (sparkline) | investments history, finances, goals | tile-savings-visuals.js `renderSavingsSpark()` | Fetches history via `getInvestmentsHistory()`. Builds 12-month series via `buildSavingsSeries({ history, finances, goal })`. Plots last 12 months. Dashed target line at goal height. Caption shows average monthly velocity + ETA month if crossing target. |
 | Scenarios Fan | finances | tile-savings-visuals.js `renderScenariosFan()` | Calls `getSavingsVelocity(financesData)` to compute 6 scenarios. Renders bars: −£500/mo, −£200/mo, baseline, +£200/mo, +£500/mo, +£5k windfall. Each bar width proportional to etaMonths. Baseline highlighted. Caption compares baseline to +£500/mo delta. |
 | Net-worth Donut | investments, finances, goals | tile-savings-visuals.js `renderNetworthDonut()` | Extracts isaValue (totalSavings − cashSavings), cashValue (cashSavings), cardDebt. Pie: isaValue arc + cashValue arc. Centre text = isaValue + cashValue − cardDebt (effective deposit). |
-| Withdrawal Readiness | investments | tile-savings-visuals.js `renderWithdrawalReadiness()` | Progress bar: months from first ISA deposit date to withdrawal-eligible (seasoning rule, typically 4–5 years per product). Marker at current date. Caption shows remaining months. |
+| Withdrawal Readiness | investments | tile-savings-visuals.js `renderWithdrawalReadiness()` | Progress bar: months from first contribution to LISA-usable date (open ≥ 12 months from first contribution — ⚠️ code correction A3; GOV.UK; OneFamily, Jan 2026). Marker at current date. Caption shows remaining months. |
 | NBA | listings, reactions, statuses, finances, criteria, learned prefs | tile-nba.js | Fetches 200 listings + reactions + statuses. Scores each via `scoreListingFit({ listing, finances, criteria, learnedPrefs })`. Calls `computeNextBestActions({ reactions, listings, statuses, scoreOf, now })` to rank and prioritize (e.g., "3 new matches in Basingstoke"). Renders as link-list. Async; never blocks bento. Hides if no actions. |
 
 ---
@@ -1859,9 +1859,16 @@ This expanded segment documents the complete design system, app shell, and navig
 ##### Sub-feature: Withdrawal Readiness
 
 **Precise rule — renderWithdrawalReadiness():**
-- Progress bar from first ISA deposit date to withdrawal-eligible date (seasoning rule, ~4–5 years per ISA product spec, exact rule UNCONFIRMED).
-- Marker at current date. Caption shows remaining months.
-- (file:lines 200+, read limit reached; UNCONFIRMED exact implementation).
+- Progress bar from `firstContributionDate` to `firstContributionDate + 12 months` — a LISA can be
+  used for a first-home purchase once it has been **open ≥ 12 months from the first contribution**.
+- Marker at current date. Caption shows remaining months until the 12-month point.
+- (file:lines 200+, read limit reached; exact implementation to be re-read during intake.)
+
+> **⚠️ External validation — correction required in code (A3):** the prior spec described a
+> "~4–5 year seasoning rule (UNCONFIRMED)." That is **wrong** and is hereby removed. The real rule is
+> the **12-month-from-first-contribution** window above. Schedule a §3/§4 phase to make the tile plot
+> `firstContributionDate → firstContributionDate + 12 months` (not a 4–5 year horizon), and to source
+> `firstContributionDate` from stored LISA data. (GOV.UK Lifetime ISA; OneFamily, Jan 2026.)
 
 **Outputs & effects:**
 - DOM: `#td-savings-spark`, `#td-spark-caption` (sparkline), `#tsf-svg`, `#tsf-caption` (fan), `#tnw-svg`, `#tnw-stats`, `#tnw-caption` (donut), `#tws-bar`, `#tws-fill`, `#tws-marker`, `#tws-caption` (seasoning bar).
