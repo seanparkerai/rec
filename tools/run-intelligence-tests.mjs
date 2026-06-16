@@ -91,6 +91,7 @@ const { register: registerRefinementPersistence } = await import('../tests/refin
 const { register: registerRefinementView } = await import('../tests/refinement-view.test.js');
 const { register: registerRefinementScope } = await import('../tests/refinement-scope.test.js');
 const { register: registerReactionProvenance } = await import('../tests/reaction-provenance.test.js');
+const { register: registerTrendsGlance } = await import('../tests/trends-glance.test.js');
 const { register: registerSuggestionsModel } = await import('../tests/suggestions-model.test.js');
 const { register: registerSuggestionsApply } = await import('../tests/suggestions-apply.test.js');
 const { register: registerAreaRef } = await import('../tests/area-ref.test.js');
@@ -151,6 +152,7 @@ await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });
 await registerRefinementScope({ test, assert, assertEqual });
 await registerReactionProvenance({ test, assert, assertEqual });
+await registerTrendsGlance({ test, assert, assertEqual });
 await registerSuggestionsModel({ test, assert, assertEqual });
 await registerSuggestionsApply({ test, assert, assertEqual });
 await registerAreaMatch({ test, assert, assertEqual });

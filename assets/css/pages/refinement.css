@@ -320,3 +320,83 @@
 .ref-reactions__n { font-family: var(--font-data); color: var(--ink); font-weight: 500; }
 .ref-reactions__note { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); line-height: 1.5; }
 .ref-reactions__note strong { color: var(--ink); font-weight: 500; }
+
+/* ── "Trends at a glance" summary band ────────────────────────────────────────
+   anchor: Linear-dense. Four compact panels — two Chart.js canvases + two HTML
+   tables/chips — in a mobile-first single column, 2-up from 768px. Tokens only. */
+.ref-glance__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+@media (min-width: 768px) {
+  .ref-glance__grid { grid-template-columns: 1fr 1fr; }
+}
+.ref-glance__panel { margin: 0; min-width: 0; }
+.ref-glance__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: var(--space-2);
+}
+.ref-glance__chart {
+  position: relative;
+  width: 100%;
+  height: 7rem;
+}
+.ref-glance__chart--tall { height: 10rem; }
+.ref-glance__caption {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+/* Top reasons — two ranked columns with hairline mini-bars. */
+.glance-reasons { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
+@media (min-width: 480px) { .glance-reasons { grid-template-columns: 1fr 1fr; } }
+.glance-reasons__col { min-width: 0; }
+.glance-reasons__h {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-2);
+}
+.glance-reasons__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.glance-reasons__empty { font-size: var(--text-sm); color: var(--ink-muted); margin: 0; }
+.glance-reason {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  font-size: var(--text-sm);
+}
+.glance-reason__label { color: var(--ink); min-width: 0; }
+.glance-reason__n { font-family: var(--font-data); color: var(--ink-muted); }
+.glance-reason__bar {
+  grid-column: 1 / -1;
+  height: var(--space-1);
+  width: var(--pct, 0%);
+  background: var(--accent-soft);
+  border-radius: var(--rec-radius-sm);
+}
+
+/* Selected vs liked — coverage chips (colour paired with icon + text). */
+.glance-chips { list-style: none; margin: 0 0 var(--space-3); padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.glance-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--rec-radius-sm);
+  font-size: var(--text-sm);
+}
+.glance-chip__type { color: var(--ink); font-weight: 500; }
+.glance-chip__state { color: var(--ink-muted); font-size: var(--text-xs); }
+.glance-chip--liked { border-color: color-mix(in oklch, var(--accent) 45%, var(--hairline)); background: var(--accent-soft); }
+.glance-chip--liked .glance-chip__icon { color: var(--accent-ink); }
+.glance-chip--never { background: var(--paper-2); }
+.glance-chip--never .glance-chip__icon { color: var(--danger); }
+.glance-coverage__note { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); line-height: 1.45; }

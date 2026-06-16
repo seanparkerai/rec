@@ -19,8 +19,9 @@ import {
   stopSearchingArea, bringBackArea,
   dismissSuggestion, undismissSuggestion, snoozeSuggestion, unsnoozeSuggestion,
   getRefinementPreset, setRefinementPreset, resetTraining,
-  getReactionLog,
+  getReactionLog, getLearnedPreferences, getCriteria,
 } from './storage.js';
+import { renderTrendsGlance } from './refinement/trends-glance.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
 import { suggestionListHTML } from './suggestions/card.js';
 import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
@@ -267,10 +268,14 @@ function wireTraining() {
 }
 
 async function refresh() {
-  const [{ combined, groups }, meta, probation, preset, reactionLog] = await Promise.all([
+  const [{ combined, groups }, meta, probation, preset, reactionLog, prefs, criteria] = await Promise.all([
     loadCombinedSuggestions({ now: new Date() }),
     getRefinementMeta(), getScrapeProbation(), getRefinementPreset(), getReactionLog(),
+    getLearnedPreferences(), getCriteria(),
   ]);
+  // The top "Trends at a glance" band — never let a glance failure blank the page.
+  try { renderTrendsGlance({ reactionLog, prefs, criteria }); }
+  catch (e) { console.error('trends glance render error', e); }
   renderReactions(reactionLog);
   renderMeter(meta);
   renderPresets(preset);

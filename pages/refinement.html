@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css" />
   <link rel="stylesheet" href="../assets/css/base.css" />
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
 </head>
 <body>
   <div data-include="components/header.html"></div>
@@ -26,6 +27,39 @@
         <p class="lead">The engine watches your like / pass / reject feedback and, only when the evidence is strong, suggests an area or property type you might want to stop seeing. Nothing is hidden or removed without your say-so.</p>
       </div>
     </header>
+
+    <!-- Trends at a glance: concise visual summary of selections vs rejections, the
+         attributes driving them, the reasons, and search-vs-liked coverage. -->
+    <section class="card ref-section ref-glance" aria-labelledby="ref-glance-h">
+      <header class="ref-section__head">
+        <h2 id="ref-glance-h">Trends at a glance</h2>
+      </header>
+      <div class="ref-glance__grid">
+        <figure class="ref-glance__panel">
+          <figcaption class="ref-glance__title">Your reaction mix</figcaption>
+          <div class="ref-glance__chart"><canvas id="glance-mix-canvas" aria-label="Liked, passed and rejected homes as a stacked bar"></canvas></div>
+          <p class="ref-glance__caption" id="glance-mix-caption">—</p>
+          <div id="glance-mix-table" class="ref-sr-only"></div>
+        </figure>
+
+        <figure class="ref-glance__panel">
+          <figcaption class="ref-glance__title">What drives your choices</figcaption>
+          <div class="ref-glance__chart ref-glance__chart--tall"><canvas id="glance-drivers-canvas" aria-label="Strongest attributes pulling toward like or reject"></canvas></div>
+          <p class="ref-glance__caption" id="glance-drivers-caption">—</p>
+          <div id="glance-drivers-table" class="ref-sr-only"></div>
+        </figure>
+
+        <figure class="ref-glance__panel">
+          <figcaption class="ref-glance__title">Top reasons</figcaption>
+          <div id="glance-reasons" class="glance-reasons"></div>
+        </figure>
+
+        <figure class="ref-glance__panel">
+          <figcaption class="ref-glance__title">Types you search vs like</figcaption>
+          <div id="glance-coverage" class="glance-coverage"></div>
+        </figure>
+      </div>
+    </section>
 
     <!-- Honest engagement summary: genuine one-at-a-time reactions vs en-masse sweeps -->
     <section class="card ref-section" aria-labelledby="ref-reactions-h">
