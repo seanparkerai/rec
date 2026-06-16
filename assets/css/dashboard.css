@@ -17,7 +17,7 @@
 @import 'dashboard/tile-ask.css';
 @import 'dashboard/tile-extended.css';
 @import 'dashboard/tile-v3-visuals.css';
-@import 'dashboard/tile-nba.css';
+@import 'dashboard/tile-review-count.css';
 
 /* Page-specific styles */
 @import 'pages/areas.css';

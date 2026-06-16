@@ -1,20 +1,16 @@
 // meta-observations.js — v3 L5 recommendation loop. Pure, side-effect-free:
-// no DOM, no DB, no fetch, no clock except an injectable `now`. Two jobs:
+// no DOM, no DB, no fetch, no clock except an injectable `now`. One job:
 //
-//   1. detectConflicts() — when the household's LIKES contradict their stated
-//      criteria (over budget, an excluded type, below the bed minimum), surface
-//      a prompt. It NEVER edits criteria — conflicts are recommendations. A
-//      3-condition trigger keeps it off noise; a dismissed prompt stays quiet
-//      for META_OBS.DISMISS_DAYS.
+//   detectConflicts() — when the household's LIKES contradict their stated
+//   criteria (over budget, an excluded type, below the bed minimum), surface
+//   a prompt. It NEVER edits criteria — conflicts are recommendations. A
+//   3-condition trigger keeps it off noise; a dismissed prompt stays quiet
+//   for META_OBS.DISMISS_DAYS.
 //
-//   2. computeNextBestActions() — a small, ordered list of the most useful next
-//      moves, computed from timestamps/counts (un-reviewed strong matches, a
-//      recent wave to review, saved-but-unviewed homes, the cold-start nudge).
-//
-// Imported by assets/js/page-listings.js (conflict banner), the dashboard NBA
-// tile, and tests/meta-observations.test.js.
+// Imported by assets/js/suggestions/sources.js (the shared suggestion inbox)
+// and tests/meta-observations.test.js.
 
-import { META_OBS, RECENCY_DAYS } from './intelligence-constants.js';
+import { META_OBS } from './intelligence-constants.js';
 
 const norm = (s) => String(s || '').trim().toLowerCase();
 const round2 = (n) => Math.round(n * 100) / 100;
@@ -183,58 +179,4 @@ export function detectConflicts(reactions, criteria = {}, opts = {}) {
 export function dismissUntil(now = new Date(), days = META_OBS.DISMISS_DAYS) {
   const ref = now instanceof Date ? now : new Date(now);
   return new Date(ref.getTime() + days * 86_400_000).toISOString();
-}
-
-// ── Next-best-action ─────────────────────────────────────────────────────────
-
-/**
- * Compute the ordered next-best-actions from current state. Pure: scoring is
- * injected via `scoreOf(listing) -> { verdict, gated }` so this module never
- * imports the fit engine.
- * @param {object} ctx
- * @param {object} ctx.reactions  map listing_id -> { reaction, ... } (latest per listing)
- * @param {Array}  ctx.listings   live listings rows
- * @param {object} ctx.statuses   map listing_id -> personal status
- * @param {Date}   [ctx.now]
- * @param {(l)=>{verdict,gated}} [ctx.scoreOf]
- * @param {number} [ctx.coldStartMin]
- * @returns {Array<{ key, priority, text, href }>}
- */
-export function computeNextBestActions(ctx = {}) {
-  const { reactions = {}, listings = [], statuses = {}, scoreOf } = ctx;
-  const now = ctx.now ? (ctx.now instanceof Date ? ctx.now : new Date(ctx.now)) : new Date();
-  const recencyDays = ctx.recencyDays ?? RECENCY_DAYS;
-  const reactedCount = Object.keys(reactions).length;
-  const actions = [];
-
-  const isRecentAdded = (l) => {
-    const a = l?.added_date; if (!a) return false;
-    const t = new Date(a).getTime();
-    return Number.isFinite(t) && now.getTime() - t <= recencyDays * 86_400_000;
-  };
-  const reactedTo = (l) => !!reactions[l.rightmove_id];
-
-  // Cold start — nothing learned yet.
-  if (reactedCount === 0) {
-    actions.push({ key: 'nba:start', priority: 1, text: 'Start training your feed — react to a few listings.', href: 'pages/listings.html' });
-  }
-
-  // Un-reviewed strong matches (recent, not gated, not yet reacted).
-  if (typeof scoreOf === 'function') {
-    const strong = listings.filter((l) => isRecentAdded(l) && !reactedTo(l)).filter((l) => {
-      const s = scoreOf(l) || {};
-      return !s.gated && s.verdict === 'strong';
-    }).length;
-    if (strong > 0) actions.push({ key: 'nba:strong', priority: 2, text: `${strong} un-reviewed strong match${strong === 1 ? '' : 'es'} waiting.`, href: 'pages/listings.html' });
-  }
-
-  // Saved but not yet viewed.
-  const savedUnviewed = Object.values(statuses).filter((s) => s === 'saved').length;
-  if (savedUnviewed > 0) actions.push({ key: 'nba:saved', priority: 3, text: `${savedUnviewed} saved home${savedUnviewed === 1 ? '' : 's'} you haven't marked viewed.`, href: 'pages/listings.html' });
-
-  // A recent wave still to review (only when not already covered by cold start).
-  const toReview = listings.filter((l) => isRecentAdded(l) && !reactedTo(l)).length;
-  if (toReview > 0 && reactedCount > 0) actions.push({ key: 'nba:review', priority: 4, text: `${toReview} recent listing${toReview === 1 ? '' : 's'} to review.`, href: 'pages/listings.html' });
-
-  return actions.sort((a, b) => a.priority - b.priority).slice(0, ctx.max ?? META_OBS.NBA_MAX);
 }

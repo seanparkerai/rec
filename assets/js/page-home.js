@@ -16,7 +16,7 @@ import { renderReadinessTile }             from './dashboard/tile-readiness.js';
 import { renderDepositRiskTile }           from './dashboard/tile-deposit-risk.js';
 import { renderAffordabilityScenariosTile } from './dashboard/tile-affordability-scenarios.js';
 import { renderISAYTD }                    from './dashboard/tile-isa-ytd.js';
-import { renderNba }                        from './dashboard/tile-nba.js';
+import { renderReviewCount }                from './dashboard/tile-review-count.js';
 import {
   renderSavingsSpark,
   renderScenariosFan,
@@ -80,8 +80,8 @@ async function init() {
   const financesData = deriveFinances(rawFinances, { investments: rawInvestments });
   renderAll(financesData);
 
-  // v3 L5 — Next-Best-Action strip (self-contained; never blocks the bento).
-  renderNba().catch((e) => console.error('nba error', e));
+  // "Listings to review" total (self-contained; never blocks the bento).
+  renderReviewCount().catch((e) => console.error('review-count error', e));
 }
 
 function ready(fn) {

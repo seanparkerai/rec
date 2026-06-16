@@ -124,22 +124,20 @@ export const RECENCY_DAYS = 14;
 // ── Recommendation loop / meta-observations (v3 L5) ──────────────────────────
 // When learned behaviour contradicts stated criteria, surface a prompt — never
 // rewrite criteria silently. A 3-condition trigger keeps it off noise; a
-// dismissed prompt stays quiet for DISMISS_DAYS. NBA = next-best-action strip.
+// dismissed prompt stays quiet for DISMISS_DAYS.
 //   MIN_CONFLICT_LIKES   minimum violating likes before a conflict can fire.
 //   MIN_CONFLICT_SHARE   violating likes must be this share of comparable likes
 //                        (so an occasional outlier never triggers).
 //   CONFLICT_RECENCY_DAYS at least one violating like must be this recent (the
 //                        pattern must persist, not be a stale one-off).
 //   DISMISS_DAYS         a dismissed conflict prompt stays quiet this long.
-//   SAVED_STALE_DAYS     a "saved" home unactioned this long becomes an NBA.
-//   NBA_MAX              max next-best-actions shown at once.
+//   SAVED_STALE_DAYS     a "saved" home unactioned this long is considered stale.
 export const META_OBS = {
   MIN_CONFLICT_LIKES: 3,
   MIN_CONFLICT_SHARE: 0.6,
   CONFLICT_RECENCY_DAYS: 30,
   DISMISS_DAYS: 14,
   SAVED_STALE_DAYS: 7,
-  NBA_MAX: 3,
   // L7.5: only propose tightening a village buffer if it would shrink by at least
   // this many miles below the farthest liked listing (avoids churny ±0.5mi nudges).
   TIGHTEN_MARGIN_MI: 1,

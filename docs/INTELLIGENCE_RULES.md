@@ -357,14 +357,16 @@ A dismissed prompt is silenced for `DISMISS_DAYS` (14) via a `dismissed_until` I
 `learned_preferences.dismissals` (user-state; migration `learned_preferences_dismissals_l5`). Trains
 on **likes only** — pass/reject/viewed are never counted as a contradiction.
 
-**Next-best-action (`computeNextBestActions`).** An ordered, count-driven strip (no black box):
-cold-start nudge → un-reviewed strong matches → saved-but-unviewed homes → recent wave to review,
-capped at `NBA_MAX` (3). Scoring is injected via a `scoreOf` callback so the module stays pure;
-rendered above the dashboard bento (`assets/js/dashboard/tile-nba.js`).
+**Listings-to-review total (`tile-review-count.js`).** A single count above the dashboard bento:
+how many listings are still waiting for a decision on the Listings page, linking straight to it. It
+is DIRECTLY tied to the Browse feed — it runs the same pure partition pipeline
+(`listings/feed-partition.js`) with the same radius / affordability-gate / junk / refinement /
+decided / dedupe rules, so the dashboard number can never drift from the feed's "to review" total.
+*(Replaced the v3 L5 next-best-action strip, 2026-06-16.)*
 
 **Constants (`META_OBS`)** — CALIBRATED, revisable; change them and this section together:
 `MIN_CONFLICT_LIKES` 3 · `MIN_CONFLICT_SHARE` 0.6 · `CONFLICT_RECENCY_DAYS` 30 · `DISMISS_DAYS` 14 ·
-`SAVED_STALE_DAYS` 7 · `NBA_MAX` 3. *(v3 L5 — added 2026-05-31.)*
+`SAVED_STALE_DAYS` 7. *(v3 L5 — added 2026-05-31.)*
 
 ### Maintenance (deposit-risk, cont.)
 4. Commit with `docs: update intelligence rules — deposit-risk thresholds`.

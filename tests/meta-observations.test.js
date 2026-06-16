@@ -1,8 +1,8 @@
 // tests/meta-observations.test.js — v3 L5 recommendation-loop core.
 // Covers the 3-condition conflict trigger (and that it stays off noise), the
-// 14-day dismissal, each conflict kind, and the next-best-action computation.
+// 14-day dismissal, and each conflict kind.
 import {
-  detectConflicts, dismissUntil, computeNextBestActions,
+  detectConflicts, dismissUntil,
 } from '../assets/js/meta-observations.js';
 import { META_OBS } from '../assets/js/intelligence-constants.js';
 
@@ -76,30 +76,6 @@ export async function register({ test, assert, assertEqual }) {
     const later = new Date(NOW.getTime() + (META_OBS.DISMISS_DAYS + 1) * DAY);
     const back = detectConflicts(reactions, criteria, { now: later, dismissals });
     assert(back.some((c) => c.kind === 'over-budget'), 'returns after the dismissal window');
-  });
-
-  // ── next-best-action ──────────────────────────────────────────────────────
-  test('meta-obs: cold start surfaces the "start training" action first', () => {
-    const nba = computeNextBestActions({ reactions: {}, listings: [], statuses: {}, now: NOW });
-    assertEqual(nba[0].key, 'nba:start');
-  });
-
-  test('meta-obs: NBA counts un-reviewed strong matches and saved-unviewed homes', () => {
-    const listings = [
-      { rightmove_id: 'a', added_date: '2026-05-28' },
-      { rightmove_id: 'b', added_date: '2026-05-28' },
-      { rightmove_id: 'c', added_date: '2026-01-01' }, // stale → not counted
-    ];
-    const scoreOf = (l) => ({ verdict: l.rightmove_id === 'c' ? 'strong' : 'strong', gated: false });
-    const nba = computeNextBestActions({
-      reactions: { z: { reaction: 'like' } }, // non-empty → not cold start
-      listings, statuses: { x: 'saved', y: 'saved', w: 'viewed' }, scoreOf, now: NOW,
-    });
-    const strong = nba.find((a) => a.key === 'nba:strong');
-    const saved = nba.find((a) => a.key === 'nba:saved');
-    assert(strong && /2 un-reviewed strong/.test(strong.text), `strong: ${strong && strong.text}`);
-    assert(saved && /2 saved/.test(saved.text), `saved: ${saved && saved.text}`);
-    assert(nba.length <= META_OBS.NBA_MAX, 'capped at NBA_MAX');
   });
 
   // ── L7.5 geofence tuning (surfaced, never silent) ─────────────────────────
