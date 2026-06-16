@@ -2817,6 +2817,24 @@ RETURN { sdlt, legalCosts, corePurchase, furnishing, majorPurchases, grandTotal 
 
 ---
 
+#### ➕ External validation — gaps to add to the FTB model (A7)
+
+The validation review found three FTB-relevant elements missing from the finance model. Schedule each
+as a normal §3/§4 phase (none changes an existing constant — these are additive). (HomeOwners Alliance /
+David Wilson Homes, 2026.)
+
+1. **Mortgage Guarantee Scheme / "Freedom to Buy"** — made **permanent since July 2025**; supports
+   91–95% LTV lending on homes ≤ £600k, repayment-only, sole home. Model it as a high-LTV enabler
+   alongside the existing LTV tiers so a low-deposit buyer sees it as an option, not a dead end.
+2. **Explicit total transaction costs** — surface the full one-off cost stack, not just SDLT + deposit:
+   legal/conveyancing, searches, survey (RICS Level 2/3), valuation, mortgage product fee, broker fee,
+   and removals. These already partly live in `oneTimeCosts`/`computeOutlayBreakdown()` but should be a
+   named, complete checklist.
+3. **Leasehold running costs** — where the target is leasehold, include **ground rent + service charge**
+   as ongoing post-move outgoings (they affect spare-cash and lender affordability).
+
+---
+
 #### Affordability Verdict Engine (`affordability.js`)
 
 **Entry Point:** `assessAffordability({ price, finances, criteria })`
@@ -2845,6 +2863,15 @@ Where `WORST()` returns the rightmost band in ['comfortable', 'stretch', 'tight'
 incomeMultiple = ROUND((loanRequired ÷ grossIncome) × 100) ÷ 100
 ```
 Rounded to 2 decimal places for display (e.g. 4.50, 5.23).
+
+> **✅ External validation — LTI bands validated as defensible (A6):** Keep the graduated bands
+> (comfortable ≤ 4.5×, stretch ≤ 5.5×, tight ≤ 6.0×) — graduated guidance is **more defensible than a
+> hard cap**. Correct the rationale, though: 4.5× is the Bank of England FPC **"LTI flow limit"** — a
+> **lender-portfolio** regulatory cap (no more than 15% of a lender's new lending may sit at LTI ≥ 4.5×),
+> **not a borrower ceiling**. It is being relaxed in 2025–26 (firms may exceed the 15% share by consent
+> to ~30 Jun 2026), and FTB schemes already lend to ~6× (e.g. Nationwide Helping Hand at 95% LTV). So
+> a borrower above 4.5× is "stretch", not "blocked". (FCA Mortgage rule review, Sep 2025; Crowdfund
+> Insider, Jul 2025.)
 
 **Payment % Calculation (line 138):**
 ```
