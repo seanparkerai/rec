@@ -2375,7 +2375,7 @@ The following files are inviolable (§16):
   1. **LTI** = loan ÷ gross annual income → band via LTI_BANDS (comfortable ≤4.5×, stretch ≤5.5×, tight ≤6.0×)
   2. **Payment%** = monthly P&I ÷ take-home % → band via PAYMENT_BANDS_PCT (≤40%, ≤52%, ≤60%)
   3. **Spare £** = income − bills − expenses − mortgage → band via SPARE_BANDS_GBP (≥£400, ≥£100, else tight)
-- Secondary signals (not verdict drivers but flagged in whyVerdict): stressed rate (contract+3pp), LISA eligibility cliff (≤£450k), LTV tier (60/75/85/90/95)
+- Secondary signals (not verdict drivers but flagged in whyVerdict): rate-rise sensitivity (currently contract+3pp; ⚠️ to be modernised to a configurable absolute floor ~7–8% — see A5), LISA eligibility cliff (≤£450k), LTV tier (60/75/85/90/95)
 - Output: `{ verdict, headline, loanRequired, ltvPct, ltvTier, depositGapToTier, monthlyPI, monthlyPIStressed, monthlySpareAfter, bandSignals, whyVerdict }` (15+ fields)
 
 **Rendering** (`section-later.js`, `renderAffordWidget()`):
@@ -2520,7 +2520,11 @@ RETURN ROUND(m × 100) ÷ 100   // to 2 decimal places
 - £100k at 5.35%, 25y → ~£585/mo
 - £500k at 8.5%, 25y → ~3,860/mo
 
-**Calibration Note:** Rate assumed per mortgage data (`finances.mortgage.ratePctAssumed`). Stress test adds 3pp (line 119 in affordability.js: `stressedRate = rate + STRESS_UPLIFT_PP`).
+**Calibration Note:** Rate assumed per mortgage data (`finances.mortgage.ratePctAssumed`). The
+rate-rise sensitivity currently adds 3pp (line 119 in affordability.js: `stressedRate = rate + STRESS_UPLIFT_PP`).
+⚠️ **Correction required in code (A5):** there has been no FPC-mandated stress rate since 1 Aug 2022;
+modernise `STRESS_UPLIFT_PP` to a configurable absolute floor (~7–8% / reversion + ~1pp) and relabel
+"stress test" → "rate-rise sensitivity". (Bank of England, 20 Jun 2022; FCA Mortgage rule review, Sep 2025.)
 
 ---
 
@@ -2854,15 +2858,30 @@ monthlySpareAfter = totalMonthly - outgoings - monthlyPI
 ```
 Where `totalMonthly = takeHomeMonthly + (bonus excluded per house rules, line 110)` and `outgoings = bills + expenses`.
 
-**Stress Test (lines 119, 128, 139–141, 172–176):**
+**Rate-rise sensitivity (formerly "stress test") (lines 119, 128, 139–141, 172–176):**
 ```
 stressedRate = rate + STRESS_UPLIFT_PP    // line 119, STRESS_UPLIFT_PP = 3 (intelligence-constants.js:21)
 monthlyPIStressed = calcMonthlyMortgage(loanRequired, stressedRate, term)
 stressedPaymentToIncomePct = ROUND((monthlyPIStressed ÷ takeHome) × 1000) ÷ 10
 
 IF stressedPaymentToIncomePct > STRESS_WARNING_PCT (60%):  // line 172
-  ADD TO whyVerdict: "Stress test: at +3pp payment rises to X% of take-home"
+  ADD TO whyVerdict: "Rate-rise sensitivity: at +3pp payment rises to X% of take-home"
 ```
+
+> **⚠️ External validation — correction required in code (STRESS_UPLIFT_PP) (A5):** The FPC
+> **withdrew** its mandatory affordability stress test on **1 August 2022** (Bank of England,
+> 20 Jun 2022). There is now **no regulator-mandated stress rate**; lenders set their own, typically
+> ~6–8% (FCA Mortgage rule review, Sep 2025; Fox Davidson, Apr 2026). Three corrections to schedule
+> as a normal §3/§4 phase:
+> 1. **Relabel** this signal throughout from "stress test" to an illustrative **"rate-rise
+>    sensitivity"** — it is a what-if, not a regulatory pass/fail.
+> 2. **Change the default.** Replace the fixed `+3pp on the contract rate` (which over-states stress
+>    for a 2026 FTB on an already-elevated contract rate) with a **configurable** uplift defaulting to
+>    an **absolute stress floor** (~7–8%, or `reversion rate + ~1pp`). `STRESS_UPLIFT_PP` becomes one
+>    mode among several rather than the sole rule.
+> 3. Keep it a **secondary signal only** — it never drives the verdict (unchanged from today).
+> Document in `docs/INTELLIGENCE_RULES.md`: "no mandated stress rate since Aug 2022; the rate-rise
+> sensitivity is illustrative and lender-set."
 
 **Deposit Gap to Next Tier (lines 67–78, called at line 126):**
 
