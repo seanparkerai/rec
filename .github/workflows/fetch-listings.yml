@@ -38,12 +38,15 @@
 #     - `concurrency` (below) queues a second simultaneous tick behind the first so
 #       the once-per-day check can't be raced.
 #
-#   PRECISION CAVEAT: the gate guarantees the right DAY and "not before noon," but it
-#   cannot make GitHub's backlogged queue punctual — in practice the run lands noon→
-#   early-afternoon London, not 12:00:00 sharp. For minute-accurate noon, drive the
-#   workflow from an external scheduler (e.g. Supabase pg_cron + pg_net, or a hosted
-#   cron service) that calls the workflow_dispatch API at exactly 12:00 Europe/London.
-#   The fetcher also self-heals: a missed day is recovered by the 3-day recency overlap.
+#   PRIMARY TRIGGER (punctual): a Supabase pg_cron job calls this workflow's
+#   workflow_dispatch API at exactly 12:00 Europe/London (pg_cron runs on the database,
+#   so it is second-accurate — no GitHub queue backlog). See docs/FETCH_SCHEDULE.md.
+#   Those dispatch runs bypass the gate (event != schedule) and run immediately at noon.
+#
+#   The GitHub `schedule` below is now the BACKSTOP: it only does real work on a day the
+#   punctual dispatch failed to fire, because the once-per-day gate sees the noon
+#   dispatch already fetched today and skips the (hours-late) schedule tick. The fetcher
+#   also self-heals — a fully missed day is recovered by the 3-day recency overlap.
 #
 # Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
 # SUPABASE_SERVICE_ROLE_KEY.
