@@ -9,22 +9,41 @@
 #     24-hour recency window, MAX_DAYS_SINCE_ADDED=1. Comment out the `schedule`
 #     block to pause.
 #
-# Why two cron lines for one daily run (READ THIS before "simplifying"):
-#   GitHub Actions cron is UTC-only — it has no timezone field — so a single fixed
-#   cron cannot mean "noon London" year-round: London is UTC+1 in summer (BST) and
-#   UTC+0 in winter (GMT). We therefore schedule BOTH candidate UTC ticks:
-#       0 11 * * *  → 12:00 London while BST is in effect (summer)
-#       0 12 * * *  → 12:00 London while GMT is in effect (winter)
-#   and the first job step ("Noon Europe/London gate") checks the real local hour
-#   via the OS tz database (TZ=Europe/London) and SKIPS the off-season tick. Result:
-#   exactly one run per day, at 12:00 England time, with the DST boundary handled
-#   automatically and forever. Manual (workflow_dispatch) and push runs bypass the
-#   gate and always proceed.
+# Timing design (READ THIS before changing the schedule or the gate):
+#   Goal: fire the daily fetch once per day, at 12:00 noon Europe/London (England
+#   local time), DST-safe, never twice.
 #
-#   Caveat (GitHub's, not ours): scheduled workflows are best-effort and can start
-#   late under platform load — sometimes by many minutes. The gate guarantees the
-#   CALENDAR/timezone is correct; it cannot make GitHub's queue punctual to the
-#   second. For a hard SLA, trigger from an external scheduler via workflow_dispatch.
+#   Two hard facts about GitHub-hosted cron force this design:
+#     1. Cron is UTC-only (no timezone field). London is UTC+1 in summer (BST) and
+#        UTC+0 in winter (GMT), so no single fixed cron means "noon London" all year.
+#     2. Scheduled runs are best-effort and routinely START HOURS LATE under platform
+#        load — measured on THIS repo at 3.5–6.5 h late every day. So we cannot trust
+#        the fire time to land in any narrow local-time window.
+#
+#   Therefore:
+#     - We schedule TWO candidate UTC ticks that bracket noon London across DST:
+#           0 11 * * *  → 12:00 London in summer (BST); 11:00 London in winter
+#           0 12 * * *  → 13:00 London in summer;       12:00 London in winter (GMT)
+#       Because GitHub fires them late, both ticks (whenever they actually land) are
+#       funnelled through the gate below.
+#     - The "Noon Europe/London gate" job step enforces, for scheduled runs only:
+#         (a) FLOOR — never execute before 12:00 Europe/London (skips the winter
+#             11:00 tick and any early fire), and
+#         (b) ONCE-PER-DAY — query this workflow's own run history via the GitHub API
+#             and skip if a real fetch already executed today (London date). This
+#             makes the delayed/duplicate ticks idempotent so Apify is never
+#             double-triggered.
+#       Net effect: exactly one fetch per day, at the first scheduled opportunity at
+#       or after noon London. Manual (workflow_dispatch) and push runs bypass the gate.
+#     - `concurrency` (below) queues a second simultaneous tick behind the first so
+#       the once-per-day check can't be raced.
+#
+#   PRECISION CAVEAT: the gate guarantees the right DAY and "not before noon," but it
+#   cannot make GitHub's backlogged queue punctual — in practice the run lands noon→
+#   early-afternoon London, not 12:00:00 sharp. For minute-accurate noon, drive the
+#   workflow from an external scheduler (e.g. Supabase pg_cron + pg_net, or a hosted
+#   cron service) that calls the workflow_dispatch API at exactly 12:00 Europe/London.
+#   The fetcher also self-heals: a missed day is recovered by the 3-day recency overlap.
 #
 # Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
 # SUPABASE_SERVICE_ROLE_KEY.
@@ -92,32 +111,77 @@ on:
 
 permissions:
   contents: read
+  actions: read   # the noon gate reads this workflow's run history to dedupe (once-per-day)
+
+# Queue a second simultaneous tick behind the first so the once-per-day gate can't be
+# raced into a double fetch. Do not cancel in-progress — let the first run finish.
+concurrency:
+  group: fetch-listings-daily
+  cancel-in-progress: false
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
-      # DST-safe noon gate. Scheduled runs fire from TWO crons (11:00 + 12:00 UTC);
-      # only the one that is actually 12:00 in Europe/London should proceed. Manual
-      # (workflow_dispatch) and push runs are never gated — they always run.
+      # Delay-tolerant, DST-safe, once-per-day noon gate (see header for the full
+      # rationale). For SCHEDULED runs only: never execute before noon Europe/London,
+      # and skip if a real fetch already ran today. Manual/push runs bypass entirely.
       - name: Noon Europe/London gate
         id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           if [ "${{ github.event_name }}" != "schedule" ]; then
-            echo "Trigger=${{ github.event_name }} (manual/push) — bypassing noon gate, proceeding."
+            echo "Trigger=${{ github.event_name }} (manual/push) — gate bypassed, proceeding."
             echo "run=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
           NOW_LONDON=$(TZ='Europe/London' date '+%Y-%m-%d %H:%M:%S %Z (%:z)')
           HOUR_LONDON=$(TZ='Europe/London' date '+%H')
-          echo "Europe/London now: $NOW_LONDON"
-          if [ "$HOUR_LONDON" = "12" ]; then
-            echo "It is the noon hour in England — proceeding with the daily fetch."
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::notice::Off-season cron tick (London hour=$HOUR_LONDON, not 12) — the other daily cron will run at noon London. Skipping this tick."
+          TODAY_LONDON=$(TZ='Europe/London' date '+%F')
+          echo "Europe/London now: $NOW_LONDON  (date=$TODAY_LONDON hour=$HOUR_LONDON)"
+
+          # (a) FLOOR — never run before noon England time.
+          if [ "$HOUR_LONDON" -lt 12 ]; then
+            echo "::notice::Before noon in England (hour=$HOUR_LONDON) — early/off-season tick, skipping; the noon-or-later tick will run."
             echo "run=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # (b) ONCE-PER-DAY — has a real fetch already executed today (London date)?
+          # GitHub fires these crons hours late and may fire BOTH daily ticks, so we
+          # must not double-trigger Apify. A prior run "really fetched" if its job has
+          # the "Fetch listings" step with a non-skipped conclusion/status.
+          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/fetch-listings.yml/runs?per_page=50"
+          runs=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$api" || true)
+          if [ -z "$runs" ]; then
+            echo "::warning::Could not read run history for the once-per-day check — proceeding (a rare double-run is bounded by APIFY_MAX_BUDGET_USD)."
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          already=false
+          while read -r id created; do
+            [ -n "$id" ] || continue
+            [ "$id" = "${GITHUB_RUN_ID}" ] && continue
+            d=$(TZ='Europe/London' date -d "$created" '+%F')
+            [ "$d" = "$TODAY_LONDON" ] || continue
+            jobs=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${id}/jobs" || true)
+            hit=$(printf '%s' "$jobs" | jq '[.jobs[]?.steps[]? | select(.name=="Fetch listings") | select(.conclusion=="success" or .conclusion=="failure" or .status=="in_progress")] | length' 2>/dev/null || echo 0)
+            if [ "${hit:-0}" -gt 0 ]; then already=true; break; fi
+          done <<EOF
+          $(printf '%s' "$runs" | jq -r '.workflow_runs[] | "\(.id) \(.created_at)"')
+          EOF
+
+          if [ "$already" = true ]; then
+            echo "::notice::A fetch already executed today ($TODAY_LONDON London) — skipping this delayed/duplicate tick."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Noon-or-later in England and no fetch yet today — proceeding with the daily fetch."
+            echo "run=true" >> "$GITHUB_OUTPUT"
           fi
       - uses: actions/checkout@v4
         if: steps.gate.outputs.run == 'true'
