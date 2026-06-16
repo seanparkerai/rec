@@ -100,6 +100,7 @@ const { register: registerDocsConsistency } = await import('../tests/docs-consis
 const { register: registerAskTools } = await import('../tests/ask-tools.test.js');
 const { register: registerAskStorage } = await import('../tests/ask-storage.test.js');
 const { register: registerProfileSchema } = await import('../tests/profile-schema.test.js');
+const { register: registerSavingsEdit } = await import('../tests/savings-edit.test.js');
 const { runResponsiveLint } = await import('./lint-responsive.mjs');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
@@ -163,6 +164,7 @@ await registerDocsConsistency({ test, assert, assertEqual });
 await registerAskTools({ test, assert, assertEqual, fixtures });
 await registerAskStorage({ test, assert, assertEqual });
 await registerProfileSchema({ test, assert, assertEqual });
+await registerSavingsEdit({ test, assert, assertEqual });
 
 await test('responsive lint (no new violations vs baseline)', () => {
   const { regressions } = runResponsiveLint();

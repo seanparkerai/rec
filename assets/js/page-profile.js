@@ -3,6 +3,7 @@
 // Edit = native <dialog> with all fields, save persists via storage.js.
 import { getProfile, saveProfile, getCriteria, _internal } from './storage.js';
 import { getDerivedFinances } from './finance-load.js';
+import { mountSavingsEditor } from './savings-editor.js';
 import { normalizeProfile, canonicalProfile, employmentDisplay, creditDisplay, householdDisplay } from './profile-schema.js';
 import { esc, byId } from './dom.js';
 
@@ -218,6 +219,18 @@ async function init() {
   $('dlg-close')?.addEventListener('click', closeEdit);
   $('p-btn-save')?.addEventListener('click', saveEdit);
   $('p-btn-reset')?.addEventListener('click', resetToDefaults);
+
+  // Shared savings editor — updates the "Saved to date" tile (and the deposit
+  // total shown elsewhere) on save.
+  mountSavingsEditor({
+    openerId: 'p-btn-edit-savings',
+    onSaved: async () => {
+      const fin = await getDerivedFinances();
+      const crit = await getCriteria();
+      renderTiles(crit, fin);
+      setStatus('Savings updated.', 'ok');
+    },
+  });
 }
 
 init();

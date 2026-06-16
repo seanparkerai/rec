@@ -230,6 +230,35 @@ export async function getInvestments(opts = {}) {
   return fresh;
 }
 
+// v3 — investments account WRITE (user-state, §18.1; source of truth = Supabase).
+// Updates the household's investments_accounts row IN PLACE: the jsonb `data` blob
+// is replaced with the passed trading212ISA object — so callers MUST pass the full
+// merged blob (holdings / strategyEpochs / snapshot preserved), not a bare patch —
+// and the scalar current_value / earmark_pct mirror columns are kept in step.
+// Accepts the same { trading212ISA } shape getInvestments() returns. Write-through:
+// localStorage is updated immediately so consumers re-render from the new figure,
+// then the row is updated in Supabase (fire-and-forget, like _save).
+export async function saveInvestments(value) {
+  writeLocal('investments', value);
+  const isa = value?.trading212ISA || {};
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return true;
+  try {
+    const patch = { data: isa, updated_at: new Date().toISOString() };
+    if (isa.currentPortfolioValue !== undefined) patch.current_value = Number(isa.currentPortfolioValue) || 0;
+    if (isa.earmarkPct !== undefined) patch.earmark_pct = Number(isa.earmarkPct) || 0;
+    const { error } = await sb
+      .from('investments_accounts')
+      .update(patch)
+      .eq('household_id', hid);
+    if (error) throw error;
+  } catch (e) {
+    console.error('storage: write investments_accounts', e.message);
+    _toast(`Sync error (investments): ${e.message}`, true);
+  }
+  return true;
+}
+
 // v3 — investments history (row-per-month; falls back to repo JSON).
 // Returns the same shape as data/imports/trading212-history.json so the
 // existing analysePerformance() / buildSavingsSeries() consumers don't have
