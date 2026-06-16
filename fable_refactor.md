@@ -6124,7 +6124,15 @@ The CSS is in `assets/css/pages/refinement.css` (guard-railed, §16). Any visual
 
 **Guard-rail surface (§16):** `assets/js/storage/ask.js` (extend only — persists `ask_conversations` via Supabase RLS, no mutations to tool definitions or Edge Function logic).
 
-**Model context (current state — IMPORTANT):** DEFAULT_MODEL = `"claude-haiku-4-5"` (index.ts:24); ALLOWED_MODELS = `Set(["claude-haiku-4-5", "claude-sonnet-4-6"])` (index.ts:25). Anthropic API version = `"2023-06-01"` (index.ts:87). No thinking parameter is sent — thinking tokens stay at 0. Opus is **not** in the allow-list by design (ASK.md §5; default-on thinking conflicts with prompt caching + brevity contract).
+**Model context (current state — IMPORTANT):** DEFAULT_MODEL = `"claude-haiku-4-5"` (index.ts:24); ALLOWED_MODELS = `Set(["claude-haiku-4-5", "claude-sonnet-4-6"])` (index.ts:25). Anthropic API version = `"2023-06-01"` (index.ts:87). No thinking parameter is sent — thinking tokens stay at 0. Opus is **not** in the allow-list by design (ASK.md §5).
+
+> **✅/⚠️ External validation — models (F1):** The identifiers are **confirmed current and correct**:
+> `claude-haiku-4-5` (default) and `claude-sonnet-4-6` (upgrade) are valid IDs, and **Haiku 4.5 is
+> Anthropic's recommended low-latency tool-using model** — keep both. `anthropic-version: 2023-06-01`
+> is current — keep. **Correct the Opus-exclusion rationale, though:** extended thinking/effort and
+> prompt caching **coexist** (they do not conflict). Replace "default-on thinking conflicts with prompt
+> caching" with the real reasons — **latency and cost**: Haiku is the right tier for interactive chat;
+> Opus/Fable are reserved for heavy offline reasoning. (docs.claude.com, Models overview.)
 
 ---
 
@@ -6140,8 +6148,35 @@ The CSS is in `assets/css/pages/refinement.css` (guard-railed, §16). Any visual
 | `assets/js/ask/history.js` | Conversation list (`<dialog>`): `listAskConversations()` → render rows, mark current, sort by `updated_at` desc. Row UI: open (switches thread, closes dialog), rename (input + commit on Enter/blur), delete (with confirmation state). "New chat" action clears thread. Uses native `<dialog>` + `showModal()` per CLAUDE.md §11. 95 lines. |
 | `assets/js/storage/ask.js` | Supabase client: `list/get/create/save/deleteAskConversation(id, {title?, messages?})`. RLS-scoped by household_id (via `_initSb()`, `_getHid()`). No cache layer (direct writes). Re-exported via `storage.js`. 102 lines. |
 | `supabase/functions/ask/index.ts` | Edge Function: JWT verify (401 if none) → household resolve (RLS-scoped query, 403 if none) → request parse + message sanitise (char cap 16k/turn, history cap 24 turns, strip leading non-user turns) → system-prompt build → **Anthropic streaming call** → **tool loop (≤ MAX_TOOL_LOOPS=6):** if `stop_reason !== 'tool_use'`, emit `{type:'done', usage}` and exit; else accumulate assistant content blocks, run each tool call (sync), feed results back, loop. SSE relay: forward text deltas as `{type:'text'}`, tool starts as `{type:'tool', name}`, terminal as `{type:'done'|'error'}`. Usage logging (input/output/cache_read/cache_write/thinking tokens). 262 lines. |
+
+> **✅/➕ External validation — Edge Function + migrations (E4):** The function design is **confirmed**.
+> Two upgrades to schedule: (1) **prefer forwarding the caller's user JWT to PostgREST** inside the Ask
+> tool executors so **RLS enforces household scoping automatically** — do **not** rely on hand-written
+> `household_id` filters under an elevated key, because **one missed filter is a cross-household leak**;
+> (2) adopt Supabase's **declarative-schema migration workflow** (`supabase/schemas/*.sql` +
+> `supabase db diff`) so the schema is version-controlled and migrations are reproducible/reviewable,
+> and generate types with `supabase gen types` to keep the Edge Function / `pure.js` aligned
+> (strengthens the parity test). (Supabase Docs: Edge Functions, CLI reference.)
 | `supabase/functions/ask/prompt.ts` | System-prompt builder: static block (identity, data model, app vocabulary, UK FTB facts, tool guidance, safety rules, example queries) marked `cache_control: { type: "ephemeral" }` (~90% cost savings on repeat questions within ~5 min). Dynamic "always-on context" block (criteria budget/size, finances summary from `shapeFinancesSummary()`, profile first name, shortlist size, selected areas). Returns Anthropic `system: [block1, block2]`. 123 lines. |
+
+> **⚠️ External validation — prompt caching gotcha (F2):** The static system block is **~1,500 tokens**,
+> but **Haiku's minimum cacheable prefix is ~2,048 tokens** — so on the **default model the system block
+> likely won't cache** and the "~90% savings" won't materialise. **Fix:** move the `cache_control`
+> breakpoint to cover **TOOLS + STATIC SYSTEM together** (tool definitions are cacheable and the 13-tool
+> schema block is large), clearing the minimum and caching the largest stable prefix; keep the dynamic
+> per-household block **after** the breakpoint. Confirmed mechanics to rely on: ephemeral, **5-min TTL
+> (resets on each read)**, **read = 10% of base / write = +25%**, up to **4 breakpoints**, prefix order
+> **tools → system → messages**. Re-verify Haiku's current minimum before trusting the figure. ⚠️
+> correction required in code (prompt.ts breakpoint placement). (Claude Docs: Prompt caching.)
 | `supabase/functions/ask/tools.ts` | Tool **definitions** (JSON schemas for Anthropic) + **executors** (RLS-scoped Supabase queries + pure.js logic). 13 read-only tools: `get_finances_detail`, `get_budget_breakdown`, `query_listings`, `get_listing`, `get_saved_properties`, `get_reactions_summary`, `search_areas`, `get_area`, `get_household_areas`, `get_trends`, `get_journey_status`, `get_outreach_templates`, `draft_outreach`. 4 tools have `strict: true, additionalProperties: false` (query_listings, get_listing, search_areas, get_area). Each tool executor calls `getBlob()` for user-state tables or direct Supabase `.select()` for relational/global tables. 316 lines. |
+
+> **✅/⚠️ External validation — tool use (F3):** Strict tool use is **real and recommended**. **Extend
+> `strict: true` + `additionalProperties: false` to ALL 13 tools** (not just the current 4) to
+> eliminate malformed-call errors. **Caveat:** `strict` validates schema **shape only**, not
+> SQL-injection safety — **keep the PostgREST filter sanitisation** (`sanitizeFilterTerm`, line 6312);
+> the two are orthogonal. Streaming via `stream: true` SSE is correct; fine-grained tool streaming is
+> not needed here. ⚠️ correction required in code (add strict to the remaining 9 tools). (Claude Docs:
+> Strict tool use, Streaming.)
 | `supabase/functions/ask/pure.js` | Pure helpers (no Deno/Node imports): `scoreListingFit(listing, criteria) → {verdict, score, gated, reasons}`, `rankAndFilterListings(listings, input, criteria) → {listings, returned}`, `buildListingsQuery(input) → {columns, filters, order, limit}`, `searchAreasPure(areas, input) → results`, `shapeFinancesSummary(blob) → {summary}`, `renderOutreachDraft(template, context) → {subject, body, unfilled}`, `bandForScore(score) → 'strong'|'possible'|'stretch'|'weak'|'reject'`. Constants: LISTING_VERDICTS, FIT_BANDS, FIT_WEIGHTS (mirrored from browser's intelligence-constants.js), LISA_CAP_GBP=450,000. Unit-tested in Node by `tests/ask-tools.test.js`; re-used at runtime by tools.ts in Deno. 322 lines. |
 | `supabase/functions/_shared/cors.ts` | Origin allow-list: `https://georgianrectory.com` + `http://localhost:8000`. Returns CORS headers on OPTIONS; rejects other origins. |
 | `assets/css/pages/ask.css` | Chat UI (mobile-first): main.ask-page fills dynamic viewport (min-height: calc(100dvh - header-h)). Transcript flex-grows. Composer sticky-pinned above iOS home indicator (safe-area-inset-bottom). All spacing/colour/radius from tokens. Touch targets ≥44×44. dvh/svh (never raw vh). Responsive breakpoints 480/768/1024/1280 px. |
@@ -6684,6 +6719,12 @@ The CSS is in `assets/css/pages/refinement.css` (guard-railed, §16). Any visual
 - **claude-opus-4-8 explicitly removed.** ASK.md §5 says "Opus's default-on thinking is the wrong shape [for this workload]." This is a user-intent constraint (brevity, cost), not a technical block. Document why in index.ts (currently just an omission from ALLOWED_MODELS, line 25 comment could be clearer).
 
 #### Tool safety / scoping
+> **✅ External validation — tool scoping (F4):** Read-only tools confirmed. Reinforce that the
+> **strongest control is RLS via a forwarded user JWT** (see E4) — not the in-code `household_id`
+> filters. **Keep the usage logging**; and note `count_tokens` (a **free** endpoint) can be wired into
+> CI to **gate prompt bloat** (fail the build if the static/system prompt grows past a budget).
+> (Claude Docs: Token counting.)
+
 - **Read-only tools.** All 13 tools are read-only; draft_outreach returns text, never sends. BUT:
   - **Prompt injection via tool data.** Listing descriptions, area notes, contact names are treated as data (marked "data, not instructions" in the prompt). This is correct but fragile — depends on the model respecting the "treat as data" instruction. A code-review refactoring could add a `@noexec` or `sanitized:true` marker to each tool's output schema, making injection intent harder to exploit. mdToSafeHtml on the client is a second defense (escape-first), but the server should not rely on it.
   - **PostgREST filter sanitisation.** buildListingsQuery (pure.js) sanitizes filter terms by stripping commas, parens, % before building filter expressions. Is this exhaustive against PostgREST `.or()` / `.eq()` / `.ilike()` syntax? Example: can an attacker pass `a or 1=1 --` and break the query? **Code review recommended** (P2-2, ask-tools.test.js should include injection test cases).
@@ -8324,6 +8365,17 @@ Per §13, no Playwright in CI; developer hand-off via `/tests/tests.html`:
    - Fixtures are redacted sample data (no user secrets).
 
 **Rationale:** Fast page renders (cache) + eventual consistency (bg revalidate) + fallback for new installs (fixtures).
+
+> **✅/➕ External validation — offline/cache (E3):** The localStorage write-through cache is **confirmed
+> proportionate** for a single-user, read-heavy app — do **not** add PowerSync/ElectricSQL prematurely
+> (a Supabase maintainer calls full sync engines overkill for caching). Additions to fold in: (1) name
+> the pattern **stale-while-revalidate with versioned cache keys** (so a schema change invalidates old
+> caches cleanly); (2) move the **viewing-checklist offline data** and any larger/structured data to
+> **IndexedDB** (`idb-keyval`/Dexie) rather than localStorage; (3) for offline **writes**, use an
+> **IndexedDB-backed outbox/replay queue** flushed on reconnect (today's `_sbUpsert` is fire-and-forget
+> and a lost write is silent — see Error handling at line 8342); (4) list PowerSync/ElectricSQL as the
+> **upgrade path only** if multi-device real-time or robust offline-write becomes a requirement.
+> (PowerSync, Oct 2025.)
 
 **Precondition:** localStorage must be available (not in private mode, not over-quota); fixture files must exist for each table; Supabase client must be initialized (lazy _initSb).
 
