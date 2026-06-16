@@ -101,6 +101,28 @@ test('purge tool reuses the baseline + fingerprint contract (no drift, v3 P4)', 
     'purge must reuse the fingerprint suppression contract (propertyFingerprint + isDecided)');
 });
 
+test('household_areas supports a reversible inactive (pause) status', async () => {
+  // The per-household area selection layer must offer a reversible pause, distinct
+  // from a hard delete. Guard the contract end-to-end without a browser import:
+  //   1. the storage layer exposes setHouseholdAreaStatus + an includeInactive read,
+  //   2. the active-only read path that listings/map rely on is preserved,
+  //   3. the sync doc records the {active, inactive, removed} status domain.
+  const storage = await readFile(resolve(root, 'assets/js/storage/listings.js'), 'utf8');
+  assert(/export async function setHouseholdAreaStatus\(/.test(storage),
+    'storage must export setHouseholdAreaStatus(area_id, status)');
+  assert(/status !== 'active' && status !== 'inactive'/.test(storage),
+    'setHouseholdAreaStatus must constrain status to active|inactive');
+  assert(/includeInactive/.test(storage),
+    'getHouseholdAreas must accept includeInactive to surface paused areas');
+  assert(/\.eq\('status', 'active'\)/.test(storage),
+    'the default (active-only) read path must be preserved for listings/map');
+  assert(/\.in\('status', \['active', 'inactive'\]\)/.test(storage),
+    'includeInactive must read active + inactive links');
+  const doc = await readFile(resolve(root, 'docs/SUPABASE_SYNC.md'), 'utf8');
+  assert(/`status` ∈ \{`active`, `inactive`, `removed`\}/.test(doc),
+    'SUPABASE_SYNC.md must document the household_areas status domain');
+});
+
 // ── Offline: repo content structure ──────────────────────────────────────────
 
 test('all area files match schema', async () => {

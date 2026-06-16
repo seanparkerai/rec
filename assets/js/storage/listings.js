@@ -33,22 +33,31 @@ export async function getHouseTypes()   { return await loadJSON('house-types'); 
 // (id, coords, coordsSource, active, geofence/searchRadiusMi, houseTypeIds) are
 // never altered. Offline / pre-auth / no-household → falls back to the full catalog
 // so local dev + tests still render.
-const _HA_KEY = 'household-areas';
-const _withProvenance = (rec, addedVia) => ({
+const _HA_KEY = 'household-areas';            // active-only (the default — listings/map/property rely on it)
+const _HA_ALL_KEY = 'household-areas:all';    // active + inactive (the management views only)
+const _withProvenance = (rec, addedVia, status = 'active') => ({
   ...rec,
   verified: rec.verified ?? true,
   source: rec.source ?? 'curated',
   _addedVia: addedVia,
+  _status: status,
 });
 
-async function _composeHouseholdAreas() {
+// Compose the household's area records. Default = active links only (every
+// consumer's existing contract). With includeInactive, paused ('inactive') links
+// are included too and each record carries its link `_status` so a management
+// view can distinguish active from paused and offer a reactivate control.
+async function _composeHouseholdAreas(includeInactive = false) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return null; // no household context — caller falls back to catalog
-  const { data, error } = await sb
+  let query = sb
     .from('household_areas')
     .select('area_id, added_via, status')
-    .eq('household_id', hid)
-    .eq('status', 'active');
+    .eq('household_id', hid);
+  query = includeInactive
+    ? query.in('status', ['active', 'inactive'])
+    : query.eq('status', 'active');
+  const { data, error } = await query;
   if (error) throw error;
   const links = data ?? [];
   if (links.length === 0) return [];
@@ -63,32 +72,35 @@ async function _composeHouseholdAreas() {
   const out = [];
   for (const l of links) {
     const rec = byId.get(l.area_id) ?? stubById.get(l.area_id);
-    if (rec) out.push(_withProvenance(rec, l.added_via));
+    if (rec) out.push(_withProvenance(rec, l.added_via, l.status));
   }
   return out;
 }
 
-export async function getHouseholdAreas({ onUpdate } = {}) {
-  const cached = readLocal(_HA_KEY);
+export async function getHouseholdAreas({ onUpdate, includeInactive = false } = {}) {
+  const key = includeInactive ? _HA_ALL_KEY : _HA_KEY;
+  const cached = readLocal(key);
   if (cached !== null) {
-    _composeHouseholdAreas().then((fresh) => {
+    _composeHouseholdAreas(includeInactive).then((fresh) => {
       if (fresh === null) return;
       if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
-        writeLocal(_HA_KEY, fresh);
+        writeLocal(key, fresh);
         if (onUpdate) onUpdate(fresh);
       }
     }).catch(() => {});
     return cached;
   }
   let fresh = null;
-  try { fresh = await _composeHouseholdAreas(); }
+  try { fresh = await _composeHouseholdAreas(includeInactive); }
   catch (e) { console.error('storage: read household_areas', e.message); }
   if (fresh === null) return await getAreaCatalog(); // offline / pre-auth fallback
-  writeLocal(_HA_KEY, fresh);
+  writeLocal(key, fresh);
   return fresh;
 }
 
-const _invalidateHouseholdAreas = () => removeLocal(_HA_KEY);
+// Both cache keys must clear together: any selection/status change can move a row
+// between the active-only and active+inactive views.
+const _invalidateHouseholdAreas = () => { removeLocal(_HA_KEY); removeLocal(_HA_ALL_KEY); };
 
 // Link an EXISTING catalog area (curated or an already-created stub) to the
 // current household. Idempotent (upsert on the composite PK).
@@ -105,6 +117,32 @@ export async function addHouseholdAreaByCatalog(area_id, added_via = 'catalog-ma
     return true;
   } catch (e) {
     console.error('storage: addHouseholdAreaByCatalog', e.message);
+    _toast(`Sync error (areas): ${e.message}`, true);
+    return false;
+  }
+}
+
+// Pause or resume an area for the current household (reversible). Flips
+// household_areas.status between 'active' and 'inactive'. An inactive link is
+// excluded from the active-only read path (listings feed, map, the default areas
+// list) and from the fetcher's demand set, but stays visible via
+// getHouseholdAreas({ includeInactive }) so the user can reactivate it. The global
+// catalog row is untouched; full removal is removeHouseholdArea (hard delete).
+export async function setHouseholdAreaStatus(area_id, status) {
+  if (status !== 'active' && status !== 'inactive') {
+    console.error('storage: setHouseholdAreaStatus — invalid status', status);
+    return false;
+  }
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid || !area_id) return false;
+  try {
+    const { error } = await sb.from('household_areas')
+      .update({ status }).eq('household_id', hid).eq('area_id', area_id);
+    if (error) throw error;
+    _invalidateHouseholdAreas();
+    return true;
+  } catch (e) {
+    console.error('storage: setHouseholdAreaStatus', e.message);
     _toast(`Sync error (areas): ${e.message}`, true);
     return false;
   }

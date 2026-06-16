@@ -26,8 +26,10 @@ doc, test, or rule that states a different count is wrong and must be reconciled
   log + `overrides` Layer-3 intent + dismissals), `area_confirmations` (blob of user-confirmed area
   locations), `household_areas` (**relational**, PK `(household_id, area_id)` — the per-household
   area *selection* layer over the global `areas` catalog; composed by `storage.js#getHouseholdAreas`;
-  its migration also added a gated `areas` INSERT policy for `source='household-onboarding'`
-  provisional stubs only), `ask_conversations` (Ask feature — natural-language assistant chat
+  `status` ∈ {`active`, `inactive`, `removed`} — `active` is searched + shown, `inactive` is a
+  reversible per-household pause (hidden from the listings feed + excluded from the fetcher's demand
+  set, still listed for reactivation via `getHouseholdAreas({ includeInactive })`); its migration also
+  added a gated `areas` INSERT policy for `source='household-onboarding'` provisional stubs only), `ask_conversations` (Ask feature — natural-language assistant chat
   threads; one row/conversation: `title` + `messages` jsonb of the final user/assistant text turns;
   RLS via `is_household_member()`, FOR ALL. Browser-owned persistence via `storage/ask.js`; the Edge
   Function `ask` only *reads* user state).
