@@ -345,12 +345,18 @@
   height: 7rem;
 }
 .ref-glance__chart--tall { height: 10rem; }
+.ref-glance__chart.is-hidden { display: none; } /* collapse empty canvas under text fallback */
 .ref-glance__caption {
   margin: var(--space-2) 0 0;
   font-size: var(--text-sm);
   color: var(--ink-muted);
   line-height: 1.45;
 }
+/* Text fallback table (shown when Chart.js is unavailable — .ref-sr-only removed by JS). */
+.ref-glance__panel table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); margin-top: var(--space-2); }
+.ref-glance__panel caption { text-align: left; color: var(--ink-muted); font-size: var(--text-xs); padding-bottom: var(--space-1); }
+.ref-glance__panel th { text-align: left; font-weight: 500; color: var(--ink); padding: var(--space-1) 0; }
+.ref-glance__panel td { text-align: right; font-family: var(--font-data); color: var(--ink-muted); padding: var(--space-1) 0; }
 
 /* Top reasons — two ranked columns with hairline mini-bars. */
 .glance-reasons { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }

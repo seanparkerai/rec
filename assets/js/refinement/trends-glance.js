@@ -119,19 +119,42 @@ function chartBase() {
   };
 }
 
+// Chart.js is a deferred CDN script; if it's blocked, slow, or the page is offline it
+// may be missing when we render. The band must never look broken, so the caption +
+// accessible data table are written FIRST (independent of Chart.js), and the hidden
+// table is revealed as a visible text fallback when the chart can't be drawn.
+function chartReady() { return typeof window.Chart !== 'undefined' && typeof window.Chart === 'function'; }
+
+/** Collapse the (empty) canvas box when we're showing a text fallback or have no data. */
+function setChartVisible(canvas, visible) {
+  canvas?.closest('.ref-glance__chart')?.classList.toggle('is-hidden', !visible);
+}
+
 function renderMixChart(mix) {
   const canvas = document.getElementById('glance-mix-canvas');
   const caption = document.getElementById('glance-mix-caption');
   const table = document.getElementById('glance-mix-table');
-  if (!canvas || typeof window.Chart === 'undefined') return;
-  charts.mix?.destroy();
-
   const graded = mix.liked + mix.rejected;
-  if (mix.total === 0) {
-    if (caption) caption.textContent = 'React to a few homes to see your keep-vs-reject split.';
-    if (table) table.textContent = '';
-    return;
+
+  if (caption) {
+    caption.textContent = mix.total === 0
+      ? 'React to a few homes to see your keep-vs-reject split.'
+      : `You like ${graded ? Math.round((mix.liked / graded) * 100) : 0}% of the homes you judge — ${mix.liked} kept, ${mix.rejected} rejected, ${mix.passed} skipped.`;
   }
+  if (table) {
+    table.innerHTML = mix.total === 0 ? '' : `<table><caption>Reaction totals</caption><tbody>
+      <tr><th scope="row">Liked</th><td>${mix.liked}</td></tr>
+      <tr><th scope="row">Passed</th><td>${mix.passed}</td></tr>
+      <tr><th scope="row">Rejected</th><td>${mix.rejected}</td></tr></tbody></table>`;
+  }
+
+  charts.mix?.destroy();
+  charts.mix = null;
+  if (!canvas || mix.total === 0) { table?.classList.add('ref-sr-only'); setChartVisible(canvas, false); return; }
+  if (!chartReady()) { table?.classList.remove('ref-sr-only'); setChartVisible(canvas, false); return; } // text fallback
+  table?.classList.add('ref-sr-only');
+  setChartVisible(canvas, true);
+
   const base = chartBase();
   charts.mix = new window.Chart(canvas.getContext('2d'), {
     type: 'bar',
@@ -155,31 +178,39 @@ function renderMixChart(mix) {
       },
     },
   });
-  if (caption) {
-    const pct = graded ? Math.round((mix.liked / graded) * 100) : 0;
-    caption.textContent = `You like ${pct}% of the homes you judge — ${mix.liked} kept, ${mix.rejected} rejected, ${mix.passed} skipped.`;
-  }
-  if (table) {
-    table.innerHTML = `<table><caption>Reaction totals</caption><tbody>
-      <tr><th scope="row">Liked</th><td>${mix.liked}</td></tr>
-      <tr><th scope="row">Passed</th><td>${mix.passed}</td></tr>
-      <tr><th scope="row">Rejected</th><td>${mix.rejected}</td></tr></tbody></table>`;
-  }
 }
 
 function renderDriversChart(derived) {
   const canvas = document.getElementById('glance-drivers-canvas');
   const caption = document.getElementById('glance-drivers-caption');
   const table = document.getElementById('glance-drivers-table');
-  if (!canvas || typeof window.Chart === 'undefined') return;
-  charts.drivers?.destroy();
-
   const rows = topDrivers(derived, 6);
-  if (rows.length === 0) {
-    if (caption) caption.textContent = 'Once the engine has enough signal, the attributes driving your choices appear here.';
-    if (table) table.textContent = '';
-    return;
+
+  if (caption) {
+    if (rows.length === 0) {
+      caption.textContent = 'Once the engine has enough signal, the attributes driving your choices appear here.';
+    } else {
+      const pos = rows.find((r) => r.weight > 0);
+      const neg = rows.find((r) => r.weight < 0);
+      const parts = [];
+      if (pos) parts.push(`strongest pull: ${pos.label}`);
+      if (neg) parts.push(`biggest turn-off: ${neg.label}`);
+      caption.textContent = parts.length ? `${parts.join(' · ')}.` : 'Your preference signals are still settling.';
+    }
   }
+  if (table) {
+    table.innerHTML = rows.length === 0 ? '' : `<table><caption>Preference drivers (signed weight)</caption><tbody>${
+      rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th><td>${r.weight >= 0 ? 'like' : 'reject'} ${r.weight.toFixed(2)}</td></tr>`).join('')
+    }</tbody></table>`;
+  }
+
+  charts.drivers?.destroy();
+  charts.drivers = null;
+  if (!canvas || rows.length === 0) { table?.classList.add('ref-sr-only'); setChartVisible(canvas, false); return; }
+  if (!chartReady()) { table?.classList.remove('ref-sr-only'); setChartVisible(canvas, false); return; } // text fallback
+  table?.classList.add('ref-sr-only');
+  setChartVisible(canvas, true);
+
   const base = chartBase();
   const accent = cssVar('--accent');
   const danger = cssVar('--danger');
@@ -205,19 +236,6 @@ function renderDriversChart(derived) {
       },
     },
   });
-  const pos = rows.find((r) => r.weight > 0);
-  const neg = rows.find((r) => r.weight < 0);
-  if (caption) {
-    const parts = [];
-    if (pos) parts.push(`strongest pull: ${pos.label}`);
-    if (neg) parts.push(`biggest turn-off: ${neg.label}`);
-    caption.textContent = parts.length ? `${parts.join(' · ')}.` : 'Your preference signals are still settling.';
-  }
-  if (table) {
-    table.innerHTML = `<table><caption>Preference drivers (signed weight)</caption><tbody>${
-      rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th><td>${r.weight >= 0 ? 'like' : 'reject'} ${r.weight.toFixed(2)}</td></tr>`).join('')
-    }</tbody></table>`;
-  }
 }
 
 function reasonColumn(title, items, empty) {
@@ -267,11 +285,25 @@ function renderCoverage(criteria, derived) {
   el.innerHTML = `<ul class="glance-chips">${chips}</ul><p class="glance-coverage__note">${note}</p>`;
 }
 
-/** Render the whole "Trends at a glance" band. Called from page-refinement.js refresh(). */
+let _lastArgs = null;     // remembered so we can upgrade text fallback → chart on Chart load
+let _loadHooked = false;
+
+/** Render the whole "Trends at a glance" band. Called from page-refinement.js refresh().
+ *  Each panel renders independently — one panel throwing must not blank the rest. */
 export function renderTrendsGlance({ reactionLog, prefs, criteria }) {
+  _lastArgs = { reactionLog, prefs, criteria };
   const derived = prefs?.derived || {};
-  renderMixChart(reactionMix(reactionLog));
-  renderDriversChart(derived);
-  renderReasons(reactionLog || []);
-  renderCoverage(criteria || {}, derived);
+  const safe = (fn) => { try { fn(); } catch (e) { console.error('trends-glance panel error', e); } };
+  safe(() => renderMixChart(reactionMix(reactionLog)));
+  safe(() => renderDriversChart(derived));
+  safe(() => renderReasons(reactionLog || []));
+  safe(() => renderCoverage(criteria || {}, derived));
+
+  // If Chart.js hadn't loaded yet, re-render once it does so the charts replace the text
+  // fallback (defer ordering normally makes this a no-op, but offline/slow CDNs and cache
+  // races can land us here).
+  if (!chartReady() && !_loadHooked && typeof window !== 'undefined') {
+    _loadHooked = true;
+    window.addEventListener('load', () => { if (chartReady() && _lastArgs) renderTrendsGlance(_lastArgs); }, { once: true });
+  }
 }
