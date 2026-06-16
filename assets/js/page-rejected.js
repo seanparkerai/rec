@@ -48,12 +48,12 @@ function buildRow(entry) {
       el('a', { class: 'rejected-title', href: dossierHref(l.rightmove_id) }, title),
       place ? el('span', { class: 'rejected-place' }, place) : null,
     ].filter(Boolean)),
-    el('td', {}, l.property_type || '—'),
-    el('td', {}, entry.areaName || '—'),
-    el('td', { class: 'num' }, l.beds != null ? String(l.beds) : '—'),
-    el('td', { class: 'num' }, fmtPrice(l.price)),
-    el('td', {}, [verdictBadge(entry.reaction)]),
-    el('td', { class: 'num' }, fmtDate(entry.created_at)),
+    el('td', { 'data-label': 'Type' }, l.property_type || '—'),
+    el('td', { 'data-label': 'Area' }, entry.areaName || '—'),
+    el('td', { class: 'num', 'data-label': 'Beds' }, l.beds != null ? String(l.beds) : '—'),
+    el('td', { class: 'num', 'data-label': 'Price' }, fmtPrice(l.price)),
+    el('td', { 'data-label': 'Verdict' }, [verdictBadge(entry.reaction)]),
+    el('td', { class: 'num', 'data-label': 'Actioned' }, fmtDate(entry.created_at)),
   ]);
 }
 
