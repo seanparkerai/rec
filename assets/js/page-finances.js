@@ -2,6 +2,7 @@
 // All rendering is delegated to assets/js/finances/section-*.js modules.
 import { getFinances, getCriteria, getInvestments } from './storage.js';
 import { deriveFinances } from './finance-derive.js';
+import { mountSavingsEditor } from './savings-editor.js';
 
 import { renderTiles }               from './finances/section-deposit.js';
 import { renderNowFlow }             from './finances/section-flow.js';
@@ -72,6 +73,16 @@ async function init() {
     try { criData = await getCriteria(); } catch (e) { console.error('criteria fetch failed', e); criData = null; }
     renderEverything();
     initTopicNav();
+    // Editing cash savings / ISA value re-derives the deposit total everywhere.
+    mountSavingsEditor({
+      openerId: 'edit-savings-btn',
+      onSaved: async () => {
+        try { rawInvestments = await getInvestments(); } catch { /* keep prior */ }
+        const rawFin = await getFinances();
+        finData = deriveFinances(rawFin, { investments: rawInvestments });
+        renderEverything();
+      },
+    });
   } catch (e) {
     console.error('finances init error', e);
   }
