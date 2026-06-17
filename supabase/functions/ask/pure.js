@@ -321,6 +321,77 @@ export function shapeFinancesSummary(raw, investments = null) {
   };
 }
 
+// ── Context-window guards (Ask plan: keep the upstream prompt under the model cap) ──
+// The Edge Function re-sends the WHOLE conversation to Anthropic on every tool-loop
+// iteration. Incoming history is capped (index.ts MAX_HISTORY_TURNS/MAX_TURN_CHARS),
+// but each loop also APPENDS an assistant tool_use turn + a user tool_result turn, and
+// a tool_result is an unbounded JSON.stringify of the DB read. Left unchecked these
+// accumulate and overflow the 200k-token window ("prompt is too long"). These two pure
+// helpers bound it: capToolResult bounds a single result; fitConvoToBudget bounds the
+// whole thread. Pure + unit-tested here; index.ts only applies them.
+
+const DEFAULT_TOOL_RESULT_CHARS = 24_000;
+
+/**
+ * Serialise a tool result for a tool_result block, bounding its length so one large
+ * read (a full area record, a listing dossier) cannot dominate the context window.
+ * tool_result content is a free-form STRING for Anthropic, so a truncated-but-clearly-
+ * marked payload is valid — it need not stay parseable JSON.
+ * @param {unknown} result    the tool executor's return value
+ * @param {number}  maxChars  hard character cap (default 24k ≈ ~7k tokens)
+ * @returns {string} the (possibly truncated) tool_result content string
+ */
+export function capToolResult(result, maxChars = DEFAULT_TOOL_RESULT_CHARS) {
+  const s = typeof result === 'string' ? result : JSON.stringify(result ?? null);
+  const cap = Math.max(0, Number(maxChars) || 0);
+  if (!cap || s.length <= cap) return s;
+  const omitted = s.length - cap;
+  return s.slice(0, cap) +
+    `\n…[result truncated: ${omitted} more characters omitted to fit the model context window]`;
+}
+
+/** Approximate the character weight of a messages array (string or block content). */
+export function estimateConvoChars(convo) {
+  let n = 0;
+  for (const m of (Array.isArray(convo) ? convo : [])) {
+    if (!m) continue;
+    n += typeof m.content === 'string' ? m.content.length : JSON.stringify(m.content ?? '').length;
+  }
+  return n;
+}
+
+/**
+ * Trim the oldest turns from a conversation so it fits a character budget, WITHOUT
+ * breaking Anthropic's tool_use/tool_result pairing. The thread may only be cut at a
+ * "clean" boundary — a user turn whose content is a plain string — because a user turn
+ * led by tool_result blocks references the assistant turn immediately before it, and
+ * orphaning that pairing is a 400. We keep the EARLIEST clean-start whose tail fits the
+ * budget (most context retained); if none fits, fall back to the latest clean-start
+ * (smallest valid tail). Tool pairs always sit between clean boundaries as whole units,
+ * so any chosen cut preserves every surviving pair.
+ * @param {object[]} convo    the messages array sent upstream
+ * @param {number}   maxChars character budget for the whole array
+ * @returns {object[]} the same array, or a trimmed suffix of it
+ */
+export function fitConvoToBudget(convo, maxChars) {
+  if (!Array.isArray(convo) || !convo.length) return Array.isArray(convo) ? convo : [];
+  const cap = Math.max(0, Number(maxChars) || 0);
+  if (!cap || estimateConvoChars(convo) <= cap) return convo;
+
+  const cleanStarts = [];
+  for (let i = 0; i < convo.length; i++) {
+    const m = convo[i];
+    if (m && m.role === 'user' && typeof m.content === 'string') cleanStarts.push(i);
+  }
+  if (!cleanStarts.length) return convo; // no safe cut point — leave the thread intact
+
+  let chosen = cleanStarts[cleanStarts.length - 1]; // aggressive fallback: smallest valid tail
+  for (const s of cleanStarts) {
+    if (estimateConvoChars(convo.slice(s)) <= cap) { chosen = s; break; }
+  }
+  return chosen === 0 ? convo : convo.slice(chosen);
+}
+
 /** Resolve a dotted path ("listing.address") against a nested context object. */
 function lookupPath(ctx, path) {
   return String(path).split('.').reduce((o, k) => (o == null ? undefined : o[k]), ctx);

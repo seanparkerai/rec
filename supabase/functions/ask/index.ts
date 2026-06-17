@@ -12,6 +12,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { CORS } from "../_shared/cors.ts";
 import { TOOLS, runTool, type ToolCtx } from "./tools.ts";
 import { buildSystemPrompt } from "./prompt.ts";
+import { capToolResult, fitConvoToBudget } from "./pure.js";
 
 const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 // This is a thin natural-language front-end over the household's own Supabase
@@ -27,6 +28,14 @@ const MAX_TOOL_LOOPS = 6;
 const MAX_TOKENS = 1024;            // runaway backstop behind the P1-3 brevity contract
 const MAX_HISTORY_TURNS = 24;        // cap conversation length sent upstream
 const MAX_TURN_CHARS = 16_000;       // per-turn hard char cap (abuse guard)
+// Context-window guards: the whole conversation (incl. accumulated tool_result turns)
+// is re-sent on every tool-loop iteration, so it must stay under the model's 200k-token
+// window. MAX_TOOL_RESULT_CHARS bounds a single read; MAX_CONVO_CHARS bounds the thread
+// sent upstream (~140k tokens, leaving headroom for system + tools + the reply);
+// MIN_CONVO_CHARS is the aggressive budget for the one retry after a 400 "prompt too long".
+const MAX_TOOL_RESULT_CHARS = 24_000;
+const MAX_CONVO_CHARS = 480_000;
+const MIN_CONVO_CHARS = 120_000;
 
 // Outreach templates are public static JSON on the deployed site.
 const TEMPLATES_URL = Deno.env.get("OUTREACH_TEMPLATES_URL") ??
@@ -78,17 +87,42 @@ Deno.serve(async (req) => {
       const convo: any[] = [...messages];
       const usageTotals = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, thinking: 0 };
 
+      const callAnthropic = (msgs: unknown[]) =>
+        fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "x-api-key": ANTHROPIC_KEY,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ model, max_tokens: MAX_TOKENS, stream: true, system, tools: TOOLS, messages: msgs }),
+        });
+
       try {
         for (let i = 0; i < MAX_TOOL_LOOPS; i++) {
-          const res = await fetch("https://api.anthropic.com/v1/messages", {
-            method: "POST",
-            headers: {
-              "x-api-key": ANTHROPIC_KEY,
-              "anthropic-version": "2023-06-01",
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({ model, max_tokens: MAX_TOKENS, stream: true, system, tools: TOOLS, messages: convo }),
-          });
+          // Keep the upstream prompt inside the model's context window. Tool results are
+          // individually capped below, but a long thread plus several results can still
+          // accumulate, so trim the oldest turns to a char budget before every call.
+          let res = await callAnthropic(fitConvoToBudget(convo, MAX_CONVO_CHARS));
+
+          // Last-ditch recovery: if Anthropic still reports the prompt is too long, trim
+          // the thread hard (keeping the latest question + its tool results) and retry once.
+          if (res.status === 400) {
+            const detail = await safeText(res);
+            if (/too long/i.test(detail)) {
+              res = await callAnthropic(fitConvoToBudget(convo, MIN_CONVO_CHARS));
+              if (!res.ok) {
+                const d2 = await safeText(res);
+                console.error(`anthropic prompt-too-long after trim: ${d2}`);
+                send({ type: "error", message: "This conversation got too long for me to process. Start a new chat or ask a shorter, more specific question." });
+                break;
+              }
+            } else {
+              console.error(`anthropic error 400: ${detail}`);
+              send({ type: "error", message: `Anthropic API error (400): ${detail}`, detail });
+              break;
+            }
+          }
 
           if (!res.ok || !res.body) {
             const detail = await safeText(res);
@@ -121,7 +155,9 @@ Deno.serve(async (req) => {
           for (const b of assistantBlocks.filter((x) => x.type === "tool_use")) {
             send({ type: "tool", name: b.name });
             const result = await runTool(b.name, b.input, ctx);
-            toolResults.push({ type: "tool_result", tool_use_id: b.id, content: JSON.stringify(result) });
+            // Cap each result so one large read can't overflow the context window (the
+            // thread is re-sent on every loop iteration). tool_result content is a string.
+            toolResults.push({ type: "tool_result", tool_use_id: b.id, content: capToolResult(result, MAX_TOOL_RESULT_CHARS) });
           }
           convo.push({ role: "user", content: toolResults });
 

@@ -106,6 +106,15 @@ The function source is version-controlled here; **do not hand-edit it in the Sup
   the static block (~90% cheaper repeats), token-usage logging (now incl. `cache_read` / `cache_write`
   / `thinking` so the cache hit-rate is visible), plus the Anthropic Console hard cap. A typical data
   Q&A turn is a fraction of a cent on Haiku. Haiku 4.5 ≈ $1/$5 per 1M in/out tokens; Sonnet 4.6 ≈ $3/$15.
+- **Context-window guards** — the whole conversation (including the assistant `tool_use` +
+  user `tool_result` turns appended each loop) is re-sent to Anthropic on every iteration, so it must
+  stay under the model's 200k-token window. Three pure, unit-tested guards (`pure.js`) keep it there:
+  each tool result is capped (`capToolResult`, 24k chars ≈ ~7k tokens) so one large read (a full area
+  record, a listing dossier) can't dominate; the thread is trimmed to a char budget before every call
+  (`fitConvoToBudget`, ~480k chars ≈ ~140k tokens) by dropping the oldest turns **only at a clean
+  user-text boundary** so `tool_use`/`tool_result` pairing is never orphaned; and a 400 "prompt is too
+  long" triggers one aggressive-trim retry (`MIN_CONVO_CHARS`) before surfacing a friendly "start a new
+  chat / ask something shorter" message instead of the raw API error.
 - **Model** — default `claude-haiku-4-5` (this is a constrained tool-routing + short-narration
   workload — the cheapest tier — and the deterministic work lives in `pure.js`, not the model). No
   `thinking` parameter is sent, so thinking stays off (zero thinking tokens). `claude-sonnet-4-6`

@@ -6,6 +6,7 @@
 import {
   rankAndFilterListings, buildListingsQuery, scoreListingFit, searchAreasPure,
   shapeFinancesSummary, computeDepositSavings, renderOutreachDraft, bandForScore,
+  capToolResult, estimateConvoChars, fitConvoToBudget,
 } from '../supabase/functions/ask/pure.js';
 import { deriveFinances } from '../assets/js/finance-derive.js';
 
@@ -201,6 +202,76 @@ export async function register({ test, assert, assertEqual }) {
       assertEqual(edge, browser);
       assertEqual(edge, computeDepositSavings(c.fin, c.inv));
     }
+  });
+
+  // ── Context-window guards (prompt-too-long fix) ───────────────────────────
+  test('ask-tools: capToolResult passes small results through unchanged', () => {
+    const r = { ok: true, n: 3 };
+    assertEqual(capToolResult(r, 24_000), JSON.stringify(r));
+  });
+
+  test('ask-tools: capToolResult truncates an oversized result with a clear marker', () => {
+    const big = { blob: 'x'.repeat(50_000) };
+    const out = capToolResult(big, 1_000);
+    assert(out.length < 1_200, `expected a bounded string, got ${out.length}`);
+    assert(out.startsWith('{"blob":"xxxx'), 'keeps the leading payload');
+    assert(/result truncated: \d+ more characters omitted/.test(out), 'marks the truncation');
+  });
+
+  test('ask-tools: capToolResult tolerates string input and a zero cap', () => {
+    assertEqual(capToolResult('already a string', 0), 'already a string');
+    assertEqual(capToolResult(null), 'null');
+  });
+
+  test('ask-tools: fitConvoToBudget returns the thread untouched when under budget', () => {
+    const convo = [
+      { role: 'user', content: 'hi' },
+      { role: 'assistant', content: 'hello' },
+    ];
+    assertEqual(fitConvoToBudget(convo, 1_000), convo);
+  });
+
+  test('ask-tools: fitConvoToBudget drops oldest turns to fit, keeping a clean user-text start', () => {
+    const convo = [
+      { role: 'user', content: 'q1 ' + 'a'.repeat(5_000) },
+      { role: 'assistant', content: 'a1 ' + 'b'.repeat(5_000) },
+      { role: 'user', content: 'q2 short' },
+      { role: 'assistant', content: 'a2 short' },
+    ];
+    const out = fitConvoToBudget(convo, 200);
+    assert(out.length < convo.length, 'trimmed at least one turn');
+    assertEqual(out[0].role, 'user');
+    assertEqual(typeof out[0].content, 'string');
+    assert(estimateConvoChars(out) <= 200 || out.length === 1, 'fits the budget or is the minimal tail');
+    assertEqual(out[0].content, 'q2 short');
+  });
+
+  test('ask-tools: fitConvoToBudget never cuts to a tool_result-led user turn (pairing safe)', () => {
+    // A loop-appended assistant(tool_use) + user(tool_result) pair must survive intact:
+    // the only valid cut point is the plain-text user question before it.
+    const convo = [
+      { role: 'user', content: 'q1 ' + 'a'.repeat(8_000) },
+      { role: 'assistant', content: 'a1 ' + 'b'.repeat(8_000) },
+      { role: 'user', content: 'compare these listings' },
+      { role: 'assistant', content: [{ type: 'tool_use', id: 't1', name: 'query_listings', input: {} }] },
+      { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't1', content: '{"listings":[]}' }] },
+    ];
+    const out = fitConvoToBudget(convo, 100);
+    // Must start on the text question, NOT the tool_result turn (which would orphan t1).
+    assertEqual(out[0].role, 'user');
+    assertEqual(out[0].content, 'compare these listings');
+    // The tool_use/tool_result pair is preserved as a whole.
+    assert(Array.isArray(out[out.length - 1].content), 'tool_result turn retained');
+    assert(out.some((m) => Array.isArray(m.content) && m.content[0]?.type === 'tool_use'), 'tool_use turn retained');
+  });
+
+  test('ask-tools: fitConvoToBudget leaves the thread intact when there is no safe cut point', () => {
+    // No plain-text user turn to cut to → return as-is rather than orphan a pairing.
+    const convo = [
+      { role: 'assistant', content: [{ type: 'tool_use', id: 't1', name: 'x', input: {} }] },
+      { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't1', content: 'big'.repeat(5_000) }] },
+    ];
+    assertEqual(fitConvoToBudget(convo, 10), convo);
   });
 
   // ── renderOutreachDraft ───────────────────────────────────────────────────
