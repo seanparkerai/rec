@@ -4,8 +4,8 @@
     "_note": "2026-06-15: all 3 profile rows migrated to the unified canonical schema (assets/js/profile-schema.js). Value-preserving re-nest of the historical flat/nested/summary shapes into one structure (person/household/employment/creditProfile/debts/pension + editorial summary fields); idempotency-checked before write, re-SELECT verified. No user values changed."
   },
   "criteria": {
-    "last_synced_at": "2026-06-04T23:04:59Z",
-    "_note": "2026-06-04: budget.min 200000→250000, budget.max 400000→425000 (owner-tightened search band)."
+    "last_synced_at": "2026-06-17T23:28:00Z",
+    "_note": "2026-06-17: household 9628b44f (Luke Clifford) budget.min 250000→300000 (owner-directed). This was the lowest min across all 3 households, so the fetcher's union price floor (priceBandForAreas, lowest budget.min) rises 250k→300k; union ceiling unchanged at 425k. Written direct to Supabase via MCP, re-SELECT verified. 2026-06-04: budget.min 200000→250000, budget.max 400000→425000 (owner-tightened search band)."
   },
   "finances": {
     "last_synced_at": "2026-06-16T14:16:21Z",
