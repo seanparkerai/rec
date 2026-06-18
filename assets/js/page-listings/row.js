@@ -1,0 +1,280 @@
+// page-listings/row.js — pure view-builders for a single listing: the feed row
+// (buildRow) and the review-deck card (buildDeckCard), plus their shared low-level
+// pieces (media well, geo/flag chips, the explainable "why" details, status select).
+// Builders take data + handler callbacks and return DOM nodes; they hold no page
+// state. Split from page-listings.js; imported by it.
+import { el } from '../dom.js';
+import { url } from '../config.js';
+import { fmtPrice, fmtAgo, lastPriceDrop } from '../listings/format.js';
+import { classifyListing, HIDE_LABELS } from '../listings/flags.js';
+import { matchingHideRule } from '../refinement/view.js';
+import { describeSignal } from '../learned-preferences.js';
+import { buildReasonPicker } from '../listings/reactions-ui.js';
+import { PERSONAL_STATUSES } from '../listings/reactions.js';
+import { VERDICT_LABELS, STATUS_LABELS, PERSONAL_STATUS_LABELS } from '../listings/labels.js';
+
+const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}&from=listings`;
+
+const mapBtn = (listing) => {
+  if (listing.lat == null || listing.lng == null) return null;
+  const a = el('a', { class: 'btn-map', href: `https://maps.google.com/?q=${listing.lat},${listing.lng}`, target: '_blank', rel: 'noopener', 'aria-label': 'Open location in Google Maps' });
+  a.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M8 1.5C5.515 1.5 3.5 3.515 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5C12.5 3.515 10.485 1.5 8 1.5zm0 6.25A1.75 1.75 0 1 1 8 4.25a1.75 1.75 0 0 1 0 3.5z" fill="currentColor"/></svg>`;
+  return a;
+};
+
+// Build the geofence chips (distance · village, and the ⚠ flag for an unconfirmed
+// location). Shared by the row and the deck card. `area` is the matched area record.
+function geoChips(listing, area) {
+  const chips = [];
+  if (listing.distance_mi != null && listing.area_id) {
+    const village = area?.name || listing.area_id;
+    chips.push(el('span', { class: 'listing-tag listing-tag--geo' }, `${Number(listing.distance_mi).toFixed(1)} mi · ${village}`));
+  }
+  if (listing.corroborated === false) {
+    chips.push(el('span', { class: 'listing-tag listing-tag--warn', title: 'The map position and the address text disagree on the village' }, '⚠ location unconfirmed'));
+  }
+  return chips;
+}
+
+// Post-fetch classifier chips (listing-flags.js). FLAG chips (new build, condition
+// red-flags) are always shown — they're judgement calls you still want to see. The
+// HIDE-reason chip only renders when a hidden listing is on screen (i.e. the user
+// turned on "Show hidden"), labelling WHY it was hidden. Shared by row + deck card.
+function flagChips(listing, hiddenRules = []) {
+  const { hide, hideReasons, flags } = classifyListing(listing);
+  const chips = flags.map((f) => el('span', { class: 'listing-tag listing-tag--flag' }, f.label));
+  if (hide) {
+    for (const r of hideReasons) {
+      chips.push(el('span', {
+        class: 'listing-tag listing-tag--hidden',
+        title: 'Normally hidden — showing because “Show hidden” is on',
+      }, `🚫 ${HIDE_LABELS[r] || r}`));
+    }
+  }
+  // Stage 5: a listing hidden by a confirmed refinement (a value the user chose to
+  // hide from the feed) only renders when "Show hidden" is on; label WHY it's hidden.
+  const refRule = matchingHideRule(listing, hiddenRules);
+  if (refRule) {
+    chips.push(el('span', {
+      class: 'listing-tag listing-tag--hidden',
+      title: 'Hidden by a refinement you confirmed — showing because “Show hidden” is on',
+    }, `🚫 Hidden by refinement: ${refRule.label}`));
+  }
+  return chips;
+}
+
+function buildWhy(scored, listing = null, area = null) {
+  // L7 location context (never silent): surface the geofence distance and, when
+  // the two location signals disagree, an explicit caution.
+  const context = [];
+  if (listing && listing.corroborated === false) {
+    const mi = listing.distance_mi != null ? `${Number(listing.distance_mi).toFixed(1)} mi from ${area?.name || 'the nearest village'}` : `near ${area?.name || 'the nearest village'}`;
+    context.push(el('li', { class: 'listing-why__item listing-why__item--warn' }, [
+      el('span', { class: 'listing-why__sign', 'aria-hidden': 'true' }, '⚠'),
+      el('span', { class: 'listing-why__label' }, `Coordinates place this ${mi}, but the listing's address text reads differently — check the location before trusting.`),
+    ]));
+  } else if (listing && listing.distance_mi != null && area) {
+    context.push(el('li', { class: 'listing-why__item listing-why__item--context' }, [
+      el('span', { class: 'listing-why__sign', 'aria-hidden': 'true' }, '📍'),
+      el('span', { class: 'listing-why__label' }, `${Number(listing.distance_mi).toFixed(1)} mi from ${area.name}.`),
+    ]));
+  }
+  const items = (scored.contributions || [])
+    .slice()
+    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
+    .map((c) => {
+      const sign = c.delta > 0 ? '＋' : '－';
+      // Prettify the L4 learned-preference contributions (the scoring seam labels
+      // them "Learned preference: <signal>"); keep everything else verbatim.
+      let label = c.label;
+      if (typeof c.signal === 'string' && c.signal.startsWith('learned:')) {
+        const verb = c.delta > 0 ? 'You tend to like' : 'You tend to pass on';
+        label = `${verb} ${describeSignal(c.signal.slice('learned:'.length))}`;
+      }
+      return el('li', { class: `listing-why__item listing-why__item--${c.delta > 0 ? 'pos' : 'neg'}` }, [
+        el('span', { class: 'listing-why__sign', 'aria-hidden': 'true' }, sign),
+        el('span', { class: 'listing-why__label' }, label),
+      ]);
+    });
+  if (!items.length) items.push(el('li', { class: 'listing-why__item' }, 'No distinguishing signals — neutral fit.'));
+  return el('details', { class: 'listing-why' }, [
+    el('summary', {}, 'Why this verdict'),
+    el('ul', { class: 'listing-why__list' }, [...context, ...items]),
+  ]);
+}
+
+// Personal-status select (lives on the shortlist record, not a parallel machine).
+function buildStatus(listing, current, onStatus) {
+  const sel = el('select', { class: 'listing-status', 'aria-label': 'Personal status' }, [
+    el('option', { value: '' }, 'No status'),
+    ...PERSONAL_STATUSES.map((s) => el('option', { value: s, selected: current === s }, PERSONAL_STATUS_LABELS[s])),
+  ]);
+  sel.addEventListener('change', () => onStatus(sel.value || null));
+  return el('label', { class: 'listing-status-wrap' }, [
+    el('span', { class: 'listing-status__label' }, 'Status'),
+    sel,
+  ]);
+}
+
+// Shared media well with graceful fallback: a broken/blocked image swaps to a
+// monogram so a card never shows a stretched or empty box. `base` is the BEM block.
+// When `href` is given (Stage 6b), the media is a keyboard-accessible link that
+// opens OUR dossier (distinct from the external Rightmove button) — the whole
+// image becomes the affordance, not a bare click handler on an <img>.
+function buildMedia(listing, base, href) {
+  const title = listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`;
+  const monogram = () => el('div', { class: `${base} ${base}--none`, 'aria-hidden': 'true' },
+    (listing.property_type || '•').slice(0, 1).toUpperCase());
+  const inner = listing.image_url
+    ? (() => {
+        const img = el('img', {
+          // Inside the labelled dossier link the image is decorative (alt="" avoids
+          // a double announcement); standalone it carries the property as its alt.
+          class: `${base}__img`, src: listing.image_url, alt: href ? '' : `Photo of ${title}`,
+          loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
+        });
+        const box = el('div', { class: base }, [img]);
+        // Replace only the inner box on error; any wrapping link stays in place.
+        img.addEventListener('error', () => box.replaceWith(monogram()), { once: true });
+        return box;
+      })()
+    : monogram();
+  function wrapLink(node) {
+    return el('a', {
+      class: `${base}-link`, href, 'aria-label': `Open dossier for ${title}`,
+    }, [node]);
+  }
+  return href ? wrapLink(inner) : inner;
+}
+
+function metaLine(listing) {
+  return [
+    listing.beds != null ? `${listing.beds} bed` : '',
+    listing.baths != null ? `${listing.baths} bath` : '',
+    listing.property_type || '',
+    fmtAgo(listing.added_date || listing.first_seen),
+  ].filter(Boolean).join(' · ');
+}
+
+export function buildRow(listing, idx, scored, area, ctx = {}) {
+  const verdict = scored?.verdict || 'unknown';
+
+  const placeBits = [];
+  if (listing.address) placeBits.push(listing.address);
+  else if (area?.name) placeBits.push(area.name);
+  if (listing.outcode) placeBits.push(listing.outcode);
+
+  const tags = [];
+  if (listing.status && listing.status !== 'live') {
+    tags.push(el('span', { class: `listing-tag listing-tag--${listing.status}` }, STATUS_LABELS[listing.status] || listing.status));
+  }
+  const drop = lastPriceDrop(listing);
+  if (drop) tags.push(el('span', { class: 'listing-tag listing-tag--drop' }, `↓ ${fmtPrice(drop)}`));
+  if (listing.update_reason === 'new') tags.push(el('span', { class: 'listing-tag listing-tag--new' }, 'New'));
+  tags.push(...geoChips(listing, area));
+  tags.push(...flagChips(listing, ctx.hiddenRules));
+  const tagRow = tags.length ? el('div', { class: 'listing-tags' }, tags) : null;
+
+  const controls = ctx.onSave
+    ? el('div', { class: 'listing-controls' }, [
+        buildReasonPicker({
+          variant: 'row',
+          current: ctx.reaction,
+          draft: ctx.draft || null,
+          onDraftChange: ctx.onDraftChange || null,
+          onSave: (d) => ctx.onSave(listing, d),
+        }),
+        buildStatus(listing, ctx.status, (status) => ctx.onStatus(listing, status)),
+      ])
+    : null;
+
+  // Stage 6b: the external Rightmove link as a clear button, visually distinct
+  // from the image-link (which opens OUR dossier).
+  const rmLink = listing.url
+    ? el('a', { class: 'listing-card__rm btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
+    : null;
+  const cardLinks = (rmLink || mapBtn(listing))
+    ? el('div', { class: 'listing-card__links' }, [rmLink, mapBtn(listing)].filter(Boolean))
+    : null;
+
+  const content = el('div', { class: 'listing-card__content' }, [
+    el('div', { class: 'listing-card__head' }, [
+      el('span', { class: `fit-dot fit-dot--${verdict}`, 'aria-hidden': 'true' }),
+      el('span', { class: `verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
+      ctx.reviewed ? el('span', { class: 'listing-card__reviewed-tag' }, '✓ Reviewed') : null,
+      el('span', { class: 'listing-card__price num' }, fmtPrice(listing.price)),
+    ].filter(Boolean)),
+    el('p', { class: 'listing-card__title' }, [
+      el('a', { class: 'listing-card__title-link', href: dossierHref(listing) },
+        listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
+    ]),
+    el('p', { class: 'listing-card__place' }, placeBits.join(' · ')),
+    el('p', { class: 'listing-card__meta num' }, metaLine(listing)),
+    tagRow,
+    buildWhy(scored, listing, area),
+    controls,
+    cardLinks,
+  ].filter(Boolean));
+
+  const reviewedClass = ctx.reviewed
+    ? ` listing-card--reviewed listing-card--${REVIEWED_MOD[ctx.reaction?.reaction] || 'reviewed'}`
+    : '';
+  return el('li', { class: `listing-card${reviewedClass}`, 'data-id': listing.rightmove_id }, [
+    buildMedia(listing, 'listing-media', dossierHref(listing)),
+    content,
+  ]);
+}
+
+// Reaction verb → reviewed-card modifier (green "actioned" tint, distinct per verb).
+export const REVIEWED_MOD = { like: 'liked', reject: 'rejected', pass: 'passed' };
+
+export function buildDeckCard(listing, scored, area, handlers) {
+  const verdict = scored?.verdict || 'unknown';
+  const media = buildMedia(listing, 'deck-media', dossierHref(listing));
+
+  const tags = [];
+  if (listing.status && listing.status !== 'live') tags.push(el('span', { class: `listing-tag listing-tag--${listing.status}` }, STATUS_LABELS[listing.status] || listing.status));
+  const drop = lastPriceDrop(listing);
+  if (drop) tags.push(el('span', { class: 'listing-tag listing-tag--drop' }, `↓ ${fmtPrice(drop)}`));
+  tags.push(...geoChips(listing, area));
+  tags.push(...flagChips(listing, handlers.hiddenRules));
+
+  const placeBits = [];
+  if (listing.address) placeBits.push(listing.address);
+  else if (area?.name) placeBits.push(area.name);
+  if (listing.outcode) placeBits.push(listing.outcode);
+
+  const metaBits = [
+    listing.beds != null ? `${listing.beds} bed` : '',
+    listing.baths != null ? `${listing.baths} bath` : '',
+    listing.property_type || '',
+    fmtAgo(listing.added_date),
+  ].filter(Boolean);
+
+  const body = el('div', { class: 'deck-card__body' }, [
+    el('div', { class: 'deck-card__head' }, [
+      el('span', { class: `fit-dot fit-dot--${verdict}`, 'aria-hidden': 'true' }),
+      el('span', { class: `verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
+      el('span', { class: 'deck-card__price num' }, fmtPrice(listing.price)),
+    ]),
+    el('p', { class: 'deck-card__title' }, listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
+    el('p', { class: 'deck-card__place' }, placeBits.join(' · ')),
+    el('p', { class: 'deck-card__meta num' }, metaBits.join(' · ')),
+    tags.length ? el('div', { class: 'listing-tags' }, tags) : null,
+    buildWhy(scored, listing, area),
+    el('div', { class: 'deck-card__links' }, [
+      el('a', { class: 'deck-card__open', href: dossierHref(listing) }, 'Full details →'),
+      listing.url ? el('a', { class: 'deck-card__rm btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗') : null,
+      mapBtn(listing),
+    ].filter(Boolean)),
+    buildReasonPicker({
+      variant: 'deck',
+      current: handlers.current || null,
+      draft: handlers.draft || null,
+      onDraftChange: handlers.onDraftChange || null,
+      onSave: (d) => handlers.onSave(d),
+    }),
+  ].filter(Boolean));
+
+  return el('article', { class: 'deck-card', 'data-id': listing.rightmove_id }, [media, body]);
+}
