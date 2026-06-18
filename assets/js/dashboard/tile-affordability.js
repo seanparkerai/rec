@@ -1,3 +1,6 @@
+// tile-affordability.js — interactive affordability ladder visualizing buy-ability bands
+// across a price range, with live verdict updates as the user adjusts two price inputs.
+// DOM-rendering tile for the home dashboard.
 import { assessAffordability } from '../affordability.js';
 import { gbp } from '../format.js';
 import { esc, byId as $, setText } from '../dom.js';

@@ -1,3 +1,5 @@
+// outreach/dialog.js — modal for drafting outreach messages: renders template preview, manages extra fields, handles mailto/copy/save actions. DOM-driven.
+
 import { renderTemplate, buildMailto, filterContextByDataNeeded } from '../outreach-renderer.js';
 import { saveEntry, newEntryId } from '../outreach-store.js';
 import { esc, byId as $, on } from '../dom.js';

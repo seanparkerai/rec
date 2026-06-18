@@ -1,3 +1,5 @@
+// finances/section-deposit.js — renders the Deposit section tiles: progress bar, saved amount, monthly contribution goal, and LISA eligibility banner. DOM. Rendered on the finances page.
+
 import * as fin from '../finances.js';
 import { gbp, monthsAsDuration } from '../format.js';
 import { assessAffordability, BANDS } from '../affordability.js';

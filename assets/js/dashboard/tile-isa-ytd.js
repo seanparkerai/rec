@@ -1,3 +1,5 @@
+// tile-isa-ytd.js — renders year-to-date net gain/loss from investment history.
+// DOM-rendering tile for the home dashboard.
 import { getInvestmentsHistory } from '../storage.js';
 import { analysePerformance } from '../investment-performance.js';
 import { gbp } from '../format.js';

@@ -1,3 +1,5 @@
+// outreach/context.js — assembles message context from profile, criteria, finances, and form inputs; defines data-needed fields. Pure helpers.
+
 import { assembleContext, filterContextByDataNeeded } from '../outreach-renderer.js';
 import { byId as $ } from '../dom.js';
 import { state } from './state.js';

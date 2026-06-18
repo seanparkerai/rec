@@ -1,3 +1,5 @@
+// finances/section-later.js — renders the Later/Post-Move section: money flow before/after mortgage, affordability widget with price slider, and what-if savings projection chart. DOM. Rendered on the finances page.
+
 import * as fin from '../finances.js';
 import { gbp } from '../format.js';
 import { assessAffordability } from '../affordability.js';

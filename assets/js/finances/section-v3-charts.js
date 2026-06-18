@@ -1,3 +1,5 @@
+// finances/section-v3-charts.js — renders v3 investment & savings charts: savings over time, monthly deposits, ISA stacked area, dividends/interest, epoch comparison, ticker treemap, realised/unrealised P&L. DOM. Rendered on the finances page.
+
 import { getInvestmentsHistory } from '../storage.js';
 import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution } from '../investment-performance.js';
 import { buildSavingsSeries } from '../savings-series.js';

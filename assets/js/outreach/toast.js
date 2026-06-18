@@ -1,3 +1,5 @@
+// outreach/toast.js — simple toast notification helper: lazy-creates an aria-live region and shows/hides messages with a timer. DOM utility.
+
 let _toastEl = null;
 
 export function showToast(msg, isError = false) {

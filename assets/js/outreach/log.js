@@ -1,3 +1,5 @@
+// outreach/log.js — renders an outreach activity log table and binds status-update buttons (sent/replied/archived). DOM rendering and event handlers.
+
 import { saveEntry } from '../outreach-store.js';
 import { esc, byId as $ } from '../dom.js';
 import { state, ROLE_LABELS } from './state.js';

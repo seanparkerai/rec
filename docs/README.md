@@ -6,6 +6,7 @@ Live operating docs for this repo, one line each. Historical material lives in
 
 | Doc | What it is / when to read it |
 |---|---|
+| [`REPO_MAP.md`](REPO_MAP.md) | **Whole-repo orientation** — directory map, naming conventions, file-size norm, guard-rail pointer. |
 | [`CHECKLIST.md`](CHECKLIST.md) | **Live progress tracker — the resume point for any fresh session.** Read first. |
 | [`ROADMAP.md`](ROADMAP.md) | v3 capabilities — what has shipped and what remains. |
 | [`CONTEXT.md`](CONTEXT.md) | Distilled, sourced research: FTB domain, architecture, Hampshire/Wiltshire region. |

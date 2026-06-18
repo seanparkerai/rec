@@ -1,3 +1,5 @@
+// finances/section-isa-attribution.js — renders ISA performance breakdown: contributed, dividends, interest, unrealised market growth in a stacked bar and definition list. DOM. Rendered on the finances page.
+
 import { getInvestmentsHistory } from '../storage.js';
 import { analysePerformance } from '../investment-performance.js';
 import { gbp } from '../format.js';

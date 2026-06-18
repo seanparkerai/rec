@@ -1,3 +1,6 @@
+// tile-readiness.js — renders deposit progress headline and stats (savings %, months to
+// target, accelerated scenarios), plus the next priority action from the readiness
+// checklist. DOM-rendering tile for the home dashboard.
 import { getGoals, getReadinessChecklist } from '../storage.js';
 import { gbp } from '../format.js';
 

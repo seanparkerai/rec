@@ -1,3 +1,5 @@
+// tile-deposit-risk.js — renders current ISA/investments value and market-drop scenarios
+// (10%, 20% decline) to show deposit vulnerability. DOM-rendering tile for the home dashboard.
 import { getInvestments, getGoals } from '../storage.js';
 import { assessDepositRisk } from '../deposit-risk.js';
 import { gbp } from '../format.js';

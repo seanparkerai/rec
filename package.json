@@ -7,6 +7,9 @@
   "scripts": {
     "serve": "python3 -m http.server 8000",
     "fonts": "node tools/fetch-fonts.mjs",
-    "test": "node tools/run-intelligence-tests.mjs"
+    "test": "node tools/run-intelligence-tests.mjs",
+    "build": "node tools/build-areas.mjs",
+    "area-status": "node tools/area-status.mjs",
+    "sync-areas": "node tools/sync-areas-from-supabase.mjs"
   }
 }

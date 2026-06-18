@@ -1,6 +1,6 @@
 # CLAUDE.md — Operating Rules for this Repository
 
-> **Last reconciled 2026-06-12.** If reality and this file disagree, **reality wins — fix this file.**
+> **Last reconciled 2026-06-18.** If reality and this file disagree, **reality wins — fix this file.**
 > Inventories (tables, files, counts) are never restated here — each has one named source of truth.
 
 This file governs how Claude (and any AI assistant) works in this repo. Read it at the **start of
@@ -182,7 +182,7 @@ Subagents are tools, not autonomous workers. The contract:
 The following files are **never touched** by feature work. Modifying any of them is its own phase, named and approved separately:
 
 - `assets/css/tokens.css` — colour, type, spacing tokens.
-- `assets/js/storage.js` + `assets/js/storage/*.js` — Supabase-backed storage layer (see §17). `storage.js` is a re-export shim (P8) over `storage/{core,user-state,listings,outreach,refinement,ask}.js`. **Extend, do not rewrite.**
+- `assets/js/storage.js` + `assets/js/storage/*.js` (incl. its subfolders) — Supabase-backed storage layer (see §17). `storage.js` is a re-export shim (P8) over `storage/{core,user-state,listings,outreach,refinement,ask}.js`. Two of those are themselves shims over a subfolder: `storage/listings.js` → `storage/listings/{content,feed,learned}.js` (+ the internal `_reactions-core.js`), and `storage/user-state.js` → `storage/user-state/{singletons,readiness,investments,shortlist}.js`. The subfolders are part of this guard-railed layer. **Extend, do not rewrite.**
 - `assets/js/config.js` — base-URL + `url()` helpers.
 - `assets/js/data-loader.js` — JSON loader.
 - `assets/js/finances.js` + `assets/js/finances/calc-*.js` — finance calculators; `finances.js` is a re-export shim (P9) over `finances/calc-{purchase,lisa,savings,outlay}.js`. **Extend, do not rewrite.**
@@ -308,6 +308,15 @@ in `assets/js/finances/`, the storage layer in `assets/js/storage/`, listings mo
 `tokens.css` (guard-railed) + `base.css` + `fonts.css`, the order-sensitive `dashboard.css` `@import`
 shell (guard-railed, §16), per-tile partials in `dashboard/`, per-page partials in `pages/` (some are
 themselves `@import` shells over a subfolder), and reusable component CSS in `components/`.
+
+**File-size norm — split with a shim past ~400 lines.** Keep modules focused (roughly ≤400 lines).
+When one outgrows that, split it into a subfolder of single-purpose modules behind a **thin
+re-export shim** that keeps the public import path unchanged — the pattern of `storage.js`
+(→ `storage/*.js`) and `finances.js` (→ `finances/calc-*.js`). A large `page-<name>.js` coordinator
+does the same: its pure view-builders move into `page-<name>/*.js` (e.g. `page-listings/`,
+`page-report/`, `page-property/`, `page-area-detail/`), leaving the stateful `render()`/`init()`
+coordinator thin and keeping its `<script>` entry path unchanged. Generated/aggregated data files
+are exempt (they're regenerated, never hand-split). The whole-repo map lives in `docs/REPO_MAP.md`.
 
 Hand-written file lists rot — get the **current** map on demand:
 

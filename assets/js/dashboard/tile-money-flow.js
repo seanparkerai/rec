@@ -1,3 +1,6 @@
+// tile-money-flow.js — renders stacked flow bars (today vs post-move) showing bills,
+// expenses, savings, mortgage, and spare income, with interactive drilldown into line
+// items per bucket. DOM-rendering tile for the home dashboard.
 import * as fin from '../finances.js';
 import { gbp } from '../format.js';
 import { getMoneyFlow, getMoneyFlowPostMove } from '../money-flow.js';

@@ -1,3 +1,5 @@
+// outreach/grid.js — renders filtered template tiles (stage + role) and binds generate buttons to open the draft dialog. DOM rendering.
+
 import { esc, byId as $, on } from '../dom.js';
 import { state, ROLE_LABELS, STAGE_LABELS } from './state.js';
 import { openDialog } from './dialog.js';

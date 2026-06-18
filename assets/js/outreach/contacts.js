@@ -1,3 +1,5 @@
+// outreach/contacts.js — renders and manages a grouped contact list (agents, brokers, solicitors, surveyors) with add/delete forms. DOM mutations.
+
 import { saveContacts } from '../outreach-store.js';
 import { esc, byId as $ } from '../dom.js';
 import { state } from './state.js';

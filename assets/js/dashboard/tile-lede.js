@@ -1,3 +1,6 @@
+// tile-lede.js — renders hero paragraph and key metrics bar (budget, deposit, beds,
+// moving window) from profile, criteria, and finances. DOM-rendering tile for the
+// home dashboard.
 import { gbp } from '../format.js';
 import { byId as $, setText } from '../dom.js';
 import { normalizeProfile } from '../profile-schema.js';

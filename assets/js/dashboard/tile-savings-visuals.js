@@ -1,3 +1,7 @@
+// tile-savings-visuals.js — renders four visualizations: sparkline of monthly savings
+// trajectory, scenarios fan (save rates ±£500/mo, +£5k windfall), networth donut
+// (ISA vs cash vs debt), and withdrawal readiness seasoning timeline. DOM-rendering
+// tile for the home dashboard.
 import { getInvestments, getInvestmentsHistory, getGoals } from '../storage.js';
 import { buildSavingsSeries } from '../savings-series.js';
 import { getSavingsVelocity } from '../savings-velocity.js';
