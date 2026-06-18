@@ -107,7 +107,9 @@ test('household_areas supports a reversible inactive (pause) status', async () =
   //   1. the storage layer exposes setHouseholdAreaStatus + an includeInactive read,
   //   2. the active-only read path that listings/map rely on is preserved,
   //   3. the sync doc records the {active, inactive, removed} status domain.
-  const storage = await readFile(resolve(root, 'assets/js/storage/listings.js'), 'utf8');
+  // The household-areas code lives in storage/listings/content.js (storage/listings.js
+  // is now a re-export shim over content/feed/learned).
+  const storage = await readFile(resolve(root, 'assets/js/storage/listings/content.js'), 'utf8');
   assert(/export async function setHouseholdAreaStatus\(/.test(storage),
     'storage must export setHouseholdAreaStatus(area_id, status)');
   assert(/status !== 'active' && status !== 'inactive'/.test(storage),
