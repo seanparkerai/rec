@@ -1,3 +1,6 @@
+// tile-shortlist.js — renders list of selected areas (up to 5) with affordability
+// fit-dots, names, towns, and live/researching status badges. DOM-rendering tile for
+// the home dashboard.
 import { assessAffordability } from '../affordability.js';
 import { gbp } from '../format.js';
 import { getShortlist, getHouseholdAreas } from '../storage.js';

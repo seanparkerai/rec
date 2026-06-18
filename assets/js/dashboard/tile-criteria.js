@@ -1,3 +1,5 @@
+// tile-criteria.js — renders search criteria as prose and a spec strip (beds, budget,
+// deposit, EPC, tenure, moving window). DOM-rendering tile for the home dashboard.
 import { gbp } from '../format.js';
 import { esc, byId as $, setText, setHTML } from '../dom.js';
 

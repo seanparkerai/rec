@@ -1,3 +1,5 @@
+// finances/section-deposit-risk.js — renders the Deposit Risk section: waterfall SVG showing current value, −10%, −20% scenarios, and impact badges. DOM. Rendered on the finances page.
+
 import { getInvestments, getGoals } from '../storage.js';
 import { assessDepositRisk } from '../deposit-risk.js';
 import { gbp } from '../format.js';

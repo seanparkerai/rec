@@ -1,3 +1,5 @@
+// outreach/filters.js — binds stage and role filter chips to update grid on click. DOM event handlers.
+
 import { byId as $, on } from '../dom.js';
 import { state } from './state.js';
 import { renderGrid } from './grid.js';

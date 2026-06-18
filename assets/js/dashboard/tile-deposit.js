@@ -1,3 +1,6 @@
+// tile-deposit.js — renders deposit progress ring, savings/target figures, monthly
+// contribution goal, scenario chips, and monthly money-flow minibar. DOM-rendering tile
+// for the home dashboard.
 import * as fin from '../finances.js';
 import { gbp, monthsAsDuration } from '../format.js';
 import { getMoneyFlow } from '../money-flow.js';

@@ -1,3 +1,6 @@
+// tile-affordability-scenarios.js — renders three affordability scenarios (buy sooner,
+// target, stretch) with prices, LTV, and ETA to each milestone. DOM-rendering tile for
+// the home dashboard.
 import { getGoals } from '../storage.js';
 import { assessAffordabilityScenarios } from '../affordability.js';
 import { gbp } from '../format.js';

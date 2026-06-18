@@ -1,3 +1,5 @@
+// finances/section-flow.js — renders money flow bars and legends: income in, bills/savings/discretionary out, spare cash. DOM. Renders on the finances page.
+
 import { gbp } from '../format.js';
 import { getMoneyFlow } from '../money-flow.js';
 import { esc, byId as $, setText, setHTML } from '../dom.js';

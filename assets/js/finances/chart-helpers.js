@@ -1,3 +1,5 @@
+// finances/chart-helpers.js — shared chart configuration and helpers for chart.js rendering. DOM manipulation for stub states. Used by all section-*-charts.js renderers.
+
 import { cssVar } from '../css-vars.js';
 import { prefersReducedMotion } from '../motion.js';
 

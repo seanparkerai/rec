@@ -1,3 +1,5 @@
+// finances/section-breakdowns.js — renders the Breakdowns section: bills, expenses, one-time costs, shopping list, and gift cards tables. DOM. Rendered on the finances page.
+
 import { gbp, gbpPence } from '../format.js';
 import { esc, byId as $, setText } from '../dom.js';
 import { computeOutlayBreakdown } from '../finances.js';
