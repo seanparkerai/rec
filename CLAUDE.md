@@ -182,7 +182,7 @@ Subagents are tools, not autonomous workers. The contract:
 The following files are **never touched** by feature work. Modifying any of them is its own phase, named and approved separately:
 
 - `assets/css/tokens.css` — colour, type, spacing tokens.
-- `assets/js/storage.js` + `assets/js/storage/*.js` — Supabase-backed storage layer (see §17). `storage.js` is a re-export shim (P8) over `storage/{core,user-state,listings,outreach,refinement,ask}.js`. **Extend, do not rewrite.**
+- `assets/js/storage.js` + `assets/js/storage/*.js` (incl. its subfolders) — Supabase-backed storage layer (see §17). `storage.js` is a re-export shim (P8) over `storage/{core,user-state,listings,outreach,refinement,ask}.js`. Two of those are themselves shims over a subfolder: `storage/listings.js` → `storage/listings/{content,feed,learned}.js` (+ the internal `_reactions-core.js`), and `storage/user-state.js` → `storage/user-state/{singletons,readiness,investments,shortlist}.js`. The subfolders are part of this guard-railed layer. **Extend, do not rewrite.**
 - `assets/js/config.js` — base-URL + `url()` helpers.
 - `assets/js/data-loader.js` — JSON loader.
 - `assets/js/finances.js` + `assets/js/finances/calc-*.js` — finance calculators; `finances.js` is a re-export shim (P9) over `finances/calc-{purchase,lisa,savings,outlay}.js`. **Extend, do not rewrite.**
