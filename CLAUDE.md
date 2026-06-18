@@ -1,6 +1,6 @@
 # CLAUDE.md — Operating Rules for this Repository
 
-> **Last reconciled 2026-06-12.** If reality and this file disagree, **reality wins — fix this file.**
+> **Last reconciled 2026-06-18.** If reality and this file disagree, **reality wins — fix this file.**
 > Inventories (tables, files, counts) are never restated here — each has one named source of truth.
 
 This file governs how Claude (and any AI assistant) works in this repo. Read it at the **start of
