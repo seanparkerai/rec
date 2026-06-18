@@ -36,8 +36,8 @@ doc, test, or rule that states a different count is wrong and must be reconciled
 - **2 content mirrors**: `areas` (**DB-canonical** since the 2026-06-04 §18.5 relaxation —
   `data/areas/<id>.json` is a materialised view) and `house_types` (repo-JSON-canonical, mirrored).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.
-- **5 untracked** (never git-synced): `listings` (live content, see below), `reports` (un-curated),
-  and the engine-managed refinement tables `refinement_suggestions`, `refinement_runs`,
+- **4 untracked** (never git-synced): `listings` (live content, see below) and the
+  engine-managed refinement tables `refinement_suggestions`, `refinement_runs`,
   `scrape_probation` (see `docs/REFINEMENT_README.md`).
 
 Note: `checklists` and `outreach_templates` have **no** mirror table — those catalogues are

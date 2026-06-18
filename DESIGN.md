@@ -18,7 +18,7 @@ For content-led views: `pages/profile.html` (the profile + criteria summary/edit
 - Inline figures with caption + licence; sources as footnotes with tap previews.
 
 ### Linear-dense (data-rich UI)
-For tools and data: `index.html`, `pages/areas.html`, `pages/finances.html`, `pages/listings.html`, `pages/saved-listings.html`, `pages/refinement.html`, `pages/report.html`.
+For tools and data: `index.html`, `pages/areas.html`, `pages/finances.html`, `pages/listings.html`, `pages/saved-listings.html`, `pages/refinement.html`.
 
 - Compact rhythm: tight rows, dense tables, monospace numerals.
 - Asymmetric / bento layouts — never a uniform grid of identical cards.

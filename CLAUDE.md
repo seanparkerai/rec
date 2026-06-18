@@ -314,7 +314,7 @@ When one outgrows that, split it into a subfolder of single-purpose modules behi
 re-export shim** that keeps the public import path unchanged — the pattern of `storage.js`
 (→ `storage/*.js`) and `finances.js` (→ `finances/calc-*.js`). A large `page-<name>.js` coordinator
 does the same: its pure view-builders move into `page-<name>/*.js` (e.g. `page-listings/`,
-`page-report/`, `page-property/`, `page-area-detail/`), leaving the stateful `render()`/`init()`
+`page-property/`, `page-area-detail/`), leaving the stateful `render()`/`init()`
 coordinator thin and keeping its `<script>` entry path unchanged. Generated/aggregated data files
 are exempt (they're regenerated, never hand-split). The whole-repo map lives in `docs/REPO_MAP.md`.
 

@@ -1,6 +1,6 @@
 // storage/listings/feed.js — Rightmove fetch trigger, the local reviewed-marker,
-// reports, live listings (public read), and the append-only listing_reactions
-// read/write. Split from storage/listings.js. The shared paged-log helper lives in
+// live listings (public read), and the append-only listing_reactions read/write.
+// Split from storage/listings.js. The shared paged-log helper lives in
 // ./_reactions-core.js.
 import { readLocal, writeLocal, _initSb, _getHid, _toast } from '../core.js';
 import { normaliseReaction, latestPerListing } from '../../listings/reactions.js';
@@ -41,23 +41,6 @@ export function addReviewedListing(id) {
   const arr = [...set];
   writeLocal('reviewed-listings', arr);
   return arr;
-}
-
-// ── Reports (read-only; no localStorage cache needed) ─────────────────────
-// Returns the full row (id, slug, title, data, created_at…) or null.
-// Throws on Supabase error so the caller can show a retry affordance.
-export async function getReport() {
-  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
-  if (!sb || !hid) return null;
-  const { data, error } = await sb
-    .from('reports')
-    .select('*')
-    .eq('household_id', hid)
-    .eq('status', 'published')
-    .order('created_at', { ascending: false })
-    .limit(1);
-  if (error) throw error;
-  return data?.[0] ?? null;
 }
 
 // ── Live listings (v3 L1 — fetcher-written content; public read) ──────────

@@ -48,6 +48,12 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       (§16-guarded, its own named phase). Scraper enforcement not yet live-run against Apify.
 
 ### UI / platform (each its own named phase)
+- [x] **Remove the Report (Value Report) feature (2026-06-18)** — unused/redundant. Deleted
+      `pages/report.html`, `assets/js/page-report.js`, `assets/js/page-report/`, `assets/js/report/`,
+      `assets/css/pages/report.css`, `tests/report-format.test.js`; pruned the nav link, the
+      `pages/report.css` `@import` (dashboard.css, §16), the dead `getReport()` (storage feed, §16),
+      the test-runner registration, and `tests.html`. Dropped the backing Supabase `reports` table via
+      `apply_migration` (single row backed up first). Docs reconciled (DESIGN/CLAUDE/SUPABASE_SYNC/SCHEMA_NOTES).
 - [x] **Active/inactive areas** — per-household reversible pause + hard remove on the areas +
       area-detail pages. `household_areas.status` ∈ {active, inactive, removed} (migration
       `household_areas_status_inactive`); `setHouseholdAreaStatus` + `getHouseholdAreas({includeInactive})`

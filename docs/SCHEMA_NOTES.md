@@ -162,7 +162,7 @@
   **remain untracked** even now that `refinement_suggestions` carries data (51 live
   rows). Rationale: they are *engine-derived* state, regenerated each run from the
   append-only `listing_reactions` log (the real source of truth) — there is no
-  portal↔repo freshness contract to enforce, so they behave like `sync_log`/`reports`
+  portal↔repo freshness contract to enforce, so they behave like `sync_log`
   (also untracked). User-owned overlays on these rows (a `dismissed`/`snoozed`/
   `confirmed_*` status the user sets in Stage 5+) are protected at write time by the
   upsert's `status = CASE WHEN status IN ('forming','actionable')` guard, not by the
