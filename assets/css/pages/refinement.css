@@ -63,6 +63,11 @@
 .ref-obs__title { margin: 0; font-size: var(--text-sm); font-weight: 600; }
 .ref-obs__detail { margin: var(--space-1) 0 0; font-size: var(--text-sm); color: var(--ink-muted); }
 
+/* ── manual "Run refinement now" control (deep-links to the GitHub Actions run screen) */
+.ref-run { margin-top: var(--space-3); }
+.ref-run__hint { margin: 0 0 var(--space-2); font-size: var(--text-sm); color: var(--ink-muted); }
+.ref-run__btn { display: inline-flex; align-items: center; gap: var(--space-1); text-decoration: none; }
+
 /* ── model-confidence meter (§4.6) ───────────────────────────────────────── */
 .ref-meter__track {
   height: var(--space-2);
