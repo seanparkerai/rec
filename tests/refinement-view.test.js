@@ -6,7 +6,7 @@ import {
   humaniseValue, toCard, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
   REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
   probationStatusLabel, effectiveStatus, snoozeDaysLeft,
-  REFINEMENT_SETTINGS_KEY, presetFromOverrides, PRESET_OPTIONS,
+  REFINEMENT_SETTINGS_KEY, presetFromOverrides, PRESET_OPTIONS, presetNudge,
 } from '../assets/js/refinement/view.js';
 import { effectiveWeights } from '../assets/js/learned-preferences.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
@@ -119,6 +119,24 @@ export async function register({ test, assert, assertEqual }) {
     const m = buildConfidenceMeter(null, cfg);
     assertEqual(m.ready, false);
     assertEqual(m.pct, 0);
+  });
+
+  // ── sensitivity nudge (§4.6) ───────────────────────────────────────────────
+  const openMeta = { params: { feedback: { global_gate_open: true } } };
+  test('view: presetNudge prompts a Balanced switch when forming patterns are stuck on Cautious', () => {
+    const n = presetNudge(openMeta, { counts: { actionable: 0, forming: 3 } }, 'cautious');
+    assert(n && n.recommend === 'balanced', 'recommends balanced');
+    assert(n.label.includes('Cautious') && n.label.includes('3'), 'names the preset and the count');
+  });
+  test('view: presetNudge stays silent when there is nothing to nudge about', () => {
+    // gate closed
+    assertEqual(presetNudge({ params: { feedback: { global_gate_open: false } } }, { counts: { actionable: 0, forming: 3 } }, 'cautious'), null);
+    // already actionable
+    assertEqual(presetNudge(openMeta, { counts: { actionable: 1, forming: 3 } }, 'cautious'), null);
+    // no forming patterns yet
+    assertEqual(presetNudge(openMeta, { counts: { actionable: 0, forming: 0 } }, 'cautious'), null);
+    // already off the strict preset
+    assertEqual(presetNudge(openMeta, { counts: { actionable: 0, forming: 3 } }, 'balanced'), null);
   });
 
   // ── Stage 5: display-hide rules (Approach B) ───────────────────────────────

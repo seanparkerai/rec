@@ -50,7 +50,7 @@ export async function register({ test, assert, assertEqual }) {
   test('refinement-config: Cautious is the shipped default with the documented levers', () => {
     assertEqual(cfg.preset, 'cautious');
     assertEqual(cfg.WILSON_FLOOR, 0.88);
-    assertEqual(cfg.MIN_LIFT, 1.6);
+    assertEqual(cfg.MIN_LIFT, 1.20); // rebased 2026-06-19 to the genuine-baseline headroom (was 1.6)
     assertEqual(cfg.PERSISTENCE_RUNS, 5);
     assertEqual(cfg.FDR_Q, 0.05);
     assertEqual(cfg.HALF_LIFE_DAYS, 150);
@@ -60,6 +60,11 @@ export async function register({ test, assert, assertEqual }) {
     // Aggressive lowers the bar; Balanced sits between.
     assert(PRESETS.aggressive.WILSON_FLOOR < PRESETS.balanced.WILSON_FLOOR, 'aggressive floor lower');
     assert(PRESETS.balanced.WILSON_FLOOR < PRESETS.cautious.WILSON_FLOOR, 'balanced floor lower than cautious');
+    // MIN_LIFT floors must stay reachable against the genuine baseline (~0.82 → ceiling ≈ 1.22):
+    // strictest (Cautious) below the ceiling, and ordered Cautious > Balanced > Aggressive.
+    assert(PRESETS.cautious.MIN_LIFT < 1.22, 'Cautious lift floor stays under the achievable ceiling');
+    assert(PRESETS.balanced.MIN_LIFT < PRESETS.cautious.MIN_LIFT, 'Balanced lift floor below Cautious');
+    assert(PRESETS.aggressive.MIN_LIFT < PRESETS.balanced.MIN_LIFT, 'Aggressive lift floor below Balanced');
   });
 
   // ── normalisation primitives ───────────────────────────────────────────────
@@ -303,9 +308,43 @@ export async function register({ test, assert, assertEqual }) {
     assert(rankIndex(run, 'terraced') < rankIndex(run, 'semi-detached'), 'terraced ranks above semi-detached');
     assert(terraced.lift > detached.lift && detached.lift > semi.lift, 'lift orders terraced > detached > semi');
 
-    // The ~98.7% baseline makes lift ceiling ≈ 1.01 — nothing can clear MIN_LIFT 1.6,
-    // so the engine correctly surfaces NO actionable suggestions on this snapshot.
+    // When the WHOLE pool is uniformly ~98.7% rejected there is no disproportionality:
+    // lift ≈ 1.0 for every type, so nothing clears MIN_LIFT and nothing is actionable.
+    // (This is the raw, unfiltered shape; the genuine-only baseline test below is the
+    // realistic one the engine actually scores against.)
     assert(run.baseline.property_type > 0.97, `degenerate baseline ≈ ${run.baseline.property_type.toFixed(3)}`);
-    assertEqual(run.actionable.length, 0, 'with a ~98.7% baseline, lift binds and nothing is actionable');
+    assertEqual(run.actionable.length, 0, 'uniform near-total rejection → no disproportionality → nothing actionable');
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // BASELINE-CEILING CALIBRATION (2026-06-19) — against the GENUINE-only baseline
+  // (~0.82, the rate the live engine scores), the max achievable lift is 1/0.82 ≈ 1.22.
+  // The rebased floors must make Balanced reachable while Cautious stays the strict
+  // floor that only the most extreme (near-100%-reject) signal can clear.
+  // ════════════════════════════════════════════════════════════════════════════
+  test('refinement: genuine ~0.82 baseline — Balanced is reachable, Cautious stays strict', () => {
+    // Pool baseline = 328 rejects / 400 = 0.82. 'terraced' is 100%-rejected (lift ≈ 1.22);
+    // 'flat' is ~94%-rejected (lift ≈ 1.15); detached/semi sit below baseline.
+    const reactions = [
+      ...batch('terraced', 70, 0, 0),   // 70/70  → p_hat 1.00, lift ≈ 1.22
+      ...batch('flat', 66, 4, 0),       // 66/70  → p_hat 0.94, lift ≈ 1.15
+      ...batch('detached', 130, 50, 0), // 130/180 → below baseline
+      ...batch('semi-detached', 62, 18, 0),
+    ];
+    const balanced = resolveConfig({ preset: 'balanced' });
+    const runB = runRefinementEngine(reactions, { now: NOW, config: balanced, dimensions: ['property_type'] });
+    const tB = typeOf(runB, 'terraced');
+    const fB = typeOf(runB, 'flat');
+    assert(runB.baseline.property_type > 0.80 && runB.baseline.property_type < 0.84,
+      `baseline ≈ 0.82 (got ${runB.baseline.property_type.toFixed(3)})`);
+    assert(tB.lift > 1.20, `terraced lift ≈ 1.22 (got ${tB.lift.toFixed(3)})`);
+    assertEqual(tB.qualifies_this_run, true, 'Balanced: the 100%-reject signal qualifies (was impossible at the old 1.3 floor)');
+    assertEqual(fB.qualifies_this_run, true, 'Balanced: a ~94%-reject signal (lift ≈ 1.15) also qualifies');
+
+    // Same snapshot under Cautious: the strict floor (1.20) still admits the most
+    // extreme signal but gates the moderate one — Cautious stays near-silent.
+    const cautious = resolveConfig({ preset: 'cautious' });
+    const runC = runRefinementEngine(reactions, { now: NOW, config: cautious, dimensions: ['property_type'] });
+    assertEqual(typeOf(runC, 'flat').qualifies_this_run, false, 'Cautious: the moderate signal is gated by the strict lift floor');
   });
 }

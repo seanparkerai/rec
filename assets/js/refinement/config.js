@@ -11,11 +11,22 @@
 //
 // If you change a number here, reconcile docs/archive/REFINEMENT_PLAN.md §5 in the same commit.
 
-/** The four preset-controlled levers (plan §5 preset matrix). */
+/** The four preset-controlled levers (plan §5 preset matrix).
+ *
+ * MIN_LIFT calibration note (2026-06-19): lift is `p_hat / baseline`, and the genuine-only
+ * baseline reject rate sits ~0.82, which caps the *maximum achievable* lift at `1/0.82 ≈ 1.22`.
+ * The original Cautious/Balanced floors (1.6 / 1.3) were tuned for the ~98.7% RAW baseline and
+ * are unreachable against the genuine baseline — so no suggestion could ever become actionable.
+ * Floors are rebased to that real headroom: Cautious stays the strict, near-silent floor (only
+ * near-100%-reject signals clear it); Balanced is the recommended working setting; Aggressive is
+ * the loosest. Wilson/FDR/MIN_DISTINCT (unchanged) still do the heavy lifting, so this surfaces
+ * only a handful of genuinely disproportionate values, not a flood. Reconcile with
+ * docs/archive/REFINEMENT_PLAN.md §5 + docs/REFINEMENT_README.md on any change here.
+ */
 export const PRESETS = {
-  cautious:   { WILSON_FLOOR: 0.88, MIN_LIFT: 1.6,  PERSISTENCE_RUNS: 5, FDR_Q: 0.05 },
-  balanced:   { WILSON_FLOOR: 0.80, MIN_LIFT: 1.3,  PERSISTENCE_RUNS: 3, FDR_Q: 0.10 },
-  aggressive: { WILSON_FLOOR: 0.72, MIN_LIFT: 1.15, PERSISTENCE_RUNS: 2, FDR_Q: 0.15 },
+  cautious:   { WILSON_FLOOR: 0.88, MIN_LIFT: 1.20, PERSISTENCE_RUNS: 5, FDR_Q: 0.05 },
+  balanced:   { WILSON_FLOOR: 0.80, MIN_LIFT: 1.10, PERSISTENCE_RUNS: 3, FDR_Q: 0.10 },
+  aggressive: { WILSON_FLOOR: 0.72, MIN_LIFT: 1.05, PERSISTENCE_RUNS: 2, FDR_Q: 0.15 },
 };
 
 /** Shipped default preset (plan §4.6 — Cautious). */

@@ -26,7 +26,7 @@ import { loadCombinedSuggestions } from './suggestions/sources.js';
 import { suggestionListHTML } from './suggestions/card.js';
 import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
 import { createConfirm } from './suggestions/confirm.js';
-import { buildConfidenceMeter, probationStatusLabel, PRESET_OPTIONS } from './refinement/view.js';
+import { buildConfidenceMeter, probationStatusLabel, presetNudge, PRESET_OPTIONS } from './refinement/view.js';
 import { provenanceSummary } from './listings/reaction-provenance.js';
 import { resolveConfig } from './refinement/config.js';
 import { esc, byId as $, on } from './dom.js';
@@ -138,6 +138,20 @@ function renderMeter(meta) {
   el.querySelector('.ref-meter__fill')?.style.setProperty('--ref-pct', `${m.pct}%`);
 }
 
+// Sensitivity nudge (§4.6): shown only when the gate is open and strong patterns are
+// forming but nothing is actionable because the user is on the strict Cautious preset.
+// The CTA flips the preset to the recommended one via the existing setRefinementPreset().
+function renderNudge(meta, groups, preset) {
+  const el = $('ref-nudge');
+  if (!el) return;
+  const n = presetNudge(meta, groups, preset);
+  if (!n) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  el.innerHTML = `
+    <p class="ref-nudge__text">${esc(n.label)}</p>
+    <button type="button" class="ref-action ref-action--hide" data-action="apply-preset" data-preset="${esc(n.recommend)}">${esc(n.cta)}</button>`;
+}
+
 function renderList(id, cards, emptyText, variant, extraFor = () => ({})) {
   const el = $(id);
   if (!el) return;
@@ -193,6 +207,18 @@ function wireActions(refresh) {
     if (!btn) return;
     // Shared inbox cards (combined live + engine) carry data-sug-id → unified router.
     if (btn.dataset.sugId) { await handleInboxAction(btn, refresh); return; }
+    // Sensitivity nudge CTA — flip the preset to the recommended one (same writer the
+    // training control uses; applies on the next engine evaluation).
+    if (btn.dataset.action === 'apply-preset') {
+      btn.disabled = true;
+      const preset = btn.dataset.preset || 'balanced';
+      const ok = await setRefinementPreset(preset);
+      announce(ok
+        ? `Sensitivity set to ${preset}. Your forming patterns will surface as suggestions on the next evaluation.`
+        : 'Could not save that setting — please try again.');
+      if (ok) await refresh(); else btn.disabled = false;
+      return;
+    }
     const action = btn.dataset.action;
     const dimension = btn.dataset.dim;
     const value = btn.dataset.value;
@@ -279,6 +305,7 @@ async function refresh() {
   renderReactions(reactionLog);
   renderMeter(meta);
   renderPresets(preset);
+  renderNudge(meta, groups, preset);
 
   // The inbox is the SHARED, combined set (engine actionable + live conflicts) — the
   // same cards the Listings page shows. The other buckets stay engine-only.

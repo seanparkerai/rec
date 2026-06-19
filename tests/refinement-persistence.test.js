@@ -90,7 +90,7 @@ export async function register({ test, assert, assertEqual }) {
     const p = paramsOf(cfg);
     assertEqual(p.preset, 'cautious');
     assertEqual(p.WILSON_FLOOR, 0.88);
-    assertEqual(p.MIN_LIFT, 1.6);
+    assertEqual(p.MIN_LIFT, 1.20); // rebased 2026-06-19 (was 1.6) — see refinement/config.js
   });
 
   // ── planRun: tracked selection + run-audit counts ────────────────────────────

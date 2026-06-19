@@ -247,3 +247,30 @@ export function buildConfidenceMeter(meta, config = resolveConfig()) {
     label: `Still learning — about ${remaining} more reactions before suggestions begin.`,
   };
 }
+
+/**
+ * Sensitivity nudge (§4.6): when the model has learned enough (global gate open) and
+ * strong patterns are *forming* but none have become actionable, the most common cause
+ * is that the active preset is the strict Cautious floor. Surface a one-tap prompt to
+ * switch to Balanced. Returns null when there's nothing useful to nudge about — i.e.
+ * the gate is still closed, there are no forming patterns, something is already
+ * actionable, or the user is already off Cautious. Pure; the page wires the CTA to the
+ * existing setRefinementPreset().
+ *
+ * @param {object} meta    latest run meta (for the global-gate signal).
+ * @param {{counts?:{actionable?:number,forming?:number}}} groups  classifySuggestions() output.
+ * @param {string} preset  the active sensitivity preset.
+ * @returns {{recommend:string, label:string, cta:string}|null}
+ */
+export function presetNudge(meta, groups = {}, preset = 'cautious') {
+  const gateOpen = !!(meta && meta.params && meta.params.feedback && meta.params.feedback.global_gate_open);
+  const counts = groups.counts || {};
+  const actionable = Number(counts.actionable) || 0;
+  const forming = Number(counts.forming) || 0;
+  if (!gateOpen || actionable > 0 || forming < 1 || preset !== 'cautious') return null;
+  return {
+    recommend: 'balanced',
+    label: `${forming} strong pattern${forming === 1 ? ' is' : 's are'} forming, but your sensitivity is set to Cautious — the strictest setting — so none have surfaced as suggestions yet.`,
+    cta: 'Switch to Balanced to act on them',
+  };
+}
