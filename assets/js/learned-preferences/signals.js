@@ -22,7 +22,7 @@ export function priceBand(price) {
 }
 
 /** Bed bucket (5+ collapsed to curb sparsity). */
-function bedBucket(beds) {
+export function bedBucket(beds) {
   if (beds == null || beds === '') return null;
   const b = Number(beds);
   if (!Number.isFinite(b)) return null;

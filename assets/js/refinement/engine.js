@@ -13,6 +13,7 @@
 // so lift over p0 is the BINDING gate — Wilson alone passes almost everything.
 
 import { resolveConfig } from './config.js';
+import { priceBand, bedBucket } from '../learned-preferences/signals.js';
 
 const DAY_MS = 86_400_000;
 
@@ -26,15 +27,36 @@ export function normaliseValue(raw) {
   return v === '' ? null : v;
 }
 
+const boolLabel = (v) => (v === true ? 'yes' : v === false ? 'no' : null);
+
 /**
- * Read the dimension value for a reaction: `listing_snapshot` first, then the joined
- * `listings` row (§2.1). `dimension` is 'area' (→ area_id) or 'property_type'.
+ * Per-dimension value extractors (2026-06-19 expansion). Each maps a listing row OR a
+ * `listing_snapshot` to the bucketed value the engine groups on. Buckets reuse the
+ * learned-preferences helpers (price band, bed bucket) so the engine and the learned
+ * layer label values identically. area/property_type stay raw-field reads (unchanged).
+ */
+const VALUE_EXTRACTORS = {
+  area:          (l) => l.area_id,
+  property_type: (l) => l.property_type,
+  outcode:       (l) => l.outcode,
+  price_band:    (l) => priceBand(l.price),
+  beds:          (l) => bedBucket(l.beds),
+  outdoor:       (l) => boolLabel(l.outdoor_space),
+  parking:       (l) => boolLabel(l.has_parking),
+};
+
+/**
+ * Read the bucketed dimension value for a reaction: `listing_snapshot` first, then the
+ * joined `listings` row (§2.1). Returns null for unknown dimensions or missing fields,
+ * so an absent value simply doesn't contribute (no phantom bucket).
  */
 export function extractValue(reaction, dimension) {
-  const key = dimension === 'area' ? 'area_id' : 'property_type';
+  const ex = VALUE_EXTRACTORS[dimension];
+  if (!ex) return null;
   const snap = reaction.listing_snapshot || {};
   const fallback = reaction.listing || {};
-  const raw = snap[key] != null ? snap[key] : fallback[key];
+  const fromSnap = ex(snap);
+  const raw = fromSnap != null ? fromSnap : ex(fallback);
   return normaliseValue(raw);
 }
 

@@ -8,19 +8,38 @@ import { resolveConfig } from './config.js';
 export const TIER_LABEL = {
   strong: 'Strong', confident: 'Confident', probable: 'Probable', forming: 'Forming', none: '—',
 };
-export const DIMENSION_LABEL = { area: 'Area', property_type: 'Property type' };
+export const DIMENSION_LABEL = {
+  area: 'Area', property_type: 'Property type', price_band: 'Price band',
+  beds: 'Bedrooms', outdoor: 'Outdoor space', parking: 'Parking', outcode: 'Postcode area',
+};
 
 const titleCase = (s) => String(s).replace(/\b[a-z]/g, (c) => c.toUpperCase());
+
+/** Pretty a price-band bucket ('250-300k' → '£250k–£300k', '800k+' → '£800k+'). */
+function humanisePriceBand(v) {
+  if (v === '<250k') return 'Under £250k';
+  if (v.endsWith('+')) return `£${v.slice(0, -1)}+`;
+  const m = v.match(/^(\d+)-(\d+)k$/);
+  if (m) return `£${m[1]}k–£${m[2]}k`;
+  return `£${v}`;
+}
 
 /** Humanise a normalised value for display. 'chillworth-so16' → 'Chillworth (SO16)'. */
 export function humaniseValue(dimension, value) {
   const v = String(value || '');
-  if (dimension === 'area') {
-    const m = v.match(/^(.*)-([a-z]{1,2}\d[a-z\d]*)$/i);
-    if (m) return `${titleCase(m[1].replace(/-/g, ' '))} (${m[2].toUpperCase()})`;
-    return titleCase(v.replace(/-/g, ' '));
+  switch (dimension) {
+    case 'area': {
+      const m = v.match(/^(.*)-([a-z]{1,2}\d[a-z\d]*)$/i);
+      if (m) return `${titleCase(m[1].replace(/-/g, ' '))} (${m[2].toUpperCase()})`;
+      return titleCase(v.replace(/-/g, ' '));
+    }
+    case 'price_band': return humanisePriceBand(v);
+    case 'beds':       return v === '5+' ? '5+ bedrooms' : `${v} bedroom${v === '1' ? '' : 's'}`;
+    case 'outdoor':    return v === 'yes' ? 'Has outdoor space' : 'No outdoor space';
+    case 'parking':    return v === 'yes' ? 'Has parking' : 'No parking';
+    case 'outcode':    return v.toUpperCase();
+    default:           return titleCase(v); // property_type: 'semi-detached' → 'Semi-Detached'
   }
-  return titleCase(v); // property_type: 'semi-detached' → 'Semi-Detached', 'end of terrace' → 'End Of Terrace'
 }
 
 // ── Stage 5: display-hide rules (Approach B — client-side overrides filter) ──

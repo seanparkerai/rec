@@ -32,6 +32,25 @@ export const PRESETS = {
 /** Shipped default preset (plan §4.6 — Cautious). */
 export const DEFAULT_PRESET = 'cautious';
 
+/**
+ * Dimensions the engine scores (2026-06-19 expansion). `area` + `property_type` are the
+ * original two; the rest broaden coverage of reaction trends to the same buckets the
+ * learned-preferences layer uses (learned-preferences/signals.js), so labels agree.
+ */
+export const DIMENSIONS = ['area', 'property_type', 'price_band', 'beds', 'outdoor', 'parking', 'outcode'];
+
+/**
+ * Only these dimensions can drive a *scrape* change ("stop searching"): the fetcher
+ * searches by area/postcode, so you can't "stop scraping 3-bed homes". Every other
+ * dimension is display-hide / observation only. Mirrors the scrape_probation CHECK.
+ */
+export const SCRAPE_ELIGIBLE_DIMENSIONS = ['area', 'property_type'];
+
+/** Whether a dimension can be put on scrape probation (vs display-hide only). */
+export function isScrapeEligible(dimension) {
+  return SCRAPE_ELIGIBLE_DIMENSIONS.includes(dimension);
+}
+
 /** Constants identical across presets (plan §5 "Fixed constants" + engine internals). */
 export const FIXED = {
   // ── plan §5 fixed constants ────────────────────────────────────────────────

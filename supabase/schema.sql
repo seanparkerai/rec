@@ -462,7 +462,9 @@ CREATE INDEX IF NOT EXISTS idx_investments_history_account    ON investments_his
 CREATE TABLE IF NOT EXISTS refinement_suggestions (
   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   household_id      uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
-  dimension         text NOT NULL CHECK (dimension IN ('area','property_type')),
+  -- 2026-06-19: expanded beyond area/property_type to cover more reaction-trend
+  -- dimensions (price_band/beds/outdoor/parking/outcode are display/observation only).
+  dimension         text NOT NULL CHECK (dimension IN ('area','property_type','price_band','beds','outdoor','parking','outcode')),
   value             text NOT NULL,                 -- normalised lower(trim())
   metrics           jsonb NOT NULL DEFAULT '{}',   -- §2.8 engine output (counts/metrics, not id lists)
   tier              text CHECK (tier IN ('forming','probable','confident','strong')),

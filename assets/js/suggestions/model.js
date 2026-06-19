@@ -89,14 +89,25 @@ export function fromConflict(c, { areasMeta = {} } = {}) {
   }
 }
 
-/** Map ONE engine card (refinement/view.toCard() output) to a NormalizedSuggestion. */
+/** Map ONE engine card (refinement/view.toCard() output) to a NormalizedSuggestion.
+ *
+ * Action surface by dimension:
+ *   • area          → "Stop searching" (scrape probation) — the fetcher searches by area.
+ *   • property_type → "Hide from view" (display-hide rule, honoured by the feed partition).
+ *   • everything else (price_band/beds/outdoor/parking/outcode, 2026-06-19 expansion) →
+ *     notify-only: there's no feed-level lever for a price band or bed count, so these
+ *     surface as insight the user can Snooze/Dismiss, never a broken Apply.
+ */
 export function fromEngineCard(card) {
-  const isArea = card.dimension === 'area';
+  const dim = card.dimension;
+  const isArea = dim === 'area';
+  const isType = dim === 'property_type';
+  const hasLever = isArea || isType;
   return {
     source: 'engine',
-    id: `${card.dimension}:${card.value}`,
-    kind: isArea ? 'engine-area' : 'engine-type',
-    dimension: card.dimension,          // engine dimension drives snooze/dismiss
+    id: `${dim}:${card.value}`,
+    kind: isArea ? 'engine-area' : isType ? 'engine-type' : 'engine-trend',
+    dimension: dim,                     // engine dimension drives snooze/dismiss
     value: card.value,
     label: card.label,
     dimensionLabel: card.dimensionLabel,
@@ -115,11 +126,13 @@ export function fromEngineCard(card) {
     artefactNote: card.artefactNote,
     apply: isArea
       ? { fn: 'stopArea', args: { value: card.value } }
-      : { fn: 'excludeType', args: { value: card.value } },
-    applyLabel: isArea ? 'Stop searching' : 'Hide from view',
-    confirm: true,
-    confirmAction: isArea ? 'stop' : 'hide',
-    actions: ['apply', 'snooze', 'dismiss'],
+      : isType
+        ? { fn: 'excludeType', args: { value: card.value } }
+        : null,
+    applyLabel: isArea ? 'Stop searching' : isType ? 'Hide from view' : '',
+    confirm: hasLever,
+    confirmAction: isArea ? 'stop' : isType ? 'hide' : null,
+    actions: hasLever ? ['apply', 'snooze', 'dismiss'] : ['snooze', 'dismiss'],
   };
 }
 

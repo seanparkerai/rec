@@ -64,6 +64,16 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(n.confirmAction, 'hide');
   });
 
+  test('model: an expanded-dimension card is notify-only (no broken Apply, Snooze/Dismiss)', () => {
+    const card = { dimension: 'price_band', value: '800k+', label: '£800k+', dimensionLabel: 'Price band', reason: 'r', whyLines: [], tier: 'confident', tierLabel: 'Confident' };
+    const n = fromEngineCard(card);
+    assertEqual(n.kind, 'engine-trend');
+    assertEqual(n.apply, null, 'no feed-level lever for a price band → no Apply');
+    assertEqual(n.confirm, false);
+    assertEqual(n.dimension, 'price_band'); // still drives snooze/dismiss via the engine path
+    assertEqual(JSON.stringify(n.actions), JSON.stringify(['snooze', 'dismiss']));
+  });
+
   test('model: combineSuggestions leads with engine cards and de-dupes a covered area', () => {
     const conflicts = [
       { key: 'prune-area:foo-sp1', kind: 'stop-searching', message: 'm', suggestion: 's', threshold: 0, areaId: 'foo-sp1' },

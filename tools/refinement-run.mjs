@@ -21,13 +21,12 @@
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { runRefinementEngine, scoreFromAggregates } from '../assets/js/refinement/engine.js';
-import { resolveConfig } from '../assets/js/refinement/config.js';
+import { resolveConfig, DIMENSIONS } from '../assets/js/refinement/config.js';
 import { priorRunsFromRows, planRun, renderPlanSql } from '../assets/js/refinement/persistence.js';
 import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const DIMENSIONS = ['area', 'property_type'];
 
 function arg(name) {
   const i = process.argv.indexOf(name);

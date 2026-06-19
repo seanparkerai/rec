@@ -34,6 +34,18 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(humaniseValue('property_type', 'end of terrace'), 'End Of Terrace');
   });
 
+  test('view: humaniseValue formats the expanded dimensions', () => {
+    assertEqual(humaniseValue('price_band', '250-300k'), '£250k–£300k');
+    assertEqual(humaniseValue('price_band', '800k+'), '£800k+');
+    assertEqual(humaniseValue('price_band', '<250k'), 'Under £250k');
+    assertEqual(humaniseValue('beds', '3'), '3 bedrooms');
+    assertEqual(humaniseValue('beds', '1'), '1 bedroom');
+    assertEqual(humaniseValue('beds', '5+'), '5+ bedrooms');
+    assertEqual(humaniseValue('outdoor', 'no'), 'No outdoor space');
+    assertEqual(humaniseValue('parking', 'yes'), 'Has parking');
+    assertEqual(humaniseValue('outcode', 'po7'), 'PO7');
+  });
+
   // ── toCard ───────────────────────────────────────────────────────────────
   test('view: toCard derives label, reject %, lift and the four Why? lines', () => {
     const c = toCard(row());

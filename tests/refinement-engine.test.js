@@ -86,6 +86,36 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(extractValue({ listing_snapshot: {} }, 'property_type'), null);
   });
 
+  test('refinement: extractValue buckets the expanded dimensions (price/beds/outdoor/parking/outcode)', () => {
+    const snap = (s) => ({ listing_snapshot: s });
+    assertEqual(extractValue(snap({ price: 275_000 }), 'price_band'), '250-300k');
+    assertEqual(extractValue(snap({ price: 950_000 }), 'price_band'), '800k+');
+    assertEqual(extractValue(snap({ beds: 3 }), 'beds'), '3');
+    assertEqual(extractValue(snap({ beds: 7 }), 'beds'), '5+');
+    assertEqual(extractValue(snap({ outdoor_space: true }), 'outdoor'), 'yes');
+    assertEqual(extractValue(snap({ outdoor_space: false }), 'outdoor'), 'no');
+    assertEqual(extractValue(snap({ has_parking: true }), 'parking'), 'yes');
+    assertEqual(extractValue(snap({ outcode: 'PO7' }), 'outcode'), 'po7');
+    // Absent fields and unknown dimensions contribute nothing (no phantom bucket).
+    assertEqual(extractValue(snap({}), 'price_band'), null);
+    assertEqual(extractValue(snap({ outdoor_space: null }), 'outdoor'), null);
+    assertEqual(extractValue(snap({ price: 275_000 }), 'unknown_dim'), null);
+  });
+
+  test('refinement: the engine scores an expanded dimension end-to-end', () => {
+    // A genuine-style price-band pool: the 800k+ band is rejected far more than baseline.
+    const r = (reaction, price, id) => ({ listing_id: id, reaction, created_at: ago(1), listing_snapshot: { price } });
+    const reactions = [];
+    let n = 0;
+    for (let i = 0; i < 40; i++) reactions.push(r('reject', 950_000, `H${n++}`)); // 800k+ : 40/40
+    for (let i = 0; i < 30; i++) reactions.push(r('reject', 275_000, `H${n++}`)); // 250-300k mixed
+    for (let i = 0; i < 30; i++) reactions.push(r('like', 275_000, `H${n++}`));
+    const run = runRefinementEngine(reactions, { now: NOW, config: resolveConfig({ preset: 'balanced' }), dimensions: ['price_band'] });
+    const hi = run.dimensions.price_band.candidates.find((c) => c.value === '800k+');
+    assert(hi && hi.lift > 1, 'the 800k+ band lifts above the price-band baseline');
+    assert(hi.distinct_rejected_listings === 40, 'distinct rejected listings counted per dimension');
+  });
+
   // ── decay weighting ──────────────────────────────────────────────────────────
   test('refinement: decayWeight halves at one half-life and floors negative ages at 1', () => {
     assert(Math.abs(decayWeight(150, 150) - 0.5) < 1e-12, 'one half-life → 0.5');
