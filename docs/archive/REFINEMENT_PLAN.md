@@ -565,9 +565,17 @@ the preset matrix. Confirm before Stage 1 migration.
 | Constant | Cautious (default) | Balanced | Aggressive |
 |---|---|---|---|
 | `WILSON_FLOOR` | 0.88 | 0.80 | 0.72 |
-| `MIN_LIFT` | 1.6 | 1.3 | 1.15 |
+| `MIN_LIFT` | 1.20 | 1.10 | 1.05 |
 | `PERSISTENCE_RUNS` | 5 | 3 | 2 |
 | `FDR_Q` | 0.05 | 0.10 | 0.15 |
+
+> **`MIN_LIFT` rebased 2026-06-19 (was 1.6 / 1.3 / 1.15).** `lift = p_hat / baseline`, and the
+> *genuine-only* baseline the engine scores against is ~0.82 — so the maximum achievable lift is
+> `1/0.82 ≈ 1.22`. The original floors (1.6, 1.3) were tuned for the ~98.7% RAW baseline and were
+> **mathematically unreachable** against the genuine baseline, so nothing ever became actionable.
+> Rebased to the real headroom: Cautious stays the strict, near-silent floor (only near-100%-reject
+> signals clear it); Balanced is the recommended working setting; Aggressive the loosest. Wilson +
+> FDR + `MIN_DISTINCT` are unchanged, so only a handful of genuinely disproportionate values surface.
 **Fixed constants (same across presets):**
 | Constant | Default | Meaning / tuning |
 |---|---|---|
@@ -584,6 +592,17 @@ the preset matrix. Confirm before Stage 1 migration.
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-06-19** — **Refinement overhaul (calibration + expansion + cadence).** Diagnosed why
+  Luke had never seen a suggestion: all candidates sat `forming`, 0 `actionable`, because the
+  Cautious `MIN_LIFT` (1.6) exceeded the achievable ceiling (`1/baseline ≈ 1.22`). Rebased the
+  `MIN_LIFT` levers (1.20 / 1.10 / 1.05 — §5); added a sensitivity **nudge** (forming-but-stuck on
+  Cautious → switch to Balanced). Expanded the engine beyond area/property_type to
+  `price_band/beds/outdoor/parking/outcode` (migration `refinement_expand_dimensions`; non-geographic
+  dims are display/observation only, scrape_probation unchanged). Added a notify-only **Trends &
+  nudges** observation lane. Added `.github/workflows/refinement-run.yml` (daily cadence; needs owner
+  secrets). Live read-only review confirmed terraced/flat lift ≈1.19 (clears Balanced, gated by
+  Cautious) and a new `price_band` signal (≈93% reject under £300k). Harness green 716/716. Full
+  account appended to `fable_refactor.md`.
 - **2026-06-05** — **Stage 9 COMPLETE → ALL STAGES DONE.** Polish + plain-English copy
   pass; accessibility/mobile pass (native dialogs, focus-visible, 44px targets,
   aria-pressed/live, fieldset reset scope, mobile-first grids, tokens only). Safety review

@@ -39,13 +39,20 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       write-back.
 - [ ] `tools/research-house-types.mjs` (to write): 15 house types fully described + cited.
 
-### Refinement engine — deferred (documented, non-blocking)
+### Refinement engine
+- [x] **Overhaul: calibration + expansion + cadence (2026-06-19)** — rebased `MIN_LIFT` to the
+      genuine-baseline headroom (Cautious 1.20 / Balanced 1.10 / Aggressive 1.05) so suggestions can
+      actually become actionable; added the sensitivity nudge; expanded the engine to
+      `price_band/beds/outdoor/parking/outcode` (migration `refinement_expand_dimensions`); added the
+      notify-only Trends & nudges lane; added `.github/workflows/refinement-run.yml`. See
+      `docs/REFINEMENT_README.md` + the `fable_refactor.md` appendix.
+- [ ] **Enable the scheduled run** — add repo secrets (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
+      `SUPABASE_DB_URL`; optional `REFINEMENT_HOUSEHOLD_ID`) so `refinement-run.yml` runs daily.
 - [ ] §4.1 "Why?" reaction-rate sparkline + sample rejected listings (needs extra
       `listing_reactions` time-series reads beyond the counts-only `metrics`).
 - [ ] "Reconsider?" auto-badge from re-probe reject rates (portal already renders the status).
-- [ ] CI scheduling of `refinement-run.mjs` + `refinement-scope-check.mjs`, and a monotonic
-      `SCRAPER_RUN_INDEX` for `fetch-listings.mjs` — all `.github/workflows` changes
-      (§16-guarded, its own named phase). Scraper enforcement not yet live-run against Apify.
+- [ ] Monotonic `SCRAPER_RUN_INDEX` for `fetch-listings.mjs`; scraper-side probation enforcement not
+      yet live-run against Apify (§16-guarded, its own named phase).
 
 ### UI / platform (each its own named phase)
 - [x] **Remove the Report (Value Report) feature (2026-06-18)** — unused/redundant. Deleted

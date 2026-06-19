@@ -83,16 +83,30 @@ genuine set the baseline is **0.819** and the findings collapse to **8 `forming`
 `terraced`, `flat`, `end of terrace` + 5 areas — the values genuinely rejected *above* baseline.
 Detached / semi-detached / bungalow / cottage sit *below* baseline (lift < 1) and correctly
 **drop out**. The portal's "Your reactions" panel (page-refinement) shows the honest
-individual-vs-bulk split via `provenanceSummary`. Aggregates-mode callers must pre-filter the
-same way in SQL. The Hide/Stop buttons stay dormant until an actionable suggestion appears
-(lift ≥ `MIN_LIFT` 1.6, Cautious).
+individual-vs-bulk split via `provenanceSummary`.
+
+### Calibration & expansion (2026-06-19)
+The "0 actionable" above had a second, decisive cause: with the genuine baseline at ~0.82 the
+**maximum achievable lift is `1/0.82 ≈ 1.22`**, yet the Cautious `MIN_LIFT` was **1.6** (Balanced
+1.3) — both unreachable, so nothing could *ever* become actionable on the shipped default. The
+`MIN_LIFT` levers were rebased to that real headroom (**Cautious 1.20 / Balanced 1.10 / Aggressive
+1.05**); Cautious stays the strict, near-silent floor and a **sensitivity nudge** prompts a switch to
+Balanced when strong patterns are forming but held back. The engine was also expanded beyond
+`area`/`property_type` to `price_band`/`beds`/`outdoor`/`parking`/`outcode` (reusing the
+learned-preferences buckets); these non-geographic dimensions are **display/observation only** —
+`scrape_probation` stays `area`/`property_type`. A notify-only **Trends & nudges** lane
+(`assets/js/refinement/observations.js`) surfaces lighter observations more regularly. On Luke's live
+data this lifts `terraced`/`flat` to ~1.19 (clears Balanced, gated by Cautious) and surfaces a new
+`price_band` signal (~93% reject under £300k). Aggregates-mode callers must pre-filter the same way
+in SQL. The Hide/Stop buttons stay dormant until an actionable suggestion appears (lift ≥ `MIN_LIFT`,
+and the persistence gate is met across consecutive runs).
 
 ## Known follow-ups (deferred, documented)
 - The §4.1 "Why?" reaction-rate **sparkline + sample rejected listings** (need extra
   `listing_reactions` time-series reads beyond the counts-only `metrics`).
 - **"Reconsider?"** auto-badge from re-probe reject rates (the portal already renders a
   `reconsider` status when the scraper sets it).
-- **CI scheduling** of `refinement-run.mjs` + `refinement-scope-check.mjs`, and passing a
-  monotonic `SCRAPER_RUN_INDEX` to `fetch-listings.mjs` — all `.github/workflows` changes
-  (guard-railed, their own named step). The scraper enforcement is **not yet live-run**
-  against Apify.
+- **Enable the scheduled run.** `.github/workflows/refinement-run.yml` ships the daily cadence +
+  scope-check; it no-ops until the owner adds the `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and
+  `SUPABASE_DB_URL` repo secrets (optional `REFINEMENT_HOUSEHOLD_ID`). Passing a monotonic
+  `SCRAPER_RUN_INDEX` to `fetch-listings.mjs` remains a separate scraper-enforcement step.
