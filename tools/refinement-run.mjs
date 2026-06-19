@@ -62,7 +62,9 @@ async function loadInputs() {
   }
   if (!SERVICE_KEY) throw new Error('no service key — use --from-file <bundle.json> (build via MCP) for the sandbox path');
   const householdId = arg('--household') || (await restGetAll('households?select=id'))[0]?.id;
-  const reactions = await restGetAll('listing_reactions?select=listing_id,reaction,reason,reasons,created_at,listing_snapshot');
+  // Scope reactions to THIS household — the engine baseline/lift must reflect one
+  // household's taste, never a cross-household blend (the service role bypasses RLS).
+  const reactions = await restGetAll(`listing_reactions?select=listing_id,reaction,reason,reasons,created_at,listing_snapshot&household_id=eq.${householdId}`);
   const existingSuggestions = await restGetAll(`refinement_suggestions?select=dimension,value,status,runs_qualified,first_detected_at,snoozed_until&household_id=eq.${householdId}`);
   // Stage 7: the household's chosen sensitivity preset + dismiss memory live in
   // learned_preferences (reserved overrides key + dismissals). Read them so a portal
