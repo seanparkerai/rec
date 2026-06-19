@@ -88,6 +88,7 @@ const { register: registerJourneyProgress } = await import('../tests/journey-pro
 const { register: registerRefinementEngine } = await import('../tests/refinement-engine.test.js');
 const { register: registerRefinementPersistence } = await import('../tests/refinement-persistence.test.js');
 const { register: registerRefinementView } = await import('../tests/refinement-view.test.js');
+const { register: registerRefinementObservations } = await import('../tests/refinement-observations.test.js');
 const { register: registerRefinementScope } = await import('../tests/refinement-scope.test.js');
 const { register: registerReactionProvenance } = await import('../tests/reaction-provenance.test.js');
 const { register: registerTrendsGlance } = await import('../tests/trends-glance.test.js');
@@ -149,6 +150,7 @@ await registerJourneyProgress({ test, assert, assertEqual });
 await registerRefinementEngine({ test, assert, assertEqual });
 await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });
+await registerRefinementObservations({ test, assert, assertEqual });
 await registerRefinementScope({ test, assert, assertEqual });
 await registerReactionProvenance({ test, assert, assertEqual });
 await registerTrendsGlance({ test, assert, assertEqual });

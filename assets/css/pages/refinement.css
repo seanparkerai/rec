@@ -46,6 +46,23 @@
   color: var(--accent-ink);
 }
 
+/* ── Trends & nudges: notify-only observation cards (tone-coded left rule) ─────── */
+.ref-obs-list { display: grid; gap: var(--space-2); grid-template-columns: 1fr; }
+.ref-obs {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--rec-radius-sm);
+  background: var(--paper-2);
+  border-left: 3px solid var(--ink-subtle);
+}
+.ref-obs--positive { border-left-color: var(--accent); }
+.ref-obs--watch    { border-left-color: var(--danger); }
+.ref-obs__body { flex: 1 1 auto; min-width: 0; }
+.ref-obs__title { margin: 0; font-size: var(--text-sm); font-weight: 600; }
+.ref-obs__detail { margin: var(--space-1) 0 0; font-size: var(--text-sm); color: var(--ink-muted); }
+
 /* ── model-confidence meter (§4.6) ───────────────────────────────────────── */
 .ref-meter__track {
   height: var(--space-2);

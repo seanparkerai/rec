@@ -20,8 +20,11 @@ import {
   dismissSuggestion, undismissSuggestion, snoozeSuggestion, unsnoozeSuggestion,
   getRefinementPreset, setRefinementPreset, resetTraining,
   getReactionLog, getLearnedPreferences, getCriteria,
+  setConflictState,
 } from './storage.js';
 import { renderTrendsGlance } from './refinement/trends-glance.js';
+import { buildObservations, observationDismissKey } from './refinement/observations.js';
+import { dismissUntil } from './meta-observations.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
 import { suggestionListHTML } from './suggestions/card.js';
 import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
@@ -152,6 +155,26 @@ function renderNudge(meta, groups, preset) {
     <button type="button" class="ref-action ref-action--hide" data-action="apply-preset" data-preset="${esc(n.recommend)}">${esc(n.cta)}</button>`;
 }
 
+// Trends & nudges (notify-only observations). Each card is dismissible; dismissal
+// reuses the shared learned_preferences.dismissals map under an `obs:` key.
+function renderObservations(observations) {
+  const el = $('ref-observations');
+  if (!el) return;
+  if (!observations.length) {
+    el.innerHTML = emptyHTML('No trends to note yet — keep reacting and observations about your taste will appear here.');
+  } else {
+    el.innerHTML = observations.map((o) => `
+      <article class="ref-obs ref-obs--${esc(o.tone)}">
+        <div class="ref-obs__body">
+          <h3 class="ref-obs__title">${esc(o.title)}</h3>
+          <p class="ref-obs__detail">${esc(o.detail)}</p>
+        </div>
+        <button type="button" class="ref-action ref-action--ghost" data-action="dismiss-obs" data-obs-id="${esc(o.id)}" data-label="${esc(o.title)}">Dismiss</button>
+      </article>`).join('');
+  }
+  setCount('ref-obs-count', observations.length);
+}
+
 function renderList(id, cards, emptyText, variant, extraFor = () => ({})) {
   const el = $(id);
   if (!el) return;
@@ -207,6 +230,14 @@ function wireActions(refresh) {
     if (!btn) return;
     // Shared inbox cards (combined live + engine) carry data-sug-id → unified router.
     if (btn.dataset.sugId) { await handleInboxAction(btn, refresh); return; }
+    // Trends & nudges dismissal — notify-only, reuses the shared dismissals map.
+    if (btn.dataset.action === 'dismiss-obs') {
+      btn.disabled = true;
+      const ok = await setConflictState(observationDismissKey(btn.dataset.obsId), { kind: 'dismiss', until: dismissUntil(new Date()) });
+      if (ok) { announce(`Dismissed: ${btn.dataset.label || 'observation'}.`); await refresh(); }
+      else { btn.disabled = false; announce('Could not dismiss that right now — please try again.'); }
+      return;
+    }
     // Sensitivity nudge CTA — flip the preset to the recommended one (same writer the
     // training control uses; applies on the next engine evaluation).
     if (btn.dataset.action === 'apply-preset') {
@@ -306,6 +337,8 @@ async function refresh() {
   renderMeter(meta);
   renderPresets(preset);
   renderNudge(meta, groups, preset);
+  try { renderObservations(buildObservations({ reactionLog, prefs, criteria, groups, now: new Date() })); }
+  catch (e) { console.error('observations render error', e); }
 
   // The inbox is the SHARED, combined set (engine actionable + live conflicts) — the
   // same cards the Listings page shows. The other buckets stay engine-only.
