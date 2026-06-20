@@ -1,5 +1,11 @@
 # Plan: Unify user data across the portal (finances/savings/profile)
 
+> **Archived 2026-06-20.** Partly executed (Phase 5 data-contract repair landed
+> 2026-06-16 — see the `_note` in `data/snapshots/sync-state.json`). The remaining
+> finance/affordability unification is now owned by `fable_refactor.md` §10.9. Kept here
+> for provenance; originally merged via PR #21. Do not resume from this file — work the
+> fable plan instead.
+
 ## Context — why this is needed
 
 Users see savings, name, job, outgoings and finances appear inconsistently across the portal —
