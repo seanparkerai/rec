@@ -21,3 +21,6 @@ day-to-day work; the live docs are indexed in [`../README.md`](../README.md).
 - Shipped feature plans: `V3_LISTINGS_PLAN.md`, `JOURNEY_TIMELINE_PLAN.md`,
   `LISTINGS_REVIEW_GROUPS_PLAN.md`.
 - One-offs: `SUPABASE_MIGRATION.md`, `STRICT_Codex_Prompt_Remaining_Areas.md`.
+- `DATA_ALIGN_PLAN.md` — data-contract / finance-unification plan (was `data-align.md` at
+  the repo root). Partly executed (Phase 5, 2026-06-16); the remainder is now owned by
+  `fable_refactor.md` §10.9. Archived 2026-06-20.
