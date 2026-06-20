@@ -1,0 +1,27 @@
+name: cleanup-stale-branches
+
+# One-shot manual cleanup: deletes every branch except the keep-list.
+# Run from the Actions tab (Run workflow). Safe to delete this file afterwards.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Delete stale branches
+        run: |
+          KEEP="main backup/pre-rename-2026-05-25 claude/fable-refactor-plan-yfmzmq claude/fable-refactor-validation-516zhj claude/repo-cleanup-organization-86qeg9"
+          git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*'
+          for b in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin | sed 's#^origin/##' | grep -v '^HEAD$'); do
+            case " $KEEP " in *" $b "*) echo "keep   $b"; continue;; esac
+            echo "delete $b"
+            git push origin --delete "$b" || echo "  (already gone)"
+          done
+          echo "Remaining:"; git ls-remote --heads origin | wc -l
