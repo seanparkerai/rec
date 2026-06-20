@@ -71,10 +71,11 @@ export function scoreListingFit({ listing, finances, criteria, area, learnedPref
   const bMin = Number(criteria?.budget?.min) || 0;
   const bMax = Number(criteria?.budget?.max) || 0;
 
-  // 1. HARD GATES. Two symmetric price gates bound the default feed, plus the
-  // affordability gate. A gated row is hidden by default and revealable via the
-  // "Show out of reach" toggle (feed-partition's includeOOR). A KNOWN price
-  // (price > 0) gates; an unknown/0 price never does.
+  // 1. HARD GATES. Two symmetric price gates bound the default feed to the user's
+  // budget window — a known price below budget.min OR above budget.max is gated —
+  // plus the income-based affordability gate. A gated row is hidden by default and
+  // revealable via the "Show out of reach" toggle (feed-partition's includeOOR). A
+  // KNOWN price (price > 0) gates; an unknown/0 price never does.
   if (affordability.verdict === 'out-of-reach') {
     return {
       verdict: 'reject',
@@ -108,6 +109,25 @@ export function scoreListingFit({ listing, finances, criteria, area, learnedPref
     };
   }
 
+  // Above the user's own price ceiling: a known price over budget.max is gated,
+  // symmetric with the floor gate, so over-budget homes never surface in the
+  // default feed (still revealable via "Show out of reach"). The ceiling is
+  // inclusive — price === bMax is in budget and not gated.
+  if (bMax && price && price > bMax) {
+    return {
+      verdict: 'reject',
+      score: 0,
+      gated: true,
+      contributions: [{
+        signal: 'budget-ceiling',
+        label: `£${price.toLocaleString('en-GB')} — over your £${bMax.toLocaleString('en-GB')} ceiling`,
+        delta: -1,
+        detail: 'Above your maximum budget',
+      }],
+      affordability,
+    };
+  }
+
   // 2. SOFT SIGNALS — start from a neutral base and accumulate.
   let score = 0.5;
   const W = FIT_WEIGHTS;
@@ -132,9 +152,9 @@ export function scoreListingFit({ listing, finances, criteria, area, learnedPref
   else if (typeIn(prefs.preferred, type)) add('type', `${type} — a preferred type`, W.typePreferred);
   else if (typeIn(prefs.acceptable, type)) add('type', `${type} — acceptable`, W.typeAcceptable);
 
-  // Price vs budget window (bMin/bMax hoisted above for the price gates).
-  if (bMax && price > bMax) add('price', `£${price.toLocaleString('en-GB')} — over your £${bMax.toLocaleString('en-GB')} ceiling`, W.priceOverBudget);
-  else if (price && (!bMin || price >= bMin) && (!bMax || price <= bMax)) add('price', 'Within your budget window', W.priceInBudget);
+  // Price vs budget window. Out-of-window prices are hard-gated above, so any
+  // listing that reaches here with a known price is within [bMin, bMax]; credit it.
+  if (price && (!bMin || price >= bMin) && (!bMax || price <= bMax)) add('price', 'Within your budget window', W.priceInBudget);
 
   // LISA eligibility (from the affordability signals — single source).
   if (affordability.bandSignals?.lisaEligible) add('lisa', 'LISA-eligible price', W.lisaEligible);
