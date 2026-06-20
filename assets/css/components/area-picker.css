@@ -1,0 +1,41 @@
+/* components/area-picker.css — reusable "add a search area" picker (lookup → results →
+   chosen chips). Shared by the areas/map "Add area" dialog and the profile Areas
+   section. Token-driven, calm-precise-editorial. anchor: Stripe-docs.
+   Imported via dashboard.css (append-only). */
+
+.area-picker { display: flex; flex-direction: column; gap: var(--space-2); }
+.area-picker__label,
+.area-picker__chosen-label { font-weight: 500; margin: 0; }
+.area-picker__chosen-label { margin-block-start: var(--space-2); }
+.area-picker input { margin: 0; min-block-size: var(--tap-min); }
+.area-picker__help { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+
+/* lookup results */
+.area-picker__results {
+  list-style: none; margin: 0; padding: 0;
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+}
+.area-picker__results:empty { display: none; }
+.area-picker__opt {
+  padding: var(--space-2) var(--space-3); cursor: pointer;
+  min-block-size: var(--tap-min); display: flex; align-items: center;
+}
+.area-picker__opt:hover,
+.area-picker__opt:focus-visible { background: color-mix(in oklch, var(--accent) 10%, var(--paper)); outline: none; }
+
+/* chosen-area chips */
+.area-picker__chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.area-picker__chips-empty { margin: 0; font-size: var(--text-sm); }
+.area-picker__chip {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 0.3rem 0.5rem 0.3rem 0.75rem;
+  border: 1px solid var(--hairline); border-radius: 99px;
+  font-size: var(--text-sm); background: var(--paper);
+}
+.area-picker__chip.is-paused { color: var(--ink-muted); }
+.area-picker__chip-x {
+  inline-size: 1.5rem; block-size: 1.5rem; min-block-size: 0;
+  padding: 0; margin: 0; border-radius: 99px; line-height: 1;
+  border: 0; background: color-mix(in oklch, var(--ink) 8%, var(--paper)); color: var(--ink);
+}
+.area-picker__chip-x:disabled { opacity: 0.5; cursor: default; }

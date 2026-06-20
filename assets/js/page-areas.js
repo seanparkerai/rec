@@ -4,6 +4,7 @@ import { url } from './config.js';
 import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
 import { esc, byId as $ } from './dom.js';
+import { mountAreaPicker } from './areas/area-picker.js';
 
 let areas = [];
 let shortlist = new Set();
@@ -249,6 +250,56 @@ function applyStateToControls() {
   if ($('search-radius')) $('search-radius').value = String(searchRadiusMi);
 }
 
+// "Add area" → a native <dialog> hosting the reusable area-picker. The picker
+// dispatches `household-areas-changed` on every add/remove, which reload() (and the
+// map) listen for, so the list + map stay live without a page reload.
+function attachAddArea() {
+  const openBtn = $('btn-add-area');
+  if (!openBtn) return;
+  let dialog = null;
+  let picker = null;
+  openBtn.addEventListener('click', async () => {
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.className = 'area-add-dialog';
+      dialog.setAttribute('aria-labelledby', 'area-add-title');
+      const article = document.createElement('article');
+      const header = document.createElement('header');
+      const h2 = document.createElement('h2');
+      h2.id = 'area-add-title';
+      h2.textContent = 'Add an area';
+      const close = document.createElement('button');
+      close.type = 'button';
+      close.className = 'outline secondary';
+      close.textContent = 'Done';
+      close.setAttribute('aria-label', 'Close');
+      close.addEventListener('click', () => dialog.close());
+      header.append(h2, close);
+      const mount = document.createElement('div');
+      article.append(header, mount);
+      dialog.append(article);
+      document.body.append(dialog);
+      picker = await mountAreaPicker(mount, {});
+    } else {
+      // Refresh chips in case areas changed while the dialog was closed.
+      await picker?.refresh?.();
+    }
+    dialog.showModal();
+  });
+}
+
+// Re-pull the household areas and repaint list + counts. Called on first load and
+// whenever an area is added/removed (household-areas-changed).
+async function reload() {
+  areas = await getHouseholdAreas({ includeInactive: true });
+  $('total-count').textContent = areas.filter((a) => a._status !== 'inactive').length;
+  populateFilters();
+  updateSubRegions({ preserve: true });
+  applyStateToControls();
+  updateCounts();
+  rerender();
+}
+
 function attachControls() {
   $('search').addEventListener('input', (e) => {
     state.search = e.target.value;
@@ -300,21 +351,17 @@ async function init() {
     // includeInactive so paused areas remain listed (behind the "Show paused"
     // filter) and can be reactivated; the map + listings still read the default
     // active-only path so a paused area drops off them immediately.
-    areas = await getHouseholdAreas({ includeInactive: true });
     shortlist = new Set(await getShortlist());
     try { finData = await getFinances(); } catch (e) { console.error('finances fetch', e); }
     try {
       criData = await getCriteria();
       searchRadiusMi = Number(criData?.location?.searchRadiusMi ?? 3);
     } catch (e) { console.error('criteria fetch', e); }
-    $('total-count').textContent = areas.filter((a) => a._status !== 'inactive').length;
     readStateFromURL();
-    populateFilters();
-    updateSubRegions({ preserve: true });
-    applyStateToControls();
-    updateCounts();
     attachControls();
-    rerender();
+    attachAddArea();
+    window.addEventListener('household-areas-changed', () => { reload(); });
+    await reload();
   } catch (e) {
     console.error('areas init error', e);
     $('areas-grid').innerHTML = `<p class="muted">Failed to load areas.</p>`;

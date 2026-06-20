@@ -35,3 +35,6 @@
 @import 'pages/property.css';
 @import 'pages/refinement.css';
 @import 'pages/ask.css';
+
+/* Reusable components loaded on dashboard pages */
+@import 'components/area-picker.css';

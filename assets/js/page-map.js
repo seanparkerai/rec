@@ -17,6 +17,7 @@ const DEFAULT_GEOFENCE_MI = 3;      // resolve-areas.mjs default; ≈ the 4.8 km
 let map = null;
 let drawLayer = null;
 let geofenceLayer = null;           // the real per-area listings catchment (active areas only)
+let markerLayer = null;             // the area-marker cluster; tracked so it can be cleared on reload
 let _areasWithCoords = [];          // populated by loadAreaMarkers; used for geofence redraws
 let _shortlistSet = new Set();      // populated by loadAreaMarkers; used for geofence styling
 let _globalRadius = DEFAULT_GEOFENCE_MI;   // household default radius (criteria.location.searchRadiusMi)
@@ -55,6 +56,9 @@ function init() {
   loadAreaMarkers();
   attachActions();
   wireGeofenceToggle();
+  // Redraw markers + geofences live when an area is added/removed elsewhere on the
+  // page (the "Add area" picker). fit:false so the viewport doesn't jump.
+  window.addEventListener('household-areas-changed', () => loadAreaMarkers({ fit: false }));
 }
 
 // ---- Fullscreen control: expand the map card to fill the screen ----
@@ -235,8 +239,13 @@ function buildGeofenceLayer(areasWithCoords, shortlist, displayRadiusMi = null, 
   return layer;
 }
 
-async function loadAreaMarkers() {
+async function loadAreaMarkers({ fit = true } = {}) {
   try {
+    // Clear any existing layers so a live reload (area added/removed) doesn't stack
+    // duplicate markers/rings on top of the old ones.
+    if (markerLayer) { map.removeLayer(markerLayer); markerLayer = null; }
+    if (geofenceLayer) { map.removeLayer(geofenceLayer); geofenceLayer = null; }
+
     const areas = await getHouseholdAreas();
     let finances = null, criteria = null;
     try { finances = await getFinances(); } catch (_) {}
@@ -301,12 +310,14 @@ async function loadAreaMarkers() {
       cluster.addLayer(marker);
     });
     cluster.addTo(map);
+    markerLayer = cluster;
     // Fit to the catchment (circles extend ~3 mi beyond the edge markers) so the whole
     // working area is visible, falling back to the markers when geofences are empty.
+    // Skipped on live reloads (fit:false) so adding an area doesn't yank the viewport.
     const fitTarget = geofenceLayer.getLayers().length
       ? geofenceLayer.getBounds().extend(cluster.getBounds())
       : cluster.getBounds();
-    if (withCoords.length >= 3) map.fitBounds(fitTarget, { padding: [40, 40] });
+    if (fit && withCoords.length >= 3) map.fitBounds(fitTarget, { padding: [40, 40] });
     const approxCount = withCoords.filter((a) => a.coordsSource === 'postcode-outward-approx').length;
     const approxNote = approxCount ? ` <span class="muted">(${approxCount} at approximate postcode-area centroid; run <code>node tools/geocode-areas.mjs</code> for precise village locations.)</span>` : '';
     $('map-status').innerHTML = `Showing <strong>${withCoords.length}</strong> of <strong>${areas.length}</strong> areas; <strong>${activeGeofences}</strong> active geofences (listings catchment, ≈3 mi radius); ${shortlist.size} shortlisted.${approxNote}`;
