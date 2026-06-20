@@ -81,7 +81,7 @@
       'pages/journey.html', 'pages/finances.html',
       'pages/listings.html', 'pages/saved-listings.html', 'pages/property.html', 'pages/outreach.html',
       'pages/ask.html', 'pages/refinement.html',
-      'pages/setup.html', 'pages/login.html',
+      'pages/login.html',
     ];
     for (const p of ALL_PAGES)
       await test(`page ${p} reachable`, async () => assert(await fetchOk(p), 'not 200'));

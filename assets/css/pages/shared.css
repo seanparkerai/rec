@@ -39,8 +39,8 @@
 }
 .ht-shortlist .num { color: var(--accent-ink, var(--ink)); font-weight: 500; }
 
-/* Your Profile data-guard: keep #main hidden until page-profile-page.js confirms a
-   populated household (mirrors auth-guard's data-auth-state pending pattern). The
-   coordinator clears the attribute on success, or navigates to setup.html before
-   anything renders, so an empty household never flashes synthetic placeholder data. */
+/* Your Profile anti-flash: keep #main hidden until page-profile-page.js has resolved
+   auth/data (mirrors auth-guard's data-auth-state pending pattern). The coordinator
+   clears the attribute once ready and reveals the page — empty households render the
+   editable profile with a first-run banner rather than flashing sample data. */
 html[data-profile-state="pending"] #main { visibility: hidden; }

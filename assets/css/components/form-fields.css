@@ -1,0 +1,45 @@
+/* components/form-fields.css — the shared field/chip/consent styles used by the
+   declarative field engine (forms/field-renderer.js). Originally lived only in
+   pages/setup.css (wizard-only); promoted here so the same fields render styled on
+   dashboard pages (the profile's editable sections). anchor: Stripe-docs.
+   Imported via dashboard.css (append-only, §16). */
+
+.wiz__fields { display: flex; flex-direction: column; gap: var(--space-4); }
+.wiz-field { display: flex; flex-direction: column; gap: var(--space-1); }
+.wiz-field > label { font-weight: 500; }
+.wiz-field__help { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+.wiz-field__err { margin: 0; min-block-size: 1.1em; font-size: var(--text-sm); color: var(--danger); }
+.wiz-field input, .wiz-field select, .wiz-field textarea { margin: 0; min-block-size: var(--tap-min); }
+
+/* chips (list editor) */
+.wiz-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.wiz-chip {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 0.3rem 0.5rem 0.3rem 0.75rem;
+  border: 1px solid var(--hairline); border-radius: 99px;
+  font-size: var(--text-sm); background: var(--paper);
+}
+.wiz-chip__x {
+  inline-size: 1.5rem; block-size: 1.5rem; min-block-size: 0;
+  padding: 0; margin: 0; border-radius: 99px; line-height: 1;
+  border: 0; background: color-mix(in oklch, var(--ink) 8%, var(--paper)); color: var(--ink);
+}
+.wiz-addrow { display: flex; gap: var(--space-2); }
+.wiz-addrow input { flex: 1 1 auto; }
+.wiz-addrow button { flex: 0 0 auto; min-block-size: var(--tap-min); }
+
+/* consent */
+.wiz-field--consent .wiz-consent { display: flex; align-items: flex-start; gap: var(--space-2); font-weight: 500; }
+.wiz-field--consent input { inline-size: 1.25rem; block-size: 1.25rem; margin-block-start: 0.15rem; }
+
+/* first-run welcome banner (empty household) + autosave note */
+.first-run-banner {
+  border: 1px solid var(--accent);
+  border-radius: var(--rec-radius-sm);
+  background: color-mix(in oklch, var(--accent) 7%, var(--paper));
+  padding: var(--space-3) var(--space-4);
+  margin-block-end: var(--space-4);
+}
+.first-run-banner p { margin: 0; }
+.first-run-banner .first-run-needed { color: var(--ink-muted); }
+.profile-section__autosave { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--ink-muted); }

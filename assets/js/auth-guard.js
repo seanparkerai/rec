@@ -10,15 +10,6 @@
   const html = document.documentElement;
   const here     = location.pathname;
   const isLogin  = here.endsWith('/login.html');
-  const isSetup  = here.endsWith('/setup.html');
-
-  // The Setup page is always accessible — it contains the credential /
-  // household configuration tools, so blocking it would trap users who
-  // have a bad supabase-client.js or stale session.
-  if (isSetup) {
-    html.removeAttribute('data-auth-state');
-    return;
-  }
 
   let supabase;
   try {

@@ -38,16 +38,24 @@ export function createFieldRenderer({
   branchPaths = ['profile.buyingSituation', 'profile.household.applicants', 'profile.employment.basis'],
   renderArea = null,
 } = {}) {
+  // Per-blob set of dotted paths this engine has actually written. Hosts that share a
+  // blob with other editors on the same page (e.g. the profile page) read this to merge
+  // only the touched paths onto the freshest blob, instead of saving a whole stale clone
+  // (which would revert a sibling editor's changes).
+  const dirty = { profile: new Set(), criteria: new Set(), finances: new Set(), goals: new Set() };
+
   function writeField(field, value) {
     const [head, ...rest] = field.path.split('.');
     if (!BLOBS.includes(head)) return;
+    const restPath = rest.join('.');
     if (field.type === 'money-line') {
       // Capture into the array the app actually sums (e.g. finances.expenses), as a
       // single labelled, re-editable entry — not a dead scalar key.
-      setLineValue(state[head], rest.join('.'), { lineId: field.lineId, label: field.lineLabel, value });
+      setLineValue(state[head], restPath, { lineId: field.lineId, label: field.lineLabel, value });
     } else {
-      setNested(state[head], rest.join('.'), value);
+      setNested(state[head], restPath, value);
     }
+    dirty[head].add(restPath);
     saver.queue(head, state[head]);
     onChange();
   }
@@ -155,6 +163,7 @@ export function createFieldRenderer({
     box.checked = granted;
     on(box, 'change', () => {
       setNested(state.profile, 'consents.health', box.checked ? { granted: true, at: new Date().toISOString() } : { granted: false, at: new Date().toISOString() });
+      dirty.profile.add('consents.health');
       saver.queue('profile', state.profile);
       onChange();
       onBranchChange(); // reveal/hide the dependent health-notes field
@@ -165,5 +174,5 @@ export function createFieldRenderer({
     ]);
   }
 
-  return { renderField, writeField };
+  return { renderField, writeField, dirty };
 }

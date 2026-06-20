@@ -168,7 +168,7 @@ universe as the user.
 ## 5. What this does NOT cover
 
 - **Auth flow** — sign-in / sign-up / password reset live in `pages/login.html` and
-  `pages/setup.html` and use Supabase Auth directly. Not Claude's concern unless changing the flow.
+  use Supabase Auth directly. Not Claude's concern unless changing the flow.
 - **Storage buckets** — not currently used. If we add image hosting via Supabase Storage, that gets
   its own §6 in this document and its own sync test.
 - **Edge functions** — none today. Same note as above.

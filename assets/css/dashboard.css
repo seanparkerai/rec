@@ -38,3 +38,4 @@
 
 /* Reusable components loaded on dashboard pages */
 @import 'components/area-picker.css';
+@import 'components/form-fields.css';

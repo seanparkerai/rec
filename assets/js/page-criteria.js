@@ -1,5 +1,5 @@
 // page-criteria.js — render the editable search criteria form with all filters.
-import { getCriteria, saveCriteria, _internal } from './storage.js';
+import { getCriteria, saveCriteria, _internal, hasRealUserData } from './storage.js';
 import { esc, byId } from './dom.js';
 import { gbp, listView, listEdit, fieldView, fieldEdit, setNestedValue } from './criteria/form.js';
 
@@ -225,7 +225,7 @@ function refreshOverlayBadge() {
   const overlay = _internal.readLocal('criteria');
   const badge = $('overlay-badge');
   const reset = $('btn-reset');
-  const has = !!overlay;
+  const has = hasRealUserData(overlay);
   badge.hidden = !has;
   reset.hidden = !has || editing;
 }
@@ -348,7 +348,8 @@ function saveEdit() {
 async function resetToDefaults() {
   if (!confirm('Discard local criteria edits and reload from your saved data? This cannot be undone.')) return;
   localStorage.removeItem('rec:criteria');
-  current = await getCriteria();
+  const c = await getCriteria();
+  current = hasRealUserData(c) ? c : {};
   renderAll();
   setStatus('Reset to repo defaults.', 'ok');
 }
@@ -362,7 +363,8 @@ function setStatus(msg, kind = '') {
 async function init() {
   if (!$('btn-edit')) return;
   try {
-    current = await getCriteria();
+    const c = await getCriteria();
+    current = hasRealUserData(c) ? c : {};
     renderAll();
   } catch (e) {
     console.error('criteria init error', e);

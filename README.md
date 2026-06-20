@@ -44,9 +44,11 @@ for instant renders. No build step.
   stored **only** in a private Supabase Postgres database, protected by Row Level Security so only
   authenticated household members can read it. It is **never** stored in the repo.
 
-First-time Supabase setup is guided by [`pages/setup.html`](pages/setup.html). The schema lives in
+First-time Supabase setup is documented in [`supabase/README.md`](supabase/README.md). The schema lives in
 [`supabase/schema.sql`](supabase/schema.sql); only `assets/js/storage.js` (data) and
-`assets/js/auth-guard.js` (sessions) talk to Supabase directly.
+`assets/js/auth-guard.js` (sessions) talk to Supabase directly. New users enter their details directly on
+[`pages/profile.html`](pages/profile.html) — every field is editable inline, guided by a first-run prompt
+until real data exists.
 
 ## 🧠 Self-learning feed
 

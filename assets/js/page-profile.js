@@ -1,7 +1,7 @@
 // page-profile.js — anchor: Stripe-docs editorial article.
 // Read view = article sections with field lists + chip grids.
 // Edit = native <dialog> with all fields, save persists via storage.js.
-import { getProfile, saveProfile, getCriteria, _internal } from './storage.js';
+import { getProfile, saveProfile, getCriteria, getFinances, _internal, hasRealUserData } from './storage.js';
 import { getDerivedFinances } from './finance-load.js';
 import { mountSavingsEditor } from './savings-editor.js';
 import { normalizeProfile, canonicalProfile, employmentDisplay, creditDisplay, householdDisplay } from './profile-schema.js';
@@ -47,6 +47,15 @@ function renderTiles(criteria, finances) {
   const tw = $('tile-window'); if (tw) tw.textContent = current?.movingTimeline || '—';
 }
 
+// Load criteria + derived finances for the headline tiles, treating the redacted
+// _SAMPLE seed (fresh household) as empty so a new user sees "—", not sample figures.
+async function refreshTiles() {
+  const [critRaw, finRaw] = await Promise.all([getCriteria(), getFinances()]);
+  const crit = hasRealUserData(critRaw) ? critRaw : {};
+  const fin = hasRealUserData(finRaw) ? await getDerivedFinances() : {};
+  renderTiles(crit, fin);
+}
+
 function renderFieldList(container, rows) {
   container.innerHTML = rows.map(([label, value]) => `
     <div class="field-view">
@@ -86,7 +95,7 @@ function renderAll() {
 }
 
 function refreshOverlayBadge() {
-  const has = !!_internal.readLocal('profile');
+  const has = hasRealUserData(_internal.readLocal('profile'));
   const badge = $('p-overlay-badge');
   if (badge) badge.hidden = !has;
 }
@@ -172,25 +181,32 @@ function closeEdit() {
 }
 
 async function saveEdit() {
-  current = canonicalProfile(collectDialog());
+  // Merge editorial fields onto the FRESHEST profile so we don't revert structured edits
+  // (person, employment, credit…) made in the inline "Application detail" sections, which
+  // write the same blob from their own clone. We overlay only the dialog's own fields.
+  const local = _internal.readLocal('profile');
+  const base = normalizeProfile(hasRealUserData(local) ? local : await getProfile().then((p) => hasRealUserData(p) ? p : {}));
+  const dialog = collectDialog();
+  const next = { ...base };
+  for (const f of TEXT_FIELDS) if (f.key in dialog) next[f.key] = dialog[f.key];
+  next.priorities = dialog.priorities;
+  next.dealBreakers = dialog.dealBreakers;
+  current = canonicalProfile(next);
   saveProfile(current);
   closeEdit();
   renderAll();
-  const fin = await getDerivedFinances();
-  const crit = await getCriteria();
-  renderTiles(crit, fin);
+  await refreshTiles();
   setStatus('Saved locally.', 'ok');
 }
 
 async function resetToDefaults() {
   if (!confirm('Discard local profile edits and reload from your saved data? This cannot be undone.')) return;
   localStorage.removeItem('rec:profile');
-  current = normalizeProfile(await getProfile());
+  const prof = await getProfile();
+  current = normalizeProfile(hasRealUserData(prof) ? prof : {});
   closeEdit();
   renderAll();
-  const fin = await getDerivedFinances();
-  const crit = await getCriteria();
-  renderTiles(crit, fin);
+  await refreshTiles();
   setStatus('Reset to repo defaults.', 'ok');
 }
 
@@ -205,10 +221,9 @@ function setStatus(msg, kind = '') {
 async function init() {
   if (!$('p-btn-edit')) return;
   try {
-    current = normalizeProfile(await getProfile());
-    const fin = await getDerivedFinances();
-    const crit = await getCriteria();
-    renderTiles(crit, fin);
+    const prof = await getProfile();
+    current = normalizeProfile(hasRealUserData(prof) ? prof : {});
+    await refreshTiles();
     renderAll();
   } catch (e) {
     console.error('profile init error', e);
@@ -225,9 +240,7 @@ async function init() {
   mountSavingsEditor({
     openerId: 'p-btn-edit-savings',
     onSaved: async () => {
-      const fin = await getDerivedFinances();
-      const crit = await getCriteria();
-      renderTiles(crit, fin);
+      await refreshTiles();
       setStatus('Savings updated.', 'ok');
     },
   });
