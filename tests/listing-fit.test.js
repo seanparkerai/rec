@@ -27,6 +27,20 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assert(r.contributions.some((c) => c.signal === 'budget-floor'), 'below-min reason surfaced');
   });
 
+  test('listing-fit: a price above budget.max is gated to reject', () => {
+    // fixture budget.max is 350000; an affordable price above it gates out of the feed.
+    const r = scoreListingFit({ listing: mk({ price: 360000 }), finances, criteria });
+    assertEqual(r.verdict, 'reject');
+    assertEqual(r.gated, true);
+    assert(r.contributions.some((c) => c.signal === 'budget-ceiling'), 'over-max reason surfaced');
+  });
+
+  test('listing-fit: a price exactly at budget.max is in budget and not gated', () => {
+    // The ceiling is inclusive — price === budget.max (350000) must not gate.
+    const r = scoreListingFit({ listing: mk({ price: 350000 }), finances, criteria });
+    assertEqual(r.gated, false);
+  });
+
   test('listing-fit: an unknown (zero/absent) price does not trip the below-min gate', () => {
     const r = scoreListingFit({ listing: mk({ price: 0 }), finances, criteria });
     assertEqual(r.gated, false);
