@@ -90,6 +90,7 @@ const { register: registerRefinementPersistence } = await import('../tests/refin
 const { register: registerRefinementView } = await import('../tests/refinement-view.test.js');
 const { register: registerRefinementObservations } = await import('../tests/refinement-observations.test.js');
 const { register: registerRefinementScope } = await import('../tests/refinement-scope.test.js');
+const { register: registerRefinementRadius } = await import('../tests/refinement-radius.test.js');
 const { register: registerReactionProvenance } = await import('../tests/reaction-provenance.test.js');
 const { register: registerTrendsGlance } = await import('../tests/trends-glance.test.js');
 const { register: registerSuggestionsModel } = await import('../tests/suggestions-model.test.js');
@@ -152,6 +153,7 @@ await registerRefinementPersistence({ test, assert, assertEqual });
 await registerRefinementView({ test, assert, assertEqual });
 await registerRefinementObservations({ test, assert, assertEqual });
 await registerRefinementScope({ test, assert, assertEqual });
+await registerRefinementRadius({ test, assert, assertEqual });
 await registerReactionProvenance({ test, assert, assertEqual });
 await registerTrendsGlance({ test, assert, assertEqual });
 await registerSuggestionsModel({ test, assert, assertEqual });

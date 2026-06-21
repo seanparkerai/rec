@@ -11,7 +11,8 @@ the table in §1 as authoritative — every data type in the app belongs to exac
 
 ## 0. Canonical table inventory (single source of truth)
 
-**Live schema = 31 tables in `public`** (verified via `list_tables` 2026-06-15, **all RLS-enabled**).
+**Live schema = 32 tables in `public`** (verified via `list_tables` 2026-06-15; `area_search_tuning`
+added 2026-06-21, **all RLS-enabled**).
 **23 are "tracked"** for the sync contract — **21 user-state + 2 content mirrors** — and appear in
 `data/snapshots/sync-state.json` (the snapshot also carries a high-water entry for the untracked
 `listings` table). The enforced list lives in `tests/supabase-sync.test.js`; any other
@@ -36,9 +37,12 @@ doc, test, or rule that states a different count is wrong and must be reconciled
 - **2 content mirrors**: `areas` (**DB-canonical** since the 2026-06-04 §18.5 relaxation —
   `data/areas/<id>.json` is a materialised view) and `house_types` (repo-JSON-canonical, mirrored).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.
-- **4 untracked** (never git-synced): `listings` (live content, see below) and the
-  engine-managed refinement tables `refinement_suggestions`, `refinement_runs`,
-  `scrape_probation` (see `docs/REFINEMENT_README.md`).
+- **5 untracked** (never git-synced): `listings` (live content, see below) and the
+  engine-managed tables `refinement_suggestions`, `refinement_runs`, `scrape_probation`
+  and `area_search_tuning` (the per-area learned search radius — AREA-GLOBAL, public-SELECT
+  RLS like the content mirrors but service-role-only writes; written by
+  `tools/radius-tune.mjs`, read live by `tools/fetch-listings.mjs`; see
+  `docs/REFINEMENT_README.md`).
 
 Note: `checklists` and `outreach_templates` have **no** mirror table — those catalogues are
 repo-JSON-only.

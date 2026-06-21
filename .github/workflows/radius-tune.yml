@@ -1,0 +1,73 @@
+# radius-tune — per-area learned search radius (docs/REFINEMENT_README.md "Per-area
+# learned search radius"). Runs tools/radius-tune.mjs on a GitHub runner (which has the
+# service-role key, unlike the Claude sandbox), then applies the emitted SQL plan with
+# psql. The plan touches ONLY area_search_tuning, refinement_suggestions (dimension
+# 'area_radius') and sync_log — never listings, criteria, zones, or the scrape scope set.
+#
+# CADENCE. Daily at ~05:30 UTC — AHEAD of the 06:00 refinement-run and the 08:00 fetch, so
+# the day's fetch reads a fresh radius. Idempotent (the SQL is UPSERTs with a status guard
+# + COALESCE override guard), so a missed or repeated run is harmless. The exploration ring
+# is time-based (explore_until / last_explored_at), so cadence drift never breaks it.
+#
+# REQUIRED REPO SECRETS (shared with refinement-run; the job no-ops until they are set):
+#   - SUPABASE_URL               e.g. https://<project>.supabase.co  (PostgREST reads)
+#   - SUPABASE_SERVICE_ROLE_KEY  service role key (reads cross-household reactions + tuning)
+#   - SUPABASE_DB_URL            Postgres connection string (psql applies the SQL plan)
+#
+# If a secret is missing the job no-ops with a clear message rather than failing red.
+name: radius-tune
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Evaluate + print the SQL plan only, do not apply'
+        type: boolean
+        default: false
+  schedule:
+    - cron: '30 5 * * *'   # daily 05:30 UTC (ahead of refinement-run 06:00 + fetch 08:00)
+
+concurrency:
+  group: radius-tune
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Guard — required secrets present
+        id: guard
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ] || [ -z "$SUPABASE_DB_URL" ]; then
+            echo "::warning::radius-tune skipped — set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY and SUPABASE_DB_URL repo secrets to enable it."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Evaluate — emit the SQL plan
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node tools/radius-tune.mjs --emit-sql /tmp/radius-plan.sql
+
+      - name: Apply — run the plan with psql
+        if: steps.guard.outputs.ready == 'true' && inputs.dry_run != true
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f /tmp/radius-plan.sql

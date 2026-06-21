@@ -33,7 +33,10 @@ reversible user action in the UI. No hard deletes, ever.
 | Scheduled evaluation job | `tools/refinement-run.mjs` |
 | Scraper enforcement | `tools/fetch-listings.mjs` (`loadProbation` → `probationDropIds`) |
 | Scope invariant / drift check | `tools/refinement-scope-check.mjs` |
-| Tables | `refinement_suggestions`, `refinement_runs`, `scrape_probation` (engine-managed, untracked); state on `learned_preferences` |
+| Per-area radius learner (pure) | `assets/js/refinement/radius.js` + plan builder `assets/js/refinement/radius-persistence.js` |
+| Radius scheduled job | `tools/radius-tune.mjs` (+ `.github/workflows/radius-tune.yml`) |
+| Radius scraper enforcement | `tools/fetch-listings.mjs` (`loadRadiusTuning` → `applyRadiusTuning`) |
+| Tables | `refinement_suggestions`, `refinement_runs`, `scrape_probation`, `area_search_tuning` (engine-managed, untracked); state on `learned_preferences` |
 
 ## The two levers (both reversible)
 - **Display-hide** (low stakes): "Hide these from view" writes a rule into
@@ -101,7 +104,53 @@ data this lifts `terraced`/`flat` to ~1.19 (clears Balanced, gated by Cautious) 
 in SQL. The Hide/Stop buttons stay dormant until an actionable suggestion appears (lift ≥ `MIN_LIFT`,
 and the persistence gate is met across consecutive runs).
 
+## Per-area learned search radius (2026-06-21)
+Every area was scraped + geofenced with the **same ~3 mi** radius, but the accept/reject data shows
+the optimal radius varies ~9× per area (tight suburban cores see likes only within ~0.3–0.5 mi; rural
+areas out to ~2.6 mi). A single radius over-scrapes suburban areas (paid noise + reject fatigue). The
+**radius learner** (`radius.js`, pure) reads the **time-decayed `distance_mi` of LIKED homes** per area
+(from `listing_snapshot`, the same source the engine reads) and recommends, per area:
+
+```
+recommended = clamp(weightedQuantile(like_distances, RADIUS_QUANTILE) + RADIUS_MARGIN_MI,
+                    RADIUS_FLOOR_MI, RADIUS_CEIL_MI)        gated on Σ decayed like-weight ≥ RADIUS_MIN_LIKES
+```
+
+The **applied** value is the **MAX across households** (a union, mirroring `priceBandForAreas`, so a
+tight household never starves a wider one); below the like gate → no row → the fetcher keeps the
+default. Two sinks:
+- **`area_search_tuning`** (new, engine-managed, **untracked**, AREA-GLOBAL; public-SELECT RLS like the
+  content mirrors, service-role-only writes) — the auto-applied `search_radius_mi`/`geofence_radius_mi`
+  + a user `override_radius_mi` that **always wins** (the upsert re-derives applied via
+  `COALESCE(override, recommended)`), read live by `fetch-listings.mjs`.
+- **`refinement_suggestions` `dimension='area_radius'`** — the per-household tighten/widen advice,
+  riding the existing engine-proposes inbox, reusing `persistence.js#resolveStatus` so a
+  confirmed/dismissed/snoozed radius row is never re-nagged. Raised only when
+  `|recommended − current| ≥ RADIUS_MIN_CHANGE_MI`.
+
+**Exploration ring (anti-selection-bias).** Tightening stops us scraping/showing homes beyond the
+learned radius, so the boundary can't be re-measured. Each area is rotated through an exploration
+window: every `RADIUS_EXPLORE_EVERY_DAYS` the tuner sets `explore_until = now + RADIUS_EXPLORE_WINDOW_H`
+(the fetcher then uses `RADIUS_CEIL_MI` for that area), staggered by an area-id hash so areas don't all
+widen on the same day. Cadence is purely time-based (`last_explored_at` / `explore_until`) — no monotonic
+run-index needed.
+
+**Tunable constants** (in `config.js` `FIXED`, reconcile here on change):
+`DEFAULT_RADIUS_MI` 3 · `RADIUS_FLOOR_MI` 0.5 · `RADIUS_CEIL_MI` 3.0 · `RADIUS_QUANTILE` 0.9 ·
+`RADIUS_MARGIN_MI` 0.3 · `RADIUS_MIN_LIKES` 5 · `RADIUS_MIN_CHANGE_MI` 0.5 · `RADIUS_EXPLORE_EVERY_DAYS` 7 ·
+`RADIUS_EXPLORE_WINDOW_H` 12.
+
+**Run it** (sandbox): build a reactions bundle via MCP, then
+`node tools/radius-tune.mjs --from-file <bundle>.json --emit-sql <out>.sql` and apply via MCP. CI/REST:
+`.github/workflows/radius-tune.yml` (daily ~05:30 UTC, ahead of the 06:00 refinement run + 08:00 fetch)
+reads cross-household reactions with the service role and applies the plan with `psql`; it no-ops until
+the same `SUPABASE_*` secrets are set. The portal surfacing (render the `area_radius` suggestions with
+Tighten/Widen/Keep actions) is a documented **fast-follow** (Phase 5).
+
 ## Known follow-ups (deferred, documented)
+- **Radius portal surfacing (fast-follow).** `area_search_tuning` + `area_radius` suggestions are
+  produced by the core pipeline; rendering them (a `storage/refinement.js` reader +
+  `refinement/view.js` cards with Tighten/Widen/Keep(override)/Snooze) is the queued follow-on.
 - The §4.1 "Why?" reaction-rate **sparkline + sample rejected listings** (need extra
   `listing_reactions` time-series reads beyond the counts-only `metrics`).
 - **"Reconsider?"** auto-badge from re-probe reject rates (the portal already renders a

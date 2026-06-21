@@ -125,6 +125,25 @@ test('household_areas supports a reversible inactive (pause) status', async () =
     'SUPABASE_SYNC.md must document the household_areas status domain');
 });
 
+test('area_search_tuning is an engine table, not a git-synced tracked table', async () => {
+  // The per-area learned search radius (area_search_tuning) is AREA-GLOBAL, engine-managed
+  // system state — the same class as refinement_suggestions / refinement_runs /
+  // scrape_probation (untracked, never in the user-state snapshot). Guard that:
+  //   1. the snapshot does NOT carry it as a tracked table (no sync ceremony for it),
+  //   2. the pure learner + plan-builder exist and emit the expected SQL contract.
+  const snapshot = JSON.parse(await readFile(resolve(root, 'data/snapshots/sync-state.json'), 'utf8'));
+  assert(!('area_search_tuning' in snapshot),
+    'area_search_tuning must NOT be a tracked snapshot table (it is engine-managed system state)');
+  const radius = await import('../assets/js/refinement/radius.js');
+  const persist = await import('../assets/js/refinement/radius-persistence.js');
+  assert(typeof radius.learnRadii === 'function', 'radius.learnRadii must exist');
+  assert(typeof persist.planRadii === 'function' && typeof persist.renderRadiusSql === 'function',
+    'radius-persistence must export planRadii + renderRadiusSql');
+  const sql = persist.renderRadiusSql({ tuningUpserts: [], suggestionUpserts: [], now: '2026-06-21T00:00:00Z' });
+  assert(/INSERT INTO sync_log/.test(sql) && /COMMIT;/.test(sql),
+    'an empty radius plan still renders a valid (no-op) transaction');
+});
+
 // ── Offline: repo content structure ──────────────────────────────────────────
 
 test('all area files match schema', async () => {

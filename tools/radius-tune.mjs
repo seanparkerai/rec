@@ -1,0 +1,133 @@
+#!/usr/bin/env node
+// radius-tune.mjs — scheduled driver for the per-area learned search radius
+// (assets/js/refinement/radius.js). Snapshots the cross-household reaction log → runs the
+// pure learner → plans the persistence writes → EMITS one idempotent SQL batch. It never
+// executes DDL/DML itself: the caller runs the emitted SQL (Claude via the Supabase MCP
+// connector in this sandbox; CI via psql). The plan touches ONLY area_search_tuning,
+// refinement_suggestions (dimension='area_radius') and sync_log.
+//
+// Mirrors tools/refinement-run.mjs. Unlike refinement-run, the reaction read is
+// CROSS-HOUSEHOLD: the applied radius is area-global (a union across households), and the
+// per-household suggestions are split out by the learner from the same log.
+//
+// TWO READ MODES:
+//   File mode (this sandbox; bundle produced via MCP execute_sql):
+//     node tools/radius-tune.mjs --from-file /tmp/radius-bundle.json --emit-sql /tmp/r.sql
+//   REST mode (CI / a machine with the service-role key):
+//     SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY set → reads reactions + tuning + suggestions
+//     via PostgREST, emits SQL to stdout (pipe into psql to apply).
+//
+// Bundle shape (file mode):
+//   { now?, config?:{preset?,overrides?},
+//     reactions:[{ household_id, reaction, created_at, listing_snapshot }],
+//     tuningRows?:[...], suggestionRows?:[...], currentRadii?:{ areaId: mi },
+//     dismissedKeys?:["area_radius:<areaId>", ...], allReactions?:bool }
+
+import { readFile, writeFile } from 'node:fs/promises';
+import { learnRadii } from '../assets/js/refinement/radius.js';
+import { planRadii, renderRadiusSql } from '../assets/js/refinement/radius-persistence.js';
+import { resolveConfig } from '../assets/js/refinement/config.js';
+import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
+
+const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+function arg(name) {
+  const i = process.argv.indexOf(name);
+  return i >= 0 ? process.argv[i + 1] : null;
+}
+
+async function restGetAll(path) {
+  const out = [];
+  const headers = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` };
+  for (let offset = 0; ; offset += 1000) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}&limit=1000&offset=${offset}`, { headers });
+    if (!res.ok) throw new Error(`PostgREST ${res.status}: ${await res.text()}`);
+    const rows = await res.json();
+    out.push(...rows);
+    if (rows.length < 1000) break;
+  }
+  return out;
+}
+
+/** Build the current applied-radius map from existing tuning rows (override wins). */
+function currentRadiiFrom(tuningRows) {
+  const out = {};
+  for (const r of tuningRows || []) {
+    const mi = r.override_radius_mi != null ? Number(r.override_radius_mi)
+      : r.search_radius_mi != null ? Number(r.search_radius_mi) : null;
+    if (mi != null && Number.isFinite(mi)) out[r.area_id] = mi;
+  }
+  return out;
+}
+
+async function loadInputs() {
+  const fromFile = arg('--from-file');
+  if (fromFile) {
+    const bundle = JSON.parse(await readFile(fromFile, 'utf8'));
+    const tuningRows = bundle.tuningRows || [];
+    return {
+      now: bundle.now || new Date().toISOString(),
+      config: resolveConfig(bundle.config || {}),
+      reactions: bundle.reactions || [],
+      tuningRows,
+      suggestionRows: bundle.suggestionRows || [],
+      currentRadii: bundle.currentRadii || currentRadiiFrom(tuningRows),
+      dismissedKeys: new Set(bundle.dismissedKeys || []),
+      useAll: !!bundle.allReactions,
+    };
+  }
+  if (!SERVICE_KEY) throw new Error('no service key — use --from-file <bundle.json> (build via MCP) for the sandbox path');
+  // Cross-household reaction log (service role bypasses RLS). distance_mi + area_id live
+  // in listing_snapshot; that's all the learner reads.
+  const reactions = await restGetAll('listing_reactions?select=household_id,reaction,created_at,listing_snapshot');
+  const tuningRows = await restGetAll('area_search_tuning?select=area_id,search_radius_mi,override_radius_mi,explore_until,last_explored_at,recommended_radius_mi');
+  const suggestionRows = await restGetAll("refinement_suggestions?select=household_id,dimension,value,status,runs_qualified,first_detected_at,snoozed_until&dimension=eq.area_radius");
+  return {
+    now: new Date().toISOString(),
+    config: resolveConfig({}),
+    reactions,
+    tuningRows,
+    suggestionRows,
+    currentRadii: currentRadiiFrom(tuningRows),
+    dismissedKeys: new Set(),
+    useAll: process.argv.includes('--all-reactions'),
+  };
+}
+
+async function main() {
+  const { now, config, reactions, tuningRows, suggestionRows, currentRadii, dismissedKeys, useAll } = await loadInputs();
+
+  // Radii must reflect GENUINE, one-at-a-time judgements — not the en-masse area/price
+  // sweeps + administrative removals that dominate the log. Likes are always individual,
+  // so the gate is unaffected, but dropping bulk/admin rejects keeps the distant-reject
+  // waste honest. `--all-reactions` (or bundle.allReactions) bypasses the filter.
+  const argvAll = process.argv.includes('--all-reactions') || useAll;
+  const filtered = argvAll ? reactions : genuineReactions(reactions);
+  if (!argvAll) {
+    process.stderr.write(`  genuine-only filter: ${reactions.length} → ${filtered.length} reactions (dropped ${reactions.length - filtered.length} bulk/admin)\n`);
+  }
+
+  const learned = learnRadii(filtered, { config, now, currentRadii });
+  const plan = planRadii(learned, { now, tuningRows, suggestionRows, dismissedKeys });
+  const sql = renderRadiusSql(plan);
+
+  // Human-readable summary (stderr so stdout can be piped as pure SQL).
+  const top = learned.areas.slice(0, 12).map((a) =>
+    `    ${a.areaId}  ${a.currentMi}mi → ${a.recommendedMi}mi  [${a.direction}]  `
+    + `likes=${a.likeCount} hh=${a.contributingHouseholds}${a.distantRejectWaste > 0 ? ` waste=${Math.round(a.distantRejectWaste * 100)}%` : ''}`);
+  process.stderr.write(
+    `\n  Radius tune\n`
+    + `  reactions=${filtered.length}  areas tuned=${learned.areas.length}  suggestions=${learned.suggestions.length}  exploring=${plan.exploringCount}\n`
+    + `  tuned areas:\n${top.join('\n') || '    (none cleared the like gate)'}\n\n`);
+
+  const emit = arg('--emit-sql');
+  if (emit) {
+    await writeFile(emit, `${sql}\n`, 'utf8');
+    process.stderr.write(`  SQL plan → ${emit}  (${plan.tuningUpserts.length} tuning + ${plan.suggestionUpserts.length} suggestion upserts + 1 sync_log)\n`);
+  } else {
+    process.stdout.write(`${sql}\n`);
+  }
+}
+
+main().catch((e) => { process.stderr.write(`radius-tune failed: ${e.message}\n`); process.exit(1); });

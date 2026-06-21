@@ -73,6 +73,21 @@ export const FIXED = {
   FDR_PER_DIMENSION: true,    // BH family = per dimension vs one pooled family (§2.5 switch)
   VOLUME_ARTEFACT_MAX_LIFT: 1.0,   // a value is an artefact only when lift ≤ this (§2.8)
   VOLUME_ARTEFACT_MIN_REJECTS: 30, // …and its raw reject count is "high" (≥ this) (§2.8)
+
+  // ── per-area learned search radius (radius.js; docs/REFINEMENT_README.md "Radius") ──
+  // The radius learner reads the time-decayed distance_mi of LIKED homes per area and
+  // recommends radius = clamp(weightedQuantile(like_distances, QUANTILE) + MARGIN_MI,
+  // FLOOR_MI, CEIL_MI), gated on ≥ MIN_LIKES decayed likes. CEIL_MI doubles as the
+  // exploration-ring radius. Reconcile docs/REFINEMENT_README.md on any change here.
+  DEFAULT_RADIUS_MI: 3,         // the current uniform search/geofence radius (fallback "current")
+  RADIUS_FLOOR_MI: 0.5,         // never tighten below this (tiny suburban cores)
+  RADIUS_CEIL_MI: 3.0,          // never widen past this; also the exploration-ring radius
+  RADIUS_QUANTILE: 0.9,         // cover the 90th percentile of liked-home distances
+  RADIUS_MARGIN_MI: 0.3,        // headroom added above the quantile so the boundary isn't tight
+  RADIUS_MIN_LIKES: 5,          // need ≥ this many decayed, distance-bearing likes to recommend
+  RADIUS_MIN_CHANGE_MI: 0.5,    // only raise a suggestion when |recommended − current| ≥ this
+  RADIUS_EXPLORE_EVERY_DAYS: 7, // re-widen an area to CEIL every N days to keep the boundary honest
+  RADIUS_EXPLORE_WINDOW_H: 12,  // …for this many hours per exploration cycle
 };
 
 /**

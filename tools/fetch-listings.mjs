@@ -54,6 +54,7 @@ import {
 import { isFetchEligible, deriveOutcode } from '../assets/js/areas/area-enrich.js';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
 import { probationDropIds, reprobeThisRun } from '../assets/js/refinement/scope.js';
+import { resolveConfig } from '../assets/js/refinement/config.js';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 import { passesBaseline } from '../assets/js/listings/classify.js';
 
@@ -209,6 +210,10 @@ function demandFilterOutcodeMap(outcodeMap, demandSet) {
 }
 
 const DEFAULT_SEARCH_MI = 3;
+// Per-area learned radius (area_search_tuning, written by tools/radius-tune.mjs). The
+// exploration-ring radius (RADIUS_CEIL_MI) is reused when an area is inside its periodic
+// re-widening window so the boundary stays measurable.
+const { RADIUS_CEIL_MI } = resolveConfig();
 const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 7;   // max disk radius (mi); lower = tighter/cheaper-per-result but more runs
 const SEARCH_MODE = (process.env.SEARCH_MODE || 'outcode').toLowerCase();
 
@@ -652,6 +657,51 @@ async function markReprobed(values, runIndex) {
   }
 }
 
+// Per-area learned search radius: read the area_search_tuning rows (service-role, written
+// by tools/radius-tune.mjs). Area-global (not household-scoped). Returns an empty Map on
+// any failure so a read outage simply leaves the file/default radius in force — never
+// widens or zeroes a run. Mirrors loadProbation's empty-on-failure contract.
+async function loadRadiusTuning() {
+  if (!SERVICE_KEY) return new Map();
+  try {
+    const url = `${SUPABASE_URL}/rest/v1/area_search_tuning?select=area_id,search_radius_mi,override_radius_mi,explore_until`;
+    const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
+    if (!res.ok) throw new Error(`GET area_search_tuning failed: ${res.status}`);
+    const rows = await res.json();
+    return new Map(rows.map((r) => [r.area_id, r]));
+  } catch (e) {
+    console.warn('radius tuning load failed:', e.message);
+    return new Map();
+  }
+}
+
+/**
+ * Overlay the learned per-area radius onto the village entries (pure mutation of the
+ * objects already in outcodeMap — they flow into clustering / search / geofence by
+ * reference). A user override wins over the learner; an area inside its exploration
+ * window is widened to RADIUS_CEIL_MI so the wider set is periodically re-measured.
+ * Areas with no tuning row keep their file/default radius. Returns { tuned, exploring }.
+ */
+function applyRadiusTuning(villages, tuning, now = new Date()) {
+  let tuned = 0;
+  let exploring = 0;
+  for (const v of villages) {
+    const t = tuning.get(v.id);
+    if (!t) continue;
+    const isExploring = t.explore_until != null && new Date(t.explore_until) > now;
+    const appliedMi = isExploring
+      ? RADIUS_CEIL_MI
+      : (t.override_radius_mi != null ? Number(t.override_radius_mi)
+        : t.search_radius_mi != null ? Number(t.search_radius_mi) : null);
+    if (appliedMi == null || !Number.isFinite(appliedMi)) continue;
+    v.searchRadiusMi = appliedMi;
+    v.geofenceRadiusKm = appliedMi / MILES_PER_KM;
+    tuned += 1;
+    if (isExploring) exploring += 1;
+  }
+  return { tuned, exploring };
+}
+
 // v3 L4 optimised search: read the household's criteria + learned preferences and
 // distil them into a narrowing spec (deriveSearchSpec). Returns null when learned
 // mode is off or there's nothing to read — the fetcher then behaves exactly as L1.
@@ -701,6 +751,15 @@ async function main() {
   if (householdRows.length) {
     const skipped = householdRows.length - householdVillages.length;
     console.log(`household areas: +${householdVillages.length} eligible merged${skipped > 0 ? ` · ${skipped} linked row(s) skipped (curated/un-enriched/county-flagged)` : ''}`);
+  }
+  // Overlay the learned per-area search radius (area_search_tuning) onto every village
+  // (curated + household stub) before clustering/targets, so a tuned area scrapes + geofences
+  // at its learned radius instead of the uniform default. Override wins; an area inside its
+  // exploration window widens to the ceil. No row → unchanged (file/default radius).
+  const radiusTuning = await loadRadiusTuning();
+  if (radiusTuning.size) {
+    const { tuned, exploring } = applyRadiusTuning(flattenVillages(outcodeMap), radiusTuning, new Date());
+    console.log(`radius tuning: ${tuned} area(s) at a learned radius${exploring ? ` · ${exploring} widened to ${RADIUS_CEIL_MI}mi for exploration` : ''}`);
   }
   // Tight identifiers for located stubs: a stub with a full postcode but no
   // resolved Rightmove id would demote its whole outcode to a coarse search.
@@ -924,4 +983,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };

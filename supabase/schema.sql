@@ -464,7 +464,9 @@ CREATE TABLE IF NOT EXISTS refinement_suggestions (
   household_id      uuid NOT NULL REFERENCES households(id) ON DELETE CASCADE,
   -- 2026-06-19: expanded beyond area/property_type to cover more reaction-trend
   -- dimensions (price_band/beds/outdoor/parking/outcode are display/observation only).
-  dimension         text NOT NULL CHECK (dimension IN ('area','property_type','price_band','beds','outdoor','parking','outcode')),
+  -- 2026-06-21: 'area_radius' added — the per-area learned search-radius advisory rides
+  -- this inbox (written by tools/radius-tune.mjs; see area_search_tuning below).
+  dimension         text NOT NULL CHECK (dimension IN ('area','property_type','price_band','beds','outdoor','parking','outcode','area_radius')),
   value             text NOT NULL,                 -- normalised lower(trim())
   metrics           jsonb NOT NULL DEFAULT '{}',   -- §2.8 engine output (counts/metrics, not id lists)
   tier              text CHECK (tier IN ('forming','probable','confident','strong')),
@@ -541,6 +543,31 @@ CREATE POLICY "household members can update scrape_probation"
 DROP POLICY IF EXISTS "household members can delete scrape_probation" ON scrape_probation;
 CREATE POLICY "household members can delete scrape_probation"
   ON scrape_probation FOR DELETE USING (is_household_member(household_id));
+
+-- area_search_tuning: per-area learned search/geofence radius (engine-managed,
+-- AREA-GLOBAL — NOT household-scoped, NOT git-synced). Written by tools/radius-tune.mjs,
+-- read live by tools/fetch-listings.mjs. RLS modelled on the content mirrors: public
+-- SELECT (area-global, for portal display), service-role-only writes (no INSERT/UPDATE
+-- policy → only the service role, which bypasses RLS, writes it).
+CREATE TABLE IF NOT EXISTS area_search_tuning (
+  area_id               text PRIMARY KEY,
+  geofence_radius_mi    numeric,
+  search_radius_mi      numeric,
+  recommended_radius_mi numeric,
+  override_radius_mi    numeric,                  -- user override; always wins over the learner
+  sample_size           integer,
+  like_count            numeric,
+  method                text,
+  confidence            text,
+  explore_until         timestamptz,              -- inside this window the fetcher uses RADIUS_CEIL_MI
+  last_explored_at      timestamptz,
+  computed_at           timestamptz,
+  updated_at            timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE area_search_tuning ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "area_search_tuning public read" ON area_search_tuning;
+CREATE POLICY "area_search_tuning public read"
+  ON area_search_tuning FOR SELECT TO public USING (true);
 
 -- updated_at touch triggers (reuse touch_updated_at()).
 DROP TRIGGER IF EXISTS trg_touch_refinement_suggestions ON refinement_suggestions;
