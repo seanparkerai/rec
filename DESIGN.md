@@ -9,7 +9,7 @@ The single source of truth for how this app looks. Read this before any UI chang
 Two named anchors. Every view is one or the other — never both, never neither.
 
 ### Stripe-docs (long-form, editorial)
-For content-led views: `pages/profile.html` (the profile + criteria summary/edit surface), `pages/area-detail.html`, `pages/property.html` (listing dossier), `pages/journey.html`, `pages/outreach.html`.
+For content-led views: `pages/profile.html` (the profile + criteria summary/edit surface), `pages/area-detail.html`, `pages/property.html` (listing dossier), `pages/journey.html`.
 
 - Single-column reading width (≤68ch) on mobile, two-column (content + sticky rail) ≥768 px.
 - Display headings in Fraunces with optical sizing; generous leading (1.5–1.6 body, 1.15 display).

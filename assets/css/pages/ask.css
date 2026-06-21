@@ -421,6 +421,43 @@ main.ask-page {
 .ask-draft__btn[disabled] { opacity: 0.5; cursor: not-allowed; }
 .ask-draft__status { margin: 0; font-size: var(--text-sm); color: var(--accent); }
 
+/* ---- Messages (folded outreach log + contacts) ----------------------- */
+.ask-messages__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.ask-messages__empty { margin: var(--space-2) 0; color: var(--ink-muted); font-size: var(--text-sm); }
+.ask-messages__item {
+  padding: var(--space-3); background: var(--paper-2);
+  border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
+}
+.ask-messages__meta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.ask-messages__role { font-size: var(--text-sm); font-weight: 600; color: var(--ink-1); }
+.ask-messages__subject { margin: var(--space-1) 0 0; font-size: var(--text-sm); }
+.ask-messages__addr { margin: var(--space-1) 0 0; font-size: var(--text-xs); color: var(--ink-muted); }
+.ask-messages__actions { margin-top: var(--space-2); display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.ask-messages__group { margin-top: var(--space-3); }
+.ask-messages__grouphead { margin: 0 0 var(--space-2); font-size: var(--text-sm); color: var(--ink-1); }
+.ask-messages__contact {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-2);
+  padding: var(--space-2) 0; border-bottom: 1px solid var(--hairline); font-size: var(--text-sm);
+}
+.ask-messages__add { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+.ask-messages__add .ask-compose__input { flex: 1 1 8rem; min-width: 0; }
+
+.status-badge {
+  display: inline-block; padding: 0.1em 0.6em; border-radius: 999px;
+  font-size: var(--text-xs); font-weight: 600; text-transform: capitalize;
+}
+.status-badge--drafted  { background: var(--paper-3); color: var(--ink-muted); }
+.status-badge--sent     { background: var(--accent-soft); color: var(--accent-ink); }
+.status-badge--replied  { background: color-mix(in oklch, oklch(60% 0.18 160) 14%, var(--paper)); color: oklch(38% 0.14 160); }
+.status-badge--declined { background: color-mix(in oklch, oklch(60% 0.18 25) 12%, var(--paper)); color: oklch(38% 0.14 25); }
+.status-badge--archived { background: var(--paper-2); color: var(--ink-subtle); }
+[data-theme="dark"] .status-badge--replied  { color: oklch(75% 0.14 160); }
+[data-theme="dark"] .status-badge--declined { color: oklch(75% 0.14 25); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .status-badge--replied  { color: oklch(75% 0.14 160); }
+  :root:not([data-theme]) .status-badge--declined { color: oklch(75% 0.14 25); }
+}
+
 /* ---- >=768px: roomier reading column, centred history panel ---------- */
 @media (min-width: 768px) {
   .ask-head { margin-bottom: var(--space-3); }

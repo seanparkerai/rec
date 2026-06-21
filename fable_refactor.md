@@ -7094,6 +7094,12 @@ If Fable is asked to execute refactoring, suggest these phases in order:
 3. **Should the assistant be able to send email or trigger actions?**
    Today, draft_outreach returns text only; the user copy-pastes to compose an email. Should the assistant be able to (a) autofill and send a draft directly, (b) create a listing reminder, (c) save a new area filter? If so, which tools should be write-enabled and under what constraints (approval flow, audit log)?
    **Action:** Prioritize by impact + complexity.
+   **RESOLVED (2026-06-21, Compose fold):** Decision is **draft-only — the assistant never sends or
+   writes user state; the human commits every action.** `draft_outreach` was replaced by the read-only
+   `get_outreach_brief` assembler; the model authors the email and the browser draft card commits the
+   copy/send/save via `storage.js` (the §18.4 contract). This keeps the function's read-only safety
+   envelope intact (prompt-injection cannot escalate to a write). A write-enabled `log_outreach` tool
+   with an approval gate + audit row remains a deferred option, not built. See `docs/ASK.md` §4.
 
 4. **Prompt accuracy / hallucination: have you seen examples where the assistant gives wrong figures or invents listings?**
    The pure.js scoring + ranking logic is deterministic, but the model's narration can be fuzzy ("Your stretch payment is roughly £1,850" when the actual figure is £1,847). Is +/- 2–3% acceptable, or should answers be hedged more ("approximately £1,850, based on your finances as of today")? Consider logging user corrections/ratings per answer to track.
@@ -7112,6 +7118,16 @@ If Fable is asked to execute refactoring, suggest these phases in order:
 
 The Ask assistant is a **conversational interface over household data**, powered by Claude (Haiku by default) via a stateless Supabase Edge Function. The design is **cost-optimized** (prompt caching ~90%, deterministic ranking in pure.js, small context window) and **read-only** (no mutations). **13 tools** fetch the household's finances, listings, areas, shortlist, and journey progress; pure.js filters/ranks results; the model narrates in plain English. Conversations persist in ask_conversations (user-state), and the browser owns the thread state. **Risks:** prompt brittleness (prose, hardcoded facts), vocab drift (TOOL_LABELS manual alignment), tool-injection fragility (soft control, not hard), and no local dev loop for the Edge Function. **Opportunities:** model upgrade to Fable (P1), structured prompt (P3), config table (P9), tool circuit-breaker (P4), integration tests (P6), and client tests (P7). **Current coverage:** pure.js helpers are unit-tested; ask_conversations schema is validated; but no E2E tests for the Edge Function itself or the streaming pipeline.
 ## 10.8 Segment: Profile, criteria, setup, journey & outreach
+
+> **STATUS UPDATE (2026-06-21 — Outreach Compose fold).** The standalone outreach page
+> (`pages/outreach.html`) and its grid/dialog/filters/context modules (`assets/js/outreach/*`,
+> `page-outreach.js`) were **retired**. Outreach is now a guided, LLM-authored **Compose** experience
+> inside Ask: the read-only `get_outreach_brief` assembler (server-side QoI privacy ladder in
+> `pure.js`) grounds the model, which authors the email; the browser draft card commits copy/send/save
+> via `storage.js` (draft-only — never auto-send). The 24 templates survive as grounding exemplars; the
+> outreach log + contacts moved into the Ask "Messages" dialog. The pure helpers `outreach-renderer.js`
+> (`buildMailto`) + `outreach-store.js` are retained. The inventory below describes the pre-fold state;
+> the live design is `docs/ASK.md` §4.
 
 ### Design anchors & guard-rail surface
 

@@ -29,9 +29,10 @@
 - **`page-<name>.js`** — one thin coordinator per HTML page (e.g. `page-finances.js` ↔ `pages/finances.html`).
 - **Prefix families** signal role: `tile-*` (dashboard cards), `section-*` (finances-page sections),
   `calc-*` (pure finance calculators), `characterization-*` (regression-baseline tests).
-- **Inside a feature subfolder, modules use bare names** (`storage/listings.js`, `outreach/grid.js`):
+- **Inside a feature subfolder, modules use bare names** (`storage/listings.js`, `ask/compose.js`):
   the directory supplies the context, so no redundant prefix. Each substantial subfolder has its own
-  `README.md` describing its domain.
+  `README.md` describing its domain. (Outreach folded into Ask Compose — `assets/js/ask/{compose,messages}.js`
+  over the read-only `get_outreach_brief`; the old `assets/js/outreach/` grid modules were retired.)
 - **CSS** mirrors the JS domains: `assets/css/pages/<page>.css`, `assets/css/components/<thing>.css`,
   `assets/css/dashboard/tile-*.css`. All colour/spacing/radius values come from `tokens.css`.
 

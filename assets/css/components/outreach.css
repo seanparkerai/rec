@@ -1,9 +1,7 @@
-/* outreach.css — Linear-dense outreach generator page.
-   Uses only tokens from tokens.css. No new colours, no new tokens.
-   Linear-dense anchor per DESIGN.md §1. */
+/* outreach.css — outreach affordances (the "draft a message" links on the
+   area-detail verdict strip, the finances affordability widget, and journey
+   checklist rows). The rigid template-grid page was retired when outreach folded
+   into Ask Compose; only the entry-point link styles remain here.
+   Uses only tokens from tokens.css. Linear-dense anchor per DESIGN.md §1. */
 
 @import 'outreach/affordances.css';
-@import 'outreach/controls.css';
-@import 'outreach/dialog.css';
-@import 'outreach/log.css';
-@import 'outreach/contacts.css';

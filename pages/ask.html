@@ -42,6 +42,13 @@
             </svg>
             New chat
           </button>
+          <button id="ask-messages-open" type="button" class="ask-head__btn">
+            <svg class="ask-head__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+              fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6h16v11H7l-3 3V6Z" />
+            </svg>
+            Messages
+          </button>
           <button id="ask-history-open" type="button" class="ask-head__btn">
             <svg class="ask-head__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"
               fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -166,6 +173,23 @@
         <button type="submit" class="ask-compose__submit">Draft it</button>
       </div>
     </form>
+  </dialog>
+
+  <dialog id="ask-messages" class="ask-compose" aria-label="Your messages">
+    <div class="ask-compose__form">
+      <div class="ask-compose__head">
+        <h2 class="ask-compose__title">Messages</h2>
+        <button id="ask-messages-close" type="button" class="ask-history__close" aria-label="Close">&times;</button>
+      </div>
+      <section class="ask-compose__group">
+        <h3 class="ask-compose__label">Sent &amp; drafts</h3>
+        <ul id="ask-messages-log" class="ask-messages__list"></ul>
+      </section>
+      <section class="ask-compose__group">
+        <h3 class="ask-compose__label">Contacts</h3>
+        <div id="ask-messages-contacts"></div>
+      </section>
+    </div>
   </dialog>
 
   <template id="ask-draft-card">

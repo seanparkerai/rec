@@ -8,17 +8,26 @@ placeholder pages. All three have now shipped.
 
 ## Shipped in v3.0
 
-### Outreach generator — `pages/outreach.html`
+### Outreach Compose — inside Ask
 
-**Shipped.** 24 researched best-practice email templates covering every party a UK FTB engages with during a purchase — estate agents, mortgage brokers, solicitors, surveyors, vendors, removals, insurers, and local authorities.
+**Shipped.** Outreach is a guided, LLM-authored **Compose** experience inside Ask (the original rigid
+template-grid page, `pages/outreach.html`, was retired). The user picks who they're writing to and the
+situation (with a free-text escape hatch for the long tail); the assistant pulls the right household
+facts automatically, drafts a genuinely good email for that exact situation, and lets them refine it,
+then copy / open-in-mail / save-to-log.
 
-- Templates are data (`data/outreach-templates.json`), not code — editable without touching JS.
-- Pure renderer (`assets/js/outreach-renderer.js`) substitutes `{{path}}` placeholders and evaluates `{{#if}}` blocks.
-- The Quantity-of-Information Ladder (`filterContextByDataNeeded`) ensures each template only shares the data appropriate for its recipient.
-- `mailto:` and clipboard copy; falls back to clipboard when the URL exceeds 1800 chars.
-- Outreach log persists via `storage.js`; Supabase `contacts` and `outreach` tables added.
-- Contacts CRUD (agents / brokers / solicitors / surveyors) in a collapsible directory.
-- Deep-linked from area-detail verdict strip (A1), finances affordability widget (A5), and seven journey checklist rows.
+- The 24 researched templates (`data/outreach-templates.json`) survive as the model's **grounding
+  corpus + style exemplars**, surfaced via `get_outreach_templates` / `get_outreach_brief` — not a
+  fill engine.
+- **Draft-only / human-in-the-loop:** the Edge Function is read-only; the human commits every send and
+  save via `storage.js`. **No invented figures.**
+- The **information ladder** (privacy) is enforced server-side in `pure.js` — agents/vendors never see
+  salary, savings, deposit total, credit, or debts; the mortgage broker gets the full picture.
+- Editable draft card: Copy / Open in mail (`buildMailto`, clipboard fallback >1800 chars) / Save to
+  log + refine chips. Outreach log + contacts (Supabase `outreach` / `contacts`) live in the Ask
+  "Messages" dialog.
+- Deep-linked from the area-detail verdict strip, the finances affordability widget, and journey
+  checklist rows. Full design: `docs/ASK.md` §4.
 
 ### Live listings + self-learning feed — `pages/listings.html`
 
@@ -40,7 +49,8 @@ holds the API key as a secret, verifies the user's JWT, gives Claude **read-only
 over the household's own data, runs the tool-use loop, and **streams** the answer back over SSE.
 The browser renders the streamed markdown (escape-first sanitiser) and persists each thread to the
 `ask_conversations` table. No Anthropic key ever reaches the browser. Default model
-`claude-sonnet-4-6`. Operating guide: `docs/ASK.md`.
+`claude-haiku-4-5` for data Q&A; Compose (outreach authoring) turns route to `claude-sonnet-4-6`.
+Operating guide: `docs/ASK.md`.
 
 ---
 

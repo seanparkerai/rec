@@ -303,8 +303,10 @@ not UPSERT them. If a mirror is wanted, add the table via `apply_migration` firs
 The JS/CSS is split into small single-purpose modules (post 2026-05 refactor): flat utilities and
 calculators in `assets/js/`, tile modules in `assets/js/dashboard/`, finance sections + calculators
 in `assets/js/finances/`, the storage layer in `assets/js/storage/`, listings modules in
-`assets/js/listings/`, refinement-engine modules in `assets/js/refinement/`, outreach modules in
-`assets/js/outreach/`, and thin `page-*.js` coordinators (one per page). CSS mirrors this:
+`assets/js/listings/`, refinement-engine modules in `assets/js/refinement/`, Ask + Compose modules in
+`assets/js/ask/` (incl. `compose.js` and the folded-in `messages.js`; outreach is authored through
+Ask Compose — the old `assets/js/outreach/` grid was retired, leaving only the pure `outreach-renderer.js`
++ `outreach-store.js` helpers), and thin `page-*.js` coordinators (one per page). CSS mirrors this:
 `tokens.css` (guard-railed) + `base.css` + `fonts.css`, the order-sensitive `dashboard.css` `@import`
 shell (guard-railed, §16), per-tile partials in `dashboard/`, per-page partials in `pages/` (some are
 themselves `@import` shells over a subfolder), and reusable component CSS in `components/`.

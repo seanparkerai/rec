@@ -7,6 +7,7 @@ import { createTranscript } from './ask/transcript.js';
 import { createComposer } from './ask/composer.js';
 import { createHistory } from './ask/history.js';
 import { createCompose } from './ask/compose.js';
+import { createMessages } from './ask/messages.js';
 import { getAskConversation, createAskConversation, saveAskConversation } from './storage.js';
 
 const $ = (id) => document.getElementById(id);
@@ -150,6 +151,17 @@ function init() {
       },
       send,
     );
+  }
+
+  const messagesDialog = $('ask-messages');
+  if (messagesDialog) {
+    createMessages({
+      dialog: messagesDialog,
+      logEl: $('ask-messages-log'),
+      contactsEl: $('ask-messages-contacts'),
+      openButtons: [$('ask-messages-open')],
+      closeBtn: $('ask-messages-close'),
+    });
   }
 
   setEmptyVisible(true);
