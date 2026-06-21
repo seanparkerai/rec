@@ -19,7 +19,7 @@ const TOOL_LABELS = {
   get_trends: 'your trends',
   get_journey_status: 'your buying journey',
   get_outreach_templates: 'outreach templates',
-  draft_outreach: 'drafting your message',
+  get_outreach_brief: 'gathering your details',
 };
 
 export function createTranscript(rootEl) {

@@ -15,7 +15,7 @@
 //   listing_reactions: append-only (reaction in like/pass/reject + reasons).
 
 import {
-  rankAndFilterListings, buildListingsQuery, searchAreasPure, shapeFinancesSummary, renderOutreachDraft,
+  rankAndFilterListings, buildListingsQuery, searchAreasPure, shapeFinancesSummary, assembleOutreachBrief,
 } from "./pure.js";
 
 // deno-lint-ignore no-explicit-any
@@ -133,28 +133,42 @@ export const TOOLS = [
   {
     name: "get_outreach_templates",
     description:
-      "List the outreach message templates (id, recipient role, stage, title, data needed). Use before " +
-      "drafting an outreach message to pick the right template.",
-    input_schema: {
-      type: "object",
-      properties: { recipientRole: { type: "string", description: "optional filter, e.g. estate-agent" } },
-    },
-  },
-  {
-    name: "draft_outreach",
-    description:
-      "Draft an outreach message from a template id, filling {{placeholders}} from the household's " +
-      "profile/finances and any listing/contact context you pass. Returns subject + body TEXT only — it " +
-      "never sends anything. Reports any placeholders it could not fill.",
+      "List the outreach message templates as STYLE EXEMPLARS (id, recipient role, stage, title, " +
+      "description, tone, best-practice notes, sources, data needed). Use to browse the catalogue or " +
+      "ground your tone on the researched best practice — but author the email yourself, don't copy a " +
+      "template verbatim. Prefer get_outreach_brief when you are about to write one.",
     input_schema: {
       type: "object",
       properties: {
-        templateId: { type: "string" },
-        listing: { type: "object", description: "ad-hoc listing context, e.g. { address, askingPrice, ref, portal }" },
-        contact: { type: "object", description: "ad-hoc contact context, e.g. { agentName }" },
-        extra: { type: "object", description: "any other {{placeholder}} values, e.g. { viewingDateOption1 }" },
+        recipientRole: { type: "string", description: "optional filter, e.g. estate-agent" },
+        stage: { type: "string", description: "optional stage filter: A (Search) | B (Offer) | C (Post-acceptance) | D (Pre-completion)" },
       },
-      required: ["templateId"],
+    },
+  },
+  {
+    name: "get_outreach_brief",
+    description:
+      "Assemble everything needed to WRITE an outreach email for a given recipient + situation: the " +
+      "best-matching template as a style exemplar, its best-practice notes, the household facts you are " +
+      "ALLOWED to use for this recipient (already privacy-filtered — an estate agent or vendor never sees " +
+      "salary, savings, deposit total, credit or debts), the saved contact if any, the property facts if a " +
+      "reference is given, and a list of missing facts to ask about. You then write the email yourself — do " +
+      "not copy the exemplar verbatim, and never invent figures, names, dates or prices. Read-only: drafts " +
+      "only, never sends or saves.",
+    input_schema: {
+      type: "object",
+      properties: {
+        recipientRole: {
+          type: "string",
+          description: "estate-agent | mortgage-broker | solicitor | surveyor | vendor | removals | insurance | local-authority",
+        },
+        intent: { type: "string", description: "free-text situation, e.g. 'request a viewing', 'renegotiate after survey'" },
+        templateId: { type: "string", description: "optional explicit template id (A1, B2, …) if the user picked one" },
+        listingRef: { type: "string", description: "optional rightmove_id OR free-text address to ground property facts" },
+        contactName: { type: "string", description: "optional recipient name to match against saved contacts" },
+        extra: { type: "object", description: "any specifics the user gave: { offerAmount, viewingDateOption1, surveyFindings, … }" },
+      },
+      required: ["recipientRole"],
     },
   },
 ];
@@ -308,30 +322,37 @@ export async function runTool(name: string, input: any, ctx: ToolCtx): Promise<u
       }
       case "get_outreach_templates": {
         const templates = await getTemplates(ctx);
-        const filtered = inp.recipientRole
-          ? templates.filter((t) => t.recipientRole === inp.recipientRole)
-          : templates;
+        const filtered = templates.filter((t) =>
+          (!inp.recipientRole || t.recipientRole === inp.recipientRole) &&
+          (!inp.stage || t.stage === inp.stage));
         return filtered.map((t) => ({
-          id: t.id, stage: t.stage, recipientRole: t.recipientRole,
-          title: t.title, description: t.description, dataNeeded: t.dataNeeded,
+          id: t.id, stage: t.stage, stageName: t.stageName, recipientRole: t.recipientRole,
+          title: t.title, description: t.description, tone: t.tone,
+          bestPracticeNotes: t.bestPracticeNotes ?? [], sources: t.sources ?? [],
+          dataNeeded: t.dataNeeded,
         }));
       }
-      case "draft_outreach": {
-        if (!inp.templateId) return { error: "templateId is required" };
-        const templates = await getTemplates(ctx);
-        const template = templates.find((t) => t.id === inp.templateId);
-        if (!template) return { error: `unknown templateId: ${inp.templateId}` };
-        const [profile, finances] = await Promise.all([
-          getBlob(ctx, "profile"), getBlob(ctx, "finances"),
+      case "get_outreach_brief": {
+        if (!inp.recipientRole) return { error: "recipientRole is required" };
+        const [templates, profile, finances, criteria, contacts, investments] = await Promise.all([
+          getTemplates(ctx), getBlob(ctx, "profile"), getBlob(ctx, "finances"),
+          getBlob(ctx, "criteria"), getBlob(ctx, "contacts"), getInvestments(ctx),
         ]);
-        const context = {
-          profile: profile ?? {},
-          finances: finances ?? {},
-          listing: inp.listing ?? {},
-          contact: inp.contact ?? {},
-          ...(inp.extra ?? {}),
-        };
-        return renderOutreachDraft(template, context);
+        // Ground property facts only when the ref is a Rightmove id; a free-text
+        // address is passed through to the model as the listingRef hint.
+        let listing = null;
+        if (inp.listingRef && /^\d+$/.test(String(inp.listingRef))) {
+          const { data } = await ctx.supabase.from("listings")
+            .select("rightmove_id, url, title, address, postcode, area_id, price, beds, baths, property_type, tenure, epc, council_tax, status")
+            .eq("rightmove_id", String(inp.listingRef)).limit(1);
+          listing = data?.[0] ?? null;
+        }
+        return assembleOutreachBrief({
+          templates, recipientRole: inp.recipientRole, intent: inp.intent,
+          templateId: inp.templateId, listingRef: inp.listingRef, listing,
+          contactName: inp.contactName, extra: inp.extra ?? {},
+          household: { profile, finances, criteria, contacts, investments },
+        });
       }
       default:
         return { error: `unknown tool: ${name}` };

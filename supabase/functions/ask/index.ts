@@ -25,7 +25,8 @@ const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 const DEFAULT_MODEL = "claude-haiku-4-5";
 const ALLOWED_MODELS = new Set(["claude-haiku-4-5", "claude-sonnet-4-6"]);
 const MAX_TOOL_LOOPS = 6;
-const MAX_TOKENS = 1024;            // runaway backstop behind the P1-3 brevity contract
+const MAX_TOKENS = 1024;            // default backstop behind the P1-3 brevity contract
+const MAX_TOKENS_CEILING = 2048;   // hard cap on a client-raised budget (compose turns)
 const MAX_HISTORY_TURNS = 24;        // cap conversation length sent upstream
 const MAX_TURN_CHARS = 16_000;       // per-turn hard char cap (abuse guard)
 // Context-window guards: the whole conversation (incl. accumulated tool_result turns)
@@ -68,13 +69,16 @@ Deno.serve(async (req) => {
   if (!householdId) return json({ error: "No household" }, 403, cors);
 
   // 3) Parse + sanitise the request.
-  let body: { messages?: unknown; model?: unknown };
+  let body: { messages?: unknown; model?: unknown; max_tokens?: unknown };
   try { body = await req.json(); } catch { return json({ error: "Invalid JSON body" }, 400, cors); }
 
   const messages = sanitiseMessages(body.messages);
   if (!messages.length) return json({ error: "messages must be a non-empty array of user/assistant turns" }, 400, cors);
 
   const model = typeof body.model === "string" && ALLOWED_MODELS.has(body.model) ? body.model : DEFAULT_MODEL;
+  // Optional per-turn output budget — compose turns (subject + body + note + refinements)
+  // can exceed the default backstop. Clamp hard so a bad client can't run up cost.
+  const maxTokens = clampMaxTokens(body.max_tokens);
   const system = await buildSystemPrompt(supabase, householdId);
   const ctx: ToolCtx = { supabase, householdId, templatesUrl: TEMPLATES_URL };
 
@@ -95,7 +99,7 @@ Deno.serve(async (req) => {
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
           },
-          body: JSON.stringify({ model, max_tokens: MAX_TOKENS, stream: true, system, tools: TOOLS, messages: msgs }),
+          body: JSON.stringify({ model, max_tokens: maxTokens, stream: true, system, tools: TOOLS, messages: msgs }),
         });
 
       try {
@@ -284,6 +288,14 @@ function sanitiseMessages(raw: unknown): { role: string; content: string }[] {
   const tail = out.slice(-MAX_HISTORY_TURNS);
   while (tail.length && tail[0].role !== "user") tail.shift();
   return tail;
+}
+
+// Clamp an optional client-supplied output budget to a sane band; default to the
+// brevity backstop when absent/invalid, cap at MAX_TOKENS_CEILING so cost stays bounded.
+function clampMaxTokens(raw: unknown): number {
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n <= 0) return MAX_TOKENS;
+  return Math.min(Math.max(Math.floor(n), 256), MAX_TOKENS_CEILING);
 }
 
 function json(obj: unknown, status: number, cors: Record<string, string>): Response {

@@ -393,8 +393,36 @@ export function fitConvoToBudget(convo, maxChars) {
 }
 
 /** Resolve a dotted path ("listing.address") against a nested context object. */
-function lookupPath(ctx, path) {
+export function lookupPath(ctx, path) {
   return String(path).split('.').reduce((o, k) => (o == null ? undefined : o[k]), ctx);
+}
+
+/** Set a dotted path on an object, creating intermediate objects as needed. */
+export function setPath(obj, path, value) {
+  const parts = String(path).split('.');
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const k = parts[i];
+    if (cur[k] == null || typeof cur[k] !== 'object') cur[k] = {};
+    cur = cur[k];
+  }
+  cur[parts[parts.length - 1]] = value;
+  return obj;
+}
+
+/** Delete a set of dotted paths from an object (defence-in-depth privacy backstop). */
+export function stripPaths(obj, paths) {
+  for (const path of (Array.isArray(paths) ? paths : [])) {
+    const parts = String(path).split('.');
+    let cur = obj;
+    let ok = true;
+    for (let i = 0; i < parts.length - 1; i++) {
+      cur = cur?.[parts[i]];
+      if (cur == null || typeof cur !== 'object') { ok = false; break; }
+    }
+    if (ok && cur && typeof cur === 'object') delete cur[parts[parts.length - 1]];
+  }
+  return obj;
 }
 
 /**
@@ -420,5 +448,240 @@ export function renderOutreachDraft(template, context = {}) {
     subject: fill(t.subjectTemplate),
     body: fill(t.bodyTemplate),
     missingFields: [...missing],
+  };
+}
+
+// ── Outreach brief assembler (Compose capability) ─────────────────────────────
+// The model AUTHORS outreach emails (any situation, no invented figures); this
+// assembler hands it everything it is ALLOWED to use: a best-matching template as
+// a STYLE exemplar, that template's best-practice notes, the household facts that
+// pass the per-recipient privacy ladder, the saved contact, the grounded property,
+// and a list of missing specifics to ask about. Read-only — it drafts nothing and
+// sends nothing. Pure + unit-tested (tests/ask-tools.test.js).
+
+// Quantity-of-Information Ladder — what each recipient role may receive. Keys are
+// dotted paths resolved against { profile, finances, criteria, derived }. The
+// `derived.*` entries are safe, pre-computed signals (buildDerivedSignals) — never
+// raw salary/savings figures, except for the mortgage broker who legitimately needs
+// the full financial picture.
+export const OUTREACH_FACT_ALLOWLIST = {
+  'estate-agent': [
+    'profile.person.firstName', 'profile.person.lastName', 'profile.person.mobile',
+    'derived.firstTimeBuyer', 'derived.chainFree', 'derived.aipInPlace', 'derived.aipAmount',
+    'derived.positionSummary',
+  ],
+  'vendor': [
+    'profile.person.firstName',
+    'derived.firstTimeBuyer', 'derived.chainFree', 'derived.positionSummary',
+  ],
+  'mortgage-broker': [
+    'profile.person.firstName', 'profile.person.lastName', 'profile.person.mobile',
+    'profile.person.email', 'profile.person.dateOfBirth',
+    'profile.employment.employer', 'profile.employment.role', 'profile.employment.type',
+    'profile.employment.probationStatus', 'profile.employment.tenureYears',
+    'finances.income', 'finances.savings.current', 'finances.goal.targetDeposit',
+    'finances.goal.targetPropertyPrice', 'finances.mortgage', 'finances.firstTimeBuyer',
+    'derived.depositSaved', 'derived.depositGap', 'derived.ltv',
+  ],
+  'solicitor': [
+    'profile.person.firstName', 'profile.person.lastName', 'profile.person.mobile',
+    'profile.person.email', 'profile.person.address',
+    'derived.firstTimeBuyer', 'derived.fundingType', 'derived.lenderName',
+  ],
+  'surveyor': [
+    'profile.person.firstName', 'profile.person.lastName', 'profile.person.mobile',
+    'profile.person.email',
+  ],
+  'removals': [
+    'profile.person.firstName', 'profile.person.lastName', 'profile.person.mobile',
+    'profile.person.email',
+  ],
+  'insurance': [
+    'profile.person.firstName', 'profile.person.lastName', 'profile.person.email',
+  ],
+  'local-authority': [
+    'profile.person.firstName', 'profile.person.lastName', 'profile.person.address',
+  ],
+};
+
+// NEVER-SHARE backstop — even if a future allow-list edit slips a sensitive field
+// in, strip these for every non-broker recipient before the brief leaves this module.
+export const OUTREACH_NEVER_FOR_NON_BROKER = [
+  'finances.income', 'finances.savings', 'finances.goal.targetDeposit',
+  'profile.creditProfile', 'profile.debts',
+];
+
+const ROLE_CONTACT_KEY = {
+  'estate-agent': 'agents',
+  'mortgage-broker': 'brokers',
+  'solicitor': 'solicitors',
+  'surveyor': 'surveyors',
+};
+
+/**
+ * Safe, pre-computed signals for the QoI ladder — proceedability and position
+ * facts an agent/vendor MAY see, derived from the raw finances/profile so the raw
+ * figures never leave this module. Reuses shapeFinancesSummary for deposit maths.
+ */
+export function buildDerivedSignals(household) {
+  const { profile = {}, finances = {} } = household || {};
+  const fs = shapeFinancesSummary(finances, household?.investments ?? null);
+  const aipAmount = finances?.mortgage?.targetMax ?? null;
+  const arrangement = String(profile?.person?.household?.livingArrangement ?? '').toLowerCase();
+  const targetPrice = Number(finances?.goal?.targetPropertyPrice) || 0;
+  const ltv = (targetPrice && fs.depositSaved != null && fs.depositSaved >= 0)
+    ? Math.max(0, Math.round(((targetPrice - fs.depositSaved) / targetPrice) * 100))
+    : null;
+  return {
+    firstTimeBuyer: finances?.firstTimeBuyer ?? true,
+    chainFree: arrangement !== 'owner-occupier',
+    aipInPlace: aipAmount != null,
+    aipAmount,
+    depositSaved: fs.depositSaved ?? null,
+    depositGap: fs.depositGap ?? null,
+    ltv,
+    fundingType: aipAmount ? 'mortgage' : null,
+    lenderName: finances?.mortgage?.lender ?? null,
+    positionSummary: 'first-time buyer, chain-free'
+      + (aipAmount ? `, AIP in place for £${Number(aipAmount).toLocaleString('en-GB')}` : ''),
+  };
+}
+
+/** Choose the exemplar template: explicit id wins, else best match on role + intent keywords. */
+export function pickTemplate(templates, { recipientRole, intent, templateId } = {}) {
+  const list = Array.isArray(templates) ? templates : [];
+  if (templateId) {
+    const byId = list.find((t) => t.id === templateId);
+    if (byId) return byId;
+  }
+  const roleMatches = list.filter((t) => t.recipientRole === recipientRole);
+  const pool = roleMatches.length ? roleMatches : list;
+  if (!pool.length) return null;
+  if (!intent) return pool[0];
+  const words = norm(intent).split(/\s+/).filter((w) => w.length > 2);
+  let best = pool[0];
+  let bestScore = -1;
+  for (const t of pool) {
+    const hay = `${norm(t.title)} ${norm(t.description)} ${norm(t.stageName)}`;
+    let score = 0;
+    for (const w of words) if (hay.includes(w)) score += 1;
+    if (score > bestScore) { bestScore = score; best = t; }
+  }
+  return best;
+}
+
+function pickContactFields(c) {
+  if (!c) return null;
+  return { name: c.name ?? null, firm: c.firm ?? null, email: c.email ?? null, phone: c.phone ?? null };
+}
+
+/** Match a saved contact for the recipient role (by name if given, else the first on file). */
+export function matchContact(contacts, recipientRole, contactName) {
+  const key = ROLE_CONTACT_KEY[recipientRole];
+  if (!key || !contacts) return null;
+  const list = Array.isArray(contacts[key]) ? contacts[key] : [];
+  if (!list.length) return null;
+  if (contactName) {
+    const want = norm(contactName);
+    const hit = list.find((c) => {
+      const n = norm(c?.name);
+      return n && (n.includes(want) || want.includes(n));
+    });
+    if (hit) return pickContactFields(hit);
+  }
+  return pickContactFields(list[0]);
+}
+
+// Build the shape the 24 template placeholders expect ({{profile.firstName}},
+// {{contact.agentName}}, {{finances.aipAmount}}…) so missing-fact detection doesn't
+// false-positive on facts we DO hold under a different key. The model still gets the
+// structured allowedFacts/contact/listing separately and authors from those.
+function briefResolutionContext({ facts, listing, contact, extra, derived }) {
+  const person = facts?.profile?.person ?? {};
+  const profile = { ...person, ...(facts?.profile ?? {}) };
+  const finances = { ...(facts?.finances ?? {}) };
+  if (derived?.aipAmount != null) finances.aipAmount = derived.aipAmount;
+  const contactAliases = contact
+    ? { name: contact.name, firm: contact.firm, email: contact.email, phone: contact.phone,
+        agentName: contact.name, brokerName: contact.name, solicitorName: contact.name, surveyorName: contact.name }
+    : {};
+  return {
+    profile,
+    finances,
+    derived: derived ?? {},
+    listing: listing ?? {},
+    contact: contactAliases,
+    ...(extra ?? {}),
+  };
+}
+
+/** The exemplar placeholders we cannot ground from facts/contact/listing/extra — the model asks about these. */
+export function computeMissingFacts(exemplar, { facts, listing, contact, extra, derived } = {}) {
+  if (!exemplar) return [];
+  const ctx = briefResolutionContext({ facts, listing, contact, extra, derived });
+  const tokens = new Set();
+  const src = `${exemplar.subjectTemplate ?? ''}\n${exemplar.bodyTemplate ?? ''}`;
+  let m;
+  const re = /\{\{\s*([\w.]+)\s*\}\}/g;
+  while ((m = re.exec(src)) !== null) tokens.add(m[1]);
+  const missing = [];
+  for (const path of tokens) {
+    const v = lookupPath(ctx, path);
+    if (v === undefined || v === null || v === '') missing.push(path);
+  }
+  return missing;
+}
+
+/**
+ * Assemble the read-only brief the model authors an outreach email from.
+ * @param {object} args
+ * @param {object[]} args.templates    outreach-templates.json
+ * @param {string}   args.recipientRole estate-agent | mortgage-broker | …
+ * @param {string=}  args.intent        free-text situation
+ * @param {string=}  args.templateId    explicit exemplar id
+ * @param {string=}  args.listingRef    rightmove id or free-text address
+ * @param {object=}  args.listing       grounded listing row (fetched by tools.ts)
+ * @param {string=}  args.contactName   recipient name to match against saved contacts
+ * @param {object=}  args.extra         user-supplied specifics
+ * @param {object}   args.household     { profile, finances, criteria, contacts, investments? }
+ */
+export function assembleOutreachBrief({
+  templates, recipientRole, intent, templateId, listingRef, listing,
+  contactName, extra, household,
+} = {}) {
+  const hh = household || {};
+  const exemplar = pickTemplate(templates, { recipientRole, intent, templateId });
+  const derived = buildDerivedSignals(hh);
+
+  // Apply the per-recipient allow-list, then the never-share backstop.
+  const facts = {};
+  const allow = OUTREACH_FACT_ALLOWLIST[recipientRole] ?? OUTREACH_FACT_ALLOWLIST['estate-agent'];
+  const source = { profile: hh.profile ?? {}, finances: hh.finances ?? {}, criteria: hh.criteria ?? {}, derived };
+  for (const path of allow) {
+    const v = lookupPath(source, path);
+    // Derived signals land at the root of allowedFacts (positionSummary, aipAmount…);
+    // profile/finances paths keep their nesting (profile.person.firstName…).
+    if (v !== undefined && v !== null && v !== '') setPath(facts, path.replace(/^derived\./, ''), v);
+  }
+  if (recipientRole !== 'mortgage-broker') stripPaths(facts, OUTREACH_NEVER_FOR_NON_BROKER);
+
+  const contact = matchContact(hh.contacts, recipientRole, contactName);
+  const missingFacts = computeMissingFacts(exemplar, { facts, listing, contact, extra, derived });
+
+  return {
+    recipientRole: recipientRole ?? null,
+    exemplar: exemplar ? {
+      id: exemplar.id, title: exemplar.title, tone: exemplar.tone,
+      subjectTemplate: exemplar.subjectTemplate, bodyTemplate: exemplar.bodyTemplate,
+      bestPracticeNotes: exemplar.bestPracticeNotes ?? [],
+      sources: exemplar.sources ?? [],
+      attachmentsHint: exemplar.attachmentsHint ?? [],
+    } : null,
+    allowedFacts: facts,
+    contact,
+    listing: listing ?? null,
+    extra: extra ?? {},
+    missingFacts,
+    note: 'These are the only household facts permitted for this recipient. Do not introduce others, and never invent figures, names, dates or prices.',
   };
 }

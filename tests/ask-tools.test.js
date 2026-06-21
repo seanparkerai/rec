@@ -7,6 +7,7 @@ import {
   rankAndFilterListings, buildListingsQuery, scoreListingFit, searchAreasPure,
   shapeFinancesSummary, computeDepositSavings, renderOutreachDraft, bandForScore,
   capToolResult, estimateConvoChars, fitConvoToBudget,
+  assembleOutreachBrief, buildDerivedSignals, stripPaths, OUTREACH_NEVER_FOR_NON_BROKER,
 } from '../supabase/functions/ask/pure.js';
 import { deriveFinances } from '../assets/js/finance-derive.js';
 
@@ -290,5 +291,99 @@ export async function register({ test, assert, assertEqual }) {
     assert(draft.body.includes('Hi {{contact.agentName}}'), 'unresolved placeholder preserved');
     assert(draft.missingFields.includes('contact.agentName'), 'missing field reported');
     assertEqual(draft.templateId, 'A1');
+  });
+
+  // ── assembleOutreachBrief (Compose capability + QoI privacy ladder) ───────────
+  const outreachTemplates = [
+    { id: 'A1', stage: 'A', stageName: 'Search', recipientRole: 'estate-agent',
+      title: 'Estate agent — viewing request', description: 'Arrange a viewing with proceedability signals.',
+      subjectTemplate: 'Viewing — {{listing.address}}',
+      bodyTemplate: 'Hi {{contact.agentName}},\n\nViewing of {{listing.address}} (ref {{listing.ref}}). '
+        + 'Position: first-time buyer, chain-free, AIP for £{{finances.aipAmount}}.\n\n'
+        + 'Could {{viewingDateOption1}} or {{viewingDateOption2}} work?\n\n'
+        + '{{profile.firstName}} {{profile.lastName}}\n{{profile.mobile}}',
+      tone: 'warm-brief', bestPracticeNotes: ['Lead with proceedability'],
+      sources: [{ title: 'x', url: 'http://x' }], attachmentsHint: [], dataNeeded: [] },
+    { id: 'A5', stage: 'A', stageName: 'Search', recipientRole: 'mortgage-broker',
+      title: 'Mortgage broker — initial enquiry', description: 'Full intro to a broker with the numbers.',
+      subjectTemplate: 'FTB mortgage enquiry',
+      bodyTemplate: 'Hi {{contact.brokerName}}, base £{{finances.income.annualBaseSalary}}.',
+      tone: 'warm-complete', bestPracticeNotes: [], sources: [], attachmentsHint: [], dataNeeded: [] },
+    { id: 'B1', stage: 'B', stageName: 'Offer', recipientRole: 'estate-agent',
+      title: 'Estate agent — make an offer', description: 'Put an offer in.',
+      subjectTemplate: 'Offer — {{listing.address}}', bodyTemplate: 'Offer of £{{offerAmount}}.',
+      tone: 'warm-brief', bestPracticeNotes: [], sources: [], attachmentsHint: [], dataNeeded: [] },
+  ];
+  const household = {
+    profile: { person: {
+      firstName: 'Sam', lastName: 'Jones', mobile: '07700 900000', email: 'sam@example.com',
+      household: { livingArrangement: 'renting' },
+    } },
+    finances: {
+      firstTimeBuyer: true, income: { annualBaseSalary: 62000 }, savings: { current: 20000 },
+      goal: { targetDeposit: 40000, targetPropertyPrice: 350000 },
+      mortgage: { targetMax: 300000, lender: 'Halifax' },
+    },
+    criteria: {},
+    contacts: { agents: [{ name: 'Jane Smith', firm: 'ABC Estates', email: 'jane@abc.co.uk', phone: '01234 567890' }], brokers: [] },
+  };
+
+  test('ask-tools: outreach brief picks the exemplar by templateId, then by role + intent', () => {
+    const byId = assembleOutreachBrief({ templates: outreachTemplates, recipientRole: 'estate-agent', templateId: 'B1', household });
+    assertEqual(byId.exemplar.id, 'B1');
+    const offer = assembleOutreachBrief({ templates: outreachTemplates, recipientRole: 'estate-agent', intent: 'make an offer', household });
+    assertEqual(offer.exemplar.id, 'B1');
+    const viewing = assembleOutreachBrief({ templates: outreachTemplates, recipientRole: 'estate-agent', intent: 'request a viewing', household });
+    assertEqual(viewing.exemplar.id, 'A1');
+  });
+
+  test('ask-tools: QoI ladder hides salary/savings/deposit from agents AND vendors', () => {
+    for (const role of ['estate-agent', 'vendor']) {
+      const brief = assembleOutreachBrief({ templates: outreachTemplates, recipientRole: role, household });
+      const blob = JSON.stringify(brief.allowedFacts).toLowerCase();
+      assert(!blob.includes('62000'), `${role} must not see the salary figure`);
+      assert(!blob.includes('20000'), `${role} must not see the savings figure`);
+      assert(!blob.includes('40000'), `${role} must not see the deposit target`);
+      assert(!/income|savings|creditprofile|debts/.test(blob), `${role} facts must omit sensitive keys`);
+      assertEqual(brief.allowedFacts.firstTimeBuyer, true);
+      assert(/first-time buyer/.test(brief.allowedFacts.positionSummary || ''), `${role} keeps the proceedability summary`);
+    }
+  });
+
+  test('ask-tools: the mortgage broker gets the full financial picture', () => {
+    const brief = assembleOutreachBrief({ templates: outreachTemplates, recipientRole: 'mortgage-broker', household });
+    assertEqual(brief.allowedFacts.finances.income.annualBaseSalary, 62000);
+    assert(brief.allowedFacts.depositSaved != null, 'broker sees the derived deposit position');
+  });
+
+  test('ask-tools: the never-share backstop strips a planted sensitive field', () => {
+    const planted = { profile: { person: { firstName: 'Sam' } }, finances: { income: { annualBaseSalary: 99000 } } };
+    stripPaths(planted, OUTREACH_NEVER_FOR_NON_BROKER);
+    assertEqual(planted.finances.income, undefined);
+    assertEqual(planted.profile.person.firstName, 'Sam');
+  });
+
+  test('ask-tools: derived signals reflect whether an AIP figure exists', () => {
+    const withAip = buildDerivedSignals(household);
+    assertEqual(withAip.aipInPlace, true);
+    assertEqual(withAip.aipAmount, 300000);
+    assert(/AIP in place/.test(withAip.positionSummary), 'names the AIP when present');
+    const noAip = buildDerivedSignals({ ...household, finances: { ...household.finances, mortgage: {} } });
+    assertEqual(noAip.aipInPlace, false);
+    assert(!/AIP/.test(noAip.positionSummary), 'omits the AIP clause when absent');
+  });
+
+  test('ask-tools: missingFacts flags absent specifics but not facts already grounded', () => {
+    const brief = assembleOutreachBrief({
+      templates: outreachTemplates, recipientRole: 'estate-agent', templateId: 'A1',
+      listingRef: '123', listing: { rightmove_id: '123', address: '12 Mill Lane', ref: '123' },
+      contactName: 'Jane', household,
+    });
+    assert(brief.missingFacts.includes('viewingDateOption1'), 'flags missing viewing slot 1');
+    assert(brief.missingFacts.includes('viewingDateOption2'), 'flags missing viewing slot 2');
+    assert(!brief.missingFacts.includes('profile.firstName'), 'does not flag a held name');
+    assert(!brief.missingFacts.includes('listing.address'), 'does not flag the grounded address');
+    assert(!brief.missingFacts.includes('contact.agentName'), 'a matched contact satisfies the agent name');
+    assertEqual(brief.contact.name, 'Jane Smith');
   });
 }
