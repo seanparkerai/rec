@@ -179,8 +179,10 @@ export async function register({ test, assert, assertEqual }) {
     assert(sql.startsWith('BEGIN;') && sql.trim().endsWith('COMMIT;'), 'wrapped in a transaction');
     assert(/INSERT INTO area_search_tuning/.test(sql), 'writes area_search_tuning');
     assert(/ON CONFLICT \(area_id\) DO UPDATE/.test(sql), 'upsert on area_id');
-    assert(/COALESCE\(EXCLUDED\.override_radius_mi, EXCLUDED\.recommended_radius_mi\)/.test(sql),
-      'applied radius re-derived with the override-wins guard (override mirrors learned_preferences intent)');
+    assert(/override_radius_mi = EXCLUDED\.override_radius_mi/.test(sql),
+      'override mirrors the learned_preferences intent the driver resolved');
+    assert(/search_radius_mi\s+= EXCLUDED\.search_radius_mi/.test(sql) && /geofence_radii\s+= EXCLUDED\.geofence_radii/.test(sql),
+      'search disk + directional petals written from the authoritative plan');
     assert(/INSERT INTO refinement_suggestions/.test(sql) && /area_radius/.test(sql), 'writes the area_radius suggestion');
     assert(/INSERT INTO sync_log/.test(sql), 'logs to sync_log');
   });
@@ -207,6 +209,57 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(villages[2].searchRadiusMi, cfg.RADIUS_CEIL_MI); // exploration ceil
     assertEqual(villages[3].searchRadiusMi, 3);              // untuned unchanged
     assert(Math.abs(villages[0].geofenceRadiusKm - 0.7 / MILES_PER_KM) < 1e-9, 'geofence km tracks the applied radius');
+  });
+
+  // ── Directional ("petal") learning ──────────────────────────────────────────────────
+  const likeBearing = (areaId, dist, bearing, hh = HH_A) => ({
+    household_id: hh, reaction: 'like', created_at: NOW,
+    listing_snapshot: { area_id: areaId, distance_mi: dist }, bearing,
+  });
+  const rejectBearing = (areaId, dist, bearing, hh = HH_A) => ({
+    household_id: hh, reaction: 'reject', created_at: NOW,
+    listing_snapshot: { area_id: areaId, distance_mi: dist }, bearing,
+  });
+
+  test('radius: no bearing data → uniform petals = the scalar radius (back-compat)', () => {
+    const r = learnRadii(likes('flat', [0.3, 0.35, 0.4, 0.45, 0.5, 0.42]), { config: cfg, now: NOW });
+    const a = r.areas[0];
+    assertEqual(a.geofenceRadiiMi.length, cfg.RADIUS_SECTORS);
+    assert(a.geofenceRadiiMi.every((p) => p === a.recommendedMi), 'every petal equals the scalar radius');
+    assertEqual(a.searchMi, a.recommendedMi);
+    assert(!a.directional, 'not directional without sector evidence');
+  });
+
+  test('radius: petals reach toward rural likes (N) and pull in toward urban likes (E)', () => {
+    const north = [2.0, 2.1, 2.2, 2.15, 2.3, 2.25].map((d) => likeBearing('town', d, 0));   // sector 0
+    const east = [0.3, 0.35, 0.4, 0.45, 0.5, 0.42].map((d) => likeBearing('town', d, 90));  // sector 2
+    const a = learnRadii([...north, ...east], { config: cfg, now: NOW }).areas[0];
+    assert(a.directional, 'directional flag set');
+    assert(a.geofenceRadiiMi[0] >= 2.0, `north (rural) petal stays wide, got ${a.geofenceRadiiMi[0]}`);
+    assertEqual(a.geofenceRadiiMi[2], 0.8); // q90 0.5 + 0.3 margin
+    assertEqual(a.searchMi, Math.max(...a.geofenceRadiiMi)); // disk = widest petal
+  });
+
+  test('radius: a like-less, reject-dominated sector inside R is pulled in (urban cut)', () => {
+    const likesSouth = [2.0, 2.1, 2.2, 2.15, 2.25].map((d) => likeBearing('town', d, 180)); // sector 4 → R≈2.55
+    const rejWest = [0.5, 0.6, 0.7, 0.55, 0.65, 0.8, 0.75, 0.9, 0.85, 0.95]
+      .map((d) => rejectBearing('town', d, 270)); // sector 6, no likes, ≥8 rejects, all inside R
+    const a = learnRadii([...likesSouth, ...rejWest], { config: cfg, now: NOW }).areas[0];
+    assert(a.geofenceRadiiMi[6] < a.recommendedMi, `west urban sector cut below the scalar radius, got ${a.geofenceRadiiMi[6]} vs ${a.recommendedMi}`);
+    assert(a.geofenceRadiiMi[6] >= cfg.RADIUS_FLOOR_MI, 'never below the floor');
+  });
+
+  test('radius-persistence: directional petals are written to geofence_radii', () => {
+    const north = [2.0, 2.1, 2.2, 2.15, 2.3, 2.25].map((d) => likeBearing('town', d, 0));
+    const east = [0.3, 0.35, 0.4, 0.45, 0.5, 0.42].map((d) => likeBearing('town', d, 90));
+    const plan = planRadii(learnRadii([...north, ...east], { config: cfg, now: NOW }), { now: NOW, tuningRows: [] });
+    const row = plan.tuningUpserts[0];
+    assertEqual(row.geofence_radii.length, cfg.RADIUS_SECTORS);
+    assertEqual(row.search_radius_mi, Math.max(...row.geofence_radii));
+    // an override pins uniform petals
+    const pinned = planRadii(learnRadii([...north, ...east], { config: cfg, now: NOW }), { now: NOW, tuningRows: [], overrides: { town: 1.0 } }).tuningUpserts[0];
+    assert(pinned.geofence_radii.every((p) => p === 1.0), 'override → uniform petals');
+    assertEqual(pinned.search_radius_mi, 1.0);
   });
 
   // ── Phase 5: portal surfacing (view-model + override routing) ───────────────────────

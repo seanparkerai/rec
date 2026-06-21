@@ -80,7 +80,12 @@ export function planRadii(learned, ctx = {}) {
     // override when the map is unavailable (e.g. a file-mode bundle without prefs).
     const override = overrides[areaId] != null ? Number(overrides[areaId])
       : (prior && prior.override_radius_mi != null ? Number(prior.override_radius_mi) : null);
-    const applied = override != null ? override : recommendedMi;
+    const nSectors = config.RADIUS_SECTORS || 8;
+    // An override pins the whole town to one radius (uniform petals). Otherwise the search
+    // disk is the widest petal (covers every sector) and the geofence is per-sector.
+    const applied = override != null ? override : (a ? a.searchMi : recommendedMi);
+    const geofenceScalar = override != null ? override : recommendedMi;
+    const geofenceRadii = override != null ? Array(nSectors).fill(override) : (a ? a.geofenceRadiiMi : null);
 
     // Exploration cadence (time-based) — only for a learner-recommended area with NO
     // override (a pinned area is never widened behind the user's back). A fresh area gets a
@@ -106,10 +111,11 @@ export function planRadii(learned, ctx = {}) {
 
     tuningUpserts.push({
       area_id: areaId,
-      geofence_radius_mi: applied,
+      geofence_radius_mi: geofenceScalar,
       search_radius_mi: applied,
       recommended_radius_mi: recommendedMi,
       override_radius_mi: override,
+      geofence_radii: geofenceRadii,
       sample_size: a ? Math.round(a.sampleSize) : null,
       like_count: a ? a.likeCount : null,
       method: a ? a.method : 'override-only',
@@ -180,22 +186,24 @@ export function renderRadiusSql(plan) {
 
   if (plan.tuningUpserts.length) {
     const cols = '(area_id, geofence_radius_mi, search_radius_mi, recommended_radius_mi, '
-      + 'override_radius_mi, sample_size, like_count, method, confidence, explore_until, '
-      + 'last_explored_at, computed_at, updated_at)';
+      + 'override_radius_mi, geofence_radii, sample_size, like_count, method, confidence, '
+      + 'explore_until, last_explored_at, computed_at, updated_at)';
     const tuples = plan.tuningUpserts.map((u) => `  (${[
       lit(u.area_id), lit(u.geofence_radius_mi), lit(u.search_radius_mi), lit(u.recommended_radius_mi),
-      lit(u.override_radius_mi), lit(u.sample_size), lit(u.like_count), lit(u.method), lit(u.confidence),
+      lit(u.override_radius_mi), u.geofence_radii ? jsonLit(u.geofence_radii) : 'NULL',
+      lit(u.sample_size), lit(u.like_count), lit(u.method), lit(u.confidence),
       lit(u.explore_until), lit(u.last_explored_at), lit(u.computed_at), lit(u.updated_at),
     ].join(', ')})`);
     lines.push(
       `INSERT INTO area_search_tuning ${cols}\nVALUES\n${tuples.join(',\n')}\n`
       + 'ON CONFLICT (area_id) DO UPDATE SET\n'
+      // EXCLUDED values are authoritative: the driver already folded the user override
+      // (resolved from learned_preferences, the sole source) into search/geofence/petals.
       + '  recommended_radius_mi = EXCLUDED.recommended_radius_mi,\n'
-      // override_radius_mi mirrors the portal intent the tuner resolved from
-      // learned_preferences (the sole source); applied = override ?? recommended.
       + '  override_radius_mi = EXCLUDED.override_radius_mi,\n'
-      + '  search_radius_mi   = COALESCE(EXCLUDED.override_radius_mi, EXCLUDED.recommended_radius_mi),\n'
-      + '  geofence_radius_mi = COALESCE(EXCLUDED.override_radius_mi, EXCLUDED.recommended_radius_mi),\n'
+      + '  search_radius_mi   = EXCLUDED.search_radius_mi,\n'
+      + '  geofence_radius_mi = EXCLUDED.geofence_radius_mi,\n'
+      + '  geofence_radii     = EXCLUDED.geofence_radii,\n'
       + '  sample_size = EXCLUDED.sample_size,\n'
       + '  like_count = EXCLUDED.like_count,\n'
       + '  method = EXCLUDED.method,\n'

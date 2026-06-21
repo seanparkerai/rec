@@ -64,6 +64,47 @@ function areaOf(reaction) {
   return snap.area_id != null && snap.area_id !== '' ? String(snap.area_id) : null;
 }
 
+/** Read a reaction's bearing (deg from the town centre), normalised to [0,360). */
+function bearingOf(reaction) {
+  const b = reaction.bearing != null ? Number(reaction.bearing) : NaN;
+  return Number.isFinite(b) ? ((b % 360) + 360) % 360 : null;
+}
+
+/** Compass sector index (0..n-1) for a bearing; sector 0 centred on North. */
+function sectorOf(bearing, n) {
+  if (bearing == null) return null;
+  return Math.round((bearing % 360) / (360 / n)) % n;
+}
+
+/**
+ * Per-sector ("petal") radii around a town, given pooled (cross-household) sector samples
+ * and the area's scalar radius R. Each sector defaults to R (rural-safe — a direction is
+ * never cut without its own evidence). A sector with its own likes is fit to them (q90 +
+ * margin, can reach toward rural up to the cap or pull in if close); a like-less sector
+ * with a real reject cluster is pulled in to its rejects' keep-quantile (cut the far urban
+ * tail). All clamped to [floor, cap].
+ */
+function computePetals(sectors, R, config) {
+  const n = config.RADIUS_SECTORS;
+  const out = new Array(n).fill(R);
+  for (let s = 0; s < n; s++) {
+    const likes = sectors.likes[s];
+    const rejects = sectors.rejects[s];
+    const likeW = likes.reduce((a, p) => a + p.weight, 0);
+    if (likeW >= config.RADIUS_SECTOR_MIN_LIKES) {
+      const q = weightedQuantile(likes, config.RADIUS_QUANTILE);
+      if (q != null) out[s] = round2(clampMi(q + config.RADIUS_MARGIN_MI, config.RADIUS_FLOOR_MI, config.RADIUS_CEIL_MI));
+      continue;
+    }
+    const rejectW = rejects.reduce((a, p) => a + p.weight, 0);
+    if (rejectW >= config.RADIUS_SECTOR_MIN_REJECTS) {
+      const keep = weightedQuantile(rejects, config.RADIUS_SECTOR_REJECT_KEEP_QUANTILE);
+      if (keep != null) out[s] = round2(clampMi(Math.min(R, keep), config.RADIUS_FLOOR_MI, config.RADIUS_CEIL_MI));
+    }
+  }
+  return out;
+}
+
 /** Direction of a recommended radius vs the current one (eps guards float noise). */
 function directionOf(recommendedMi, currentMi) {
   if (recommendedMi == null) return 'hold';
@@ -111,7 +152,15 @@ export function learnRadii(reactions = [], opts = {}) {
 
   // Group reactions: area → household → { likeSamples, likeWeight, rejectWeight,
   // rejectDistances } (decayed). Only distance-bearing reactions contribute distances.
+  // In parallel, pool per-sector like/reject distances across households per area (the
+  // directional "petals") — only reactions that carry a bearing contribute here.
+  const nSectors = config.RADIUS_SECTORS;
   const byArea = new Map();
+  const sectorByArea = new Map();
+  const blankSectors = () => ({
+    likes: Array.from({ length: nSectors }, () => []),
+    rejects: Array.from({ length: nSectors }, () => []),
+  });
   for (const r of reactions) {
     const areaId = areaOf(r);
     if (!areaId) continue;
@@ -127,12 +176,22 @@ export function learnRadii(reactions = [], opts = {}) {
       area.set(hh, e);
     }
     e.sampleWeight += w;
+    const sector = dist != null ? sectorOf(bearingOf(r), nSectors) : null;
+    let sec = sectorByArea.get(areaId);
+    if (!sec) { sec = blankSectors(); sectorByArea.set(areaId, sec); }
     if (r.reaction === 'like') {
       e.likeWeight += w;
-      if (dist != null) e.likeSamples.push({ value: dist, weight: w });
+      if (dist != null) {
+        e.likeSamples.push({ value: dist, weight: w });
+        if (sector != null) sec.likes[sector].push({ value: dist, weight: w });
+      }
     } else if (r.reaction === 'reject') {
       e.rejectWeight += w;
-      if (dist != null) { e.rejectWeightWithDist += w; e.rejectDistances.push({ value: dist, weight: w }); }
+      if (dist != null) {
+        e.rejectWeightWithDist += w;
+        e.rejectDistances.push({ value: dist, weight: w });
+        if (sector != null) sec.rejects[sector].push({ value: dist, weight: w });
+      }
     }
   }
 
@@ -190,10 +249,20 @@ export function learnRadii(reactions = [], opts = {}) {
 
     const beyondUnion = areaRejectDistances.reduce((s, p) => s + (p.value > unionRec ? p.weight : 0), 0);
     const distantRejectWaste = areaRejectWithDist > 0 ? round2(beyondUnion / areaRejectWithDist) : 0;
+
+    // Directional petals around the scalar radius R (=unionRec). With no bearing data the
+    // sectors are empty → every petal = R → searchMi = R (identical to the symmetric model).
+    const petals = computePetals(sectorByArea.get(areaId) || blankSectors(), unionRec, config);
+    const searchMi = round2(Math.max(...petals));
+    const directional = petals.some((p) => p !== unionRec);
+
     areas.push({
       areaId,
       recommendedMi: unionRec,
       appliedMi: unionRec, // override (if any) is applied by the persistence layer
+      searchMi,                 // the Rightmove disk = widest petal (covers every sector), ≤ cap
+      geofenceRadiiMi: petals,  // per-sector keep radius (the directional "petals")
+      directional,              // true once any sector differs from the scalar radius
       currentMi: round2(currentMi),
       sampleSize: round2(areaSampleWeight),
       likeCount: round2(areaLikeWeight),

@@ -555,6 +555,7 @@ CREATE TABLE IF NOT EXISTS area_search_tuning (
   search_radius_mi      numeric,
   recommended_radius_mi numeric,
   override_radius_mi    numeric,                  -- user override; always wins over the learner
+  geofence_radii        jsonb,                    -- directional "petals": per-sector keep radius (mi), sector 0 = North
   sample_size           integer,
   like_count            numeric,
   method                text,

@@ -23,15 +23,53 @@
 //     tuningRows?:[...], suggestionRows?:[...], currentRadii?:{ areaId: mi },
 //     dismissedKeys?:["area_radius:<areaId>", ...], allReactions?:bool }
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { learnRadii } from '../assets/js/refinement/radius.js';
 import { planRadii, renderRadiusSql } from '../assets/js/refinement/radius-persistence.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
 import { radiusOverridesFromOverrides } from '../assets/js/refinement/view.js';
 import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
+import { haversineKm, bearingDeg, MILES_PER_KM } from './listings-normalise.mjs';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+
+/** Read each area's centre coords from the repo (id → {lat,lng}) for bearing maths. */
+async function loadAreaCentres() {
+  const dir = resolve(ROOT, 'data/areas');
+  const out = new Map();
+  for (const f of (await readdir(dir)).filter((n) => n.endsWith('.json'))) {
+    try {
+      const a = JSON.parse(await readFile(resolve(dir, f), 'utf8'));
+      const lat = a?.coords?.lat; const lng = a?.coords?.lng;
+      if (a?.id && lat != null && lng != null) out.set(a.id, { lat: Number(lat), lng: Number(lng) });
+    } catch { /* skip unreadable file */ }
+  }
+  return out;
+}
+
+/**
+ * Enrich reactions with a `bearing` (deg from the town centre) and a coords-derived
+ * `distance_mi`, by joining each reaction's listing to its coordinates. This unlocks the
+ * directional petals AND recovers distance for likes whose snapshot lacked it. Reactions
+ * that don't resolve to coords are returned unchanged (they still feed the scalar radius).
+ */
+function enrichBearings(reactions, listingCoords, centres) {
+  return reactions.map((r) => {
+    const snap = r.listing_snapshot || {};
+    const areaId = snap.area_id;
+    const rmId = snap.rightmove_id != null ? String(snap.rightmove_id) : null;
+    const here = rmId ? listingCoords.get(rmId) : null;
+    const centre = areaId ? centres.get(areaId) : null;
+    if (!here || !centre) return r;
+    const distance_mi = haversineKm(centre, here) * MILES_PER_KM;
+    const bearing = bearingDeg(centre, here);
+    return { ...r, bearing, listing_snapshot: { ...snap, distance_mi } };
+  });
+}
 
 function arg(name) {
   const i = process.argv.indexOf(name);
@@ -128,8 +166,19 @@ async function loadInputs() {
   }
   if (!SERVICE_KEY) throw new Error('no service key — use --from-file <bundle.json> (build via MCP) for the sandbox path');
   // Cross-household reaction log (service role bypasses RLS). distance_mi + area_id live
-  // in listing_snapshot; that's all the learner reads.
-  const reactions = await restGetAll('listing_reactions?select=household_id,reaction,created_at,listing_snapshot');
+  // in listing_snapshot; the rightmove_id lets us join coords for the directional bearing.
+  const rawReactions = await restGetAll('listing_reactions?select=household_id,reaction,created_at,listing_snapshot');
+  // Join listing coordinates (the snapshot has no lat/lng) + repo area centres, then
+  // enrich each reaction with a bearing + coords-derived distance for the petal learner.
+  const [coordRows, centres] = await Promise.all([
+    restGetAll('listings?select=rightmove_id,lat,lng'),
+    loadAreaCentres(),
+  ]);
+  const listingCoords = new Map(
+    coordRows.filter((l) => l.lat != null && l.lng != null)
+      .map((l) => [String(l.rightmove_id), { lat: Number(l.lat), lng: Number(l.lng) }]),
+  );
+  const reactions = enrichBearings(rawReactions, listingCoords, centres);
   const tuningRows = await restGetAll('area_search_tuning?select=area_id,search_radius_mi,override_radius_mi,explore_until,last_explored_at,recommended_radius_mi');
   const suggestionRows = await restGetAll("refinement_suggestions?select=household_id,dimension,value,status,runs_qualified,first_detected_at,snoozed_until&dimension=eq.area_radius");
   // Portal-set radius overrides live in learned_preferences.overrides (the portal can't
@@ -171,8 +220,8 @@ async function main() {
 
   // Human-readable summary (stderr so stdout can be piped as pure SQL).
   const top = learned.areas.slice(0, 12).map((a) =>
-    `    ${a.areaId}  ${a.currentMi}mi → ${a.recommendedMi}mi  [${a.direction}]  `
-    + `likes=${a.likeCount} hh=${a.contributingHouseholds}${a.distantRejectWaste > 0 ? ` waste=${Math.round(a.distantRejectWaste * 100)}%` : ''}`);
+    `    ${a.areaId}  ${a.currentMi}mi → ${a.recommendedMi}mi (disk ${a.searchMi}mi)  [${a.direction}]  `
+    + `likes=${a.likeCount} hh=${a.contributingHouseholds}${a.directional ? ` petals=[${a.geofenceRadiiMi.join(',')}]` : ''}`);
   process.stderr.write(
     `\n  Radius tune\n`
     + `  reactions=${filtered.length}  areas tuned=${learned.areas.length}  suggestions=${learned.suggestions.length}  exploring=${plan.exploringCount}\n`

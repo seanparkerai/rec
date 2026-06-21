@@ -88,6 +88,17 @@ export const FIXED = {
   RADIUS_MIN_CHANGE_MI: 0.5,    // only raise a suggestion when |recommended − current| ≥ this
   RADIUS_EXPLORE_EVERY_DAYS: 7, // re-widen an area to CEIL every N days to keep the boundary honest
   RADIUS_EXPLORE_WINDOW_H: 12,  // …for this many hours per exploration cycle
+
+  // ── directional ("petal") geofence — per-compass-sector keep radius ──────────────
+  // Each area is split into RADIUS_SECTORS sectors around its centre. A sector defaults
+  // to the area's scalar radius (rural-safe: a direction is never cut without its own
+  // evidence). A sector with its own likes is fit to them (can reach toward rural up to
+  // CEIL, or pull in if those likes are close); a sector that is reject-dominated with
+  // no likes is pulled in to its rejects' keep-quantile (cut the far urban tail).
+  RADIUS_SECTORS: 8,                    // compass sectors (45° each); sector 0 = North
+  RADIUS_SECTOR_MIN_LIKES: 3,           // decayed likes in a sector before it fits its own radius
+  RADIUS_SECTOR_MIN_REJECTS: 8,         // decayed rejects before a like-less sector may be cut
+  RADIUS_SECTOR_REJECT_KEEP_QUANTILE: 0.5, // a cut sector keeps up to this quantile of its reject distances
 };
 
 /**

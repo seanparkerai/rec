@@ -664,7 +664,7 @@ async function markReprobed(values, runIndex) {
 async function loadRadiusTuning() {
   if (!SERVICE_KEY) return new Map();
   try {
-    const url = `${SUPABASE_URL}/rest/v1/area_search_tuning?select=area_id,search_radius_mi,override_radius_mi,explore_until`;
+    const url = `${SUPABASE_URL}/rest/v1/area_search_tuning?select=area_id,search_radius_mi,geofence_radius_mi,override_radius_mi,geofence_radii,explore_until`;
     const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
     if (!res.ok) throw new Error(`GET area_search_tuning failed: ${res.status}`);
     const rows = await res.json();
@@ -678,9 +678,16 @@ async function loadRadiusTuning() {
 /**
  * Overlay the learned per-area radius onto the village entries (pure mutation of the
  * objects already in outcodeMap — they flow into clustering / search / geofence by
- * reference). A user override wins over the learner; an area inside its exploration
- * window is widened to RADIUS_CEIL_MI so the wider set is periodically re-measured.
- * Areas with no tuning row keep their file/default radius. Returns { tuned, exploring }.
+ * reference). For each tuned area:
+ *   • the SEARCH disk (`searchRadiusMi`) = the widest learned sector (or the override) so
+ *     the Rightmove call covers every direction the area keeps;
+ *   • the GEOFENCE = the per-sector "petals" (`geofenceRadiiKm`) — reaching toward rural
+ *     sectors, pulled in toward urban ones — with the scalar `geofenceRadiusKm` as a
+ *     fallback for directions/areas without petals.
+ * A user override pins the whole area to one radius (uniform). An area inside its
+ * exploration window is widened to RADIUS_CEIL_MI (petals cleared) so the full disk is
+ * periodically re-measured. Areas with no tuning row keep their file/default radius.
+ * Returns { tuned, exploring }.
  */
 function applyRadiusTuning(villages, tuning, now = new Date()) {
   let tuned = 0;
@@ -689,15 +696,24 @@ function applyRadiusTuning(villages, tuning, now = new Date()) {
     const t = tuning.get(v.id);
     if (!t) continue;
     const isExploring = t.explore_until != null && new Date(t.explore_until) > now;
-    const appliedMi = isExploring
-      ? RADIUS_CEIL_MI
-      : (t.override_radius_mi != null ? Number(t.override_radius_mi)
-        : t.search_radius_mi != null ? Number(t.search_radius_mi) : null);
-    if (appliedMi == null || !Number.isFinite(appliedMi)) continue;
-    v.searchRadiusMi = appliedMi;
-    v.geofenceRadiusKm = appliedMi / MILES_PER_KM;
+    if (isExploring) {
+      v.searchRadiusMi = RADIUS_CEIL_MI;
+      v.geofenceRadiusKm = RADIUS_CEIL_MI / MILES_PER_KM;
+      v.geofenceRadiiKm = null;            // measure the full disk while exploring
+      tuned += 1; exploring += 1;
+      continue;
+    }
+    const searchMi = t.override_radius_mi != null ? Number(t.override_radius_mi)
+      : t.search_radius_mi != null ? Number(t.search_radius_mi) : null;
+    if (searchMi == null || !Number.isFinite(searchMi)) continue;
+    v.searchRadiusMi = searchMi;
+    const keepScalar = t.override_radius_mi != null ? Number(t.override_radius_mi)
+      : t.geofence_radius_mi != null ? Number(t.geofence_radius_mi) : searchMi;
+    v.geofenceRadiusKm = keepScalar / MILES_PER_KM;
+    v.geofenceRadiiKm = Array.isArray(t.geofence_radii) && t.geofence_radii.length
+      ? t.geofence_radii.map((mi) => Number(mi) / MILES_PER_KM)
+      : null;
     tuned += 1;
-    if (isExploring) exploring += 1;
   }
   return { tuned, exploring };
 }
