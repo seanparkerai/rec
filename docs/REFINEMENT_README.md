@@ -155,10 +155,13 @@ run-index needed.
 `RADIUS_EXPLORE_WINDOW_H` 12.
 
 **Run it** (sandbox): build a reactions bundle via MCP, then
-`node tools/radius-tune.mjs --from-file <bundle>.json --emit-sql <out>.sql` and apply via MCP. CI/REST:
+`node tools/radius-tune.mjs --from-file <bundle>.json --emit-sql <out>.sql` and apply via MCP. CI:
 `.github/workflows/radius-tune.yml` (daily ~05:30 UTC, ahead of the 06:00 refinement run + 08:00 fetch)
-reads cross-household reactions with the service role and applies the plan with `psql`; it no-ops until
-the same `SUPABASE_*` secrets are set.
+reads cross-household reactions and **applies the plan over PostgREST with the service role**
+(`node tools/radius-tune.mjs --apply`) — so it needs only `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`
+(the secrets the fetcher already uses), **no `SUPABASE_DB_URL` / psql**. The service role bypasses RLS,
+and `planRadii` pre-resolves the sticky status + override-folded radius, so a merge-duplicates UPSERT
+writes exactly what `renderRadiusSql` would. (`--emit-sql` / stdout SQL remain for the psql path.)
 
 ## Known follow-ups (deferred, documented)
 - The §4.1 "Why?" reaction-rate **sparkline + sample rejected listings** (need extra

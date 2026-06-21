@@ -51,6 +51,36 @@ async function restGetAll(path) {
   return out;
 }
 
+/**
+ * Apply the plan over PostgREST with the service role (no SUPABASE_DB_URL / psql needed).
+ * The service role bypasses RLS, so it can write the engine tables directly. The plan's
+ * rows already carry the resolved sticky status + override-folded radius (planRadii), so a
+ * merge-duplicates UPSERT writes exactly what renderRadiusSql would. Idempotent.
+ */
+async function restUpsert(table, rows, onConflict) {
+  if (!rows || !rows.length) return 0;
+  const url = `${SUPABASE_URL}/rest/v1/${table}${onConflict ? `?on_conflict=${onConflict}` : ''}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`,
+      'Content-Type': 'application/json',
+      Prefer: `${onConflict ? 'resolution=merge-duplicates,' : ''}return=minimal`,
+    },
+    body: JSON.stringify(rows),
+  });
+  if (!res.ok) throw new Error(`UPSERT ${table} ${res.status}: ${await res.text()}`);
+  return rows.length;
+}
+
+async function applyPlanViaRest(plan) {
+  if (!SERVICE_KEY) throw new Error('--apply needs SUPABASE_SERVICE_ROLE_KEY');
+  const t = await restUpsert('area_search_tuning', plan.tuningUpserts, 'area_id');
+  const s = await restUpsert('refinement_suggestions', plan.suggestionUpserts, 'household_id,dimension,value');
+  await restUpsert('sync_log', [{ actor: 'system', action: 'update', table_name: 'area_search_tuning', at: plan.now }]);
+  process.stderr.write(`  applied via REST (service role): ${t} tuning + ${s} suggestion upserts + 1 sync_log\n`);
+}
+
 /** Build the current applied-radius map from existing tuning rows (override wins). */
 function currentRadiiFrom(tuningRows) {
   const out = {};
@@ -148,8 +178,15 @@ async function main() {
     + `  reactions=${filtered.length}  areas tuned=${learned.areas.length}  suggestions=${learned.suggestions.length}  exploring=${plan.exploringCount}\n`
     + `  tuned areas:\n${top.join('\n') || '    (none cleared the like gate)'}\n\n`);
 
+  // Apply modes:
+  //   --apply       → write the plan over PostgREST with the service role (CI default;
+  //                   needs only SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY — no DB URL/psql).
+  //   --emit-sql f  → write the SQL plan to a file (sandbox / psql path).
+  //   (neither)     → print the SQL plan to stdout (dry run / pipe into psql).
   const emit = arg('--emit-sql');
-  if (emit) {
+  if (process.argv.includes('--apply')) {
+    await applyPlanViaRest(plan);
+  } else if (emit) {
     await writeFile(emit, `${sql}\n`, 'utf8');
     process.stderr.write(`  SQL plan → ${emit}  (${plan.tuningUpserts.length} tuning + ${plan.suggestionUpserts.length} suggestion upserts + 1 sync_log)\n`);
   } else {

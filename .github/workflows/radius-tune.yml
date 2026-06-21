@@ -1,20 +1,21 @@
 # radius-tune — per-area learned search radius (docs/REFINEMENT_README.md "Per-area
-# learned search radius"). Runs tools/radius-tune.mjs on a GitHub runner (which has the
-# service-role key, unlike the Claude sandbox), then applies the emitted SQL plan with
-# psql. The plan touches ONLY area_search_tuning, refinement_suggestions (dimension
-# 'area_radius') and sync_log — never listings, criteria, zones, or the scrape scope set.
+# learned search radius"). Runs tools/radius-tune.mjs on a GitHub runner and APPLIES the
+# plan over the Supabase REST API with the service role (`--apply`). The plan touches ONLY
+# area_search_tuning, refinement_suggestions (dimension 'area_radius') and sync_log — never
+# listings, criteria, zones, or the scrape scope set.
+#
+# ZERO EXTRA SECRETS. Apply is via PostgREST (the same service-role key the fetcher uses),
+# so this needs only the two secrets the project already has — NO SUPABASE_DB_URL / psql.
+# The service role bypasses RLS, and planRadii pre-resolves the sticky status + the
+# override-folded radius, so a merge-duplicates UPSERT is exactly what the SQL plan would do.
 #
 # CADENCE. Daily at ~05:30 UTC — AHEAD of the 06:00 refinement-run and the 08:00 fetch, so
-# the day's fetch reads a fresh radius. Idempotent (the SQL is UPSERTs with a status guard
-# + COALESCE override guard), so a missed or repeated run is harmless. The exploration ring
-# is time-based (explore_until / last_explored_at), so cadence drift never breaks it.
+# the day's fetch reads a fresh radius. Fully idempotent, so a missed or repeated run is
+# harmless; the exploration ring is time-based, so cadence drift never breaks it.
 #
-# REQUIRED REPO SECRETS (shared with refinement-run; the job no-ops until they are set):
-#   - SUPABASE_URL               e.g. https://<project>.supabase.co  (PostgREST reads)
-#   - SUPABASE_SERVICE_ROLE_KEY  service role key (reads cross-household reactions + tuning)
-#   - SUPABASE_DB_URL            Postgres connection string (psql applies the SQL plan)
-#
-# If a secret is missing the job no-ops with a clear message rather than failing red.
+# REQUIRED REPO SECRETS (already present for the fetcher; the job no-ops if missing):
+#   - SUPABASE_URL               https://<project>.supabase.co  (PostgREST reads + writes)
+#   - SUPABASE_SERVICE_ROLE_KEY  service role key (reads reactions; writes the engine tables)
 name: radius-tune
 
 on:
@@ -48,26 +49,24 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ] || [ -z "$SUPABASE_DB_URL" ]; then
-            echo "::warning::radius-tune skipped — set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY and SUPABASE_DB_URL repo secrets to enable it."
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::warning::radius-tune skipped — set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY repo secrets to enable it."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Evaluate — emit the SQL plan
+      - name: Tune — learn + apply the per-area radius (REST, service role)
         if: steps.guard.outputs.ready == 'true'
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: node tools/radius-tune.mjs --emit-sql /tmp/radius-plan.sql
-
-      - name: Apply — run the plan with psql
-        if: steps.guard.outputs.ready == 'true' && inputs.dry_run != true
-        env:
-          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
-          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f /tmp/radius-plan.sql
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN — printing the SQL plan only, not applying:"
+            node tools/radius-tune.mjs
+          else
+            node tools/radius-tune.mjs --apply
+          fi
