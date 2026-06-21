@@ -20,7 +20,7 @@ let lastTrigger = null;    // step row that opened the modal (for focus return)
 function outreachLink(task) {
   if (!task.outreachTemplateId) return '';
   const id = esc(task.outreachTemplateId);
-  return `<a href="outreach.html?templateId=${id}" data-nav="pages/outreach.html?templateId=${id}" class="journey-outreach-link" aria-label="Open email template for this step">&rarr; Email</a>`;
+  return `<a href="ask.html?composeTemplate=${id}" data-nav="pages/ask.html?composeTemplate=${id}" class="journey-outreach-link" aria-label="Draft an email for this step">&rarr; Email</a>`;
 }
 
 function announce(msg) {

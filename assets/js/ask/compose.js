@@ -195,20 +195,36 @@ export function createCompose({ dialog, form, openButtons = [], draftTemplate },
   cancelBtn?.addEventListener('click', close);
   openButtons.forEach((b) => b?.addEventListener('click', open));
 
-  // Deep-link: ask.html?compose=<role>:<intent>:<ref>  (Phase 3 entry points).
+  // Deep-link (Phase 3 entry points):
+  //   ask.html?compose=<role>:<intent>:<ref>   — area-detail / finances strips
+  //   ask.html?composeTemplate=<id>            — journey rows (role+intent from the template)
+  function seed(role, intent, ref) {
+    const radio = form.querySelector(`input[name="recipient"][value="${cssEsc(role)}"]`);
+    if (radio) { radio.checked = true; renderIntents(); }
+    if (intent && customEl) customEl.value = intent;
+    if (ref && propertyEl) {
+      const opt = [...propertyEl.options].find((o) => o.value === ref);
+      if (opt) propertyEl.value = ref;
+    }
+    open();
+  }
+
   function seedFromQuery() {
-    const q = new URLSearchParams(location.search).get('compose');
-    if (!q) return;
-    const [role, intent, ref] = q.split(':');
+    const params = new URLSearchParams(location.search);
+    const q = params.get('compose');
+    const tid = params.get('composeTemplate');
+    if (!q && !tid) return;
     ensureData().then(() => {
-      const radio = form.querySelector(`input[name="recipient"][value="${cssEsc(role)}"]`);
-      if (radio) { radio.checked = true; renderIntents(); }
-      if (intent && customEl) customEl.value = decodeURIComponent(intent).replace(/-/g, ' ');
-      if (ref && propertyEl) {
-        const opt = [...propertyEl.options].find((o) => o.value === ref);
-        if (opt) propertyEl.value = ref;
+      if (tid) {
+        const t = templates.find((x) => x.id === tid);
+        if (t) {
+          const intent = (t.title || '').replace(/^.*?—\s*/, '').trim() || t.description || '';
+          seed(t.recipientRole, intent, null);
+        } else { open(); }
+        return;
       }
-      open();
+      const [role, intent, ref] = q.split(':');
+      seed(role, intent ? decodeURIComponent(intent).replace(/-/g, ' ') : '', ref);
     });
   }
 
