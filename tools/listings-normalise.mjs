@@ -34,6 +34,29 @@ export function haversineKm(a, b) {
 }
 
 /**
+ * Initial great-circle bearing a→b in degrees (0=N, 90=E, 180=S, 270=W). Returns null
+ * for missing coords. Used by the directional geofence + the radius learner to place a
+ * listing in a compass sector around its town centre.
+ */
+export function bearingDeg(a, b) {
+  if (a?.lat == null || a?.lng == null || b?.lat == null || b?.lng == null) return null;
+  const toRad = (d) => (d * Math.PI) / 180;
+  const phi1 = toRad(a.lat);
+  const phi2 = toRad(b.lat);
+  const dLng = toRad(b.lng - a.lng);
+  const y = Math.sin(dLng) * Math.cos(phi2);
+  const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLng);
+  return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
+}
+
+/** Sector index (0..n-1) for a bearing; sector 0 is centred on North (default 8 = 45°). */
+export function bearingSector(bearing, n = 8) {
+  if (bearing == null || !Number.isFinite(bearing)) return null;
+  const span = 360 / n;
+  return Math.round((((bearing % 360) + 360) % 360) / span) % n;
+}
+
+/**
  * Shared place-name normaliser (L7). Lowercase, strip punctuation, drop the
  * "saint/st"/"cum" joiners and county suffixes, collapse whitespace. Used by the
  * geofence's second signal (nameAgrees) AND by tools/verify-area-coords.mjs so
@@ -60,6 +83,25 @@ export function normaliseName(s) {
 // they can be flagged for audit — never silently dropped, never silently trusted.
 export const GEOFENCE_RADIUS_KM = 4.8;          // ≈3 miles; per-village overridable
 export const MILES_PER_KM = 0.621371;
+
+/**
+ * The geofence buffer (km) for a village given a candidate listing point. When the
+ * village carries a learned per-sector buffer (geofenceRadiiKm — the directional
+ * "petal" coverage, one radius per compass sector), the sector is chosen by the bearing
+ * from the village CENTRE to the listing, so coverage can reach further toward rural
+ * sectors and pull in toward urban ones. Falls back to the scalar geofenceRadiusKm (then
+ * the global default) when no directional data is present — so this is fully
+ * backward-compatible with villages that have only a single radius.
+ */
+export function villageBufferKm(v, here, fallbackKm = GEOFENCE_RADIUS_KM) {
+  const radii = v?.geofenceRadiiKm;
+  if (Array.isArray(radii) && radii.length) {
+    const s = bearingSector(bearingDeg(v, here), radii.length);
+    const r = s != null ? Number(radii[s]) : NaN;
+    if (Number.isFinite(r)) return r;
+  }
+  return v?.geofenceRadiusKm ?? fallbackKm;
+}
 
 /**
  * Nearest active village to a listing, by coordinates only (no address-token
@@ -129,7 +171,7 @@ export function withinGeofence(listing, { villages = [], radiusKm = GEOFENCE_RAD
   const here = { lat: Number(listing.lat), lng: Number(listing.lng) };
   // Distance to every active village + that village's own buffer (L7.3 override).
   const scored = villages
-    .map((v) => ({ v, km: haversineKm(here, v), r: v.geofenceRadiusKm ?? radiusKm }))
+    .map((v) => ({ v, km: haversineKm(here, v), r: villageBufferKm(v, here, radiusKm) }))
     .sort((a, b) => a.km - b.km);
   const nearest = scored[0];
   if (!nearest || !Number.isFinite(nearest.km)) {

@@ -13,6 +13,9 @@ import {
   withinGeofence,
   nearestVillage,
   nameAgrees,
+  bearingDeg,
+  bearingSector,
+  villageBufferKm,
 } from '../tools/listings-normalise.mjs';
 
 // The exact raw shape captured by the L0 probe (actor dhrumil~rightmove-scraper).
@@ -193,6 +196,33 @@ export async function register({ test, assert, assertEqual }) {
     const twoMiNorth = { lat: 51.145 + 0.029, lng: -1.468 };
     assert(!withinGeofence(twoMiNorth, { villages: v }).pass, '2mi rejected under a 1mi override');
     assert(withinGeofence({ lat: 51.145, lng: -1.468 }, { villages: v }).pass, 'centre still accepted');
+  });
+
+  // ── Directional ("petal") geofence: reach toward rural sectors, pull in toward urban ──
+  test('bearingDeg + bearingSector place a point in the right compass sector', () => {
+    const c = { lat: 51.145, lng: -1.468 };
+    assertEqual(bearingSector(bearingDeg(c, { lat: 51.20, lng: -1.468 }), 8), 0); // due north → sector 0
+    assertEqual(bearingSector(bearingDeg(c, { lat: 51.145, lng: -1.40 }), 8), 2); // due east  → sector 2
+    assertEqual(bearingSector(0, 8), 0);
+    assertEqual(bearingSector(90, 8), 2);
+    assertEqual(bearingSector(180, 8), 4);
+    assertEqual(bearingSector(null, 8), null);
+  });
+
+  test('geofence directional: a wide rural sector keeps a far home; a tight urban sector cuts one', () => {
+    // North petal wide (≈3mi/4.8km), East petal tight (≈0.5mi/0.8km); others wide.
+    const radii = [4.8, 4.8, 0.8, 4.8, 4.8, 4.8, 4.8, 4.8];
+    const v = [{ id: 'x', name: 'X', outcode: 'SP11', lat: 51.145, lng: -1.468, geofenceRadiusKm: 4.8, geofenceRadiiKm: radii }];
+    const twoMiNorth = { lat: 51.145 + 0.029, lng: -1.468 }; // ~2mi N → sector 0 (wide) → KEEP
+    const twoMiEast = { lat: 51.145, lng: -1.468 + 0.0461 }; // ~2mi E → sector 2 (tight) → CUT
+    assert(withinGeofence(twoMiNorth, { villages: v }).pass, 'rural-direction home kept by the wide north petal');
+    assert(!withinGeofence(twoMiEast, { villages: v }).pass, 'urban-direction home cut by the tight east petal');
+  });
+
+  test('villageBufferKm falls back to the scalar radius when no petals are present', () => {
+    const v = { lat: 51.145, lng: -1.468, geofenceRadiusKm: 2.0 };
+    assertEqual(villageBufferKm(v, { lat: 51.20, lng: -1.468 }), 2.0);
+    assertEqual(villageBufferKm({ lat: 51.145, lng: -1.468 }, { lat: 51.2, lng: -1.468 }, 4.8), 4.8);
   });
 
   // ── L7.6 overlap tiebreak: a home inside several village disks lands on the one it is ADDRESSED in ──
