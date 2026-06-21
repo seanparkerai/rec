@@ -12,7 +12,7 @@ const FN_URL = 'https://qxmyrahqsopmaeokxdub.supabase.co/functions/v1/ask';
  * Yields events: {type:'text',text} · {type:'tool',name} · {type:'done',usage} ·
  * {type:'error',message}. The caller may pass an AbortSignal to stop early.
  */
-export async function* askStream(messages, { model, signal } = {}) {
+export async function* askStream(messages, { model, max_tokens, signal } = {}) {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) { yield { type: 'error', message: 'You are signed out — please sign in again.' }; return; }
 
@@ -25,7 +25,7 @@ export async function* askStream(messages, { model, signal } = {}) {
         Authorization: `Bearer ${session.access_token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ messages, ...(model ? { model } : {}) }),
+      body: JSON.stringify({ messages, ...(model ? { model } : {}), ...(max_tokens ? { max_tokens } : {}) }),
     });
   } catch (e) {
     if (e?.name === 'AbortError') return;

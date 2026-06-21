@@ -28,6 +28,13 @@
           <h1>Ask</h1>
         </div>
         <div class="ask-head__actions">
+          <button id="ask-compose-open" type="button" class="ask-head__btn">
+            <svg class="ask-head__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+              fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Z" /><path d="M13.5 6.5l3 3" />
+            </svg>
+            Draft message
+          </button>
           <button id="ask-new" type="button" class="ask-head__btn">
             <svg class="ask-head__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"
               fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -57,8 +64,16 @@
         <li><button type="button" class="ask-chip" data-chip>Which of my saved homes have I rated 8 or higher?</button></li>
         <li><button type="button" class="ask-chip" data-chip>How big is my deposit gap and roughly when do I hit my target?</button></li>
         <li><button type="button" class="ask-chip" data-chip>What property types do I tend to reject?</button></li>
-        <li><button type="button" class="ask-chip" data-chip>Draft a viewing email for an estate agent</button></li>
       </ul>
+      <div class="ask-empty__compose">
+        <button id="ask-compose-open-empty" type="button" class="ask-compose__cta">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Z" /><path d="M13.5 6.5l3 3" />
+          </svg>
+          <span>Draft a message to an agent, broker, solicitor&hellip;</span>
+        </button>
+      </div>
     </section>
 
     <form id="ask-composer" class="ask-composer" autocomplete="off">
@@ -92,6 +107,86 @@
     </div>
     <ul id="ask-history-list" class="ask-history__list"></ul>
   </dialog>
+
+  <dialog id="ask-compose" class="ask-compose" aria-label="Draft a message">
+    <form id="ask-compose-form" class="ask-compose__form" method="dialog">
+      <div class="ask-compose__head">
+        <h2 class="ask-compose__title">Draft a message</h2>
+        <button id="ask-compose-cancel" type="button" class="ask-history__close" aria-label="Close">&times;</button>
+      </div>
+
+      <fieldset role="group" class="ask-compose__group">
+        <legend>Who are you writing to?</legend>
+        <div class="ask-compose__chips">
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="estate-agent" checked /><span>Estate agent</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="mortgage-broker" /><span>Mortgage broker</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="solicitor" /><span>Solicitor</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="surveyor" /><span>Surveyor</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="vendor" /><span>Vendor</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="removals" /><span>Removals</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="insurance" /><span>Insurance</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="recipient" value="local-authority" /><span>Local authority</span></label>
+        </div>
+      </fieldset>
+
+      <div class="ask-compose__group">
+        <p class="ask-compose__label" id="ask-compose-intent-label">What&rsquo;s the situation?</p>
+        <div id="ask-compose-intents" class="ask-compose__chips" role="group" aria-labelledby="ask-compose-intent-label"></div>
+        <label class="ask-compose__field">
+          <span class="ask-compose__sublabel">Something else&hellip;</span>
+          <input id="ask-compose-custom" type="text" class="ask-compose__input" placeholder="Describe the situation in your own words" autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="ask-compose__group">
+        <label class="ask-compose__field">
+          <span class="ask-compose__label">Which property?</span>
+          <select id="ask-compose-property" class="ask-compose__input">
+            <option value="">No specific property</option>
+          </select>
+        </label>
+        <input id="ask-compose-address" type="text" class="ask-compose__input" placeholder="Type the property address" autocomplete="off" hidden />
+      </div>
+
+      <fieldset role="group" class="ask-compose__group">
+        <legend>Tone</legend>
+        <div class="ask-compose__chips">
+          <label class="ask-compose__radio"><input type="radio" name="tone" value="warm-brief" checked /><span>Warm &amp; brief</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="tone" value="firm" /><span>Firm</span></label>
+          <label class="ask-compose__radio"><input type="radio" name="tone" value="formal" /><span>Formal</span></label>
+        </div>
+      </fieldset>
+
+      <label class="ask-compose__field">
+        <span class="ask-compose__label">Anything to include? <span class="ask-compose__optional">(optional)</span></span>
+        <textarea id="ask-compose-notes" class="ask-compose__input" rows="2" placeholder="e.g. I can view Saturday morning or Tuesday after 5pm"></textarea>
+      </label>
+
+      <div class="ask-compose__actions">
+        <button type="submit" class="ask-compose__submit">Draft it</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="ask-draft-card">
+    <section class="ask-draft" aria-label="Draft email">
+      <label class="ask-draft__row">
+        <span class="ask-draft__label">Subject</span>
+        <input type="text" class="ask-draft__subject ask-compose__input" />
+      </label>
+      <label class="ask-draft__row">
+        <span class="ask-draft__label">Message</span>
+        <textarea class="ask-draft__body ask-compose__input" rows="10"></textarea>
+      </label>
+      <div class="ask-draft__actions" role="group" aria-label="Draft actions">
+        <button type="button" class="ask-draft__btn" data-act="copy">Copy</button>
+        <button type="button" class="ask-draft__btn" data-act="mail">Open in mail</button>
+        <button type="button" class="ask-draft__btn" data-act="save">Save to log</button>
+      </div>
+      <div class="ask-draft__refine" aria-label="Refine the draft"></div>
+      <p class="ask-draft__status" role="status" aria-live="polite" hidden></p>
+    </section>
+  </template>
 
   <div data-include="components/footer.html"></div>
   <script type="module" src="../assets/js/components.js"></script>

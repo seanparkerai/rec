@@ -6,6 +6,7 @@ import { askStream } from './ask/client.js';
 import { createTranscript } from './ask/transcript.js';
 import { createComposer } from './ask/composer.js';
 import { createHistory } from './ask/history.js';
+import { createCompose } from './ask/compose.js';
 import { getAskConversation, createAskConversation, saveAskConversation } from './storage.js';
 
 const $ = (id) => document.getElementById(id);
@@ -18,7 +19,11 @@ const state = {
 
 let transcript;
 let composer;
+let compose;
 let emptyEl;
+// When a compose turn ends with a clarifying question (no draft yet), carry the
+// compose model onto the user's next reply so the draft itself lands on Sonnet.
+let composeCarry = null;
 
 function setEmptyVisible(visible) {
   if (emptyEl) emptyEl.hidden = !visible;
@@ -27,6 +32,7 @@ function setEmptyVisible(visible) {
 function resetThread() {
   state.messages = [];
   state.conversationId = null;
+  composeCarry = null;
   if (state.controller) { state.controller.abort(); state.controller = null; }
   transcript.clear();
   setEmptyVisible(true);
@@ -44,8 +50,10 @@ async function loadConversation(id) {
   transcript.clear();
   setEmptyVisible(state.messages.length === 0);
   for (const m of state.messages) {
-    if (m.role === 'user') transcript.appendUser(m.content);
-    else transcript.appendAssistant(m.content, m.tools || []);
+    if (m.role === 'user') { transcript.appendUser(m.content); continue; }
+    const node = transcript.appendAssistant(m.content, m.tools || []);
+    // Re-hydrate a saved outreach draft as an actionable card.
+    compose?.maybeRenderDraft({ ...node, text: m.content });
   }
 }
 
@@ -65,8 +73,14 @@ function deriveTitle() {
   return t.length > 60 ? `${t.slice(0, 57)}…` : t;
 }
 
-async function send(text) {
+async function send(text, opts = {}) {
   setEmptyVisible(false);
+  // A plain typed reply inherits the carried compose model (clarifying-question round).
+  const carried = composeCarry;
+  composeCarry = null;
+  const model = opts.model || carried?.model;
+  const maxTokens = opts.maxTokens || carried?.maxTokens;
+
   state.messages.push({ role: 'user', content: text });
   transcript.appendUser(text);
 
@@ -79,7 +93,7 @@ async function send(text) {
 
   let finished = null;
   try {
-    for await (const ev of askStream(wire, { signal: state.controller.signal })) {
+    for await (const ev of askStream(wire, { signal: state.controller.signal, model, max_tokens: maxTokens })) {
       if (ev.type === 'text') assistant.token(ev.text);
       else if (ev.type === 'tool') assistant.tool(ev.name);
       else if (ev.type === 'done') finished = assistant.end();
@@ -92,6 +106,11 @@ async function send(text) {
   if (!finished) finished = assistant.end(); // stream closed without an explicit terminal event
   composer.setStreaming(false);
   state.controller = null;
+
+  // Upgrade an outreach-draft block to an actionable, editable card.
+  const rendered = compose?.maybeRenderDraft(finished);
+  // Compose turn but no draft yet (the model asked something) → keep Sonnet next turn.
+  if (model && !rendered) composeCarry = { model, maxTokens };
 
   // Record the assistant turn (text + the tools it used) and persist the thread.
   if (finished.text.trim() || finished.tools.length) {
@@ -119,6 +138,19 @@ function init() {
     { openBtn: $('ask-history-open'), dialog: $('ask-history'), listEl: $('ask-history-list'), newBtn: $('ask-new'), closeBtn: $('ask-history-close') },
     { onSwitch: loadConversation, onNew: resetThread, getCurrentId: () => state.conversationId },
   );
+
+  const composeDialog = $('ask-compose');
+  if (composeDialog) {
+    compose = createCompose(
+      {
+        dialog: composeDialog,
+        form: $('ask-compose-form'),
+        openButtons: [$('ask-compose-open'), $('ask-compose-open-empty')],
+        draftTemplate: $('ask-draft-card'),
+      },
+      send,
+    );
+  }
 
   setEmptyVisible(true);
   composer.focus();

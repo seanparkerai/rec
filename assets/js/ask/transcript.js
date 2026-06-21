@@ -58,11 +58,17 @@ export function createTranscript(rootEl) {
   }
 
   // Render a finished assistant message (e.g. when reloading a saved thread).
+  // Returns the body + content nodes so a caller can upgrade an outreach-draft
+  // block to an actionable card (assets/js/ask/compose.js).
   function appendAssistant(text, tools = []) {
     const { body } = bubble('assistant');
-    body.innerHTML = mdToSafeHtml(text);
+    const content = document.createElement('div');
+    content.className = 'ask-msg__md';
+    content.innerHTML = mdToSafeHtml(text);
+    body.appendChild(content);
     if (tools.length) body.appendChild(sourcesLine(tools));
     scrollToEnd(true);
+    return { bodyEl: body, contentEl: content };
   }
 
   // Begin a streaming assistant message; returns a small controller.
@@ -98,7 +104,7 @@ export function createTranscript(rootEl) {
         content.innerHTML = mdToSafeHtml(raw);
         if (tools.length) body.appendChild(sourcesLine(tools));
         scrollToEnd(true);
-        return { text: raw, tools: [...tools] };
+        return { text: raw, tools: [...tools], bodyEl: body, contentEl: content };
       },
       error(message) {
         status.remove();
