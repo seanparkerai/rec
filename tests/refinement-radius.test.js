@@ -8,6 +8,7 @@ import { learnRadii, weightedQuantile } from '../assets/js/refinement/radius.js'
 import { planRadii, renderRadiusSql } from '../assets/js/refinement/radius-persistence.js';
 import { applyRadiusTuning } from '../tools/fetch-listings.mjs';
 import { resolveConfig } from '../assets/js/refinement/config.js';
+import { toRadiusCard, classifySuggestions, radiusOverridesFromOverrides, REFINEMENT_RADIUS_OVERRIDE_KEY } from '../assets/js/refinement/view.js';
 import { MILES_PER_KM } from '../tools/listings-normalise.mjs';
 
 export async function register({ test, assert, assertEqual }) {
@@ -178,8 +179,8 @@ export async function register({ test, assert, assertEqual }) {
     assert(sql.startsWith('BEGIN;') && sql.trim().endsWith('COMMIT;'), 'wrapped in a transaction');
     assert(/INSERT INTO area_search_tuning/.test(sql), 'writes area_search_tuning');
     assert(/ON CONFLICT \(area_id\) DO UPDATE/.test(sql), 'upsert on area_id');
-    assert(/COALESCE\(area_search_tuning\.override_radius_mi, EXCLUDED\.recommended_radius_mi\)/.test(sql),
-      'applied radius re-derived with the override-wins guard');
+    assert(/COALESCE\(EXCLUDED\.override_radius_mi, EXCLUDED\.recommended_radius_mi\)/.test(sql),
+      'applied radius re-derived with the override-wins guard (override mirrors learned_preferences intent)');
     assert(/INSERT INTO refinement_suggestions/.test(sql) && /area_radius/.test(sql), 'writes the area_radius suggestion');
     assert(/INSERT INTO sync_log/.test(sql), 'logs to sync_log');
   });
@@ -206,5 +207,65 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(villages[2].searchRadiusMi, cfg.RADIUS_CEIL_MI); // exploration ceil
     assertEqual(villages[3].searchRadiusMi, 3);              // untuned unchanged
     assert(Math.abs(villages[0].geofenceRadiusKm - 0.7 / MILES_PER_KM) < 1e-9, 'geofence km tracks the applied radius');
+  });
+
+  // ── Phase 5: portal surfacing (view-model + override routing) ───────────────────────
+  test('view: toRadiusCard maps a row to a radius card', () => {
+    const c = toRadiusCard({
+      dimension: 'area_radius', value: 'titchfield-hampshire', tier: 'confident', status: 'actionable',
+      metrics: { recommended_mi: 1.62, current_mi: 3, direction: 'tighten', like_count: 7.8, distant_reject_waste: 0.35, reason: 'Tighten…' },
+    });
+    assertEqual(c.dimension, 'area_radius');
+    assertEqual(c.areaId, 'titchfield-hampshire');
+    assertEqual(c.direction, 'tighten');
+    assertEqual(c.directionLabel, 'Tighten');
+    assertEqual(c.recommendedLabel, '1.6 mi');
+    assertEqual(c.currentLabel, '3.0 mi');
+    assertEqual(c.likeCount, 8);
+    assertEqual(c.distantRejectPct, 35);
+  });
+
+  test('view: classifySuggestions splits area_radius into its own lane, never the inbox', () => {
+    const rows = [
+      { dimension: 'area_radius', value: 'titchfield-hampshire', status: 'actionable', tier: 'confident', metrics: { recommended_mi: 1.6, current_mi: 3, direction: 'tighten' } },
+      { dimension: 'area_radius', value: 'stubbington-hampshire', status: 'confirmed_scrape', tier: 'confident', metrics: { recommended_mi: 0.7, current_mi: 3, direction: 'tighten' } },
+      { dimension: 'property_type', value: 'flat', status: 'actionable', tier: 'confident', metrics: { wilson_lower: 0.9, lift: 1.2 } },
+    ];
+    const g = classifySuggestions(rows);
+    assertEqual(g.radius.inbox.length, 1);
+    assertEqual(g.radius.applied.length, 1);
+    assertEqual(g.counts.radius, 1);
+    // the statistical inbox must NOT contain the area_radius rows
+    assert(g.inbox.every((c) => c.dimension !== 'area_radius'), 'no radius rows leak into the statistical inbox');
+    assertEqual(g.inbox.length, 1); // only the flat suggestion
+  });
+
+  test('view: radiusOverridesFromOverrides reads the reserved overrides key', () => {
+    const overrides = { [REFINEMENT_RADIUS_OVERRIDE_KEY]: { 'whiteley-po15': { mi: 2.5, at: NOW }, 'bad-area': { mi: 0 } } };
+    const ov = radiusOverridesFromOverrides(overrides);
+    assertEqual(ov['whiteley-po15'], 2.5);
+    assert(!('bad-area' in ov), 'non-positive radius is ignored');
+    assertEqual(Object.keys(radiusOverridesFromOverrides({})).length, 0);
+  });
+
+  test('radius-persistence: a portal override (map) wins and pins the applied radius', () => {
+    const learned = learnRadii(likes('suburb', [0.3, 0.35, 0.4, 0.45, 0.5, 0.42]), { config: cfg, now: NOW });
+    const plan = planRadii(learned, { now: NOW, tuningRows: [], overrides: { suburb: 1.5 } });
+    const row = plan.tuningUpserts[0];
+    assertEqual(row.override_radius_mi, 1.5);
+    assertEqual(row.search_radius_mi, 1.5);
+    assertEqual(row.recommended_radius_mi, 0.8);
+    assertEqual(row.explore_until, null); // a pinned area is never widened for exploration
+  });
+
+  test('radius-persistence: an override-only area (no current recommendation) still gets a row', () => {
+    const learned = learnRadii([], { config: cfg, now: NOW }); // no likes → no recommendation
+    const plan = planRadii(learned, { now: NOW, tuningRows: [], overrides: { 'pinned-area': 2.0 } });
+    assertEqual(plan.tuningUpserts.length, 1);
+    const row = plan.tuningUpserts[0];
+    assertEqual(row.area_id, 'pinned-area');
+    assertEqual(row.search_radius_mi, 2.0);
+    assertEqual(row.recommended_radius_mi, null);
+    assertEqual(row.method, 'override-only');
   });
 }

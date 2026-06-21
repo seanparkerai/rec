@@ -14,7 +14,7 @@
 // durable/reversible record is the rule + the status flip + learned_preferences.updated_at.
 import { _initSb, _getHid } from './core.js';
 import { getLearnedPreferences, saveLearnedPreferences } from './listings.js';
-import { REFINEMENT_HIDE_KEY, REFINEMENT_SETTINGS_KEY, hideRuleKey, presetFromOverrides } from '../refinement/view.js';
+import { REFINEMENT_HIDE_KEY, REFINEMENT_SETTINGS_KEY, REFINEMENT_RADIUS_OVERRIDE_KEY, hideRuleKey, presetFromOverrides } from '../refinement/view.js';
 
 /** All refinement suggestions for the current household (engine-derived, read-only). */
 export async function getRefinementSuggestions() {
@@ -228,6 +228,77 @@ export async function unhideSuggestion({ dimension, value } = {}) {
   else delete overrides[REFINEMENT_HIDE_KEY];
   const okPrefs = await saveLearnedPreferences({ overrides });
   const okStatus = await _setSuggestionStatus(dimension, norm, 'actionable');
+  return okPrefs && okStatus;
+}
+
+// ── Per-area learned search radius (the radius lane) ─────────────────────────
+// area_search_tuning is AREA-GLOBAL, written only by the service-role tuner
+// (tools/radius-tune.mjs); the portal can SELECT it (public read) but CANNOT write it.
+// So, exactly like the Stage-5 hide lever, a radius OVERRIDE is recorded as intent in
+// learned_preferences.overrides (reserved key), which the tuner reads and applies.
+
+/** All area_search_tuning rows (area-global; read-only from the portal). */
+export async function getAreaRadiusTuning() {
+  const sb = await _initSb();
+  if (!sb) return [];
+  try {
+    const { data, error } = await sb
+      .from('area_search_tuning')
+      .select('area_id, search_radius_mi, geofence_radius_mi, recommended_radius_mi, override_radius_mi, like_count, confidence, explore_until, updated_at');
+    if (error) throw error;
+    return data ?? [];
+  } catch (e) {
+    console.error('storage: read area_search_tuning', e.message);
+    return [];
+  }
+}
+
+/**
+ * Accept the learned radius for an area (the "Tighten/Apply" confirm). The radius is
+ * already auto-applied by the tuner; this just flips the suggestion → confirmed_scrape
+ * so it leaves the inbox and stops being re-nagged (sticky via the engine's CASE guard).
+ */
+export async function applyRadiusSuggestion({ areaId } = {}) {
+  if (!areaId) return false;
+  return _setSuggestionStatus('area_radius', String(areaId).trim().toLowerCase(), 'confirmed_scrape');
+}
+
+/**
+ * Keep a specific radius for an area (the "Keep / override" lever). Records the override
+ * intent in learned_preferences.overrides under the reserved key; the service-role tuner
+ * pins area_search_tuning.override_radius_mi from it on its next run. Flips the suggestion
+ * → confirmed_scrape. `radiusMi` omitted → pin the area's CURRENT radius (i.e. "leave as is").
+ */
+export async function keepAreaRadius({ areaId, radiusMi } = {}) {
+  if (!areaId) return false;
+  const id = String(areaId).trim().toLowerCase();
+  const mi = Number(radiusMi);
+  if (!Number.isFinite(mi) || mi <= 0) return false;
+  const prefs = await getLearnedPreferences();
+  const overrides = { ...(prefs.overrides || {}) };
+  const blob = { ...(overrides[REFINEMENT_RADIUS_OVERRIDE_KEY] || {}) };
+  blob[id] = { mi, at: new Date().toISOString() };
+  overrides[REFINEMENT_RADIUS_OVERRIDE_KEY] = blob;
+  const okPrefs = await saveLearnedPreferences({ overrides });
+  const okStatus = await _setSuggestionStatus('area_radius', id, 'confirmed_scrape');
+  return okPrefs && okStatus;
+}
+
+/**
+ * Clear a radius override (undo "Keep") and return the suggestion to the inbox. The tuner
+ * resumes auto-applying the learned radius on its next run.
+ */
+export async function clearAreaRadius({ areaId } = {}) {
+  if (!areaId) return false;
+  const id = String(areaId).trim().toLowerCase();
+  const prefs = await getLearnedPreferences();
+  const overrides = { ...(prefs.overrides || {}) };
+  const blob = { ...(overrides[REFINEMENT_RADIUS_OVERRIDE_KEY] || {}) };
+  delete blob[id];
+  if (Object.keys(blob).length) overrides[REFINEMENT_RADIUS_OVERRIDE_KEY] = blob;
+  else delete overrides[REFINEMENT_RADIUS_OVERRIDE_KEY];
+  const okPrefs = await saveLearnedPreferences({ overrides });
+  const okStatus = await _setSuggestionStatus('area_radius', id, 'actionable');
   return okPrefs && okStatus;
 }
 

@@ -20,6 +20,7 @@ import {
   dismissSuggestion, undismissSuggestion, snoozeSuggestion, unsnoozeSuggestion,
   getRefinementPreset, setRefinementPreset, resetTraining,
   getReactionLog, getLearnedPreferences, getCriteria,
+  applyRadiusSuggestion, keepAreaRadius, clearAreaRadius, getAreaRadiusTuning,
   setConflictState,
 } from './storage.js';
 import { renderTrendsGlance } from './refinement/trends-glance.js';
@@ -101,6 +102,44 @@ function cardHTML(c, variant, extra = {}) {
 
 function emptyHTML(text) {
   return `<p class="ref-empty">${esc(text)}</p>`;
+}
+
+// Radius card. `variant`: 'radius' → Apply / Keep current / Snooze / Dismiss;
+// 'applied' → "Searching at X mi" + Reset to learned. `extra.appliedMi` carries the
+// live area_search_tuning radius for the applied lane.
+function radiusCardHTML(c, variant, extra = {}) {
+  const data = `data-dim="area_radius" data-value="${esc(c.value)}" data-area="${esc(c.areaId)}" data-current="${c.currentMi ?? ''}" data-label="${esc(c.label)}"`;
+  const arrow = c.direction === 'widen' ? '↔' : '→';
+  let actions = '';
+  if (variant === 'radius') {
+    actions = `<footer class="ref-card__actions">
+        <button type="button" class="ref-action ref-action--hide" data-action="apply-radius" ${data}>Apply ${esc(c.directionLabel.toLowerCase())} to ${esc(c.recommendedLabel)}</button>
+        <button type="button" class="ref-action ref-action--ghost" data-action="keep-radius" ${data}>Keep current (${esc(c.currentLabel)})</button>
+        <button type="button" class="ref-action ref-action--ghost" data-action="snooze" ${data}>Snooze 30 days</button>
+        <button type="button" class="ref-action ref-action--ghost" data-action="dismiss" ${data}>Dismiss</button>
+      </footer>`;
+  } else if (variant === 'applied') {
+    const appliedMi = extra.appliedMi != null ? `${Number(extra.appliedMi).toFixed(1)} mi` : c.recommendedLabel;
+    actions = `<footer class="ref-card__actions">
+        <span class="ref-action__state">Searching at ${esc(appliedMi)}</span>
+        <button type="button" class="ref-action ref-action--undo" data-action="clear-radius" ${data}>Reset to learned</button>
+      </footer>`;
+  }
+  return `
+    <article class="ref-card ref-card--${esc(c.tier)}">
+      <header class="ref-card__head">
+        <span class="ref-chip">Search radius</span>
+        <h3 class="ref-card__title">${esc(c.label)}</h3>
+        <span class="ref-tier ref-tier--${esc(c.tier)}">${esc(c.directionLabel)}</span>
+      </header>
+      <p class="ref-card__reason">${esc(c.reason)}</p>
+      <div class="ref-stats">
+        <span class="ref-stat"><span class="ref-stat__n">${esc(c.currentLabel)}</span> now</span>
+        <span class="ref-stat"><span class="ref-stat__n">${esc(arrow)} ${esc(c.recommendedLabel)}</span> learned</span>
+        <span class="ref-stat"><span class="ref-stat__n">${c.likeCount}</span> liked homes</span>
+      </div>
+      ${actions}
+    </article>`;
 }
 
 // Honest engagement summary ("Your reactions"): how many homes were judged one at a time
@@ -266,6 +305,8 @@ function wireActions(refresh) {
     }
     // One-tap, reversible actions (two-way doors — no confirm needed).
     btn.disabled = true;
+    const areaId = btn.dataset.area;
+    const currentMi = Number(btn.dataset.current);
     const ONE_TAP = {
       unhide: { fn: () => unhideSuggestion({ dimension, value }), msg: `${label} restored to your feed.` },
       bringback: { fn: () => bringBackArea({ value }), msg: `${label} back in your search.` },
@@ -273,6 +314,10 @@ function wireActions(refresh) {
       dismiss: { fn: () => dismissSuggestion({ dimension, value }), msg: `Dismissed ${label}.` },
       undismiss: { fn: () => undismissSuggestion({ dimension, value }), msg: `${label} back in your suggestions.` },
       unsnooze: { fn: () => unsnoozeSuggestion({ dimension, value }), msg: `${label} resumed.` },
+      // Radius lane: accept the learned radius, pin the current one, or reset to learned.
+      'apply-radius': { fn: () => applyRadiusSuggestion({ areaId }), msg: `Applied the learned search radius for ${label}.` },
+      'keep-radius': { fn: () => keepAreaRadius({ areaId, radiusMi: currentMi }), msg: `Keeping ${label} at ${currentMi.toFixed(1)} mi.` },
+      'clear-radius': { fn: () => clearAreaRadius({ areaId }), msg: `${label} back to the learned radius.` },
     };
     const h = ONE_TAP[action];
     const ok = h ? await h.fn() : false;
@@ -325,10 +370,10 @@ function wireTraining() {
 }
 
 async function refresh() {
-  const [{ combined, groups }, meta, probation, preset, reactionLog, prefs, criteria] = await Promise.all([
+  const [{ combined, groups }, meta, probation, preset, reactionLog, prefs, criteria, tuning] = await Promise.all([
     loadCombinedSuggestions({ now: new Date() }),
     getRefinementMeta(), getScrapeProbation(), getRefinementPreset(), getReactionLog(),
-    getLearnedPreferences(), getCriteria(),
+    getLearnedPreferences(), getCriteria(), getAreaRadiusTuning(),
   ]);
   // The top "Trends at a glance" band — never let a glance failure blank the page.
   try { renderTrendsGlance({ reactionLog, prefs, criteria }); }
@@ -361,8 +406,26 @@ async function refresh() {
   renderList('ref-snoozed', groups.snoozed, "Nothing snoozed.", 'snoozed');
   renderList('ref-dismissed', groups.dismissed, "Nothing dismissed.", 'dismissed');
 
+  // Per-area radius lane. The applied/tuned areas show their live area_search_tuning radius.
+  const radius = groups.radius || { inbox: [], applied: [], snoozed: [], dismissed: [] };
+  const tuningByArea = new Map((tuning || []).map((t) => [t.area_id, t]));
+  const radiusInboxEl = $('ref-radius');
+  if (radiusInboxEl) {
+    radiusInboxEl.innerHTML = radius.inbox.length
+      ? radius.inbox.map((c) => radiusCardHTML(c, 'radius')).join('')
+      : emptyHTML('No radius suggestions yet — once you like enough homes in an area, the engine tunes its search radius and proposes it here.');
+  }
+  const appliedEl = $('ref-radius-applied');
+  if (appliedEl) {
+    const appliedCards = [...radius.applied, ...radius.snoozed, ...radius.dismissed];
+    appliedEl.innerHTML = appliedCards.length
+      ? appliedCards.map((c) => radiusCardHTML(c, 'applied', { appliedMi: tuningByArea.get(c.areaId)?.search_radius_mi })).join('')
+      : emptyHTML('No areas tuned yet.');
+  }
+
   setCount('ref-inbox-count', combined.length);
   setCount('ref-forming-count', groups.counts.forming);
+  setCount('ref-radius-count', radius.inbox.length);
 }
 
 async function init() {

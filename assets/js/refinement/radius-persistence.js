@@ -41,6 +41,9 @@ function hashInt(str) {
  * @param {object} ctx
  * @param {Array}  [ctx.tuningRows]      current area_search_tuning rows.
  * @param {Array}  [ctx.suggestionRows]  current refinement_suggestions rows (dimension='area_radius').
+ * @param {Object} [ctx.overrides]       portal-set radius overrides { areaId: miles } (from
+ *   learned_preferences — the only place a user override originates, since the portal can't
+ *   write the service-role-only tuning table directly). Wins over the learner.
  * @param {Set}    [ctx.dismissedKeys]   `area_radius:<areaId>` keys the user dismissed.
  * @param {Date|string} [ctx.now]
  * @returns {{ tuningUpserts:Array, suggestionUpserts:Array, exploringCount:number }}
@@ -51,56 +54,66 @@ export function planRadii(learned, ctx = {}) {
   const nowMs = now.getTime();
   const nowIso = now.toISOString();
   const dismissedKeys = ctx.dismissedKeys || new Set();
+  const overrides = ctx.overrides || {};
   const everyMs = (config.RADIUS_EXPLORE_EVERY_DAYS || 7) * DAY_MS;
   const windowMs = (config.RADIUS_EXPLORE_WINDOW_H || 12) * HOUR_MS;
 
   const tuningByArea = new Map((ctx.tuningRows || []).map((r) => [r.area_id, r]));
+  const learnedByArea = new Map(learned.areas.map((a) => [a.areaId, a]));
   const suggByKey = new Map(
     (ctx.suggestionRows || []).map((r) => [`${r.household_id}|${r.dimension}:${r.value}`, r]),
   );
 
+  // Emit a tuning row for every area with a recommendation OR a portal override (so a user
+  // can pin a radius even on an area whose like signal has since decayed below the gate).
+  const areaIds = [...new Set([...learnedByArea.keys(), ...Object.keys(overrides)])].sort();
+
   const tuningUpserts = [];
   let exploringCount = 0;
 
-  for (const a of learned.areas) {
-    const prior = tuningByArea.get(a.areaId);
+  for (const areaId of areaIds) {
+    const a = learnedByArea.get(areaId);
+    const recommendedMi = a ? a.recommendedMi : null;
+    const prior = tuningByArea.get(areaId);
 
-    // Exploration cadence (time-based). A fresh area gets a staggered last_explored_at in
-    // the recent past so its first widening lands somewhere across the next cadence window.
-    let lastExplored;
-    let exploreUntil;
-    if (prior && prior.last_explored_at) {
-      const le = new Date(prior.last_explored_at).getTime();
-      if (nowMs - le >= everyMs) {
-        lastExplored = nowIso;
-        exploreUntil = new Date(nowMs + windowMs).toISOString();
-        exploringCount += 1;
+    // A user override (from learned_preferences) wins; fall back to a previously-pinned DB
+    // override when the map is unavailable (e.g. a file-mode bundle without prefs).
+    const override = overrides[areaId] != null ? Number(overrides[areaId])
+      : (prior && prior.override_radius_mi != null ? Number(prior.override_radius_mi) : null);
+    const applied = override != null ? override : recommendedMi;
+
+    // Exploration cadence (time-based) — only for a learner-recommended area with NO
+    // override (a pinned area is never widened behind the user's back). A fresh area gets a
+    // staggered last_explored_at so areas don't all widen on the same day.
+    let lastExplored = null;
+    let exploreUntil = null;
+    if (recommendedMi != null && override == null) {
+      if (prior && prior.last_explored_at) {
+        const le = new Date(prior.last_explored_at).getTime();
+        if (nowMs - le >= everyMs) {
+          lastExplored = nowIso;
+          exploreUntil = new Date(nowMs + windowMs).toISOString();
+          exploringCount += 1;
+        } else {
+          lastExplored = prior.last_explored_at;
+          exploreUntil = prior.explore_until || null; // may still be inside an active window
+        }
       } else {
-        lastExplored = prior.last_explored_at;
-        exploreUntil = prior.explore_until || null; // may still be inside an active window
+        const offsetDays = hashInt(areaId) % (config.RADIUS_EXPLORE_EVERY_DAYS || 7);
+        lastExplored = new Date(nowMs - offsetDays * DAY_MS).toISOString();
       }
-    } else {
-      const offsetDays = hashInt(a.areaId) % (config.RADIUS_EXPLORE_EVERY_DAYS || 7);
-      lastExplored = new Date(nowMs - offsetDays * DAY_MS).toISOString();
-      exploreUntil = null;
     }
 
-    // A user override always wins and is never written by the tuner. Applied = override
-    // ?? recommended (the SQL re-derives this with COALESCE so a live override set after
-    // this read still wins).
-    const override = prior && prior.override_radius_mi != null ? Number(prior.override_radius_mi) : null;
-    const applied = override != null ? override : a.recommendedMi;
-
     tuningUpserts.push({
-      area_id: a.areaId,
+      area_id: areaId,
       geofence_radius_mi: applied,
       search_radius_mi: applied,
-      recommended_radius_mi: a.recommendedMi,
+      recommended_radius_mi: recommendedMi,
       override_radius_mi: override,
-      sample_size: Math.round(a.sampleSize),
-      like_count: a.likeCount,
-      method: a.method,
-      confidence: a.confidence,
+      sample_size: a ? Math.round(a.sampleSize) : null,
+      like_count: a ? a.likeCount : null,
+      method: a ? a.method : 'override-only',
+      confidence: a ? a.confidence : 'override',
       explore_until: exploreUntil,
       last_explored_at: lastExplored,
       computed_at: nowIso,
@@ -178,9 +191,11 @@ export function renderRadiusSql(plan) {
       `INSERT INTO area_search_tuning ${cols}\nVALUES\n${tuples.join(',\n')}\n`
       + 'ON CONFLICT (area_id) DO UPDATE SET\n'
       + '  recommended_radius_mi = EXCLUDED.recommended_radius_mi,\n'
-      // user override (kept on the existing row) always wins over the learner:
-      + '  search_radius_mi   = COALESCE(area_search_tuning.override_radius_mi, EXCLUDED.recommended_radius_mi),\n'
-      + '  geofence_radius_mi = COALESCE(area_search_tuning.override_radius_mi, EXCLUDED.recommended_radius_mi),\n'
+      // override_radius_mi mirrors the portal intent the tuner resolved from
+      // learned_preferences (the sole source); applied = override ?? recommended.
+      + '  override_radius_mi = EXCLUDED.override_radius_mi,\n'
+      + '  search_radius_mi   = COALESCE(EXCLUDED.override_radius_mi, EXCLUDED.recommended_radius_mi),\n'
+      + '  geofence_radius_mi = COALESCE(EXCLUDED.override_radius_mi, EXCLUDED.recommended_radius_mi),\n'
       + '  sample_size = EXCLUDED.sample_size,\n'
       + '  like_count = EXCLUDED.like_count,\n'
       + '  method = EXCLUDED.method,\n'

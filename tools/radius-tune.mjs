@@ -27,6 +27,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { learnRadii } from '../assets/js/refinement/radius.js';
 import { planRadii, renderRadiusSql } from '../assets/js/refinement/radius-persistence.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
+import { radiusOverridesFromOverrides } from '../assets/js/refinement/view.js';
 import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
@@ -61,17 +62,35 @@ function currentRadiiFrom(tuningRows) {
   return out;
 }
 
+/**
+ * Union the portal-set per-area radius overrides across households (learned_preferences
+ * rows). The tuning table is area-global, so when households disagree we take the WIDEST
+ * pin (max) — consistent with the union-by-max applied radius. Returns { areaId: miles }.
+ */
+function overridesFromLearned(prefsRows) {
+  const out = {};
+  for (const row of prefsRows || []) {
+    const ov = radiusOverridesFromOverrides(row.overrides || {});
+    for (const [areaId, mi] of Object.entries(ov)) {
+      if (out[areaId] == null || mi > out[areaId]) out[areaId] = mi;
+    }
+  }
+  return out;
+}
+
 async function loadInputs() {
   const fromFile = arg('--from-file');
   if (fromFile) {
     const bundle = JSON.parse(await readFile(fromFile, 'utf8'));
     const tuningRows = bundle.tuningRows || [];
+    const overrides = bundle.overrides || overridesFromLearned(bundle.learnedPreferences);
     return {
       now: bundle.now || new Date().toISOString(),
       config: resolveConfig(bundle.config || {}),
       reactions: bundle.reactions || [],
       tuningRows,
       suggestionRows: bundle.suggestionRows || [],
+      overrides,
       currentRadii: bundle.currentRadii || currentRadiiFrom(tuningRows),
       dismissedKeys: new Set(bundle.dismissedKeys || []),
       useAll: !!bundle.allReactions,
@@ -83,12 +102,17 @@ async function loadInputs() {
   const reactions = await restGetAll('listing_reactions?select=household_id,reaction,created_at,listing_snapshot');
   const tuningRows = await restGetAll('area_search_tuning?select=area_id,search_radius_mi,override_radius_mi,explore_until,last_explored_at,recommended_radius_mi');
   const suggestionRows = await restGetAll("refinement_suggestions?select=household_id,dimension,value,status,runs_qualified,first_detected_at,snoozed_until&dimension=eq.area_radius");
+  // Portal-set radius overrides live in learned_preferences.overrides (the portal can't
+  // write the service-role-only tuning table). Resolve + union them here.
+  const prefsRows = await restGetAll('learned_preferences?select=household_id,overrides');
+  const overrides = overridesFromLearned(prefsRows);
   return {
     now: new Date().toISOString(),
     config: resolveConfig({}),
     reactions,
     tuningRows,
     suggestionRows,
+    overrides,
     currentRadii: currentRadiiFrom(tuningRows),
     dismissedKeys: new Set(),
     useAll: process.argv.includes('--all-reactions'),
@@ -96,7 +120,10 @@ async function loadInputs() {
 }
 
 async function main() {
-  const { now, config, reactions, tuningRows, suggestionRows, currentRadii, dismissedKeys, useAll } = await loadInputs();
+  const { now, config, reactions, tuningRows, suggestionRows, overrides, currentRadii, dismissedKeys, useAll } = await loadInputs();
+  // A pinned area's "current" radius is its override, so suggestion direction/threshold
+  // compares against what the user actually chose (not the stale default).
+  const effectiveCurrent = { ...currentRadii, ...overrides };
 
   // Radii must reflect GENUINE, one-at-a-time judgements — not the en-masse area/price
   // sweeps + administrative removals that dominate the log. Likes are always individual,
@@ -108,8 +135,8 @@ async function main() {
     process.stderr.write(`  genuine-only filter: ${reactions.length} → ${filtered.length} reactions (dropped ${reactions.length - filtered.length} bulk/admin)\n`);
   }
 
-  const learned = learnRadii(filtered, { config, now, currentRadii });
-  const plan = planRadii(learned, { now, tuningRows, suggestionRows, dismissedKeys });
+  const learned = learnRadii(filtered, { config, now, currentRadii: effectiveCurrent });
+  const plan = planRadii(learned, { now, tuningRows, suggestionRows, overrides, dismissedKeys });
   const sql = renderRadiusSql(plan);
 
   // Human-readable summary (stderr so stdout can be piped as pure SQL).

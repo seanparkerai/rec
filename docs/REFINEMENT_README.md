@@ -36,6 +36,8 @@ reversible user action in the UI. No hard deletes, ever.
 | Per-area radius learner (pure) | `assets/js/refinement/radius.js` + plan builder `assets/js/refinement/radius-persistence.js` |
 | Radius scheduled job | `tools/radius-tune.mjs` (+ `.github/workflows/radius-tune.yml`) |
 | Radius scraper enforcement | `tools/fetch-listings.mjs` (`loadRadiusTuning` → `applyRadiusTuning`) |
+| Radius portal lane (cards + Apply/Keep/Snooze/Dismiss) | `assets/js/page-refinement.js` + `refinement/view.js` (`toRadiusCard`, `classifySuggestions.radius`) |
+| Radius storage (read tuning + override via learned_preferences) | `assets/js/storage/refinement.js` (`getAreaRadiusTuning` / `applyRadiusSuggestion` / `keepAreaRadius` / `clearAreaRadius`) |
 | Tables | `refinement_suggestions`, `refinement_runs`, `scrape_probation`, `area_search_tuning` (engine-managed, untracked); state on `learned_preferences` |
 
 ## The two levers (both reversible)
@@ -128,6 +130,18 @@ default. Two sinks:
   confirmed/dismissed/snoozed radius row is never re-nagged. Raised only when
   `|recommended − current| ≥ RADIUS_MIN_CHANGE_MI`.
 
+**Portal surfacing (the radius lane).** `page-refinement.js` renders a dedicated "Search radius by
+area" lane (separated from the statistical suggestions by `classifySuggestions`, which splits
+`area_radius` into its own `radius` group so it never lands in the combined inbox). Cards show the
+current → learned radius + the rationale, with **Apply** (`applyRadiusSuggestion` → `confirmed_scrape`;
+the radius is already auto-applied, this just acknowledges it), **Keep current**, **Snooze** and
+**Dismiss**. Because the portal's anon key can't write the service-role-only `area_search_tuning`, a
+**Keep / override** records intent in `learned_preferences.overrides.__area_radius_override`
+(`{ areaId: { mi } }`, the same reserved-key pattern as the hide lever — `effectiveWeights` skips it,
+a retrain preserves it); the service-role tuner reads it (`radiusOverridesFromOverrides`, union-max
+across households) and pins `override_radius_mi`. Storage: `getAreaRadiusTuning` / `applyRadiusSuggestion`
+/ `keepAreaRadius` / `clearAreaRadius` in `storage/refinement.js`.
+
 **Exploration ring (anti-selection-bias).** Tightening stops us scraping/showing homes beyond the
 learned radius, so the boundary can't be re-measured. Each area is rotated through an exploration
 window: every `RADIUS_EXPLORE_EVERY_DAYS` the tuner sets `explore_until = now + RADIUS_EXPLORE_WINDOW_H`
@@ -144,13 +158,9 @@ run-index needed.
 `node tools/radius-tune.mjs --from-file <bundle>.json --emit-sql <out>.sql` and apply via MCP. CI/REST:
 `.github/workflows/radius-tune.yml` (daily ~05:30 UTC, ahead of the 06:00 refinement run + 08:00 fetch)
 reads cross-household reactions with the service role and applies the plan with `psql`; it no-ops until
-the same `SUPABASE_*` secrets are set. The portal surfacing (render the `area_radius` suggestions with
-Tighten/Widen/Keep actions) is a documented **fast-follow** (Phase 5).
+the same `SUPABASE_*` secrets are set.
 
 ## Known follow-ups (deferred, documented)
-- **Radius portal surfacing (fast-follow).** `area_search_tuning` + `area_radius` suggestions are
-  produced by the core pipeline; rendering them (a `storage/refinement.js` reader +
-  `refinement/view.js` cards with Tighten/Widen/Keep(override)/Snooze) is the queued follow-on.
 - The §4.1 "Why?" reaction-rate **sparkline + sample rejected listings** (need extra
   `listing_reactions` time-series reads beyond the counts-only `metrics`).
 - **"Reconsider?"** auto-badge from re-probe reject rates (the portal already renders a

@@ -56,6 +56,28 @@ export const REFINEMENT_HIDE_KEY = '__refinement_hidden';
 // Stage 7: the chosen sensitivity preset persists under another reserved overrides key
 // (same safety: no numeric `.weight`, so effectiveWeights skips it; recompute preserves it).
 export const REFINEMENT_SETTINGS_KEY = '__refinement_settings';
+// Per-area search-radius OVERRIDE intent (the radius "Keep" lever). The portal can't
+// write the service-role-only area_search_tuning table, so — exactly like the hide lever
+// — it records intent under this reserved overrides key ({ areaId: { mi, at } }); the
+// service-role tuner (tools/radius-tune.mjs) reads it and pins override_radius_mi. Safe:
+// the value is an object (no numeric `.weight`), so effectiveWeights skips it and a
+// retrain preserves it.
+export const REFINEMENT_RADIUS_OVERRIDE_KEY = '__area_radius_override';
+
+/**
+ * Extract per-area radius overrides from a learned_preferences.overrides blob.
+ * Returns { [areaId]: miles } (finite, positive only). Tolerant of a missing/non-object key.
+ */
+export function radiusOverridesFromOverrides(overrides = {}) {
+  const blob = overrides && typeof overrides === 'object' ? overrides[REFINEMENT_RADIUS_OVERRIDE_KEY] : null;
+  if (!blob || typeof blob !== 'object') return {};
+  const out = {};
+  for (const [areaId, meta] of Object.entries(blob)) {
+    const mi = meta && typeof meta === 'object' ? Number(meta.mi) : Number(meta);
+    if (Number.isFinite(mi) && mi > 0) out[areaId] = mi;
+  }
+  return out;
+}
 
 /** The three sensitivity presets, with plain-English copy for the §4.6 control. */
 export const PRESET_OPTIONS = [
@@ -179,6 +201,40 @@ export function toCard(row) {
   };
 }
 
+/**
+ * Turn one `area_radius` suggestion row into a radius card view-model. The radius lane is
+ * separate from the statistical suggestions (different evidence + actions): it carries the
+ * learned recommendation, the current radius, the tighten/widen direction and the
+ * plain-English rationale the learner wrote into `metrics.reason`.
+ */
+export function toRadiusCard(row) {
+  const m = row.metrics || {};
+  const recommendedMi = m.recommended_mi != null ? Number(m.recommended_mi) : null;
+  const currentMi = m.current_mi != null ? Number(m.current_mi) : null;
+  const direction = m.direction || (recommendedMi != null && currentMi != null
+    ? (recommendedMi < currentMi ? 'tighten' : recommendedMi > currentMi ? 'widen' : 'hold') : 'hold');
+  const likeCount = Math.round(Number(m.like_count) || 0);
+  return {
+    dimension: 'area_radius',
+    value: row.value,
+    areaId: row.value,
+    label: humaniseValue('area', row.value),
+    status: row.status,
+    tier: row.tier || 'confident',
+    tierLabel: TIER_LABEL[row.tier] || 'Confident',
+    direction,
+    directionLabel: direction === 'tighten' ? 'Tighten' : direction === 'widen' ? 'Widen' : 'Keep',
+    recommendedMi,
+    currentMi,
+    recommendedLabel: recommendedMi != null ? `${round1(recommendedMi)} mi` : '—',
+    currentLabel: currentMi != null ? `${round1(currentMi)} mi` : '—',
+    likeCount,
+    distantRejectWaste: Number(m.distant_reject_waste) || 0,
+    distantRejectPct: Math.round((Number(m.distant_reject_waste) || 0) * 100),
+    reason: m.reason || `${direction === 'widen' ? 'Widen' : 'Tighten'} the search radius for ${humaniseValue('area', row.value)}.`,
+  };
+}
+
 /** Rank actionable rows for the inbox (§2.8) and cap at MAX_INBOX. */
 export function rankForInbox(rows, max) {
   return [...rows]
@@ -223,9 +279,25 @@ export function snoozeDaysLeft(row = {}, now = new Date()) {
  * Dismissed and Snoozed.
  */
 export function classifySuggestions(rows = [], config = resolveConfig(), now = new Date()) {
-  const eff = rows.map((r) => ({ row: r, status: effectiveStatus(r, now) }));
+  // The per-area radius advisory rides the same table but is a distinct lane (different
+  // evidence + actions). Split it out so it never lands in the statistical buckets / the
+  // combined inbox, and gets its own radius group.
+  const radiusRows = rows.filter((r) => r.dimension === 'area_radius');
+  const statRows = rows.filter((r) => r.dimension !== 'area_radius');
+
+  const eff = statRows.map((r) => ({ row: r, status: effectiveStatus(r, now) }));
   const of = (s) => eff.filter((e) => e.status === s).map((e) => e.row);
   const inbox = rankForInbox(of('actionable'), config.MAX_INBOX);
+
+  const rEff = radiusRows.map((r) => ({ row: r, status: effectiveStatus(r, now) }));
+  const rOf = (s) => rEff.filter((e) => e.status === s).map((e) => e.row);
+  const radius = {
+    inbox: rOf('actionable').map(toRadiusCard),
+    applied: rOf('confirmed_scrape').map(toRadiusCard),
+    snoozed: rOf('snoozed').map((r) => ({ ...toRadiusCard(r), snoozeDaysLeft: snoozeDaysLeft(r, now) })),
+    dismissed: rOf('dismissed').map(toRadiusCard),
+  };
+
   return {
     inbox: inbox.map(toCard),
     forming: sortByConfidence(of('forming')).map(toCard),
@@ -233,10 +305,12 @@ export function classifySuggestions(rows = [], config = resolveConfig(), now = n
     probation: of('confirmed_scrape').map(toCard),
     dismissed: of('dismissed').map(toCard),
     snoozed: of('snoozed').map((r) => ({ ...toCard(r), snoozeDaysLeft: snoozeDaysLeft(r, now) })),
+    radius,
     counts: {
       total: rows.length,
       actionable: of('actionable').length,
       forming: of('forming').length,
+      radius: radius.inbox.length,
     },
   };
 }
