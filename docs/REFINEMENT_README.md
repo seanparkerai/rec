@@ -142,6 +142,22 @@ a retrain preserves it); the service-role tuner reads it (`radiusOverridesFromOv
 across households) and pins `override_radius_mi`. Storage: `getAreaRadiusTuning` / `applyRadiusSuggestion`
 / `keepAreaRadius` / `clearAreaRadius` in `storage/refinement.js`.
 
+**Directional "petals" (within the 3mi cap).** 3mi is the default AND the ceiling: a town starts at
+3mi and is only ever *reduced from* it (down to a 0.5mi floor), or grows back *up to* 3mi — never
+beyond (only a user override may exceed the cap). On top of the scalar radius, the learner splits each
+town into `RADIUS_SECTORS` compass sectors (sector 0 = North) and learns a per-sector keep radius from
+the **bearing** of liked/rejected homes around the town centre (bearing + coords-derived distance come
+from joining the reaction's listing to the `listings` table — `radius-tune.mjs`). Rules, rural-safe:
+a sector with ≥ `RADIUS_SECTOR_MIN_LIKES` likes is fit to them (reach toward rural up to the cap, or
+pull in if close); a like-less sector with ≥ `RADIUS_SECTOR_MIN_REJECTS` rejects *inside* the scalar
+radius is pulled in to its rejects' keep-quantile (cut the near urban tail); **every other sector
+defaults to the scalar radius — a direction is never cut without its own evidence.** Stored in
+`area_search_tuning.geofence_radii` (jsonb array, mi). The fetch disk = the **widest petal** (covers
+every direction); the geofence (`withinGeofence` → `villageBufferKm`, `bearingSector`) keeps each
+listing against its sector's petal. A user override pins uniform petals. Backward-compatible: no
+`geofence_radii` → the scalar buffer, exactly as before. The portal card shows a "Coverage by
+direction" breakdown.
+
 **Exploration ring (anti-selection-bias).** Tightening stops us scraping/showing homes beyond the
 learned radius, so the boundary can't be re-measured. Each area is rotated through an exploration
 window: every `RADIUS_EXPLORE_EVERY_DAYS` the tuner sets `explore_until = now + RADIUS_EXPLORE_WINDOW_H`
@@ -152,7 +168,8 @@ run-index needed.
 **Tunable constants** (in `config.js` `FIXED`, reconcile here on change):
 `DEFAULT_RADIUS_MI` 3 · `RADIUS_FLOOR_MI` 0.5 · `RADIUS_CEIL_MI` 3.0 · `RADIUS_QUANTILE` 0.9 ·
 `RADIUS_MARGIN_MI` 0.3 · `RADIUS_MIN_LIKES` 5 · `RADIUS_MIN_CHANGE_MI` 0.5 · `RADIUS_EXPLORE_EVERY_DAYS` 7 ·
-`RADIUS_EXPLORE_WINDOW_H` 12.
+`RADIUS_EXPLORE_WINDOW_H` 12 · `RADIUS_SECTORS` 8 · `RADIUS_SECTOR_MIN_LIKES` 3 ·
+`RADIUS_SECTOR_MIN_REJECTS` 8 · `RADIUS_SECTOR_REJECT_KEEP_QUANTILE` 0.5.
 
 **Run it** (sandbox): build a reactions bundle via MCP, then
 `node tools/radius-tune.mjs --from-file <bundle>.json --emit-sql <out>.sql` and apply via MCP. CI:

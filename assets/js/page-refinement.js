@@ -104,9 +104,28 @@ function emptyHTML(text) {
   return `<p class="ref-empty">${esc(text)}</p>`;
 }
 
+const SECTOR_LABELS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+
+// Compact directional-coverage summary from a per-sector petal array (mi). Returns ''
+// when coverage is uniform (no directional shape to show). Text-led (not colour-only).
+function petalsHTML(petals) {
+  if (!Array.isArray(petals) || petals.length < 2) return '';
+  const vals = petals.map(Number);
+  const max = Math.max(...vals);
+  const min = Math.min(...vals);
+  if (max - min < 0.05) return ''; // effectively uniform
+  const lab = (i) => SECTOR_LABELS[Math.round(i * SECTOR_LABELS.length / vals.length)] || `${i}`;
+  const wi = vals.indexOf(max);
+  const ti = vals.indexOf(min);
+  const grid = vals.map((v, i) => `<span class="ref-stat"><span class="ref-stat__n">${v.toFixed(1)}</span> ${esc(lab(i))}</span>`).join('');
+  return `
+    <p class="ref-card__reason">Coverage reaches <strong>${max.toFixed(1)} mi</strong> ${esc(lab(wi))} and pulls in to <strong>${min.toFixed(1)} mi</strong> ${esc(lab(ti))}.</p>
+    <details class="ref-why"><summary>Coverage by direction</summary><div class="ref-stats">${grid}</div></details>`;
+}
+
 // Radius card. `variant`: 'radius' → Apply / Keep current / Snooze / Dismiss;
 // 'applied' → "Searching at X mi" + Reset to learned. `extra.appliedMi` carries the
-// live area_search_tuning radius for the applied lane.
+// live area_search_tuning radius for the applied lane; `extra.petals` the per-sector array.
 function radiusCardHTML(c, variant, extra = {}) {
   const data = `data-dim="area_radius" data-value="${esc(c.value)}" data-area="${esc(c.areaId)}" data-current="${c.currentMi ?? ''}" data-label="${esc(c.label)}"`;
   const arrow = c.direction === 'widen' ? '↔' : '→';
@@ -138,6 +157,7 @@ function radiusCardHTML(c, variant, extra = {}) {
         <span class="ref-stat"><span class="ref-stat__n">${esc(arrow)} ${esc(c.recommendedLabel)}</span> learned</span>
         <span class="ref-stat"><span class="ref-stat__n">${c.likeCount}</span> liked homes</span>
       </div>
+      ${petalsHTML(extra.petals)}
       ${actions}
     </article>`;
 }
@@ -412,14 +432,17 @@ async function refresh() {
   const radiusInboxEl = $('ref-radius');
   if (radiusInboxEl) {
     radiusInboxEl.innerHTML = radius.inbox.length
-      ? radius.inbox.map((c) => radiusCardHTML(c, 'radius')).join('')
+      ? radius.inbox.map((c) => radiusCardHTML(c, 'radius', { petals: tuningByArea.get(c.areaId)?.geofence_radii })).join('')
       : emptyHTML('No radius suggestions yet — once you like enough homes in an area, the engine tunes its search radius and proposes it here.');
   }
   const appliedEl = $('ref-radius-applied');
   if (appliedEl) {
     const appliedCards = [...radius.applied, ...radius.snoozed, ...radius.dismissed];
     appliedEl.innerHTML = appliedCards.length
-      ? appliedCards.map((c) => radiusCardHTML(c, 'applied', { appliedMi: tuningByArea.get(c.areaId)?.search_radius_mi })).join('')
+      ? appliedCards.map((c) => {
+        const t = tuningByArea.get(c.areaId);
+        return radiusCardHTML(c, 'applied', { appliedMi: t?.search_radius_mi, petals: t?.geofence_radii });
+      }).join('')
       : emptyHTML('No areas tuned yet.');
   }
 

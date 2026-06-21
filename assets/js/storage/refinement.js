@@ -244,7 +244,7 @@ export async function getAreaRadiusTuning() {
   try {
     const { data, error } = await sb
       .from('area_search_tuning')
-      .select('area_id, search_radius_mi, geofence_radius_mi, recommended_radius_mi, override_radius_mi, like_count, confidence, explore_until, updated_at');
+      .select('area_id, search_radius_mi, geofence_radius_mi, recommended_radius_mi, override_radius_mi, geofence_radii, like_count, confidence, explore_until, updated_at');
     if (error) throw error;
     return data ?? [];
   } catch (e) {
