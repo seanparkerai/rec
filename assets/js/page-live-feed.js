@@ -9,10 +9,10 @@
 //     timer re-rolls the few-pixel shift. Material changes announced via aria-live.
 import { getLiveFeedStats, getScraperLog } from './storage.js';
 import { clusterRuns, nextSlot } from './live-feed/runs.js';
-import { nextLayout, nextUserOrder, burnShift } from './live-feed/layout.js';
+import { nextUserOrder, burnShift } from './live-feed/layout.js';
 
 const STATS_MS = 60 * 60 * 1000; // hourly
-const FEED_MS = 60 * 1000;       // 60s liveness poll
+const FEED_MS = 30 * 1000;       // 30s liveness poll — keeps the feed live while runs write
 const SHIFT_MS = 4 * 60 * 1000;  // re-roll the pixel nudge every few minutes
 const MAX_RUNS = 18;
 
@@ -24,6 +24,9 @@ const londonTime = new Intl.DateTimeFormat('en-GB', {
 });
 const fmtClock = (iso) => { const d = new Date(iso); return Number.isNaN(d.getTime()) ? '—' : londonTime.format(d); };
 const fmtInt = (n) => Number(n ?? 0).toLocaleString('en-GB');
+// Null/undefined = the household hasn't computed its pool yet (no Browse visit
+// since deploy) — show an em dash rather than a misleading 0.
+const fmtIntOrDash = (n) => (n == null ? '—' : Number(n).toLocaleString('en-GB'));
 const fmtMoney = (n) => `£${Number(n ?? 0).toLocaleString('en-GB', { maximumFractionDigits: 0 })}`;
 const fmtAvg = (n) => Number(n ?? 0).toLocaleString('en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
@@ -74,7 +77,7 @@ function chip(isLive) {
 }
 
 // ── State ────────────────────────────────────────────────────────────────────
-const state = { layout: 'v1', order: ['luke', 'suzanne'], tick: 0, lastLiveTotals: {} };
+const state = { order: ['luke', 'suzanne'], tick: 0, lastReview: {} };
 
 // ── Scraper feed render ───────────────────────────────────────────────────────
 function renderRuns(rows) {
@@ -117,15 +120,17 @@ function userPanel(hh) {
     el('div', { class: 'lf-stat__label', text: label }),
   ]);
   return el('div', { class: 'lf-panel lf-user', 'data-user': KEY_BY_LABEL[hh.label] || hh.label.toLowerCase() }, [
-    el('div', { class: 'lf-panel__head' }, [
-      el('div', {}, [
-        el('p', { class: 'lf-eyebrow', text: 'Household' }),
-        el('h2', { class: 'lf-title', text: hh.label }),
+    el('div', { class: 'lf-user__top' }, [
+      el('div', { class: 'lf-panel__head' }, [
+        el('div', {}, [
+          el('p', { class: 'lf-eyebrow', text: 'Household' }),
+          el('h2', { class: 'lf-title', text: hh.label }),
+        ]),
       ]),
-    ]),
-    el('div', { class: 'lf-hero' }, [
-      el('div', { class: 'lf-hero__num', text: fmtInt(hh.live_listings) }),
-      el('div', { class: 'lf-hero__label', text: 'live listings in your areas' }),
+      el('div', { class: 'lf-hero' }, [
+        el('div', { class: 'lf-hero__num', text: fmtIntOrDash(hh.to_review) }),
+        el('div', { class: 'lf-hero__label', text: 'listings to review' }),
+      ]),
     ]),
     el('div', { class: 'lf-stats' }, [
       stat(fmtInt(hh.saved), 'Saved'),
@@ -133,6 +138,7 @@ function userPanel(hh) {
       stat(fmtMoney(hh.savings), 'Savings'),
     ]),
     el('p', { class: 'lf-avgs' }, [
+      el('span', { class: 'lf-avg' }, [document.createTextNode('Live in areas '), el('b', { text: fmtInt(hh.live_listings) })]),
       el('span', { class: 'lf-avg' }, [document.createTextNode('Likes/day (7d) '), el('b', { text: fmtAvg(hh.avg_likes_per_day_7) })]),
       el('span', { class: 'lf-avg' }, [document.createTextNode('Likes/week '), el('b', { text: fmtAvg(hh.avg_likes_per_week_4) })]),
     ]),
@@ -158,16 +164,18 @@ function applyShift() {
   k.style.setProperty('--lf-shift-y', `${y}px`);
 }
 
+// Burn-in step: swap the two stacked user panels (top↔bottom) and re-roll the
+// pixel nudge. The layout itself is fixed (U F / U F), so rearranging = reordering
+// the users + the shift; renderUsers() then paints them in the new order.
 function rearrange() {
-  const k = $('.lf-kiosk');
-  if (!k) return;
-  state.layout = nextLayout(state.layout);
   state.order = nextUserOrder(state.order);
   state.tick += 1;
-  k.classList.add('lf-kiosk--refreshing');
-  k.setAttribute('data-layout', state.layout);
+  const k = $('.lf-kiosk');
+  if (k) {
+    k.classList.add('lf-kiosk--refreshing');
+    setTimeout(() => k.classList.remove('lf-kiosk--refreshing'), 450);
+  }
   applyShift();
-  setTimeout(() => k.classList.remove('lf-kiosk--refreshing'), 450);
 }
 
 function announce(msg) {
@@ -179,25 +187,27 @@ function announce(msg) {
 }
 
 // ── Refreshers ────────────────────────────────────────────────────────────────
-async function refreshStats() {
+async function refreshStats({ rearrangeLayout = false } = {}) {
   const stats = await getLiveFeedStats();
   if (!stats) return;
+  // Advance the burn-in order BEFORE painting so the swap is visible immediately
+  // (the first load keeps the default Luke-top order).
+  if (rearrangeLayout) rearrange();
   renderUsers(stats.households);
 
   const sc = stats.scraper || {};
   const s7 = $('[data-scraper-7d]'); if (s7) s7.textContent = fmtAvg(sc.new_per_day_7);
   const s30 = $('[data-scraper-30d]'); if (s30) s30.textContent = fmtAvg(sc.new_per_day_30);
 
-  rearrange(); // every stat refresh rearranges (burn-in)
-
-  // Announce live-listing changes per household.
+  // Announce changes in the to-review pool per household.
   const changes = [];
   for (const hh of stats.households || []) {
-    const prev = state.lastLiveTotals[hh.label];
-    if (prev !== undefined && prev !== hh.live_listings) {
-      changes.push(`${hh.label}: ${hh.live_listings} live`);
+    const prev = state.lastReview[hh.label];
+    const cur = hh.to_review;
+    if (prev !== undefined && cur != null && prev !== cur) {
+      changes.push(`${hh.label}: ${cur} to review`);
     }
-    state.lastLiveTotals[hh.label] = hh.live_listings;
+    if (cur != null) state.lastReview[hh.label] = cur;
   }
   if (changes.length) announce(`Updated — ${changes.join('; ')}.`);
 }
@@ -214,7 +224,7 @@ async function refreshFeed() {
 async function init() {
   applyShift();
   await Promise.all([refreshStats(), refreshFeed()]);
-  setInterval(refreshStats, STATS_MS);
+  setInterval(() => refreshStats({ rearrangeLayout: true }), STATS_MS);
   setInterval(refreshFeed, FEED_MS);
   setInterval(() => { state.tick += 1; applyShift(); }, SHIFT_MS);
 }

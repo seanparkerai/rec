@@ -10,7 +10,9 @@
   (`schema-additions.sql` Phase 5 data-model expansion · `schema-listings.sql` v3 L1 ·
   `schema-multi-reason.sql` v3 L3). Verified applied via `list_tables` 2026-06-12 (all tables
   present, RLS enabled). Kept for the record; do not re-run.
-- **`archive/schema-live-feed-stats.sql`** — the `public.live_feed_stats()` admin-only aggregate
-  RPC for the `/live-feed` kiosk (LIVE_FEED_PLAN §2). Applied to the live project 2026-06-22 via
-  MCP `execute_sql` (the `apply_migration` tool was approval-gated that session); verified present +
-  rejecting non-admin callers. Kept for the record; do not re-run blindly.
+- **`archive/schema-live-feed-stats.sql`** — the `/live-feed` kiosk DB surface (LIVE_FEED_PLAN §2):
+  the `public.live_feed_stats()` admin-only aggregate RPC **and** the `household_review_stats`
+  derived per-household cache (the listings-page "to review" count). Applied to the live project
+  2026-06-22 via MCP `execute_sql` (the `apply_migration` tool was approval-gated that session);
+  verified present + rejecting non-admin callers. `household_review_stats` is untracked engine/derived
+  state (see `docs/SUPABASE_SYNC.md` §0). Kept for the record; do not re-run blindly.

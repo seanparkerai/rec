@@ -186,6 +186,28 @@ export async function getScraperLog({ sinceDays = 3, limit = 400 } = {}) {
   }
 }
 
+// Persist the household's current "to review" count — the size of the visible
+// Browse pool the listings page renders AFTER the full intelligence pipeline
+// (radius → affordability gate → junk → refinement/probation → decided
+// suppression → dedupe). The raw live-listings count cannot reproduce this, so
+// the /live-feed kiosk reads this persisted figure (via live_feed_stats) instead.
+// Upsert keyed on household_id into the derived household_review_stats cache.
+export async function saveListingsReviewCount(count) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid) return false;
+  try {
+    const { error } = await sb.from('household_review_stats').upsert(
+      { household_id: hid, pending_count: Math.max(0, Math.round(Number(count) || 0)), updated_at: new Date().toISOString() },
+      { onConflict: 'household_id' },
+    );
+    if (error) throw error;
+    return true;
+  } catch (e) {
+    console.error('storage: save review count', e.message);
+    return false;
+  }
+}
+
 // ── Listing reactions (v3 L3 — append-only graded preference signal) ───────
 // User-state, household-scoped. Every reaction is a new row (append-only); the
 // latest row per listing is the current reaction. getListingReactions returns a

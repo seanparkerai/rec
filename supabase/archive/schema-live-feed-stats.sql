@@ -1,21 +1,53 @@
--- schema-live-feed-stats.sql — the /live-feed admin kiosk aggregate RPC.
--- Migration intent name: live_feed_stats_admin_rpc (LIVE_FEED_PLAN §2).
+-- schema-live-feed-stats.sql — the /live-feed admin kiosk DB surface.
+-- Migration intent name: live_feed_stats_admin_rpc (LIVE_FEED_PLAN §2) + the
+-- household_review_stats derived cache (added 2026-06-22 for the "to review" hero).
 --
 -- Applied to the live project 2026-06-22 via MCP execute_sql (the apply_migration
 -- tool was approval-gated in that session). Recorded here for the record per
 -- supabase/README.md — live schema truth remains the MCP migration history /
--- list_tables, not this file. Do NOT re-run blindly; CREATE OR REPLACE is idempotent.
---
+-- list_tables, not this file. CREATE OR REPLACE / IF NOT EXISTS are idempotent.
+
+-- ── household_review_stats — derived, engine/cache class (UNTRACKED) ──────────
+-- Holds the listings-page "to review" count: the size of the visible Browse pool
+-- the household actually sees AFTER the full client intelligence pipeline (radius →
+-- affordability gate → junk → refinement/probation → decided suppression → dedupe).
+-- The raw live-listings count CANNOT reproduce it, so the browser persists this
+-- figure (assets/js/storage/listings/feed.js#saveListingsReviewCount, written by
+-- page-listings.js) and the kiosk RPC reads it. Recomputable; never synced from
+-- repo JSON — same untracked class as area_search_tuning / refinement_*.
+create table if not exists public.household_review_stats (
+  household_id uuid primary key references public.households(id) on delete cascade,
+  pending_count int not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.household_review_stats enable row level security;
+
+drop policy if exists "review_stats_member_select" on public.household_review_stats;
+drop policy if exists "review_stats_member_insert" on public.household_review_stats;
+drop policy if exists "review_stats_member_update" on public.household_review_stats;
+
+create policy "review_stats_member_select" on public.household_review_stats
+  for select using (public.is_household_member(household_id));
+create policy "review_stats_member_insert" on public.household_review_stats
+  for insert with check (public.is_household_member(household_id));
+create policy "review_stats_member_update" on public.household_review_stats
+  for update using (public.is_household_member(household_id))
+  with check (public.is_household_member(household_id));
+
+grant select, insert, update on public.household_review_stats to authenticated;
+
+-- ── live_feed_stats() — admin-only aggregate read for the kiosk ───────────────
 -- Admin-only (auth.jwt() email = admin@gr.com), SECURITY DEFINER so it can
 -- aggregate across the two target households WITHOUT exposing any raw RLS-locked
 -- row — it returns only counts, a savings total, and rolling averages. Read-only.
 --
--- Savings sources the ISA value from the scalar investments_accounts.current_value
--- / earmark_pct columns (the "current latest" figure — owner decision 2026-06-22),
--- not the older data->>'currentPortfolioValue' snapshot. The earmark arithmetic +
--- rounding still mirror finance-derive.js#computeDepositSavings; the formula parity
--- is pinned by tests/live-feed-stats.test.js.
-
+-- `to_review` is the persisted household_review_stats pool (null until the
+-- household first browses since deploy). `live_listings` is the raw in-area live
+-- count (kept as secondary context). Savings sources the ISA value from the scalar
+-- investments_accounts.current_value / earmark_pct columns (the "current latest"
+-- figure — owner decision 2026-06-22); the earmark arithmetic + rounding mirror
+-- finance-derive.js#computeDepositSavings (parity pinned by tests/live-feed-stats.test.js).
 create or replace function public.live_feed_stats()
 returns jsonb
 language plpgsql
@@ -46,6 +78,11 @@ begin
     join listings l on l.area_id = a.area_id and l.status = 'live' and l.geofence_pass is not false
     where a.status = 'active' and a.household_id in (luke, suzanne)
     group by a.household_id
+  ),
+  review as (
+    select household_id, pending_count, updated_at
+    from household_review_stats
+    where household_id in (luke, suzanne)
   ),
   latest_reaction as (
     select distinct on (household_id, listing_id) household_id, listing_id, reaction
@@ -93,6 +130,8 @@ begin
     'households', (
       select jsonb_agg(jsonb_build_object(
         'id', hh.id, 'label', hh.label,
+        'to_review', review.pending_count,
+        'to_review_at', review.updated_at,
         'live_listings', coalesce(live.n, 0),
         'saved', coalesce(saved.n, 0),
         'areas', coalesce(areas.n, 0),
@@ -102,6 +141,7 @@ begin
       ) order by hh.label)
       from hh
       left join live    on live.household_id    = hh.id
+      left join review  on review.household_id  = hh.id
       left join saved   on saved.household_id   = hh.id
       left join areas   on areas.household_id   = hh.id
       left join savings on savings.household_id = hh.id

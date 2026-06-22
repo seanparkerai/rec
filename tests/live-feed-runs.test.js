@@ -2,7 +2,7 @@
 // sync_log → run clustering, liveness, the London fetch-slot clock, and the
 // anti-burn-in layout cycle. Offline; mirrors the harness register(...) shape.
 import { clusterRuns, dailyAverages, nextSlot, FETCH_SLOTS } from '../assets/js/live-feed/runs.js';
-import { nextLayout, nextUserOrder, burnShift, LAYOUTS, isHorizontal } from '../assets/js/live-feed/layout.js';
+import { nextUserOrder, burnShift } from '../assets/js/live-feed/layout.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A fixed clock so isLive / windows are deterministic.
@@ -90,25 +90,7 @@ export async function register({ test, assert, assertEqual }) {
     assert(slot.at.getTime() > Date.parse('2026-06-22T18:00:00Z'), 'next slot is in the future');
   });
 
-  // ── layout cycle (burn-in) ────────────────────────────────────────────────
-  test('nextLayout: cycles v1→v2→v3→v4→v1', () => {
-    assertEqual(nextLayout('v1'), 'v2');
-    assertEqual(nextLayout('v2'), 'v3');
-    assertEqual(nextLayout('v3'), 'v4');
-    assertEqual(nextLayout('v4'), 'v1');
-  });
-
-  test('nextLayout: unknown/absent prev starts at the first variant', () => {
-    assertEqual(nextLayout(undefined), 'v1');
-    assertEqual(nextLayout('nope'), 'v1');
-    assertEqual(LAYOUTS.length, 4);
-  });
-
-  test('isHorizontal: only v3/v4 are horizontal bands', () => {
-    assert(!isHorizontal('v1') && !isHorizontal('v2'), 'v1/v2 vertical');
-    assert(isHorizontal('v3') && isHorizontal('v4'), 'v3/v4 horizontal');
-  });
-
+  // ── burn-in helpers ───────────────────────────────────────────────────────
   test('nextUserOrder: swaps the two panels each refresh', () => {
     assertEqual(JSON.stringify(nextUserOrder(['luke', 'suzanne'])), JSON.stringify(['suzanne', 'luke']));
     assertEqual(JSON.stringify(nextUserOrder(['suzanne', 'luke'])), JSON.stringify(['luke', 'suzanne']));

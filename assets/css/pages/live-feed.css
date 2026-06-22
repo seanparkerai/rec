@@ -3,11 +3,14 @@
    accent (the live pulse), hairlines + whitespace, no chrome. Linked DIRECTLY from
    live-feed/index.html (NOT via the guard-railed dashboard.css @import shell).
 
-   Tokens only — no hard-coded colour / spacing / radius. Landscape-first; heights
-   use dvh/svh; safe-area insets on the edges; the whole grid nudges a few px per
-   tick (--lf-shift-*) and rearranges across 4 [data-layout] variants for burn-in. */
+   Tokens only — no hard-coded colour / spacing / radius. Landscape is a 2×2 grid
+   (U F / U F): the two users stacked in the left column, the scraper feed spanning
+   both rows as one full-height column on the right. Heights use dvh/svh; the grid is
+   pinned to the viewport so the feed column maxes at screen height and its run list
+   scrolls internally. Burn-in is mitigated by swapping the two user panels and nudging
+   the whole grid a few px (--lf-shift-*) on every refresh. */
 
-/* ── Kiosk shell ──────────────────────────────────────────────────────────── */
+/* ── Kiosk shell — mobile-first base (320–767px): one stacked column ────────── */
 .lf-kiosk {
   box-sizing: border-box;
   min-height: 100svh;
@@ -19,63 +22,62 @@
     calc(var(--space-3) + env(safe-area-inset-left));
   display: grid;
   gap: var(--space-3);
-  /* Mobile-first base (320–767px): a single stacked column, scraper then users.
-     The landscape burn-in variants below progressively enhance from 768px up. */
   grid-template-columns: 1fr;
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas: "scraper" "users";
   background: var(--paper);
   color: var(--ink);
-  /* Per-tick anti-burn-in nudge (a few px); transitioned for a calm drift. */
+  /* Per-refresh anti-burn-in nudge (a few px); transitioned for a calm drift. */
   transform: translate(var(--lf-shift-x, 0px), var(--lf-shift-y, 0px));
-  transition: transform 1.2s ease, grid-template-columns 0.6s ease, grid-template-rows 0.6s ease;
+  transition: transform 1.2s ease;
 }
 
-/* The two regions. Crossfade between refreshes via the --refreshing flag. */
+.lf-scraper { grid-area: scraper; min-height: 0; }
+.lf-users {
+  grid-area: users;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr; /* mobile: the two user panels stack */
+  gap: var(--space-3);
+}
+
+/* Crossfade between refreshes via the --refreshing flag. */
 .lf-scraper,
-.lf-users { min-height: 0; transition: opacity 0.4s ease; }
+.lf-users { transition: opacity 0.4s ease; }
 .lf-kiosk--refreshing .lf-scraper,
-.lf-kiosk--refreshing .lf-users { opacity: 0.35; }
+.lf-kiosk--refreshing .lf-users { opacity: 0.4; }
 
-/* ── The four burn-in arrangements (even wear across both axes) ───────────── */
-/* Landscape-first kiosk: the variants only apply once there's room (≥768px);
-   below that the mobile-first stacked base above holds. min-width only (§10). */
+/* ── Landscape (≥768px): two columns ───────────────────────────────────────── */
+/*   U F
+ *   U F
+ * Left column = the two users stacked (Luke top, Suzanne bottom), each a 1×1 cell.
+ * Right column = the scraper feed spanning BOTH rows → one full-height vertical
+ * column. min-width only (§10). The grid is pinned to the viewport so the feed
+ * column is capped at screen height and its run list scrolls INSIDE it. */
 @media (min-width: 768px) {
-  /* V1 — scraper LEFT (vertical column) · users RIGHT */
-  .lf-kiosk[data-layout="v1"] {
-    grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
-    grid-template-rows: 1fr;
-    grid-template-areas: "scraper users";
+  .lf-kiosk {
+    height: 100svh;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "users scraper"
+      "users scraper";
   }
-  /* V2 — scraper RIGHT (vertical column) · users LEFT */
-  .lf-kiosk[data-layout="v2"] {
-    grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
-    grid-template-rows: 1fr;
-    grid-template-areas: "users scraper";
-  }
-  /* V3 — scraper TOP (horizontal band) · users BOTTOM */
-  .lf-kiosk[data-layout="v3"] {
+  /* Left column holds the two user panels stacked, each one row tall. */
+  .lf-users {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, auto) minmax(0, 1fr);
-    grid-template-areas: "scraper" "users";
+    grid-template-rows: repeat(2, minmax(0, 1fr));
   }
-  /* V4 — scraper BOTTOM (horizontal band) · users TOP */
-  .lf-kiosk[data-layout="v4"] {
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) minmax(0, auto);
-    grid-template-areas: "users" "scraper";
-  }
-  /* Two user panels side by side once landscape. */
-  .lf-users { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
-.lf-scraper { grid-area: scraper; }
-.lf-users { grid-area: users; }
 
 /* ── Panels (shared card chrome) ──────────────────────────────────────────── */
 .lf-panel {
   box-sizing: border-box;
   height: 100%;
+  min-height: 0; /* let the inner run list shrink + scroll instead of growing the panel */
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -85,6 +87,11 @@
   border-radius: var(--rec-radius-lg);
   box-shadow: var(--rec-shadow);
 }
+/* User panels distribute their three blocks (identity+hero / stats / averages) across
+   the full column height, so there is no dead space below the data. */
+.lf-user { justify-content: space-between; }
+.lf-user__top { display: flex; flex-direction: column; gap: var(--space-3); }
+
 .lf-panel__head {
   display: flex;
   align-items: baseline;
@@ -137,7 +144,7 @@
 }
 .lf-meta b { color: var(--ink); font-family: var(--font-data); font-feature-settings: "tnum"; font-weight: 600; }
 
-/* ── Scraper run list ─────────────────────────────────────────────────────── */
+/* ── Scraper run list (fills the feed column; scrolls internally) ──────────── */
 .lf-runs {
   list-style: none; margin: 0; padding: 0;
   display: flex; flex-direction: column; gap: var(--space-2);
@@ -179,11 +186,6 @@
 .lf-chip--running .lf-chip__icon { animation: lf-pulse 1.6s ease-in-out infinite; border-radius: 50%; }
 
 /* ── User stat panels ─────────────────────────────────────────────────────── */
-.lf-users {
-  display: grid;
-  grid-template-columns: 1fr; /* mobile-first: stacked; 2-up from 768px (above) */
-  gap: var(--space-3);
-}
 .lf-hero {
   display: flex; flex-direction: column; gap: var(--space-1);
 }
@@ -194,7 +196,7 @@
 .lf-hero__label { font-size: var(--text-sm); color: var(--ink-muted); }
 
 .lf-stats {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2);
 }
 .lf-stat {
   display: flex; flex-direction: column; gap: var(--space-1);
@@ -204,16 +206,16 @@
 }
 .lf-stat__num {
   font-family: var(--font-data); font-feature-settings: "tnum";
-  font-size: var(--text-2xl); line-height: 1; color: var(--ink); font-weight: 600;
+  font-size: var(--text-xl); line-height: 1.05; color: var(--ink); font-weight: 600;
+  white-space: nowrap; /* keep "£33,500" on one line in a narrow column */
 }
 .lf-stat__label {
   font-size: var(--text-xs); letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--ink-subtle);
 }
 
-/* Averages strip — secondary, hairline-separated. */
+/* Averages strip — secondary, hairline-separated, sits below the stats (no auto gap). */
 .lf-avgs {
-  margin-top: auto;
   display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4);
   padding-top: var(--space-3);
   border-top: 1px solid var(--hairline);

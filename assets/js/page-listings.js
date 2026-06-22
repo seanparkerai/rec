@@ -13,6 +13,7 @@ import {
   getReactionLog,
   getReviewedListings, addReviewedListing,
   getListingRatings, getScrapeProbation,
+  saveListingsReviewCount,
 } from './storage.js';
 import { getDerivedFinances } from './finance-load.js';
 import { createListingsControls } from './listings/controls.js';
@@ -451,6 +452,27 @@ async function render() {
   const cardCache = new Map(); // id → { node, sig }
   let hiddenRulesRev = 0; // bumped whenever hiddenRules / learned weights change
 
+  // Persist the canonical "to review" count for the /live-feed kiosk. Only the
+  // DEFAULT (unfiltered) view is the household's true pending pool — a transient
+  // search/type/beds/status filter narrows the list, so we skip persisting then
+  // (sort doesn't change membership, so it's ignored). Debounced + write-on-change.
+  let lastPersistedReview = null;
+  let reviewPersistTimer = null;
+  function controlsFilterActive() {
+    const s = controls.state || {};
+    return !!(s.search && s.search.trim())
+      || (s.type && s.type !== 'all')
+      || (s.beds && s.beds !== 'all')
+      || (s.status && s.status !== 'all');
+  }
+  function persistReviewCount(n) {
+    if (controlsFilterActive()) return;
+    if (n === lastPersistedReview) return;
+    lastPersistedReview = n;
+    clearTimeout(reviewPersistTimer);
+    reviewPersistTimer = setTimeout(() => { saveListingsReviewCount(n); }, 1200);
+  }
+
   function paint() {
     const includeOOR = !!(showOOR && showOOR.checked);
     const includeHidden = !!(showHidden && showHidden.checked);
@@ -460,6 +482,7 @@ async function render() {
         el('p', { class: 'listings-empty__hint' }, 'The daily fetch hasn’t populated the listings table yet — tap 24hr / 3d / 7d above to pull now (runs server-side; no token needed), or check the Apify / Supabase secrets are set.'),
       ]));
       if (summaryEl) clear(summaryEl);
+      persistReviewCount(0);
       return;
     }
 
@@ -531,6 +554,8 @@ async function render() {
 
     lastBrowse = { visible: feed.visible, ...feed.counts };
     renderSummary();
+    // Surface the real pending pool to the /live-feed kiosk (default view only).
+    persistReviewCount(feed.unreviewed.length);
   }
 
   // ── Review mode (the deck) ──────────────────────────────────────────────

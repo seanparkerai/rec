@@ -1,35 +1,15 @@
-// live-feed/layout.js — PURE anti-burn-in layout cycling for the /live-feed kiosk.
-// No DOM: returns the next arrangement token + small pixel offsets so the page
-// coordinator can apply them and tests can pin the cycle (tests/live-feed-runs.test.js).
+// live-feed/layout.js — PURE anti-burn-in helpers for the /live-feed kiosk.
+// No DOM: returns the next user-panel order + small pixel offsets so the page
+// coordinator can apply them and tests can pin them (tests/live-feed-runs.test.js).
 //
-// The kiosk runs permanently on a landscape iPad, so a static layout risks OLED/LCD
-// burn-in. On every refresh the page advances to the next variant (even wear across
-// all four), reorders the two user panels, and nudges the whole grid a few pixels.
-
-// Four grid arrangements, implemented purely via CSS grid-template-areas keyed on
-// [data-layout]. V1/V2 are vertical scraper columns (left/right); V3/V4 are
-// horizontal scraper bands (top/bottom) — so both axes get equal wear.
-export const LAYOUTS = ['v1', 'v2', 'v3', 'v4'];
-
-/** True when the scraper region is a horizontal band rather than a side column. */
-export function isHorizontal(layout) {
-  return layout === 'v3' || layout === 'v4';
-}
-
-/**
- * Next layout token in the deterministic cycle (even wear). An unknown/absent
- * `prev` starts at the first variant.
- * @param {string} [prev]
- * @returns {string} one of LAYOUTS
- */
-export function nextLayout(prev) {
-  const i = LAYOUTS.indexOf(prev);
-  return LAYOUTS[(i + 1) % LAYOUTS.length];
-}
+// The kiosk runs permanently on a landscape iPad in a FIXED 2×2 layout (U F / U F:
+// the two users stacked in the left column, the feed a full-height column on the
+// right). To mitigate OLED/LCD burn-in, on every refresh the page swaps the two
+// user panels (top↔bottom) and nudges the whole grid a few pixels.
 
 /**
  * Next user-panel order. The two panels swap on every refresh so neither hero
- * number is pinned to one half of the panel for the screen's whole life.
+ * number is pinned to one half of the left column for the screen's whole life.
  * @param {string[]} [prev] e.g. ['luke','suzanne']
  * @returns {string[]} the reversed pair (defaults to ['luke','suzanne'] → reversed)
  */
