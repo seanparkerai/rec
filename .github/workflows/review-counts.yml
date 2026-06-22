@@ -1,0 +1,67 @@
+# review-counts — keep the /live-feed kiosk's "listings to review" number LIVE.
+#
+# Runs tools/compute-review-counts.mjs on a GitHub runner (which holds the service-role
+# key). It replays the EXACT listings-page pipeline headlessly — the same pure engine
+# modules the browser feed uses (affordability/fit gate, junk classifier, refinement
+# hides + probation, decided suppression, radius filter, fingerprint dedupe, composed by
+# partitionFeed) — and UPSERTs each household's pending pool into household_review_stats,
+# which public.live_feed_stats() reads. So the kiosk reflects the real number without a
+# user having to open their listings page.
+#
+# READ-ONLY w.r.t. all real data — it writes ONLY household_review_stats and NEVER
+# triggers Apify / a scrape (the recompute is observe-only).
+#
+# Triggers (kept as live as GitHub Actions allows):
+#   - workflow_dispatch: tap "Run workflow" (phone-friendly) or trigger via the API.
+#   - workflow_run after `fetch-listings`: the listings set just changed, so recompute.
+#   - schedule: every 15 minutes (best-effort; GitHub cron is delayed under load) as the
+#     backstop so criteria/area/reaction edits made between scrapes still propagate.
+#
+# Requires repo secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (already set for the
+# fetch / refinement jobs). If absent the job no-ops with a clear message, never red.
+
+name: review-counts
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["fetch-listings"]
+    types: [completed]
+  schedule:
+    - cron: '*/15 * * * *'
+
+concurrency:
+  group: review-counts
+  cancel-in-progress: true
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Guard — required secrets present
+        id: guard
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::warning::review-counts skipped — set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY repo secrets to enable it."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Recompute + upsert household_review_stats
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node tools/compute-review-counts.mjs
