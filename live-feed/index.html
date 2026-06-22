@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Live feed · GR</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <meta name="description" content="Admin kiosk — live Rightmove scraper feed and per-household stats." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/pages/live-feed.css" />
+</head>
+<body>
+  <!-- No header/nav includes: minimal kiosk chrome. components.js still loads so
+       auth-guard.js (the admin ⇔ /live-feed lock) + theme run. -->
+  <main id="main" class="lf-kiosk" data-layout="v1">
+    <section class="lf-scraper">
+      <div class="lf-panel" data-scraper>
+        <div class="lf-panel__head">
+          <div>
+            <p class="lf-eyebrow">Rightmove scraper</p>
+            <h1 class="lf-title">Live feed</h1>
+          </div>
+          <span class="lf-live" data-scraper-live data-live="false">
+            <span class="lf-live__dot" aria-hidden="true"></span>
+            <span data-scraper-live-label>Idle</span>
+          </span>
+        </div>
+        <p class="lf-meta">
+          <span>Last write <b data-last-write>—</b></span>
+          <span>Next fetch <b data-next-fetch>—</b></span>
+        </p>
+        <ol class="lf-runs" data-runs aria-label="Recent scraper runs"></ol>
+        <p class="lf-avgs">
+          <span class="lf-avg">New/day (7d) <b data-scraper-7d>—</b></span>
+          <span class="lf-avg">New/day (30d) <b data-scraper-30d>—</b></span>
+        </p>
+      </div>
+    </section>
+
+    <section class="lf-users" data-users aria-label="Household stats"></section>
+
+    <p class="lf-sr-only" role="status" aria-live="polite" data-live-region></p>
+  </main>
+
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-live-feed.js"></script>
+</body>
+</html>

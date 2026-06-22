@@ -141,6 +141,51 @@ export async function getListing(rightmoveId) {
   }
 }
 
+// ── /live-feed admin kiosk readers (aggregate RPC + public scraper log) ────
+// Read-only, no localStorage cache (the kiosk always wants a fresh read). Both go
+// through storage (CLAUDE.md §17.4 — page modules never call Supabase directly).
+
+// The admin-only aggregate: cross-household counts + savings + rolling averages
+// from the public.live_feed_stats() SECURITY DEFINER RPC. Returns the parsed
+// object, or null on error (incl. the `forbidden` raise for any non-admin caller).
+export async function getLiveFeedStats() {
+  const sb = await _initSb();
+  if (!sb) return null;
+  try {
+    const { data, error } = await sb.rpc('live_feed_stats');
+    if (error) { console.error('storage: live_feed_stats', error.message); return null; }
+    return data ?? null;
+  } catch (e) {
+    console.error('storage: live_feed_stats', e.message);
+    return null;
+  }
+}
+
+// The Rightmove-scraper feed: recent public sync_log writes (fetcher rows,
+// table_name='listings', actor='system') for client-side run clustering. Public
+// read (qual=true), so it works for the household-less admin account. Returns the
+// raw rows newest-first; [] on error.
+export async function getScraperLog({ sinceDays = 3, limit = 400 } = {}) {
+  const sb = await _initSb();
+  if (!sb) return [];
+  const since = new Date(Date.now() - sinceDays * 24 * 60 * 60 * 1000).toISOString();
+  try {
+    const { data, error } = await sb
+      .from('sync_log')
+      .select('action, at')
+      .eq('table_name', 'listings')
+      .eq('actor', 'system')
+      .gte('at', since)
+      .order('at', { ascending: false })
+      .limit(limit);
+    if (error) { console.error('storage: read sync_log', error.message); return []; }
+    return data ?? [];
+  } catch (e) {
+    console.error('storage: read sync_log', e.message);
+    return [];
+  }
+}
+
 // ── Listing reactions (v3 L3 — append-only graded preference signal) ───────
 // User-state, household-scoped. Every reaction is a new row (append-only); the
 // latest row per listing is the current reaction. getListingReactions returns a
