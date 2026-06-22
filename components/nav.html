@@ -42,6 +42,10 @@
       <li><a data-nav="pages/profile.html">Your profile</a></li>
       <li><a data-nav="pages/finances.html">Finances</a></li>
       <li><a data-nav="pages/journey.html">Buying journey</a></li>
+      <!-- Admin-only: revealed by components.js when signed in as admin@gr.com.
+           Latent in practice — the admin is locked to the chrome-less /live-feed
+           kiosk (auth-guard.js) and so does not see this drawer. -->
+      <li data-admin-only hidden><a data-nav="live-feed/">Live feed</a></li>
     </ul>
   </nav>
 </dialog>

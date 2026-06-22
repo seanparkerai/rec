@@ -135,6 +135,12 @@ async function initHeaderUser() {
   try {
     const user = await getCurrentUser();
     if (!user) return;
+    // Reveal admin-only nav entries (the /live-feed kiosk link) for the dedicated
+    // admin account. Latent for the locked kiosk itself, but keeps the link
+    // present in the shared nav for admin@gr.com (see components/nav.html).
+    if ((user.email || '').toLowerCase() === 'admin@gr.com') {
+      document.querySelectorAll('[data-admin-only]').forEach((el) => { el.hidden = false; });
+    }
     const userEl = document.getElementById('header-user');
     const signOutBtn = document.getElementById('btn-sign-out');
     if (userEl) {
