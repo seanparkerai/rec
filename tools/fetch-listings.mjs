@@ -168,6 +168,12 @@ function householdRowsToVillages(rows, repoIds = new Set()) {
     const data = r?.data || {};
     const id = r?.id || data.id;
     if (!id || seen.has(id) || repoIds.has(id)) continue;
+    // active:false is authoritative for CURATED areas: a deliberate disable must never be
+    // re-admitted by a stale household_areas link. Onboarding stubs are ALSO active:false
+    // but must stay admittable by design, so exempt them by their source tag. (Without this
+    // guard, repoIds — built from the already-pruned outcodeMap — omits disabled curated
+    // areas, so the repoIds.has(id) dedupe above never catches them.)
+    if (data.active === false && data.source !== 'household-onboarding') continue;
     if (!isFetchEligible(data)) continue;
     const outcode = String(deriveOutcode(data.postcode) || '').toUpperCase();
     if (!outcode) continue;

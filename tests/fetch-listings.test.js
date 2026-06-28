@@ -78,10 +78,15 @@ export async function register({ test, assert, assertEqual }) {
       { id: 'bar-kent', data: { name: 'Bar', postcode: 'ME1 1AA', coords: null, coordsSource: 'postcodes-io:places+reverse', source: 'household-onboarding', active: false } },
       // already in the repo (curated catalog-match link) → skipped (covered by loadOutcodeMap)
       { id: 'oakley-rg23', data: { name: 'Oakley', postcode: 'RG23 7AA', coords: { lat: 51.27, lng: -1.17 }, coordsSource: 'postcodes-io:places+reverse' } },
+      // curated DISABLED area (active:false, NOT an onboarding stub) absent from repoIds —
+      // mirrors the real leak: the repoIds dedupe misses it, so the active:false guard must
+      // drop it (a deliberate disable must never be re-admitted by a stale active link).
+      { id: 'hambledon-po7', data: { name: 'Hambledon', postcode: 'PO7', county: 'Hampshire', coords: { lat: 50.9225, lng: -1.0639 }, geofenceRadiusMi: 3, searchRadiusMi: 3, active: false } },
     ];
     const repoIds = new Set(['oakley-rg23']);
     const out = householdRowsToVillages(rows, repoIds);
     assertEqual(out.length, 1, 'only the located, non-repo stub is merged');
+    assertEqual(out.find((v) => v.id === 'hambledon-po7'), undefined, 'curated active:false area is dropped, not re-admitted');
     const v = out[0];
     assertEqual(v.id, 'alresford-hampshire');
     assertEqual(v.outcode, 'SO24', 'outcode derived from the full postcode (not stored)');
