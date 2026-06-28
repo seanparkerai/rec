@@ -5,6 +5,8 @@
 import { readLocal, writeLocal, _initSb, _getHid, _toast } from '../core.js';
 import { normaliseReaction, latestPerListing } from '../../listings/reactions.js';
 import { _fetchAllReactionRows } from './_reactions-core.js';
+import { getAreaCatalog } from './content.js';
+import { excludeCuratedDisabled } from '../../areas/area-ref.js';
 
 // ── Trigger a Rightmove fetch (server-side dispatch via Vault token) ───────
 // The fetcher (tools/fetch-listings.mjs) needs the Apify + service-role secrets,
@@ -81,6 +83,14 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
         .eq('status', 'active');
       if (laErr) { console.error('storage: read household_areas (scope)', laErr.message); return []; }
       areaIds = (links ?? []).map((l) => l.area_id);
+      // Display side of the active:false contract: drop any area the catalog marks a
+      // curated disable (active:false, not an onboarding stub), mirroring the scraper's
+      // householdRowsToVillages guard via the SAME excludeCuratedDisabled rule. A stale
+      // active link to a disabled area therefore neither re-fetches NOR shows its leaked
+      // listings — scrape and display stay in lockstep without a blanket active filter
+      // (a "Researching" stub is absent from the catalog, so it passes through and renders).
+      try { areaIds = excludeCuratedDisabled(areaIds, await getAreaCatalog()); }
+      catch (e) { console.error('storage: scope catalog disable', e.message); }
       if (areaIds.length === 0) return []; // no areas chosen → no listings belong here yet
     }
   }

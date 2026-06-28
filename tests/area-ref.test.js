@@ -5,6 +5,7 @@
 // run-intelligence-tests.mjs.
 import {
   isPendingArea, isLiveArea, resolveAreaRef, buildAreaIndex, resolveAreaById,
+  isCuratedDisabled, excludeCuratedDisabled,
 } from '../assets/js/areas/area-ref.js';
 
 export async function register({ test, assert, assertEqual }) {
@@ -65,6 +66,30 @@ export async function register({ test, assert, assertEqual }) {
     assert(isPendingArea({ id: 'x', status: 'drafted' }), 'drafted + no active → pending');
     // …but a curated area stays live at partial status when it is active/fetchable
     assert(isLiveArea({ id: 'y', status: 'partial', active: true }), 'active partial → live');
+  });
+
+  // ── curated-disable rule (the SINGLE rule scrape + display both obey) ────────
+  test('area-ref: isCuratedDisabled flags a crossed-off curated area, exempts stubs', () => {
+    assertEqual(isCuratedDisabled({ id: 'hambledon-po7', active: false }), true, 'active:false curated (no source) is a disable');
+    assertEqual(isCuratedDisabled({ id: 'x', active: false, source: 'curated' }), true, 'explicit curated source still a disable');
+    assertEqual(isCuratedDisabled(stub), false, 'an onboarding stub (active:false) is NOT a curated disable');
+    assertEqual(isCuratedDisabled(curated), false, 'an active curated area is not a disable');
+    assertEqual(isCuratedDisabled({ id: 'y' }), false, 'no active flag → not a disable');
+    assertEqual(isCuratedDisabled(null), false, 'null is safe');
+  });
+
+  test('area-ref: excludeCuratedDisabled drops disabled ids, keeps active + off-catalog stubs', () => {
+    const catalog = [
+      { id: 'oakley-rg23', active: true },
+      { id: 'hambledon-po7', active: false },        // curated disable → dropped
+      { id: 'bordon-gu35', active: false },          // curated disable → dropped
+    ];
+    // 'alresford-hampshire' is an onboarding stub: absent from the catalog → passes through.
+    const ids = ['oakley-rg23', 'hambledon-po7', 'bordon-gu35', 'alresford-hampshire'];
+    const kept = excludeCuratedDisabled(ids, catalog);
+    assertEqual(kept.join(','), 'oakley-rg23,alresford-hampshire', 'only disabled curated ids are removed');
+    assertEqual(excludeCuratedDisabled([], catalog).length, 0, 'empty ids safe');
+    assertEqual(excludeCuratedDisabled(ids, null).join(','), ids.join(','), 'no catalog → nothing dropped');
   });
 
   // ── display object ──────────────────────────────────────────────────────────
