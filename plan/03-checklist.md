@@ -28,8 +28,8 @@
 - [x] New test standard (§5.2) designed (`04-program.md` §5); owner signed off the full blueprint incl. test-only devDependencies. *(2026-07-01)*
 - [x] "State of the system" note delivered with top-3 targets (session note, 2026-07-01; summary in `plan/README.md` known-drift + `04-program.md`).
 - [x] The plan (now `plan/`) overhauled into the final step-by-step program + atomic backlog (`b1ea902`). *(2026-07-01)*
-- [ ] Plan presented and **owner-approved** — the one gate that starts product-code execution.
-- [ ] On approval: overhauled plan committed *before* any product code moves.
+- [x] Plan presented and **owner-approved** (2026-07-01) — execution unlocked.
+- [x] On approval: overhauled plan committed *before* any product code moves (`b1ea902` + close-out ticks).
 
 
 ---
