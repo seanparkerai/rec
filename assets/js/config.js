@@ -5,7 +5,9 @@
 
 export const APP_BASE = new URL('../../', import.meta.url).href;
 
-/** Resolve an app-root-relative path to an absolute URL. */
+/** Resolve an app-root-relative path to an absolute URL.
+ * @param {string} p
+ * @returns {string} */
 export const url = (p) => new URL(String(p).replace(/^\/+/, ''), APP_BASE).href;
 
 export const STORAGE_NS = 'rec';

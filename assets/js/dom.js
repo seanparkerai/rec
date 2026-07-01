@@ -7,7 +7,8 @@
  * @returns {string}
  */
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  /** @type {Record<string, string>} */
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
 ));
 
 /**
@@ -69,7 +70,7 @@ export const on = (el, evt, fn, opts) => el?.addEventListener(evt, fn, opts);
  * ignored so `[cond && node]` filters cleanly.
  * @param {string} tag
  * @param {Object} [attrs]
- * @param {string|Node|Array|null} [children]
+ * @param {string|Node|Array<*>|null} [children]
  * @returns {HTMLElement}
  */
 export function el(tag, attrs = {}, children = null) {
@@ -79,6 +80,7 @@ export function el(tag, attrs = {}, children = null) {
     if (v === true) { node.setAttribute(k, ''); continue; }
     node.setAttribute(k, String(v));
   }
+  /** @param {*} c */
   const append = (c) => {
     if (c === null || c === undefined || c === false) return;
     if (Array.isArray(c)) { c.forEach(append); return; }
@@ -88,7 +90,8 @@ export function el(tag, attrs = {}, children = null) {
   return node;
 }
 
-/** Remove all children from a node. No-op if the node is null. */
+/** Remove all children from a node. No-op if the node is null.
+ * @param {Node|null|undefined} node */
 export function clear(node) {
   if (!node) return;
   while (node.firstChild) node.removeChild(node.firstChild);

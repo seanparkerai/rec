@@ -1,0 +1,20 @@
+{
+  "_comment": "Tier-0 type-check (overhaul step 1.12). RATCHET: this include list may only GROW — every phase that rebuilds a module adds it here type-clean (mirrors the lint-v2 ratchet). Whole-graph typing is the Phase-9 R1/R4 job. JSDoc-only annotations; the shipped site stays plain JS.",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "strict": false,
+    "skipLibCheck": true,
+    "lib": ["es2022", "dom", "dom.iterable"]
+  },
+  "include": [
+    "assets/js/shell-core.js",
+    "assets/js/config.js",
+    "assets/js/dom.js",
+    "assets/js/format.js"
+  ]
+}

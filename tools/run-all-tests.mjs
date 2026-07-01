@@ -20,7 +20,7 @@
 import { readdirSync, existsSync, statSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 
 const __root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -95,10 +95,17 @@ for (const tier of TIERS) {
   byTier.set(tier, { files: files.length, results, ms: Date.now() - t0 });
 }
 
-// Full runs (no --tier) also carry the lint + the spawned sync suite, so the
-// single-command invariant (§3.6) holds from day one.
+// Full runs (no --tier) also carry Tier 0 (type-check), the lint, and the
+// spawned sync suite, so the single-command invariant (§3.6) holds from day one.
 const extras = [];
 if (!onlyTier) {
+  // Tier 0: tsc --checkJs over the ratcheting tsconfig include list (step 1.12).
+  const t0 = spawnSync('npx', ['tsc', '--noEmit'], { cwd: __root, encoding: 'utf8' });
+  extras.push({
+    name: 'tier-0 type-check (tsc --checkJs over the ratcheting tsconfig scope)',
+    pass: t0.status === 0,
+    error: t0.status === 0 ? undefined : (t0.stdout || t0.stderr || `tsc exit ${t0.status}`),
+  });
   const lintResults = [];
   const test = async (name, fn) => {
     try { await fn(); lintResults.push({ name, pass: true }); }

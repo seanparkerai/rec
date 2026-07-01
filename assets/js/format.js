@@ -73,4 +73,4 @@ export function dateFromMonths(n, from = new Date()) {
  * @param {Date} d
  * @returns {string}
  */
-export const monthYear = (d) => (d instanceof Date && !isNaN(d) ? DATE_MONTH_YEAR.format(d) : '—');
+export const monthYear = (d) => (d instanceof Date && !isNaN(d.getTime()) ? DATE_MONTH_YEAR.format(d) : '—');

@@ -12,14 +12,20 @@ import { url as configUrl, STORAGE_NS } from './config.js';
 export const THEME_KEY = `${STORAGE_NS}:theme`;
 
 /* ---------- Partial includes: <div data-include="components/header.html"></div> ---------- */
+/**
+ * @param {object} [opts]
+ * @param {Document} [opts.doc]
+ * @param {(p: string) => string} [opts.urlFor]
+ * @param {(href: string) => Promise<{ok: boolean, status: number, text(): Promise<string>}>} [opts.fetchFn]
+ */
 export async function injectIncludes({
   doc = document,
   urlFor = configUrl,
-  fetchFn = (...a) => fetch(...a),
+  fetchFn = (href) => fetch(href),
 } = {}) {
   const nodes = [...doc.querySelectorAll('[data-include]')];
   await Promise.all(nodes.map(async (el) => {
-    const path = el.getAttribute('data-include');
+    const path = el.getAttribute('data-include') || '';
     try {
       const res = await fetchFn(urlFor(path));
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -35,14 +41,22 @@ export async function injectIncludes({
 }
 
 /* ---------- Active nav + resolve data-nav hrefs ---------- */
+/** @param {string} p  @param {{origin: string}} [loc] */
 export function normalisePath(p, loc = location) {
   return new URL(p, loc.origin).pathname.replace(/index\.html$/, '').replace(/\/+$/, '');
 }
 
+/**
+ * @param {object} [opts]
+ * @param {Document} [opts.doc]
+ * @param {{origin: string, href: string}} [opts.loc]
+ * @param {(p: string) => string} [opts.urlFor]
+ */
 export function setActiveNav({ doc = document, loc = location, urlFor = configUrl } = {}) {
   const here = normalisePath(loc.href, loc);
-  doc.querySelectorAll('[data-nav]').forEach((a) => {
-    const target = urlFor(a.dataset.nav);
+  doc.querySelectorAll('[data-nav]').forEach((el) => {
+    const a = /** @type {HTMLElement} */ (el);
+    const target = urlFor(a.dataset.nav || '');
     a.setAttribute('href', target);
     if (normalisePath(target, loc) === here) a.setAttribute('aria-current', 'page');
   });
@@ -58,11 +72,13 @@ export function effectiveTheme({
   return prefersDark() ? 'dark' : 'light';
 }
 
+/** @param {string|null} saved  @param {Document} [doc] */
 export function applyTheme(saved, doc = document) {
   if (saved === 'light' || saved === 'dark') doc.documentElement.setAttribute('data-theme', saved);
   else doc.documentElement.removeAttribute('data-theme');
 }
 
+/** @param {Element} btn  @param {object} [opts] */
 export function updateToggle(btn, opts = {}) {
   const dark = effectiveTheme(opts) === 'dark';
   // Toggle state via attribute + label only — the sun/moon SVGs are swapped by
