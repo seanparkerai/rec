@@ -72,7 +72,7 @@
 
 *2.C — One membership truth*
 - [x] 2.9 MIGRATION LIVE (`derived_primary_from_listing_areas`): `uniq_listing_areas_primary` partial unique index (multi-primary structurally impossible) + `replace_listing_areas` v2 (validates exactly-one-primary at the boundary; DERIVES `listings.area_id` from the junction in the same transaction). Pre-gate 0 mismatches/0 multi-primary; synthetic 4-assertion live verification passed + cleaned; real data untouched (1067/4028). Applied via execute_sql WITH history insert (apply_migration approval stream down — disclosed); mirror + DATA_MODEL + SUPABASE_SYNC updated incl. the §18.3 parity SQL. FOUND: 4 live geofence-passing listings with zero membership (feed-invisible today) → 2.11 repair queue. 825/825. *(2026-07-01)*
-- [ ] 2.10 Update all writers (fetcher, importer, backfills) to write membership once and derive the primary; delete per-writer primary alignment code.
+- [x] 2.10 Writers simplified to write-membership-once: `membershipFor` is verdict-driven (stored-column alignment + `primaryFix` deleted; `primaryDrift` kept as a stale-geofence-fields signal pairing with `backfill-geofence`); raw `emitSql`/`--emit-sql` write path deleted (would bypass the deriving RPC — RPC is the ONLY membership writer; `--from-file` is report-only); `restReplace` fix-upsert dropped. Fetcher/importer keep setting the identical initial `area_id` on insert (RPC re-derives). Tests rewritten to the new contract. 825/825. *(2026-07-01)*
 - [ ] 2.11 Re-run the full membership backfill via the one canonical path; checksum-verify (md5 parity as 2026-07-01); reconcile snapshot.
 
 *2.D — One visibility predicate*

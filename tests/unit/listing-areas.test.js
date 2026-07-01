@@ -37,26 +37,26 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   // ── backfill: is_primary is aligned to the listing's STORED area_id ──
-  test('backfill membershipFor: is_primary tracks the stored area_id (no drift)', () => {
-    // Stored area_id = dundridge (an in-buffer area that is NOT the geofence tiebreak winner).
-    const row = { rightmove_id: '3', lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase, SO32', area_id: 'dundridge-so32' };
-    const { rows, primaryDrift, primaryFix } = membershipFor(row, VILLAGES);
+  test('backfill membershipFor: verdict-driven rows, no drift when stored primary matches', () => {
+    const row = { rightmove_id: '3', lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase', area_id: 'waltham-chase-so32' };
+    const { rows, primaryDrift } = membershipFor(row, VILLAGES);
     assertEqual(primaryDrift, false);
-    assertEqual(primaryFix, null);
     const primaries = rows.filter((r) => r.is_primary);
-    assertEqual(primaries.length, 1);
-    assertEqual(primaries[0].area_id, 'dundridge-so32'); // aligned to the stored value
+    assertEqual(primaries.length, 1, 'exactly one primary (RPC boundary requires it)');
+    assertEqual(primaries[0].area_id, 'waltham-chase-so32');
   });
 
-  test('backfill membershipFor: a stored area_id no longer in-buffer → drift + primaryFix', () => {
-    // Stored area_id points at a village whose buffer no longer contains the home.
-    const row = { rightmove_id: '4', lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase, SO32', area_id: 'gone-area' };
-    const { rows, primaryDrift, primaryFix } = membershipFor(row, VILLAGES);
+  test('backfill membershipFor: stored area_id disagreeing with the verdict → drift flag only (RPC derives the column)', () => {
+    // Stored primary no longer the geofence verdict: rows carry the VERDICT
+    // primary as-is; primaryDrift=true signals stale geofence FIELDS (run
+    // backfill-geofence alongside). No primaryFix — listings.area_id is derived
+    // by replace_listing_areas since step 2.9.
+    const row = { rightmove_id: '4', lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase', area_id: 'gone-area' };
+    const { rows, primaryDrift } = membershipFor(row, VILLAGES);
     assertEqual(primaryDrift, true);
-    assert(primaryFix && primaryFix.rightmove_id === '4', 'a fix is emitted to correct listings.area_id');
     const primaries = rows.filter((r) => r.is_primary);
-    assertEqual(primaries.length, 1);                       // still exactly one primary
-    assertEqual(primaries[0].area_id, primaryFix.area_id);  // and it matches the fix
+    assertEqual(primaries.length, 1, 'exactly one verdict primary');
+    assert(primaries[0].area_id !== 'gone-area', 'verdict, not the stale stored column, drives the primary');
   });
 
   // ── Problem A: membership makes an overlap-area listing visible ──
