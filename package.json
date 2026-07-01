@@ -10,7 +10,8 @@
     "test": "node tools/run-intelligence-tests.mjs",
     "build": "node tools/build-areas.mjs",
     "area-status": "node tools/area-status.mjs",
-    "sync-areas": "node tools/sync-areas-from-supabase.mjs"
+    "sync-areas": "node tools/sync-areas-from-supabase.mjs",
+    "test:new": "node tools/run-all-tests.mjs"
   },
   "devDependencies": {
     "happy-dom": "^20.10.6",
