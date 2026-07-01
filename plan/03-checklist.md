@@ -42,7 +42,7 @@
 > (§0.2 mode-2 decision, `04-program.md` §1). ⚙ = flagged owner action.
 
 **Phase 1 — The net, first: new test-harness core (§5; strangler — old runner stays green throughout)**
-- [ ] 1.1 Add `devDependencies` (jsdom + happy-dom) and a lockfile; confirm GH Pages deploy is unaffected (no build step; deps never shipped).
+- [x] 1.1 devDependencies added (jsdom ^29.1.1, happy-dom ^20.10.6) + package-lock.json; Pages deploy verified unaffected (uploads a fresh checkout, node_modules gitignored). *(2026-07-01)*
 - [ ] 1.2 Stand up `tools/run-all-tests.mjs` beside the old runner: tier discovery over `tests/{unit,contract,characterization,integration,pages}/`, `--tier` filter, per-tier summary, honest online-skip reporting.
 - [ ] 1.3 Centralise fixtures: `tests/fixtures.mjs` (memoised loaders over `data/fixtures/*.sample.json`) + `tests/mocks/supabase-client.js` (fixture-backed stub with `.from().select()` + mock session).
 - [ ] 1.4 Port suite batch A (pure finance: affordability, calc-*, money-flow, savings) into `tests/unit/` + `tests/characterization/`; both runners green.
