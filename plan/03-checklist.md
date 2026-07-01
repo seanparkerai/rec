@@ -59,7 +59,7 @@
 **Phase 2 — ⭐ FLAGSHIP: listings pipeline, DB-canonical rework (§10.4/§10.5/§10.9 + `logs/2026-07-01-listings-m2m.md` §5)**
 
 *2.A — Pin current behaviour (before any change)*
-- [ ] 2.1 Characterization tests for `withinGeofence()` over a fixture village set: scalar + petal radii, overlap tiebreak, name corroboration, membership set shape.
+- [x] 2.1 `withinGeofence()` characterized: existing unit coverage audited (petals/tiebreak/corroboration/membership already pinned); new `tests/characterization/geofence-pipeline.test.js` pins the subtle contracts the rework leans on — km-sorted membership, primary-position independence, INCLUSIVE buffer boundary, exact mi conversion, sectoral membership, mixed-universe resolution, determinism (7 tests). 808/808. *(2026-07-01)*
 - [ ] 2.2 Characterization tests for the feed contract: membership scoping, origin exclusion, `geofence_pass`, gate order, decided suppression, fingerprint dedupe (extend `tests/listing-areas.test.js`).
 - [ ] 2.3 Golden-master test for `fetch-listings` target-building: villages → outcodes → clusters → demand-gating, from fixtures (no network).
 
