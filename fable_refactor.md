@@ -6,10 +6,12 @@
 >
 > **Status of this file:** This is the *foundation*, authored by Opus 4.8 (2026-06-16) and expanded
 > the same day into this comprehensive edition. It is a living document. Fable's **first job** is to
-> ingest it whole, perform the §2 scan, run the §7 Q&A intake, and then **rewrite this plan top to
-> bottom** into a sequenced, owner-approved program. Nothing below is frozen until that intake is
-> done — including the guard rails and the tests, both of which Fable now has explicit authority to
-> redesign (§4, §5).
+> **enter Plan Mode** (see the Session Mandate immediately below), ingest this file whole, perform the
+> §2 scan, run the §7 Q&A intake, and then — still in Plan Mode — **rewrite this plan top to bottom**
+> into the final, exhaustive, step-by-step program, which it presents for the owner's approval before
+> a single line of the product is touched. Nothing below is frozen until that intake is done —
+> including the guard rails and the tests, both of which Fable now has explicit authority to redesign
+> (§4, §5).
 >
 > **Prime directive — a new standard, not a polish pass.** The current system is good: feature-
 > complete, modular, tested. That is the *floor*, not the ceiling. The brief is to lift every
@@ -29,6 +31,65 @@
 >
 > **External validation pass applied 2026-06-16; finance/web-platform/API claims checked against
 > primary sources current to June 2026 — see commit.**
+>
+> ---
+>
+> ## 🔒 SESSION MANDATE — run this entire session in PLAN MODE (owner-directed, 2026-07-01) — read before anything else
+>
+> **This is the operating contract for the session that opens this file. It governs *how* the session
+> runs and overrides any looser phrasing elsewhere in this document.** The owner will start a fresh
+> Claude Code session on the **Fable model (`claude-fable-5`)** and hand it this one file. Everything
+> below tells that session exactly what to do.
+>
+> **1. Enter Plan Mode first — before any other action.** The very first thing this session does is
+> switch Claude Code into **Plan Mode** (cycle modes with **Shift+Tab** until the input shows
+> *"plan mode on"*). If already in Plan Mode, confirm it and stay there. **Do not leave Plan Mode**
+> until the owner has approved the plan. In Plan Mode the session is **read-only**: it researches and
+> designs but **writes nothing** — no file edits, no `Write`/`Edit`, no commits, no pushes, no code
+> changes, no Supabase writes. Every scan, trace, and MCP read below is permitted; every mutation is
+> forbidden until approval.
+>
+> **2. Do all the thinking here, in Plan Mode.** While in Plan Mode, carry out — in full — the §2
+> full-codebase scan, the §7 Q&A intake, the flow traces (§2.4), the dead-code/obsolescence audit
+> (§2.7), and the Supabase/schema reads (§2.3). This is the entire discovery and design effort. Take
+> the time it needs; this is the most important hour of the program and everything downstream inherits
+> its accuracy.
+>
+> **3. The single deliverable of Plan Mode is the overhaul of *this file*.** The plan you present for
+> approval is not a summary and not a sketch — it is a proposal to **rewrite `fable_refactor.md` itself
+> into the final, complete, definitive plan**: a top-to-bottom, step-by-step-by-step breakdown of
+> **every single part of the system** (every segment, page, module, mechanism, rule, constant, table,
+> and data flow) and **every granular unit of work** required to take it to the new standard. Nothing
+> vague, nothing deferred to "figure out later." If a part of the system exists, it appears in the
+> plan; if a piece of work is needed, it is written down as a discrete step.
+>
+> **4. Granularity is the whole point — size every step to survive credit limits and cold resumes.**
+> The owner works alongside real usage/credit limits and expects the program to advance in **tiny,
+> individually shippable steps**. So the overhauled plan must decompose the work until **each step is
+> small enough to complete, test, commit, and tick in a single short working spell** — one sentence to
+> describe, one commit to land, one checklist line to track (§3.1, §9). A step that can't be described
+> in one sentence is too big; split it. The sequenced backlog (§9) is the spine of this: an ordered
+> list of atomic steps, each with its files, its test impact, and its acceptance check, such that **any
+> fresh session can open this file, read the checklist, and resume from the exact next unticked step.**
+>
+> **5. Present the plan, then wait for approval.** When the overhaul is authored, present it via the
+> **ExitPlanMode** tool for the owner to review and approve. The plan you present is the *content of the
+> rewritten file plus the sequenced tiny-step backlog*. **Do not carry out any of it until the owner
+> approves.** If the owner asks for changes, revise in Plan Mode and re-present. Approval of the plan is
+> the one and only gate that starts execution.
+>
+> **6. On approval — write the file first, then execute one tiny step at a time.** The moment the owner
+> approves and Plan Mode is exited, the session's **first execution action** is to **write the
+> overhauled `fable_refactor.md`** (the new comprehensive plan + backlog) and commit it, so the plan is
+> durable and resumable before any product code moves. From then on, execute the backlog **strictly one
+> tiny step at a time**, following the §3 safety protocol: build the step (test-first per §5), run the
+> harness green, commit + push, tick the §9 checklist, post a one-line progress note — then move to the
+> next step. **Never batch steps.** This cadence is deliberate: it keeps every increment reversible,
+> owner-visible, and resumable across the credit limits and cold sessions the owner will hit.
+>
+> **7. Reality wins.** The §10 deep-dives below are the best previous answer, not the final one. Where
+> the §2 scan shows this file is stale, the overhaul corrects it (`CLAUDE.md` rule 0). The plan you
+> present should reflect the code as it actually is today, not as this document remembers it.
 >
 > ---
 >
@@ -67,21 +128,30 @@
 ## 0. How Fable should use this document
 
 Read this file once, end to end, before touching anything. It is long by design: it is meant to let
-any cold Fable session resume the program with full context. Then:
+any cold Fable session resume the program with full context. The Session Mandate at the top of this
+file is the binding version of the steps below — this section is its rationale. Then:
 
+0. **Enter Plan Mode (Session Mandate).** Switch Claude Code into Plan Mode and stay there for
+   everything in steps 1–3. Nothing is written, edited, committed, or pushed until the owner approves
+   the plan (step 4). All of the discovery below is read-only research.
 1. **Scan (§2 kickoff).** Run the mandated full-codebase sweep. Do not trust this file's inventories
-   blindly — verify them against reality and **correct this file where they disagree** (the repo's
-   own first rule: *"If reality and this file disagree, reality wins — fix this file."*).
+   blindly — verify them against reality; the corrections are folded into the plan you present, per the
+   repo's own first rule: *"If reality and this file disagree, reality wins — fix this file."*
 2. **Interrogate (§7 intake).** Run the structured Q&A. Extract the owner's aspirations, taste,
-   priorities, risk tolerance, and non-negotiables. Capture answers inline so the plan self-documents.
-3. **Re-plan.** Replace every "opportunities / sub-phases" stub with a concrete, dependency-ordered
-   backlog. Decide the order segments are tackled and justify it. Decide which guard rails to keep,
-   relax, or redesign (§4) and how the test suite is rebuilt (§5) — and write those decisions down.
-4. **Execute (§3 safety protocol).** Work one segment (or sub-phase) at a time. Plan it (§3.3),
-   build it test-first (§5), self-review against the feature-description standard (§6), the design
-   contract (`DESIGN.md`) and accessibility floor, merge to `main`, push, report. Repeat.
-5. **Report continuously.** After every merged sub-phase, post a short progress update and tick the
-   §9 living checklist. Progress never lives only in your head.
+   priorities, risk tolerance, and non-negotiables. Fold the answers into the plan so it self-documents.
+3. **Overhaul this file into the final plan (still in Plan Mode).** Rewrite `fable_refactor.md` top to
+   bottom into the definitive, step-by-step breakdown of every part of the system and every granular
+   unit of work — replacing every "opportunities / sub-phases" stub with a concrete, dependency-ordered
+   backlog of atomic steps (§9). Decide the order segments are tackled and justify it. Decide which
+   guard rails to keep, relax, or redesign (§4) and how the test suite is rebuilt (§5) — and write those
+   decisions down. **Present the result via ExitPlanMode for the owner's approval.**
+4. **Execute only after approval (§3 safety protocol).** Write the overhauled file first, then work
+   **one tiny step at a time**. Plan it (§3.3), build it test-first (§5), self-review against the
+   feature-description standard (§6), the design contract (`DESIGN.md`) and accessibility floor, merge
+   to `main`, push, report. Repeat — never batching steps.
+5. **Report continuously.** After every merged step, post a short progress update and tick the §9
+   living checklist. Progress never lives only in your head — so any credit-limited or cold session can
+   resume from the exact next unticked step.
 
 Treat the per-segment deep-dives (§10) as the map of the territory. Treat `CLAUDE.md` and `DESIGN.md`
 as the *current* law — law that you are now authorised to amend through the disciplined processes in
@@ -249,7 +319,10 @@ only when green, and never park long-lived divergent branches. The owner has sta
 ask for a merge to `main` at any time; honour it. Push with `git push -u origin <branch>` (retry with
 backoff on network errors only). **Do not open a PR unless the owner explicitly asks.**
 
-**3.3 Plan-mode contract (`CLAUDE.md` §14, sharpened).** Before each sub-phase, enumerate in order:
+**3.3 Per-step planning discipline (`CLAUDE.md` §14, sharpened).** *(Distinct from the top-of-file
+Session Mandate: that puts the whole discovery-and-design session in Claude Code **Plan Mode**; this is
+the lightweight plan each individual execution step writes down after approval.)* Before each step,
+enumerate in order:
 (1) files to edit *and the sections within them*; (2) order of operations; (3) test impact — which
 tests change, which are added, the new behaviours pinned, and confirmation the harness ran green;
 (4) an explicit **out-of-scope** list; (5) **guard-rail touch declaration** — does this sub-phase
@@ -653,11 +726,15 @@ Fowler & Feathers, 2004.)
 
 ## 9. Living program checklist (Fable maintains this)
 
-> Replace this stub during intake with the agreed, sequenced backlog. Tick + commit after every
-> merged sub-phase so any fresh session resumes from a known-good state. Record baseline metrics here
-> (test count/runtime, lint violations, segment coverage) so progress is measured, not asserted.
+> This checklist is the spine the Session Mandate refers to. During the Plan-Mode overhaul, replace
+> this stub with the agreed, sequenced backlog of **atomic steps** — each small enough to complete,
+> test, commit, and tick in a single short working spell (§3.1). Tick + commit after every merged step
+> so any credit-limited or cold session resumes from the exact next unticked line. Record baseline
+> metrics here (test count/runtime, lint violations, segment coverage) so progress is measured, not
+> asserted.
 
-**Phase 0 — Onboarding**
+**Phase 0 — Onboarding (all in Plan Mode; ends at owner approval)**
+- [ ] Plan Mode entered; session confirmed read-only until approval (Session Mandate).
 - [ ] Full-codebase scan complete (§2); inventories in §10 verified/corrected.
 - [ ] Harness green at baseline; baseline metrics recorded (tests, runtime, lint, coverage/segment).
 - [ ] Supabase schema + RLS confirmed via MCP; sync-state snapshot fresh.
@@ -665,6 +742,9 @@ Fowler & Feathers, 2004.)
 - [ ] Guard-rail audit (§4.5) delivered; redesign recommendations agreed with owner.
 - [ ] New test standard (§5.2) designed; owner sign-off on shape + any dev dependency.
 - [ ] "State of the system" note delivered with top-3 targets.
+- [ ] `fable_refactor.md` overhauled into the final step-by-step plan + atomic backlog (still in Plan Mode).
+- [ ] Plan presented via **ExitPlanMode** and **owner-approved** — the one gate that starts execution.
+- [ ] On approval: overhauled `fable_refactor.md` written + committed *before* any product code moves.
 
 **Phase 1 — Test re-architecture (the net, first) (§5)**
 - [ ] New harness stood up beside the old; single green command preserved.
