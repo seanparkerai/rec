@@ -16,10 +16,12 @@
     "_note": "2026-07-01 §18.2 reconciliation: live 2026-06-28T10:37:12Z > prior snapshot (2026-05-25) — portal shortlist activity; Supabase wins, high-water pulled forward, no data written."
   },
   "zones": {
-    "last_synced_at": "2026-05-25T21:44:00Z"
+    "last_synced_at": "2026-06-03T23:36:16Z",
+    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-03T23:36:16Z > prior snapshot (2026-05-25) — owner-household portal write (content verified: empty FeatureCollection); Supabase wins, high-water pulled forward, no data written."
   },
   "journey_checks": {
-    "last_synced_at": "2026-05-25T21:44:00Z"
+    "last_synced_at": "2026-06-15T21:07:15Z",
+    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-15T21:07:15Z > prior snapshot (2026-05-25) — household 4deadb32 portal edit; Supabase wins, high-water pulled forward, no data written."
   },
   "journey_progress": {
     "last_synced_at": "2026-06-07T00:00:00Z",
@@ -27,10 +29,12 @@
     "_note": "v3 buying-journey timeline tick state ({ tasks: { taskId: true } } from data/journey.json). Table created 2026-06-07 via add_journey_progress migration; 0 rows until first tick. Tracked sync table (19th user-state)."
   },
   "contacts": {
-    "last_synced_at": "2026-05-25T21:44:00Z"
+    "last_synced_at": "2026-06-15T21:07:40Z",
+    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-15T21:07:40Z > prior snapshot (2026-05-25) — household 4deadb32 portal edit (agent contacts); Supabase wins, high-water pulled forward, no data written."
   },
   "outreach": {
-    "last_synced_at": "2026-05-25T21:44:00Z"
+    "last_synced_at": "2026-06-15T21:07:40Z",
+    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-15T21:07:40Z > prior snapshot (2026-05-25) — household 4deadb32 portal edit (outreach log); Supabase wins, high-water pulled forward, no data written."
   },
   "areas": {
     "count": 192,
