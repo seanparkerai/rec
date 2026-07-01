@@ -1,8 +1,8 @@
 // tests/live-feed-runs.test.js — pure tests for the /live-feed kiosk logic:
 // sync_log → run clustering, liveness, the London fetch-slot clock, and the
 // anti-burn-in layout cycle. Offline; mirrors the harness register(...) shape.
-import { clusterRuns, dailyAverages, nextSlot, FETCH_SLOTS } from '../assets/js/live-feed/runs.js';
-import { nextUserOrder, burnShift } from '../assets/js/live-feed/layout.js';
+import { clusterRuns, dailyAverages, nextSlot, FETCH_SLOTS } from '../../assets/js/live-feed/runs.js';
+import { nextUserOrder, burnShift } from '../../assets/js/live-feed/layout.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A fixed clock so isLive / windows are deterministic.

@@ -6,7 +6,7 @@
 import {
   isPendingArea, isLiveArea, resolveAreaRef, buildAreaIndex, resolveAreaById,
   isCuratedDisabled, excludeCuratedDisabled,
-} from '../assets/js/areas/area-ref.js';
+} from '../../assets/js/areas/area-ref.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A curated, fetchable catalog area (the common case).

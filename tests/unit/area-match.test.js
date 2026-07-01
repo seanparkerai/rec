@@ -2,7 +2,7 @@
 // lookup: stub-id slugging, haversine distance, and the catalog match-or-create
 // decision. No network, no Supabase — the live postcodes.io round-trip is exercised
 // in the browser (areas/place-lookup.js). Node-only; wired into run-intelligence-tests.mjs.
-import { slugifyArea, haversineKm, postcodeDistrict, matchCatalogArea } from '../assets/js/areas/area-match.js';
+import { slugifyArea, haversineKm, postcodeDistrict, matchCatalogArea } from '../../assets/js/areas/area-match.js';
 
 export async function register({ test, assert, assertEqual }) {
   // ── slugifyArea ────────────────────────────────────────────────────────────

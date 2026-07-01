@@ -7,7 +7,7 @@ import {
   classifyIdentifier,
   parseTypeaheadMatch,
   DISAMBIGUATION_KM,
-} from '../tools/resolve-areas.mjs';
+} from '../../tools/resolve-areas.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   test('resolve/withinDisambiguation: accepts a 1km candidate, rejects a 50km namesake', () => {

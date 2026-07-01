@@ -2,11 +2,11 @@
 // branch inclusion (buying-situation × employment × joint), the required-to-finish gate,
 // completeness computation, and the autosave merge (no-clobber). Imports ONLY the pure
 // modules (no DOM, no Supabase) — the wizard/a11y DOM layers are a manual hand-off.
-import { includedSteps, visibleFields, STEPS } from '../assets/js/setup/steps.js';
-import { requiredGate, validateField } from '../assets/js/setup/validate.js';
-import { stepCompleteness, overallCompleteness } from '../assets/js/setup/completeness.js';
-import { setNested, getNested, setLineValue, getLineValue } from '../assets/js/setup/autosave.js';
-import { deriveFinances } from '../assets/js/finance-derive.js';
+import { includedSteps, visibleFields, STEPS } from '../../assets/js/setup/steps.js';
+import { requiredGate, validateField } from '../../assets/js/setup/validate.js';
+import { stepCompleteness, overallCompleteness } from '../../assets/js/setup/completeness.js';
+import { setNested, getNested, setLineValue, getLineValue } from '../../assets/js/setup/autosave.js';
+import { deriveFinances } from '../../assets/js/finance-derive.js';
 
 export async function register({ test, assert, assertEqual }) {
   // ── branching ────────────────────────────────────────────────────────────────

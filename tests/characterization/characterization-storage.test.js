@@ -10,7 +10,7 @@
 // what is observable WITHOUT a network: key derivation, the localStorage
 // read/write/remove round-trip, and the cache-first behaviour of the get/save pairs.
 
-import { STORAGE_NS } from '../assets/js/config.js';
+import { STORAGE_NS } from '../../assets/js/config.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A Map-backed localStorage shim (Node has no DOM). Installed BEFORE importing
@@ -23,7 +23,7 @@ export async function register({ test, assert, assertEqual }) {
     clear: () => store.clear(),
   };
 
-  const S = await import('../assets/js/storage.js');
+  const S = await import('../../assets/js/storage.js');
   const { key, readLocal, writeLocal, removeLocal } = S._internal;
 
   // ── _internal surface ───────────────────────────────────────────────────────

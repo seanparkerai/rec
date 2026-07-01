@@ -1,7 +1,7 @@
 // dom-utils.test.js — unit tests for assets/js/dom.js (esc only; byId/setText/setHTML
 // require a DOM and are tested implicitly via the characterization tests).
 
-import { esc } from '../assets/js/dom.js';
+import { esc } from '../../assets/js/dom.js';
 
 export async function register({ test, assert, assertEqual }) {
   await test('dom/esc: plain string passes through', () => {

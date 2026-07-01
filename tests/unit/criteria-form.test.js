@@ -1,5 +1,5 @@
 // criteria-form.test.js — pure view/binding helpers extracted from page-criteria.js (REFACTOR P7e).
-import { gbp, listView, listEdit, fieldView, fieldEdit, setNestedValue } from '../assets/js/criteria/form.js';
+import { gbp, listView, listEdit, fieldView, fieldEdit, setNestedValue } from '../../assets/js/criteria/form.js';
 
 export async function register({ test, assert, assertEqual }) {
   test('criteria/form: gbp formats whole GBP, coerces null to 0', () => {

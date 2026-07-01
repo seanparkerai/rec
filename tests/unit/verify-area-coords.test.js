@@ -12,8 +12,8 @@ import {
   verifyArea,
   flagNamesakes,
   flagDuplicatePoints,
-} from '../tools/verify-area-coords.mjs';
-import { normaliseName } from '../tools/listings-normalise.mjs';
+} from '../../tools/verify-area-coords.mjs';
+import { normaliseName } from '../../tools/listings-normalise.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   test('verify/normaliseName: collapses Saint / St. / punctuation', () => {

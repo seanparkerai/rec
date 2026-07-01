@@ -6,11 +6,11 @@
 // assert structural invariants + internal consistency — NOT hard-coded personal
 // figures. If a refactor accidentally changes a computation path, these fail first.
 
-import { assessAffordability } from '../assets/js/affordability.js';
-import { getMoneyFlow } from '../assets/js/money-flow.js';
-import { assessDepositRisk } from '../assets/js/deposit-risk.js';
-import { assessAffordabilityScenarios } from '../assets/js/affordability.js';
-import { gbp, pct, monthsAsDuration } from '../assets/js/format.js';
+import { assessAffordability } from '../../assets/js/affordability.js';
+import { getMoneyFlow } from '../../assets/js/money-flow.js';
+import { assessDepositRisk } from '../../assets/js/deposit-risk.js';
+import { assessAffordabilityScenarios } from '../../assets/js/affordability.js';
+import { gbp, pct, monthsAsDuration } from '../../assets/js/format.js';
 
 const BANDS = ['comfortable', 'stretch', 'tight', 'out-of-reach'];
 

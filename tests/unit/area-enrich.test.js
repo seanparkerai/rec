@@ -4,7 +4,7 @@
 // county/postcode/outcode fill, the conservative county-mismatch flag, soft-fail),
 // and the shared isFetchEligible() predicate. Node-only; no network. Wired into
 // run-intelligence-tests.mjs.
-import { enrichPatch, isFetchEligible, deriveOutcode } from '../assets/js/areas/area-enrich.js';
+import { enrichPatch, isFetchEligible, deriveOutcode } from '../../assets/js/areas/area-enrich.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A place-kind candidate (from /places): accurate pin, county, no postcode.

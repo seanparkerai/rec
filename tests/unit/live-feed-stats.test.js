@@ -15,7 +15,7 @@
 //
 // The live RPC values were verified via MCP on 2026-06-22 (admin-only; a non-admin
 // caller raises `forbidden`): Luke £33,500.00, Suzanne £53,000.00 — asserted below.
-import { computeDepositSavings } from '../assets/js/finance-derive.js';
+import { computeDepositSavings } from '../../assets/js/finance-derive.js';
 
 const round2 = (n) => Math.round(n * 100) / 100;
 

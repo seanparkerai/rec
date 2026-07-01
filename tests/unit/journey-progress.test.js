@@ -3,7 +3,7 @@
 import {
   isTaskDone, stepProgress, stepIsDone, phaseProgress, phaseIsDone,
   overall, orderedSteps, currentStep,
-} from '../assets/js/journey/progress.js';
+} from '../../assets/js/journey/progress.js';
 
 // Small two-phase fixture: phase A (2 steps: a1[2 tasks], a2[1 task]),
 // phase B (1 step: b1[2 tasks]).

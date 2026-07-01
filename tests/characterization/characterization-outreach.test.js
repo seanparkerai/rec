@@ -6,7 +6,7 @@
 // (b) structural assertions about the template registry, and (c) context
 // building assertions that would catch regressions in page-outreach.js refactoring.
 
-import { renderTemplate, buildMailto } from '../assets/js/outreach-renderer.js';
+import { renderTemplate, buildMailto } from '../../assets/js/outreach-renderer.js';
 
 const SAMPLE_CTX = {
   profile: {

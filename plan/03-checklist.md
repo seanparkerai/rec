@@ -49,7 +49,7 @@
 - [x] 1.5 Batch B ported: 20 listings-pipeline suites → `tests/unit/` (incl. fetch/purge/backfill tool tests); legacy 783/0, new harness 365/365. *(2026-07-01)*
 - [x] 1.6 Batch C ported: 11 intelligence-engine suites → `tests/unit/`. *(2026-07-01)*
 - [x] 1.7 Batch D ported: 10 contract suites → `tests/contract/` (root-path + dynamic-import fixes; live docs re-pointed to the tiered paths; supabase-sync stays a spawned suite by design). Legacy 783/0; new 649/649. *(2026-07-01)*
-- [ ] 1.8 Port remaining suites (dashboard tiles, live-feed, outreach, shell utils); old runner now a thin alias.
+- [x] 1.8 Remaining 14 suites ported (11 → unit, 3 → characterization); only the spawned `supabase-sync.test.js` stays at root by design. Porting complete: 67 suite files across tiers; legacy 783/0, new harness 789/789. *(2026-07-01)*
 - [ ] 1.9 jsdom page-test harness (`tools/run-page-tests.mjs` or a `pages` tier): first test renders shell injection + nav active-state on a fixture DOM.
 - [ ] 1.10 Semantic lint v2: rewrite `tools/lint-responsive.mjs` fingerprinting to (rule|file|selector|property) identity with an approved-violations baseline replacing counts; port the 7 allow-entries.
 - [ ] 1.11 RLS CI assertion (new rail, E2): offline contract test over the tracked-table inventory + a CI-gated online check that fails if any public table has RLS disabled.
