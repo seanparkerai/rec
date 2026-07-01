@@ -1,8 +1,13 @@
 // components.js — shell bootstrap: inject shared partials, mark active nav, wire theme toggle.
 // Loaded on every page as <script type="module">.
-import { url, STORAGE_NS } from './config.js';
+import { url } from './config.js';
 import { signOut, getCurrentUser } from './storage.js';
 import './auth-guard.js';
+// Pure shell mechanics live in shell-core.js (DOM-tier testable, step 1.9);
+// this module is the side-effectful bootstrapper that wires them to the page.
+import {
+  THEME_KEY, injectIncludes, setActiveNav, effectiveTheme, applyTheme, updateToggle,
+} from './shell-core.js';
 
 // Always-HTTPS guard: if the page is served over plain http on a real host,
 // upgrade to https immediately. Localhost/loopback is exempt so `python3 -m
@@ -14,60 +19,6 @@ if (location.protocol === 'http:' &&
   location.replace(location.href.replace(/^http:/, 'https:'));
 }
 
-const THEME_KEY = `${STORAGE_NS}:theme`;
-
-/* ---------- Partial includes: <div data-include="components/header.html"></div> ---------- */
-async function injectIncludes() {
-  const nodes = [...document.querySelectorAll('[data-include]')];
-  await Promise.all(nodes.map(async (el) => {
-    const path = el.getAttribute('data-include');
-    try {
-      const res = await fetch(url(path));
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const html = await res.text();
-      const tpl = document.createElement('template');
-      tpl.innerHTML = html.trim();
-      el.replaceWith(tpl.content);
-    } catch (e) {
-      console.error('Include failed:', path, e);
-      el.replaceWith(document.createComment(`include failed: ${path}`));
-    }
-  }));
-}
-
-/* ---------- Active nav + resolve data-nav hrefs ---------- */
-function normalisePath(p) {
-  return new URL(p, location.origin).pathname.replace(/index\.html$/, '').replace(/\/+$/, '');
-}
-function setActiveNav() {
-  const here = normalisePath(location.href);
-  document.querySelectorAll('[data-nav]').forEach((a) => {
-    const target = url(a.dataset.nav);
-    a.setAttribute('href', target);
-    if (normalisePath(target) === here) a.setAttribute('aria-current', 'page');
-  });
-}
-
-/* ---------- Theme: system by default, manual override persisted ---------- */
-function effectiveTheme() {
-  const saved = localStorage.getItem(THEME_KEY);
-  if (saved === 'light' || saved === 'dark') return saved;
-  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-function applyTheme(saved) {
-  if (saved === 'light' || saved === 'dark') document.documentElement.setAttribute('data-theme', saved);
-  else document.documentElement.removeAttribute('data-theme');
-}
-function updateToggle(btn) {
-  const dark = effectiveTheme() === 'dark';
-  // Toggle state via attribute + label only — the sun/moon SVGs are swapped by
-  // CSS keyed on [aria-pressed]. Never write glyph characters into the button
-  // (the old '☾'/'☀︎' fell back to a tofu box in UI fonts without those glyphs).
-  btn.setAttribute('aria-pressed', String(dark));
-  btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
-  const label = btn.querySelector('.theme-toggle__label');
-  if (label) label.textContent = dark ? 'Light' : 'Dark';
-}
 function initTheme() {
   applyTheme(localStorage.getItem(THEME_KEY));
   const btn = document.getElementById('theme-toggle');

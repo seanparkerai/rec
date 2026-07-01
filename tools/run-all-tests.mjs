@@ -69,9 +69,18 @@ for (const tier of TIERS) {
   if (onlyTier && tier !== onlyTier) continue;
   const files = discover(tier);
   const results = [];
-  const test = async (name, fn) => {
-    try { await fn(); results.push({ name, pass: true }); }
-    catch (e) { results.push({ name, pass: false, error: e?.message || String(e) }); }
+  const pending = [];
+  // register() calls test(name, fn) without awaiting — collect every returned
+  // promise and drain them before reporting, so genuinely async tests (the DOM
+  // tier) are counted. The legacy runner tolerates floating promises only
+  // because its suites are effectively synchronous.
+  const test = (name, fn) => {
+    const p = (async () => {
+      try { await fn(); results.push({ name, pass: true }); }
+      catch (e) { results.push({ name, pass: false, error: e?.message || String(e) }); }
+    })();
+    pending.push(p);
+    return p;
   };
   const t0 = Date.now();
   for (const file of files) {
@@ -81,6 +90,7 @@ for (const tier of TIERS) {
       continue;
     }
     await mod.register({ test, assert, assertEqual, fixtures });
+    await Promise.all(pending.splice(0));
   }
   byTier.set(tier, { files: files.length, results, ms: Date.now() - t0 });
 }
