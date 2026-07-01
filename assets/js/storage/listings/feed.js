@@ -65,6 +65,59 @@ const _LISTING_COLS = 'rightmove_id, url, title, address, postcode, outcode, are
 // listings instead of an empty feed. The saved view opts out (`false`) so a
 // deliberately-saved home still resolves its live row even after its area is
 // deselected.
+// Prettify a slug area id into a display fallback (for stub areas absent from the
+// catalog): drop a trailing outcode/county token and title-case the rest.
+function _prettyAreaId(id) {
+  const s = String(id || '');
+  const cleaned = s
+    .replace(/-(?:hampshire|wiltshire|dorset|somerset|berkshire|surrey|so\d+|sp\d+|po\d+|rg\d+|gu\d+|ba\d+)$/i, '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .trim();
+  return cleaned || s;
+}
+
+// Attach the full m2m area membership to each listing — every area whose geofence
+// contains it (nearest-first, `is_primary` flagged, names resolved from the area
+// catalog with a slug fallback for household-stub areas). This is what lets the UI
+// answer "why is this listing showing for me": it lists all the areas the property
+// overlaps / is within range of. Read-only, best-effort (a failure leaves .areas=[]
+// so the card still renders from its single area_id).
+async function _attachAreaMemberships(sb, rows) {
+  const ids = [...new Set(rows.map((r) => r.rightmove_id).filter(Boolean))];
+  if (!ids.length) return rows;
+  let nameById = new Map();
+  try { nameById = new Map((await getAreaCatalog() ?? []).map((a) => [a.id, a.name])); }
+  catch (e) { console.error('storage: area catalog for membership names', e.message); }
+  const byListing = new Map();
+  const CHUNK = 200;                          // ≤ ~200 ids × avg 4 areas keeps each page well under 1000
+  for (let i = 0; i < ids.length; i += CHUNK) {
+    const slice = ids.slice(i, i + CHUNK);
+    for (let from = 0; ; from += 1000) {
+      const { data, error } = await sb.from('listing_areas')
+        .select('rightmove_id, area_id, distance_mi, is_primary')
+        .in('rightmove_id', slice).range(from, from + 999);
+      if (error) { console.error('storage: read listing_areas (attach)', error.message); break; }
+      for (const m of data ?? []) {
+        if (!byListing.has(m.rightmove_id)) byListing.set(m.rightmove_id, []);
+        byListing.get(m.rightmove_id).push({
+          area_id: m.area_id,
+          name: nameById.get(m.area_id) || _prettyAreaId(m.area_id),
+          distance_mi: m.distance_mi,
+          is_primary: !!m.is_primary,
+        });
+      }
+      if ((data ?? []).length < 1000) break;
+    }
+  }
+  for (const r of rows) {
+    const arr = byListing.get(r.rightmove_id) || [];
+    arr.sort((a, b) => (a.distance_mi ?? Infinity) - (b.distance_mi ?? Infinity));
+    r.areas = arr;
+  }
+  return rows;
+}
+
 export async function getListings({ limit = 200, status = null, includeOutOfArea = false, scopeToHousehold = true } = {}) {
   const sb = await _initSb();
   if (!sb) return [];
@@ -135,7 +188,7 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
     if (limit != null) {
       const { data, error } = await buildQuery().limit(limit);
       if (error) throw error;
-      return data ?? [];
+      return await _attachAreaMemberships(sb, data ?? []);
     }
     // Uncapped path: page through every row so the full kept history is returned
     // (Supabase caps a single response at ~1000 rows, so we must paginate).
@@ -148,7 +201,7 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
       all.push(...batch);
       if (batch.length < PAGE) break; // last (short) page reached
     }
-    return all;
+    return await _attachAreaMemberships(sb, all);
   } catch (e) {
     console.error('storage: read listings', e.message);
     return [];
@@ -167,7 +220,12 @@ export async function getListing(rightmoveId) {
       .eq('rightmove_id', String(rightmoveId))
       .limit(1);
     if (error) throw error;
-    return data?.[0] ?? null;
+    const row = data?.[0] ?? null;
+    if (!row) return null;
+    // Attach the full area membership so the dossier can list every area this
+    // property overlaps / is within range of (why it surfaces).
+    await _attachAreaMemberships(sb, [row]);
+    return row;
   } catch (e) {
     console.error('storage: read listing', e.message);
     return null;

@@ -1,6 +1,6 @@
 // listings-format.test.js — pure formatters in ./listings/format.js: fmtPrice/fmtAgo/
 // lastPriceDrop (extracted from page-listings.js, P7b) + fmtDate (page-property.js, P7f).
-import { fmtPrice, fmtAgo, lastPriceDrop, fmtDate } from '../assets/js/listings/format.js';
+import { fmtPrice, fmtAgo, lastPriceDrop, fmtDate, fmtAreaMembershipItem, fmtAreaMembership } from '../assets/js/listings/format.js';
 
 export async function register({ test, assert, assertEqual }) {
   // ── fmtPrice ──────────────────────────────────────────────────────
@@ -56,5 +56,22 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(fmtDate(new Date(2026, 5, 5)), '5 Jun 2026');   // local June 5
     assertEqual(fmtDate(new Date(2026, 0, 1)), '1 Jan 2026');   // local Jan 1
     assertEqual(fmtDate('2026-06-05T12:00:00'), '5 Jun 2026');  // local-time string, midday
+  });
+
+  // ── fmtAreaMembership (the m2m "within range of" explanation) ─────
+  test('listings/format: fmtAreaMembershipItem renders name — distance (primary)', () => {
+    assertEqual(fmtAreaMembershipItem({ name: 'Waltham Chase', distance_mi: 0.277, is_primary: true }), 'Waltham Chase — 0.3 mi (primary)');
+    assertEqual(fmtAreaMembershipItem({ name: 'Dundridge', distance_mi: 0.603, is_primary: false }), 'Dundridge — 0.6 mi');
+    assertEqual(fmtAreaMembershipItem({ area_id: 'x-so32', distance_mi: null }), 'x-so32'); // no distance, id fallback
+    assertEqual(fmtAreaMembershipItem(null), '');
+  });
+  test('listings/format: fmtAreaMembership joins nearest-first, empty for none', () => {
+    const areas = [
+      { name: 'Dundridge', distance_mi: 0.6, is_primary: false },
+      { name: 'Waltham Chase', distance_mi: 0.3, is_primary: true },
+    ];
+    assertEqual(fmtAreaMembership(areas), 'Waltham Chase — 0.3 mi (primary) · Dundridge — 0.6 mi'); // re-sorted nearest first
+    assertEqual(fmtAreaMembership([]), '');
+    assertEqual(fmtAreaMembership(null), '');
   });
 }

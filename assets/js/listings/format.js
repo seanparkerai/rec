@@ -37,3 +37,26 @@ export function fmtDate(d) {
   const dt = new Date(d);
   return isNaN(dt) ? '' : dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
+
+// One membership area → "Waltham Chase — 0.3 mi (primary)". The primary is the
+// listing's single stamped area_id; the others are every area whose geofence also
+// contains the listing (the m2m membership). Pure.
+export function fmtAreaMembershipItem(a) {
+  if (!a) return '';
+  const name = a.name || a.area_id || 'area';
+  const dist = a.distance_mi != null && Number.isFinite(Number(a.distance_mi))
+    ? `${Number(a.distance_mi).toFixed(1)} mi` : null;
+  return `${name}${dist ? ` — ${dist}` : ''}${a.is_primary ? ' (primary)' : ''}`;
+}
+
+// The full "within range of" list for a listing's m2m area membership, nearest
+// first — this is the "why is this showing for me" explanation. Returns '' when
+// there is no membership to show. Pure (no DOM).
+export function fmtAreaMembership(areas) {
+  if (!Array.isArray(areas) || !areas.length) return '';
+  return areas
+    .slice()
+    .sort((a, b) => (a?.distance_mi ?? Infinity) - (b?.distance_mi ?? Infinity))
+    .map(fmtAreaMembershipItem)
+    .join(' · ');
+}

@@ -124,6 +124,16 @@
 .listing-why__item--context { color: var(--ink-muted); }
 .listing-why__item--warn { color: color-mix(in oklch, oklch(55% 0.16 60) 70%, var(--ink)); }
 
+/* ── "Within range of" area membership (why this listing shows, m2m) ───────── */
+.listing-areas { margin: var(--space-2) 0 0; }
+.listing-areas--single { font-size: var(--text-xs); color: var(--ink-muted); margin: var(--space-2) 0 0; }
+.listing-areas > summary {
+  cursor: pointer; font-size: var(--text-xs); color: var(--ink-muted);
+  list-style-position: inside; min-height: 28px; display: inline-flex; align-items: center;
+}
+.listing-areas > summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-areas__list { margin: var(--space-2) 0 0; font-size: var(--text-sm); color: var(--ink); line-height: 1.5; }
+
 /* ── Reaction + personal-status controls (L3) ─────────────────────────────── */
 /* A calm vertical stack: the verbs/reasons/save picker, then the single secondary
    control (status on the feed, priority on Saved) set off by a hairline. Reads far

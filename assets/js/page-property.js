@@ -20,7 +20,7 @@ import { url } from './config.js';
 import { el, clear, byId } from './dom.js';
 import {
   mapBtn, buildGallery, buildHeadline, buildFacts, buildFloorplan, buildWhy,
-  buildPriceHistory, buildDescription, buildAreaCard, buildActions,
+  buildPriceHistory, buildDescription, buildAreaCard, buildAreaMembership, buildActions,
 } from './page-property/sections.js';
 
 function notFound(mount, msg) {
@@ -113,6 +113,7 @@ async function render() {
       buildGallery(listing),
       buildHeadline(listing, scored),
       buildFacts(listing),
+      buildAreaMembership(listing),
       buildFloorplan(listing),
       buildWhy(scored),
       buildPriceHistory(listing),

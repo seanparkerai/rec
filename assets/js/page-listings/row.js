@@ -5,7 +5,7 @@
 // state. Split from page-listings.js; imported by it.
 import { el } from '../dom.js';
 import { url } from '../config.js';
-import { fmtPrice, fmtAgo, lastPriceDrop } from '../listings/format.js';
+import { fmtPrice, fmtAgo, fmtDate, fmtAreaMembership, lastPriceDrop } from '../listings/format.js';
 import { classifyListing, HIDE_LABELS } from '../listings/flags.js';
 import { matchingHideRule } from '../refinement/view.js';
 import { describeSignal } from '../learned-preferences.js';
@@ -34,6 +34,36 @@ function geoChips(listing, area) {
     chips.push(el('span', { class: 'listing-tag listing-tag--warn', title: 'The map position and the address text disagree on the village' }, '⚠ location unconfirmed'));
   }
   return chips;
+}
+
+// The full m2m area membership — every area whose geofence contains this listing,
+// nearest first, primary flagged. This is the explicit "why is this showing for me"
+// answer the feed owes the user: a listing surfaces because it sits within range of
+// (an) area you hold. Collapsed by default (a card can be a member of many areas) so
+// the feed stays scannable on a phone; the count is in the summary. Falls back to the
+// single primary area when membership hasn't been attached (older/uncached reads).
+function buildAreaMembership(listing, area) {
+  const areas = Array.isArray(listing.areas) ? listing.areas : [];
+  if (!areas.length) {
+    if (listing.area_id == null || listing.distance_mi == null) return null;
+    const name = area?.name || listing.area_id;
+    return el('p', { class: 'listing-areas listing-areas--single' },
+      `Within range of ${name} — ${Number(listing.distance_mi).toFixed(1)} mi`);
+  }
+  const n = areas.length;
+  return el('details', { class: 'listing-areas' }, [
+    el('summary', { class: 'listing-areas__summary' },
+      `Within range of ${n} area${n === 1 ? '' : 's'} — why this shows`),
+    el('p', { class: 'listing-areas__list' }, fmtAreaMembership(areas)),
+  ]);
+}
+
+// The date the property was added to Rightmove (the source's addedOn), shown
+// explicitly. Falls back to when we first saw it if the source omitted a date.
+function addedText(listing) {
+  if (listing.added_date) { const d = fmtDate(listing.added_date); if (d) return `Added ${d}`; }
+  if (listing.first_seen) { const a = fmtAgo(listing.first_seen); if (a) return `First seen ${a}`; }
+  return '';
 }
 
 // Post-fetch classifier chips (listing-flags.js). FLAG chips (new build, condition
@@ -152,7 +182,7 @@ function metaLine(listing) {
     listing.beds != null ? `${listing.beds} bed` : '',
     listing.baths != null ? `${listing.baths} bath` : '',
     listing.property_type || '',
-    fmtAgo(listing.added_date || listing.first_seen),
+    addedText(listing),
   ].filter(Boolean).join(' · ');
 }
 
@@ -211,6 +241,7 @@ export function buildRow(listing, idx, scored, area, ctx = {}) {
     el('p', { class: 'listing-card__place' }, placeBits.join(' · ')),
     el('p', { class: 'listing-card__meta num' }, metaLine(listing)),
     tagRow,
+    buildAreaMembership(listing, area),
     buildWhy(scored, listing, area),
     controls,
     cardLinks,
@@ -248,7 +279,7 @@ export function buildDeckCard(listing, scored, area, handlers) {
     listing.beds != null ? `${listing.beds} bed` : '',
     listing.baths != null ? `${listing.baths} bath` : '',
     listing.property_type || '',
-    fmtAgo(listing.added_date),
+    addedText(listing),
   ].filter(Boolean);
 
   const body = el('div', { class: 'deck-card__body' }, [
@@ -261,6 +292,7 @@ export function buildDeckCard(listing, scored, area, handlers) {
     el('p', { class: 'deck-card__place' }, placeBits.join(' · ')),
     el('p', { class: 'deck-card__meta num' }, metaBits.join(' · ')),
     tags.length ? el('div', { class: 'listing-tags' }, tags) : null,
+    buildAreaMembership(listing, area),
     buildWhy(scored, listing, area),
     el('div', { class: 'deck-card__links' }, [
       el('a', { class: 'deck-card__open', href: dossierHref(listing) }, 'Full details →'),

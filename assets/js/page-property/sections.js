@@ -286,6 +286,27 @@ export function buildAreaCard(area) {
   ].filter(Boolean));
 }
 
+// ── Areas within range (the m2m membership — "why this shows") ────────────────
+// Every area whose geofence contains this property (nearest first, primary flagged).
+// A property surfaces in your feed because it sits within range of an area you hold;
+// this makes that explicit and complete, not just the single nearest village.
+export function buildAreaMembership(listing) {
+  const areas = Array.isArray(listing?.areas) ? listing.areas.slice() : [];
+  if (!areas.length) return null;
+  areas.sort((a, b) => (a?.distance_mi ?? Infinity) - (b?.distance_mi ?? Infinity));
+  return el('section', { class: 'dossier-section' }, [
+    el('h2', { class: 'dossier-section__label' }, `Areas within range (${areas.length})`),
+    el('p', { class: 'dossier-section__hint' },
+      'This property is inside the geofence of these areas — it shows in your feed because you hold at least one of them.'),
+    el('ul', { class: 'dossier-areas' }, areas.map((a) => el('li', { class: 'dossier-areas__item' }, [
+      el('a', { class: 'dossier-areas__name', href: `${url('pages/area-detail.html')}?id=${encodeURIComponent(a.area_id)}` }, a.name || a.area_id),
+      el('span', { class: 'dossier-areas__dist num' },
+        a.distance_mi != null ? `${Number(a.distance_mi).toFixed(1)} mi` : '—'),
+      a.is_primary ? el('span', { class: 'dossier-areas__primary' }, 'primary') : null,
+    ].filter(Boolean)))),
+  ]);
+}
+
 // ── Actions (multi-reason picker + Save + status) ────────────────────────────
 // The Rightmove link now lives prominently in the dossier header (buildHeadline),
 // not buried here. The shared picker gives the same multi-select reasons +

@@ -178,6 +178,21 @@
 
 .dossier-why__afford { margin: 0; font-size: var(--text-sm); color: var(--ink); }
 
+/* ── Areas within range (m2m membership — why this property shows) ─────────── */
+.dossier-section__hint { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+.dossier-areas { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.dossier-areas__item {
+  display: flex; align-items: baseline; gap: var(--space-2);
+  padding: var(--space-2) 0; border-bottom: 1px solid var(--hairline);
+}
+.dossier-areas__name { flex: 1 1 auto; font-size: var(--text-sm); color: var(--ink); }
+.dossier-areas__dist { flex: none; font-size: var(--text-sm); color: var(--ink-muted); }
+.dossier-areas__primary {
+  flex: none; font-size: var(--text-xs); color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  border: 1px solid color-mix(in oklch, var(--accent) 40%, var(--hairline));
+  border-radius: var(--rec-radius-sm); padding: 0 var(--space-2);
+}
+
 /* Price history */
 .dossier-history { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
 .dossier-history__item { display: grid; grid-template-columns: 1fr auto auto; gap: var(--space-3); align-items: baseline; font-size: var(--text-sm); }
