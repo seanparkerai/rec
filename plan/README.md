@@ -6,9 +6,9 @@
 >
 > **Status (2026-07-01):** §2 kickoff scan **complete** (harness baseline **783 pass / 0 fail**;
 > 33 Supabase tables live, all RLS-enabled; listings-pipeline deep-trace, repo drift audit, and
-> front-end audit done). Next deliverable: the §7 Q&A intake, then the reality-wins rewrite of each
-> segment file + the atomic §9 backlog in `03-checklist.md`, presented for the owner's approval —
-> the gate that starts product-code execution.
+> front-end audit done). §7 intake **complete** — decisions recorded in `04-program.md`. The phased
+> backlog is authored in `03-checklist.md` (Phases 1–2 atomic; 3–10 expanded just-in-time).
+> **Awaiting the owner's program approval — the gate that starts product-code execution.**
 
 ## How to use this directory (cold-resume protocol)
 
@@ -26,7 +26,8 @@
 | `00-mandate.md` | Session Mandate · ⭐ TOP PRIORITY DIRECTIVE · prime directive · §0 how-to-use · §1 the product | **Every session start** |
 | `01-protocol.md` | §2 kickoff scan · §3 safety & merge protocol · §4 guard-rail authority · §5 test re-architecture mandate · §6 feature-description standard | Before shipping any step; before touching a rail |
 | `02-intake.md` | §7 Q&A intake standard · §8 global conventions (+ §8.1 external validation) | Before asking the owner anything; before any UI commit |
-| `03-checklist.md` | §9 living checklist — **the resumable backlog spine** | **Every session start**; tick after every merged step |
+| `03-checklist.md` | §9 living checklist — **the resumable backlog spine** (Phases 0–10) | **Every session start**; tick after every merged step |
+| `04-program.md` | The agreed program design — intake record, priority order, flagship target architecture, rail audit, test-apparatus shape, owner actions | Before starting any phase; when a design decision needs its rationale |
 | `segments/README.md` | §10 segment index · §10.0 safe modular decomposition rule | Before starting any segment |
 | `segments/10.1-design-shell.md` | Design system, app shell & navigation | Priority-2 UI overhaul work |
 | `segments/10.2-dashboard.md` | Home dashboard (tiles, bands, visuals) | Dashboard work |

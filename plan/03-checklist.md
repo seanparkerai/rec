@@ -31,73 +31,91 @@
 - [ ] Plan presented and **owner-approved** — the one gate that starts product-code execution.
 - [ ] On approval: overhauled plan committed *before* any product code moves.
 
-**Phase 1 — Test re-architecture (the net, first) (§5)**
-- [ ] New harness stood up beside the old; single green command preserved.
-- [ ] Suites ported + strengthened segment-by-segment; missing layers added (DOM/integration/e2e/online).
-- [ ] Old runner retired; `CLAUDE.md` §6 + `package.json` re-pointed; §9 re-baselined.
-
-**Phase 2…N — Per-segment overhaul** *(owner-directed priority order, 2026-06-16; tests precede code per §5.3)*
-
-> The owner has set the **priority order** below. It overrides the old "dependency-order, foundation
-> first" default for *sequencing the overhaul* — but **the test net (Phase 1) still comes first** for
-> any segment before its code is rebuilt (§5.3, never leave the net down). Within each priority block,
-> tests precede code and work ships in small reversible sub-phases (§3).
-
-- **Priority 1 — Front-end / UX / mobile / redesign.** The visual + interaction overhaul comes first:
-  §10.1 (design system, app shell, navigation) and §10.2 (home dashboard), plus the UX and
-  mobile-responsiveness pass across every page (DESIGN.md §6/§9–§13). This is where the OKLCH-fallback
-  fix (C1, §16 tokens.css phase) and the responsive/a11y validations (C2–C6) land.
-- **Priority 2 — Listings, trends, saved/rejected, scraper.** §10.4 (live feed, fit-scoring, reactions,
-  dossier, saved/rejected handling) and the scraper/fetch-listings optimisation (tooling, §10.10) +
-  the trends surfaces. Pull the intelligence-engine seams (§10.6) that feed trends/refinement in
-  alongside this block where they couple to listings.
-- **Priority 3 — the rest, in optimal logical order** *(Fable confirms during intake; recommended)*:
-  1. **Intelligence engine (§10.6)** — closely coupled to listings/reactions and trends; rebuild the
-     module seams (§10.0) right after listings. Includes the **z-test → Fisher's exact** correction (B3)
-     and the Bayesian-core decision (B5).
-  2. **Finances (§10.3)** — includes the two ⚠️ code corrections (LISA 12-month A3, stress-rate A5) and
-     the FTB-model additions (A4/A7).
-  3. **Areas & map (§10.5).**
-  4. **Ask assistant (§10.7)** — cache-breakpoint, strict-all-tools, JWT-forwarding (F2/F3/E4).
-  5. **Profile, criteria, setup, journey & outreach (§10.8).**
-  6. **Backend, storage, data & sync (§10.9)** — Supabase key migration (E1), RLS CI assertion (E2),
-     IndexedDB/outbox (E3), declarative migrations (E4). *(The RLS CI assertion may be pulled forward
-     into Phase 1 as a safety win.)*
-  7. **Tooling, tests & CI (§10.10)** — folded into Phase 1; finalised last.
-
-**Validation-driven corrections backlog (external review, 2026-06-16).** Each is scheduled as a normal
-§3/§4 phase inside its segment above. Items marked ⚠️ are **corrections required in code** (a behaviour
-or constant is currently wrong); the rest are additive/test/process improvements.
-
-- [ ] ⚠️ **LISA withdrawal readiness → 12-month rule** (A3; §10.2 savings-visuals) — plot
-  `firstContributionDate → +12 months`, not a 4–5 year horizon.
-- [ ] ⚠️ **Mortgage stress test → "rate-rise sensitivity"** (A5; §10.3) — relabel; make `STRESS_UPLIFT_PP`
-  configurable; default to an absolute floor (~7–8%); note "no mandated stress rate since Aug 2022" in
-  INTELLIGENCE_RULES.md.
-- [ ] **LISA/SDLT cap-mismatch warning + reform caveat** (A4; §10.3 + Ask UK-FTB facts).
-- [ ] **FTB-model additions** (A7; §10.3) — Mortgage Guarantee/"Freedom to Buy", full transaction-cost
-  checklist, leasehold running costs.
-- [ ] ⚠️ **z-test → Fisher's exact test** before BH-FDR (B3; §10.6).
-- [ ] **Decide Bayesian Beta-Bernoulli core vs keep-gates** (B5; §10.6) — intake decision; log gate-pass
-  rates for tuning (B6).
-- [ ] ⚠️ **OKLCH/`color-mix` fallbacks on base tokens** (C1; §16 tokens.css phase) — `@supports` guard +
-  hex/rgb fallback.
-- [ ] **Front-end validations** (C2–C6; §10.1) — target-size AA/AAA clarity, focus citation, container/
-  dvh caveats, View-Transition unique-name + reduced-motion, Pico v2 variable-name check.
-- [ ] **Drop `linkedom`; use jsdom/happy-dom** (D1; §5/§10.10).
-- [ ] **Add Tier 0 type-check (`tsc --checkJs` + JSDoc) and Tier 6 real-browser (Playwright/Vitest browser)**
-  (D5; Phase 1).
-- [ ] **Stryker config** (D2; Phase 1) — perTest, incremental, scoped to finances/refinement/learned-prefs,
-  ~75–80% threshold; consider **Vitest** runner (D6).
-- [ ] ⚠️ **Supabase: ship `sb_publishable_*` (never secret/service_role); migrate off legacy keys** (E1; §10.9).
-- [ ] **RLS CI assertion** (E2) — fail if any public user-data table has `rowsecurity = false`; run Security
-  Advisor in CI. *(Candidate to pull into Phase 1.)*
-- [ ] **IndexedDB + offline-write outbox; name SWR + versioned cache keys** (E3; §10.9).
-- [ ] **Declarative-schema migrations (`supabase db diff`) + `supabase gen types`** (E4; §10.9).
-- [ ] ⚠️ **Ask: cache breakpoint over TOOLS+SYSTEM; strict on all 13 tools; forward user JWT to PostgREST**
-  (F2/F3/E4; §10.7); wire `count_tokens` prompt-bloat gate (F4).
-- [ ] **Fix Opus-exclusion rationale to latency/cost** (F1; §10.7 — already corrected in plan prose).
-- [ ] **Process: `docs/adr/` + template; map every §4 rail-change to an ADR; add `commitlint` in CI**
-  (G2/G3/G4; Phase 0/1).
 
 ---
+
+> **Backlog authored 2026-07-01 from the §2 scan + §7 intake (decisions in [`04-program.md`](04-program.md)).**
+> Sequencing: the 2026-07-01 ⭐ TOP PRIORITY DIRECTIVE supersedes the 2026-06-16 "front-end first"
+> order — **listings pipeline first (after the Phase-1 net core), mobile-first UI second.**
+> Rules: one step = one commit = one tick, merged to `main`, harness green (§3). Phases 1–2 are
+> atomic now; Phases 3–10 are expanded to atomic granularity just-in-time when their block starts
+> (§0.2 mode-2 decision, `04-program.md` §1). ⚙ = flagged owner action.
+
+**Phase 1 — The net, first: new test-harness core (§5; strangler — old runner stays green throughout)**
+- [ ] 1.1 Add `devDependencies` (jsdom + happy-dom) and a lockfile; confirm GH Pages deploy is unaffected (no build step; deps never shipped).
+- [ ] 1.2 Stand up `tools/run-all-tests.mjs` beside the old runner: tier discovery over `tests/{unit,contract,characterization,integration,pages}/`, `--tier` filter, per-tier summary, honest online-skip reporting.
+- [ ] 1.3 Centralise fixtures: `tests/fixtures.mjs` (memoised loaders over `data/fixtures/*.sample.json`) + `tests/mocks/supabase-client.js` (fixture-backed stub with `.from().select()` + mock session).
+- [ ] 1.4 Port suite batch A (pure finance: affordability, calc-*, money-flow, savings) into `tests/unit/` + `tests/characterization/`; both runners green.
+- [ ] 1.5 Port suite batch B (listings: classify, fit, feed-partition, suppress, reactions, listing-areas) likewise.
+- [ ] 1.6 Port suite batch C (refinement/learned-prefs/suggestions/radius) likewise.
+- [ ] 1.7 Port suite batch D (contract: supabase-sync, docs-consistency, schemas, areas-parity, profile-schema, ask-*) into `tests/contract/`.
+- [ ] 1.8 Port remaining suites (dashboard tiles, live-feed, outreach, shell utils); old runner now a thin alias.
+- [ ] 1.9 jsdom page-test harness (`tools/run-page-tests.mjs` or a `pages` tier): first test renders shell injection + nav active-state on a fixture DOM.
+- [ ] 1.10 Semantic lint v2: rewrite `tools/lint-responsive.mjs` fingerprinting to (rule|file|selector|property) identity with an approved-violations baseline replacing counts; port the 7 allow-entries.
+- [ ] 1.11 RLS CI assertion (new rail, E2): offline contract test over the tracked-table inventory + a CI-gated online check that fails if any public table has RLS disabled.
+- [ ] 1.12 Tier-0 type-check: `tsconfig.json` (`checkJs`, `noEmit`) scoped to `assets/js/{listings,storage,finances}/` to start; wire as the harness's first step; fix or `@ts-ignore`-with-reason the initial findings.
+- [ ] 1.13 Cut over: `package.json` test script + `ci.yml` + `CLAUDE.md` §6 point at the new runner; old runner archived; re-baseline metrics here.
+
+**Phase 2 — ⭐ FLAGSHIP: listings pipeline, DB-canonical rework (§10.4/§10.5/§10.9 + `logs/2026-07-01-listings-m2m.md` §5)**
+
+*2.A — Pin current behaviour (before any change)*
+- [ ] 2.1 Characterization tests for `withinGeofence()` over a fixture village set: scalar + petal radii, overlap tiebreak, name corroboration, membership set shape.
+- [ ] 2.2 Characterization tests for the feed contract: membership scoping, origin exclusion, `geofence_pass`, gate order, decided suppression, fingerprint dedupe (extend `tests/listing-areas.test.js`).
+- [ ] 2.3 Golden-master test for `fetch-listings` target-building: villages → outcodes → clusters → demand-gating, from fixtures (no network).
+
+*2.B — One geofence universe*
+- [ ] 2.4 Extract `tools/lib/geofence-universe.mjs`: DB-canonical loader (areas active OR household-linked incl. stubs, `area_search_tuning` scalar+petal applied) with an offline repo-files fallback mode; unit-test both modes.
+- [ ] 2.5 Migrate `fetch-listings.mjs` onto the shared loader (delete `loadOutcodeMap` + inline tuning overlay); golden-master 2.3 must not change demand output for the fixture case.
+- [ ] 2.6 Migrate `backfill-listing-areas.mjs` onto it (delete `restLoadVillages`/`toVillage`).
+- [ ] 2.7 Migrate `backfill-geofence.mjs` (delete `loadActiveVillages`) and `radius-tune.mjs` (`loadAreaCentres`) onto it.
+- [ ] 2.8 Migrate `import-apify-runs.mjs` onto it and delete `matchListingToArea()` + `assignArea()` from the ingestion path — `withinGeofence()` is now the only matcher (one-predicate invariant test).
+
+*2.C — One membership truth*
+- [ ] 2.9 Migration: derived primary — `listing_areas` gains the authority; `listings.area_id` maintained from it (trigger or writer discipline + DB CHECK/view), with a parity invariant test that can never drift.
+- [ ] 2.10 Update all writers (fetcher, importer, backfills) to write membership once and derive the primary; delete per-writer primary alignment code.
+- [ ] 2.11 Re-run the full membership backfill via the one canonical path; checksum-verify (md5 parity as 2026-07-01); reconcile snapshot.
+
+*2.D — One visibility predicate*
+- [ ] 2.12 Migration: `household_feed(household_id)` SECURITY DEFINER RPC/view — membership ∩ non-origin active areas ∩ `geofence_pass` ∩ baseline, paged; contract-tested against fixtures.
+- [ ] 2.13 Point `storage/listings/feed.js` at the RPC (rail phase, pre-authorised): client id-list `.in()` and the double-gate retired; feed characterization (2.2) green throughout.
+- [ ] 2.14 Live acceptance: re-verify the Shedfield/Whiteley invariants (§3 of the 2026-07-01 log) + counts vs the RPC.
+
+*2.E — Freshness, dedupe, origins, hygiene*
+- [ ] 2.15 Re-membership sweep workflow (`.github/workflows/remembership.yml`): recompute membership + geofence on area add/disable/radius-tune + weekly; no-ops until ⚙ secrets exist.
+- [ ] 2.16 ⚙ Owner adds `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_DB_URL` repo secrets (unlocks 2.15, refinement-run.yml, CI backfills).
+- [ ] 2.17 Dedupe audit: pin relist-under-new-id, cross-run, and price_history-merge behaviour with tests; fix any double-show a listing can reach via two memberships or a relist.
+- [ ] 2.18 Listing lifecycle audit: status transitions + purge criteria documented and contract-tested; `purge-listings.mjs` on the shared universe.
+- [ ] 2.19 Origin/target as first-class UI: area-picker + profile let a household mark "live/commute here" vs "want to buy here", writing `household_areas.is_origin` (replaces the one-off SQL seed).
+- [ ] 2.20 Strip dead mechanics + reconcile docs (DATA_MODEL, SUPABASE_SYNC, FETCH_SCHEDULE, INTELLIGENCE_RULES, REPO_MAP) + re-verify §2.7 leanness; flagship exit review against the §3 contract of the 2026-07-01 log.
+
+**Phase 3 — Mobile-first UI/UX overhaul (IA rethink, page-by-page on existing foundations)** *(expand to atomic on entry)*
+- [ ] 3.1 IA + navigation proposal (mobile-first wireframe note per page, anchor per view) → ⚙ owner design review before build.
+- [ ] 3.2 C1: OKLCH/`color-mix` `@supports` fallbacks in `tokens.css` (rail phase).
+- [ ] 3.3 Shell resilience: partial-injection timeout + minimal fallback + visible error; theme/header extracted to modules; page tests.
+- [ ] 3.4 Listings feed page rebuild (cards, thumb-zone reactions, pagination/virtual scroll, controls) — the flagship's face.
+- [ ] 3.5 Property dossier rebuild (collapsible sections, lazy gallery + srcset).
+- [ ] 3.6 Dashboard rebuild (tile hierarchy, at-a-glance precedence).
+- [ ] 3.7 Areas + map rebuild (incl. the queued MapLibre GL + PMTiles upgrade as its own sub-block).
+- [ ] 3.8 Finances page rebuild (chart sizing/a11y, SVG title/desc, aria).
+- [ ] 3.9 Profile/journey/ask/saved/rejected passes; a11y hardening (contrast + focus lint rules on); real-browser smoke tier if warranted.
+
+**Phase 4 — Intelligence engine (module-by-module per §10.0; 8 modules incl. radius)** *(expand on entry)*
+- [ ] 4.1 Interface-pin the 8 modules with tests; then per module: Fisher's exact before BH-FDR (B3 ⚠); Bayesian-core decision (B5) with gate-pass-rate logging (B6); explainability whySignals (P10a); probation re-probe UX (P10h); reason aggregation (P10c); weight-snapshot persistence (P10i); enable scheduled cadence (⚙ secrets); Stryker on engine modules.
+
+**Phase 5 — Finances (trust surface; every visible-number change flagged §3.10b)** *(expand on entry)*
+- [ ] 5.1 Golden-master grid + Stryker over `calc-*`; then: LISA withdrawal 12-month rule (A3 ⚠); stress-test → rate-rise sensitivity relabel + configurable uplift (A5 ⚠); LISA/SDLT cap-mismatch warning (A4); FTB-model additions (A7); chart/data-flow cleanups from §10.3 phases A–E.
+
+**Phase 6 — Areas content & data quality** *(expand on entry)*
+- [ ] 6.1 Matched-price lookup extracted to one shared function (triplication dies); priceSummary baked at materialisation; stub predicate unified; coordinate-quality + completeness surfacing; content research batches continue per CLAUDE.md §7.
+
+**Phase 7 — Ask assistant** *(expand on entry)*
+- [ ] 7.1 Model upgrade to `claude-fable-5` (P1); cache breakpoint over TOOLS+SYSTEM + strict on all 13 tools + JWT forwarding (F2/F3/E4 ⚠); tool-input sanitisation audit (P2); Edge-Function integration tests (P6); prompt versioning + new tool-contract rail (04-program §4).
+
+**Phase 8 — Profile, criteria, journey** *(expand on entry)*
+- [ ] 8.1 Unify the three profile modules; auto-generate template dataNeeded; journey.json → content-table decision; field-engine reactivity; outreach-via-Ask polish.
+
+**Phase 9 — Backend/storage resilience** *(expand on entry)*
+- [ ] 9.1 Offline write queue + retry (R2); ask-conversations cache (R3); snapshot split into current + changelog (R5); one schema truth incl. `supabase/archive/` (R6); publishable-key migration (E1 ⚠); generated types (R4/E4); multi-device conflict strategy decision (R7, own gate).
+
+**Phase 10 — Process & rails re-baseline** *(expand on entry)*
+- [ ] 10.1 `docs/adr/` + template with every §4 rail change mapped (G2); commitlint in CI (G3); ⚙ branch protection + required CI on `main` (G1); new rails live (spend, tool-contract, RLS); CLAUDE.md §16/§6 + DESIGN.md re-baselined to the rebuilt system; final §2.7 leanness sweep.
