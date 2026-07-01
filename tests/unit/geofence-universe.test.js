@@ -19,6 +19,13 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(u.stats.skippedNoCoords, 1);
   });
 
+  test('universe: includeDisabled admits disabled-unheld areas (full-catalog geometry)', () => {
+    const records = [rec('active-area', {}), rec('disabled-unheld', { active: false })];
+    const u = buildUniverse(records, { includeDisabled: true });
+    assertEqual(u.villages.length, 2, 'disabled area kept for bearing math');
+    assertEqual(buildUniverse(records).villages.length, 1, 'default still excludes it');
+  });
+
   test('universe: no-outcode villages match geofences but never join the outcodeMap', () => {
     const u = buildUniverse([rec('has-oc', {}), rec('no-oc', { postcode: '' })]);
     assertEqual(u.villages.length, 2, 'both in the matchable universe');

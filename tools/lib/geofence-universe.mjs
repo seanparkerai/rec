@@ -90,7 +90,7 @@ export function applyRadiusTuning(villages, tuning, now = new Date()) {
  * outcode stay in `villages` (geofence matching is coordinate-driven) but cannot
  * join `outcodeMap` (target building needs an outcode).
  */
-export function buildUniverse(records, { links = new Set(), tuning = new Map(), now = new Date() } = {}) {
+export function buildUniverse(records, { links = new Set(), tuning = new Map(), now = new Date(), includeDisabled = false } = {}) {
   const villages = [];
   let skippedNoCoords = 0;
   let skippedDisabled = 0;
@@ -99,7 +99,10 @@ export function buildUniverse(records, { links = new Set(), tuning = new Map(), 
     const lat = d.coords?.lat, lng = d.coords?.lng;
     if (lat == null || lng == null) { skippedNoCoords += 1; continue; }
     const active = d.active !== false;
-    if (!active && !links.has(r.id)) { skippedDisabled += 1; continue; }
+    // includeDisabled: full-catalog geometry for consumers that need coords for
+    // ANY referenced area (e.g. radius-tune bearing math over historic reactions)
+    // — never for scrape/membership universes.
+    if (!active && !links.has(r.id) && !includeDisabled) { skippedDisabled += 1; continue; }
     villages.push(toVillage({
       id: r.id, name: d.name, outcode: d.postcode, lat, lng,
       geofenceRadiusMi: d.geofenceRadiusMi, searchRadiusMi: d.searchRadiusMi,
@@ -146,7 +149,7 @@ export async function loadUniverseFromDb({
  * so it is the repo-active subset only; callers that need stubs/tuning pass them
  * in via { links, tuning } after fetching separately (the fetcher does).
  */
-export async function loadUniverseFromRepo({ root = REPO_ROOT, links, tuning, now } = {}) {
+export async function loadUniverseFromRepo({ root = REPO_ROOT, links, tuning, now, includeDisabled } = {}) {
   const dir = resolve(root, 'data/areas');
   const files = (await readdir(dir)).filter((f) => f.endsWith('.json'));
   const records = [];
@@ -154,5 +157,5 @@ export async function loadUniverseFromRepo({ root = REPO_ROOT, links, tuning, no
     const a = JSON.parse(await readFile(resolve(dir, f), 'utf8'));
     records.push({ id: a.id, data: { ...a, postcode: a.postcode } });
   }
-  return buildUniverse(records, { links, tuning, now });
+  return buildUniverse(records, { links, tuning, now, includeDisabled });
 }

@@ -37,18 +37,13 @@ const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-/** Read each area's centre coords from the repo (id → {lat,lng}) for bearing maths. */
+/** Area centres (id → {lat,lng}) for bearing maths — from THE canonical
+ *  universe, includeDisabled so historic reactions in paused/disabled areas
+ *  keep their geometry (step 2.7). */
 async function loadAreaCentres() {
-  const dir = resolve(ROOT, 'data/areas');
-  const out = new Map();
-  for (const f of (await readdir(dir)).filter((n) => n.endsWith('.json'))) {
-    try {
-      const a = JSON.parse(await readFile(resolve(dir, f), 'utf8'));
-      const lat = a?.coords?.lat; const lng = a?.coords?.lng;
-      if (a?.id && lat != null && lng != null) out.set(a.id, { lat: Number(lat), lng: Number(lng) });
-    } catch { /* skip unreadable file */ }
-  }
-  return out;
+  const { loadUniverseFromRepo } = await import('./lib/geofence-universe.mjs');
+  const { villages } = await loadUniverseFromRepo({ includeDisabled: true });
+  return new Map(villages.map((v) => [v.id, { lat: v.lat, lng: v.lng }]));
 }
 
 /**

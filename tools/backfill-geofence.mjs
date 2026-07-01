@@ -34,22 +34,10 @@ const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const DRY_RUN = process.env.DRY_RUN === '1' || process.env.DRY_RUN === 'true';
 
-// ── active-village index (the geofence is measured globally, across outcodes) ──
+// ── active-village index — THE canonical repo edge (step 2.7) ────────────────
 export async function loadActiveVillages() {
-  const dir = resolve(root, 'data/areas');
-  const files = (await readdir(dir)).filter((f) => f.endsWith('.json'));
-  const villages = [];
-  for (const f of files) {
-    const a = JSON.parse(await readFile(resolve(dir, f), 'utf8'));
-    if (a.active === false) continue;                       // L7.5 pruning (default active)
-    const lat = a.coords?.lat, lng = a.coords?.lng;
-    if (lat == null || lng == null) continue;
-    villages.push({
-      id: a.id, name: a.name, outcode: String(a.postcode || '').toUpperCase(),
-      lat: Number(lat), lng: Number(lng),
-      geofenceRadiusKm: a.geofenceRadiusMi != null ? Number(a.geofenceRadiusMi) / 0.621371 : undefined,
-    });
-  }
+  const { loadUniverseFromRepo } = await import('./lib/geofence-universe.mjs');
+  const { villages } = await loadUniverseFromRepo();
   return villages;
 }
 
