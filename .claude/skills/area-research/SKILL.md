@@ -20,7 +20,7 @@ Supabase `areas` is the source of truth; `data/areas/<id>.json` is a materialise
    (rebuilds the `data/areas.json` index from `data/source/villages.csv` + content files).
 6. Verify coords if locations changed: `node tools/verify-area-coords.mjs --online`.
 7. Update `data/snapshots/sync-state.json` high-water marks.
-8. `node tools/run-intelligence-tests.mjs` green → commit, ending the message with
+8. `node tools/run-all-tests.mjs` green → commit, ending the message with
    `Supabase: pushed N areas, 0 user-state rows`.
 
 An id/postcode migration also rewrites `data/source/villages.csv` and carries

@@ -2,6 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(node tools/area-status.mjs:*)",
+      "Bash(node tools/run-all-tests.mjs)",
       "Bash(node tools/run-intelligence-tests.mjs)",
       "Bash(node tools/check-supabase-freshness.mjs)",
       "Bash(node tools/lint-responsive.mjs:*)",

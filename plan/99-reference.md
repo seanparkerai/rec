@@ -28,7 +28,7 @@
 
 ### 11.2 The single commands that matter
 ```bash
-node tools/run-intelligence-tests.mjs   # the unified test harness — green before every commit (§3.6)
+node tools/run-all-tests.mjs   # the unified test harness — green before every commit (§3.6)
 node tools/area-status.mjs              # area research progress / next-to-do queue
 node tools/lint-responsive.mjs          # mechanical responsive-doctrine lint (to become semantic, §5.2)
 node tools/build-areas.mjs              # rebuild data/areas.json index from villages.csv + per-area files

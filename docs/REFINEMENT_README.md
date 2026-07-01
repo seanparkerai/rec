@@ -72,7 +72,7 @@ still logs `actor='system'` run rows.
   stdout into `psql`. The job reads the household's persisted **preset** + dismiss memory.
 - **Check scope drift**: `node tools/refinement-scope-check.mjs` (REST) or
   `--probation-file <rows>.json` (sandbox). Exits non-zero on paused-but-active drift.
-- **Tests**: `node tools/run-intelligence-tests.mjs` (the refinement suites are
+- **Tests**: `node tools/run-all-tests.mjs` (the refinement suites are
   `refinement-engine` / `-persistence` / `-view` / `-scope`).
 
 ## Current production state (2026-06-07)

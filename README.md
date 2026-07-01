@@ -26,7 +26,7 @@ python3 -m http.server 8000
 
 ## Tests
 
-`node tools/run-intelligence-tests.mjs` runs the unified test harness. Browser-side smoke checks
+`node tools/run-all-tests.mjs` runs the unified test harness. Browser-side smoke checks
 (no horizontal scroll, no inline styles, page reachability) live at
 `http://localhost:8000/tests/tests.html`. Run before each commit.
 

@@ -33,7 +33,7 @@
 //   --no-prune  (default) never delete a per-area file even if absent from the dump.
 //
 // AFTER running this, ALWAYS: node tools/build-areas.mjs (rebuild the index) →
-// node tools/verify-area-coords.mjs --online → node tools/run-intelligence-tests.mjs.
+// node tools/verify-area-coords.mjs --online → node tools/run-all-tests.mjs.
 
 import { readFile, readdir, writeFile, unlink, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';

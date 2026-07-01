@@ -18,7 +18,7 @@
 | `assets/fonts/`, `assets/img/` | Self-hosted woff2 subsets; downloaded openly-licensed imagery. |
 | `data/` | Content + data layer (areas index + per-area files, schema, fixtures, snapshots, source). |
 | `tools/` | Node `.mjs` scripts — build, sync, fetch, test harness. See `tools/README.md`. |
-| `tests/` | Pure-JS test harness — `*.test.js`, run by `tools/run-intelligence-tests.mjs`. |
+| `tests/` | Pure-JS test harness — `*.test.js`, run by `tools/run-all-tests.mjs`. |
 | `supabase/` | Backend — schema (reference), edge functions (`functions/ask`). MCP is canonical. |
 | `docs/` | Live operating docs (this file, sync contract, data model, engine guides). Index: `docs/README.md`. |
 | `.claude/` | Claude Code config — skills (resume/sync-check/area-research) + settings. |

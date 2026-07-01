@@ -18,7 +18,7 @@ Run these steps in order; stop and surface anything unexpected.
    queue (`--missing` to filter, `--id <area-id>` for one area).
 3. Read `docs/CHECKLIST.md` (the live tracker). Add `docs/CONTEXT.md` for content
    sessions, `docs/SUPABASE_SYNC.md` for data sessions.
-4. `node tools/run-intelligence-tests.mjs` — must be green before starting.
+4. `node tools/run-all-tests.mjs` — must be green before starting.
 5. Continue at the **first unchecked** checklist item — or, for area research, the next
    area surfaced by `area-status.mjs`.
 

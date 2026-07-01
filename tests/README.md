@@ -19,7 +19,7 @@ function.
 
 ## Running Tests
 
-- **Node harness** (CI + local): `node tools/run-intelligence-tests.mjs` or `npm test`
+- **Node harness** (CI + local): `node tools/run-all-tests.mjs` or `npm test`
   — runs all `*.test.js` + the offline Supabase sync test.
 - **Browser harness** — open `tests/tests.html` over HTTP for interactive results (includes
   storage + DOM shape checks).

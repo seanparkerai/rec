@@ -104,7 +104,7 @@ start empty until onboarding.
 | Class | Tables / files | Canonical store | Writer | Reader |
 |-------|----------------|-----------------|--------|--------|
 | **User state** | `profile`, `criteria`, `finances`, `shortlist`, `zones`, `journey_checks`, `contacts`, `outreach` — **no repo JSON file** | Supabase row (one per household_id) | Portal via `storage.js`, OR Claude via MCP `execute_sql` | `storage.js` reads with localStorage write-through cache |
-| **Test fixtures** | `data/fixtures/*.sample.json` | Repo file (git-versioned, redacted) | Claude only | Test harness (`tools/run-intelligence-tests.mjs`) and fresh-install fallback in `storage.js` |
+| **Test fixtures** | `data/fixtures/*.sample.json` | Repo file (git-versioned, redacted) | Claude only | Test harness (`tools/run-all-tests.mjs`) and fresh-install fallback in `storage.js` |
 | **Content (per-area)** | Supabase `areas` table + materialised `data/areas/<id>.json` | **Supabase `areas`** (DB-canonical, §18.5 relaxation 2026-06-04) | Claude via MCP UPSERT, then `tools/sync-areas-from-supabase.mjs` re-materialises the files | App fetches the JSON; `tests/contract/areas-db-repo-parity.test.js` guards file↔DB parity |
 | **Content (catalogues)** | `data/house-types.json`, `data/checklists.json`, `data/outreach-templates.json` | Repo file | Claude only | App fetches the JSON; only `house_types` has a Supabase mirror table — `checklists` / `outreach_templates` are repo-JSON-only (no mirror) |
 | **Index** | `data/areas.json` | Derived from `data/source/villages.csv` + the materialised per-area files via `tools/build-areas.mjs` | Build tool | App fetches the JSON |
@@ -153,7 +153,7 @@ If any of steps 1–4 fails or surfaces an unexpected change, **stop and check w
 ┌─────────────────────────────────────────────────────────┐
 │ 1. Verify every Claude-side write landed (re-SELECT)     │
 │ 2. tests/supabase-sync.test.js must pass                 │
-│ 3. tools/run-intelligence-tests.mjs must pass            │
+│ 3. tools/run-all-tests.mjs must pass            │
 │ 4. Update data/snapshots/sync-state.json                 │
 │ 5. git add + git commit + git push                       │
 │ 6. Commit message footer: "Supabase: N areas, M rows"    │
@@ -225,7 +225,7 @@ mcp__supabase__apply_migration                 # any DDL
 # Local sync tooling
 node tools/check-supabase-freshness.mjs        # MAX(updated_at) per table vs local snapshot
 node tools/sync-content-to-supabase.mjs        # push repo JSON to mirror tables (Phase 10)
-node tools/run-intelligence-tests.mjs          # full test harness incl. sync test
+node tools/run-all-tests.mjs          # full test harness incl. sync test
 ```
 
 If you're reaching for `curl`, `psql`, or pasting SQL into the Supabase web dashboard — stop. You're

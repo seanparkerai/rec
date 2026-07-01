@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: '20'
       - name: Run test harness
-        run: node tools/run-intelligence-tests.mjs
+        run: node tools/run-all-tests.mjs
 
   deploy:
     needs: test

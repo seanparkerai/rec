@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '20'
       - name: Run test harness
-        run: node tools/run-intelligence-tests.mjs
+        run: node tools/run-all-tests.mjs
       # RLS guard rail (overhaul step 1.11): the browser ships the publishable
       # key, so RLS is the whole authorisation model. Fails the build if any
       # public table has RLS disabled. Honest no-op (SKIPPED, exit 0) until the

@@ -23,7 +23,7 @@ Applies to sessions touching data, schema, or user-state. The table inventory li
    DB-canonical so the flow is reversed — see the area-research skill). `checklists` /
    `outreach_templates` have no mirror — do not UPSERT them.
 3. Update `data/snapshots/sync-state.json` high-water marks.
-4. `node tools/run-intelligence-tests.mjs` green (includes the sync suite).
+4. `node tools/run-all-tests.mjs` green (includes the sync suite).
 5. Commit with the footer `Supabase: pushed N areas, M user-state rows`.
 
 If any MCP write fails the session is **incomplete** — fix it or surface it; never

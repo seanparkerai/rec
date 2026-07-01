@@ -13,7 +13,7 @@ single most important hour of the program: everything downstream inherits its ac
 find assets/js -name '*.js' | sort        # JS modules (expect ~132)
 find assets/css -name '*.css' | sort      # CSS partials (expect ~51)
 ls pages/ components/ data/ tools/ tests/  # surfaces, partials, data, tooling
-node tools/run-intelligence-tests.mjs      # the single unified harness — must be green at start
+node tools/run-all-tests.mjs      # the single unified harness — must be green at start
 git log --oneline -40                      # recent history & cadence
 wc -l fable_refactor.md                    # this plan's size — track it as it grows
 ```

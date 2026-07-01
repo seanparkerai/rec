@@ -49,8 +49,13 @@ every session**. These rules exist to keep work safe, resumable, and high qualit
   phases are archived under `docs/archive/` — never resurrected into the live file.
 
 ## 6. Testing & regression
-- Keep the `tests/` harness current. **Run `node tools/run-intelligence-tests.mjs` after changes and
-  before committing.** This single command runs all intelligence tests + the Supabase sync tests.
+- Keep the `tests/` harness current. **Run `node tools/run-all-tests.mjs` (`npm test`) after changes
+  and before committing.** The single command runs every tier — Tier-0 type-check (ratcheting
+  `tsconfig.json` scope), `tests/{unit,contract,characterization,integration,pages}/` (pages = jsdom
+  DOM tests), the semantic responsive lint (justified ratcheting baseline,
+  `tools/lint-responsive.allow.json`), and the Supabase sync suite. `--tier <name>` runs one tier for
+  fast iteration. `tools/run-intelligence-tests.mjs` is a deprecated forwarder (deleted once nothing
+  references it).
 - Add/extend benchmark tests (calculators, JSON schemas) as features grow so regressions surface early.
 - **Supabase sync tests are non-negotiable** for commits touching data, schema, or
   `assets/js/storage.js` (they run inside the unified harness). The **offline** suite
@@ -86,7 +91,7 @@ See §18 for the full Supabase sync contract.
    canonical view of research progress and the next-to-do queue.
 2. Read `docs/CHECKLIST.md` (what's done / next). Add `docs/CONTEXT.md` (research facts) for content
    sessions and `docs/SUPABASE_SYNC.md` (sync contract) for data sessions.
-3. Run the test harness (`node tools/run-intelligence-tests.mjs` — includes the sync test, §6).
+3. Run the test harness (`node tools/run-all-tests.mjs` — includes the sync test, §6).
 4. Continue at the **first unchecked** checklist item — or, for area research, the next `partial` or
    `directory` area surfaced by `area-status.mjs`.
 
@@ -154,7 +159,7 @@ properties in `tokens.css` — never hard-code hex or off-scale spacing in compo
 ## 13. Verification for UI changes
 
 No browser in this environment — verification is code self-review + the harness
-(`node tools/run-intelligence-tests.mjs` green before commit), then a one-line visual hand-off to
+(`node tools/run-all-tests.mjs` green before commit), then a one-line visual hand-off to
 the developer for anything that genuinely needs eyes. The full procedure is **`DESIGN.md` §4**;
 browser-side smoke checks (`tests/tests.html`) are run by the developer.
 

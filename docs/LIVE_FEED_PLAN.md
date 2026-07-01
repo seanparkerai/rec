@@ -248,7 +248,7 @@ Do **not** call Supabase from the page module directly (CLAUDE.md §17.4) — go
   - `tests/live-feed-stats.test.js` — **online/MCP, runs at session end**: asserts the RPC's
     `savings` for both households equals `computeDepositSavings(finances, investments)` read
     from the same rows (the third mirror parity, alongside `tests/contract/ask-tools.test.js`).
-  - Wire both into `node tools/run-intelligence-tests.mjs` (the unified harness). Online
+  - Wire both into `node tools/run-all-tests.mjs` (the unified harness). Online
     assertions are reported skipped offline, per CLAUDE.md §6.
 
 ---
@@ -323,7 +323,7 @@ Two logical regions:
    builders if needed).
 6. **Access**: extend `assets/js/auth-guard.js` with the admin ⇔ `/live-feed` lock.
 7. **Tests**: `tests/live-feed-runs.test.js` (+ `tests/live-feed-stats.test.js`); run
-   `node tools/run-intelligence-tests.mjs` until green.
+   `node tools/run-all-tests.mjs` until green.
 8. **Sync ceremony** (CLAUDE.md §18.3): re-SELECT to confirm the RPC; this build writes **no**
    user-state and **no** content rows, so the only DB change is the function + the admin user.
    Update `data/snapshots/sync-state.json` only if a tracked high-water mark changed (it
@@ -354,6 +354,6 @@ Two logical regions:
 - Averages render: new listings/day (7d & 30d) and likes/day (7d) + likes/week per user.
 - On each refresh the layout **rearranges** (scraper side + vertical/horizontal flip, user
   panels reorder, pixel-shift) to mitigate burn-in; respects `prefers-reduced-motion`.
-- `node tools/run-intelligence-tests.mjs` is green; WCAG 2.2 AA basics hold (text/icon
+- `node tools/run-all-tests.mjs` is green; WCAG 2.2 AA basics hold (text/icon
   status, focus-visible, `aria-live`, ≥44px targets, contrast via tokens).
 - The RPC is **admin-only** (`forbidden` for any other authenticated caller).

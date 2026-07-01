@@ -22,7 +22,7 @@ Generated: 2026-05-26. Updated: 2026-06-02 (doc-privacy purge — personal value
 | **Supabase `goals`** | Deposit target, timeline, funding source | `storage.js` → `page-home.js`, `deposit-risk.js` | Via MCP or portal save |
 | **Supabase `debts_*`** | Credit cards, student loan, other debts | `storage.js` → profile/finances surfaces | Via MCP or portal save |
 | **Supabase `investments_accounts` / `investments_history`** | Deposit-fund account structure + transaction history | `storage.js` → `deposit-risk.js`, `page-home.js`, `page-finances.js` | After CSV import via `tools/import-trading212.mjs` |
-| `data/fixtures/*.sample.json` | Redacted sample data for tests and fresh-install fallback | `tools/run-intelligence-tests.mjs`, `storage.js` (fallback) | Updated by Claude during refactors |
+| `data/fixtures/*.sample.json` | Redacted sample data for tests and fresh-install fallback | `tools/run-all-tests.mjs`, `storage.js` (fallback) | Updated by Claude during refactors |
 | `data/areas/*.json` | Per-area research (character, prices, schools, sources) | `page-areas.js`, `page-area-detail.js` | After area research |
 | `data/areas.json` | Lightweight area directory index | `page-areas.js`, `page-home.js` | Rebuilt by `tools/build-areas.mjs` |
 

@@ -88,7 +88,7 @@ developer confirms the visuals on-device.
 Before merging any UI change:
 
 1. Re-read the diff and reason through the layout (spans, grid tracks, specificity, token resolution).
-2. `node tools/run-intelligence-tests.mjs`: green. (`tests/tests.html` smoke checks are run by the developer.)
+2. `node tools/run-all-tests.mjs`: green. (`tests/tests.html` smoke checks are run by the developer.)
 3. Keep each page true to its anchor — **Stripe-docs** or **Linear-dense**. If it could be mistaken for
    generic SaaS, redo it.
 4. For anything that needs eyes (spacing, colour, alignment, motion), hand the developer one short note on
@@ -112,7 +112,7 @@ Adopted at v2 plan adoption. Every page and component in the v2 overhaul must re
 
 The contract for the systematic mobile-responsiveness overhaul. Enforced where mechanical by
 `tools/lint-responsive.mjs` (count-based baseline in `tools/lint-responsive.allow.json`, wired into
-`node tools/run-intelligence-tests.mjs`); the rest is hand-off + device QA.
+`node tools/run-all-tests.mjs`); the rest is hand-off + device QA.
 
 1. **Breakpoints — `min-width` only.** Canonical **480 / 768 / 1024 / 1280**. Layout `max-width` media
    queries are banned (`r-no-max-width-media`); `prefers-*`, `orientation`, and `*-height` queries are
