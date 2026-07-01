@@ -1,10 +1,14 @@
-// Integration (step 2.2): the REAL storage feed read path — getListings() in
-// assets/js/storage/listings/feed.js — run under Node against the fixture-backed
-// mock client via the core.js test seam. Pins the live visibility contract the
-// Phase-2 rework (one visibility predicate, 2.12–2.14) must preserve:
-// m2m membership scoping, origin exclusion, active-link filtering,
-// geofence_pass semantics, status filter, ordering, and membership attachment.
+// Integration (step 2.2, re-pointed at the RPC in step 2.13): the REAL storage
+// feed read path — getListings() in assets/js/storage/listings/feed.js — run
+// under Node against the fixture-backed mock client via the core.js test seam.
+// Since the 2.13 cutover the scoped path calls the household_feed RPC, served
+// here by the fixture reference implementation (tests/mocks/household-feed-rpc.js,
+// itself contract-pinned against the SQL mirror) — so these assertions prove the
+// same visibility contract holds THROUGH the client: m2m membership scoping,
+// origin exclusion, active-link filtering, geofence_pass semantics, status
+// filter, ordering, and membership attachment.
 import { MockSupabaseClient } from '../mocks/supabase-client.js';
+import { buildHouseholdFeedRpc } from '../mocks/household-feed-rpc.js';
 
 const HID = 'house-001';
 const SESSION = { user: { id: 'user-001', email: 'test@example.com' }, access_token: 't' };
@@ -57,6 +61,7 @@ function fixtureTables() {
 async function loadFeed(tables) {
   const core = await import('../../assets/js/storage/core.js');
   core._resetStorageForTests();
+  tables.__rpc = { household_feed: buildHouseholdFeedRpc(tables, { session: SESSION }) };
   globalThis.__REC_TEST_SB__ = new MockSupabaseClient(tables, { session: SESSION });
   const feed = await import('../../assets/js/storage/listings/feed.js');
   return { core, feed };

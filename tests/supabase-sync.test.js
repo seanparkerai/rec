@@ -121,14 +121,21 @@ test('listing_areas is live-content (untracked): NOT in the tracked snapshot', a
   assert(/listing_areas/.test(doc), 'SUPABASE_SYNC.md must document listing_areas');
 });
 
-test('feed read scopes via the junction and excludes origin areas (m2m + origin)', async () => {
-  // The feed must (a) drop origin areas from the household scope, and (b) resolve
-  // membership through listing_areas rather than the single area_id column.
+test('feed read goes through the ONE visibility predicate (household_feed RPC)', async () => {
+  // Since step 2.13 the household-scoped read is a single household_feed RPC
+  // call — the RPC owns membership + origin exclusion + curated-disable +
+  // geofence + baseline (semantics pinned by tests/contract/household-feed.test.js
+  // against supabase/archive/schema-household-feed.sql). The retired client-side
+  // composition (page listing_areas → .in('rightmove_id', id-list) → local
+  // origin filter) must never come back beside it — two half-rules drift.
   const feed = await readFile(resolve(root, 'assets/js/storage/listings/feed.js'), 'utf8');
-  assert(/is_origin/.test(feed) && /filter\(\(l\) => !l\.is_origin\)/.test(feed),
-    'feed must exclude origin areas from the household scope');
-  assert(/from\('listing_areas'\)/.test(feed) && /\.in\('rightmove_id', memberIds\)/.test(feed),
-    'feed must scope listings by listing_areas membership (rightmove_id), not area_id');
+  assert(/rpc\('household_feed'/.test(feed),
+    'scoped feed read must call the household_feed RPC');
+  assert(!/\.in\('area_id'/.test(feed) && !/\.in\('rightmove_id', memberIds\)/.test(feed),
+    'the retired client-side membership/id-list scoping must not return');
+  const sql = await readFile(resolve(root, 'supabase/archive/schema-household-feed.sql'), 'utf8');
+  assert(/ha\.is_origin = false/.test(sql) && /listing_areas/.test(sql),
+    'household_feed must own origin exclusion + junction membership');
   // The fetcher demand set must drop origin areas too (cost corollary).
   const fetcher = await readFile(resolve(root, 'tools/fetch-listings.mjs'), 'utf8');
   assert(/is_origin/.test(fetcher), 'fetcher must read is_origin and drop origin areas from the demand set');
