@@ -96,6 +96,7 @@ const { register: registerProfileSchema } = await import('../tests/contract/prof
 const { register: registerSavingsEdit } = await import('../tests/unit/savings-edit.test.js');
 const { register: registerLiveFeedRuns } = await import('../tests/unit/live-feed-runs.test.js');
 const { register: registerLiveFeedStats } = await import('../tests/unit/live-feed-stats.test.js');
+const { register: registerRlsCheck } = await import('../tests/contract/rls-check.test.js');
 const { runResponsiveLint } = await import('./lint-responsive.mjs');
 
 await registerFinanceDerive({ test, assert, assertEqual, fixtures });
@@ -164,6 +165,7 @@ await registerProfileSchema({ test, assert, assertEqual });
 await registerSavingsEdit({ test, assert, assertEqual });
 await registerLiveFeedRuns({ test, assert, assertEqual });
 await registerLiveFeedStats({ test, assert, assertEqual });
+await registerRlsCheck({ test, assert, assertEqual });
 
 await test('responsive lint (no new violations vs baseline)', () => {
   const { regressions, stale } = runResponsiveLint();

@@ -19,3 +19,11 @@ jobs:
           node-version: '20'
       - name: Run test harness
         run: node tools/run-intelligence-tests.mjs
+      # RLS guard rail (overhaul step 1.11): the browser ships the publishable
+      # key, so RLS is the whole authorisation model. Fails the build if any
+      # public table has RLS disabled. Honest no-op (SKIPPED, exit 0) until the
+      # SUPABASE_DB_URL repo secret exists (owner step 2.16).
+      - name: RLS guard (online, secret-gated)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: node tools/check-rls.mjs
