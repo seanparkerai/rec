@@ -12,17 +12,24 @@
 > asserted.
 
 **Phase 0 — Onboarding (all in Plan Mode; ends at owner approval)**
-- [ ] Plan Mode entered; session confirmed read-only until approval (Session Mandate).
-- [ ] Full-codebase scan complete (§2); inventories in §10 verified/corrected.
-- [ ] Harness green at baseline; baseline metrics recorded (tests, runtime, lint, coverage/segment).
-- [ ] Supabase schema + RLS confirmed via MCP; sync-state snapshot fresh.
+- [x] Plan Mode entered; session confirmed read-only until approval (Session Mandate). *(2026-07-01)*
+- [x] Full-codebase scan complete (§2); inventories verified/corrected — dated "§2 scan corrections"
+      sections appended to `segments/10.{1,4,5,6,8,9,10}` + drift summary in `plan/README.md`. *(2026-07-01)*
+- [x] Harness green at baseline; baseline metrics recorded: **783 pass / 0 fail** (+ sync 16/0/3
+      online-skips); 67 test files; responsive-lint baseline 7 entries; 145 JS / 53 CSS / 28 tools /
+      14 page surfaces. *(2026-07-01)*
+- [x] Supabase schema + RLS confirmed via MCP: **33 tables, all RLS-enabled**. Snapshot NOT fresh —
+      drift found (`profile` 06-21, `shortlist` 06-28, `learned_preferences` 07-01, `areas` 06-28 vs
+      older high-water marks); reconcile per §18.2 at the first data-session start. *(2026-07-01)*
+- [x] **Owner-directed insertion (2026-07-01): split `fable_refactor.md` into `plan/`** — granular
+      files + directory index; merged to `main` (`91cec46`).
 - [ ] Global Q&A intake (§7.1) complete; answers recorded.
 - [ ] Guard-rail audit (§4.5) delivered; redesign recommendations agreed with owner.
 - [ ] New test standard (§5.2) designed; owner sign-off on shape + any dev dependency.
 - [ ] "State of the system" note delivered with top-3 targets.
-- [ ] `fable_refactor.md` overhauled into the final step-by-step plan + atomic backlog (still in Plan Mode).
-- [ ] Plan presented via **ExitPlanMode** and **owner-approved** — the one gate that starts execution.
-- [ ] On approval: overhauled `fable_refactor.md` written + committed *before* any product code moves.
+- [ ] The plan (now `plan/`) overhauled into the final step-by-step program + atomic backlog.
+- [ ] Plan presented and **owner-approved** — the one gate that starts product-code execution.
+- [ ] On approval: overhauled plan committed *before* any product code moves.
 
 **Phase 1 — Test re-architecture (the net, first) (§5)**
 - [ ] New harness stood up beside the old; single green command preserved.
