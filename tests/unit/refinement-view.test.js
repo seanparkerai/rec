@@ -7,9 +7,9 @@ import {
   REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
   probationStatusLabel, effectiveStatus, snoozeDaysLeft,
   REFINEMENT_SETTINGS_KEY, presetFromOverrides, PRESET_OPTIONS, presetNudge,
-} from '../assets/js/refinement/view.js';
-import { effectiveWeights } from '../assets/js/learned-preferences.js';
-import { resolveConfig } from '../assets/js/refinement/config.js';
+} from '../../assets/js/refinement/view.js';
+import { effectiveWeights } from '../../assets/js/learned-preferences.js';
+import { resolveConfig } from '../../assets/js/refinement/config.js';
 
 export async function register({ test, assert, assertEqual }) {
   const cfg = resolveConfig();

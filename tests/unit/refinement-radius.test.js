@@ -4,12 +4,12 @@
 // clamp, union-by-max across households, the suggestion threshold + direction, override
 // precedence, exploration-window scheduling, and the fetcher overlay.
 
-import { learnRadii, weightedQuantile } from '../assets/js/refinement/radius.js';
-import { planRadii, renderRadiusSql } from '../assets/js/refinement/radius-persistence.js';
-import { applyRadiusTuning } from '../tools/fetch-listings.mjs';
-import { resolveConfig } from '../assets/js/refinement/config.js';
-import { toRadiusCard, classifySuggestions, radiusOverridesFromOverrides, REFINEMENT_RADIUS_OVERRIDE_KEY } from '../assets/js/refinement/view.js';
-import { MILES_PER_KM } from '../tools/listings-normalise.mjs';
+import { learnRadii, weightedQuantile } from '../../assets/js/refinement/radius.js';
+import { planRadii, renderRadiusSql } from '../../assets/js/refinement/radius-persistence.js';
+import { applyRadiusTuning } from '../../tools/fetch-listings.mjs';
+import { resolveConfig } from '../../assets/js/refinement/config.js';
+import { toRadiusCard, classifySuggestions, radiusOverridesFromOverrides, REFINEMENT_RADIUS_OVERRIDE_KEY } from '../../assets/js/refinement/view.js';
+import { MILES_PER_KM } from '../../tools/listings-normalise.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const cfg = resolveConfig();

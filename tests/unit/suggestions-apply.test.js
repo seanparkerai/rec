@@ -1,7 +1,7 @@
 // tests/suggestions-apply.test.js — the action router (storage injected, no Supabase).
 import {
   applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified, SNOOZE_DAYS, DISMISS_SENTINEL,
-} from '../assets/js/suggestions/apply.js';
+} from '../../assets/js/suggestions/apply.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A recording stub for every writer the router can call.

@@ -1,5 +1,5 @@
 // tests/suggestions-model.test.js — the normalized suggestion mappers (pure).
-import { fromConflict, fromEngineCard, combineSuggestions } from '../assets/js/suggestions/model.js';
+import { fromConflict, fromEngineCard, combineSuggestions } from '../../assets/js/suggestions/model.js';
 
 export async function register({ test, assert, assertEqual }) {
   const areasMeta = { 'wherwell-sp11': { name: 'Wherwell', geofenceRadiusMi: 5 } };

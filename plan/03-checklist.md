@@ -47,7 +47,7 @@
 - [x] 1.3 Fixtures centralised in `tests/fixtures.mjs` (memoised; both runners consume it) + `tests/mocks/supabase-client.js` (chainable fixture-backed stub, self-tested by the first unit-tier suite, 6/6). *(2026-07-01)*
 - [x] 1.4 Batch A ported: 9 finance suites → `tests/unit/`, 2 → `tests/characterization/`; legacy runner + browser harness re-pointed; legacy 783/0, new harness 142/142. *(2026-07-01)*
 - [x] 1.5 Batch B ported: 20 listings-pipeline suites → `tests/unit/` (incl. fetch/purge/backfill tool tests); legacy 783/0, new harness 365/365. *(2026-07-01)*
-- [ ] 1.6 Port suite batch C (refinement/learned-prefs/suggestions/radius) likewise.
+- [x] 1.6 Batch C ported: 11 intelligence-engine suites → `tests/unit/`. *(2026-07-01)*
 - [ ] 1.7 Port suite batch D (contract: supabase-sync, docs-consistency, schemas, areas-parity, profile-schema, ask-*) into `tests/contract/`.
 - [ ] 1.8 Port remaining suites (dashboard tiles, live-feed, outreach, shell utils); old runner now a thin alias.
 - [ ] 1.9 jsdom page-test harness (`tools/run-page-tests.mjs` or a `pages` tier): first test renders shell injection + nav active-state on a fixture DOM.

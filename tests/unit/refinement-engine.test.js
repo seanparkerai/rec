@@ -15,8 +15,8 @@
 import {
   runRefinementEngine, wilsonLowerBound, twoProportionPValue, benjaminiHochberg,
   decayWeight, normaliseValue, extractValue, tierFor,
-} from '../assets/js/refinement/engine.js';
-import { resolveConfig, PRESETS, DEFAULT_PRESET } from '../assets/js/refinement/config.js';
+} from '../../assets/js/refinement/engine.js';
+import { resolveConfig, PRESETS, DEFAULT_PRESET } from '../../assets/js/refinement/config.js';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = '2026-06-05T00:00:00Z';

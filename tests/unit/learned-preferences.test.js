@@ -8,8 +8,8 @@ import {
   gradedCount, isColdStart, diversifySelection, listingBucketKey,
   deriveSearchSpec, implicatedKinds, REASON_SIGNAL_KINDS, SUBREASON_SIGNAL_KINDS, trainingProgress,
   inferOutdoorSpace, inferParking,
-} from '../assets/js/learned-preferences.js';
-import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from '../assets/js/intelligence-constants.js';
+} from '../../assets/js/learned-preferences.js';
+import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from '../../assets/js/intelligence-constants.js';
 
 export async function register({ test, assert, assertEqual }) {
   const DAY = 86_400_000;

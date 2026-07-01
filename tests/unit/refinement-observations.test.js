@@ -1,7 +1,7 @@
 // tests/refinement-observations.test.js — the "Trends & nudges" lane (2026-06-19).
 // Exercises the PURE observation builder: which cards surface from reaction mix /
 // learned drivers / coverage / forming digest, and that a dismissal filters a card out.
-import { buildObservations, observationDismissKey, isDismissed } from '../assets/js/refinement/observations.js';
+import { buildObservations, observationDismissKey, isDismissed } from '../../assets/js/refinement/observations.js';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-06-19T00:00:00Z');

@@ -3,8 +3,8 @@
 // 14-day dismissal, and each conflict kind.
 import {
   detectConflicts, dismissUntil,
-} from '../assets/js/meta-observations.js';
-import { META_OBS } from '../assets/js/intelligence-constants.js';
+} from '../../assets/js/meta-observations.js';
+import { META_OBS } from '../../assets/js/intelligence-constants.js';
 
 export async function register({ test, assert, assertEqual }) {
   const DAY = 86_400_000;

@@ -3,8 +3,8 @@
 // subtraction, the exploration re-probe cadence, and the drift invariant.
 import {
   activeAreaIds, probationAreaSet, reprobeThisRun, probationDropIds, scopeInvariant,
-} from '../assets/js/refinement/scope.js';
-import { resolveConfig } from '../assets/js/refinement/config.js';
+} from '../../assets/js/refinement/scope.js';
+import { resolveConfig } from '../../assets/js/refinement/config.js';
 
 export async function register({ test, assert, assertEqual }) {
   const cfg = resolveConfig();

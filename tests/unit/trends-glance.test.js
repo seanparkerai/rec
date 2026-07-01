@@ -2,7 +2,7 @@
 // band on the Trends page. No DOM / no Chart.js: only the data shaping is exercised here.
 import {
   reactionMix, topDrivers, reasonCounts, coverage, shortLabel,
-} from '../assets/js/refinement/trends-glance.js';
+} from '../../assets/js/refinement/trends-glance.js';
 
 export async function register({ test, assert, assertEqual }) {
   const at = (iso, reaction, reasons = []) => ({

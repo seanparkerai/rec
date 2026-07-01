@@ -5,11 +5,11 @@
 //   • nothing in the plan mutates listings / criteria / zones (notify-only).
 // Plus tracked-set selection, status resolution, first_detected_at preservation,
 // run-audit counts, and the idempotent-upsert SQL shape.
-import { runRefinementEngine } from '../assets/js/refinement/engine.js';
+import { runRefinementEngine } from '../../assets/js/refinement/engine.js';
 import {
   priorRunsFromRows, isTracked, resolveStatus, metricsOf, paramsOf, planRun, renderPlanSql,
-} from '../assets/js/refinement/persistence.js';
-import { resolveConfig } from '../assets/js/refinement/config.js';
+} from '../../assets/js/refinement/persistence.js';
+import { resolveConfig } from '../../assets/js/refinement/config.js';
 
 export async function register({ test, assert, assertEqual }) {
   const cfg = resolveConfig();
