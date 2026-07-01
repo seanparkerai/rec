@@ -45,7 +45,7 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       actually become actionable; added the sensitivity nudge; expanded the engine to
       `price_band/beds/outdoor/parking/outcode` (migration `refinement_expand_dimensions`); added the
       notify-only Trends & nudges lane; added `.github/workflows/refinement-run.yml`. See
-      `docs/REFINEMENT_README.md` + the `fable_refactor.md` appendix.
+      `docs/REFINEMENT_README.md` + the `plan/logs/2026-06-19-refinement.md` session log.
 - [ ] **Enable the scheduled run** — add repo secrets (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
       `SUPABASE_DB_URL`; optional `REFINEMENT_HOUSEHOLD_ID`) so `refinement-run.yml` runs daily.
 - [ ] §4.1 "Why?" reaction-rate sparkline + sample rejected listings (needs extra
