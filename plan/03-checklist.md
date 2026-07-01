@@ -23,11 +23,11 @@
       older high-water marks); reconcile per §18.2 at the first data-session start. *(2026-07-01)*
 - [x] **Owner-directed insertion (2026-07-01): split `fable_refactor.md` into `plan/`** — granular
       files + directory index; merged to `main` (`91cec46`).
-- [ ] Global Q&A intake (§7.1) complete; answers recorded.
-- [ ] Guard-rail audit (§4.5) delivered; redesign recommendations agreed with owner.
-- [ ] New test standard (§5.2) designed; owner sign-off on shape + any dev dependency.
-- [ ] "State of the system" note delivered with top-3 targets.
-- [ ] The plan (now `plan/`) overhauled into the final step-by-step program + atomic backlog.
+- [x] Global Q&A intake (§7.1) complete; answers recorded in `04-program.md` §1. *(2026-07-01)*
+- [x] Guard-rail audit (§4.5) delivered (`04-program.md` §4); gates pre-authorised via the plan (owner, §7 intake). *(2026-07-01)*
+- [x] New test standard (§5.2) designed (`04-program.md` §5); owner signed off the full blueprint incl. test-only devDependencies. *(2026-07-01)*
+- [x] "State of the system" note delivered with top-3 targets (session note, 2026-07-01; summary in `plan/README.md` known-drift + `04-program.md`).
+- [x] The plan (now `plan/`) overhauled into the final step-by-step program + atomic backlog (`b1ea902`). *(2026-07-01)*
 - [ ] Plan presented and **owner-approved** — the one gate that starts product-code execution.
 - [ ] On approval: overhauled plan committed *before* any product code moves.
 
