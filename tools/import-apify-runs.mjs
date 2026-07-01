@@ -79,7 +79,7 @@ async function restGetExisting(ids) {
     const slice = ids.slice(i, i + CHUNK);
     if (!slice.length) continue;
     const inList = slice.map((x) => `"${x}"`).join(',');
-    const url = `${SUPABASE_URL}/rest/v1/listings?select=rightmove_id,price,price_history,first_seen&rightmove_id=in.(${inList})`;
+    const url = `${SUPABASE_URL}/rest/v1/listings?select=rightmove_id,price,price_history,first_seen,image_url&rightmove_id=in.(${inList})`;
     const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
     if (!res.ok) throw new Error(`GET existing failed: ${res.status} ${await res.text()}`);
     for (const r of await res.json()) out.set(r.rightmove_id, r);
@@ -210,8 +210,13 @@ async function main() {
     const { price_history } = mergePriceHistory(prev, l, now);
     return {
       ...l,
-      first_seen: prev?.first_seen ?? l.first_seen,
+      first_seen: prev?.first_seen ?? l.first_seen, // never reset on update
       last_seen: now.toISOString(),
+      // WRITER PARITY with tools/fetch-listings.mjs (dedupe audit, step 2.17):
+      // never blank a photo or price we already hold — an imported summary
+      // payload with a null image/price must not erase good live data.
+      image_url: l.image_url ?? prev?.image_url ?? null,
+      price: l.price ?? prev?.price ?? null,
       price_history,
       raw_json: l.raw_json,
     };
