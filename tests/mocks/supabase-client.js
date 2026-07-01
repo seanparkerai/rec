@@ -28,7 +28,8 @@ class MockQuery {
   neq(col, val) { this._rows = this._rows.filter((r) => r?.[col] !== val); return this; }
   in(col, vals) { const set = new Set(vals); this._rows = this._rows.filter((r) => set.has(r?.[col])); return this; }
   not(col, op, val) {
-    if (op === 'is' && val === null) this._rows = this._rows.filter((r) => r?.[col] != null);
+    // PostgREST `not.<col>.is.<val>` semantics for val ∈ {null, true, false}.
+    if (op === 'is') this._rows = this._rows.filter((r) => (r?.[col] ?? null) !== val);
     return this;
   }
   is(col, val) { this._rows = this._rows.filter((r) => r?.[col] === val); return this; }
@@ -75,6 +76,7 @@ export class MockSupabaseClient {
       getSession: async () => ({ data: { session: this._session }, error: null }),
       getUser: async () => ({ data: { user: this._session?.user ?? null }, error: null }),
       signOut: async () => { this._session = null; return { error: null }; },
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
     };
   }
   from(table) { return new MockQuery(this.tables[table] ?? [], this.writes, table); }

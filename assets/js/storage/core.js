@@ -27,6 +27,14 @@ let _sbInitP = null;     // single in-flight init promise
 async function _initSb() {
   if (_sbInitP) return _sbInitP;
   _sbInitP = (async () => {
+    // Test seam (overhaul step 2.2): the integration tier injects the
+    // fixture-backed mock client (tests/mocks/supabase-client.js) so the REAL
+    // storage read/write paths run under Node with no network. Never set in
+    // the browser app; the dynamic import below stays the production path.
+    if (globalThis.__REC_TEST_SB__) {
+      _sb = globalThis.__REC_TEST_SB__;
+      return _sb;
+    }
     try {
       const mod = await import('../supabase-client.js');
       _sb = mod.supabase;
@@ -37,6 +45,10 @@ async function _initSb() {
   })();
   return _sbInitP;
 }
+
+// Test-only: drop the cached client/household/init-promise so each integration
+// test can inject a fresh fixture client. No production caller.
+export function _resetStorageForTests() { _sb = null; _hid = null; _sbInitP = null; }
 
 async function _getHid() {
   if (_hid) return _hid;

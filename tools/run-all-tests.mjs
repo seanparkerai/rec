@@ -70,17 +70,18 @@ for (const tier of TIERS) {
   const files = discover(tier);
   const results = [];
   const pending = [];
-  // register() calls test(name, fn) without awaiting — collect every returned
-  // promise and drain them before reporting, so genuinely async tests (the DOM
-  // tier) are counted. The legacy runner tolerates floating promises only
-  // because its suites are effectively synchronous.
+  // register() calls test(name, fn) without awaiting. Tests run SEQUENTIALLY
+  // (chained), not concurrently: integration suites inject shared process state
+  // (the core.js client seam), and concurrent async tests would race on it.
+  // The chain is drained before reporting so async tests are always counted.
+  let chain = Promise.resolve();
   const test = (name, fn) => {
-    const p = (async () => {
+    chain = chain.then(async () => {
       try { await fn(); results.push({ name, pass: true }); }
       catch (e) { results.push({ name, pass: false, error: e?.message || String(e) }); }
-    })();
-    pending.push(p);
-    return p;
+    });
+    pending.push(chain);
+    return chain;
   };
   const t0 = Date.now();
   for (const file of files) {

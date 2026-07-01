@@ -60,7 +60,7 @@
 
 *2.A — Pin current behaviour (before any change)*
 - [x] 2.1 `withinGeofence()` characterized: existing unit coverage audited (petals/tiebreak/corroboration/membership already pinned); new `tests/characterization/geofence-pipeline.test.js` pins the subtle contracts the rework leans on — km-sorted membership, primary-position independence, INCLUSIVE buffer boundary, exact mi conversion, sectoral membership, mixed-universe resolution, determinism (7 tests). 808/808. *(2026-07-01)*
-- [ ] 2.2 Characterization tests for the feed contract: membership scoping, origin exclusion, `geofence_pass`, gate order, decided suppression, fingerprint dedupe (extend `tests/listing-areas.test.js`).
+- [x] 2.2 Feed contract pinned at the INTEGRATION tier: the REAL `getListings()` runs under Node against the fixture mock via a new `core.js` test seam (`__REC_TEST_SB__` + `_resetStorageForTests`, extend-only §16 change) — membership scoping, Problem A (membership beats primary), Problem B (origin exclusion), paused-link exclusion, `geofence_pass` false/null/reveal semantics, status filter, ordering, membership attachment, empty-scope short-circuit (7 tests). Runner now executes tests sequentially (integration suites share process state). 815/815. *(2026-07-01)*
 - [ ] 2.3 Golden-master test for `fetch-listings` target-building: villages → outcodes → clusters → demand-gating, from fixtures (no network).
 
 *2.B — One geofence universe*
