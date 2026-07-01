@@ -239,8 +239,11 @@ list is in `tests/supabase-sync.test.js`. Never restate counts here.**
   source of truth = **repo JSON**, mirrored via MCP UPSERT where a mirror exists (§18.7).
   `data/areas.json` is derived by `tools/build-areas.mjs`.
 - **System / engine** (`households`, `household_members`, `sync_log`, plus fetcher-written
-  `listings` and the engine-managed refinement tables): Supabase-managed; never synced or directly
-  edited by Claude.
+  `listings` + its `listing_areas` m2m membership junction, and the engine-managed refinement
+  tables): Supabase-managed; never synced or directly edited by Claude. (`listing_areas` records
+  every area whose geofence contains a listing — `listings.area_id` stays the single primary;
+  `household_areas.is_origin` marks home/commute anchors excluded from the feed + fetch. See
+  `docs/SUPABASE_SYNC.md` / `docs/DATA_MODEL.md`.)
 
 ### 18.2 Mandatory MCP-first session start
 

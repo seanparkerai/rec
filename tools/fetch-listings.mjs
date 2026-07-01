@@ -58,6 +58,7 @@ import { probationDropIds, reprobeThisRun } from '../assets/js/refinement/scope.
 import { resolveConfig } from '../assets/js/refinement/config.js';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 import { passesBaseline } from '../assets/js/listings/classify.js';
+import { membershipRowsFor, replaceListingAreas } from './listing-areas-writer.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -539,7 +540,7 @@ async function loadHouseholdAreas() {
   if (!SERVICE_KEY) return { rows: [], links: [], ok: false };
   const headers = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` };
   try {
-    const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=household_id,area_id`;
+    const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=household_id,area_id,is_origin`;
     const laRes = await fetch(laUrl, { headers });
     if (!laRes.ok) throw new Error(`GET household_areas failed: ${laRes.status}`);
     const links = (await laRes.json()) || [];
@@ -810,6 +811,11 @@ async function main() {
   const areaHouseholds = new Map();
   for (const l of householdLinks || []) {
     if (!l?.area_id || !l?.household_id) continue;
+    // Origin areas (where the household LIVES, not where they want to buy) are
+    // excluded from the demand set: the fetcher must not spend Apify budget
+    // scraping a household's home/commute catchment whose listings the feed will
+    // never show (the display-side mirror of this drop is in storage/listings/feed.js).
+    if (l.is_origin) continue;
     if (!areaHouseholds.has(l.area_id)) areaHouseholds.set(l.area_id, new Set());
     areaHouseholds.get(l.area_id).add(l.household_id);
   }
@@ -943,6 +949,12 @@ async function main() {
       const filteredOut = inBuffer.length - onSpec.length;
 
       const deduped = dedupeByRightmoveId(onSpec);          // area_id already set by the geofence
+      // m2m membership for every listing we are about to write: the FULL in-buffer
+      // area set from the geofence verdict (one row per containing area, is_primary
+      // === the single area_id). Built from the same `geo` results, scoped to the
+      // rows that survived on-spec + dedupe so memberships match the upserted rows.
+      const writtenIds = new Set(deduped.map((l) => l.rightmove_id));
+      const memberRows = membershipRowsFor(geo.filter((x) => writtenIds.has(x.l.rightmove_id)));
       const flagged = deduped.filter((l) => l.corroborated === false).length;
       totalKept += deduped.length;
       totalFlagged += flagged;
@@ -980,6 +992,11 @@ async function main() {
 
       if (payload.length) {
         await restUpsert(payload);
+        // m2m membership: atomically replace each written listing's area set. Done
+        // AFTER the listings upsert so a membership row never references a row that
+        // failed to write. replace = delete-then-insert per listing (the set can
+        // shrink on re-geocode / radius tuning).
+        await replaceListingAreas(memberRows, { SUPABASE_URL, SERVICE_KEY });
         await syncLog(payload.map((p) => ({
           table_name: 'listings', actor: 'system', action: existing.has(p.rightmove_id) ? 'update' : 'insert', row_id: p.rightmove_id,
         })));

@@ -162,11 +162,15 @@ export function addressNamesVillage(listing, village) {
  * recorded via corroborated=false for downstream flagging.
  * @param {object} listing  needs .lat/.lng; optionally .town/.address/.postcode.
  * @param {object} opts     { villages:[{id,name,outcode,lat,lng,geofenceRadiusKm?}], radiusKm }
- * @returns {{ pass, km, distance_mi, area_id, name_match, corroborated }}
+ * @returns {{ pass, km, distance_mi, area_id, name_match, corroborated, areas }}
+ *   `areas` is the FULL m2m membership set: every in-buffer village, km-sorted,
+ *   as { area_id, distance_mi, is_primary } (exactly one is_primary, === area_id).
+ *   It is `[]` precisely when `pass` is false. The single `area_id` stays the
+ *   primary (named/nearest) area for backward compatibility — the junction is additive.
  */
 export function withinGeofence(listing, { villages = [], radiusKm = GEOFENCE_RADIUS_KM } = {}) {
   if (listing?.lat == null || listing?.lng == null || !villages.length) {
-    return { pass: false, km: null, distance_mi: null, area_id: null, name_match: null, corroborated: false };
+    return { pass: false, km: null, distance_mi: null, area_id: null, name_match: null, corroborated: false, areas: [] };
   }
   const here = { lat: Number(listing.lat), lng: Number(listing.lng) };
   // Distance to every active village + that village's own buffer (L7.3 override).
@@ -175,7 +179,7 @@ export function withinGeofence(listing, { villages = [], radiusKm = GEOFENCE_RAD
     .sort((a, b) => a.km - b.km);
   const nearest = scored[0];
   if (!nearest || !Number.isFinite(nearest.km)) {
-    return { pass: false, km: null, distance_mi: null, area_id: null, name_match: null, corroborated: false };
+    return { pass: false, km: null, distance_mi: null, area_id: null, name_match: null, corroborated: false, areas: [] };
   }
   // Overlap tiebreak (L7.6): among villages whose buffer actually CONTAINS the
   // listing, prefer the NEAREST one the address explicitly NAMES. A home sitting
@@ -192,7 +196,17 @@ export function withinGeofence(listing, { villages = [], radiusKm = GEOFENCE_RAD
   // name_match (no text) is treated as "not contradicted" so coordinate-only
   // listings still pass — but the absence is recorded via name_match=null.
   const corroborated = pass && name_match !== false;
-  return { pass, km: chosen.km, distance_mi: chosen.km * MILES_PER_KM, area_id: chosen.v.id, name_match, corroborated };
+  // Full m2m membership: every in-buffer village (already km-sorted). is_primary
+  // marks the chosen primary — the same village the single area_id keeps pointing
+  // at — so the junction is purely additive (one of these rows IS the primary).
+  const areas = pass
+    ? inBuffer.map((s) => ({
+        area_id: s.v.id,
+        distance_mi: s.km * MILES_PER_KM,
+        is_primary: s.v.id === chosen.v.id,
+      }))
+    : [];
+  return { pass, km: chosen.km, distance_mi: chosen.km * MILES_PER_KM, area_id: chosen.v.id, name_match, corroborated, areas };
 }
 
 /** Pull a full postcode (outcode + incode) or bare outcode token from an address. */

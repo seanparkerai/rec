@@ -58,6 +58,7 @@ const { register: registerListingsPickerState } = await import('../tests/listing
 const { register: registerPurgeListings } = await import('../tests/purge-listings.test.js');
 const { register: registerVerifyAreaCoords } = await import('../tests/verify-area-coords.test.js');
 const { register: registerBackfillGeofence } = await import('../tests/backfill-geofence.test.js');
+const { register: registerListingAreas } = await import('../tests/listing-areas.test.js');
 const { register: registerResolveAreas } = await import('../tests/resolve-areas.test.js');
 const { register: registerAreaMatch } = await import('../tests/area-match.test.js');
 const { register: registerSetupWizard } = await import('../tests/setup-wizard.test.js');
@@ -125,6 +126,7 @@ await registerListingsPickerState({ test, assert, assertEqual });
 await registerPurgeListings({ test, assert, assertEqual });
 await registerVerifyAreaCoords({ test, assert, assertEqual, fixtures });
 await registerBackfillGeofence({ test, assert, assertEqual, fixtures });
+await registerListingAreas({ test, assert, assertEqual, fixtures });
 await registerResolveAreas({ test, assert, assertEqual, fixtures });
 await registerListingFit({ test, assert, assertEqual, fixtures });
 await registerListingReactions({ test, assert, assertEqual, fixtures });

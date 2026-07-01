@@ -73,16 +73,21 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
   // (offline / pre-auth / local dev) we leave the scope open so tests and the
   // signed-out shell still render, mirroring getHouseholdAreas()'s fallback.
   let areaIds = null;
+  let memberIds = null;
   if (scopeToHousehold) {
     const hid = await _getHid();
     if (hid) {
       const { data: links, error: laErr } = await sb
         .from('household_areas')
-        .select('area_id')
+        .select('area_id, is_origin')
         .eq('household_id', hid)
         .eq('status', 'active');
       if (laErr) { console.error('storage: read household_areas (scope)', laErr.message); return []; }
-      areaIds = (links ?? []).map((l) => l.area_id);
+      // Origin areas (home/commute anchors) contribute to commute math but are
+      // EXCLUDED from listing-feed membership: their catchment is where the
+      // household lives, not where they want to buy. Mirror of the fetcher's demand
+      // gate in tools/fetch-listings.mjs.
+      areaIds = (links ?? []).filter((l) => !l.is_origin).map((l) => l.area_id);
       // Display side of the active:false contract: drop any area the catalog marks a
       // curated disable (active:false, not an onboarding stub), mirroring the scraper's
       // householdRowsToVillages guard via the SAME excludeCuratedDisabled rule. A stale
@@ -92,6 +97,22 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
       try { areaIds = excludeCuratedDisabled(areaIds, await getAreaCatalog()); }
       catch (e) { console.error('storage: scope catalog disable', e.message); }
       if (areaIds.length === 0) return []; // no areas chosen → no listings belong here yet
+      // m2m membership: a listing belongs to EVERY area whose geofence contains it
+      // (areas overlap), recorded in listing_areas. Resolve the set of listing ids
+      // that are members of any of the household's (non-origin) areas, then filter
+      // the feed by rightmove_id — so a listing physically inside an area you hold is
+      // visible even when its single primary area_id is one you don't. PostgREST
+      // can't express a cross-table IN in one filter, so resolve the id set first.
+      const ids = new Set();
+      for (let from = 0; ; from += 1000) {
+        const { data, error } = await sb.from('listing_areas')
+          .select('rightmove_id').in('area_id', areaIds).range(from, from + 999);
+        if (error) { console.error('storage: read listing_areas (scope)', error.message); return []; }
+        for (const r of data ?? []) ids.add(r.rightmove_id);
+        if ((data ?? []).length < 1000) break;
+      }
+      memberIds = [...ids];
+      if (memberIds.length === 0) return []; // no listings sit in any held area yet
     }
   }
   // Each query starts from the same base; we rebuild it per page so the filters
@@ -99,8 +120,10 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
   const buildQuery = () => {
     let q = sb.from('listings').select(_LISTING_COLS).order('first_seen', { ascending: false });
     if (status) q = q.eq('status', status);
-    // Scope to the household's selected areas (see the doc comment above).
-    if (areaIds) q = q.in('area_id', areaIds);
+    // Scope to the household's areas via m2m membership (see the doc comment above):
+    // filter by the listing ids that are members of a held (non-origin) area, NOT by
+    // the single primary area_id column (which would hide overlap-area listings).
+    if (memberIds) q = q.in('rightmove_id', memberIds);
     // L7: only show listings inside a target-village geofence. Exclude
     // geofence_pass === false; a null verdict (a not-yet-backfilled row) is
     // treated as pass so nothing vanishes before the backfill lands.

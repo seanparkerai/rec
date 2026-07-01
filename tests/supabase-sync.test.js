@@ -92,6 +92,48 @@ test('listings baseline gate is wired into every writer (pollution guard, v3 P1)
   }
 });
 
+test('listing_areas (m2m) membership is written by every listings writer + backfilled', async () => {
+  // The junction is live content (same class as listings): every path that writes
+  // listings must also write its area membership, and the one-off backfill must
+  // recompute it from the SAME withinGeofence. Guard writer parity by source.
+  const writer = await readFile(resolve(root, 'tools/listing-areas-writer.mjs'), 'utf8');
+  assert(/export function membershipRowsFor\(/.test(writer) && /export async function replaceListingAreas\(/.test(writer),
+    'listing-areas-writer must export membershipRowsFor + replaceListingAreas');
+  for (const tool of ['tools/fetch-listings.mjs', 'tools/import-apify-runs.mjs', 'tools/backfill-listing-areas.mjs']) {
+    const src = await readFile(resolve(root, tool), 'utf8');
+    assert(/listing-areas-writer/.test(src) || /replace_listing_areas/.test(src),
+      `${tool} must write listing_areas membership`);
+  }
+  // The fetcher computes the full membership set from the geofence verdict.
+  const fetcher = await readFile(resolve(root, 'tools/fetch-listings.mjs'), 'utf8');
+  assert(/membershipRowsFor\(/.test(fetcher) && /replaceListingAreas\(/.test(fetcher),
+    'fetch-listings must build + write memberships after the listings upsert');
+});
+
+test('listing_areas is live-content (untracked): NOT in the tracked snapshot', async () => {
+  // Same class as listings — service-role write, public read, never git-synced —
+  // so it must NOT appear as a tracked snapshot table (no sync ceremony for it).
+  const snapshot = JSON.parse(await readFile(resolve(root, 'data/snapshots/sync-state.json'), 'utf8'));
+  assert(!('listing_areas' in snapshot),
+    'listing_areas must NOT be a tracked snapshot table (it is live content)');
+  const doc = await readFile(resolve(root, 'docs/SUPABASE_SYNC.md'), 'utf8');
+  assert(/7 untracked/.test(doc), 'SUPABASE_SYNC.md must record 7 untracked tables');
+  assert(/listing_areas/.test(doc), 'SUPABASE_SYNC.md must document listing_areas');
+});
+
+test('feed read scopes via the junction and excludes origin areas (m2m + origin)', async () => {
+  // The feed must (a) drop origin areas from the household scope, and (b) resolve
+  // membership through listing_areas rather than the single area_id column.
+  const feed = await readFile(resolve(root, 'assets/js/storage/listings/feed.js'), 'utf8');
+  assert(/is_origin/.test(feed) && /filter\(\(l\) => !l\.is_origin\)/.test(feed),
+    'feed must exclude origin areas from the household scope');
+  assert(/from\('listing_areas'\)/.test(feed) && /\.in\('rightmove_id', memberIds\)/.test(feed),
+    'feed must scope listings by listing_areas membership (rightmove_id), not area_id');
+  // The fetcher demand set must drop origin areas too (cost corollary).
+  const fetcher = await readFile(resolve(root, 'tools/fetch-listings.mjs'), 'utf8');
+  assert(/is_origin/.test(fetcher), 'fetcher must read is_origin and drop origin areas from the demand set');
+});
+
 test('purge tool reuses the baseline + fingerprint contract (no drift, v3 P4)', async () => {
   // tools/purge-listings.mjs must reuse the SAME gate + fingerprint as the feed, never
   // re-implement them, so a purge can't diverge from what the feed suppresses.

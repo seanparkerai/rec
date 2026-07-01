@@ -28,10 +28,12 @@
 import {
   normaliseRawListing,
   matchListingToArea,
+  withinGeofence,
   dedupeByRightmoveId,
   mergePriceHistory,
 } from './listings-normalise.mjs';
 import { loadOutcodeMap } from './fetch-listings.mjs';
+import { membershipRowsFor, replaceListingAreas } from './listing-areas-writer.mjs';
 import { passesBaseline } from '../assets/js/listings/classify.js';
 import { pathToFileURL } from 'node:url';
 
@@ -162,6 +164,28 @@ async function main() {
   const deduped = dedupeByRightmoveId(collected);
   console.log(`\ncollected ${collected.length} → unique ${deduped.length} (rejected wrong-region ${totalRejected})`);
 
+  // m2m membership: run the SAME withinGeofence the live fetcher uses over the same
+  // village index, so backfilled rows carry the identical listing_areas set. For a
+  // row inside a village buffer, align its primary area_id + geofence fields to the
+  // geofence verdict (matching fetch-listings), so listings.area_id == the junction's
+  // is_primary. Rows outside every buffer keep their matchListingToArea area_id and
+  // get no membership rows (they were accepted only by the coarse 20km region guard).
+  const geo = deduped.map((l) => ({ l, g: withinGeofence(l, { villages: areas }) }));
+  for (const { l, g } of geo) {
+    if (!g.pass) continue;
+    l.area_id = g.area_id;
+    l.distance_mi = g.distance_mi;
+    l.geofence_pass = true;
+    l.name_match = g.name_match;
+    l.corroborated = g.corroborated;
+    l.match_source = g.name_match !== null ? 'coordinates+name' : 'coordinates';
+  }
+  const memberRowsById = new Map();
+  for (const r of membershipRowsFor(geo)) {
+    if (!memberRowsById.has(r.rightmove_id)) memberRowsById.set(r.rightmove_id, []);
+    memberRowsById.get(r.rightmove_id).push(r);
+  }
+
   if (DRY_RUN) {
     for (const l of deduped.slice(0, 10)) {
       console.log(`    • ${l.address ?? '—'} — £${(l.price ?? 0).toLocaleString('en-GB')} — ${l.beds ?? '?'}bd ${l.property_type ?? ''} → ${l.outcode}/${l.area_id ?? '—'}`);
@@ -191,6 +215,10 @@ async function main() {
   for (let i = 0; i < payload.length; i += CHUNK) {
     const slice = payload.slice(i, i + CHUNK);
     await restUpsert(slice);
+    // m2m membership for this slice — written after the listings upsert so a
+    // membership row never references a row that failed to write.
+    const sliceMembers = slice.flatMap((p) => memberRowsById.get(p.rightmove_id) ?? []);
+    await replaceListingAreas(sliceMembers, { SUPABASE_URL, SERVICE_KEY });
     await syncLog(slice.map((p) => ({
       table_name: 'listings', actor: 'system', action: existing.has(p.rightmove_id) ? 'update' : 'insert', row_id: p.rightmove_id,
     })));

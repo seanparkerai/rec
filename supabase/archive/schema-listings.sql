@@ -84,4 +84,55 @@ DROP TRIGGER IF EXISTS trg_touch_listings ON listings;
 CREATE TRIGGER trg_touch_listings BEFORE UPDATE ON listings
   FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 
+-- ── listing↔area membership (m2m) + origin areas ──────────────────────────────
+-- A listing is stamped with ONE primary `listings.area_id` (named/nearest village),
+-- but areas have OVERLAPPING geofences, so a listing can sit inside several areas at
+-- once. `listing_areas` records the FULL membership set (every area whose geofence
+-- contains it); `listings.area_id` stays the primary (one row here, is_primary=true).
+-- Same live-content class as `listings`: service-role write, public read, never
+-- git-synced. The feed reads membership here instead of the single area_id column,
+-- so a listing inside an area you hold is visible even when its primary is one you
+-- don't. See docs/SUPABASE_SYNC.md and the HANDOFF for the m2m + origin rationale.
+CREATE TABLE IF NOT EXISTS listing_areas (
+  rightmove_id  text    NOT NULL,            -- → listings.rightmove_id (logical ref, loose like area_id)
+  area_id       text    NOT NULL,            -- → areas.id
+  distance_mi   double precision,            -- listing → this area's centroid (mi)
+  is_primary    boolean NOT NULL DEFAULT false,  -- mirrors listings.area_id (the named/nearest home area)
+  created_at    timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (rightmove_id, area_id)
+);
+CREATE INDEX IF NOT EXISTS idx_listing_areas_area    ON listing_areas (area_id);
+CREATE INDEX IF NOT EXISTS idx_listing_areas_listing ON listing_areas (rightmove_id);
+ALTER TABLE listing_areas ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "listing_areas public read" ON listing_areas;
+CREATE POLICY "listing_areas public read" ON listing_areas FOR SELECT USING (true);
+
+-- Atomic membership replace for one listing (delete-then-insert in one txn): a
+-- listing's membership set can SHRINK on re-geocode / radius tuning, so a plain
+-- upsert would leave stale rows. SECURITY DEFINER → the service-role fetcher writes
+-- the whole set atomically. p_rows = json array of { area_id, distance_mi, is_primary }.
+CREATE OR REPLACE FUNCTION replace_listing_areas(p_rightmove_id text, p_rows jsonb)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  DELETE FROM listing_areas WHERE rightmove_id = p_rightmove_id;
+  INSERT INTO listing_areas (rightmove_id, area_id, distance_mi, is_primary)
+  SELECT p_rightmove_id,
+         (r->>'area_id')::text,
+         NULLIF(r->>'distance_mi','')::double precision,
+         COALESCE((r->>'is_primary')::boolean, false)
+  FROM jsonb_array_elements(COALESCE(p_rows, '[]'::jsonb)) AS r
+  ON CONFLICT (rightmove_id, area_id) DO UPDATE
+    SET distance_mi = EXCLUDED.distance_mi, is_primary = EXCLUDED.is_primary;
+END;
+$$;
+
+-- Origin areas: a home/commute-anchor area contributes to commute math but is
+-- EXCLUDED from listing-feed membership + the fetcher demand set (its catchment is
+-- where the household LIVES, not where they want to buy). Household-specific.
+ALTER TABLE household_areas ADD COLUMN IF NOT EXISTS is_origin boolean NOT NULL DEFAULT false;
+
 COMMIT;

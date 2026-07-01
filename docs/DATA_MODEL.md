@@ -135,3 +135,25 @@ Validates the CSV column format, deduplicates by transaction ID, writes the outp
 | `assets/js/investment-performance.js` | `analysePerformance()`, `getMonthlyCumulativeDeposits()`, `getEpochAttribution()` | history | Stub-safe. Adds cumulative + per-epoch helpers. |
 | `assets/js/savings-series.js` | `buildSavingsSeries()` | history + finances + goal | Composes monthly cumulative deposits with the engine baseline projection. Stub-safe. |
 | `assets/js/finances.js` | `calcSDLT()`, `calcMonthlyMortgage()`, `calcLTV()` etc. | primitives | Pure; do not rewrite |
+
+## Listings ↔ areas (live content)
+
+`listings` is fetcher-written live content (Supabase only, never git-synced; see
+`docs/SUPABASE_SYNC.md`). Two complementary columns/tables tie a listing to areas:
+
+| Field | Meaning |
+|-------|---------|
+| `listings.area_id` | The **primary** area — the single named/nearest village (address tiebreak in `withinGeofence`). Consumed by `page-property.js` (area-detail lookup) and `page-listings.js` (per-area radius + probation via `normArea`). **Do not drop or repurpose.** |
+| `listing_areas` (m2m) | The **full membership set** — one row per area whose geofence *contains* the listing (`rightmove_id`, `area_id`, `distance_mi`, `is_primary`). Exactly one `is_primary=true` row, equal to `listings.area_id`. Live content (service-role write, public read). |
+
+Village geofences **overlap**, so a listing can sit inside several areas at once. The feed
+scopes to a household's areas via `listing_areas` membership (filter by `rightmove_id`), NOT the
+single `area_id` — so a listing physically inside an area you hold is visible even when its
+primary is one you don't. Writers: both `tools/fetch-listings.mjs` and
+`tools/import-apify-runs.mjs` emit membership from `withinGeofence().areas` via the
+`replace_listing_areas` RPC; `tools/backfill-listing-areas.mjs` seeded existing rows.
+
+**Origin areas** (`household_areas.is_origin=true`): a home/commute-anchor area. It counts for
+commute math but is **excluded from the listing feed and the fetcher demand set** — its
+catchment is where the household lives, not where they want to buy. Contrast a **target** area
+(the default) whose listings the household wants to see.

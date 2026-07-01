@@ -37,8 +37,14 @@ doc, test, or rule that states a different count is wrong and must be reconciled
 - **2 content mirrors**: `areas` (**DB-canonical** since the 2026-06-04 §18.5 relaxation —
   `data/areas/<id>.json` is a materialised view) and `house_types` (repo-JSON-canonical, mirrored).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.
-- **6 untracked** (never git-synced): `listings` (live content, see below) and the
-  engine-managed tables `refinement_suggestions`, `refinement_runs`, `scrape_probation`,
+- **7 untracked** (never git-synced): `listings` (live content, see below), `listing_areas`
+  (the listing↔area **m2m membership** junction — live content of the SAME class as `listings`:
+  service-role write, public-SELECT RLS, never git-synced; one row per area whose geofence
+  contains a listing, `is_primary` mirroring `listings.area_id`; written by BOTH listings writers
+  via the `replace_listing_areas` SECURITY DEFINER RPC and recomputed one-off by
+  `tools/backfill-listing-areas.mjs`; the feed reads it to surface a listing inside ANY held
+  area, not just its single primary — see below), and the engine-managed tables
+  `refinement_suggestions`, `refinement_runs`, `scrape_probation`,
   `area_search_tuning` (the per-area learned search radius — AREA-GLOBAL, public-SELECT
   RLS like the content mirrors but service-role-only writes; written by
   `tools/radius-tune.mjs`, read live by `tools/fetch-listings.mjs`; see
@@ -47,6 +53,17 @@ doc, test, or rule that states a different count is wrong and must be reconciled
   pipeline — written by the browser via `storage/listings/feed.js#saveListingsReviewCount` and
   read by the `/live-feed` kiosk RPC `live_feed_stats`; recomputable, never git-synced; RLS via
   `is_household_member()`).
+
+**SECURITY DEFINER RPCs (service-role/engine writes):** `live_feed_stats` (admin kiosk
+aggregate), `request_rightmove_fetch` (portal→fetcher dispatch), and `replace_listing_areas`
+(`p_rightmove_id`, `p_rows jsonb`) — atomically deletes then re-inserts one listing's
+`listing_areas` set in a single transaction (the membership set can SHRINK on re-geocode or
+radius tuning, so a plain upsert would leave stale rows).
+
+**`household_areas.is_origin`** (boolean, default false): marks a home/commute-anchor area.
+An origin area contributes to commute math but is **excluded from listing-feed membership**
+(the feed drops it from the household scope) AND from the **fetcher demand set** (it is not
+scraped) — its catchment is where the household LIVES, not where they want to buy.
 
 Note: `checklists` and `outreach_templates` have **no** mirror table — those catalogues are
 repo-JSON-only.
@@ -60,6 +77,18 @@ backfill `import-apify-runs.mjs`) apply the `passesBaseline` gate
 by user-approved one-off MCP cleanups. The reject SIGNAL that drives feed suppression lives in the
 append-only `listing_reactions` log, NOT in `listings`, so purging a heavy listings row never loses
 suppression.
+
+**`listing_areas` — the m2m membership junction (2026-07).** `listings.area_id` stays the
+listing's single PRIMARY area (named/nearest village, still consumed by `page-property.js` /
+`page-listings.js`). But village geofences OVERLAP, so a listing physically inside an area you
+hold could be invisible when its primary is a *different* area you don't hold. `listing_areas`
+records the FULL membership set — one row per area whose geofence contains the listing, with
+exactly one `is_primary=true` row equal to `listings.area_id`. The feed resolves the household's
+(non-origin) areas → the member listing ids via `listing_areas` → filters listings by
+`rightmove_id` (not `area_id`). Both writers emit membership from `withinGeofence().areas` via
+`replace_listing_areas`; `tools/backfill-listing-areas.mjs` seeded the existing rows (a pure £0
+recompute over the same DB area universe + tuning). Do **not** drop `area_id` or the junction —
+they are complementary (primary vs. full membership). See `docs/DATA_MODEL.md` / `docs/AREAS.md`.
 
 *History (collapsed):* `listings` / `listing_reactions` landed v3 L1/L3 (2026-05-30),
 `learned_preferences` L4 and `area_confirmations` Step 5 (2026-05-31), `household_areas` +

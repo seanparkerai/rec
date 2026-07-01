@@ -273,4 +273,38 @@ export async function register({ test, assert, assertEqual }) {
   test('corroboration: nameAgrees returns null when there is nothing to check', () => {
     assertEqual(nameAgrees({}, SP11_VILLAGES[0]), null);
   });
+
+  // ── m2m membership: withinGeofence().areas = every in-buffer village ──
+  test('geofence areas: a home in two overlapping disks is a member of BOTH, one is_primary', () => {
+    const villages = [
+      { id: 'dundridge-so32', name: 'Dundridge', outcode: 'SO32', lat: 50.9413, lng: -1.1952 },
+      { id: 'waltham-chase-so32', name: 'Waltham Chase', outcode: 'SO32', lat: 50.9675, lng: -1.2077 },
+    ];
+    const home = { lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase, SO32', postcode: 'SO32' };
+    const r = withinGeofence(home, { villages });
+    const ids = r.areas.map((a) => a.area_id).sort();
+    assertEqual(JSON.stringify(ids), JSON.stringify(['dundridge-so32', 'waltham-chase-so32']));
+    const primaries = r.areas.filter((a) => a.is_primary);
+    assertEqual(primaries.length, 1);                          // exactly one primary
+    assertEqual(primaries[0].area_id, r.area_id);              // and it equals the single area_id
+    assertEqual(primaries[0].area_id, 'waltham-chase-so32');   // the address-named tiebreak winner
+    assert(r.areas.every((a) => Number.isFinite(a.distance_mi)), 'every membership row carries a distance');
+  });
+
+  test('geofence areas: membership is [] exactly when pass is false', () => {
+    // A point far from every village → no in-buffer area → not a member of anything.
+    const r = withinGeofence({ lat: 52.5, lng: -1.9 }, { villages: SP11_VILLAGES });
+    assertEqual(r.pass, false);
+    assertEqual(JSON.stringify(r.areas), '[]');
+    // No villages at all → also [].
+    assertEqual(JSON.stringify(withinGeofence({ lat: 51.1, lng: -1.4 }, { villages: [] }).areas), '[]');
+  });
+
+  test('geofence areas: a single-village match yields one primary member', () => {
+    const r = withinGeofence({ lat: 51.145, lng: -1.468, town: 'Wherwell', postcode: 'SP11 7JX' }, { villages: SP11_VILLAGES });
+    assert(r.pass, 'in buffer');
+    assert(r.areas.length >= 1, 'at least the matched village');
+    assertEqual(r.areas.filter((a) => a.is_primary).length, 1);
+    assertEqual(r.areas.find((a) => a.is_primary).area_id, r.area_id);
+  });
 }
