@@ -56,7 +56,7 @@ import { isCuratedDisabled } from '../assets/js/areas/area-ref.js';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
 import { probationDropIds, reprobeThisRun } from '../assets/js/refinement/scope.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
-import { applyRadiusTuning } from './lib/geofence-universe.mjs';
+import { applyRadiusTuning, loadUniverseFromRepo } from './lib/geofence-universe.mjs';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 import { passesBaseline } from '../assets/js/listings/classify.js';
 import { membershipRowsFor, replaceListingAreas } from './listing-areas-writer.mjs';
@@ -118,25 +118,14 @@ const BROWSER_HEADERS = {
 };
 
 // ── areas → outcode map ──────────────────────────────────────────────────────
+// The village universe now comes from THE canonical loader (step 2.5):
+// tools/lib/geofence-universe.mjs. Repo edge = the DB-materialised view
+// (repo-active areas); live household stubs are still merged in main() via
+// householdRowsToVillages, and tuning is applied after the REST read — the
+// composed behaviour is pinned by tests/characterization/fetch-targets.test.js.
 async function loadOutcodeMap() {
-  const dir = resolve(root, 'data/areas');
-  const files = (await readdir(dir)).filter((f) => f.endsWith('.json'));
-  const map = new Map(); // outcode → [{ id, name, outcode, lat, lng, geofenceRadiusKm? }]
-  for (const f of files) {
-    const a = JSON.parse(await readFile(resolve(dir, f), 'utf8'));
-    if (a.active === false) continue;                       // L7.5 pruning (default active)
-    const oc = String(a.postcode || '').toUpperCase().trim();
-    const lat = a.coords?.lat, lng = a.coords?.lng;
-    if (!oc || lat == null || lng == null) continue;
-    if (!map.has(oc)) map.set(oc, []);
-    map.get(oc).push({
-      id: a.id, name: a.name, outcode: oc, lat: Number(lat), lng: Number(lng),
-      geofenceRadiusKm: a.geofenceRadiusMi != null ? Number(a.geofenceRadiusMi) / MILES_PER_KM : undefined,
-      searchRadiusMi: a.searchRadiusMi != null ? Number(a.searchRadiusMi) : undefined,
-      rightmove: a.rightmove || undefined,
-    });
-  }
-  return map;
+  const { outcodeMap } = await loadUniverseFromRepo();
+  return outcodeMap;
 }
 
 /** Flatten the outcode map into the global active-village index. The geofence is

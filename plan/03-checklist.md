@@ -65,7 +65,7 @@
 
 *2.B — One geofence universe*
 - [x] 2.4 `tools/lib/geofence-universe.mjs` created: pure `buildUniverse()` core (inclusion = coords AND (active OR linked); tuning applied; outcode grouping) + `toVillage` (lifted) + `applyRadiusTuning` (moved from the fetcher, re-exported for compat) + DB REST edge and repo materialised-view edge; 6 unit tests incl. stubbed-REST composition and a real-repo smoke (175 villages / 18 outcodes today). 825/825. *(2026-07-01)*
-- [ ] 2.5 Migrate `fetch-listings.mjs` onto the shared loader (delete `loadOutcodeMap` + inline tuning overlay); golden-master 2.3 must not change demand output for the fixture case.
+- [x] 2.5 Fetcher migrated: `loadOutcodeMap` is now a thin call to the canonical `loadUniverseFromRepo()` (divergent parsing deleted; tuning overlay already shared since 2.4; live stub merge unchanged); golden-master byte-identical. `import-apify-runs` consumes the same export, so it rides along until its own 2.8 migration. 825/825. *(2026-07-01)*
 - [ ] 2.6 Migrate `backfill-listing-areas.mjs` onto it (delete `restLoadVillages`/`toVillage`).
 - [ ] 2.7 Migrate `backfill-geofence.mjs` (delete `loadActiveVillages`) and `radius-tune.mjs` (`loadAreaCentres`) onto it.
 - [ ] 2.8 Migrate `import-apify-runs.mjs` onto it and delete `matchListingToArea()` + `assignArea()` from the ingestion path — `withinGeofence()` is now the only matcher (one-predicate invariant test).
