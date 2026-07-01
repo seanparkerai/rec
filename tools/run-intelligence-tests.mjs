@@ -26,18 +26,9 @@ function assertEqual(actual, expected, msg) {
   }
 }
 
-const { deriveFinances } = await import('../assets/js/finance-derive.js');
-
-const rawFinances = readJson('data/fixtures/finances.sample.json');
-let rawInvestments = null;
-try { rawInvestments = readJson('data/fixtures/investments.sample.json'); } catch { /* optional */ }
-
-const fixtures = {
-  finances: deriveFinances(rawFinances, { investments: rawInvestments }),
-  rawFinances,
-  investments: rawInvestments,
-  criteria: readJson('data/fixtures/criteria.sample.json'),
-};
+// Fixtures come from the single source (tests/fixtures.mjs, step 1.3).
+const { getFixtures } = await import('../tests/fixtures.mjs');
+const fixtures = await getFixtures();
 
 const { register: registerFinanceDerive } = await import('../tests/finance-derive.test.js');
 const { register: registerAffordability } = await import('../tests/affordability.test.js');

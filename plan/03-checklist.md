@@ -44,7 +44,7 @@
 **Phase 1 — The net, first: new test-harness core (§5; strangler — old runner stays green throughout)**
 - [x] 1.1 devDependencies added (jsdom ^29.1.1, happy-dom ^20.10.6) + package-lock.json; Pages deploy verified unaffected (uploads a fresh checkout, node_modules gitignored). *(2026-07-01)*
 - [x] 1.2 `tools/run-all-tests.mjs` stood up beside the old runner (`npm run test:new`): dynamic tier discovery, same `register()` contract (suites port by moving), `--tier` filter, per-tier summaries, lint + sync suite on full runs with online-skips reported as unrun. *(2026-07-01)*
-- [ ] 1.3 Centralise fixtures: `tests/fixtures.mjs` (memoised loaders over `data/fixtures/*.sample.json`) + `tests/mocks/supabase-client.js` (fixture-backed stub with `.from().select()` + mock session).
+- [x] 1.3 Fixtures centralised in `tests/fixtures.mjs` (memoised; both runners consume it) + `tests/mocks/supabase-client.js` (chainable fixture-backed stub, self-tested by the first unit-tier suite, 6/6). *(2026-07-01)*
 - [ ] 1.4 Port suite batch A (pure finance: affordability, calc-*, money-flow, savings) into `tests/unit/` + `tests/characterization/`; both runners green.
 - [ ] 1.5 Port suite batch B (listings: classify, fit, feed-partition, suppress, reactions, listing-areas) likewise.
 - [ ] 1.6 Port suite batch C (refinement/learned-prefs/suggestions/radius) likewise.

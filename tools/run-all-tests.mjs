@@ -17,13 +17,12 @@
 //   node tools/run-all-tests.mjs                 # all tiers + lint + sync suite
 //   node tools/run-all-tests.mjs --tier unit     # a single tier, fast iteration
 
-import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import { readdirSync, existsSync, statSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 import { spawn } from 'node:child_process';
 
 const __root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const readJson = (p) => JSON.parse(readFileSync(join(__root, p), 'utf8'));
 
 export const TIERS = ['unit', 'contract', 'characterization', 'integration', 'pages'];
 
@@ -44,20 +43,8 @@ function assertEqual(actual, expected, msg) {
   }
 }
 
-// ---- shared fixtures (extracted to tests/fixtures.mjs in step 1.3; inline
-// here mirrors the legacy runner byte-for-byte until then) -------------------
-async function buildFixtures() {
-  const { deriveFinances } = await import('../assets/js/finance-derive.js');
-  const rawFinances = readJson('data/fixtures/finances.sample.json');
-  let rawInvestments = null;
-  try { rawInvestments = readJson('data/fixtures/investments.sample.json'); } catch { /* optional */ }
-  return {
-    finances: deriveFinances(rawFinances, { investments: rawInvestments }),
-    rawFinances,
-    investments: rawInvestments,
-    criteria: readJson('data/fixtures/criteria.sample.json'),
-  };
-}
+// ---- shared fixtures (tests/fixtures.mjs — the single source, step 1.3) ----
+const { getFixtures } = await import('../tests/fixtures.mjs');
 
 // ---- discovery --------------------------------------------------------------
 function discover(tier) {
@@ -76,7 +63,7 @@ const byTier = new Map();
 let failedTotal = 0;
 let passedTotal = 0;
 
-const fixtures = await buildFixtures();
+const fixtures = await getFixtures();
 
 for (const tier of TIERS) {
   if (onlyTier && tier !== onlyTier) continue;
