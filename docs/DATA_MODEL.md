@@ -153,6 +153,13 @@ primary is one you don't. Writers: both `tools/fetch-listings.mjs` and
 `tools/import-apify-runs.mjs` emit membership from `withinGeofence().areas` via the
 `replace_listing_areas` RPC; `tools/backfill-listing-areas.mjs` seeded existing rows.
 
+**One visibility predicate (2026-07-01):** the `household_feed(p_household_id, …)` SECURITY
+DEFINER RPC owns the whole per-household rule in one place — membership ∩ non-origin active
+areas ∩ curated-disable ∩ `geofence_pass` ∩ baseline, ordered + paged, with the full membership
+set attached as `areas` jsonb. Contract: `supabase/archive/schema-household-feed.sql` +
+`tests/contract/household-feed.test.js` (fixture reference implementation:
+`tests/mocks/household-feed-rpc.js`). The storage feed read is pointed at it in step 2.13.
+
 **Origin areas** (`household_areas.is_origin=true`): a home/commute-anchor area. It counts for
 commute math but is **excluded from the listing feed and the fetcher demand set** — its
 catchment is where the household lives, not where they want to buy. Contrast a **target** area

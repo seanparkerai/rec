@@ -77,7 +77,7 @@
 - [ ] 2.11b Full membership + geofence-field sweep runs in CI via the 2.15 workflow (fields first via backfill-geofence, then membership via the RPC path), checksum-verified — a ~4,000-row bulk write belongs in CI, not MCP-transported SQL (log §5.8). Unblocked by ⚙ 2.16.
 
 *2.D — One visibility predicate*
-- [ ] 2.12 Migration: `household_feed(household_id)` SECURITY DEFINER RPC/view — membership ∩ non-origin active areas ∩ `geofence_pass` ∩ baseline, paged; contract-tested against fixtures.
+- [x] 2.12 Migration LIVE (`household_feed_rpc`): `household_feed(p_household_id, …)` SECURITY DEFINER RPC — membership ∩ non-origin active areas ∩ curated-disable ∩ `geofence_pass` ∩ baseline (classify.js constants + \y-translated type regexes, anti-drift-pinned by `tests/contract/household-feed.test.js` over the `supabase/archive/schema-household-feed.sql` mirror), ordered + paged, `areas` jsonb attached; fixture reference impl `tests/mocks/household-feed-rpc.js` (12 contract tests). Live verify: exact set parity with the reference predicate (392=392, 0 missing/extra/doubled), Shedfield visible, baseline hides only the ever-liked £435k row (already decided-suppressed → zero visible-row change); guard verified anon/member/non-member. Applied via execute_sql + history insert (apply_migration approval stream down — disclosed, as 2.9). 837/837. *(2026-07-01)*
 - [ ] 2.13 Point `storage/listings/feed.js` at the RPC (rail phase, pre-authorised): client id-list `.in()` and the double-gate retired; feed characterization (2.2) green throughout.
 - [ ] 2.14 Live acceptance: re-verify the Shedfield/Whiteley invariants (§3 of the 2026-07-01 log) + counts vs the RPC.
 

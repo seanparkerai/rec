@@ -60,6 +60,16 @@ aggregate), `request_rightmove_fetch` (portal→fetcher dispatch), and `replace_
 `listing_areas` set in a single transaction (the membership set can SHRINK on re-geocode or
 radius tuning, so a plain upsert would leave stale rows).
 
+**SECURITY DEFINER RPC (per-household read):** `household_feed(p_household_id, …)` — the ONE
+visibility predicate (2026-07-01, migration `household_feed_rpc`): membership ∩ non-origin
+active areas ∩ curated-disable rule ∩ `geofence_pass IS DISTINCT FROM false` ∩ the
+`passesBaseline` rule (constants + type regexes mirrored from
+`assets/js/listings/classify.js`, pinned by `tests/contract/household-feed.test.js` against
+`supabase/archive/schema-household-feed.sql`), ordered `first_seen DESC` and paged. Callers:
+household members only (plus service contexts); anon/non-members get `forbidden`. Returns
+listing columns + an `areas` jsonb membership array. The storage feed read
+(`storage/listings/feed.js`) is repointed at it in step 2.13.
+
 **`household_areas.is_origin`** (boolean, default false): marks a home/commute-anchor area.
 An origin area contributes to commute math but is **excluded from listing-feed membership**
 (the feed drops it from the household scope) AND from the **fetcher demand set** (it is not

@@ -16,12 +16,15 @@ const lc = (s) => String(s ?? '').toLowerCase().trim();
 // word "house" (Coach House, House Share, House of Multiple Occupation) and must
 // not slip through the broad "house" allow rule. Town/Country/Manor/Farm House are
 // genuine homes and are caught by the allow rule (they carry no excluded token).
-const EXCLUDED_TYPE_RE = /\b(flat|apartment|maisonette|penthouse|studio|duplex|coach\s*house|park\s*home|mobile\s*home|caravan|houseboat|house\s*boat|lodge|chalet|land|plot|farm\s*land|equestrian|garages?|house\s*share|multiple\s*occupation|\bhmo\b|retirement|sheltered|not\s*specified)\b/;
+// Exported so the household_feed RPC's SQL mirror can be pinned against these
+// exact sources (tests/contract/household-feed.test.js translates \b→\y and
+// asserts the SQL literal matches — the anti-drift rail for the DB-side copy).
+export const EXCLUDED_TYPE_RE = /\b(flat|apartment|maisonette|penthouse|studio|duplex|coach\s*house|park\s*home|mobile\s*home|caravan|houseboat|house\s*boat|lodge|chalet|land|plot|farm\s*land|equestrian|garages?|house\s*share|multiple\s*occupation|\bhmo\b|retirement|sheltered|not\s*specified)\b/;
 
 // Broad houses + bungalows: detached / semi / terraced / end-of-terrace / town
 // house / cottage / link-detached / mews / barn conversion / character / bungalow
 // (all bungalow forms) / plain "house" / farmhouse / manor / country house.
-const ALLOWED_TYPE_RE = /\b(detached|semi[\s-]*detached|terrace|terraced|end[\s-]*of[\s-]*terrace|town\s*house|cottage|link[\s-]*detached|mews|barn|character|bungalow|house|farmhouse|manor)\b/;
+export const ALLOWED_TYPE_RE = /\b(detached|semi[\s-]*detached|terrace|terraced|end[\s-]*of[\s-]*terrace|town\s*house|cottage|link[\s-]*detached|mews|barn|character|bungalow|house|farmhouse|manor)\b/;
 
 /** Classify a raw property_type string: 'house' (show), 'excluded' (never show),
  *  or 'unknown' (unrecognised → treated as not-a-home, so the feed stays tight). */
