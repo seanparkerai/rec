@@ -11,7 +11,11 @@
 //
 //   REST mode (CI / a machine with the service key):
 //     SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY set → read listings via PostgREST,
-//     compute, UPSERT back (on_conflict=rightmove_id, merge-duplicates).
+//     compute, UPSERT back (on_conflict=rightmove_id, merge-duplicates). The
+//     village universe is THE canonical DB edge (active OR household-linked,
+//     stubs included, tuning applied — step 2.15): the repo edge sees no stubs
+//     and no tuning, so a REST sweep over it would wrongly flip stub-area
+//     listings to geofence_pass=false and ignore learned radii.
 //       node tools/backfill-geofence.mjs            (writes)
 //       DRY_RUN=1 node tools/backfill-geofence.mjs  (read + report, no write)
 //
@@ -145,8 +149,17 @@ async function main() {
   const fromFile = fromFileIdx >= 0 ? argv[fromFileIdx + 1] : null;
   const emitSqlPath = emitSqlIdx >= 0 ? argv[emitSqlIdx + 1] : null;
 
-  const villages = await loadActiveVillages();
-  console.log(`active villages: ${villages.length}`);
+  // REST mode reads THE canonical DB universe (stubs + tuning — see header);
+  // the repo edge stays the offline/--from-file fallback.
+  let villages;
+  if (SERVICE_KEY && !fromFile) {
+    const { loadUniverseFromDb } = await import('./lib/geofence-universe.mjs');
+    ({ villages } = await loadUniverseFromDb({ url: SUPABASE_URL, key: SERVICE_KEY }));
+    console.log(`villages from DB universe: ${villages.length}`);
+  } else {
+    villages = await loadActiveVillages();
+    console.log(`active villages (repo edge): ${villages.length}`);
+  }
 
   let rows;
   if (fromFile) {

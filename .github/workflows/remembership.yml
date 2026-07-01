@@ -1,0 +1,132 @@
+# remembership — the listing membership + geofence-field sweep (flagship step 2.15).
+#
+# WHY. Membership (listing_areas) and the geofence FIELDS on listings are computed
+# at ingestion time. Adding/disabling an area, tuning a radius, or fixing a village
+# pin silently STALEIFIES the already-stored rows until they happen to be re-fetched
+# — the 2026-07-01 log's weakness #5 (there was previously NO trigger for this).
+# This sweep recomputes both over every stored listing, £0 (no Apify), using the
+# SAME canonical machinery as ingestion:
+#   1. FIELDS FIRST:  tools/backfill-geofence.mjs      (withinGeofence over the
+#      canonical DB universe — active OR household-linked incl. stubs, tuning
+#      applied — REST UPSERT of area_id/distance/geofence_pass/…)
+#   2. MEMBERSHIP:    tools/backfill-listing-areas.mjs (same verdicts → the
+#      deriving replace_listing_areas RPC, the ONLY membership writer)
+#   3. INVARIANTS:    psql checks that fail the run red if the data is wrong:
+#      primary parity (listings.area_id == the is_primary junction row, §18.3)
+#      and no feed-invisible listings (geofence_pass=true with zero membership).
+#
+# Field order matters: membership is derived from the same verdict machinery, so
+# refreshing fields first means one coherent universe snapshot feeds both writes.
+#
+# Triggers:
+#   - workflow_dispatch: manual, phone-friendly; dry_run input reports only.
+#     Run it after adding/disabling an area or correcting a village pin.
+#   - workflow_run (radius-tune): tuned radii reshape every geofence, so the
+#     sweep chases each completed radius-tune run automatically.
+#   - schedule: weekly full sweep (Sun 05:45 UTC) as the catch-all backstop.
+#
+# REQUIRED REPO SECRETS (the owner must add these before it does anything):
+#   - SUPABASE_URL               e.g. https://<project>.supabase.co  (PostgREST)
+#   - SUPABASE_SERVICE_ROLE_KEY  service role key (reads listings, writes via RPC)
+#   - SUPABASE_DB_URL            Postgres connection string (psql invariant checks)
+# If a secret is missing the job no-ops with a clear warning rather than failing red.
+name: remembership
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Compute + report only, write nothing'
+        type: boolean
+        default: false
+  workflow_run:
+    workflows: [radius-tune]
+    types: [completed]
+  schedule:
+    - cron: '45 5 * * 0'   # weekly, Sunday 05:45 UTC (after radius-tune 05:30)
+
+concurrency:
+  group: remembership
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    # For workflow_run triggers, only chase a radius-tune that actually succeeded.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Guard — required secrets present
+        id: guard
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ] || [ -z "$SUPABASE_DB_URL" ]; then
+            echo "::warning::remembership skipped — set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY and SUPABASE_DB_URL repo secrets to enable it."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fields first — geofence recompute over the canonical DB universe
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ inputs.dry_run == true && '1' || '' }}
+        run: node tools/backfill-geofence.mjs
+
+      - name: Membership — recompute via the deriving replace_listing_areas RPC
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ inputs.dry_run == true && '1' || '' }}
+        run: node tools/backfill-listing-areas.mjs
+
+      - name: Invariants — parity + no feed-invisible listings (fails red)
+        if: steps.guard.outputs.ready == 'true' && inputs.dry_run != true
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 <<'SQL'
+          DO $$
+          DECLARE
+            v_parity int;
+            v_invisible int;
+            v_orphans int;
+          BEGIN
+            -- §18.3 primary parity: listings.area_id must equal the is_primary junction row.
+            SELECT count(*) INTO v_parity FROM listings l
+            JOIN listing_areas la ON la.rightmove_id = l.rightmove_id AND la.is_primary
+            WHERE la.area_id IS DISTINCT FROM l.area_id;
+            IF v_parity <> 0 THEN
+              RAISE EXCEPTION 'PARITY VIOLATION: % listings whose area_id != is_primary junction row', v_parity;
+            END IF;
+
+            -- No feed-invisible listings: a geofence-passing row with zero membership
+            -- can be seen by nobody (the 2.11a repair class).
+            SELECT count(*) INTO v_invisible FROM listings l
+            WHERE l.geofence_pass IS TRUE
+              AND NOT EXISTS (SELECT 1 FROM listing_areas la WHERE la.rightmove_id = l.rightmove_id);
+            IF v_invisible <> 0 THEN
+              RAISE EXCEPTION 'FEED-INVISIBLE: % geofence-passing listings with zero membership rows', v_invisible;
+            END IF;
+
+            -- Informational: junction rows whose listing no longer exists (purge debris —
+            -- audited properly in step 2.18; surfaced here, not fatal).
+            SELECT count(*) INTO v_orphans FROM listing_areas la
+            WHERE NOT EXISTS (SELECT 1 FROM listings l WHERE l.rightmove_id = la.rightmove_id);
+            RAISE NOTICE 'invariants OK — parity 0, feed-invisible 0, orphan junction rows (info): %', v_orphans;
+          END $$;
+          SQL

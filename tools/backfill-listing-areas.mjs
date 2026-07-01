@@ -27,12 +27,11 @@
 //       node tools/backfill-listing-areas.mjs            (writes)
 //       DRY_RUN=1 node tools/backfill-listing-areas.mjs  (read + report, no write)
 //
-//   File / emit-sql mode (this sandbox, applied via the Supabase MCP connector):
+//   File mode (this sandbox) — REPORT-ONLY since step 2.10 (the deriving
+//   replace_listing_areas RPC is the ONLY membership writer; --emit-sql deleted):
 //     --from-file    <listings.json>  rows dumped via MCP (rightmove_id,lat,lng,address,postcode,area_id)
 //     --villages-file <villages.json> the village index dumped via MCP, tuning ALREADY baked in
-//     --emit-sql     <out.sql>        writes TRUNCATE + INSERT…ON CONFLICT batches to
-//                                     apply via mcp__supabase__execute_sql
-//       node tools/backfill-listing-areas.mjs --from-file L.json --villages-file V.json --emit-sql la.sql
+//       node tools/backfill-listing-areas.mjs --from-file L.json --villages-file V.json
 
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
