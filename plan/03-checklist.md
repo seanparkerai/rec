@@ -64,7 +64,7 @@
 - [x] 2.3 Composed target-pipeline golden-master (`tests/characterization/fetch-targets.test.js`): radius-tuning → demand-gating → cluster targets → dedupe over a fixture universe with exact serialized output (tight clusters, coarse whole-outcode fallback, shared-identifier merge, origin absence), tuning/exploration reshaping, the cluster≤outcode cost invariant, and partial demand pruning. 2.A complete. 819/819. *(2026-07-01)*
 
 *2.B — One geofence universe*
-- [ ] 2.4 Extract `tools/lib/geofence-universe.mjs`: DB-canonical loader (areas active OR household-linked incl. stubs, `area_search_tuning` scalar+petal applied) with an offline repo-files fallback mode; unit-test both modes.
+- [x] 2.4 `tools/lib/geofence-universe.mjs` created: pure `buildUniverse()` core (inclusion = coords AND (active OR linked); tuning applied; outcode grouping) + `toVillage` (lifted) + `applyRadiusTuning` (moved from the fetcher, re-exported for compat) + DB REST edge and repo materialised-view edge; 6 unit tests incl. stubbed-REST composition and a real-repo smoke (175 villages / 18 outcodes today). 825/825. *(2026-07-01)*
 - [ ] 2.5 Migrate `fetch-listings.mjs` onto the shared loader (delete `loadOutcodeMap` + inline tuning overlay); golden-master 2.3 must not change demand output for the fixture case.
 - [ ] 2.6 Migrate `backfill-listing-areas.mjs` onto it (delete `restLoadVillages`/`toVillage`).
 - [ ] 2.7 Migrate `backfill-geofence.mjs` (delete `loadActiveVillages`) and `radius-tune.mjs` (`loadAreaCentres`) onto it.

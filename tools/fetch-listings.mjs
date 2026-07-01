@@ -56,6 +56,7 @@ import { isCuratedDisabled } from '../assets/js/areas/area-ref.js';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
 import { probationDropIds, reprobeThisRun } from '../assets/js/refinement/scope.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
+import { applyRadiusTuning } from './lib/geofence-universe.mjs';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 import { passesBaseline } from '../assets/js/listings/classify.js';
 import { membershipRowsFor, replaceListingAreas } from './listing-areas-writer.mjs';
@@ -684,48 +685,9 @@ async function loadRadiusTuning() {
   }
 }
 
-/**
- * Overlay the learned per-area radius onto the village entries (pure mutation of the
- * objects already in outcodeMap — they flow into clustering / search / geofence by
- * reference). For each tuned area:
- *   • the SEARCH disk (`searchRadiusMi`) = the widest learned sector (or the override) so
- *     the Rightmove call covers every direction the area keeps;
- *   • the GEOFENCE = the per-sector "petals" (`geofenceRadiiKm`) — reaching toward rural
- *     sectors, pulled in toward urban ones — with the scalar `geofenceRadiusKm` as a
- *     fallback for directions/areas without petals.
- * A user override pins the whole area to one radius (uniform). An area inside its
- * exploration window is widened to RADIUS_CEIL_MI (petals cleared) so the full disk is
- * periodically re-measured. Areas with no tuning row keep their file/default radius.
- * Returns { tuned, exploring }.
- */
-function applyRadiusTuning(villages, tuning, now = new Date()) {
-  let tuned = 0;
-  let exploring = 0;
-  for (const v of villages) {
-    const t = tuning.get(v.id);
-    if (!t) continue;
-    const isExploring = t.explore_until != null && new Date(t.explore_until) > now;
-    if (isExploring) {
-      v.searchRadiusMi = RADIUS_CEIL_MI;
-      v.geofenceRadiusKm = RADIUS_CEIL_MI / MILES_PER_KM;
-      v.geofenceRadiiKm = null;            // measure the full disk while exploring
-      tuned += 1; exploring += 1;
-      continue;
-    }
-    const searchMi = t.override_radius_mi != null ? Number(t.override_radius_mi)
-      : t.search_radius_mi != null ? Number(t.search_radius_mi) : null;
-    if (searchMi == null || !Number.isFinite(searchMi)) continue;
-    v.searchRadiusMi = searchMi;
-    const keepScalar = t.override_radius_mi != null ? Number(t.override_radius_mi)
-      : t.geofence_radius_mi != null ? Number(t.geofence_radius_mi) : searchMi;
-    v.geofenceRadiusKm = keepScalar / MILES_PER_KM;
-    v.geofenceRadiiKm = Array.isArray(t.geofence_radii) && t.geofence_radii.length
-      ? t.geofence_radii.map((mi) => Number(mi) / MILES_PER_KM)
-      : null;
-    tuned += 1;
-  }
-  return { tuned, exploring };
-}
+// applyRadiusTuning moved to tools/lib/geofence-universe.mjs (step 2.4) — the
+// shared universe module owns tuning application so every consumer applies it
+// identically. Re-exported below to keep this tool's public test surface stable.
 
 // v3 L4 optimised search: read the household's criteria + learned preferences and
 // distil them into a narrowing spec (deriveSearchSpec). Returns null when learned
