@@ -38,26 +38,15 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { withinGeofence, MILES_PER_KM } from './listings-normalise.mjs';
-import { applyRadiusTuning } from './fetch-listings.mjs';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const DRY_RUN = process.env.DRY_RUN === '1' || process.env.DRY_RUN === 'true';
 
-/**
- * Map a DB areas row (or a pre-dumped village) to a withinGeofence village. Pure.
- * Accepts either { geofenceRadiusMi } (raw) or { geofenceRadiusKm } (pre-baked).
- */
-export function toVillage(a) {
-  const v = {
-    id: a.id, name: a.name ?? null, outcode: String(a.outcode || '').toUpperCase(),
-    lat: Number(a.lat), lng: Number(a.lng),
-  };
-  if (a.geofenceRadiusKm != null) v.geofenceRadiusKm = Number(a.geofenceRadiusKm);
-  else if (a.geofenceRadiusMi != null && a.geofenceRadiusMi !== '') v.geofenceRadiusKm = Number(a.geofenceRadiusMi) / MILES_PER_KM;
-  if (Array.isArray(a.geofenceRadiiKm)) v.geofenceRadiiKm = a.geofenceRadiiKm.map(Number);
-  return v;
-}
+// toVillage + the DB universe now come from THE canonical loader (step 2.6):
+// tools/lib/geofence-universe.mjs. Re-exported for the --villages file path + tests.
+export { toVillage } from './lib/geofence-universe.mjs';
+import { toVillage, loadUniverseFromDb } from './lib/geofence-universe.mjs';
 
 /**
  * Membership rows for one listing, with is_primary aligned to the stored area_id.
@@ -150,26 +139,11 @@ async function restGet(path) {
   return res.json();
 }
 
-// The complete geofence village universe = areas (active OR household-linked) with
-// coords, tuning applied. Mirrors the live fetcher's ALL_ACTIVE index.
+// The complete geofence village universe — THE canonical definition (areas
+// active OR household-linked, coords required, tuning applied), via the shared
+// loader's DB edge (step 2.6). The divergent local reader is deleted.
 async function restLoadVillages() {
-  const [areaRows, links, tuningRows] = await Promise.all([
-    restGet('areas?select=id,data'),
-    restGet('household_areas?select=area_id'),
-    restGet('area_search_tuning?select=area_id,search_radius_mi,geofence_radius_mi,override_radius_mi,geofence_radii,explore_until'),
-  ]);
-  const linked = new Set(links.map((l) => l.area_id));
-  const villages = [];
-  for (const r of areaRows) {
-    const d = r.data || {};
-    const lat = d.coords?.lat, lng = d.coords?.lng;
-    if (lat == null || lng == null) continue;
-    const active = d.active !== false;
-    if (!active && !linked.has(r.id)) continue;              // disabled & unheld → not in the universe
-    villages.push(toVillage({ id: r.id, name: d.name, outcode: d.postcode, lat, lng, geofenceRadiusMi: d.geofenceRadiusMi }));
-  }
-  const tuning = new Map(tuningRows.map((t) => [t.area_id, t]));
-  applyRadiusTuning(villages, tuning);
+  const { villages } = await loadUniverseFromDb({ url: SUPABASE_URL, key: SERVICE_KEY });
   return villages;
 }
 
