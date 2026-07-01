@@ -21,7 +21,7 @@ every session**. These rules exist to keep work safe, resumable, and high qualit
   `data/areas/<id>.json` is a **materialised view** regenerated from the DB by
   `tools/sync-areas-from-supabase.mjs`. When researching or revising an area, **write the change to
   Supabase via MCP, then materialise** (`sync-areas-from-supabase` → `build-areas`) — do **not**
-  hand-edit a per-area file as the primary write (the parity test `tests/areas-db-repo-parity.test.js`
+  hand-edit a per-area file as the primary write (the parity test `tests/contract/areas-db-repo-parity.test.js`
   fails if a file drifts from the DB). Do **not** paste content into `data/areas.json`, and do **not**
   recreate `Areadetails.md` (the pre-JSON monolith — deleted from `docs/archive/`, in git history).
 - The canonical shape lives at `data/schema/area.schema.json` and is enforced by
@@ -279,7 +279,7 @@ to the Supabase row via MCP `execute_sql`, verified by re-SELECT inside the same
   disagree, the file is re-materialised. Every area change follows the §2 write path: **write the DB
   via MCP → `sync-areas-from-supabase` → `build-areas` → `verify-area-coords --online` →
   `run-intelligence-tests` → commit.** `data/snapshots/areas.json` +
-  `tests/areas-db-repo-parity.test.js` guard this. An id/postcode migration also rewrites
+  `tests/contract/areas-db-repo-parity.test.js` guard this. An id/postcode migration also rewrites
   `data/source/villages.csv` and carries references (incl. the user-state `area_confirmations`
   keys — the narrow §18.4 relaxation).
 - **Content — other (`house_types`, `checklists`, `outreach-templates`)**: repo JSON wins; the

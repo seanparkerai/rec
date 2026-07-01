@@ -9,7 +9,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (p) => readFileSync(join(ROOT, p), 'utf8');
 
 // Instruction/contract docs whose factual claims are checked. CHECKLIST.md is

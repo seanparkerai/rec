@@ -12,7 +12,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
   const { join, dirname } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
 
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
   const jsRoot = join(root, 'assets/js');
 
   // The module families the guard polices, recorded as paths relative to assets/js.

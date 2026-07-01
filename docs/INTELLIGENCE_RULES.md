@@ -101,7 +101,7 @@ When any constant changes:
 
 1. Edit this file first, including the source citation.
 2. Update the matching literal in `assets/js/affordability.js`.
-3. Update the affordability test fixtures in `tests/affordability.test.js` if a band edge moved across a test case.
+3. Update the affordability test fixtures in `tests/unit/affordability.test.js` if a band edge moved across a test case.
 4. Commit with `docs: update intelligence rules — <which one>` and a one-line rationale.
 
 ---
@@ -157,7 +157,7 @@ the engine returns the exact band, LTI and post-move spare for each.
 When deposit-risk thresholds change:
 1. Update verdict logic in `assets/js/deposit-risk.js` `deriveVerdict()`.
 2. Update the table above with rationale.
-3. Update test cases in `tests/deposit-risk.test.js`.
+3. Update test cases in `tests/unit/deposit-risk.test.js`.
 
 ---
 

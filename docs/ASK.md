@@ -37,7 +37,7 @@ Browser (pages/ask.html)            Edge Function "ask"                 Anthropi
 |---|---|
 | `supabase/functions/ask/index.ts` | Edge Function: CORS, JWT verify, household resolve, system-prompt build, Anthropic call, tool loop, SSE relay. |
 | `supabase/functions/ask/tools.ts` | Tool **definitions** + **executors** (RLS-scoped Supabase queries over the pure helpers). |
-| `supabase/functions/ask/pure.js` | **Pure** helpers (listing filter/rank/gate, area search, finance summary, the Compose brief assembler + QoI privacy allow-list). Imported by both Deno (tools.ts) and Node (`tests/ask-tools.test.js`). |
+| `supabase/functions/ask/pure.js` | **Pure** helpers (listing filter/rank/gate, area search, finance summary, the Compose brief assembler + QoI privacy allow-list). Imported by both Deno (tools.ts) and Node (`tests/contract/ask-tools.test.js`). |
 | `supabase/functions/ask/prompt.ts` | System-prompt builder: cached static domain block + cached Compose capability block + dynamic always-on context. |
 | `supabase/functions/_shared/cors.ts` | Origin allow-list. |
 | `assets/js/page-ask.js` | Page coordinator (boots on `shell:ready`). |
@@ -49,8 +49,8 @@ Browser (pages/ask.html)            Edge Function "ask"                 Anthropi
 | `assets/js/ask/history.js` | Conversation list (new / switch / rename / delete) via `<dialog>`. |
 | `assets/js/storage/ask.js` | `list/get/create/save/delete AskConversation` (re-exported by `storage.js`). |
 | `assets/css/pages/ask.css` | Chat UI (tokens only; imported by `dashboard.css`). |
-| `tests/ask-tools.test.js` | Unit tests for the pure helpers. |
-| `tests/ask-storage.test.js` | Offline `ask_conversations` snapshot-shape test. |
+| `tests/contract/ask-tools.test.js` | Unit tests for the pure helpers. |
+| `tests/contract/ask-storage.test.js` | Offline `ask_conversations` snapshot-shape test. |
 
 ## 3. The tool catalogue
 
@@ -90,7 +90,7 @@ exemplars). The flow:
   (`OUTREACH_FACT_ALLOWLIST`) means an estate agent or vendor only ever receives proceedability
   signals (FTB, chain-free, AIP amount, availability) — never salary, savings total, deposit figure,
   credit, or debts; a mortgage broker receives the full financial picture. `OUTREACH_NEVER_FOR_NON_BROKER`
-  is a defence-in-depth backstop. Covered by `tests/ask-tools.test.js`.
+  is a defence-in-depth backstop. Covered by `tests/contract/ask-tools.test.js`.
 
 ## 5. Deploy / redeploy (admin)
 

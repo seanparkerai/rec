@@ -20,9 +20,9 @@ export async function register({ test, assert, assertEqual }) {
   const { readFileSync, readdirSync } = await import('node:fs');
   const { join, dirname } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
-  const { INDEX_FIELDS } = await import('../tools/area-fields.mjs');
+  const { INDEX_FIELDS } = await import('../../tools/area-fields.mjs');
 
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
   const readJson = (p) => JSON.parse(readFileSync(join(root, p), 'utf8'));
 
   const index = readJson('data/areas.json');

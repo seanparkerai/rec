@@ -105,7 +105,7 @@ start empty until onboarding.
 |-------|----------------|-----------------|--------|--------|
 | **User state** | `profile`, `criteria`, `finances`, `shortlist`, `zones`, `journey_checks`, `contacts`, `outreach` — **no repo JSON file** | Supabase row (one per household_id) | Portal via `storage.js`, OR Claude via MCP `execute_sql` | `storage.js` reads with localStorage write-through cache |
 | **Test fixtures** | `data/fixtures/*.sample.json` | Repo file (git-versioned, redacted) | Claude only | Test harness (`tools/run-intelligence-tests.mjs`) and fresh-install fallback in `storage.js` |
-| **Content (per-area)** | Supabase `areas` table + materialised `data/areas/<id>.json` | **Supabase `areas`** (DB-canonical, §18.5 relaxation 2026-06-04) | Claude via MCP UPSERT, then `tools/sync-areas-from-supabase.mjs` re-materialises the files | App fetches the JSON; `tests/areas-db-repo-parity.test.js` guards file↔DB parity |
+| **Content (per-area)** | Supabase `areas` table + materialised `data/areas/<id>.json` | **Supabase `areas`** (DB-canonical, §18.5 relaxation 2026-06-04) | Claude via MCP UPSERT, then `tools/sync-areas-from-supabase.mjs` re-materialises the files | App fetches the JSON; `tests/contract/areas-db-repo-parity.test.js` guards file↔DB parity |
 | **Content (catalogues)** | `data/house-types.json`, `data/checklists.json`, `data/outreach-templates.json` | Repo file | Claude only | App fetches the JSON; only `house_types` has a Supabase mirror table — `checklists` / `outreach_templates` are repo-JSON-only (no mirror) |
 | **Index** | `data/areas.json` | Derived from `data/source/villages.csv` + the materialised per-area files via `tools/build-areas.mjs` | Build tool | App fetches the JSON |
 | **Live content (v3)** | `listings` (Supabase only — no repo file) | Supabase (fetcher-written) | `tools/fetch-listings.mjs` via service-role REST UPSERT (`on_conflict=rightmove_id`) | `storage.js#getListings` → listings page. NOT git-versioned; not a tracked table |
@@ -193,7 +193,7 @@ universe as the user.
 
 | Symptom | Cause | Recovery |
 |---------|-------|----------|
-| `tests/areas-db-repo-parity.test.js` fails (area file ≠ DB) | A per-area file was edited by hand, or a DB write wasn't materialised | The DB wins (§18.5): re-run `node tools/sync-areas-from-supabase.mjs` + `build-areas`; do not commit until green |
+| `tests/contract/areas-db-repo-parity.test.js` fails (area file ≠ DB) | A per-area file was edited by hand, or a DB write wasn't materialised | The DB wins (§18.5): re-run `node tools/sync-areas-from-supabase.mjs` + `build-areas`; do not commit until green |
 | `tests/supabase-sync.test.js` fails: "count mismatch on house_types" | A content file edit didn't mirror | Re-run the UPSERT for the missing rows; do not commit until green |
 | `tests/supabase-sync.test.js` fails: "user-state row missing" | Brand-new household never saved the relevant page | Acceptable if the page hasn't been visited; mark the row optional in the test fixture |
 | Session-start freshness check shows user-state newer than expected | User edited in the portal since last session | Pull + surface; never overwrite without explicit confirm |

@@ -30,7 +30,7 @@ export async function register({ test, assert, assertEqual }) {
   const { join, dirname } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
 
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
   const readJson = (p) => JSON.parse(readFileSync(join(root, p), 'utf8'));
 
   const snapPath = 'data/snapshots/areas.json';

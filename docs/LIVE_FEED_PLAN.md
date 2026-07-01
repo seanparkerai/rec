@@ -55,7 +55,7 @@ periodic pixel-shift is applied.
   currentPortfolioValue × earmarkPct/100, or full value if earmarkPct=0)`.
   Current values: **Luke ≈ £32,994.45** (cash £0 + ISA £32,994.45 @ 100%),
   **Suzanne = £53,000** (cash £53,000, no investments). This formula is already mirrored in
-  `supabase/functions/ask/pure.js` and pinned by `tests/ask-tools.test.js`; the SQL
+  `supabase/functions/ask/pure.js` and pinned by `tests/contract/ask-tools.test.js`; the SQL
   replica below adds a third mirror — **a parity test keeps all three in lockstep**.
 - Reference snapshot (will move): Luke 195 active areas; Suzanne 9 active areas.
 
@@ -247,7 +247,7 @@ Do **not** call Supabase from the page module directly (CLAUDE.md §17.4) — go
   - `tests/live-feed-runs.test.js` (offline) — clustering, isLive, nextSlot, layout cycling.
   - `tests/live-feed-stats.test.js` — **online/MCP, runs at session end**: asserts the RPC's
     `savings` for both households equals `computeDepositSavings(finances, investments)` read
-    from the same rows (the third mirror parity, alongside `tests/ask-tools.test.js`).
+    from the same rows (the third mirror parity, alongside `tests/contract/ask-tools.test.js`).
   - Wire both into `node tools/run-intelligence-tests.mjs` (the unified harness). Online
     assertions are reported skipped offline, per CLAUDE.md §6.
 

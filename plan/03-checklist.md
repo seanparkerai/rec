@@ -48,7 +48,7 @@
 - [x] 1.4 Batch A ported: 9 finance suites → `tests/unit/`, 2 → `tests/characterization/`; legacy runner + browser harness re-pointed; legacy 783/0, new harness 142/142. *(2026-07-01)*
 - [x] 1.5 Batch B ported: 20 listings-pipeline suites → `tests/unit/` (incl. fetch/purge/backfill tool tests); legacy 783/0, new harness 365/365. *(2026-07-01)*
 - [x] 1.6 Batch C ported: 11 intelligence-engine suites → `tests/unit/`. *(2026-07-01)*
-- [ ] 1.7 Port suite batch D (contract: supabase-sync, docs-consistency, schemas, areas-parity, profile-schema, ask-*) into `tests/contract/`.
+- [x] 1.7 Batch D ported: 10 contract suites → `tests/contract/` (root-path + dynamic-import fixes; live docs re-pointed to the tiered paths; supabase-sync stays a spawned suite by design). Legacy 783/0; new 649/649. *(2026-07-01)*
 - [ ] 1.8 Port remaining suites (dashboard tiles, live-feed, outreach, shell utils); old runner now a thin alias.
 - [ ] 1.9 jsdom page-test harness (`tools/run-page-tests.mjs` or a `pages` tier): first test renders shell injection + nav active-state on a fixture DOM.
 - [ ] 1.10 Semantic lint v2: rewrite `tools/lint-responsive.mjs` fingerprinting to (rule|file|selector|property) identity with an approved-violations baseline replacing counts; port the 7 allow-entries.

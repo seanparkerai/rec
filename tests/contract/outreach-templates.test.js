@@ -1,6 +1,6 @@
 // outreach-templates.test.js — Phase 1/2 tests for the template registry and renderer.
 // Runs via tools/run-intelligence-tests.mjs (Node, no DOM).
-import { validateOutreachTemplate } from './schemas.js';
+import { validateOutreachTemplate } from '../schemas.js';
 
 // Sample context used for renderer and leak tests.
 const SAMPLE_CTX = {
@@ -105,7 +105,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
   const { join, dirname } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
 
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
   const templates = JSON.parse(readFileSync(join(root, 'data/outreach-templates.json'), 'utf8'));
 
   // ── Schema validation ─────────────────────────────────────────────────
@@ -159,7 +159,7 @@ export async function register({ test, assert, assertEqual, fixtures }) {
   // Import the renderer dynamically. This requires the file to exist (Phase 2).
   let renderer = null;
   try {
-    renderer = await import('../assets/js/outreach-renderer.js');
+    renderer = await import('../../assets/js/outreach-renderer.js');
   } catch {
     // Renderer not yet built — skip renderer tests gracefully.
   }

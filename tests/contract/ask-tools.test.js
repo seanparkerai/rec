@@ -8,8 +8,8 @@ import {
   shapeFinancesSummary, computeDepositSavings, renderOutreachDraft, bandForScore,
   capToolResult, estimateConvoChars, fitConvoToBudget,
   assembleOutreachBrief, buildDerivedSignals, stripPaths, OUTREACH_NEVER_FOR_NON_BROKER,
-} from '../supabase/functions/ask/pure.js';
-import { deriveFinances } from '../assets/js/finance-derive.js';
+} from '../../supabase/functions/ask/pure.js';
+import { deriveFinances } from '../../assets/js/finance-derive.js';
 
 export async function register({ test, assert, assertEqual }) {
   // A small synthetic listings set (inline — there is no listings fixture file).

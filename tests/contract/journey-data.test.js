@@ -6,7 +6,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const readJson = async (p) => JSON.parse(await readFile(resolve(root, p), 'utf8'));
 
 export async function register({ test, assert, assertEqual }) {

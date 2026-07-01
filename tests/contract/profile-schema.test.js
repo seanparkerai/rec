@@ -3,7 +3,7 @@
 // idempotent, exposes the flat outreach mirrors, and never loses data.
 // Synthetic fixtures only — no real user data.
 
-import { canonicalProfile, normalizeProfile, employmentDisplay, creditDisplay } from '../assets/js/profile-schema.js';
+import { canonicalProfile, normalizeProfile, employmentDisplay, creditDisplay } from '../../assets/js/profile-schema.js';
 
 // Mirrors the flat-full shape (demo-style): everything at the top level.
 const FLAT_FULL = {

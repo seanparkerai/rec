@@ -6,9 +6,9 @@
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validateAskConversation } from './schemas.js';
+import { validateAskConversation } from '../schemas.js';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
 export async function register({ test, assert, assertEqual }) {
   test('ask-storage: ask_conversations is tracked + classified user-state in the snapshot', async () => {
