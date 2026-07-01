@@ -111,13 +111,30 @@ CREATE POLICY "listing_areas public read" ON listing_areas FOR SELECT USING (tru
 -- listing's membership set can SHRINK on re-geocode / radius tuning, so a plain
 -- upsert would leave stale rows. SECURITY DEFINER → the service-role fetcher writes
 -- the whole set atomically. p_rows = json array of { area_id, distance_mi, is_primary }.
+-- Structural guarantee (2026-07-01, migration derived_primary_from_listing_areas):
+-- at most one is_primary row per listing.
+CREATE UNIQUE INDEX IF NOT EXISTS uniq_listing_areas_primary
+  ON listing_areas (rightmove_id) WHERE is_primary;
+
 CREATE OR REPLACE FUNCTION replace_listing_areas(p_rightmove_id text, p_rows jsonb)
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+DECLARE
+  v_primary_count int;
+  v_primary_area  text;
 BEGIN
+  -- Boundary validation: a non-empty membership set carries EXACTLY one primary.
+  SELECT count(*) FILTER (WHERE COALESCE((r->>'is_primary')::boolean, false))
+    INTO v_primary_count
+  FROM jsonb_array_elements(COALESCE(p_rows, '[]'::jsonb)) AS r;
+  IF jsonb_array_length(COALESCE(p_rows, '[]'::jsonb)) > 0 AND v_primary_count <> 1 THEN
+    RAISE EXCEPTION 'replace_listing_areas(%): membership set must carry exactly one is_primary row, got %',
+      p_rightmove_id, v_primary_count;
+  END IF;
+
   DELETE FROM listing_areas WHERE rightmove_id = p_rightmove_id;
   INSERT INTO listing_areas (rightmove_id, area_id, distance_mi, is_primary)
   SELECT p_rightmove_id,
@@ -127,6 +144,18 @@ BEGIN
   FROM jsonb_array_elements(COALESCE(p_rows, '[]'::jsonb)) AS r
   ON CONFLICT (rightmove_id, area_id) DO UPDATE
     SET distance_mi = EXCLUDED.distance_mi, is_primary = EXCLUDED.is_primary;
+
+  -- Derive (2026-07-01, ONE membership truth): the junction's primary drives
+  -- listings.area_id in the same transaction — the column can never drift.
+  SELECT area_id INTO v_primary_area
+  FROM listing_areas
+  WHERE rightmove_id = p_rightmove_id AND is_primary;
+  IF v_primary_area IS NOT NULL THEN
+    UPDATE listings
+    SET area_id = v_primary_area
+    WHERE rightmove_id = p_rightmove_id
+      AND area_id IS DISTINCT FROM v_primary_area;
+  END IF;
 END;
 $$;
 

@@ -231,3 +231,23 @@ node tools/run-all-tests.mjs          # full test harness incl. sync test
 If you're reaching for `curl`, `psql`, or pasting SQL into the Supabase web dashboard — stop. You're
 outside the MCP-first contract. Either use the MCP connector or open a new phase in `CHECKLIST.md`
 to explain why an exception is needed.
+
+---
+
+### 2026-07-01 — ONE membership truth (migration `derived_primary_from_listing_areas`)
+
+`listings.area_id` is **derived**: the `replace_listing_areas` RPC validates exactly-one-primary
+per non-empty membership set and updates `listings.area_id` from the `is_primary` row in the same
+transaction; `uniq_listing_areas_primary` (partial unique index) makes multi-primary structurally
+impossible. **§18.3 online parity check (run at data-session end):**
+
+```sql
+SELECT count(*) FROM listings l
+JOIN listing_areas la ON la.rightmove_id = l.rightmove_id AND la.is_primary
+WHERE la.area_id IS DISTINCT FROM l.area_id;   -- must be 0
+```
+
+Known repair queue (found 2026-07-01, fixed by the 2.11 canonical re-backfill): 4 live
+geofence-passing listings with zero membership rows (invisible to every feed) —
+90359223, 173588246, 90374985, 174197870 — plus 1 near-miss (87986133, geofence_pass=false,
+correctly membership-less).

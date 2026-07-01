@@ -143,8 +143,8 @@ Validates the CSV column format, deduplicates by transaction ID, writes the outp
 
 | Field | Meaning |
 |-------|---------|
-| `listings.area_id` | The **primary** area — the single named/nearest village (address tiebreak in `withinGeofence`). Consumed by `page-property.js` (area-detail lookup) and `page-listings.js` (per-area radius + probation via `normArea`). **Do not drop or repurpose.** |
-| `listing_areas` (m2m) | The **full membership set** — one row per area whose geofence *contains* the listing (`rightmove_id`, `area_id`, `distance_mi`, `is_primary`). Exactly one `is_primary=true` row, equal to `listings.area_id`. Live content (service-role write, public read). |
+| `listings.area_id` | The **primary** area — **DERIVED from `listing_areas.is_primary` since 2026-07-01** (migration `derived_primary_from_listing_areas`): the `replace_listing_areas` RPC updates it in the same transaction as every membership write, so it can never drift. Still the single named/nearest village (address tiebreak in `withinGeofence`); consumed by `page-property.js` and `page-listings.js`. **Do not drop, repurpose, or write directly — write membership.** |
+| `listing_areas` (m2m) | The **full membership set** — one row per area whose geofence *contains* the listing (`rightmove_id`, `area_id`, `distance_mi`, `is_primary`). Exactly one `is_primary=true` row per non-empty set — enforced structurally (`uniq_listing_areas_primary` partial unique index + RPC boundary validation, 2026-07-01) — and `listings.area_id` is derived from it. Live content (service-role write, public read). |
 
 Village geofences **overlap**, so a listing can sit inside several areas at once. The feed
 scopes to a household's areas via `listing_areas` membership (filter by `rightmove_id`), NOT the
