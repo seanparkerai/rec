@@ -1,6 +1,6 @@
 // tests/listings-controls.test.js — pure tests for the shared listings
 // search/sort/filter core (no DOM). Mirrors the harness register(...) shape.
-import { filterListings, sortListings, LISTING_SORTS } from '../assets/js/listings/controls.js';
+import { filterListings, sortListings, LISTING_SORTS } from '../../assets/js/listings/controls.js';
 
 export async function register({ test, assert, assertEqual }) {
   const L = (over = {}) => ({

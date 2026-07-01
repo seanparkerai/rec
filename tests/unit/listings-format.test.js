@@ -1,6 +1,6 @@
 // listings-format.test.js — pure formatters in ./listings/format.js: fmtPrice/fmtAgo/
 // lastPriceDrop (extracted from page-listings.js, P7b) + fmtDate (page-property.js, P7f).
-import { fmtPrice, fmtAgo, lastPriceDrop, fmtDate, fmtAreaMembershipItem, fmtAreaMembership } from '../assets/js/listings/format.js';
+import { fmtPrice, fmtAgo, lastPriceDrop, fmtDate, fmtAreaMembershipItem, fmtAreaMembership } from '../../assets/js/listings/format.js';
 
 export async function register({ test, assert, assertEqual }) {
   // ── fmtPrice ──────────────────────────────────────────────────────

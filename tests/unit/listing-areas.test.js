@@ -5,9 +5,9 @@
 //     member of Y, so a household holding Y sees it (the single area_id would hide it).
 //   • Problem B — an origin area is dropped from the household's feed scope, so a
 //     listing that sits ONLY in the origin's catchment is not surfaced.
-import { withinGeofence } from '../tools/listings-normalise.mjs';
-import { membershipRowsFor, groupByListing } from '../tools/listing-areas-writer.mjs';
-import { membershipFor } from '../tools/backfill-listing-areas.mjs';
+import { withinGeofence } from '../../tools/listings-normalise.mjs';
+import { membershipRowsFor, groupByListing } from '../../tools/listing-areas-writer.mjs';
+import { membershipFor } from '../../tools/backfill-listing-areas.mjs';
 
 // Two overlapping villages (both buffers contain the home) + one far village.
 const VILLAGES = [

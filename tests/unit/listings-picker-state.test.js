@@ -7,7 +7,7 @@
 import {
   emptyDraft, draftFromDecision, applyVerb, togglePrimary, toggleSub,
   reasonsArray, isDirty,
-} from '../assets/js/listings/picker-state.js';
+} from '../../assets/js/listings/picker-state.js';
 
 export async function register({ test, assert, assertEqual }) {
   const saved = {

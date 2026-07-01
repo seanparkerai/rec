@@ -3,8 +3,8 @@
 // rightmove_id (like/reject) is suppressed even when re-listed under another id,
 // that `pass` now suppresses like `reject` (passed/rejected moved to their own page),
 // and that duplicate rows collapse to one rep.
-import { decidedSets, isDecided, dedupeByFingerprint } from '../assets/js/listings/suppress.js';
-import { propertyFingerprint } from '../assets/js/listings/classify.js';
+import { decidedSets, isDecided, dedupeByFingerprint } from '../../assets/js/listings/suppress.js';
+import { propertyFingerprint } from '../../assets/js/listings/classify.js';
 
 export async function register({ test, assert, assertEqual }) {
   const snap = (address, beds, property_type) => ({ address, beds, property_type });

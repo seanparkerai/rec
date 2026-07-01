@@ -3,7 +3,7 @@
 // stale), that a liked property is never purged, and that a rejected re-list under a
 // NEW id is caught by physical-property fingerprint. The REST I/O in main() is not
 // exercised here (no network) — only the drift-free, reusable decision is tested.
-import { purgeDecision, buildPurgeContext, ageInDays } from '../tools/purge-listings.mjs';
+import { purgeDecision, buildPurgeContext, ageInDays } from '../../tools/purge-listings.mjs';
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-06-04T00:00:00Z');

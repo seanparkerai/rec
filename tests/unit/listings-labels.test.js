@@ -1,8 +1,8 @@
 // listings-labels.test.js — shared display-label dictionaries de-duplicated from
 // page-listings.js / page-property.js into ./listings/labels.js (REFACTOR P7f).
 // Guards against a key being added to a status/verdict enum without a matching label.
-import { VERDICT_LABELS, STATUS_LABELS, PERSONAL_STATUS_LABELS } from '../assets/js/listings/labels.js';
-import { PERSONAL_STATUSES } from '../assets/js/listings/reactions.js';
+import { VERDICT_LABELS, STATUS_LABELS, PERSONAL_STATUS_LABELS } from '../../assets/js/listings/labels.js';
+import { PERSONAL_STATUSES } from '../../assets/js/listings/reactions.js';
 
 export async function register({ test, assert, assertEqual }) {
   test('listings/labels: VERDICT_LABELS covers every fit verdict', () => {

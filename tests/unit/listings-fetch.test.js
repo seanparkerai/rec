@@ -3,7 +3,7 @@
 // wireListingsFetch() (which now calls the server-side request_rightmove_fetch RPC
 // via storage.js — no in-browser PAT) is exercised by hand / the browser harness.
 
-import { windowLabel, isValidWindow } from '../assets/js/listings/fetch.js';
+import { windowLabel, isValidWindow } from '../../assets/js/listings/fetch.js';
 
 export async function register({ test, assert, assertEqual }) {
   await test('listings-fetch: only Rightmove-valid windows are accepted', () => {

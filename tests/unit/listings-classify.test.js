@@ -5,7 +5,7 @@
 import {
   propertyTypeClass, isAllowedPropertyType, passesBaseline, propertyFingerprint,
   BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS,
-} from '../assets/js/listings/classify.js';
+} from '../../assets/js/listings/classify.js';
 
 export async function register({ test, assert, assertEqual }) {
   // ── property-type allow-list (broad houses + bungalows) ────────────────────

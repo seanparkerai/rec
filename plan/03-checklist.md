@@ -46,7 +46,7 @@
 - [x] 1.2 `tools/run-all-tests.mjs` stood up beside the old runner (`npm run test:new`): dynamic tier discovery, same `register()` contract (suites port by moving), `--tier` filter, per-tier summaries, lint + sync suite on full runs with online-skips reported as unrun. *(2026-07-01)*
 - [x] 1.3 Fixtures centralised in `tests/fixtures.mjs` (memoised; both runners consume it) + `tests/mocks/supabase-client.js` (chainable fixture-backed stub, self-tested by the first unit-tier suite, 6/6). *(2026-07-01)*
 - [x] 1.4 Batch A ported: 9 finance suites → `tests/unit/`, 2 → `tests/characterization/`; legacy runner + browser harness re-pointed; legacy 783/0, new harness 142/142. *(2026-07-01)*
-- [ ] 1.5 Port suite batch B (listings: classify, fit, feed-partition, suppress, reactions, listing-areas) likewise.
+- [x] 1.5 Batch B ported: 20 listings-pipeline suites → `tests/unit/` (incl. fetch/purge/backfill tool tests); legacy 783/0, new harness 365/365. *(2026-07-01)*
 - [ ] 1.6 Port suite batch C (refinement/learned-prefs/suggestions/radius) likewise.
 - [ ] 1.7 Port suite batch D (contract: supabase-sync, docs-consistency, schemas, areas-parity, profile-schema, ask-*) into `tests/contract/`.
 - [ ] 1.8 Port remaining suites (dashboard tiles, live-feed, outreach, shell utils); old runner now a thin alias.

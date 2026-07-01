@@ -2,7 +2,7 @@
 // Uses the shared finances/criteria fixtures. Asserts the hard affordability
 // gate, the explainable contributions[] contract, and relative ordering that
 // holds regardless of the exact calibrated thresholds.
-import { scoreListingFit } from '../assets/js/listings/fit.js';
+import { scoreListingFit } from '../../assets/js/listings/fit.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances, criteria } = fixtures;

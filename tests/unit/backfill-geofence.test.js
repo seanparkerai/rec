@@ -1,7 +1,7 @@
 // tests/backfill-geofence.test.js — L7.0 pure-logic tests for the geofence
 // backfill recompute (tools/backfill-geofence.mjs). No network/DB: locks the
 // per-row field derivation, the summary counts, and the emitted SQL escaping.
-import { geofenceFields, summarise, emitSql } from '../tools/backfill-geofence.mjs';
+import { geofenceFields, summarise, emitSql } from '../../tools/backfill-geofence.mjs';
 
 const VILLAGES = [
   { id: 'wherwell-sp11', name: 'wherwell', outcode: 'SP11', lat: 51.1624, lng: -1.4756 },

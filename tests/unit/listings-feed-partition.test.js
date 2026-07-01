@@ -6,7 +6,7 @@
 // and the page pre-filters the decided pile before calling in), decided rows hide
 // unless "Show hidden", junk vs refinement never double-counts, unknown verbs fold
 // into the Passed group, and no count can go negative.
-import { partitionFeed } from '../assets/js/listings/feed-partition.js';
+import { partitionFeed } from '../../assets/js/listings/feed-partition.js';
 
 export async function register({ test, assert, assertEqual }) {
   // Distinct addresses → distinct fingerprints (dedupeByFingerprint is exercised

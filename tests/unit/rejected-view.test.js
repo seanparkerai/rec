@@ -3,7 +3,7 @@
 // and un-reacted excluded), most-recently-actioned first, re-listed duplicates
 // collapse to the latest decision, rows render from the durable snapshot, search
 // matches property type + area name, and pagination yields 50/page with clamped bounds.
-import { buildRejectedRows, searchRejected, paginate } from '../assets/js/listings/rejected-view.js';
+import { buildRejectedRows, searchRejected, paginate } from '../../assets/js/listings/rejected-view.js';
 
 export async function register({ test, assert, assertEqual }) {
   const snap = (id, address, beds, property_type, over = {}) => ({

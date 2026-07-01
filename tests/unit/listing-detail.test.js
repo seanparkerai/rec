@@ -1,5 +1,5 @@
 // tests/listing-detail.test.js — v3 L6 dossier pure helpers.
-import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from '../assets/js/listings/detail.js';
+import { galleryImages, floorplanImages, priceHistorySeries, netPriceChange } from '../../assets/js/listings/detail.js';
 
 export async function register({ test, assert, assertEqual }) {
   test('listing-detail: galleryImages reads raw_json.images[].url + dedupes the primary', () => {

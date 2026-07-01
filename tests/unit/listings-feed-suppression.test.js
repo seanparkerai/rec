@@ -5,11 +5,11 @@
 // dedupeByFingerprint) and page-saved-listings.js (dedupeNewestByFingerprint), so the
 // wiring can't silently regress even though the page coordinators aren't themselves
 // unit-importable (they touch the DOM + storage).
-import { latestPerListing } from '../assets/js/listings/reactions.js';
+import { latestPerListing } from '../../assets/js/listings/reactions.js';
 import {
   decidedSets, isDecided, dedupeNewestByFingerprint, foldDecision,
-} from '../assets/js/listings/suppress.js';
-import { propertyFingerprint } from '../assets/js/listings/classify.js';
+} from '../../assets/js/listings/suppress.js';
+import { propertyFingerprint } from '../../assets/js/listings/classify.js';
 
 export async function register({ test, assert, assertEqual }) {
   const snap = (address, beds, property_type) => ({ address, beds, property_type });

@@ -2,7 +2,7 @@
 // judgements vs en-masse sweeps vs administrative removals. Pure module, no IO.
 import {
   classifyProvenance, genuineReactions, provenanceSummary, REACTION_CADENCE,
-} from '../assets/js/listings/reaction-provenance.js';
+} from '../../assets/js/listings/reaction-provenance.js';
 
 export async function register({ test, assert, assertEqual }) {
   // N reactions in the SAME minute (a burst). i*1000ms keeps them inside one minute.
