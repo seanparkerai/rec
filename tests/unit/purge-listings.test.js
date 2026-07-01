@@ -3,7 +3,12 @@
 // stale), that a liked property is never purged, and that a rejected re-list under a
 // NEW id is caught by physical-property fingerprint. The REST I/O in main() is not
 // exercised here (no network) — only the drift-free, reusable decision is tested.
-import { purgeDecision, buildPurgeContext, ageInDays } from '../../tools/purge-listings.mjs';
+import { purgeDecision, buildPurgeContext, ageInDays, PURGE_REASONS } from '../../tools/purge-listings.mjs';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
 export async function register({ test, assert, assertEqual }) {
   const NOW = new Date('2026-06-04T00:00:00Z');
@@ -53,5 +58,33 @@ export async function register({ test, assert, assertEqual }) {
   test('purge: ageInDays falls back to first_seen and is 0 when unknown', () => {
     assert(ageInDays({ last_seen: null, first_seen: daysAgo(10) }, NOW) > 9, 'uses first_seen when last_seen missing');
     assertEqual(ageInDays({ last_seen: null, first_seen: null }, NOW), 0, 'unknown dates → 0 (never stale)');
+  });
+
+  test('purge (2.18): PURGE_REASONS is the COMPLETE reason set — nothing undocumented', () => {
+    // Guards against the fc5574a landmine: an undocumented 'new-build' reason with
+    // no report bucket crashed main(). Every decision must be a documented reason
+    // or null — and a fresh, in-baseline new-build row follows the normal rules.
+    const grid = [
+      row({ rightmove_id: 'g1' }),
+      row({ rightmove_id: 'g2', title: 'Stunning NEW BUILD home', description: 'NHBC warranty' }),
+      row({ rightmove_id: 'g3', property_type: 'Flat' }),
+      row({ rightmove_id: 'g4', last_seen: daysAgo(40) }),
+      row({ rightmove_id: 'g5', price: 999000, last_seen: daysAgo(400) }),
+    ];
+    for (const r of grid) {
+      const d = purgeDecision(r, emptyCtx);
+      assert(d === null || PURGE_REASONS.includes(d), `undocumented purge reason "${d}" for ${r.rightmove_id}`);
+    }
+    assertEqual(purgeDecision(grid[1], emptyCtx), null,
+      'a fresh, in-baseline new-build is KEPT (new-build is a flag, never junk)');
+  });
+
+  test('purge (2.18): the tool cleans listing_areas junction rows alongside listings', () => {
+    // No FK ties listing_areas to listings (loose by design) — a purge that only
+    // deletes listings rows strands orphan membership rows (the remembership
+    // sweep surfaces them as info). Pin the junction delete in the source.
+    const src = readFileSync(join(ROOT, 'tools/purge-listings.mjs'), 'utf8');
+    assert(/listing_areas\?rightmove_id=in\./.test(src),
+      'purge must DELETE the purged ids from listing_areas too');
   });
 }

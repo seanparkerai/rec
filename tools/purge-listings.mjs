@@ -19,6 +19,11 @@
 // NOT a cap: it removes records that are out-of-baseline, rejected-and-old, or stale —
 // it never trims valid, undecided, in-baseline listings.
 //
+// Each purged listing's `listing_areas` membership rows are deleted alongside it
+// (no FK ties them — junction hygiene, step 2.18). PURGE_REASONS is the COMPLETE
+// reason set: purgeDecision returns one of those or null, nothing else (pinned by
+// tests/unit/purge-listings.test.js).
+//
 // Env:
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY  — required (read + delete)
 //   APPLY=1                                   — actually DELETE (default is DRY RUN)
@@ -80,8 +85,11 @@ export function purgeDecision(row, ctx) {
   if (!row) return null;
   if (likedIds && likedIds.has(String(row.rightmove_id))) return null;       // liked → protected
   if (!passesBaseline(row)) return 'baseline';
-  const NEW_BUILD_RE = /\bnew\s+(?:build|home)\b|\bnhbc\b/i;
-  if (NEW_BUILD_RE.test(row.title ?? '') || NEW_BUILD_RE.test(row.description ?? '')) return 'new-build';
+  // NOTE (2.18 audit): an undocumented 'new-build' purge reason was removed here —
+  // it arrived in an unrelated commit (fc5574a), was absent from PURGE_REASONS and
+  // the header contract, crashed main() (no report bucket), and contradicted the
+  // product rule that new-build is a FLAG (flags.js), never junk. Purging by
+  // build-age is a policy decision the owner has not made.
   const age = ageInDays(row, now);
   if (rejectedSets && isDecided(row, rejectedSets) && age > rejectHalfLifeDays) return 'rejected-stale';
   if (age > staleDays) return 'stale';
@@ -111,6 +119,15 @@ async function restDelete(ids) {
     headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, Prefer: 'return=minimal' },
   });
   if (!res.ok) throw new Error(`DELETE failed: ${res.status} ${await res.text()}`);
+  // Junction hygiene (2.18): listing_areas has no FK to listings (loose by
+  // design), so a purge must clean the membership rows itself or they orphan —
+  // deleted AFTER the listings so a live row is never left feed-invisible.
+  const laUrl = `${SUPABASE_URL}/rest/v1/listing_areas?rightmove_id=in.(${inList})`;
+  const laRes = await fetch(laUrl, {
+    method: 'DELETE',
+    headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, Prefer: 'return=minimal' },
+  });
+  if (!laRes.ok) throw new Error(`DELETE listing_areas failed: ${laRes.status} ${await laRes.text()}`);
   return ids.length;
 }
 

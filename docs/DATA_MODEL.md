@@ -164,3 +164,23 @@ set attached as `areas` jsonb. Contract: `supabase/archive/schema-household-feed
 commute math but is **excluded from the listing feed and the fetcher demand set** — its
 catchment is where the household lives, not where they want to buy. Contrast a **target** area
 (the default) whose listings the household wants to see.
+
+### Listing lifecycle (audited + pinned, step 2.18)
+
+`listings.status` ∈ `live | under_offer | sstc | withdrawn` — stamped by
+`mapStatus()` (`tools/listings-normalise.mjs`) from the source's free-text status at
+normalise-time and refreshed on every re-sight via the UPSERT. **Nothing else writes it**
+(personal statuses — new/saved/viewed/offered/rejected — live on `shortlist`, never here).
+A delisted property simply stops being re-seen: its `status`/`last_seen` freeze and it ages
+into the purge. Out-of-buffer rows (`geofence_pass=false`, stored-but-hidden) are never
+re-upserted by the fetcher (it writes in-buffer only), so they age out the same way.
+
+`tools/purge-listings.mjs` (dry-run by default; `APPLY=1` deletes) removes, in order —
+ever-**liked** rows are unconditionally protected first: (a) `baseline` violations
+(`passesBaseline`, the shared gate), (b) `rejected-stale` (current reaction = reject, by id
+OR fingerprint so relists count, unseen > `REJECT_HALF_LIFE_DAYS`=14), (c) `stale` (unseen >
+`STALE_DAYS`=30, catches delisted/withdrawn). `PURGE_REASONS` is the **complete** reason set
+(pinned by `tests/unit/purge-listings.test.js` — an undocumented drive-by reason once
+crashed the tool). Each purged listing's `listing_areas` rows are deleted alongside it (no
+FK — junction hygiene, also pinned); the reject signal survives forever in the append-only
+`listing_reactions` log, so suppression outlives the purged row.
