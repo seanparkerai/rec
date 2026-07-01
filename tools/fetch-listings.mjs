@@ -457,15 +457,8 @@ async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles =
 }
 
 // ── nearest-area match within the outcode ────────────────────────────────────
-function assignArea(listing, areas) {
-  if (listing.lat == null || listing.lng == null || !areas.length) return null;
-  let best = null, bestKm = Infinity;
-  for (const a of areas) {
-    const km = haversineKm({ lat: listing.lat, lng: listing.lng }, a);
-    if (km < bestKm) { bestKm = km; best = a; }
-  }
-  return best?.id ?? null;
-}
+// assignArea deleted (step 2.8): a third nearest-only matcher with zero callers.
+// withinGeofence (tools/listings-normalise.mjs) is the one decisive matcher.
 
 // ── Supabase REST (service role) ─────────────────────────────────────────────
 async function restGetExisting(ids) {
@@ -975,4 +968,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, assignArea, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };

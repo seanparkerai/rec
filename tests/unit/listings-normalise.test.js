@@ -4,7 +4,6 @@
 import {
   normaliseRawListing,
   isInOutcode,
-  matchListingToArea,
   dedupeByRightmoveId,
   mergePriceHistory,
   parseAddedDate,
@@ -139,26 +138,8 @@ export async function register({ test, assert, assertEqual }) {
   ];
   const KNOWN = new Set(['SO20', 'SO51']);
 
-  test('listings/import-match: assigns nearest area + its outcode by coordinates', () => {
-    const l = normaliseRawListing(RAW, { outcode: '' }); // unknown target outcode
-    const m = matchListingToArea(l, { areas: ALL_AREAS, knownOutcodes: KNOWN });
-    assert(m.accepted, 'near a known area → accepted');
-    assertEqual(m.outcode, 'SO20');
-    assertEqual(m.area_id, 'over-wallop-so20');
-  });
 
-  test('listings/import-match: address-token fallback when coords missing', () => {
-    const l = { postcode: 'SO51 8AB', lat: null, lng: null };
-    const m = matchListingToArea(l, { areas: ALL_AREAS, knownOutcodes: KNOWN });
-    assert(m.accepted, 'token in a covered outcode → accepted');
-    assertEqual(m.outcode, 'SO51');
-  });
 
-  test('listings/import-match: REJECTS a wrong-region listing', () => {
-    const london = { postcode: null, lat: 51.5072, lng: -0.1276 };
-    const m = matchListingToArea(london, { areas: ALL_AREAS, knownOutcodes: KNOWN });
-    assert(!m.accepted, 'far from every area and no covered token → rejected');
-  });
 
   // ── L7 geofence: the decisive precision test (regression guard for the bug) ──
   const SP11_VILLAGES = [

@@ -11,7 +11,7 @@
 //   GET /v2/acts/{actor}/runs?status=SUCCEEDED  → defaultDatasetId per run
 //   GET /v2/datasets/{id}/items                 → raw items (already paid for)
 //   → normaliseRawListing (same locked field map as the live fetcher)
-//   → matchListingToArea (coordinate-first, target outcode UNKNOWN for ad-hoc
+//   → withinGeofence (the ONE decisive matcher; near-misses stored hidden for ad-hoc
 //     runs, so match across ALL areas + address-token fallback; rejects wrong-region)
 //   → dedupe by rightmove_id → merge price_history vs existing rows
 //   → UPSERT listings (on_conflict=rightmove_id), same as the live fetcher.
@@ -27,7 +27,7 @@
 
 import {
   normaliseRawListing,
-  matchListingToArea,
+  IN_OUTCODE_RADIUS_KM,
   withinGeofence,
   dedupeByRightmoveId,
   mergePriceHistory,
@@ -151,10 +151,18 @@ async function main() {
       // upserted EVERYTHING (flats, park homes, land, over/under-priced), which is
       // how the table got polluted. Never again.
       if (!passesBaseline(l)) { totalOffBaseline += 1; continue; }
-      const m = matchListingToArea(l, { areas, knownOutcodes });
-      if (!m.accepted) { totalRejected += 1; continue; }
-      l.outcode = m.outcode;
-      l.area_id = m.area_id;
+      // ONE decisive matcher (step 2.8): withinGeofence — the same predicate as
+      // the live fetcher. In-buffer rows are fully accepted; near-miss rows
+      // (outside every buffer but within IN_OUTCODE_RADIUS_KM of the nearest
+      // village) are kept STORED-BUT-HIDDEN (geofence_pass=false, no membership),
+      // preserving the includeOutOfArea surface; wrong-region and coordinate-less
+      // rows are dropped (a listing the geofence can never verify has no place in
+      // a feed that guarantees completeness-without-leaks).
+      const g = withinGeofence(l, { villages: areas });
+      const nearMiss = !g.pass && g.km != null && g.km <= IN_OUTCODE_RADIUS_KM;
+      if (!g.pass && !nearMiss) { totalRejected += 1; continue; }
+      l.outcode = String((areas.find((a) => a.id === g.area_id)?.outcode) || l.outcode || '').toUpperCase();
+      l.area_id = g.area_id;
       collected.push(l);
       kept += 1;
     }
@@ -168,7 +176,7 @@ async function main() {
   // village index, so backfilled rows carry the identical listing_areas set. For a
   // row inside a village buffer, align its primary area_id + geofence fields to the
   // geofence verdict (matching fetch-listings), so listings.area_id == the junction's
-  // is_primary. Rows outside every buffer keep their matchListingToArea area_id and
+  // is_primary. Near-miss rows (in-region, outside every buffer) keep the nearest area_id and
   // get no membership rows (they were accepted only by the coarse 20km region guard).
   const geo = deduped.map((l) => ({ l, g: withinGeofence(l, { villages: areas }) }));
   for (const { l, g } of geo) {

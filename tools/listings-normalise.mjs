@@ -332,36 +332,10 @@ export function isInOutcode(listing, { outcode, areaCoords = [], radiusKm = IN_O
   return false;
 }
 
-/**
- * Backfill/import variant of in-outcode validation: the per-listing target
- * outcode is UNKNOWN (the source run was an ad-hoc search, not our per-outcode
- * query), so match the listing to the nearest known area across ALL areas
- * (coordinate-first), with an address-token fallback. Resolves the outcode +
- * area_id from whichever area it landed in. Used by tools/import-apify-runs.mjs.
- * @param {object} listing  a normalised row (needs lat/lng and/or postcode).
- * @param {object} opts { areas: [{id,outcode,lat,lng}], knownOutcodes: Set<string>, radiusKm }
- * @returns {{ accepted: boolean, outcode: string|null, area_id: string|null, km: number }}
- */
-export function matchListingToArea(listing, { areas = [], knownOutcodes = new Set(), radiusKm = IN_OUTCODE_RADIUS_KM } = {}) {
-  let best = null, bestKm = Infinity;
-  if (listing?.lat != null && listing?.lng != null) {
-    const here = { lat: Number(listing.lat), lng: Number(listing.lng) };
-    for (const a of areas) {
-      const km = haversineKm(here, a);
-      if (km < bestKm) { bestKm = km; best = a; }
-    }
-  }
-  const coordOk = best && bestKm <= radiusKm;
-
-  // Address-token fallback: the listing's own outcode token is one we cover.
-  const token = listing?.postcode ? String(listing.postcode).toUpperCase() : null;
-  const tokenOutcode = token ? (token.match(/^[A-Z]{1,2}\d{1,2}[A-Z]?/)?.[0] ?? null) : null;
-  const tokenOk = tokenOutcode != null && knownOutcodes.has(tokenOutcode);
-
-  if (!coordOk && !tokenOk) return { accepted: false, outcode: null, area_id: null, km: bestKm };
-  const outcode = coordOk ? best.outcode : tokenOutcode;
-  return { accepted: true, outcode: String(outcode).toUpperCase(), area_id: best ? best.id : null, km: bestKm };
-}
+// matchListingToArea deleted (step 2.8): the 20 km nearest+token matcher let
+// wrong-village rows in with a coarse area_id. withinGeofence is the ONE
+// decisive matcher; IN_OUTCODE_RADIUS_KM survives only as the importer's
+// stored-but-hidden wrong-region bound.
 
 /** Dedupe a list of normalised rows by rightmove_id, keeping the first seen. */
 export function dedupeByRightmoveId(rows) {
