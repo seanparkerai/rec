@@ -1,7 +1,7 @@
 // investment-performance.test.js — analysePerformance() + getVelocityFromHistory()
 
-import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution } from '../assets/js/investment-performance.js';
-import { getVelocityFromHistory } from '../assets/js/savings-velocity.js';
+import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution } from '../../assets/js/investment-performance.js';
+import { getVelocityFromHistory } from '../../assets/js/savings-velocity.js';
 
 // Stub history — should return zeros gracefully.
 const STUB_HISTORY = {

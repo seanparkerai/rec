@@ -1,6 +1,6 @@
 // savings-series.test.js — buildSavingsSeries()
 
-import { buildSavingsSeries } from '../assets/js/savings-series.js';
+import { buildSavingsSeries } from '../../assets/js/savings-series.js';
 
 const STUB_HISTORY = {
   _status: 'awaiting Phase 3 import',

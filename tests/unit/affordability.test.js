@@ -2,8 +2,8 @@
 // Registered into tests/tests.html by passing { test, assert, assertEqual, fixtures }.
 // Fixtures = { finances: data/finances.json, criteria: data/criteria.json }.
 
-import { assessAffordability } from '../assets/js/affordability.js';
-import { calcSDLT, calcMonthlyMortgage, calcLTV, lisaEligible, computeOutlayBreakdown } from '../assets/js/finances.js';
+import { assessAffordability } from '../../assets/js/affordability.js';
+import { calcSDLT, calcMonthlyMortgage, calcLTV, lisaEligible, computeOutlayBreakdown } from '../../assets/js/finances.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances, criteria } = fixtures;

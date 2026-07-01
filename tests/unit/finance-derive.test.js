@@ -1,7 +1,7 @@
 // finance-derive.test.js — exercises deriveFinances() against hand-computed values.
 // All inputs are synthetic round numbers (not real user data).
 
-import { deriveFinances, stripDerived, computeDepositSavings } from '../assets/js/finance-derive.js';
+import { deriveFinances, stripDerived, computeDepositSavings } from '../../assets/js/finance-derive.js';
 
 const RAW = {
   currency: 'GBP',

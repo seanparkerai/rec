@@ -26,14 +26,14 @@
     import * as schema from './schemas.js';
     import * as fin from '../assets/js/finances.js';
     import { test, assert, assertEqual, render } from './assert.js';
-    import { register as registerAffordability } from './affordability.test.js';
-    import { register as registerMoneyFlow } from './money-flow.test.js';
-    import { register as registerSavingsVelocity } from './savings-velocity.test.js';
-    import { register as registerDepositRisk } from './deposit-risk.test.js';
-    import { register as registerAffordabilityScenarios } from './affordability-scenarios.test.js';
-    import { register as registerInvestmentPerformance } from './investment-performance.test.js';
-    import { register as registerSavingsSeries } from './savings-series.test.js';
-    import { register as registerFinanceDerive } from './finance-derive.test.js';
+    import { register as registerAffordability } from './unit/affordability.test.js';
+    import { register as registerMoneyFlow } from './unit/money-flow.test.js';
+    import { register as registerSavingsVelocity } from './unit/savings-velocity.test.js';
+    import { register as registerDepositRisk } from './unit/deposit-risk.test.js';
+    import { register as registerAffordabilityScenarios } from './unit/affordability-scenarios.test.js';
+    import { register as registerInvestmentPerformance } from './unit/investment-performance.test.js';
+    import { register as registerSavingsSeries } from './unit/savings-series.test.js';
+    import { register as registerFinanceDerive } from './unit/finance-derive.test.js';
     import { deriveFinances } from '../assets/js/finance-derive.js';
 
     const fetchOk = async (path) => (await fetch(url(path))).ok;

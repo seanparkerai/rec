@@ -1,6 +1,6 @@
 // deposit-risk.test.js — verdict cases for assessDepositRisk().
 
-import { assessDepositRisk } from '../assets/js/deposit-risk.js';
+import { assessDepositRisk } from '../../assets/js/deposit-risk.js';
 
 const LOW_RISK_INVESTMENTS = {
   trading212ISA: {

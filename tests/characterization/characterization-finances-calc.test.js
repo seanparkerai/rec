@@ -9,7 +9,7 @@ import {
   calcSDLT, calcMonthlyMortgage, calcLTV, calcLISABonus, lisaEligible,
   calcDepositProgress, calcMonthsToTarget, projectSavings,
   totalInitialOutlay, computeOutlayBreakdown,
-} from '../assets/js/finances.js';
+} from '../../assets/js/finances.js';
 
 export async function register({ test, assert, assertEqual }) {
   const eqJSON = (a, b, msg) => assertEqual(JSON.stringify(a), JSON.stringify(b), msg);

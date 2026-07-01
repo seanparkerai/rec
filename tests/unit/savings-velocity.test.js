@@ -1,8 +1,8 @@
 // savings-velocity.test.js — baseline ETA + scenario deltas.
 // Registered into tests/tests.html.
 
-import { getSavingsVelocity } from '../assets/js/savings-velocity.js';
-import { calcMonthsToTarget } from '../assets/js/finances.js';
+import { getSavingsVelocity } from '../../assets/js/savings-velocity.js';
+import { calcMonthsToTarget } from '../../assets/js/finances.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances } = fixtures;

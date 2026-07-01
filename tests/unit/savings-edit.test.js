@@ -4,7 +4,7 @@
 
 import {
   applyCashSavings, applyIsaValue, previewDepositTotal, hasIsa,
-} from '../assets/js/savings-edit.js';
+} from '../../assets/js/savings-edit.js';
 
 const RAW = {
   currency: 'GBP',

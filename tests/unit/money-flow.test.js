@@ -1,7 +1,7 @@
 // money-flow.test.js — pre/post move money-flow shape + sums.
 // Registered into tests/tests.html.
 
-import { getMoneyFlow, getMoneyFlowPostMove } from '../assets/js/money-flow.js';
+import { getMoneyFlow, getMoneyFlowPostMove } from '../../assets/js/money-flow.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances } = fixtures;

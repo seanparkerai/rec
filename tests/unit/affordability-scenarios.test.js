@@ -1,7 +1,7 @@
 // affordability-scenarios.test.js — assessAffordabilityScenarios() against the synthetic sample.
 // All inputs are fictional placeholder values (real user-state lives in Supabase).
 
-import { assessAffordabilityScenarios } from '../assets/js/affordability.js';
+import { assessAffordabilityScenarios } from '../../assets/js/affordability.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances, criteria } = fixtures;

@@ -3,10 +3,10 @@
 // No DOM access — pure modules only. Assertions are structural / consistency
 // checks against the (synthetic) fixtures — not hard-coded personal figures.
 
-import { getMoneyFlow, getMoneyFlowPostMove } from '../assets/js/money-flow.js';
-import { buildSavingsSeries } from '../assets/js/savings-series.js';
-import { deriveFinances } from '../assets/js/finance-derive.js';
-import { gbp } from '../assets/js/format.js';
+import { getMoneyFlow, getMoneyFlowPostMove } from '../../assets/js/money-flow.js';
+import { buildSavingsSeries } from '../../assets/js/savings-series.js';
+import { deriveFinances } from '../../assets/js/finance-derive.js';
+import { gbp } from '../../assets/js/format.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances, rawFinances, criteria, investments } = fixtures;
