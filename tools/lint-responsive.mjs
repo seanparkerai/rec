@@ -19,9 +19,13 @@
 //     assets/css/ UNION every first-arg literal of `.style.setProperty('--name')`
 //     under assets/js/. Without the JS half, runtime tokens (--seasoning-pct,
 //     --marker-pct, later --ref-pct) are permanent false positives.
-//  4. Baseline is COUNT-based, not set-membership. Fingerprint =
-//     rule|file|normalised-snippet → occurrence count. Lint passes iff every
-//     live fingerprint count <= its baseline count (totals may only shrink).
+//  4. Baseline v2 (step 1.10) is a justified, RATCHETING allow-list. Fingerprint =
+//     rule|file|normalised-snippet → { count, reason }. Lint passes iff
+//     (a) every live fingerprint exists in the baseline with live <= count
+//         (new-by-identity always fails), and
+//     (b) no baseline entry is STALE (live < count, or gone) — fixing a
+//         violation must tighten the baseline (`--tighten-baseline`), so
+//         freed allowances can never be silently reoccupied.
 //  5. Guard-railed paths (storage/*, config.js, data-loader.js, finances.js,
 //     finances/calc-*.js) are SKIPPED by the JS rules — a lint must not demand
 //     edits to files the project forbids editing (CLAUDE.md §16).
@@ -242,29 +246,60 @@ const liveCounts = countMap(violations);
 
 // === public API ============================================================
 
+function loadBaseline() {
+  if (!existsSync(ALLOW_PATH)) return {};
+  const raw = JSON.parse(readFileSync(ALLOW_PATH, 'utf8'));
+  // v1 entries were bare counts; normalise so both shapes read identically.
+  const out = {};
+  for (const [fp, v] of Object.entries(raw)) {
+    out[fp] = typeof v === 'number' ? { count: v, reason: '(v1 entry — reason not recorded)' } : v;
+  }
+  return out;
+}
+
 export function runResponsiveLint() {
-  const baseline = existsSync(ALLOW_PATH) ? JSON.parse(readFileSync(ALLOW_PATH, 'utf8')) : {};
+  const baseline = loadBaseline();
   const regressions = [];
   for (const [fp, n] of Object.entries(liveCounts)) {
-    const allowed = baseline[fp] || 0;
+    const allowed = baseline[fp]?.count || 0;
     if (n > allowed) regressions.push({ fingerprint: fp, live: n, baseline: allowed });
   }
-  return { violations, regressions };
+  // Ratchet: a baseline allowance above the live count is stale — the fix must
+  // be locked in (via --tighten-baseline) or the allowance could be reoccupied.
+  const stale = [];
+  for (const [fp, entry] of Object.entries(baseline)) {
+    const live = liveCounts[fp] || 0;
+    if (live < entry.count) stale.push({ fingerprint: fp, live, baseline: entry.count });
+  }
+  return { violations, regressions, stale };
 }
 
 // === CLI ===================================================================
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
-  if (process.argv.includes('--write-baseline')) {
-    const sorted = Object.fromEntries(Object.entries(liveCounts).sort(([a], [b]) => a.localeCompare(b)));
+  if (process.argv.includes('--tighten-baseline')) {
+    // Ratchet DOWN only: shrink counts to live, drop zero entries, keep reasons.
+    const baseline = loadBaseline();
+    const next = {};
+    for (const [fp, entry] of Object.entries(baseline)) {
+      const live = liveCounts[fp] || 0;
+      const count = Math.min(entry.count, live);
+      if (count > 0) next[fp] = { count, reason: entry.reason };
+    }
+    const sorted = Object.fromEntries(Object.entries(next).sort(([a], [b]) => a.localeCompare(b)));
     writeFileSync(ALLOW_PATH, JSON.stringify(sorted, null, 2) + '\n');
-    const total = Object.values(liveCounts).reduce((a, b) => a + b, 0);
-    console.log(`wrote baseline: ${Object.keys(sorted).length} fingerprints, ${total} occurrences → ${relative(__root, ALLOW_PATH)}`);
+    console.log(`tightened baseline: ${Object.keys(sorted).length} justified fingerprints → ${relative(__root, ALLOW_PATH)}`);
     process.exit(0);
   }
+  if (process.argv.includes('--write-baseline')) {
+    console.error('--write-baseline was removed in v2: a full resnapshot would launder new violations.');
+    console.error('Add a NEW allowance by editing tools/lint-responsive.allow.json with a { count, reason } entry;');
+    console.error('lock in fixes with --tighten-baseline.');
+    process.exit(2);
+  }
 
-  const { regressions } = runResponsiveLint();
+  const { regressions, stale } = runResponsiveLint();
   const byRule = {};
   for (const v of violations) (byRule[v.rule] ||= []).push(v);
   console.log('Responsive lint — live violations by rule:');
@@ -273,10 +308,17 @@ if (isMain) {
   }
   console.log(`  TOTAL: ${violations.length}`);
 
+  let bad = false;
   if (regressions.length) {
+    bad = true;
     console.error(`\n✗ ${regressions.length} regression(s) above baseline:`);
     for (const r of regressions) console.error(`  ${r.fingerprint}  (live ${r.live} > baseline ${r.baseline})`);
-    process.exit(1);
   }
-  console.log('\n✓ no regressions vs baseline');
+  if (stale.length) {
+    bad = true;
+    console.error(`\n✗ ${stale.length} stale baseline allowance(s) — run --tighten-baseline to lock the fix in:`);
+    for (const r of stale) console.error(`  ${r.fingerprint}  (live ${r.live} < baseline ${r.baseline})`);
+  }
+  if (bad) process.exit(1);
+  console.log('\n✓ no regressions vs baseline; no stale allowances');
 }

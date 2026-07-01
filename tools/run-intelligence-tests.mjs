@@ -166,10 +166,10 @@ await registerLiveFeedRuns({ test, assert, assertEqual });
 await registerLiveFeedStats({ test, assert, assertEqual });
 
 await test('responsive lint (no new violations vs baseline)', () => {
-  const { regressions } = runResponsiveLint();
+  const { regressions, stale } = runResponsiveLint();
   assert(
-    regressions.length === 0,
-    `responsive lint regressions:\n${regressions.map((r) => `  ${r.fingerprint} (live ${r.live} > baseline ${r.baseline})`).join('\n')}`,
+    regressions.length === 0 && stale.length === 0,
+    `responsive lint:\n${regressions.map((r) => `  NEW ${r.fingerprint} (live ${r.live} > baseline ${r.baseline})`).join('\n')}${stale.map((r) => `  STALE ${r.fingerprint} (live ${r.live} < baseline ${r.baseline}) — run --tighten-baseline`).join('\n')}`,
   );
 });
 

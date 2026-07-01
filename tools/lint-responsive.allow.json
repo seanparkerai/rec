@@ -1,8 +1,26 @@
 {
-  "r-no-style-assign|assets/js/dashboard/tile-deposit.js|.style.strokeDashoffset =": 1,
-  "r-no-style-assign|assets/js/finances/section-deposit.js|.style.width =": 1,
-  "r-no-style-assign|assets/js/page-area-detail.js|.style.viewTransitionName =": 1,
-  "r-no-style-assign|assets/js/page-areas.js|.style.viewTransitionName =": 1,
-  "r-no-style-assign|assets/js/page-listings/progress.js|.style.width =": 2,
-  "r-no-style-assign|assets/js/page-property/sections.js|.style.cursor =": 1
+  "r-no-style-assign|assets/js/dashboard/tile-deposit.js|.style.strokeDashoffset =": {
+    "count": 1,
+    "reason": "Deposit-arc SVG animation: strokeDashoffset is a numeric SVG presentation value driven per-frame; a CSS-var indirection adds no safety. Sanctioned 2026-07-01 (v1 baseline port)."
+  },
+  "r-no-style-assign|assets/js/finances/section-deposit.js|.style.width =": {
+    "count": 1,
+    "reason": "Deposit progress bar fill: dynamic percentage width on one element; predates the --x setProperty idiom. Migrate when Phase 3 rebuilds the finances page. Sanctioned 2026-07-01 (v1 baseline port)."
+  },
+  "r-no-style-assign|assets/js/page-area-detail.js|.style.viewTransitionName =": {
+    "count": 1,
+    "reason": "Cross-document View Transition: view-transition-name must be set programmatically on the morphing element (area title). Sanctioned 2026-07-01 (v1 baseline port)."
+  },
+  "r-no-style-assign|assets/js/page-areas.js|.style.viewTransitionName =": {
+    "count": 1,
+    "reason": "Cross-document View Transition: list-side counterpart of the area-title morph. Sanctioned 2026-07-01 (v1 baseline port)."
+  },
+  "r-no-style-assign|assets/js/page-listings/progress.js|.style.width =": {
+    "count": 2,
+    "reason": "Review-progress meter fills (two segments): dynamic percentage widths; predates the --x setProperty idiom. Migrate when Phase 3 rebuilds the listings page. Sanctioned 2026-07-01 (v1 baseline port)."
+  },
+  "r-no-style-assign|assets/js/page-property/sections.js|.style.cursor =": {
+    "count": 1,
+    "reason": "Lightbox gallery: cursor swaps zoom-in/zoom-out with viewer state; state-dependent UI affordance, not layout. Sanctioned 2026-07-01 (v1 baseline port)."
+  }
 }
