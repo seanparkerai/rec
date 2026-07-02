@@ -28,39 +28,56 @@
       <p class="lead">Every property you’ve liked, gathered in one place with the specific things you called out as positives. Like more on the <a href="listings.html">Listings</a> page and they’ll appear here; change your mind and they drop off.</p>
     </header>
 
-    <div class="listings-filter" data-listings-filter role="search">
-      <input type="search" class="listings-filter__search" data-control="search"
-             placeholder="Search address, postcode, title, area or type…" aria-label="Search saved listings" />
-      <div class="listings-filter__facets">
-        <label class="listings-filter__field">
-          <span class="listings-filter__label">Sort</span>
-          <select data-control="sort" aria-label="Sort saved listings"></select>
-        </label>
-        <label class="listings-filter__field">
-          <span class="listings-filter__label">Type</span>
-          <select data-control="type" aria-label="Filter by house type"><option value="all">Any type</option></select>
-        </label>
-        <label class="listings-filter__field">
-          <span class="listings-filter__label">Beds</span>
-          <select data-control="beds" aria-label="Filter by minimum bedrooms">
-            <option value="all">Any beds</option>
-            <option value="1">1+</option>
-            <option value="2">2+</option>
-            <option value="3">3+</option>
-            <option value="4">4+</option>
-            <option value="5">5+</option>
-          </select>
-        </label>
-        <label class="listings-filter__field">
-          <span class="listings-filter__label">Status</span>
-          <select data-control="status" aria-label="Filter by status"><option value="all">Any status</option></select>
-        </label>
-        <button type="button" class="listings-filter__clear outline secondary" data-control="clear">Clear</button>
-      </div>
+    <div class="filter-trigger-row" data-filter-trigger hidden>
+      <div class="active-filters" data-active-filters aria-live="polite">No filters set.</div>
+      <button type="button" data-open-filters aria-haspopup="dialog" aria-controls="saved-filter-sheet">Filters</button>
     </div>
 
+    <dialog class="filter-sheet" id="saved-filter-sheet" aria-labelledby="saved-filter-title">
+      <article>
+        <header>
+          <h2 id="saved-filter-title">Filters</h2>
+          <button type="button" class="outline secondary" data-close-filters aria-label="Close">Done</button>
+        </header>
+        <div class="listings-filter" data-listings-filter role="search">
+          <input type="search" class="listings-filter__search" data-control="search"
+                 placeholder="Search address, postcode, title, area or type…" aria-label="Search saved listings" />
+          <div class="listings-filter__facets">
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Sort</span>
+              <select data-control="sort" aria-label="Sort saved listings"></select>
+            </label>
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Type</span>
+              <select data-control="type" aria-label="Filter by house type"><option value="all">Any type</option></select>
+            </label>
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Beds</span>
+              <select data-control="beds" aria-label="Filter by minimum bedrooms">
+                <option value="all">Any beds</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+              </select>
+            </label>
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Status</span>
+              <select data-control="status" aria-label="Filter by status"><option value="all">Any status</option></select>
+            </label>
+            <button type="button" class="listings-filter__clear outline secondary" data-control="clear">Clear</button>
+          </div>
+        </div>
+      </article>
+    </dialog>
+
     <p data-saved-summary class="listings-summary"></p>
-    <ol class="listing-list" data-saved-listings aria-label="Your saved (liked) listings"></ol>
+    <div class="prop-list" data-saved-listings role="list" aria-label="Your saved (liked) listings"></div>
+    <div class="listings-empty" data-empty-saved hidden>
+      <p>No saved listings yet.</p>
+      <p class="listings-empty__hint">Like properties on the <a href="listings.html">Listings</a> page and they’ll gather here with the reasons you loved them.</p>
+    </div>
   </main>
 
   <div data-include="components/footer.html"></div>

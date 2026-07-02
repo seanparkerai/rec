@@ -1,69 +1,26 @@
 // page-rejected.js — the dedicated "Rejected & passed" surface.
-// A simplified, paginated table of every property whose CURRENT reaction is `pass`
-// or `reject`, most-recently-actioned first, one small cover photo per row. It reads
-// ONLY the append-only reaction log (latest-per-listing) and renders from each
-// reaction's durable snapshot — no listings fetch — so the page stays light even
-// with a large reject pile and still shows homes whose live row was withdrawn or
-// purged. Search narrows by property type / area name; the table paginates 50/page.
+// A simplified, paginated archive of every property whose CURRENT reaction is
+// `pass` or `reject`, most-recently-actioned first. It reads ONLY the append-only
+// reaction log (latest-per-listing) and renders from each reaction's durable
+// snapshot — no listings fetch — so the page stays light even with a large reject
+// pile and still shows homes whose live row was withdrawn or purged. Rows are
+// compact compositions of THE shared property-card family (page-rejected/row.js,
+// step 3.4d). Search narrows by property type / area name; paginates 50/page.
 import { getReactionLog } from './storage.js';
 import { loadJSON } from './data-loader.js';
 import { buildRejectedRows, searchRejected, paginate } from './listings/rejected-view.js';
 import { url } from './config.js';
 import { el, clear } from './dom.js';
+import { buildRejectedCard } from './page-rejected/row.js';
 
 const PER_PAGE = 50;
-const dossierHref = (id) => `${url('pages/property.html')}?id=${encodeURIComponent(id)}&from=rejected`;
-const fmtPrice = (n) => (n == null ? '—' : '£' + Math.round(n).toLocaleString('en-GB'));
-const fmtDate = (v) => {
-  const d = new Date(v);
-  return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-};
-
-// Small cover thumbnail with a monogram fallback (lazy, no-referrer — same
-// resilience as the feed's media so a broken/blocked image degrades gracefully).
-function buildThumb(listing) {
-  const monogram = () => el('span', { class: 'rejected-thumb rejected-thumb--none', 'aria-hidden': 'true' },
-    (listing.property_type || '•').slice(0, 1).toUpperCase());
-  if (!listing.image_url) return monogram();
-  const img = el('img', {
-    class: 'rejected-thumb', src: listing.image_url, alt: '',
-    loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
-  });
-  img.addEventListener('error', () => img.replaceWith(monogram()), { once: true });
-  return img;
-}
-
-function verdictBadge(reaction) {
-  const label = reaction === 'reject' ? 'Rejected' : 'Passed';
-  return el('span', { class: `rejected-verdict rejected-verdict--${reaction}` }, label);
-}
-
-function buildRow(entry) {
-  const l = entry.listing;
-  const place = [l.address, l.outcode].filter(Boolean).join(' · ');
-  const title = l.title || `${l.beds ?? '?'}-bed ${l.property_type || 'property'}`;
-  return el('tr', { 'data-id': l.rightmove_id }, [
-    el('td', { class: 'rejected-cell-thumb' }, [buildThumb(l)]),
-    el('td', { class: 'rejected-cell-property' }, [
-      el('a', { class: 'rejected-title', href: dossierHref(l.rightmove_id) }, title),
-      place ? el('span', { class: 'rejected-place' }, place) : null,
-    ].filter(Boolean)),
-    el('td', { 'data-label': 'Type' }, l.property_type || '—'),
-    el('td', { 'data-label': 'Area' }, entry.areaName || '—'),
-    el('td', { class: 'num', 'data-label': 'Beds' }, l.beds != null ? String(l.beds) : '—'),
-    el('td', { class: 'num', 'data-label': 'Price' }, fmtPrice(l.price)),
-    el('td', { 'data-label': 'Verdict' }, [verdictBadge(entry.reaction)]),
-    el('td', { class: 'num', 'data-label': 'Actioned' }, fmtDate(entry.created_at)),
-  ]);
-}
 
 async function render() {
   const main = document.querySelector('#main') || document.body;
-  const tbody = main.querySelector('[data-rejected-rows]');
-  if (!tbody) return;
+  const listEl = main.querySelector('[data-rejected-list]');
+  if (!listEl) return;
   const summaryEl = main.querySelector('[data-rejected-summary]');
   const filterEl = main.querySelector('[data-rejected-filter]');
-  const tableWrap = main.querySelector('[data-rejected-tablewrap]');
   const pagerEl = main.querySelector('[data-rejected-pager]');
   const pageInfoEl = main.querySelector('[data-rejected-pageinfo]');
   const prevBtn = main.querySelector('[data-rejected-prev]');
@@ -91,13 +48,13 @@ async function render() {
     const { slice, page, pageCount, total, start } = paginate(filtered, state.page, PER_PAGE);
     state.page = page;
 
-    clear(tbody);
-    for (const entry of slice) tbody.appendChild(buildRow(entry));
+    clear(listEl);
+    for (const entry of slice) listEl.appendChild(buildRejectedCard(entry));
 
     const hasAny = allRows.length > 0;
     const hasMatches = total > 0;
     show(filterEl, hasAny);
-    show(tableWrap, hasMatches);
+    show(listEl, hasMatches);
     show(pagerEl, pageCount > 1);
 
     if (emptyEl) {
