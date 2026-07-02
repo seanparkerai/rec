@@ -4,11 +4,12 @@
 > (832 KB / 11,068 lines — split 2026-07-01, owner-directed, content preserved). The root
 > `fable_refactor.md` is now a pointer stub kept so old references resolve.
 >
-> **Status (2026-07-02):** Phases **1** (test-harness core), **2** (⭐ flagship listings pipeline)
-> and **3** (mobile-first UI/UX overhaul — all surfaces passed, wireframe reconciled in
-> `05-ia-proposal.md` §6, a11y rails live) are **COMPLETE**; Phase 4 complete except owner-gated
-> ⚙ 4.9 + optional 4.10b; Phase 5 open at 5.2 (5.1 done; 5.9/5.10 absorbed into 3.8). Harness
-> 936/936. Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag).
+> **Status (2026-07-02, Phase-5 exit):** Phases **1** (test-harness core), **2** (⭐ flagship
+> listings pipeline), **3** (mobile-first UI/UX overhaul) and **5** (finances trust surface —
+> A3/A4/A5/A7 corrections shipped, golden grids + drift rail + mutation floor live) are
+> **COMPLETE**; Phase 4 complete except owner-gated ⚙ 4.9 + optional 4.10b. Harness 955/955.
+> Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag; 2.11b + 4.9 unlock
+> with it). Next open phase: **6** (areas content & data quality — expand on entry).
 > **Resume at the first unticked line of `03-checklist.md`.**
 
 ## How to use this directory (cold-resume protocol)
