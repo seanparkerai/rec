@@ -84,6 +84,19 @@ preserved throughout; semantic lint v2 (violation identity, not counts); online 
 never reported as passing when skipped; Stryker mutation testing scoped to finances + refinement +
 learned-preferences at ~75–80% threshold, opt-in, added in their phases. devDependencies only.
 
+## 5b. Recorded decisions (ADR-style, dated)
+
+- **2026-07-01 — B5 declined: keep the five explainable gates (step 4.4).** The validation
+  review offered a Bayesian Beta-Bernoulli core (global reject rate as prior) unifying
+  confidence, cold-start and disproportionality into one posterior. Decision: **keep the
+  gates.** Rationale: the review's own trade-off — Bayesian models are better-calibrated at
+  small n but lose the explicit gates the product exposes to the user — and the owner's north
+  star ranks *trust/explainability* alongside feed quality; the gates ARE the explanation the
+  Refinement page shows. The cheaper statistical win was taken instead (Fisher's exact, 4.2),
+  and gate pass-rates are now audited per run (4.3). **Revisit trigger:** if the 4.3
+  calibration data shows systematic miscalibration (e.g. gates passing noise or starving
+  obvious signals across many runs), reopen as its own named phase.
+
 ## 6. Owner-action items (each one flagged as a checklist step when reached)
 
 1. Add repo secrets `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DB_URL`
