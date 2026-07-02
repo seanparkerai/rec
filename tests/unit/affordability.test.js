@@ -110,6 +110,32 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(overCap.bandSignals.mgsEligible, false);
   });
 
+  await test('affordability: MGS window boundaries are inclusive at 91 / 95 / £600k exactly', () => {
+    const finAt = (price, deposit) => ({
+      firstTimeBuyer: true,
+      income: { annualBaseSalary: 200000, annualBonus: 0, takeHomeMonthly: 9000, totalMonthly: 9000 },
+      goal: { targetDeposit: deposit },
+      savings: { totalSavings: deposit, monthlyContribution: 0 },
+      mortgage: { ratePctAssumed: 5, termYears: 25 },
+    });
+    const mgs = (price, deposit) =>
+      assessAffordability({ price, finances: finAt(price, deposit), criteria: {} }).bandSignals.mgsEligible;
+    assertEqual(mgs(100000, 9000), true, 'LTV exactly 91.0% is IN (>=, not >)');
+    assertEqual(mgs(100000, 9100), false, 'LTV 90.9% is below the window');
+    assertEqual(mgs(100000, 5000), true, 'LTV exactly 95.0% is IN (<=, not <)');
+    assertEqual(mgs(100000, 4900), false, 'LTV 95.1% is above the window');
+    assertEqual(mgs(600000, 54000), true, 'price exactly £600k is IN (<=, not <)');
+    assertEqual(mgs(600001, 54001), false, 'price £600,001 is out');
+  });
+
+  await test('affordability: A4 band boundary — £500,000 exactly still gets the mismatch line', () => {
+    const r = at(500_000);
+    assert(
+      r.whyVerdict.some((s) => /mismatch:/.test(s)),
+      '£500k exactly keeps FTB relief, so the mismatch line applies; got: ' + r.whyVerdict.join(' | '),
+    );
+  });
+
   // --- Transaction-cost checklist (5.7/A7) -----------------------------------------
 
   await test('outlay: the named transaction-cost checklist flags what is not itemised', () => {
@@ -125,6 +151,29 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(missingTransactionCosts([]).length, TRANSACTION_COST_CHECKLIST.length,
       'an empty list is missing every named cost');
     assertEqual(missingTransactionCosts(undefined).length, TRANSACTION_COST_CHECKLIST.length);
+  });
+
+  await test('outlay: every checklist keyword alternative recognises its cost on its own', () => {
+    // One row per keyword — each must satisfy exactly its own checklist entry,
+    // so no regex alternative can be silently dropped.
+    const cases = [
+      ['Legal / conveyancing', ['Solicitor quote', 'Conveyancing pack', 'LEGAL fees']],
+      ['Local authority searches', ['Searches bundle']],
+      ['Survey (RICS Level 2/3)', ['Survey booking']],
+      ['Lender valuation', ['Valuation fee']],
+      ['Mortgage product / arrangement fee', ['Arrangement fee', 'Product fee']],
+      ['Mortgage broker fee', ['Broker invoice']],
+      ['Removals', ['removal van']],
+    ];
+    for (const [name, rows] of cases) {
+      for (const item of rows) {
+        const missing = missingTransactionCosts([{ item, cost: 1 }]);
+        assert(!missing.includes(name), `"${item}" alone must satisfy "${name}"`);
+      }
+    }
+    // notes participate in matching too (the sample list holds searches in notes).
+    const viaNotes = missingTransactionCosts([{ item: 'Fees', notes: 'including searches', cost: 1 }]);
+    assert(!viaNotes.includes('Local authority searches'), 'notes text satisfies a checklist entry');
   });
 
   await test('outlay: the checklist gaps render on the finances page (source rail)', async () => {

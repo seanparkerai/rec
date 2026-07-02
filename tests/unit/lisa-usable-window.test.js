@@ -32,6 +32,25 @@ export async function register({ test, assert, assertEqual }) {
       `~197 days from 2 Jul 2026 to 15 Jan 2027, got ${w.daysRemaining}`);
   });
 
+  test('lisa window (5.5): boundary exactness — day count, pct floor/cap, ISO timestamps', () => {
+    // 2 Jul 2026 noon → 15 Jan 2027 midnight = 196.5 days → ceil = 197 exactly.
+    const w = lisaUsableWindow({ firstContributionDate: '2026-01-15' }, D('2026-07-02'));
+    assertEqual(w.daysRemaining, 197, 'ceil, not round/floor');
+    // A clock started today: elapsed 0.5 day of 365 → pct just above 0, never negative.
+    const fresh = lisaUsableWindow({ firstContributionDate: '2026-07-02' }, D('2026-07-02'));
+    assertEqual(fresh.met, false);
+    assert(fresh.pct >= 0 && fresh.pct < 1, `pct floors at 0, got ${fresh.pct}`);
+    // A future-dated start (data-entry slip) clamps pct to 0, not negative.
+    const future = lisaUsableWindow({ firstContributionDate: '2026-09-01' }, D('2026-07-02'));
+    assertEqual(future.pct, 0, 'pct never goes negative');
+    // Full ISO timestamp: date PART drives the local-day window.
+    const iso = lisaUsableWindow({ accountOpened: '2025-05-26T10:30:00Z' }, D('2026-07-02'));
+    assertEqual(iso.usableFrom.getFullYear(), 2026);
+    assertEqual(iso.usableFrom.getMonth(), 4);
+    assertEqual(iso.usableFrom.getDate(), 26);
+    assertEqual(iso.met, true);
+  });
+
   test('lisa window (5.5): met at/after the 12-month point; pct capped at 100', () => {
     const onTheDay = lisaUsableWindow({ firstContributionDate: '2025-07-02' }, D('2026-07-02'));
     assertEqual(onTheDay.met, true, 'the anniversary day itself is usable');
