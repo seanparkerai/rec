@@ -44,6 +44,25 @@ export const CONTENT_FIELDS = [
   { key: 'sources',             test: (v) => Array.isArray(v) && v.length > 0 },
 ];
 
+// priceSummary — the lightweight per-type price subset baked into the directory index
+// (and per-area files) so the list/map pages can compute affordability fit dots without
+// loading every per-area file. ONE derivation home (Phase 6.2): called by build-areas.mjs
+// AND sync-areas-from-supabase.mjs `canonicalRecord()`; the DB's stored priceSummary is
+// IGNORED at materialisation — derived state is always recomputed from `prices`, so it
+// can never go stale between pipeline steps.
+export function bakePriceSummary(prices) {
+  const p = prices ?? {};
+  const hasAnyPrice = ['avgDetached', 'avgSemi', 'avgTerraced', 'avgFlat']
+    .some((k) => p[k] != null);
+  return hasAnyPrice ? {
+    avgDetached: p.avgDetached ?? null,
+    avgSemi:     p.avgSemi     ?? null,
+    avgTerraced: p.avgTerraced ?? null,
+    avgFlat:     p.avgFlat     ?? null,
+    asOf:        p.asOf        ?? null,
+  } : null;
+}
+
 export function getField(obj, path) {
   return path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
 }

@@ -11,7 +11,7 @@
 
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { INDEX_FIELDS, DETAIL_FIELDS } from './area-fields.mjs';
+import { INDEX_FIELDS, DETAIL_FIELDS, bakePriceSummary } from './area-fields.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const read = (p) => readFileSync(ROOT + p, 'utf8');
@@ -66,15 +66,8 @@ const areas = vRows
     const prices = p.prices ?? {};
     // priceSummary: lightweight subset baked into the index so the Areas page
     // can compute affordability fit dots without loading every per-area file.
-    const hasAnyPrice = ['avgDetached', 'avgSemi', 'avgTerraced', 'avgFlat']
-      .some((k) => prices[k] != null);
-    const priceSummary = hasAnyPrice ? {
-      avgDetached: prices.avgDetached ?? null,
-      avgSemi:     prices.avgSemi     ?? null,
-      avgTerraced: prices.avgTerraced ?? null,
-      avgFlat:     prices.avgFlat     ?? null,
-      asOf:        prices.asOf        ?? null,
-    } : null;
+    // One derivation home (Phase 6.2): shared with sync-areas-from-supabase.
+    const priceSummary = bakePriceSummary(prices);
     return {
       id,
       name: village,

@@ -39,7 +39,7 @@ import { readFile, readdir, writeFile, unlink, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { DETAIL_FIELDS } from './area-fields.mjs';
+import { DETAIL_FIELDS, bakePriceSummary } from './area-fields.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const AREAS_DIR = resolve(root, 'data/areas');
@@ -49,7 +49,7 @@ const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 // Per-area file shape defaults — mirrors tools/build-areas.mjs so a sync followed by a
 // build-areas run produces byte-identical per-area files (the index is build's job).
-function canonicalRecord(data) {
+export function canonicalRecord(data) {
   const p = data || {};
   const prices = p.prices ?? {};
   const a = {
@@ -71,7 +71,9 @@ function canonicalRecord(data) {
     schools: p.schools ?? [],
     transport: p.transport ?? { commutes: [] },
     prices,
-    priceSummary: p.priceSummary ?? null,
+    // Derived, never trusted from the DB row: recomputed from `prices` so the
+    // materialised summary can't go stale (Phase 6.2 — one bake, area-fields.mjs).
+    priceSummary: bakePriceSummary(prices),
     thingsToDo: p.thingsToDo ?? [],
     placesToEat: p.placesToEat ?? [],
     pros: p.pros ?? [],
