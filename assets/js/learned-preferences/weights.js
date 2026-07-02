@@ -8,6 +8,16 @@ const GRADED = new Set(['like', 'reject']);
 const PASS   = new Set(['pass']);
 const round3 = (n) => Math.round(n * 1000) / 1000;
 
+// Reserved key inside `learned_preferences.derived` (step 4.7, P10c): the ranked
+// attributed-reason counts ({ reject:[{key,label,count}…], like:[…] }), recomputed
+// wholesale from the append-only reaction log every retrain — never incremented per
+// reaction, so the log stays the single source of truth. Safe by the same convention
+// as the overrides-side reserved keys: no numeric `.weight`, so effectiveWeights()
+// (and every derived consumer) treats it as inert. Lets one-row readers (dashboard
+// tiles, the Ask assistant, MCP analysis) answer "what do they dislike most" without
+// paging the multi-thousand-row log.
+export const REASON_COUNTS_KEY = '__reason_counts';
+
 // A reaction trains preferences only if it is a graded verb, carries a snapshot, is not
 // administrative (e.g. a `removed_area` reject — a wholesale area ignore, which must not
 // be read as a dislike of the homes' type/outcode/beds/price), AND — for a reject — is

@@ -30,7 +30,7 @@ import { loadCombinedSuggestions } from './suggestions/sources.js';
 import { suggestionListHTML } from './suggestions/card.js';
 import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
 import { createConfirm } from './suggestions/confirm.js';
-import { buildConfidenceMeter, probationStatusLabel, presetNudge, PRESET_OPTIONS } from './refinement/view.js';
+import { buildConfidenceMeter, probationStatusLabel, presetNudge, PRESET_OPTIONS, topDislikesLine } from './refinement/view.js';
 import { provenanceSummary } from './listings/reaction-provenance.js';
 import { resolveConfig } from './refinement/config.js';
 import { esc, byId as $, on } from './dom.js';
@@ -197,14 +197,18 @@ function renderReactions(log) {
     </p>`;
 }
 
-function renderMeter(meta) {
+function renderMeter(meta, prefs) {
   const el = $('ref-meter');
   if (!el) return;
   const m = buildConfidenceMeter(meta);
+  // Step 4.7 (P10c): while the meter says "still learning", prove the stated reasons
+  // are heard — the persisted reason counts, no reaction-log fetch needed.
+  const dislikes = topDislikesLine(prefs);
   el.classList.toggle('is-ready', m.ready);
   el.innerHTML = `
     <div class="ref-meter__track"><span class="ref-meter__fill"></span></div>
-    <p class="ref-meter__label">${esc(m.label)}</p>`;
+    <p class="ref-meter__label">${esc(m.label)}</p>
+    ${dislikes ? `<p class="ref-meter__label">${esc(dislikes)}</p>` : ''}`;
   el.querySelector('.ref-meter__fill')?.style.setProperty('--ref-pct', `${m.pct}%`);
 }
 
@@ -407,7 +411,7 @@ async function refresh() {
   try { renderTrendsGlance({ reactionLog, prefs, criteria }); }
   catch (e) { console.error('trends glance render error', e); }
   renderReactions(reactionLog);
-  renderMeter(meta);
+  renderMeter(meta, prefs);
   renderPresets(preset);
   renderNudge(meta, groups, preset);
   try { renderObservations(buildObservations({ reactionLog, prefs, criteria, groups, now: new Date() })); }

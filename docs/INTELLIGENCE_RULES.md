@@ -302,6 +302,13 @@ A signal is "recent" when `added_date ≥ now − RECENCY_DAYS` (undated never c
 **Effective weights & overrides.** `effectiveWeights(derived, overrides)` is a flat `signal → weight`
 map where an override **replaces** the derived weight (Layer-3 precedence); the override keeps
 `derived_weight_at_set` so L5 can detect drift and surface a conflict — never resolved silently.
+Entries without a numeric `.weight` are skipped, which is what makes the reserved
+`derived.__reason_counts` key safe (`REASON_COUNTS_KEY`, 2026-07-02 step 4.7): the recompute path
+persists the ranked attributed-reason counts (`{ reject:[{key,label,count}…], like:[…] }`,
+aggregated by `refinement/trends-glance.js#reasonCounts` over the same log the weights train on) so
+one-row readers get "your top dislikes" (`refinement/view.js#topDislikesLine`, shown with the
+confidence meter) without paging the reaction log. Recomputed wholesale each retrain — never
+incremented per reaction.
 `listingLearnedPrefs(listing, effective)` pre-selects the signals a listing exhibits before they hit
 the scoring seam (so a `type:detached` weight only touches detached homes).
 

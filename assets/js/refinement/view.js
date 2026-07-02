@@ -4,6 +4,7 @@
 // page renderer turns into markup. Kept pure so the formatting (plain-English copy,
 // the volume-artefact note, the confidence meter, the inbox cap/ranking) is unit-tested.
 import { resolveConfig } from './config.js';
+import { REASON_COUNTS_KEY } from '../learned-preferences/weights.js';
 
 export const TIER_LABEL = {
   strong: 'Strong', confident: 'Confident', probable: 'Probable', forming: 'Forming', none: '—',
@@ -418,4 +419,22 @@ export function presetNudge(meta, groups = {}, preset = 'cautious') {
     label: `${forming} strong pattern${forming === 1 ? ' is' : 's are'} forming, but your sensitivity is set to Cautious — the strictest setting — so none have surfaced as suggestions yet.`,
     cta: 'Switch to Balanced to act on them',
   };
+}
+
+/**
+ * "Your top dislikes" one-liner (step 4.7, P10c) from the reason counts the recompute
+ * path persists under the reserved derived key — so this reads ONE learned_preferences
+ * row, no reaction-log fetch. Shown with the confidence meter: while the engine is
+ * still learning it proves the stated reasons ARE being heard. Returns null until a
+ * recompute has run and at least one reject carried a reason (no empty shell).
+ *
+ * @param {{derived?:object}|null} prefs  getLearnedPreferences() shape.
+ * @param {number} [n]  how many reasons to name.
+ * @returns {string|null}
+ */
+export function topDislikesLine(prefs, n = 3) {
+  const reject = prefs?.derived?.[REASON_COUNTS_KEY]?.reject;
+  if (!Array.isArray(reject) || reject.length === 0) return null;
+  const parts = reject.slice(0, n).map((r) => `${r.label || r.key} ×${r.count}`);
+  return `Your top dislikes: ${parts.join(' · ')}`;
 }

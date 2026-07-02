@@ -6,9 +6,9 @@ import {
   humaniseValue, toCard, whySignalsFor, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
   REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
   probationStatusLabel, effectiveStatus, snoozeDaysLeft,
-  REFINEMENT_SETTINGS_KEY, presetFromOverrides, PRESET_OPTIONS, presetNudge,
+  REFINEMENT_SETTINGS_KEY, presetFromOverrides, PRESET_OPTIONS, presetNudge, topDislikesLine,
 } from '../../assets/js/refinement/view.js';
-import { effectiveWeights } from '../../assets/js/learned-preferences.js';
+import { effectiveWeights, REASON_COUNTS_KEY } from '../../assets/js/learned-preferences.js';
 import { resolveConfig } from '../../assets/js/refinement/config.js';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -310,5 +310,38 @@ export async function register({ test, assert, assertEqual }) {
     );
     assertEqual(groups.forming[0].whySignals[0].signal, 'type:terraced',
       'classifySuggestions threads the weight map to every card');
+  });
+
+  // ── step 4.7 (P10c): "your top dislikes" from the persisted reason counts ────
+  test('view (4.7): topDislikesLine summarises the persisted reject reasons, capped', () => {
+    const prefs = { derived: { [REASON_COUNTS_KEY]: { reject: [
+      { key: 'too_expensive', label: 'Too expensive', count: 7 },
+      { key: 'wrong_area', label: 'Wrong area', count: 4 },
+      { key: 'no_parking', label: 'No parking', count: 2 },
+      { key: 'dated', label: 'Needs updating', count: 1 },
+    ], like: [] } } };
+    const line = topDislikesLine(prefs);
+    assertEqual(line, 'Your top dislikes: Too expensive ×7 · Wrong area ×4 · No parking ×2',
+      'top three, ranked, labelled, counted');
+    assert(topDislikesLine(prefs, 1).endsWith('Too expensive ×7'), 'n caps the list');
+  });
+
+  test('view (4.7): topDislikesLine is null with no persisted counts (cold / pre-recompute)', () => {
+    assertEqual(topDislikesLine(null), null);
+    assertEqual(topDislikesLine({ derived: {} }), null, 'row exists but counts never recomputed');
+    assertEqual(topDislikesLine({ derived: { [REASON_COUNTS_KEY]: { reject: [], like: [] } } }), null,
+      'no attributed rejects yet → no line, not an empty shell');
+    assertEqual(topDislikesLine({ derived: { [REASON_COUNTS_KEY]: { reject: [{ key: 'x', count: 3 }] } } }),
+      'Your top dislikes: x ×3', 'label falls back to the key');
+  });
+
+  test('view (4.7): the reserved counts key never leaks into effective weights or cards', () => {
+    const derived = {
+      'type:flat': { weight: -0.2, n_liked: 0, n_rejected: 9 },
+      [REASON_COUNTS_KEY]: { reject: [{ key: 'too_expensive', count: 7 }], like: [] },
+    };
+    const eff = effectiveWeights(derived, {});
+    assertEqual(Object.keys(eff).join(','), 'type:flat',
+      'effectiveWeights skips the reserved object (no numeric .weight)');
   });
 }

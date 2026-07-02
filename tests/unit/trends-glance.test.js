@@ -49,9 +49,13 @@ export async function register({ test, assert, assertEqual }) {
       'type:flat': { weight: -0.9, n_liked: 0, n_rejected: 12 },
       'beds:3': { weight: 0.1, n_liked: 5, n_rejected: 4 },
       'beds:1': { weight: 0, n_liked: 0, n_rejected: 0 },
+      // step 4.7: recompute persists reason counts under a reserved derived key —
+      // no numeric .weight, so the chart helpers must treat it as inert.
+      __reason_counts: { reject: [{ key: 'too_expensive', count: 7 }], like: [] },
     };
     const rows = topDrivers(derived, 6);
     assertEqual(rows.length, 3, 'zero-weight signal dropped');
+    assert(!rows.some((r) => r.signal === '__reason_counts'), 'reserved counts key dropped');
     assertEqual(rows[0].signal, 'type:flat', 'largest magnitude first');
     assert(rows[0].weight < 0, 'reject-leaning sign preserved');
     assertEqual(rows[1].label, 'Detached');

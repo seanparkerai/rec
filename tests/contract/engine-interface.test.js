@@ -47,6 +47,7 @@ const SURFACE = {
     'radiusOverridesFromOverrides', 'PRESET_OPTIONS', 'presetFromOverrides',
     'hideRuleKey', 'hiddenRulesFromOverrides', 'matchingHideRule',
     'listingHiddenByRefinement', 'probationStatusLabel', 'toCard', 'whySignalsFor', 'toRadiusCard',
+    'topDislikesLine',
     'rankForInbox', 'sortByConfidence', 'effectiveStatus', 'snoozeDaysLeft',
     'classifySuggestions', 'buildConfidenceMeter', 'presetNudge',
   ],
@@ -60,7 +61,7 @@ const SURFACE = {
   ],
   'assets/js/learned-preferences/weights.js': [
     'isRecent', 'gradedCount', 'isColdStart', 'trainingProgress',
-    'deriveWeights', 'effectiveWeights', 'listingLearnedPrefs',
+    'deriveWeights', 'effectiveWeights', 'listingLearnedPrefs', 'REASON_COUNTS_KEY',
   ],
 };
 

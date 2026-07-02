@@ -3,7 +3,8 @@
 // retrains derived weights from the whole append-only reaction log. Split from
 // storage/listings.js. Uses the shared paged-log helper in ./_reactions-core.js.
 import { readLocal, writeLocal, _initSb, _getHid, _toast, _normShortlist } from '../core.js';
-import { deriveWeights } from '../../learned-preferences.js';
+import { deriveWeights, REASON_COUNTS_KEY } from '../../learned-preferences.js';
+import { reasonCounts } from '../../refinement/trends-glance.js';
 import { _fetchAllReactionRows } from './_reactions-core.js';
 
 // ── Learned preferences (v3 L4 — distilled reaction weights) ───────────────
@@ -132,6 +133,10 @@ export async function recomputeLearnedPreferences({ now, log = null } = {}) {
     return null;
   }
   const { derived } = deriveWeights(rows, now ? { now, statusMap } : { statusMap });
+  // Step 4.7 (P10c): the ranked attributed-reason counts ride along under the
+  // reserved key — same source rows, same wholesale-recompute lifecycle as the
+  // weights, so one-row readers get "your top dislikes" without paging the log.
+  derived[REASON_COUNTS_KEY] = reasonCounts(rows, 8);
   const existing = readLocal('learned-preferences') || (await _sbGetLearnedPrefs()) || {};
   const overrides = existing.overrides ?? {};
   const dismissals = existing.dismissals ?? {};
