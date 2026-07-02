@@ -1,7 +1,10 @@
 /* pages/finances-v3-charts.css — v3 finances chart suite + deposit-risk waterfall. */
 
-.chart-wrap--tall { height: clamp(220px, 50vw, 320px); }
-.chart-wrap--tall canvas { max-height: clamp(220px, 50vw, 320px); }
+/* 3.8c (absorbs 5.9): chart height keyed to the viewport HEIGHT (dvh, §6.5),
+   not width — 50vw over-grew charts in landscape and under-grew on tall
+   phones; the max-height:600px block below still owns short viewports. */
+.chart-wrap--tall { height: clamp(220px, 32dvh, 320px); }
+.chart-wrap--tall canvas { max-height: clamp(220px, 32dvh, 320px); }
 
 /* Short-viewport (landscape phones): cap the tallest charts so they never
    consume the whole viewport; SVG keeps its aspect ratio via viewBox. */

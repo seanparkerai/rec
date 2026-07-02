@@ -75,12 +75,9 @@
 .finance-verdict--unknown { background: var(--paper); border-color: var(--hairline); }
 
 /* ---- Finances tables / calculators -------------------------------- */
-.chart-tall { height: clamp(220px, 50vw, 320px); }
-.chart-tall canvas { max-height: clamp(220px, 50vw, 320px); }
-@media (max-height: 600px) {
-  .chart-tall { height: clamp(180px, 40svh, 240px); }
-  .chart-tall canvas { max-height: clamp(180px, 40svh, 240px); }
-}
+/* 3.8c: the .chart-tall CARD-height clamp is deleted — it duplicated the
+   inner .chart-wrap--tall sizing (finances-charts.css, the one mechanism)
+   while fixing the card to a height its heading + caption could never fit. */
 
 /* .table-wrap primitive now lives in components/table.css */
 

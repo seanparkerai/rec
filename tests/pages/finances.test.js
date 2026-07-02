@@ -39,6 +39,19 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
+  test('finances: chart heights are viewport-HEIGHT-keyed; the stale card clamp is dead (3.8c)', () => {
+    const dom = financesDom();
+    const doc = dom.window.document;
+    assert(!doc.querySelector('.chart-tall'), 'the duplicated .chart-tall card clamp no longer has consumers');
+    assert(doc.querySelectorAll('.chart-wrap').length >= 4, 'the chart wraps remain the one sizing mechanism');
+    for (const file of ['assets/css/pages/finances.css', 'assets/css/pages/finances-charts.css', 'assets/css/dashboard/base.css']) {
+      const css = readFileSync(join(ROOT, file), 'utf8');
+      assert(!/chart[^\n{]*\{[^}]*\bclamp\([^)]*\dvw\b/.test(css),
+        `${file}: no chart height keyed to viewport WIDTH (5.9 — dvh idiom only)`);
+    }
+    dom.window.close();
+  });
+
   test('finances: the verdict composes the pinned calculator surface — no new maths', async () => {
     const dom = financesDom();
     const doc = dom.window.document;
