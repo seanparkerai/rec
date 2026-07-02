@@ -48,6 +48,30 @@
   color: var(--ink);
 }
 
+/* ---- Verdict-led lede (3.8a): can/can't + headroom, first viewport ----
+   Mirrors the area-detail verdict register (areas-rows.css) in the page's
+   Linear-dense voice: accent-tinted strip, Fraunces headline, mono numbers. */
+.finance-verdict {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in oklch, var(--accent) 25%, var(--hairline));
+  border-radius: var(--rec-radius);
+  background: color-mix(in oklch, var(--accent) 6%, var(--paper));
+}
+.finance-verdict__text {
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em;
+  color: var(--ink); margin: 0; flex: 1; min-width: 12rem;
+}
+.finance-verdict__num {
+  font-family: var(--font-data); font-feature-settings: "tnum";
+  font-size: var(--text-sm); color: var(--ink-muted); margin: 0;
+  display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3);
+}
+.finance-verdict__num strong { color: var(--ink); font-weight: 500; }
+.finance-verdict--unknown { background: var(--paper); border-color: var(--hairline); }
+
 /* ---- Finances tables / calculators -------------------------------- */
 .chart-tall { height: clamp(220px, 50vw, 320px); }
 .chart-tall canvas { max-height: clamp(220px, 50vw, 320px); }

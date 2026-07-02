@@ -24,8 +24,16 @@
     <header class="page-head">
       <p class="eyebrow">Budget &amp; calculators</p>
       <h1>Finances</h1>
-      <p class="lead">Your whole money picture in one place: <strong>where you stand today</strong>, <strong>how your investments are doing</strong>, and <strong>what the purchase will cost</strong>.</p>
     </header>
+
+    <!-- 3.8a: verdict-led lede — can/can't at the target price + headroom,
+         in the first viewport (DESIGN.md §5 rule 1). The filler lead line it
+         replaces duplicated the topic nav below (3.6c fold-space precedent). -->
+    <section class="finance-verdict finance-verdict--unknown" id="finance-verdict" aria-label="Affordability verdict" hidden>
+      <span class="fit-dot fit-dot--unknown" id="finance-verdict-dot" aria-hidden="true"></span>
+      <p class="finance-verdict__text" id="finance-verdict-text">&mdash;</p>
+      <p class="finance-verdict__num" id="finance-verdict-num"></p>
+    </section>
 
     <nav class="finance-toc" aria-label="Finance topics">
       <ol>

@@ -4,6 +4,7 @@ import { getFinances, getCriteria, getInvestments } from './storage.js';
 import { deriveFinances } from './finance-derive.js';
 import { mountSavingsEditor } from './savings-editor.js';
 
+import { renderFinanceVerdict }      from './finances/section-verdict.js';
 import { renderTiles }               from './finances/section-deposit.js';
 import { renderNowFlow }             from './finances/section-flow.js';
 import { renderBreakdowns }          from './finances/section-breakdowns.js';
@@ -25,6 +26,8 @@ let criData = null;
 let rawInvestments = null;
 
 function renderEverything() {
+  // Verdict-led lede (3.8a) — answers the page's question before the topics.
+  renderFinanceVerdict(finData, criData);
   // Topic: Today
   renderTiles(finData);
   renderNowFlow(finData);
