@@ -77,3 +77,14 @@ a11y floor. ⚙ 2.16/4.9 repo secrets: **deferred by the owner for now** (engine
 re-membership stay manual/MCP-run).
 
 Steps 3.4–3.9 expand to atomic steps honouring these answers (see `03-checklist.md`).
+
+## 6. Phase-3 exit (2026-07-02) — the wireframe table, reconciled
+
+Every §3 row shipped or was verified already-live and pinned; recorded deviations (all dated in
+`03-checklist.md`): dossier `srcset` dropped (single-size Rightmove media); areas map **lean form**
+(no draggable sheet — full-viewport map + jump chip); **KEEP-LEAFLET** (3.7c ADR, `04-program.md`
+§5b); chart descriptions via `aria-describedby`→live captions (renderers wipe in-SVG title/desc);
+Trends untouched by design (Phase-4 surface). A11y rails now mechanical: `r-focus-kill`,
+`r-focus-ring-as-outline` (found+fixed ×29 dead focus outlines), and the tokens contrast rail
+(two raise-only ratchets queued for the post-refactor visual pass: accent-contrast 4.44→4.5,
+ink-subtle 2.85→3.0+). Real-browser smoke tier: NOT NOW (recorded at 3.9e2).
