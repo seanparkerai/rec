@@ -31,17 +31,19 @@
     </button>
   </div>
   <nav class="nav-drawer__nav" aria-label="Primary">
+    <!-- Order = the ⚙ 3.1 owner decision (2026-07-02): the daily loop leads —
+         Home · Listings · Areas · Finances · Ask — then the secondary views. -->
     <ul>
       <li><a data-nav="index.html">Home</a></li>
-      <li><a data-nav="pages/ask.html">Ask</a></li>
       <li><a data-nav="pages/listings.html">Listings</a></li>
+      <li><a data-nav="pages/areas.html">Area and map</a></li>
+      <li><a data-nav="pages/finances.html">Finances</a></li>
+      <li><a data-nav="pages/ask.html">Ask</a></li>
       <li><a data-nav="pages/saved-listings.html">Saved</a></li>
       <li><a data-nav="pages/rejected.html">Rejected</a></li>
       <li><a data-nav="pages/refinement.html">Trends</a></li>
-      <li><a data-nav="pages/areas.html">Area and map</a></li>
-      <li><a data-nav="pages/profile.html">Your profile</a></li>
-      <li><a data-nav="pages/finances.html">Finances</a></li>
       <li><a data-nav="pages/journey.html">Buying journey</a></li>
+      <li><a data-nav="pages/profile.html">Your profile</a></li>
       <!-- Admin-only: revealed by components.js when signed in as admin@gr.com.
            Latent in practice — the admin is locked to the chrome-less /live-feed
            kiosk (auth-guard.js) and so does not see this drawer. -->

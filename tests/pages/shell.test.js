@@ -67,6 +67,15 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(current[0].dataset.nav, 'pages/listings.html');
   });
 
+  test('shell: the drawer leads with the daily loop (⚙ 3.1 owner decision, 2026-07-02)', async () => {
+    const { doc } = await renderShell('/pages/listings.html');
+    const items = [...doc.querySelectorAll('.nav-drawer__nav li a')].map((a) => a.dataset.nav);
+    assertEqual(items.slice(0, 5).join(' → '),
+      'index.html → pages/listings.html → pages/areas.html → pages/finances.html → pages/ask.html',
+      'Home · Listings · Areas · Finances · Ask lead the drawer, in that order');
+    assertEqual(items.length, 11, 'the full 10-item nav + latent admin entry survive the reorder');
+  });
+
   test('shell: index.html and bare / mark Home active identically (incl. both brand lockups)', async () => {
     // Characterized behaviour: on the home page THREE links match — the header
     // brand, the drawer brand, and the Home nav item — and all three carry
