@@ -389,4 +389,30 @@ export async function register({ test, assert, assertEqual }) {
     const runC = runRefinementEngine(reactions, { now: NOW, config: cautious, dimensions: ['property_type'] });
     assertEqual(typeOf(runC, 'flat').qualifies_this_run, false, 'Cautious: the moderate signal is gated by the strict lift floor');
   });
+
+  test('refinement (4.3): gate_stats counts candidates through every gate, consistent with the flags', () => {
+    const reactions = [];
+    let id = 0;
+    const NOW = new Date('2026-06-01T00:00:00Z');
+    const add = (type, reaction, n) => {
+      for (let i = 0; i < n; i++) {
+        reactions.push({
+          listing_id: `l${++id}`, reaction, created_at: NOW.toISOString(),
+          listing_snapshot: { property_type: type },
+        });
+      }
+    };
+    add('park home', 'reject', 40); // extreme signal
+    add('detached', 'reject', 150); add('detached', 'like', 120);
+    add('semi', 'reject', 100); add('semi', 'like', 90);
+    const run = runRefinementEngine(reactions, { now: NOW, dimensions: ['property_type'] });
+    const gs = run.gate_stats.property_type;
+    const cs = run.dimensions.property_type.candidates;
+    assertEqual(gs.total, cs.length, 'total = all candidates in the dimension');
+    for (const gate of ['global', 'sample', 'confidence', 'disproportionality', 'persistence']) {
+      assertEqual(gs[gate], cs.filter((c) => c.gates[gate]).length, `${gate} count matches flags`);
+    }
+    assertEqual(gs.qualified_this_run, cs.filter((c) => c.qualifies_this_run).length);
+    assertEqual(gs.actionable, cs.filter((c) => c.actionable).length);
+  });
 }

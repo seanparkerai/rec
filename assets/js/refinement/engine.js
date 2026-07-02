@@ -337,12 +337,32 @@ export function scoreFromAggregates(aggregates, opts = {}) {
   const candidates = allCandidates.slice().sort(rankCmp);
   const actionable = candidates.filter((c) => c.actionable);
 
+  // Gate pass-rates per dimension (B6, step 4.3): the thresholds are tuning
+  // defaults, not derivable constants — logging how many candidates clear each
+  // gate per run lets them be CALIBRATED against real data instead of guessed.
+  // Recorded onto the refinement_runs audit row by persistence.planRun.
+  const gate_stats = {};
+  for (const dim of dimensions) {
+    const cs = perDimension[dim].candidates;
+    gate_stats[dim] = {
+      total: cs.length,
+      global: cs.filter((c) => c.gates.global).length,
+      sample: cs.filter((c) => c.gates.sample).length,
+      confidence: cs.filter((c) => c.gates.confidence).length,
+      disproportionality: cs.filter((c) => c.gates.disproportionality).length,
+      persistence: cs.filter((c) => c.gates.persistence).length,
+      qualified_this_run: cs.filter((c) => c.qualifies_this_run).length,
+      actionable: cs.filter((c) => c.actionable).length,
+    };
+  }
+
   return {
     config,
     generated_at: now.toISOString(),
     system_decayed: aggregates.systemDecayed || 0,
     baseline: Object.fromEntries(dimensions.map((d) => [d, perDimension[d].p0])),
     dimensions: perDimension,
+    gate_stats,
     candidates,
     actionable,
   };

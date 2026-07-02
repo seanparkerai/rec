@@ -108,6 +108,12 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(fb.global_min, cfg.GLOBAL_MIN_FEEDBACK);
     assertEqual(fb.global_gate_open, fb.system_decayed >= cfg.GLOBAL_MIN_FEEDBACK);
     assert('property_type' in fb.dims, 'per-dimension decayed feedback recorded');
+    // gate pass-rates (B6, step 4.3) audited so thresholds can be calibrated
+    const gs = plan.runRow.params.gate_stats;
+    assert(gs && gs[dim], 'gate_stats recorded per dimension');
+    assertEqual(gs[dim].total, run.candidates.length, 'gate_stats.total = evaluated candidates');
+    assert(gs[dim].disproportionality <= gs[dim].total, 'gate counts bounded by total');
+    assertEqual(gs[dim].actionable, 0, 'no actionable on run 1 mirrors the run row');
   });
 
   // ════════════════════════════════════════════════════════════════════════════

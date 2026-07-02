@@ -139,7 +139,9 @@ export function planRun(engineRun, ctx = {}) {
   const runRow = {
     household_id: householdId,
     run_at: nowIso,
-    params: { ...paramsOf(engineRun.config), feedback },
+    // gate_stats (B6, step 4.3): per-gate pass counts per dimension, so the
+    // gate thresholds can be calibrated against real runs, not guessed.
+    params: { ...paramsOf(engineRun.config), feedback, gate_stats: engineRun.gate_stats || {} },
     candidates_evaluated: engineRun.candidates.length,
     actionable_count: actionableCount,
   };
