@@ -4,7 +4,10 @@
 // persistence writes → EMITS idempotent SQL. It never executes DDL/DML itself: the
 // caller runs the emitted SQL (Claude via the Supabase MCP connector in this sandbox;
 // CI via `psql`). NOTIFY-ONLY — the plan touches only refinement_suggestions /
-// refinement_runs / sync_log, never listings / criteria / zones / scrape scope.
+// refinement_runs / sync_log, plus the scrape_probation STATUS HINT (step 4.6b:
+// active ↔ reconsider — both statuses keep the area paused, so scrape scope never
+// changes here; only the user's bring-back does that). Never listings / criteria /
+// zones.
 //
 // TWO READ MODES (mirrors tools/backfill-geofence.mjs):
 //   File mode (this sandbox; bundle produced via MCP execute_sql):
@@ -17,12 +20,14 @@
 //   { householdId, now?, config?:{preset?,overrides?},
 //     aggregates?:{systemDecayed,perDimension}  // preferred: decayed counts from SQL
 //     reactions?:[...]                           // OR raw rows (aggregated in JS)
-//     existingSuggestions?:[...], dismissedKeys?:["dim:value", ...] }
+//     existingSuggestions?:[...], dismissedKeys?:["dim:value", ...],
+//     probationRows?:[...] }                     // scrape_probation rows (reconsider detection)
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { runRefinementEngine, scoreFromAggregates } from '../assets/js/refinement/engine.js';
 import { resolveConfig, DIMENSIONS } from '../assets/js/refinement/config.js';
-import { priorRunsFromRows, planRun, renderPlanSql } from '../assets/js/refinement/persistence.js';
+import { priorRunsFromRows, planRun, renderPlanSql, renderProbationSql } from '../assets/js/refinement/persistence.js';
+import { reconsiderUpdates } from '../assets/js/refinement/scope.js';
 import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
@@ -58,6 +63,7 @@ async function loadInputs() {
       reactions: bundle.reactions || null,
       existingSuggestions: bundle.existingSuggestions || [],
       dismissedKeys: new Set(bundle.dismissedKeys || []),
+      probationRows: bundle.probationRows || [],
     };
   }
   if (!SERVICE_KEY) throw new Error('no service key — use --from-file <bundle.json> (build via MCP) for the sandbox path');
@@ -66,6 +72,8 @@ async function loadInputs() {
   // household's taste, never a cross-household blend (the service role bypasses RLS).
   const reactions = await restGetAll(`listing_reactions?select=listing_id,reaction,reason,reasons,created_at,listing_snapshot&household_id=eq.${householdId}`);
   const existingSuggestions = await restGetAll(`refinement_suggestions?select=dimension,value,status,runs_qualified,first_detected_at,snoozed_until&household_id=eq.${householdId}`);
+  // Paused areas, so the run can flip the reconsider status hint (step 4.6b).
+  const probationRows = await restGetAll(`scrape_probation?select=dimension,value,status,approved_at&household_id=eq.${householdId}`);
   // Stage 7: the household's chosen sensitivity preset + dismiss memory live in
   // learned_preferences (reserved overrides key + dismissals). Read them so a portal
   // preset change / dismissal takes effect on this run.
@@ -74,12 +82,12 @@ async function loadInputs() {
   const dismissedKeys = new Set(Object.keys(lp.dismissals || {}).filter((k) => k.includes(':')));
   return {
     householdId, now: new Date().toISOString(), config: resolveConfig({ preset }),
-    aggregates: null, reactions, existingSuggestions, dismissedKeys,
+    aggregates: null, reactions, existingSuggestions, dismissedKeys, probationRows,
   };
 }
 
 async function main() {
-  const { householdId, now, config, aggregates, reactions, existingSuggestions, dismissedKeys } = await loadInputs();
+  const { householdId, now, config, aggregates, reactions, existingSuggestions, dismissedKeys, probationRows } = await loadInputs();
   if (!householdId) throw new Error('no householdId resolved');
 
   const priorRunsQualified = priorRunsFromRows(existingSuggestions);
@@ -99,23 +107,37 @@ async function main() {
     : runRefinementEngine(filtered || [], { config, now, dimensions: DIMENSIONS, priorRunsQualified });
 
   const plan = planRun(run, { householdId, existingRows: existingSuggestions, dismissedKeys, now });
-  const sql = renderPlanSql(plan);
+
+  // Reconsider detection (step 4.6b): the same GENUINE reactions decide whether a
+  // paused area's status hint should flip. Aggregates-mode bundles carry no raw
+  // reactions, so there is no evidence to judge — hold every hint as-is.
+  const probation = probationRows || [];
+  const probationFlips = filtered ? reconsiderUpdates(probation, filtered, config) : [];
+  if (!filtered && probation.length) {
+    process.stderr.write('  reconsider check skipped: aggregates-mode bundle has no raw reactions\n');
+  }
+  const probationSql = renderProbationSql(probationFlips, { householdId, now });
+
+  const sql = renderPlanSql(plan) + (probationSql ? `\n\n${probationSql}` : '');
 
   // Human-readable summary (stderr so stdout can be piped as pure SQL).
   const top = run.candidates.slice(0, 8).map((c) =>
     `    ${c.dimension}/${c.value}  wilson=${c.wilson_lower.toFixed(3)} lift=${c.lift.toFixed(2)} `
     + `n_eff=${c.n_eff.toFixed(1)} tier=${c.tier}${c.volume_artefact ? ' [artefact]' : ''}`
     + `${c.actionable ? ' ★ACTIONABLE' : ''}`);
+  const flips = probationFlips.map((f) =>
+    `    ${f.value}: ${f.from} → ${f.to}  (post-pause reject rate ${(f.rate * 100).toFixed(0)}% over ${f.n} reactions)`);
   process.stderr.write(
     `\n  Refinement run (household ${householdId})\n`
     + `  preset=${config.preset}  evaluated=${run.candidates.length}  tracked=${plan.trackedCount}  actionable=${plan.actionableCount}\n`
     + `  baseline reject rate: area=${(run.baseline.area ?? 0).toFixed(3)} property_type=${(run.baseline.property_type ?? 0).toFixed(3)}\n`
-    + `  top candidates:\n${top.join('\n')}\n\n`);
+    + `  top candidates:\n${top.join('\n')}\n`
+    + `  probation reconsider flips: ${probationFlips.length}${flips.length ? `\n${flips.join('\n')}` : ''}\n\n`);
 
   const emit = arg('--emit-sql');
   if (emit) {
     await writeFile(emit, `${sql}\n`, 'utf8');
-    process.stderr.write(`  SQL plan → ${emit}  (${plan.upserts.length} upserts + 1 run row + 1 sync_log)\n`);
+    process.stderr.write(`  SQL plan → ${emit}  (${plan.upserts.length} upserts + 1 run row + 1 sync_log + ${probationFlips.length} probation flips)\n`);
   } else {
     process.stdout.write(`${sql}\n`);
   }

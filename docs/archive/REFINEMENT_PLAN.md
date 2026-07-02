@@ -477,10 +477,13 @@ everywhere — no jargon, no raw statistics unless the user expands "Why?".
       gated behind a monotonic `SCRAPER_RUN_INDEX` (advances `last_reprobe_run` via a
       best-effort PATCH). The workflow that supplies the index is a `.github/workflows`
       change (§16-guarded) — its own named step.
-- [ ] Auto **"Reconsider?"** badge when a probationed value's re-probe reject
-      rate drops below `RECONSIDER_RATE`. **DEFERRED** — needs re-probe reject-rate
-      aggregation; the portal *already* renders a `reconsider` status + copy
-      (`probationStatusLabel`) the moment the scraper sets it.
+- [x] Auto **"Reconsider?"** badge when a probationed value's re-probe reject
+      rate drops below `RECONSIDER_RATE`. **DONE 2026-07-02 (overhaul step 4.6b)** —
+      the scheduled engine job detects it (`scope.js#reconsiderUpdates` over genuine
+      post-`approved_at` reactions, ≥`RECONSIDER_MIN_REACTIONS`) and emits guarded
+      status flips (`persistence.js#renderProbationSql`); the portal already rendered
+      the `reconsider` status + copy (`probationStatusLabel`) and the 4.6 one-tap
+      re-enable.
 - [x] **Bring back** restores the value to active search (deletes the probation row +
       reverts the suggestion to `actionable`), one-tap. → `bringBackArea()`. The
       **On probation** view lists paused areas with a forward-looking re-probe label
@@ -588,10 +591,16 @@ the preset matrix. Confirm before Stage 1 migration.
 | `MAX_INBOX` | 5 | Max suggestions shown at once. |
 | `PROBATION_REPROBE_RUNS` | 6 | Re-probe a removed value every N scraper runs (exploration). Higher = cheaper but blinder. |
 | `RECONSIDER_RATE` | 0.60 | If a probationed value's re-probe reject rate drops below this, flag "Reconsider?". |
+| `RECONSIDER_MIN_REACTIONS` | 5 | Min post-probation reactions before the reconsider hint may flip (added 2026-07-02, step 4.6b). |
 | `EXCLUDE_PASSES` | false | Confirmed: `pass` counts as a non-reject trial. Set true only to switch to like-vs-reject-only. |
 ---
 ## Progress Log
 > Claude Code: append a dated, one-line entry per merge. Most recent at top.
+- **2026-07-02** — **Reconsider detection live (overhaul step 4.6b).** The Stage-6 deferred
+  auto-"Reconsider?" badge is now written by the scheduled engine job: `reconsiderUpdates()`
+  (scope.js) judges each paused area on genuine post-pause reactions (≥`RECONSIDER_MIN_REACTIONS` 5;
+  rate < `RECONSIDER_RATE` 0.60 → `reconsider`, walked back when evidence reverses) and
+  `renderProbationSql()` emits FROM-status-guarded UPDATEs — notify-only, both statuses stay paused.
 - **2026-06-19** — **Refinement overhaul (calibration + expansion + cadence).** Diagnosed why
   Luke had never seen a suggestion: all candidates sat `forming`, 0 `actionable`, because the
   Cautious `MIN_LIFT` (1.6) exceeded the achievable ceiling (`1/baseline ≈ 1.22`). Rebased the

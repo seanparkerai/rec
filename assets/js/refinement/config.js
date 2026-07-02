@@ -63,6 +63,8 @@ export const FIXED = {
   MAX_INBOX: 5,               // max suggestions shown at once (UI, plan §4.1)
   PROBATION_REPROBE_RUNS: 6,  // re-probe a removed value every N scraper runs (Stage 6)
   RECONSIDER_RATE: 0.60,      // probation re-probe reject rate below this → "Reconsider?" (Stage 6)
+  RECONSIDER_MIN_REACTIONS: 5, // ≥ this many post-probation trials before the hint may flip
+                               // (step 4.6b — one lucky like must not headline "worth another look")
   EXCLUDE_PASSES: false,      // confirmed: `pass` counts as a non-reject trial (§2.1)
 
   // ── engine internals (operationalise the §2 spec; not user-facing) ──────────

@@ -10,6 +10,7 @@
 // with a periodic exploration RE-PROBE that temporarily re-includes a probationed area so
 // the engine keeps learning about it (§1.2 "acquire wide, display narrow").
 import { resolveConfig } from './config.js';
+import { extractValue } from './engine.js';
 
 const norm = (s) => String(s ?? '').trim().toLowerCase();
 
@@ -67,6 +68,50 @@ export function probationDropIds(probationRows = [], runIndex = null, config = r
  *  • `probationedNotActive` — probation rows whose area is already inactive (harmless,
  *    but flagged as stale so the user can bring it back / clean it up).
  */
+/**
+ * Reconsider detection (step 4.6b, plan §4.3 "Reconsider?" badge): which paused areas'
+ * status HINT should flip, given the reactions since each pause began. Evidence = the
+ * caller's reactions (pass GENUINE ones — the driver pre-filters bulk/admin sweeps)
+ * created strictly after the row's `approved_at` whose snapshot resolves to the paused
+ * area — post-pause stock only reaches the user via the exploration re-probe, so this
+ * IS the re-probe reject rate. A pass counts as a non-reject trial (EXCLUDE_PASSES
+ * mirror, §2.1); no decay — the post-pause window is recent by construction.
+ *
+ * Flips are bidirectional between the two paused statuses and nothing else:
+ *   active → reconsider  when rate < RECONSIDER_RATE ("worth another look")
+ *   reconsider → active  when the evidence no longer supports the hint
+ * `restored` (user tombstone) and property_type rows are never touched, and no flip
+ * happens below RECONSIDER_MIN_REACTIONS trials. NOTIFY-ONLY: both statuses keep the
+ * area paused (see probationAreaSet) — only the user changes scrape scope.
+ *
+ * @returns {Array<{value:string, from:string, to:string, rate:number, n:number}>} sorted by value.
+ */
+export function reconsiderUpdates(probationRows = [], reactions = [], config = resolveConfig()) {
+  const out = [];
+  for (const p of probationRows || []) {
+    if (!p || p.dimension !== 'area') continue;
+    if (p.status !== 'active' && p.status !== 'reconsider') continue;
+    const value = norm(p.value);
+    const approved = new Date(p.approved_at || 0).getTime();
+    let n = 0;
+    let k = 0;
+    for (const r of reactions || []) {
+      if (!r || (r.reaction !== 'like' && r.reaction !== 'pass' && r.reaction !== 'reject')) continue;
+      if (config.EXCLUDE_PASSES && r.reaction === 'pass') continue;
+      const t = new Date(r.created_at || NaN).getTime();
+      if (!Number.isFinite(t) || t <= approved) continue;
+      if (extractValue(r, 'area') !== value) continue;
+      n += 1;
+      if (r.reaction === 'reject') k += 1;
+    }
+    if (n < config.RECONSIDER_MIN_REACTIONS) continue;
+    const rate = k / n;
+    const to = rate < config.RECONSIDER_RATE ? 'reconsider' : 'active';
+    if (to !== p.status) out.push({ value, from: p.status, to, rate, n });
+  }
+  return out.sort((a, b) => (a.value < b.value ? -1 : a.value > b.value ? 1 : 0));
+}
+
 export function scopeInvariant(areas = [], probationRows = []) {
   const active = activeAreaIds(areas);
   const paused = probationAreaSet(probationRows);

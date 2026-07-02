@@ -54,6 +54,13 @@ reversible user action in the UI. No hard deletes, ever.
   `reprobe_every_runs` runs (gated behind `SCRAPER_RUN_INDEX`). Bring back = delete the
   row + status → `actionable`. **No `areas.active` flip** — `areas` is also SELECT-only
   (SCHEMA_NOTES §5).
+- **Reconsider hint** (2026-07-02): each engine run judges every paused area on its
+  genuine post-pause reactions (`scope.js#reconsiderUpdates`; ≥ `RECONSIDER_MIN_REACTIONS`
+  trials, a pass counting as a non-reject trial). Reject rate below `RECONSIDER_RATE` →
+  status `active` → `reconsider` (the "worth another look" card with one-tap re-enable);
+  walked back if the evidence reverses. Flips are FROM-status-guarded UPDATEs
+  (`persistence.js#renderProbationSql`), so a concurrent bring-back/restore no-ops.
+  **Notify-only** — both statuses keep the area paused; only the user changes scrape scope.
 
 Dismiss / snooze write the suggestion status (+ `learned_preferences.dismissals` /
 `snoozed_until`). Snooze expiry is handled in the view (`effectiveStatus`).
@@ -183,8 +190,6 @@ writes exactly what `renderRadiusSql` would. (`--emit-sql` / stdout SQL remain f
 ## Known follow-ups (deferred, documented)
 - The §4.1 "Why?" reaction-rate **sparkline + sample rejected listings** (need extra
   `listing_reactions` time-series reads beyond the counts-only `metrics`).
-- **"Reconsider?"** auto-badge from re-probe reject rates (the portal already renders a
-  `reconsider` status when the scraper sets it).
 - **Enable the scheduled run.** `.github/workflows/refinement-run.yml` ships the daily cadence +
   scope-check; it no-ops until the owner adds the `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and
   `SUPABASE_DB_URL` repo secrets (optional `REFINEMENT_HOUSEHOLD_ID`). Passing a monotonic

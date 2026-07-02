@@ -30,12 +30,13 @@ const SURFACE = {
   ],
   'assets/js/refinement/persistence.js': [
     'priorRunsFromRows', 'isTracked', 'resolveStatus', 'metricsOf', 'paramsOf',
-    'planRun', 'renderPlanSql',
+    'planRun', 'renderPlanSql', 'renderProbationSql',
   ],
   'assets/js/refinement/radius.js': ['weightedQuantile', 'learnRadii'],
   'assets/js/refinement/radius-persistence.js': ['planRadii', 'renderRadiusSql'],
   'assets/js/refinement/scope.js': [
-    'activeAreaIds', 'probationAreaSet', 'reprobeThisRun', 'probationDropIds', 'scopeInvariant',
+    'activeAreaIds', 'probationAreaSet', 'reprobeThisRun', 'probationDropIds',
+    'reconsiderUpdates', 'scopeInvariant',
   ],
   'assets/js/refinement/trends-glance.js': [
     'reactionMix', 'shortLabel', 'topDrivers', 'reasonCounts', 'coverage', 'renderTrendsGlance',

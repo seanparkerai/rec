@@ -8,6 +8,7 @@
 import { runRefinementEngine } from '../../assets/js/refinement/engine.js';
 import {
   priorRunsFromRows, isTracked, resolveStatus, metricsOf, paramsOf, planRun, renderPlanSql,
+  renderProbationSql,
 } from '../../assets/js/refinement/persistence.js';
 import { resolveConfig } from '../../assets/js/refinement/config.js';
 
@@ -229,5 +230,31 @@ export async function register({ test, assert, assertEqual }) {
     ]) {
       assert(!sql.includes(banned), `plan SQL must not reference ${banned}`);
     }
+  });
+
+  // ── renderProbationSql (step 4.6b: the reconsider status-hint write) ──────────
+  test('persistence: renderProbationSql emits status-guarded UPDATEs, area-scoped, in a transaction', () => {
+    const sql = renderProbationSql([
+      { value: 'hambledon-po7', from: 'active', to: 'reconsider', rate: 0.33, n: 6 },
+      { value: 'swanmore-so32', from: 'reconsider', to: 'active', rate: 0.83, n: 6 },
+    ], { householdId: HH, now: new Date(BASE) });
+    assert(sql.startsWith('BEGIN;') && sql.trim().endsWith('COMMIT;'), 'wrapped in a transaction');
+    assert(sql.includes('UPDATE scrape_probation'), 'targets scrape_probation only');
+    assert(sql.includes(`household_id = '${HH}'`), 'household-scoped');
+    assert(sql.includes("dimension = 'area'"), 'area rows only');
+    assert(sql.includes("SET status = 'reconsider'") && sql.includes("value = 'hambledon-po7'"), 'flip rendered');
+    assert(sql.includes("AND status = 'active';") && sql.includes("AND status = 'reconsider';"),
+      'guarded on the FROM status — a concurrent user bring-back/restore makes it a no-op');
+    // status hint only: never touches scope-bearing tables or user-owned rows.
+    for (const banned of ['DELETE FROM', 'INTO scrape_probation', 'UPDATE areas', "status = 'restored'"]) {
+      assert(!sql.includes(banned), `probation SQL must not contain ${banned}`);
+    }
+  });
+
+  test('persistence: renderProbationSql escapes quotes and renders nothing for no flips', () => {
+    assertEqual(renderProbationSql([], { householdId: HH }), '', 'no flips → no SQL');
+    const sql = renderProbationSql([{ value: "o'dell-so99", from: 'active', to: 'reconsider' }],
+      { householdId: HH, now: new Date(BASE) });
+    assert(sql.includes("'o''dell-so99'"), 'single quotes doubled');
   });
 }

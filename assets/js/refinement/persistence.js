@@ -205,3 +205,25 @@ export function renderPlanSql(plan) {
   lines.push('COMMIT;');
   return lines.join('\n\n');
 }
+
+/**
+ * Render the reconsider status-hint flips (step 4.6b, scope.js#reconsiderUpdates) as
+ * one guarded, idempotent batch. Each UPDATE is scoped to the household + area row AND
+ * guarded on the FROM status, so a concurrent user action (bring-back deletes the row;
+ * restore tombstones it) makes it a harmless no-op. Both statuses keep the area paused —
+ * this writes a UI hint, never scrape scope. Returns '' when there is nothing to flip.
+ */
+export function renderProbationSql(updates = [], { householdId, now } = {}) {
+  if (!updates.length) return '';
+  const nowIso = (now ? new Date(now) : new Date()).toISOString();
+  const lines = ['BEGIN;'];
+  for (const u of updates) {
+    lines.push(
+      `UPDATE scrape_probation SET status = ${lit(u.to)}, updated_at = ${lit(nowIso)}\n`
+      + `WHERE household_id = ${lit(householdId)} AND dimension = 'area' AND value = ${lit(u.value)}\n`
+      + `  AND status = ${lit(u.from)};`,
+    );
+  }
+  lines.push('COMMIT;');
+  return lines.join('\n\n');
+}
