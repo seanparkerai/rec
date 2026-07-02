@@ -52,22 +52,28 @@ Tokens, type ramp, palette, Pico v2 base, the shell-injection architecture (hard
 not replaced), auth-guard, storage layer, any URL. No page is deleted (owner: cut nothing) —
 Saved/Rejected fold into segments but keep their addresses.
 
-## 5. ⚙ Owner review — the four decisions (per §7.0: recommendation first)
+## 5. ⚙ Owner review — DECIDED 2026-07-02 (review complete; owner authorised immediate build)
 
-1. **Bottom tab bar on phones?** (a) **Yes, 5 tabs as proposed** *(recommended — puts the
-   daily loop under the thumb; the single highest-leverage mobile change)*; (b) No — keep
-   burger-only, just re-order the drawer. Consequence: (a) adds one new shell component +
-   per-page padding-bottom; reversible by CSS.
-2. **Merge Browse/Saved/Passed into one Properties surface?** (a) **Yes, segments**
-   *(recommended — one mental place for properties; kills two top-level pages without cutting
-   anything)*; (b) No — three separate pages as today. Consequence: (a) reshapes 3.4's build
-   and simplifies nav; URLs survive either way.
-3. **Home lede:** (a) **Verdict strip + ranked bands (Act/Money/Track)** *(recommended —
-   at-a-glance precedence per the dashboard's own §10.2 goals)*; (b) keep the current
-   equal-tile bento, restyled only. Consequence: (a) is a rebuild of index.html's grid order;
-   data/tiles all survive.
-4. **Tab-bar slot 4:** (a) **Money** *(recommended — trust-in-numbers is the #2 north-star
-   axis)*; (b) Ask; (c) Journey. Consequence: whichever loses lives in More — one tap further.
+1. **Bottom tab bar on phones? → NO — burger-only.** (First answer said burger-only; a Q4
+   answer implied tabs; the explicit reconciliation question confirmed **burger-only, no tab
+   bar**.) The drawer is re-ordered **daily-loop-first**: the owner's named six lead it —
+   **Home · Properties(Browse) · Areas · Money · Ask** — with everything else below.
+2. **Merge into one Properties surface? → NO — three separate pages stay** (Browse, Saved,
+   Passed/rejected), but ALL THREE drive from **one overhauled primary design** — a single
+   shared card/list component family. Owner's calibration: *"the current rejection list page
+   has the cleanest design"* — that cleanliness is the reference bar; the shared design must
+   be *"absolutely the most optimal"*, not three separate restyles.
+3. **Home lede → verdict strip + ranked bands, APPROVED with a hard constraint:** *"most
+   optimised for viewability on mobile phones and tablets at a glance and super clean and
+   super easy and super efficient"* — at-a-glance density on 320–480px + the 600–800 iPad
+   band is the acceptance test for 3.6, not a nice-to-have.
+4. **Tab slot 4 → moot** (no tab bar). The answer's intent ("make it six — include Ask and
+   Money") is honoured as the drawer's leading group order in decision 1.
 
-Everything else above I treat as within the already-granted redesign latitude; correct me
-where taste differs. On approval, 3.4–3.9 expand to atomic steps honouring these answers.
+**Standing latitude (owner, 2026-07-02):** implement known best practices and the best,
+latest front-end design styles; the design may be actively overhauled anywhere **as long as
+it's improving** — within the §3 process, DESIGN.md's calm-precise contract, and the §11
+a11y floor. ⚙ 2.16/4.9 repo secrets: **deferred by the owner for now** (engine cadence +
+re-membership stay manual/MCP-run).
+
+Steps 3.4–3.9 expand to atomic steps honouring these answers (see `03-checklist.md`).
