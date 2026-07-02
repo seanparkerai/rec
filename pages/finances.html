@@ -77,7 +77,7 @@
         <div class="flow">
           <div class="flow__panel">
             <h3>Today</h3>
-            <svg class="flow__bar" id="now-flow-bar" viewBox="0 0 300 40" aria-label="Today&rsquo;s monthly flow"></svg>
+            <svg class="flow__bar" id="now-flow-bar" viewBox="0 0 300 40" aria-label="Today&rsquo;s monthly flow" role="img" aria-describedby="now-flow-caption"></svg>
             <ul class="flow__legend" id="now-flow-legend"></ul>
           </div>
           <div class="flow__panel">
@@ -111,7 +111,7 @@
       <section class="card" id="savings-over-time-card" aria-labelledby="sot-h">
         <h2 id="sot-h">Savings over time</h2>
         <p class="muted is-card-intro">Cumulative balance month-by-month against your &pound;40k deposit target.</p>
-        <div class="chart-wrap chart-wrap--tall"><canvas id="savings-over-time-canvas"></canvas></div>
+        <div class="chart-wrap chart-wrap--tall"><canvas id="savings-over-time-canvas" role="img" aria-label="Savings over time line chart" aria-describedby="sot-caption"></canvas></div>
         <p class="chart-caption" id="sot-caption">&mdash;</p>
       </section>
 
@@ -119,7 +119,7 @@
       <section class="card" id="monthly-deposits-card" aria-labelledby="md-h">
         <h2 id="md-h">Monthly deposits</h2>
         <p class="muted is-card-intro">Net deposits per month — what you actually put in vs your &pound;2,000 goal.</p>
-        <div class="chart-wrap"><canvas id="monthly-deposits-canvas"></canvas></div>
+        <div class="chart-wrap"><canvas id="monthly-deposits-canvas" role="img" aria-label="Monthly deposits bar chart" aria-describedby="md-caption"></canvas></div>
         <p class="chart-caption" id="md-caption">&mdash;</p>
       </section>
 
@@ -134,7 +134,7 @@
       <section class="card" id="isa-stacked-area-card" aria-labelledby="isasa-h">
         <h2 id="isasa-h">Where the balance came from</h2>
         <p class="muted is-card-intro">Contribution vs dividends vs interest vs market growth, stacked over time.</p>
-        <div class="chart-wrap chart-wrap--tall"><canvas id="isa-stacked-canvas"></canvas></div>
+        <div class="chart-wrap chart-wrap--tall"><canvas id="isa-stacked-canvas" role="img" aria-label="ISA balance composition stacked area chart" aria-describedby="isasa-caption"></canvas></div>
         <p class="chart-caption" id="isasa-caption">&mdash;</p>
       </section>
 
@@ -142,7 +142,7 @@
       <section class="card" id="div-int-cumulative-card" aria-labelledby="di-h">
         <h2 id="di-h">Cumulative dividends &amp; interest</h2>
         <p class="muted is-card-intro">Passive income paid into the ISA over time.</p>
-        <div class="chart-wrap"><canvas id="div-int-canvas"></canvas></div>
+        <div class="chart-wrap"><canvas id="div-int-canvas" role="img" aria-label="Cumulative dividends and interest line chart" aria-describedby="di-caption"></canvas></div>
         <p class="chart-caption" id="di-caption">&mdash;</p>
       </section>
 
@@ -150,7 +150,7 @@
       <section class="card" id="epoch-comparison-card" aria-labelledby="ec-h">
         <h2 id="ec-h">Strategy epochs</h2>
         <p class="muted is-card-intro">What each strategy phase contributed and what it returned.</p>
-        <svg id="epoch-svg" class="epoch-comparison" viewBox="0 0 600 180" preserveAspectRatio="xMinYMin meet" aria-label="Per-epoch contribution and return"></svg>
+        <svg id="epoch-svg" class="epoch-comparison" viewBox="0 0 600 180" preserveAspectRatio="xMinYMin meet" aria-label="Per-epoch contribution and return" role="img" aria-describedby="ec-caption"></svg>
         <p class="chart-caption" id="ec-caption">&mdash;</p>
       </section>
 
@@ -158,7 +158,7 @@
       <section class="card" id="ticker-treemap-card" aria-labelledby="tt-h">
         <h2 id="tt-h">Ticker exposure</h2>
         <p class="muted is-card-intro">Where deployed capital is sitting right now.</p>
-        <svg id="ticker-treemap-svg" class="ticker-treemap" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet" aria-label="Holdings by ticker"></svg>
+        <svg id="ticker-treemap-svg" class="ticker-treemap" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet" aria-label="Holdings by ticker" role="img" aria-describedby="tt-caption"></svg>
         <p class="chart-caption" id="tt-caption">&mdash;</p>
       </section>
 
@@ -166,7 +166,7 @@
       <section class="card" id="realised-unrealised-card" aria-labelledby="ru-h">
         <h2 id="ru-h">Realised vs unrealised P&amp;L</h2>
         <p class="muted is-card-intro">Profit locked in by selling vs profit still riding the market.</p>
-        <svg id="ru-svg" class="realised-unrealised" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid meet" aria-label="Realised vs unrealised profit"></svg>
+        <svg id="ru-svg" class="realised-unrealised" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid meet" aria-label="Realised vs unrealised profit" role="img" aria-describedby="ru-caption"></svg>
         <p class="chart-caption" id="ru-caption">&mdash;</p>
       </section>
     </section>
@@ -211,7 +211,7 @@
       <section class="card">
         <h3>What if&hellip;</h3>
         <p class="muted is-card-intro">Baseline savings projection plus ghosted scenarios. Hover a series for amounts.</p>
-        <div class="what-if-chart"><canvas id="what-if-canvas"></canvas></div>
+        <div class="what-if-chart"><canvas id="what-if-canvas" role="img" aria-label="Savings projection scenario line chart"></canvas></div>
       </section>
 
       <!-- v3 Later Rank 3 — Money-flow today vs after move (demoted) -->
@@ -223,12 +223,12 @@
         <div class="flow">
           <div class="flow__panel">
             <h3>Today</h3>
-            <svg class="flow__bar" id="later-flow-today" viewBox="0 0 300 40" aria-label="Today&rsquo;s flow"></svg>
+            <svg class="flow__bar" id="later-flow-today" viewBox="0 0 300 40" aria-label="Today&rsquo;s flow" role="img" aria-describedby="later-flow-caption"></svg>
             <ul class="flow__legend" id="later-legend-today"></ul>
           </div>
           <div class="flow__panel">
             <h3>After move</h3>
-            <svg class="flow__bar" id="later-flow-after" viewBox="0 0 300 40" aria-label="After-move flow"></svg>
+            <svg class="flow__bar" id="later-flow-after" viewBox="0 0 300 40" aria-label="After-move flow" role="img" aria-describedby="later-flow-caption"></svg>
             <ul class="flow__legend" id="later-legend-after"></ul>
           </div>
         </div>
@@ -242,7 +242,7 @@
           <span class="verdict-badge verdict-badge--loading" id="tdr-badge">—</span>
         </header>
         <p class="muted is-card-intro">What a market correction would do to your deposit before you buy.</p>
-        <svg id="dr-waterfall-svg" class="deposit-risk-waterfall" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet" aria-label="Deposit at risk waterfall"></svg>
+        <svg id="dr-waterfall-svg" class="deposit-risk-waterfall" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet" aria-label="Deposit at risk waterfall" role="img" aria-describedby="dr-waterfall-caption"></svg>
         <p class="chart-caption" id="dr-waterfall-caption">&mdash;</p>
         <details class="dr-waterfall-details">
           <summary>See scenario details</summary>

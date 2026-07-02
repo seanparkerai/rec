@@ -52,6 +52,31 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
+  test('finances: every chart is a named, described image (3.8d absorbs 5.10, §11 floor)', () => {
+    const dom = financesDom();
+    const doc = dom.window.document;
+    const charts = [...doc.querySelectorAll('main svg, main canvas')];
+    assert(charts.length >= 12, 'all chart surfaces found');
+    for (const el of charts) {
+      const name = `${el.tagName.toLowerCase()}#${el.id}`;
+      assertEqual(el.getAttribute('role'), 'img', `${name} exposes role=img`);
+      assert(el.getAttribute('aria-label'), `${name} has an accessible name`);
+      const desc = el.getAttribute('aria-describedby');
+      if (desc) {
+        for (const id of desc.split(/\s+/)) {
+          assert(doc.getElementById(id), `${name} description #${id} resolves (the live verdict caption IS the desc)`);
+        }
+      }
+    }
+    // Every SVG chart is described by its caption — the deviation recorded at
+    // 3.8d: renderers replaceChildren() so in-SVG <title>/<desc> would be
+    // wiped; aria-describedby -> the verdict caption is the durable form.
+    for (const svg of doc.querySelectorAll('main svg')) {
+      assert(svg.getAttribute('aria-describedby'), `svg#${svg.id} is caption-described`);
+    }
+    dom.window.close();
+  });
+
   test('finances: the verdict composes the pinned calculator surface — no new maths', async () => {
     const dom = financesDom();
     const doc = dom.window.document;
