@@ -2440,7 +2440,7 @@
     },
     "coordsSource": "web-verified:getthedata-centre-Worthy-Down(51.112,-1.343);getthedata SO21-2QS(51.112256,-1.342553 ~35m) at Worthy Down camp/Connaught Rd cluster; cross-check MOD Worthy Down Camp 51.1133,-1.3238; stored 51.0943,-1.2977 & centroid 51.09241 sit ~3.5km SE at Abbots Worthy rejected; 2026-06-04",
     "houseTypeIds": [],
-    "status": "directory",
+    "status": "researched",
     "priceSummary": null,
     "councilTaxBand": null,
     "geofenceRadiusMi": 3,

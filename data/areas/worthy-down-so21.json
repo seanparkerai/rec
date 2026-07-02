@@ -15,25 +15,102 @@
   },
   "coordsSource": "web-verified:getthedata-centre-Worthy-Down(51.112,-1.343);getthedata SO21-2QS(51.112256,-1.342553 ~35m) at Worthy Down camp/Connaught Rd cluster; cross-check MOD Worthy Down Camp 51.1133,-1.3238; stored 51.0943,-1.2977 & centroid 51.09241 sit ~3.5km SE at Abbots Worthy rejected; 2026-06-04",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
   "active": true,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "overview": "Worthy Down is the MOD's tri-service Worthy Down camp and its fringe of housing on the chalk downs about 4 miles north of Winchester, between South Wonston and Kings Worthy. The site began as a First World War Royal Flying Corps airfield (later RAF Worthy Down, then the Royal Navy's HMS Kestrel), passed to the Army in 1960, and was rebuilt under the ~£250m Project Wellesley as home of the Defence School of Logistics, Policing and Administration and the headquarters of the Royal Logistic Corps and Adjutant General's Corps. Almost all housing on the site itself is service accommodation; the adjoining village for day-to-day life is South Wonston.",
+  "character": "A working garrison on open downland: modern college buildings and service-family housing behind the fence line, South Wonston's post-war bungalows and family houses immediately east, and arable downs, gallops and old railway earthworks all around.",
+  "amenities": [
+    "Almost no civilian amenities at the camp itself — the Royal Logistic Corps Museum is the public-facing exception",
+    "South Wonston (adjoining): post office & village stores, St Margaret's Church, village hall, social club, surgery and nursery school",
+    "Kings Worthy (~2 miles): shops, church and the Cart & Horses pub",
+    "Full city amenities in Winchester ~4 miles south"
+  ],
+  "schools": [
+    {
+      "url": null,
+      "name": "South Wonston Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "in adjoining South Wonston"
+    },
+    {
+      "url": null,
+      "name": "The Henry Beaufort School",
+      "type": "State",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3 miles (Harestock, north Winchester)"
+    },
+    {
+      "url": null,
+      "name": "Kings Worthy Primary School",
+      "type": "State",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 miles (Kings Worthy)"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "roads": "Beside the A34 just north of Winchester; A34 → M3 J9 ~4 mi; B3420 into the city",
+    "commutes": [
+      {
+        "to": "Winchester",
+        "mode": "Drive",
+        "notes": "~4 miles south via the A34/B3420",
+        "typical": "~10-12 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "From Winchester station; Worthy Down's own halt closed in 1960",
+        "typical": "~60-70 min"
+      },
+      {
+        "to": "Southampton",
+        "mode": "Drive",
+        "notes": "A34/M3 southbound",
+        "typical": "~25-30 min"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "asOf": "2026-07",
+    "summary": "Housing at Worthy Down itself is almost entirely MOD service accommodation, so there is no meaningful open market at the camp; buyers wanting this corner of the downs look to adjoining South Wonston and Kings Worthy — use the SO21 sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/so21.html"
+  },
+  "thingsToDo": [
+    "Royal Logistic Corps Museum at Worthy Down",
+    "The Watercress Way heritage trail passes the old Worthy Down Halt site",
+    "Downland and disused-railway walks between South Wonston and Kings Worthy",
+    "Hampshire Polo School at South Wonston Farm",
+    "Winchester's city sights ~4 miles south"
+  ],
+  "placesToEat": [
+    {
+      "url": "https://www.thecartandhorses-kingsworthy.co.uk/",
+      "name": "Cart & Horses, Kings Worthy",
+      "type": "Pub",
+      "notes": "c.1760 coaching inn on the old London road ~2 miles south-east; refurbished 2023"
+    }
+  ],
+  "pros": [
+    "Excellent A34/M3 access with Winchester ~4 miles",
+    "South Wonston's everyday village amenities next door",
+    "Open downland walking and heritage trails from the door",
+    "RLC Museum on the doorstep"
+  ],
+  "cons": [
+    "A working garrison — fencing, security and military traffic set the tone",
+    "Almost no open-market housing at Worthy Down itself",
+    "No pub or shop on site; a car is needed for most errands",
+    "No rail service since the halt closed in 1960 — nearest station Winchester"
+  ],
+  "whoItSuits": "Mainly service families posted to the camp; civilian buyers drawn to this stretch of downland should look next door at South Wonston or Kings Worthy.",
   "broadbandMedianMbps": null,
   "nearestStation": null,
   "primarySupermarket": null,
@@ -54,6 +131,30 @@
     {
       "url": "https://en.wikipedia.org/wiki/Kings_Worthy",
       "label": "Kings Worthy - Wikipedia"
+    },
+    {
+      "url": "https://www.gov.uk/government/news/second-phase-of-work-to-transform-worthy-down-gathers-pace",
+      "label": "Second phase of work to transform Worthy Down - GOV.UK"
+    },
+    {
+      "url": "https://www.fpcr.co.uk/projects/project-wellesley-worthy-down-camp-service-family-accommodation-site/",
+      "label": "Project Wellesley: Worthy Down Camp & Service Family Accommodation - FPCR"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Worthy_Down_Halt_railway_station",
+      "label": "Worthy Down Halt railway station - Wikipedia"
+    },
+    {
+      "url": "https://www.thewatercressway.org.uk/railway-heritage",
+      "label": "Railway Heritage - The Watercress Way"
+    },
+    {
+      "url": "https://www.winchester.gov.uk/assets/attach/27247/south-wonston-village-design-statement-2014.pdf",
+      "label": "South Wonston Village Design Statement (2014) - Winchester City Council"
+    },
+    {
+      "url": "https://www.thecartandhorses-kingsworthy.co.uk/",
+      "label": "The Cart & Horses, Kings Worthy"
     }
   ],
   "rightmove": {
