@@ -285,24 +285,26 @@ export function buildAreaCard(area) {
   ].filter(Boolean));
 }
 
-// ── Areas within range (the m2m membership — "why this shows") ────────────────
-// Every area whose geofence contains this property (nearest first, primary flagged).
-// A property surfaces in your feed because it sits within range of an area you hold;
-// this makes that explicit and complete, not just the single nearest village.
+// ── Areas within range (the m2m membership — "why am I seeing this") ─────────
+// Every area whose geofence contains this property, as linked chips (nearest
+// first, primary flagged in text). A property surfaces in your feed because it
+// sits within range of an area you hold; the chips make that explicit and
+// complete — and each one steps straight into its area dossier (3.5b).
 export function buildAreaMembership(listing) {
   const areas = Array.isArray(listing?.areas) ? listing.areas.slice() : [];
   if (!areas.length) return null;
   areas.sort((a, b) => (a?.distance_mi ?? Infinity) - (b?.distance_mi ?? Infinity));
   return el('section', { class: 'dossier-section' }, [
-    el('h2', { class: 'dossier-section__label' }, `Areas within range (${areas.length})`),
+    el('h2', { class: 'dossier-section__label' }, `Why am I seeing this? Within range of ${areas.length} area${areas.length === 1 ? '' : 's'}`),
     el('p', { class: 'dossier-section__hint' },
       'This property is inside the geofence of these areas — it shows in your feed because you hold at least one of them.'),
-    el('ul', { class: 'dossier-areas' }, areas.map((a) => el('li', { class: 'dossier-areas__item' }, [
-      el('a', { class: 'dossier-areas__name', href: `${url('pages/area-detail.html')}?id=${encodeURIComponent(a.area_id)}` }, a.name || a.area_id),
-      el('span', { class: 'dossier-areas__dist num' },
-        a.distance_mi != null ? `${Number(a.distance_mi).toFixed(1)} mi` : '—'),
-      a.is_primary ? el('span', { class: 'dossier-areas__primary' }, 'primary') : null,
-    ].filter(Boolean)))),
+    el('ul', { class: 'chip-grid dossier-area-chips' }, areas.map((a) => el('li', {}, [
+      el('a', { class: 'chip dossier-area-chip', href: `${url('pages/area-detail.html')}?id=${encodeURIComponent(a.area_id)}` }, [
+        el('span', {}, a.name || a.area_id),
+        a.distance_mi != null ? el('span', { class: 'dossier-area-chip__dist num' }, `${Number(a.distance_mi).toFixed(1)} mi`) : null,
+        a.is_primary ? el('span', { class: 'dossier-area-chip__note' }, '· primary') : null,
+      ].filter(Boolean)),
+    ]))),
   ]);
 }
 
