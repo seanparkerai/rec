@@ -28,6 +28,13 @@ export const RATE_RISE_FLOOR_PCT = 7.5;
 /** Sensitivity payment / take-home above this triggers a whyVerdict warning. */
 export const STRESS_WARNING_PCT = 60;
 
+/** Mortgage Guarantee Scheme / "Freedom to Buy" (permanent since Jul 2025):
+ * supports 91–95% LTV lending on a sole home priced ≤ £600k, repayment-only.
+ * Modelled as a high-LTV enabler beside the LTV tiers (A7, 5.7). */
+export const MGS_LTV_MIN_PCT = 91;
+export const MGS_LTV_MAX_PCT = 95;
+export const MGS_PRICE_CAP_GBP = 600_000;
+
 /** Affordability price-ladder range used by dashboard + finances UI. */
 export const LADDER_RANGE = { min: 250_000, max: 500_000, step: 2_000 };
 

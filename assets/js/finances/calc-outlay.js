@@ -32,6 +32,35 @@ export function totalInitialOutlay({ deposit = 0, sdlt = 0, oneTimeCosts = [] })
  *
  * @returns {{ sdlt, legalCosts, corePurchase, furnishing, majorPurchases, grandTotal }}
  */
+/**
+ * The complete one-off transaction-cost stack a UK FTB purchase incurs beyond
+ * deposit + SDLT (A7, 5.7 — HomeOwners Alliance, 2026). Each entry names the
+ * cost and the regex that recognises it in the household's free-text
+ * oneTimeCosts rows (matched against `item` + `notes` combined).
+ */
+export const TRANSACTION_COST_CHECKLIST = [
+  { name: 'Legal / conveyancing', match: /solicitor|conveyanc|legal/i },
+  { name: 'Local authority searches', match: /search/i },
+  { name: 'Survey (RICS Level 2/3)', match: /survey/i },
+  { name: 'Lender valuation', match: /valuation/i },
+  { name: 'Mortgage product / arrangement fee', match: /arrangement|product fee/i },
+  { name: 'Mortgage broker fee', match: /broker/i },
+  { name: 'Removals', match: /removal/i },
+];
+
+/**
+ * Which named transaction costs are absent from an itemised oneTimeCosts list
+ * (a row priced £0 still counts as itemised — the point is the NAMED checklist,
+ * not a spend floor). Pure. @returns {string[]} missing cost names.
+ */
+export function missingTransactionCosts(oneTimeCosts = []) {
+  const haystack = (oneTimeCosts || [])
+    .map((c) => `${c?.item ?? ''} ${c?.notes ?? ''}`).join(' | ');
+  return TRANSACTION_COST_CHECKLIST
+    .filter(({ match }) => !match.test(haystack))
+    .map(({ name }) => name);
+}
+
 export function computeOutlayBreakdown({
   targetDeposit = 0, offerTarget = 0, firstTimeBuyer = true,
   oneTimeCosts = [], shoppingList = [],

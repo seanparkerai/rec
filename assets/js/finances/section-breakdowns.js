@@ -2,7 +2,7 @@
 
 import { gbp, gbpPence } from '../format.js';
 import { esc, byId as $, setText } from '../dom.js';
-import { computeOutlayBreakdown } from '../finances.js';
+import { computeOutlayBreakdown, missingTransactionCosts } from '../finances.js';
 
 function sumNumeric(arr, key) {
   return (arr || []).reduce((s, x) => s + (Number(x[key]) || 0), 0);
@@ -62,6 +62,12 @@ export function renderBreakdowns(finData) {
     { label: 'Notes', get: (r) => r.notes, key: 'notes' },
   ], { item: 'Total', cost: gbp(oneTimeTotal), notes: '' }, 'cost', oneMax);
   setText('onetime-total', gbp(oneTimeTotal));
+  // A7 (5.7): the named transaction-cost checklist — surface what isn't itemised
+  // yet so the one-off stack is complete, not just SDLT + deposit.
+  const gaps = missingTransactionCosts(finData.oneTimeCosts);
+  setText('onetime-gaps', gaps.length
+    ? `Not yet itemised: ${gaps.join(' · ')}.`
+    : 'All typical transaction costs are itemised.');
 
   const shopTotal = sumNumeric(finData.shoppingList, 'cost');
   const shopMax = Math.max(...(finData.shoppingList || []).map((b) => Number(b.cost) || 0), 1);

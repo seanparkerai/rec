@@ -3,7 +3,10 @@
 // Fixtures = { finances: data/finances.json, criteria: data/criteria.json }.
 
 import { assessAffordability } from '../../assets/js/affordability.js';
-import { calcSDLT, calcMonthlyMortgage, calcLTV, lisaEligible, computeOutlayBreakdown } from '../../assets/js/finances.js';
+import {
+  calcSDLT, calcMonthlyMortgage, calcLTV, lisaEligible, computeOutlayBreakdown,
+  missingTransactionCosts, TRANSACTION_COST_CHECKLIST,
+} from '../../assets/js/finances.js';
 
 export async function register({ test, assert, assertEqual, fixtures }) {
   const { finances, criteria } = fixtures;
@@ -76,6 +79,61 @@ export async function register({ test, assert, assertEqual, fixtures }) {
       r.whyVerdict.some((s) => /Rate-rise sensitivity:/.test(s)),
       'expected whyVerdict to mention rate-rise sensitivity; got: ' + r.whyVerdict.join(' | '),
     );
+  });
+
+  // --- MGS high-LTV enabler (5.7/A7) ---------------------------------------------
+
+  await test('affordability: 91–95% LTV ≤£600k flags the Mortgage Guarantee Scheme', () => {
+    const fin = {
+      firstTimeBuyer: true,
+      income: { annualBaseSalary: 90000, annualBonus: 0, takeHomeMonthly: 5000, totalMonthly: 5000 },
+      goal: { targetDeposit: 24000 }, // £300k → LTV 92.0%
+      savings: { totalSavings: 24000, monthlyContribution: 0 },
+      mortgage: { ratePctAssumed: 5, termYears: 25 },
+    };
+    const inWindow = assessAffordability({ price: 300000, finances: fin, criteria: {} });
+    assertEqual(inWindow.bandSignals.mgsEligible, true);
+    assert(
+      inWindow.whyVerdict.some((s) => /Mortgage Guarantee Scheme/.test(s)),
+      'expected the MGS high-LTV route line; got: ' + inWindow.whyVerdict.join(' | '),
+    );
+    // 96% LTV — above the window: no scheme, no line.
+    const above = assessAffordability({
+      price: 300000, finances: { ...fin, goal: { targetDeposit: 12000 } }, criteria: {},
+    });
+    assertEqual(above.bandSignals.mgsEligible, false);
+    assert(!above.whyVerdict.some((s) => /Guarantee Scheme/.test(s)), 'no MGS line above 95% LTV');
+    // 92% LTV but £650k — over the price cap.
+    const overCap = assessAffordability({
+      price: 650000, finances: { ...fin, goal: { targetDeposit: 52000 } }, criteria: {},
+    });
+    assertEqual(overCap.bandSignals.mgsEligible, false);
+  });
+
+  // --- Transaction-cost checklist (5.7/A7) -----------------------------------------
+
+  await test('outlay: the named transaction-cost checklist flags what is not itemised', () => {
+    const missing = missingTransactionCosts(finances.oneTimeCosts);
+    assert(missing.includes('Mortgage broker fee'),
+      'the sample list has no broker row — must be flagged; got: ' + missing.join(', '));
+    for (const covered of [
+      'Legal / conveyancing', 'Local authority searches', 'Survey (RICS Level 2/3)',
+      'Lender valuation', 'Mortgage product / arrangement fee', 'Removals',
+    ]) {
+      assert(!missing.includes(covered), `${covered} is itemised in the sample list (item or notes)`);
+    }
+    assertEqual(missingTransactionCosts([]).length, TRANSACTION_COST_CHECKLIST.length,
+      'an empty list is missing every named cost');
+    assertEqual(missingTransactionCosts(undefined).length, TRANSACTION_COST_CHECKLIST.length);
+  });
+
+  await test('outlay: the checklist gaps render on the finances page (source rail)', async () => {
+    const { readFileSync } = await import('node:fs');
+    const section = readFileSync(new URL('../../assets/js/finances/section-breakdowns.js', import.meta.url), 'utf8');
+    assert(/missingTransactionCosts\(/.test(section), 'section-breakdowns consults the checklist');
+    assert(/onetime-gaps/.test(section), 'gaps write into #onetime-gaps');
+    const html = readFileSync(new URL('../../pages/finances.html', import.meta.url), 'utf8');
+    assert(/id="onetime-gaps"/.test(html), 'the gaps element exists under the one-time table');
   });
 
   // --- Shape contract ----------------------------------------------------------

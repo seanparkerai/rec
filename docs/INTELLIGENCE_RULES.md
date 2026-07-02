@@ -33,6 +33,16 @@ Affordability is assessed at both the contract rate and an illustrative rate-ris
 
 ---
 
+## Mortgage Guarantee Scheme ("Freedom to Buy")
+
+A high-LTV enabler flagged beside the LTV tiers so a low-deposit buyer sees an option, not a dead end.
+
+- **MGS window = 91% to 95% LTV, price cap £600,000** (sole home, repayment-only).
+
+*Source:* made **permanent since July 2025** (HM Treasury; HomeOwners Alliance, 2026). Flagged as a `whyVerdict` line and `bandSignals.mgsEligible` when the assessed LTV sits inside the window at an in-cap price. Added 2026-07-02 (A7).
+
+---
+
 ## Payment-to-take-home bands
 
 Monthly mortgage payment (P&I only, contract rate) as % of monthly net (take-home) income.

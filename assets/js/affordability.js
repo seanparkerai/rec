@@ -18,6 +18,9 @@ import {
   RATE_RISE_UPLIFT_PP,
   RATE_RISE_FLOOR_PCT,
   STRESS_WARNING_PCT,
+  MGS_LTV_MIN_PCT,
+  MGS_LTV_MAX_PCT,
+  MGS_PRICE_CAP_GBP,
 } from './intelligence-constants.js';
 
 const VERDICTS = ['comfortable', 'stretch', 'tight', 'out-of-reach'];
@@ -192,6 +195,13 @@ export function assessAffordability({ price, finances, criteria, councilTaxBand:
   if (sdlt > 0 && ftb && p > 500_000) {
     whyVerdict.push(`FTB SDLT relief lost above £500k — standard rates apply (£${sdlt.toLocaleString('en-GB')}).`);
   }
+  // A7 (5.7): high-LTV is an option, not a dead end — the permanent Mortgage
+  // Guarantee Scheme backs 91–95% LTV on a sole home ≤ £600k, repayment-only.
+  const mgsEligible = ltvPct >= MGS_LTV_MIN_PCT && ltvPct <= MGS_LTV_MAX_PCT
+    && p > 0 && p <= MGS_PRICE_CAP_GBP;
+  if (mgsEligible) {
+    whyVerdict.push(`High-LTV route: ${ltvPct.toFixed(1)}% LTV fits the permanent Mortgage Guarantee Scheme ("Freedom to Buy") — ${MGS_LTV_MIN_PCT}–${MGS_LTV_MAX_PCT}% lending on a sole home ≤£${(MGS_PRICE_CAP_GBP / 1000).toFixed(0)}k, repayment terms.`);
+  }
 
   const headline = buildHeadline({
     price: p,
@@ -223,6 +233,7 @@ export function assessAffordability({ price, finances, criteria, councilTaxBand:
       paymentToIncome: paymentToIncomePct,
       stressedPaymentToIncome: stressedPaymentToIncomePct,
       lisaEligible: lisaOk,
+      mgsEligible,
     },
     whyVerdict,
     // Extras for the dashboard / Phase 3 — not in the strict PLAN.md shape but cheap to expose.
@@ -331,4 +342,5 @@ export const BANDS = {
   rateRiseUpliftPP: RATE_RISE_UPLIFT_PP,
   rateRiseFloorPct: RATE_RISE_FLOOR_PCT,
   stressWarningPct: STRESS_WARNING_PCT,
+  mgs: { minLtvPct: MGS_LTV_MIN_PCT, maxLtvPct: MGS_LTV_MAX_PCT, priceCapGbp: MGS_PRICE_CAP_GBP },
 };

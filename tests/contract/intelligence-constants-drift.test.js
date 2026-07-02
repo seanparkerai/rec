@@ -11,7 +11,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
   LTI_BANDS, PAYMENT_BANDS_PCT, SPARE_BANDS_GBP, LISA_CAP_GBP, LTV_TIERS,
-  RATE_RISE_UPLIFT_PP, RATE_RISE_FLOOR_PCT, FIT_BANDS, FIT_WEIGHTS,
+  RATE_RISE_UPLIFT_PP, RATE_RISE_FLOOR_PCT, MGS_LTV_MIN_PCT, MGS_LTV_MAX_PCT,
+  MGS_PRICE_CAP_GBP, FIT_BANDS, FIT_WEIGHTS,
 } from '../../assets/js/intelligence-constants.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -51,6 +52,10 @@ export async function register({ test, assertEqual }) {
       'the rate-rise sensitivity rule');
     assertEqual(num(rise[1]), RATE_RISE_UPLIFT_PP, `RATE_RISE_UPLIFT_PP: doc +${rise[1]}pp, code +${RATE_RISE_UPLIFT_PP}pp`);
     assertEqual(num(rise[2]), RATE_RISE_FLOOR_PCT, `RATE_RISE_FLOOR_PCT: doc ${rise[2]}%, code ${RATE_RISE_FLOOR_PCT}%`);
+    const mgs = grab(/MGS window = (\d+)% to (\d+)% LTV, price cap £([\d,]+)/, 'the MGS window');
+    assertEqual(num(mgs[1]), MGS_LTV_MIN_PCT, `MGS_LTV_MIN_PCT: doc ${mgs[1]}%, code ${MGS_LTV_MIN_PCT}%`);
+    assertEqual(num(mgs[2]), MGS_LTV_MAX_PCT, `MGS_LTV_MAX_PCT: doc ${mgs[2]}%, code ${MGS_LTV_MAX_PCT}%`);
+    assertEqual(num(mgs[3]), MGS_PRICE_CAP_GBP, `MGS_PRICE_CAP_GBP: doc £${mgs[3]}, code £${MGS_PRICE_CAP_GBP}`);
   });
 
   test('constants drift (5.3): FIT_BANDS + FIT_WEIGHTS match the code', () => {
