@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-  "_comment": "Step 5.2 (04-program §5): mutation testing over the FINANCE CALCULATORS — the trust surface (§3.10b), scoped separately from the engine config (stryker.conf.json) so each domain's ratchet floor stays honest. Kill vehicles: the unit tier (calc suites) AND the characterization tier (the 5.1 golden-master grid — SDLT band edges, LTV tiers, LISA caps live there). OPT-IN via `npm run test:mutation:finance`; never part of the default gate. `break` is a RATCHET FLOOR set just under the measured baseline — only ever raised.",
+  "_comment": "Step 5.2 (04-program §5): mutation testing over the FINANCE CALCULATORS — the trust surface (§3.10b), scoped separately from the engine config (stryker.conf.json) so each domain's ratchet floor stays honest. Kill vehicles: the unit tier (calc suites) AND the characterization tier (the 5.1 calc grid + the 5.2 affordability verdict-engine grid). OPT-IN via `npm run test:mutation:finance`; never part of the default gate. MEASURED 2026-07-02: first baseline 63.55% (affordability.js 42.59% — the verdict engine was the gap); after the 5.2 fold-back grid 87.07% overall in 1m19s (642 mutants; affordability 89.91, calc-lisa 100, calc-savings/outlay 88, derive 81.9, calc-purchase 80.7). `break` is a RATCHET FLOOR just under that measurement — only ever raised. NOTE: incremental caching does NOT see kill-vehicle test changes under the command runner — re-measure with --force after strengthening tests.",
   "mutate": [
     "assets/js/finances/calc-*.js",
     "assets/js/finance-derive.js",
@@ -10,7 +10,7 @@
   "commandRunner": { "command": "node tools/run-all-tests.mjs --tier unit && node tools/run-all-tests.mjs --tier characterization" },
   "coverageAnalysis": "off",
   "reporters": ["clear-text", "progress"],
-  "thresholds": { "high": 90, "low": 80, "break": 50 },
+  "thresholds": { "high": 90, "low": 80, "break": 86 },
   "tempDirName": ".stryker-tmp-finance",
   "incremental": true,
   "incrementalFile": "reports/stryker-finance-incremental.json"
