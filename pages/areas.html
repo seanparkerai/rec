@@ -150,60 +150,6 @@
   <script type="module" src="../assets/js/components.js"></script>
   <script type="module" src="../assets/js/page-areas.js"></script>
   <script type="module" src="../assets/js/page-map.js"></script>
-  <script>
-    // Filter sheet: inline card on desktop, modal bottom-sheet on mobile.
-    (() => {
-      const dlg = document.getElementById('filter-sheet');
-      const openBtn = document.getElementById('open-filters');
-      const closeBtn = document.getElementById('filter-sheet-close');
-      const mq = matchMedia('(max-width: 767.98px)');
-
-      function syncMode() {
-        if (mq.matches) {
-          if (dlg.hasAttribute('open') && !dlg.matches(':modal')) dlg.removeAttribute('open');
-        } else {
-          if (!dlg.hasAttribute('open')) dlg.setAttribute('open', '');
-        }
-      }
-      openBtn?.addEventListener('click', () => {
-        if (dlg.hasAttribute('open')) dlg.close();
-        dlg.showModal();
-      });
-      closeBtn?.addEventListener('click', () => dlg.close());
-      mq.addEventListener?.('change', syncMode);
-      syncMode();
-
-      // Mirror "x active filters" summary on the trigger row.
-      const active = document.getElementById('active-filters');
-      const sheetCount = document.getElementById('filter-sheet-count');
-      const resultCount = document.getElementById('result-count');
-      function refreshSummary() {
-        const parts = [];
-        const q = document.getElementById('search')?.value?.trim();
-        const c = document.getElementById('filter-county')?.value;
-        const s = document.getElementById('filter-subregion')?.value;
-        const sl = document.getElementById('only-shortlisted')?.checked;
-        const paused = document.getElementById('show-paused')?.checked;
-        if (q) parts.push(`<span class="filter-pill">“${q}”</span>`);
-        if (c && c !== 'all') parts.push(`<span class="filter-pill">${c}</span>`);
-        if (s && s !== 'all') parts.push(`<span class="filter-pill">${s}</span>`);
-        if (sl) parts.push(`<span class="filter-pill">★ shortlisted</span>`);
-        if (paused) parts.push(`<span class="filter-pill">incl. paused</span>`);
-        active.innerHTML = parts.length ? parts.join('') : 'No filters set.';
-        if (sheetCount && resultCount) sheetCount.textContent = resultCount.textContent || '0';
-      }
-      document.addEventListener('input', (e) => {
-        if (e.target?.closest('#filter-sheet') || e.target?.id === 'search') refreshSummary();
-      });
-      document.addEventListener('change', (e) => {
-        if (e.target?.closest('#filter-sheet')) refreshSummary();
-      });
-      // Also refresh after the page script renders results (areas list changes).
-      const ol = document.getElementById('areas-grid');
-      if (ol) new MutationObserver(refreshSummary).observe(ol, { childList: true });
-      document.addEventListener('shell:ready', refreshSummary);
-      refreshSummary();
-    })();
-  </script>
+  <script type="module" src="../assets/js/areas/filter-sheet-init.js"></script>
 </body>
 </html>

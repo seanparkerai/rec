@@ -122,7 +122,7 @@ export async function register({ test, assert, assertEqual }) {
   test('filter-sheet wiring: modal on phones, inline card on desktop, safe pill summary', async () => {
     const dom = pageDom();
     const doc = dom.window.document;
-    const { wireFilterSheet } = await import('../../assets/js/listings/filter-sheet.js');
+    const { wireFilterSheet } = await import('../../assets/js/filter-sheet.js');
     const dlg = doc.getElementById('listings-filter-sheet');
     // jsdom has no dialog internals — shim the contract the wiring calls.
     let modal = false;

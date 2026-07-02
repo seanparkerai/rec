@@ -1,10 +1,11 @@
-// listings/filter-sheet.js — filter controls in a native <dialog>: a modal
-// bottom-sheet on phones, an inline card at ≥768px (components/filter-sheet.css
-// gates the presentation; this module only manages the open/modal state). The
-// mechanism is the areas-page pattern (pages/areas.html inline script),
-// extracted as a DI-friendly module so Browse (3.4c) and Saved/Rejected (3.4d)
-// share one wiring and jsdom can drive it. Pure DOM wiring — no storage, no
-// page state; the caller supplies `describe()` for the active-filter pills.
+// filter-sheet.js — filter controls in a native <dialog>: a modal bottom-sheet
+// on phones, an inline card at ≥768px (components/filter-sheet.css gates the
+// presentation; this module only manages the open/modal state). Extracted from
+// the areas page's inline script at 3.4c for Browse/Saved; promoted to a flat
+// shared utility at 3.7a when areas itself folded back onto it (one mechanism,
+// three surfaces). Pure DOM wiring — no storage, no page state; the caller
+// supplies `describe()` for the active-filter pills (rendered as TEXT — raw
+// user search terms can never become markup).
 
 /**
  * @param {object} opts

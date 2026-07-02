@@ -17,7 +17,7 @@ import {
 } from './storage.js';
 import { getDerivedFinances } from './finance-load.js';
 import { createListingsControls, LISTING_SORTS } from './listings/controls.js';
-import { wireFilterSheet } from './listings/filter-sheet.js';
+import { wireFilterSheet } from './filter-sheet.js';
 import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
 import { suggestionListHTML } from './suggestions/card.js';

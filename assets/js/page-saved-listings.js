@@ -17,7 +17,7 @@ import { effectiveWeights, listingLearnedPrefs } from './learned-preferences.js'
 import { latestPerListing } from './listings/reactions.js';
 import { dedupeNewestByFingerprint } from './listings/suppress.js';
 import { createListingsControls, LISTING_SORTS } from './listings/controls.js';
-import { wireFilterSheet } from './listings/filter-sheet.js';
+import { wireFilterSheet } from './filter-sheet.js';
 import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
 import { clear } from './dom.js';
 import { buildSavedCard } from './page-saved-listings/card.js';
