@@ -101,8 +101,17 @@
 - [ ] 3.8 Finances page rebuild (chart sizing/a11y, SVG title/desc, aria).
 - [ ] 3.9 Profile/journey/ask/saved/rejected passes; a11y hardening (contrast + focus lint rules on); real-browser smoke tier if warranted.
 
-**Phase 4 — Intelligence engine (module-by-module per §10.0; 8 modules incl. radius)** *(expand on entry)*
-- [ ] 4.1 Interface-pin the 8 modules with tests; then per module: Fisher's exact before BH-FDR (B3 ⚠); Bayesian-core decision (B5) with gate-pass-rate logging (B6); explainability whySignals (P10a); probation re-probe UX (P10h); reason aggregation (P10c); weight-snapshot persistence (P10i); enable scheduled cadence (⚙ secrets); Stryker on engine modules.
+**Phase 4 — Intelligence engine (module-by-module per §10.0)** *(entered 2026-07-01 while ⚙ 3.1 design review is pending — Phase-3 builds 3.4–3.9 resume the moment it lands; expansion below from segments/10.6 + the 2026-06-19 log)*
+- [ ] 4.1 Interface-pin the engine surface: one contract test pinning the public exports of `refinement/{config,engine,observations,persistence,radius,radius-persistence,scope,trends-glance,view}.js` + `learned-preferences/{search,signals,weights}.js` so a rebuild can't silently drop/rename API another module leans on.
+- [ ] 4.2 B3 ⚠: Fisher's exact test (2×2 value vs rest-of-pool, RAW counts — an exact test needs integers; decay keeps driving Wilson/lift/p̂) replaces the normal-approximation z-test feeding BH-FDR; characterization of today's p-values first, then the swap + re-pin.
+- [ ] 4.3 B6: gate-pass-rate logging — the engine result carries per-gate pass counts per dimension; the Stage-3 persistence writes them into the `refinement_runs` audit row so thresholds get calibrated against real data, not guessed.
+- [ ] 4.4 B5 decision recorded (ADR-style in the plan): KEEP the explainable five-gate core; the Bayesian Beta-Bernoulli redesign is declined while the gates remain a product asset — revisit only if 4.3's calibration data shows systematic miscalibration.
+- [ ] 4.5 P10a: explainability whySignals in `view.js#toCard()` (per-signal weight, direction, contribution) surfaced in the card's "Why?" drawer.
+- [ ] 4.6 P10h: probation re-probe UX — 'reconsider' rows surface "worth another look" with a one-tap re-enable.
+- [ ] 4.7 P10c: attributed-reason aggregation (`reason_counts` in learned_preferences) driving a "your top dislikes" summary.
+- [ ] 4.8 P10i: `refinement_runs.weights_snapshot` jsonb (migration) + snapshot write each run.
+- [ ] 4.9 ⚙ Scheduled cadence goes live the moment the 2.16 secrets exist (refinement-run.yml already built — same owner action, no new work).
+- [ ] 4.10 Stryker mutation testing scoped to `refinement/` + `learned-preferences/` (~75–80% threshold, opt-in script per 04-program §5).
 
 **Phase 5 — Finances (trust surface; every visible-number change flagged §3.10b)** *(expand on entry)*
 - [ ] 5.1 Golden-master grid + Stryker over `calc-*`; then: LISA withdrawal 12-month rule (A3 ⚠); stress-test → rate-rise sensitivity relabel + configurable uplift (A5 ⚠); LISA/SDLT cap-mismatch warning (A4); FTB-model additions (A7); chart/data-flow cleanups from §10.3 phases A–E.
