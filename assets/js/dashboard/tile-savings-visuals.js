@@ -3,6 +3,7 @@
 // (ISA vs cash vs debt), and withdrawal readiness seasoning timeline. DOM-rendering
 // tile for the home dashboard.
 import { getInvestments, getInvestmentsHistory, getGoals } from '../storage.js';
+import { lisaUsableWindow } from '../finances.js';
 import { buildSavingsSeries } from '../savings-series.js';
 import { getSavingsVelocity } from '../savings-velocity.js';
 import { gbp } from '../format.js';
@@ -230,6 +231,23 @@ export async function renderWithdrawalReadiness() {
   try { goals = await getGoals(); } catch { goals = null; }
   try { investments = await getInvestments(); } catch { investments = null; }
 
+  // LISA branch (5.5/A3): when a Lifetime ISA is on file, the binding liquidity
+  // constraint is the GOV.UK 12-month rule — plot first contribution → +12 months.
+  const lisaWin = lisaUsableWindow(investments?.lisa);
+  if (lisaWin) {
+    if (fill) fill.style.setProperty('--seasoning-pct', `${lisaWin.pct.toFixed(1)}%`);
+    if (marker) marker.style.setProperty('--marker-pct', `${lisaWin.pct.toFixed(1)}%`);
+    if (caption) {
+      const opts = { day: 'numeric', month: 'short', year: 'numeric' };
+      const from = lisaWin.usableFrom.toLocaleDateString('en-GB', opts);
+      caption.textContent = lisaWin.met
+        ? `LISA 12-month rule met — usable for your first-home purchase since ${from}.`
+        : `LISA usable for a first-home purchase from ${from} — 12 months after your first contribution.`;
+    }
+    return;
+  }
+
+  // No LISA on file — generic sell-and-transfer deposit-seasoning guidance.
   const SEASONING_MONTHS = 3;
   const today = new Date();
   const applyDate = new Date(today.getFullYear(), today.getMonth() + 4, today.getDate());

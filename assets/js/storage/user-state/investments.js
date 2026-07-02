@@ -12,24 +12,44 @@ export async function getInvestments(opts = {}) {
     const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
     if (!sb || !hid) return null;
     try {
-      const { data, error } = await sb
-        .from('investments_accounts')
-        .select('data, provider, current_value, earmark_pct, account_opened, account_type')
-        .eq('household_id', hid)
-        .limit(1);
+      // Extend-only (5.5/A3): the primary row now excludes any Lifetime ISA
+      // account (which the second query surfaces as `lisa`), so a future LISA
+      // row can never be mistaken for the S&S ISA blob.
+      const [{ data, error }, lisaRes] = await Promise.all([
+        sb.from('investments_accounts')
+          .select('data, provider, current_value, earmark_pct, account_opened, account_type')
+          .eq('household_id', hid)
+          .not('account_type', 'ilike', '%lifetime%')
+          .limit(1),
+        sb.from('investments_accounts')
+          .select('account_opened, data')
+          .eq('household_id', hid)
+          .ilike('account_type', '%lifetime%')
+          .limit(1),
+      ]);
       if (error) throw error;
       const row = data?.[0];
       if (!row) return null;
       // The jsonb `data` column mirrors the legacy investments.json blob; expose
       // it under trading212ISA so existing consumers (finance-derive, deposit-risk,
       // tile-*) work unchanged.
-      return { trading212ISA: row.data ?? {
+      const out = { trading212ISA: row.data ?? {
         provider: row.provider,
         accountType: row.account_type,
         accountOpened: row.account_opened,
         earmarkPct: Number(row.earmark_pct) || 0,
         currentPortfolioValue: Number(row.current_value) || 0,
       } };
+      const lisaRow = lisaRes?.data?.[0];
+      if (lisaRow) {
+        out.lisa = {
+          accountOpened: lisaRow.account_opened ?? null,
+          // The GOV.UK 12-month clock runs from the FIRST contribution; the
+          // opening date is the proxy when no explicit date is recorded.
+          firstContributionDate: lisaRow.data?.firstContributionDate ?? lisaRow.account_opened ?? null,
+        };
+      }
+      return out;
     } catch (e) {
       console.error('storage: read investments_accounts', e.message);
       return null;

@@ -6,9 +6,18 @@
 //   const sb = new MockSupabaseClient({ profile: [{ household_id: 'test-001', … }] });
 //   const { data, error } = await sb.from('profile').select('*').eq('household_id', 'test-001');
 //
-// Supported chain: select / eq / neq / in / not / order / limit / range / single
-// / maybeSingle — enough for the storage layer's read paths. Writes record into
+// Supported chain: select / eq / neq / in / not / ilike / order / limit / range
+// / single / maybeSingle — enough for the storage layer's read paths. Writes record into
 // this.writes for assertion and upsert-merge into the table rows.
+
+/** SQL ILIKE pattern → case-insensitive anchored RegExp (% = .*, _ = .). */
+function ilikeRegExp(pattern) {
+  const body = String(pattern)
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    .replace(/%/g, '.*')
+    .replace(/_/g, '.');
+  return new RegExp(`^${body}$`, 'i');
+}
 
 const MOCK_SESSION = {
   user: { id: 'user-001', email: 'test@example.com' },
@@ -30,6 +39,15 @@ class MockQuery {
   not(col, op, val) {
     // PostgREST `not.<col>.is.<val>` semantics for val ∈ {null, true, false}.
     if (op === 'is') this._rows = this._rows.filter((r) => (r?.[col] ?? null) !== val);
+    else if (op === 'ilike') {
+      const re = ilikeRegExp(val);
+      this._rows = this._rows.filter((r) => !re.test(String(r?.[col] ?? '')));
+    }
+    return this;
+  }
+  ilike(col, pattern) {
+    const re = ilikeRegExp(pattern);
+    this._rows = this._rows.filter((r) => re.test(String(r?.[col] ?? '')));
     return this;
   }
   is(col, val) { this._rows = this._rows.filter((r) => r?.[col] === val); return this; }
