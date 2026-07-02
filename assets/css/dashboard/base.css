@@ -8,15 +8,26 @@
   color: var(--ink-muted); margin: 0 0 var(--space-2);
 }
 .page-head .lead { color: var(--ink-muted); font-size: var(--text-lg); margin: var(--space-2) 0 0; max-width: 56ch; }
+/* Home only: the head hugs the verdict strip on phones (fold space). */
+.page-head--tight { margin-bottom: var(--space-2); }
+@media (min-width: 768px) {
+  .page-head--tight { margin-bottom: var(--space-6); }
+}
 
 /* ---- Magazine lede (above bento) ----------------------------------- */
+/* 3.6c at-a-glance: phones tighten the strip so verdict + review count land
+   inside the first viewport (320-480 is the acceptance test); the magazine
+   spacing returns from tablet up. */
 .page-lede {
-  margin: var(--space-6) 0 var(--space-6);
-  padding: var(--space-5);
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
   border: 1px solid var(--hairline);
   border-radius: var(--rec-radius);
   background: var(--paper);
-  display: grid; gap: var(--space-4);
+  display: grid; gap: var(--space-3);
+}
+@media (min-width: 768px) {
+  .page-lede { margin: var(--space-6) 0; padding: var(--space-5); gap: var(--space-4); }
 }
 .page-lede .lede-prose {
   margin: 0;
@@ -63,7 +74,10 @@
   font-size: var(--text-xs); letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--ink-muted); font-weight: 500;
 }
-.page-lede .lede-val { font-size: var(--text-lg); font-weight: 500; color: var(--ink); }
+.page-lede .lede-val { font-size: var(--text-base); font-weight: 500; color: var(--ink); }
+@media (min-width: 768px) {
+  .page-lede .lede-val { font-size: var(--text-lg); }
+}
 
 /* ---- Bento grid (Phase 3 tile-* names own the column spans) ------ */
 .bento {
