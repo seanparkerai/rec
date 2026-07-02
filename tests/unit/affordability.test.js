@@ -148,9 +148,19 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     ]) {
       assert(!missing.includes(covered), `${covered} is itemised in the sample list (item or notes)`);
     }
-    assertEqual(missingTransactionCosts([]).length, TRANSACTION_COST_CHECKLIST.length,
-      'an empty list is missing every named cost');
+    // The empty list returns the complete named checklist VERBATIM, in order —
+    // pins every cost name (a blanked name would silently pass an includes check).
+    assertEqual(
+      JSON.stringify(missingTransactionCosts([])),
+      JSON.stringify([
+        'Legal / conveyancing', 'Local authority searches', 'Survey (RICS Level 2/3)',
+        'Lender valuation', 'Mortgage product / arrangement fee', 'Mortgage broker fee', 'Removals',
+      ]),
+      'empty list → every named cost, verbatim and ordered',
+    );
     assertEqual(missingTransactionCosts(undefined).length, TRANSACTION_COST_CHECKLIST.length);
+    // Malformed rows must not throw (optional chaining is load-bearing).
+    assertEqual(missingTransactionCosts([null, { cost: 5 }]).length, TRANSACTION_COST_CHECKLIST.length);
   });
 
   await test('outlay: every checklist keyword alternative recognises its cost on its own', () => {
