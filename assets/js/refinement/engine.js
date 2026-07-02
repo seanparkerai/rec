@@ -6,8 +6,8 @@
 // Pipeline (one pass per dimension):
 //   normalise → time-decayed counts (n_eff/k_eff/p_hat/distinct) → Wilson lower
 //   bound (small-n continuity-corrected) → baseline p0 + lift + one-sided
-//   two-proportion test → Benjamini-Hochberg FDR → the five gates → tiers →
-//   ranking → volume_artefact flag.
+//   Fisher's exact test (RAW counts — B3, step 4.2) → Benjamini-Hochberg FDR →
+//   the five gates → tiers → ranking → volume_artefact flag.
 //
 // KEY MODELLING FACT (docs/SCHEMA_NOTES.md §1): the raw reject baseline is ~98.7%,
 // so lift over p0 is the BINDING gate — Wilson alone passes almost everything.
@@ -88,28 +88,38 @@ export function wilsonLowerBound(k, n, { z = 1.96, continuity = false } = {}) {
   return clamp01(Math.min(lower, p));
 }
 
-/** Standard normal CDF via an Abramowitz-Stegun erf approximation (deterministic). */
-function normalCdf(x) {
-  const sign = x < 0 ? -1 : 1;
-  const ax = Math.abs(x) / Math.SQRT2;
-  const t = 1 / (1 + 0.3275911 * ax);
-  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-ax * ax);
-  return 0.5 * (1 + sign * y);
+// log(n!) with a growing memo — exact hypergeometric terms without overflow.
+const _logFact = [0, 0];
+function logFact(n) {
+  for (let i = _logFact.length; i <= n; i++) _logFact[i] = _logFact[i - 1] + Math.log(i);
+  return _logFact[n];
 }
+const logChoose = (n, k) => (k < 0 || k > n ? -Infinity : logFact(n) - logFact(k) - logFact(n - k));
 
 /**
- * One-sided two-proportion z-test p-value: is group 1 rejected *more* than group 2?
- * (§2.4 — value vs rest-of-pool, decayed counts.) Returns 1 (no evidence) on
- * degenerate inputs so a candidate never sneaks through the FDR gate by accident.
+ * One-sided Fisher's exact test p-value: is group 1 rejected *more* than group 2?
+ * (§2.4 — value vs rest-of-pool; B3 correction, step 4.2.) P(X ≥ k1) under the
+ * hypergeometric null for the 2×2 table — exact at ANY n, replacing the
+ * normal-approximation z-test that was unreliable in precisely the small-n
+ * regime this engine targets (and inconsistent with the small-sample Wilson
+ * bound next to it). Operates on RAW counts (an exact test needs integers —
+ * inputs are rounded defensively); decay keeps driving Wilson/lift/p̂.
+ * Returns 1 (no evidence) on degenerate inputs so a candidate never sneaks
+ * through the FDR gate by accident.
  */
-export function twoProportionPValue(k1, n1, k2, n2) {
-  if (n1 <= 0 || n2 <= 0) return 1;
-  const p1 = k1 / n1;
-  const p2 = k2 / n2;
-  const pPool = (k1 + k2) / (n1 + n2);
-  const se = Math.sqrt(pPool * (1 - pPool) * (1 / n1 + 1 / n2));
-  if (!(se > 0)) return p1 > p2 ? 0 : 1; // no variance (pool all-reject / all-keep)
-  return 1 - normalCdf((p1 - p2) / se);
+export function fisherExactPValue(k1, n1, k2, n2) {
+  n1 = Math.round(n1); n2 = Math.round(n2);
+  if (!(n1 > 0) || !(n2 > 0)) return 1;
+  k1 = Math.min(Math.max(Math.round(k1), 0), n1);
+  k2 = Math.min(Math.max(Math.round(k2), 0), n2);
+  const K = k1 + k2;
+  const N = n1 + n2;
+  const logDenom = logChoose(N, K);
+  let p = 0;
+  for (let x = k1, hi = Math.min(n1, K); x <= hi; x++) {
+    p += Math.exp(logChoose(n1, x) + logChoose(n2, K - x) - logDenom);
+  }
+  return p > 1 ? 1 : p;
 }
 
 /**
@@ -249,10 +259,16 @@ export function scoreFromAggregates(aggregates, opts = {}) {
     const agg = perDim[dim] || { dimDecayed: 0, values: [] };
     const dimGateOpen = globalGateOpen && agg.dimDecayed >= config.DIM_MIN_FEEDBACK;
 
-    // Baseline decayed reject rate across the whole dimension pool (§2.4).
+    // Baseline decayed reject rate across the whole dimension pool (§2.4),
+    // plus the RAW pool totals Fisher's exact test needs (integers).
     let Kall = 0;
     let Nall = 0;
-    for (const v of agg.values) { Kall += v.k_eff; Nall += v.n_eff; }
+    let KallRaw = 0;
+    let NallRaw = 0;
+    for (const v of agg.values) {
+      Kall += v.k_eff; Nall += v.n_eff;
+      KallRaw += v.k_raw; NallRaw += v.n_raw;
+    }
     const p0 = Nall > 0 ? Kall / Nall : 0;
 
     const candidates = [];
@@ -263,7 +279,7 @@ export function scoreFromAggregates(aggregates, opts = {}) {
         continuity: v.n_eff < config.CONTINUITY_N_MAX,
       });
       const lift = p0 > 0 ? p_hat / p0 : 0;
-      const p_value = twoProportionPValue(v.k_eff, v.n_eff, Kall - v.k_eff, Nall - v.n_eff);
+      const p_value = fisherExactPValue(v.k_raw, v.n_raw, KallRaw - v.k_raw, NallRaw - v.n_raw);
       const cand = {
         dimension: dim,
         value: v.value,

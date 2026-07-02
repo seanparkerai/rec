@@ -18,9 +18,11 @@ const SURFACE = {
     'PRESETS', 'DEFAULT_PRESET', 'DIMENSIONS', 'SCRAPE_ELIGIBLE_DIMENSIONS',
     'isScrapeEligible', 'FIXED', 'resolveConfig',
   ],
+  // twoProportionPValue → fisherExactPValue: the deliberate B3 rename (step
+  // 4.2, consumer sweep done — only engine tests referenced it).
   'assets/js/refinement/engine.js': [
     'normaliseValue', 'extractValue', 'decayWeight', 'wilsonLowerBound',
-    'twoProportionPValue', 'benjaminiHochberg', 'tierFor', 'buildAggregates',
+    'fisherExactPValue', 'benjaminiHochberg', 'tierFor', 'buildAggregates',
     'scoreFromAggregates', 'runRefinementEngine',
   ],
   'assets/js/refinement/observations.js': [

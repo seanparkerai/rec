@@ -13,7 +13,7 @@
 // plus the acceptance check: the real type distribution ranks terraced (the
 // mid-terrace equivalent) above detached/semi.
 import {
-  runRefinementEngine, wilsonLowerBound, twoProportionPValue, benjaminiHochberg,
+  runRefinementEngine, wilsonLowerBound, fisherExactPValue, benjaminiHochberg,
   decayWeight, normaliseValue, extractValue, tierFor,
 } from '../../assets/js/refinement/engine.js';
 import { resolveConfig, PRESETS, DEFAULT_PRESET } from '../../assets/js/refinement/config.js';
@@ -141,15 +141,27 @@ export async function register({ test, assert, assertEqual }) {
     assert(cc < plain, `cc (${cc.toFixed(3)}) should be below plain (${plain.toFixed(3)}) at n=8`);
   });
 
-  // ── two-proportion test ──────────────────────────────────────────────────────
-  test('refinement: one-sided two-proportion p-value is small only when v is rejected MORE', () => {
-    const more = twoProportionPValue(95, 100, 50, 100); // 95% vs 50%
-    const equal = twoProportionPValue(50, 100, 50, 100); // 50% vs 50%
-    const less = twoProportionPValue(20, 100, 80, 100); // 20% vs 80%
+  // ── Fisher's exact test (B3 correction, step 4.2) ────────────────────────────
+  test('refinement: one-sided Fisher p-value is small only when v is rejected MORE', () => {
+    const more = fisherExactPValue(95, 100, 50, 100); // 95% vs 50%
+    const equal = fisherExactPValue(50, 100, 50, 100); // 50% vs 50%
+    const less = fisherExactPValue(20, 100, 80, 100); // 20% vs 80%
     assert(more < 0.001, `clearly-more → tiny p (${more})`);
-    assert(Math.abs(equal - 0.5) < 1e-6, `equal → ~0.5 (${equal})`);
+    assert(equal > 0.4 && equal < 0.6, `equal → ~0.5 (${equal})`);
     assert(less > 0.99, `less → ~1 (${less})`);
-    assertEqual(twoProportionPValue(5, 0, 5, 10), 1); // degenerate
+    assertEqual(fisherExactPValue(5, 0, 5, 10), 1); // degenerate
+  });
+
+  test('refinement: Fisher p-values are EXACT (hand-computed hypergeometric tails)', () => {
+    // 3/4 vs 1/4 → P(X≥3) = (C(4,3)C(4,1)+C(4,4)C(4,0))/C(8,4) = 17/70.
+    assert(Math.abs(fisherExactPValue(3, 4, 1, 4) - 17 / 70) < 1e-12, 'tea-tasting-sized table exact');
+    // 8/10 vs 2/10 → (45·45 + 10·10 + 1)/184756 = 2126/184756.
+    assert(Math.abs(fisherExactPValue(8, 10, 2, 10) - 2126 / 184756) < 1e-12, '2126/184756 exact');
+    // The z-test's small-n anti-conservatism this replaces: z said 0.079 for
+    // 3/4 vs 1/4; the exact truth is 0.243 — three times less significant.
+    assert(fisherExactPValue(3, 4, 1, 4) > 0.2, 'no false small-n significance');
+    // Fractional (decayed) inputs are rounded defensively, never crash.
+    assert(fisherExactPValue(2.6, 4.2, 1.4, 3.9) > 0 , 'fractional inputs tolerated');
   });
 
   // ── Benjamini-Hochberg FDR (direct) ──────────────────────────────────────────
