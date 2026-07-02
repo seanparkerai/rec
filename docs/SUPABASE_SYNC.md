@@ -72,8 +72,10 @@ listing columns + an `areas` jsonb membership array. The storage feed read
 
 **`household_areas.is_origin`** (boolean, default false): marks a home/commute-anchor area.
 An origin area contributes to commute math but is **excluded from listing-feed membership**
-(the feed drops it from the household scope) AND from the **fetcher demand set** (it is not
-scraped) — its catchment is where the household LIVES, not where they want to buy.
+(the `household_feed` RPC drops it from the household scope) AND from the **fetcher demand
+set** (it is not scraped) — its catchment is where the household LIVES, not where they want
+to buy. User-editable via the area picker's "Home" toggle
+(`storage#setHouseholdAreaOrigin`, step 2.19).
 
 Note: `checklists` and `outreach_templates` have **no** mirror table — those catalogues are
 repo-JSON-only.

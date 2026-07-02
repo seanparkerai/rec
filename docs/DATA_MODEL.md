@@ -163,7 +163,10 @@ set attached as `areas` jsonb. Contract: `supabase/archive/schema-household-feed
 **Origin areas** (`household_areas.is_origin=true`): a home/commute-anchor area. It counts for
 commute math but is **excluded from the listing feed and the fetcher demand set** — its
 catchment is where the household lives, not where they want to buy. Contrast a **target** area
-(the default) whose listings the household wants to see.
+(the default) whose listings the household wants to see. **User-editable since step 2.19:**
+each chip in the reusable area picker (profile Areas section + areas/map page) carries a
+"Home" toggle writing the flag via `storage#setHouseholdAreaOrigin` — the original one-off
+SQL seed (Whiteley, 2026-07-01) is now just data this control manages.
 
 ### Listing lifecycle (audited + pinned, step 2.18)
 

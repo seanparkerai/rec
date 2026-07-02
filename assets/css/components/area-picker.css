@@ -33,6 +33,19 @@
   font-size: var(--text-sm); background: var(--paper);
 }
 .area-picker__chip.is-paused { color: var(--ink-muted); }
+/* origin (home/commute) chips: state is carried in the "(home)" text + the
+   pressed toggle — the dashed border is reinforcement, never the sole signal. */
+.area-picker__chip.is-origin { border-style: dashed; color: var(--ink-muted); }
+.area-picker__chip-home {
+  min-block-size: 0; padding: 0.1rem 0.5rem; margin: 0;
+  border-radius: 99px; line-height: 1.4; font-size: var(--text-sm);
+  border: 1px solid var(--hairline); background: var(--paper); color: var(--ink-muted);
+}
+.area-picker__chip-home[aria-pressed='true'] {
+  background: color-mix(in oklch, var(--ink) 10%, var(--paper));
+  color: var(--ink); font-weight: 500;
+}
+.area-picker__chip-home:disabled { opacity: 0.5; cursor: default; }
 .area-picker__chip-x {
   inline-size: 1.5rem; block-size: 1.5rem; min-block-size: 0;
   padding: 0; margin: 0; border-radius: 99px; line-height: 1;

@@ -33,12 +33,13 @@ export async function getHouseTypes()   { return await loadJSON('house-types'); 
 // so local dev + tests still render.
 const _HA_KEY = 'household-areas';            // active-only (the default — listings/map/property rely on it)
 const _HA_ALL_KEY = 'household-areas:all';    // active + inactive (the management views only)
-const _withProvenance = (rec, addedVia, status = 'active') => ({
+const _withProvenance = (rec, addedVia, status = 'active', isOrigin = false) => ({
   ...rec,
   verified: rec.verified ?? true,
   source: rec.source ?? 'curated',
   _addedVia: addedVia,
   _status: status,
+  _isOrigin: !!isOrigin,
 });
 
 // Compose the household's area records. Default = active links only (every
@@ -50,7 +51,7 @@ async function _composeHouseholdAreas(includeInactive = false) {
   if (!sb || !hid) return null; // no household context — caller falls back to catalog
   let query = sb
     .from('household_areas')
-    .select('area_id, added_via, status')
+    .select('area_id, added_via, status, is_origin')
     .eq('household_id', hid);
   query = includeInactive
     ? query.in('status', ['active', 'inactive'])
@@ -70,7 +71,7 @@ async function _composeHouseholdAreas(includeInactive = false) {
   const out = [];
   for (const l of links) {
     const rec = byId.get(l.area_id) ?? stubById.get(l.area_id);
-    if (rec) out.push(_withProvenance(rec, l.added_via, l.status));
+    if (rec) out.push(_withProvenance(rec, l.added_via, l.status, l.is_origin));
   }
   return out;
 }
@@ -141,6 +142,28 @@ export async function setHouseholdAreaStatus(area_id, status) {
     return true;
   } catch (e) {
     console.error('storage: setHouseholdAreaStatus', e.message);
+    _toast(`Sync error (areas): ${e.message}`, true);
+    return false;
+  }
+}
+
+// Mark an area as the household's ORIGIN (home / commute anchor) or back to a
+// target. An origin contributes to commute math but is EXCLUDED from the listing
+// feed (household_feed RPC) and the fetcher demand set — its catchment is where
+// the household LIVES, not where they want to buy (step 2.19: this replaces the
+// one-off SQL seed as the way is_origin is set). Reversible, per-household; the
+// global catalog row is untouched.
+export async function setHouseholdAreaOrigin(area_id, isOrigin) {
+  const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
+  if (!sb || !hid || !area_id) return false;
+  try {
+    const { error } = await sb.from('household_areas')
+      .update({ is_origin: !!isOrigin }).eq('household_id', hid).eq('area_id', area_id);
+    if (error) throw error;
+    _invalidateHouseholdAreas();
+    return true;
+  } catch (e) {
+    console.error('storage: setHouseholdAreaOrigin', e.message);
     _toast(`Sync error (areas): ${e.message}`, true);
     return false;
   }
