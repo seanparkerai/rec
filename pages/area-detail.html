@@ -90,21 +90,32 @@
           <h2>Prices</h2>
           <div id="sec-prices"></div>
         </section>
+        <!-- 3.7d: the colour tail shares the property dossier's fold shell (3.5d) —
+             native details, OPEN by default so nothing is ever hidden; the heading
+             IS the summary. TOC anchors keep landing on the section wrappers. -->
         <section class="article-section" id="section-things">
-          <h2>Things to do</h2>
-          <div id="sec-things"></div>
+          <details class="dossier-fold" open>
+            <summary class="dossier-fold__summary"><h2>Things to do</h2></summary>
+            <div id="sec-things"></div>
+          </details>
         </section>
         <section class="article-section" id="section-eat">
-          <h2>Places to eat</h2>
-          <div id="sec-eat"></div>
+          <details class="dossier-fold" open>
+            <summary class="dossier-fold__summary"><h2>Places to eat</h2></summary>
+            <div id="sec-eat"></div>
+          </details>
         </section>
         <section class="article-section" id="section-proscons">
-          <h2>Pros &amp; cons</h2>
-          <div id="sec-proscons"></div>
+          <details class="dossier-fold" open>
+            <summary class="dossier-fold__summary"><h2>Pros &amp; cons</h2></summary>
+            <div id="sec-proscons"></div>
+          </details>
         </section>
         <section class="article-section" id="section-suits">
-          <h2>Who it suits</h2>
-          <div id="sec-suits"></div>
+          <details class="dossier-fold" open>
+            <summary class="dossier-fold__summary"><h2>Who it suits</h2></summary>
+            <div id="sec-suits"></div>
+          </details>
         </section>
         <div id="extras"></div>
       </article>

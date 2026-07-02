@@ -26,3 +26,9 @@
 }
 
 #btn-star.is-starred { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
+
+/* 3.7d: tail sections share the property dossier's fold shell (property.css
+   .dossier-fold, loaded via the dashboard.css import). The editorial h2 IS the
+   summary — sit it flush in the summary's flex row (Pico gives h2 a bottom
+   margin that would misalign the › cue). */
+.article-section .dossier-fold__summary h2 { margin: 0; }
