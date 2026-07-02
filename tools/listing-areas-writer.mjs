@@ -28,11 +28,20 @@ export function membershipRowsFor(geoResults) {
     })));
 }
 
-/** Group flat membership rows by rightmove_id → Map<id, rows[]>. Pure. */
+/**
+ * Group flat membership rows by rightmove_id → Map<id, rows[]>. Pure.
+ * Duplicate (rightmove_id, area_id) pairs keep the FIRST row: a repeated geo
+ * verdict for the same listing would otherwise land two is_primary rows in one
+ * set, which the replace_listing_areas RPC rejects wholesale.
+ */
 export function groupByListing(memberRows) {
   const byId = new Map();
+  const seen = new Set();
   for (const r of memberRows || []) {
     if (!r?.rightmove_id || !r?.area_id) continue;
+    const key = `${r.rightmove_id} ${r.area_id}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
     if (!byId.has(r.rightmove_id)) byId.set(r.rightmove_id, []);
     byId.get(r.rightmove_id).push({
       area_id: r.area_id,

@@ -24,6 +24,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+      # Dev-tooling deps only (jsdom for the tests/pages tier, typescript for
+      # Tier-0); the deploy job below still uploads the repo as-is, no build.
+      - name: Install dev dependencies
+        run: npm ci
       - name: Run test harness
         run: node tools/run-all-tests.mjs
 

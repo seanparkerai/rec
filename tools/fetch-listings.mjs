@@ -898,7 +898,15 @@ async function main() {
       // === the single area_id). Built from the same `geo` results, scoped to the
       // rows that survived on-spec + dedupe so memberships match the upserted rows.
       const writtenIds = new Set(deduped.map((l) => l.rightmove_id));
-      const memberRows = membershipRowsFor(geo.filter((x) => writtenIds.has(x.l.rightmove_id)));
+      // ONE geo verdict per written id: raw Apify pages can repeat a listing, and
+      // two verdicts for the same id would each carry an is_primary row — the
+      // replace_listing_areas RPC rejects the merged set ("exactly one is_primary").
+      const geoById = new Map();
+      for (const x of geo) {
+        const id = x.l.rightmove_id;
+        if (writtenIds.has(id) && !geoById.has(id)) geoById.set(id, x);
+      }
+      const memberRows = membershipRowsFor([...geoById.values()]);
       const flagged = deduped.filter((l) => l.corroborated === false).length;
       totalKept += deduped.length;
       totalFlagged += flagged;
