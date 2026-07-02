@@ -114,6 +114,7 @@ export function fromEngineCard(card) {
     message: card.reason,
     detail: '',
     whyLines: card.whyLines || [],
+    whySignals: card.whySignals || [], // P10a: learned-signal context for the Why drawer
     tier: card.tier || 'forming',
     tierLabel: card.tierLabel || '—',
     current: null,

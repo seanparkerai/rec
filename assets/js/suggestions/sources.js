@@ -32,7 +32,9 @@ export async function loadCombinedSuggestions({ now = new Date() } = {}) {
     pruneCandidates: { areas: searchSpec.dropAreas, outcodes: searchSpec.dropOutcodes },
   });
 
-  const groups = classifySuggestions(engineRows || [], undefined, now);
+  // P10a (step 4.5): thread the learned weights so every engine card carries
+  // whySignals + the learned-weight "Why?" line.
+  const groups = classifySuggestions(engineRows || [], undefined, now, { effective });
   const combined = combineSuggestions({ conflicts, engineInbox: groups.inbox, areasMeta });
   return { combined, groups, conflicts, areasMeta };
 }

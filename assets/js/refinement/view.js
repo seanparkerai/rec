@@ -158,24 +158,74 @@ export function probationStatusLabel(row = {}, config = resolveConfig()) {
 const pct = (x) => `${Math.round((Number(x) || 0) * 100)}%`;
 const round1 = (x) => (Number(x) || 0).toFixed(1);
 
+/** Engine dimension → learned-preference signal-key kind (signals.js format). */
+const DIMENSION_SIGNAL_KIND = {
+  area: 'area',
+  property_type: 'type',
+  outcode: 'outcode',
+  price_band: 'price-band',
+  beds: 'beds',
+  outdoor: 'outdoor',
+  parking: 'parking',
+};
+
+/**
+ * Explainability (P10a, step 4.5): the learned signals behind one suggestion.
+ * `main` = the learned weight for this exact dimension:value (the model's own
+ * position on the thing being suggested); `supporting` = the strongest other
+ * learned signals of the SAME kind, so the user sees the suggestion in the
+ * context of what the model has already learned there. [] when no learned
+ * weight exists yet (the drawer says learning hasn't weighted it).
+ * @param {{dimension: string, value: string}} row
+ * @param {Record<string, number>|null} effective  flat signal→weight map
+ */
+export function whySignalsFor(row, effective) {
+  if (!effective || typeof effective !== 'object') return [];
+  const kind = DIMENSION_SIGNAL_KIND[row.dimension];
+  if (!kind) return [];
+  const entry = (signal, w, contribution) => ({
+    signal,
+    weight: Number(w),
+    direction: w < 0 ? 'disliked' : 'liked',
+    contribution,
+  });
+  const key = `${kind}:${String(row.value ?? '').toLowerCase()}`;
+  const out = [];
+  const main = Number(effective[key]);
+  if (Number.isFinite(main) && main !== 0) out.push(entry(key, main, 'main'));
+  const supporting = Object.entries(effective)
+    .filter(([s, v]) => s.startsWith(`${kind}:`) && s !== key && Number(v))
+    .sort((a, b) => Math.abs(Number(b[1])) - Math.abs(Number(a[1])))
+    .slice(0, 2)
+    .map(([s, v]) => entry(s, Number(v), 'supporting'));
+  return [...out, ...supporting];
+}
+
 /**
  * Turn one suggestion row into a display card view-model: humanised label, tier,
  * the plain-English reason, the "Why?" detail lines, and — when the engine flagged it
  * — the volume-artefact note (§2.8: "high volume, not disproportionately disliked").
+ * Pass the effective learned-weight map to get `whySignals` (P10a) and the
+ * learned-weight "Why?" line — omitted when no weights are supplied.
  */
-export function toCard(row) {
+export function toCard(row, effective = null) {
   const m = row.metrics || {};
   const nRaw = m.n_raw ?? 0;
   const kRaw = m.k_raw ?? 0;
   const rejectRate = nRaw > 0 ? kRaw / nRaw : 0;
   const lift = Number(m.lift) || 0;
   const artefact = !!m.volume_artefact;
+  const whySignals = whySignalsFor(row, effective);
   const whyLines = [
     `Rejected ${pct(rejectRate)} — ${kRaw} of ${nRaw} listings`,
     `${round1(lift)}× your usual reject rate of ${pct(m.baseline)}`,
     `Confidence: ${pct(m.wilson_lower)} (${TIER_LABEL[row.tier] || '—'})`,
     `Seen across ${m.distinct_rejected_listings ?? 0} different listings`,
   ];
+  const mainSignal = whySignals.find((s) => s.contribution === 'main');
+  if (mainSignal) {
+    whyLines.push(`Learned weight: ${mainSignal.weight > 0 ? '+' : ''}${mainSignal.weight.toFixed(2)} (${mainSignal.direction}) — the model already leans this way`);
+  }
   return {
     dimension: row.dimension,
     dimensionLabel: DIMENSION_LABEL[row.dimension] || row.dimension,
@@ -197,6 +247,7 @@ export function toCard(row) {
       : '',
     reason: m.reason || whyLines[0],
     whyLines,
+    whySignals,
     runsQualified: row.runs_qualified ?? 0,
   };
 }
@@ -278,7 +329,7 @@ export function snoozeDaysLeft(row = {}, now = new Date()) {
  * forming" list; the rest map to Active (confirmed_hide), Probation (confirmed_scrape),
  * Dismissed and Snoozed.
  */
-export function classifySuggestions(rows = [], config = resolveConfig(), now = new Date()) {
+export function classifySuggestions(rows = [], config = resolveConfig(), now = new Date(), { effective = null } = {}) {
   // The per-area radius advisory rides the same table but is a distinct lane (different
   // evidence + actions). Split it out so it never lands in the statistical buckets / the
   // combined inbox, and gets its own radius group.
@@ -298,13 +349,14 @@ export function classifySuggestions(rows = [], config = resolveConfig(), now = n
     dismissed: rOf('dismissed').map(toRadiusCard),
   };
 
+  const card = (r) => toCard(r, effective); // P10a: learned-weight context on every card
   return {
-    inbox: inbox.map(toCard),
-    forming: sortByConfidence(of('forming')).map(toCard),
-    active: of('confirmed_hide').map(toCard),
-    probation: of('confirmed_scrape').map(toCard),
-    dismissed: of('dismissed').map(toCard),
-    snoozed: of('snoozed').map((r) => ({ ...toCard(r), snoozeDaysLeft: snoozeDaysLeft(r, now) })),
+    inbox: inbox.map(card),
+    forming: sortByConfidence(of('forming')).map(card),
+    active: of('confirmed_hide').map(card),
+    probation: of('confirmed_scrape').map(card),
+    dismissed: of('dismissed').map(card),
+    snoozed: of('snoozed').map((r) => ({ ...card(r), snoozeDaysLeft: snoozeDaysLeft(r, now) })),
     radius,
     counts: {
       total: rows.length,

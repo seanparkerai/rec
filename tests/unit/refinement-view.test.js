@@ -3,7 +3,7 @@
 // the card view-model (incl. the volume-artefact note, §2.8), status classification,
 // the inbox ranking + MAX_INBOX cap, and the model-confidence meter states.
 import {
-  humaniseValue, toCard, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
+  humaniseValue, toCard, whySignalsFor, rankForInbox, sortByConfidence, classifySuggestions, buildConfidenceMeter,
   REFINEMENT_HIDE_KEY, hideRuleKey, hiddenRulesFromOverrides, matchingHideRule, listingHiddenByRefinement,
   probationStatusLabel, effectiveStatus, snoozeDaysLeft,
   REFINEMENT_SETTINGS_KEY, presetFromOverrides, PRESET_OPTIONS, presetNudge,
@@ -257,5 +257,43 @@ export async function register({ test, assert, assertEqual }) {
     const eff = effectiveWeights({}, ov);
     assertEqual(eff['type:flat'], -0.5);
     assert(!(REFINEMENT_SETTINGS_KEY in eff), 'settings key never becomes a scoring weight');
+  });
+
+  // ── explainability whySignals (P10a, step 4.5) ───────────────────────────────
+  test('view (4.5): whySignals surfaces the main learned weight + same-kind context', () => {
+    const r = { dimension: 'property_type', value: 'terraced', metrics: {}, tier: 'confident' };
+    const effective = {
+      'type:terraced': -0.12,
+      'type:flat': -0.4,
+      'type:detached': 0.1,
+      'type:bungalow': 0.02,
+      'area:oakley-rg23': -0.3, // different kind — never included
+    };
+    const ws = whySignalsFor(r, effective);
+    assertEqual(ws[0].signal, 'type:terraced');
+    assertEqual(ws[0].contribution, 'main');
+    assertEqual(ws[0].direction, 'disliked');
+    const supporting = ws.filter((s) => s.contribution === 'supporting');
+    assertEqual(supporting.length, 2, 'strongest two same-kind co-signals only');
+    assertEqual(supporting[0].signal, 'type:flat', 'ordered by |weight|');
+    assert(!ws.some((s) => s.signal.startsWith('area:')), 'other kinds excluded');
+    const card = toCard(r, effective);
+    assertEqual(card.whySignals.length, 3);
+    assert(card.whyLines.some((l) => l.includes('Learned weight: -0.12 (disliked)')),
+      'the Why? drawer carries the learned-weight line');
+  });
+
+  test('view (4.5): no learned weights → whySignals empty, card shape unchanged', () => {
+    const r = { dimension: 'property_type', value: 'terraced', metrics: {}, tier: 'confident' };
+    assertEqual(whySignalsFor(r, null).length, 0);
+    const card = toCard(r);
+    assertEqual(card.whySignals.length, 0, 'no phantom signals without a weight map');
+    assertEqual(card.whyLines.length, 4, 'the four statistical lines only');
+    const groups = classifySuggestions(
+      [{ dimension: 'property_type', value: 'terraced', status: 'forming', metrics: {}, tier: 'forming' }],
+      undefined, new Date(), { effective: { 'type:terraced': -0.2 } },
+    );
+    assertEqual(groups.forming[0].whySignals[0].signal, 'type:terraced',
+      'classifySuggestions threads the weight map to every card');
   });
 }

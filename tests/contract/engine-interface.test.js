@@ -45,7 +45,7 @@ const SURFACE = {
     'REFINEMENT_SETTINGS_KEY', 'REFINEMENT_RADIUS_OVERRIDE_KEY',
     'radiusOverridesFromOverrides', 'PRESET_OPTIONS', 'presetFromOverrides',
     'hideRuleKey', 'hiddenRulesFromOverrides', 'matchingHideRule',
-    'listingHiddenByRefinement', 'probationStatusLabel', 'toCard', 'toRadiusCard',
+    'listingHiddenByRefinement', 'probationStatusLabel', 'toCard', 'whySignalsFor', 'toRadiusCard',
     'rankForInbox', 'sortByConfidence', 'effectiveStatus', 'snoozeDaysLeft',
     'classifySuggestions', 'buildConfidenceMeter', 'presetNudge',
   ],
