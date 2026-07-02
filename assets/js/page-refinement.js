@@ -62,9 +62,17 @@ function cardHTML(c, variant, extra = {}) {
       </footer>`;
   } else if (variant === 'probation') {
     const rp = extra.reprobeLabel ? `<p class="ref-action__reprobe">${esc(extra.reprobeLabel)}</p>` : '';
+    // P10h (step 4.6): a 'reconsider' probation row surfaces prominently — the
+    // re-check verdict is the headline and the action reads as a re-enable.
+    // Re-enabling deletes the probation row, so the area rejoins the scraper's
+    // demand set on the NEXT scheduled run (the cost-safe "re-probe now").
+    const state = extra.reconsider
+      ? 'Latest re-checks suggest this might be worth another look.'
+      : 'Paused — new listings not being searched';
+    const cta = extra.reconsider ? 'Re-enable this area' : 'Bring back';
     actions = `${rp}<footer class="ref-card__actions">
-        <span class="ref-action__state">Paused — new listings not being searched</span>
-        <button type="button" class="ref-action ref-action--undo" data-action="bringback" ${data}>Bring back</button>
+        <span class="ref-action__state">${esc(state)}</span>
+        <button type="button" class="ref-action ref-action--undo" data-action="bringback" ${data}>${esc(cta)}</button>
       </footer>`;
   } else if (variant === 'dismissed') {
     actions = `<footer class="ref-card__actions">
@@ -422,7 +430,13 @@ async function refresh() {
     "Nothing hidden. Refinements you apply will appear here, with a one-tap restore.", 'active');
   renderList('ref-probation', groups.probation,
     "No areas paused. Areas you stop searching will appear here, with a one-tap bring-back.", 'probation',
-    (c) => ({ reprobeLabel: probationStatusLabel(probByKey.get(`${c.dimension}:${c.value}`) || {}, cfg) }));
+    (c) => {
+      const prob = probByKey.get(`${c.dimension}:${c.value}`) || {};
+      return {
+        reprobeLabel: probationStatusLabel(prob, cfg),
+        reconsider: prob.status === 'reconsider', // P10h: prominent re-enable
+      };
+    });
   renderList('ref-snoozed', groups.snoozed, "Nothing snoozed.", 'snoozed');
   renderList('ref-dismissed', groups.dismissed, "Nothing dismissed.", 'dismissed');
 

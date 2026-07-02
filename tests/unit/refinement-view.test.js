@@ -10,6 +10,11 @@ import {
 } from '../../assets/js/refinement/view.js';
 import { effectiveWeights } from '../../assets/js/learned-preferences.js';
 import { resolveConfig } from '../../assets/js/refinement/config.js';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const _ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
 export async function register({ test, assert, assertEqual }) {
   const cfg = resolveConfig();
@@ -257,6 +262,16 @@ export async function register({ test, assert, assertEqual }) {
     const eff = effectiveWeights({}, ov);
     assertEqual(eff['type:flat'], -0.5);
     assert(!(REFINEMENT_SETTINGS_KEY in eff), 'settings key never becomes a scoring weight');
+  });
+
+  test('view (4.6/P10h): the page surfaces reconsider prominently with a one-tap re-enable', () => {
+    // The card markup lives in page-refinement.js (page coordinators get DOM
+    // tests in the Phase-3 rebuild); pin the P10h surfacing at source level so
+    // it can't silently regress meanwhile.
+    const src = readFileSync(join(_ROOT, 'assets/js/page-refinement.js'), 'utf8');
+    assert(/worth another look/i.test(src), 'reconsider headline copy present');
+    assert(/Re-enable this area/.test(src), 'one-tap re-enable CTA present');
+    assert(/status === 'reconsider'/.test(src), 'driven by the probation row status');
   });
 
   // ── explainability whySignals (P10a, step 4.5) ───────────────────────────────
