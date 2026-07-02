@@ -28,6 +28,7 @@
 | `02-intake.md` | §7 Q&A intake standard · §8 global conventions (+ §8.1 external validation) | Before asking the owner anything; before any UI commit |
 | `03-checklist.md` | §9 living checklist — **the resumable backlog spine** (Phases 0–10) | **Every session start**; tick after every merged step |
 | `04-program.md` | The agreed program design — intake record, priority order, flagship target architecture, rail audit, test-apparatus shape, owner actions | Before starting any phase; when a design decision needs its rationale |
+| `05-ia-proposal.md` | Phase-3 IA & navigation proposal (step 3.1) — nav model, per-page wireframe notes, the 4 ⚙ review decisions | Before any Phase-3 page build; at the owner design review |
 | `segments/README.md` | §10 segment index · §10.0 safe modular decomposition rule | Before starting any segment |
 | `segments/10.1-design-shell.md` | Design system, app shell & navigation | Priority-2 UI overhaul work |
 | `segments/10.2-dashboard.md` | Home dashboard (tiles, bands, visuals) | Dashboard work |
