@@ -65,6 +65,12 @@ function initTopicNav() {
 
 async function init() {
   try {
+    // Revalidation decision (5.11/E1, recorded): only getFinances subscribes
+    // onUpdate; criteria + investments are read once at init (and re-read on
+    // save via the editor below). Deliberate — single-user app, the portal and
+    // this page are usually the same tab, and the write-through cache serves
+    // fresh values on the next visit. Revisit only if mid-session portal edits
+    // become a real workflow.
     try { rawInvestments = await getInvestments(); } catch { rawInvestments = null; }
     const rawFinances = await getFinances({
       onUpdate: (fresh) => {

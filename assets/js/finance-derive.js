@@ -81,6 +81,13 @@ export function computeDepositSavings(finances, investments) {
  */
 export function deriveFinances(raw, opts = {}) {
   if (!raw || typeof raw !== 'object') return raw;
+  // C1 (5.11): investments is optional but must be optional DELIBERATELY.
+  // A forgotten investments record silently understates totalSavings (the ISA
+  // earmark is ignored), so omitting the key warns; pass { investments: null }
+  // to make a cash-only derivation explicit.
+  if (!('investments' in opts)) {
+    console.warn('finance-derive: no investments option supplied — totalSavings counts cash only. Pass { investments: null } if cash-only is deliberate.');
+  }
   const investments = opts.investments || null;
 
   // --- Income aliases -------------------------------------------------------

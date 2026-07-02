@@ -29,54 +29,54 @@ export async function register({ test, assert, assertEqual }) {
 
   // --- Income aliases -------------------------------------------------------
   await test('derive: income.takeHomeMonthly aliases monthlyNetTakeHome', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.income.takeHomeMonthly, 3000);
   });
 
   await test('derive: income.totalMonthly equals takeHomeMonthly (bonus excluded)', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.income.totalMonthly, 3000);
   });
 
   await test('derive: income.annualBaseSalary aliases annualGrossBase', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.income.annualBaseSalary, 60000);
   });
 
   await test('derive: income.monthlyGross = annualGrossBase / 12', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.income.monthlyGross, 5000);
   });
 
   await test('derive: income.bonusMonthly = annualBonus / 12, NOT added to totalMonthly', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.income.bonusMonthly, 200);
     assertEqual(d.income.totalMonthly, 3000);
   });
 
   // --- Line-item totals -----------------------------------------------------
   await test('derive: oneTimeCostsTotal sums oneTimeCosts[].cost', () => {
-    assertEqual(deriveFinances(RAW).oneTimeCostsTotal, 300);
+    assertEqual(deriveFinances(RAW, { investments: null }).oneTimeCostsTotal, 300);
   });
 
   await test('derive: ongoingBillsTotal.monthly + .annual', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.ongoingBillsTotal.monthly, 100);
     assertEqual(d.ongoingBillsTotal.annual, 1200);
   });
 
   await test('derive: expensesTotal.monthly + .annual', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.expensesTotal.monthly, 400);
     assertEqual(d.expensesTotal.annual, 4800);
   });
 
   await test('derive: giftCardsTotal sums giftCards[].amount', () => {
-    assertEqual(deriveFinances(RAW).giftCardsTotal, 250);
+    assertEqual(deriveFinances(RAW, { investments: null }).giftCardsTotal, 250);
   });
 
   await test('derive: shoppingTotal sums shoppingList[].cost', () => {
-    assertEqual(deriveFinances(RAW).shoppingTotal, 1200);
+    assertEqual(deriveFinances(RAW, { investments: null }).shoppingTotal, 1200);
   });
 
   // --- computeDepositSavings (shared single-definition helper) ---------------
@@ -103,7 +103,7 @@ export async function register({ test, assert, assertEqual }) {
   // --- Savings cross-resource ----------------------------------------------
   // Gift cards are NOT counted in totalSavings — they aren't deposit-eligible.
   await test('derive: totalSavings = cash only when no investments', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.savings.totalSavings, 20000);
   });
 
@@ -121,7 +121,7 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   await test('derive: savingsGap = max(0, target - totalSavings)', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     // target 40000 - totalSavings 20000 = 20000
     assertEqual(d.savings.savingsGap, 20000);
   });
@@ -133,7 +133,7 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   await test('derive: monthsToSave = gap / monthlyContribution, 0 when at target', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     // 20000 / 2000 = 10
     assertEqual(d.savings.monthsToSave, 10);
 
@@ -164,12 +164,12 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   await test('derive: avgMonthlyDepositEstimate is null without investments and no monthlyAverage', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.savings.avgMonthlyDepositEstimate, null);
   });
 
   await test('derive: gift cards tracked separately, NOT in totalSavings', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.giftCardsTotal, 250);
     // totalSavings is purely cash — gift cards excluded
     assertEqual(d.savings.totalSavings, 20000);
@@ -177,20 +177,20 @@ export async function register({ test, assert, assertEqual }) {
 
   // --- Post-move outgoings + spare -----------------------------------------
   await test('derive: monthlyOutgoingsPostMove = bills + expenses + mortgage', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     // 100 + 400 + 1900 = 2400
     assertEqual(d.monthlyOutgoingsPostMove.total, 2400);
   });
 
   await test('derive: spare.monthly = takeHome - post-move outgoings', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     // 3000 - 2400 = 600
     assertEqual(d.spare.monthly, 600);
   });
 
   // --- Pass-through fields --------------------------------------------------
   await test('derive: raw inputs are passed through untouched', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     assertEqual(d.income.annualGrossBase, 60000);
     assertEqual(d.income.monthlyNetTakeHome, 3000);
     assertEqual(d.goal.targetDeposit, 40000);
@@ -205,16 +205,33 @@ export async function register({ test, assert, assertEqual }) {
 
   await test('derive: handles missing arrays without throwing', () => {
     const bare = { income: { monthlyNetTakeHome: 1000 } };
-    const d = deriveFinances(bare);
+    const d = deriveFinances(bare, { investments: null });
     assertEqual(d.oneTimeCostsTotal, 0);
     assertEqual(d.ongoingBillsTotal.monthly, 0);
     assertEqual(d.expensesTotal.monthly, 0);
     assertEqual(d.giftCardsTotal, 0);
   });
 
+  // --- C1 (5.11): investments-optional must be deliberate --------------------
+  await test('derive: omitting the investments option warns; explicit null / a record is silent', () => {
+    const seen = [];
+    const orig = console.warn;
+    console.warn = (msg) => seen.push(String(msg));
+    try {
+      deriveFinances(RAW);                              // bare — forgot investments
+      deriveFinances(RAW, { investments: null });       // deliberate cash-only
+      deriveFinances(RAW, { investments: INVESTMENTS }); // supplied
+      deriveFinances(null);                             // early return — no warn
+    } finally { console.warn = orig; }
+    assertEqual(
+      seen.filter((m) => m.includes('finance-derive: no investments')).length, 1,
+      'exactly the bare call warns; got: ' + JSON.stringify(seen),
+    );
+  });
+
   // --- stripDerived round-trips --------------------------------------------
   await test('stripDerived: deriving then stripping returns shape equivalent to raw', () => {
-    const d = deriveFinances(RAW);
+    const d = deriveFinances(RAW, { investments: null });
     const stripped = stripDerived(d);
     assert(!('oneTimeCostsTotal' in stripped), 'oneTimeCostsTotal should be stripped');
     assert(!('ongoingBillsTotal' in stripped), 'ongoingBillsTotal should be stripped');
