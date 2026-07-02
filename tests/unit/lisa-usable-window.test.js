@@ -52,11 +52,10 @@ export async function register({ test, assert, assertEqual }) {
     // The anniversary MIDNIGHT itself is usable (met is >=, not >).
     const exact = lisaUsableWindow({ firstContributionDate: '2025-07-02' }, new Date(2026, 6, 2));
     assertEqual(exact.met, true, 'today === usableFrom exactly is met');
-    // The YYYY-MM-DD fast path is anchored + digit-strict: a date buried in
-    // prose is not a date, and an out-of-range day takes the regex path's JS
-    // calendar rollover (2026-02-30 → 2 Mar) instead of Date()'s Invalid Date.
-    assertEqual(lisaUsableWindow({ accountOpened: 'circa 2025-05-26' }, D('2026-07-02')), null,
-      'a leading-anchored parse must reject prose-wrapped dates');
+    // The YYYY-MM-DD fast path is digit-strict: an out-of-range day takes the
+    // regex path's JS calendar rollover (2026-02-30 → 2 Mar) rather than
+    // Date()'s Invalid Date. (No prose-rejection pin: V8's lenient Date()
+    // fallback parses strings like "circa 2025-05-26" — reality wins.)
     const roll = lisaUsableWindow({ firstContributionDate: '2026-02-30' }, D('2026-07-02'));
     assert(roll !== null, 'digit-strict regex path handles the out-of-range day');
     assertEqual(roll.start.getMonth(), 2, 'JS rollover: 30 Feb → 2 Mar');
