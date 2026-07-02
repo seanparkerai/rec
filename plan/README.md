@@ -7,7 +7,8 @@
 > **Status (2026-07-02, Phase-5 exit):** Phases **1** (test-harness core), **2** (⭐ flagship
 > listings pipeline), **3** (mobile-first UI/UX overhaul) and **5** (finances trust surface —
 > A3/A4/A5/A7 corrections shipped, golden grids + drift rail + mutation floor live) are
-> **COMPLETE**; Phase 4 complete except owner-gated ⚙ 4.9 + optional 4.10b. Harness 955/955.
+> **COMPLETE**; Phase 4 complete except owner-gated ⚙ 4.9 + optional 4.10b. Harness 959/959;
+> finance mutation 87.04 (floor 86).
 > Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag; 2.11b + 4.9 unlock
 > with it). Next open phase: **6** (areas content & data quality — expand on entry).
 > **Resume at the first unticked line of `03-checklist.md`.**
