@@ -17,10 +17,15 @@ export const LISA_CAP_GBP = 450_000;
 /** LTV tier boundaries — lender rate cliffs (%). Sorted ascending. */
 export const LTV_TIERS = [60, 75, 85, 90, 95];
 
-/** Stressed-rate uplift over contract rate (percentage points). Source: PRA guidance. */
-export const STRESS_UPLIFT_PP = 3;
+/** Rate-rise sensitivity (illustrative — no regulator-mandated stress rate since the
+ * FPC withdrew its +3pp test on 1 Aug 2022). Sensitivity rate = the HIGHER of
+ * (assumed rate + uplift) and the absolute floor; lenders typically test at
+ * reversion + ~1pp with a floor around 7–8%. Both are overridable per household
+ * via finances.mortgage.rateRiseUpliftPP / rateRiseFloorPct. */
+export const RATE_RISE_UPLIFT_PP = 1;
+export const RATE_RISE_FLOOR_PCT = 7.5;
 
-/** Stressed payment / take-home above this triggers a whyVerdict warning. */
+/** Sensitivity payment / take-home above this triggers a whyVerdict warning. */
 export const STRESS_WARNING_PCT = 60;
 
 /** Affordability price-ladder range used by dashboard + finances UI. */

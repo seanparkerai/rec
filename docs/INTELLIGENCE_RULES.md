@@ -23,13 +23,13 @@ The loan-to-income ratio — loan ÷ gross annual household income — that main
 
 ---
 
-## Stress-test rate
+## Rate-rise sensitivity
 
-Affordability is assessed at both the contract rate and a stressed rate.
+Affordability is assessed at both the contract rate and an illustrative rate-rise sensitivity rate.
 
-- **Stressed rate = assumed rate + 3 percentage points.**
+- **Sensitivity rate = max(assumed rate + 1 percentage point, 7.5% absolute floor).**
 
-*Source:* PRA SS3/13 (residential mortgage stress testing). Even after the FPC's 2022 withdrawal of the specific 3-pp rule, +3 pp remains the lenders' working convention.
+*Source:* the FPC **withdrew** its mandatory +3-pp affordability stress test on 1 August 2022 (Bank of England, 20 Jun 2022); there has been no regulator-mandated stress rate since. Lenders set their own under MCOB 11.6.18 — typically the reversion rate + ~1 pp, subject to an absolute floor of ~7–8%. Both numbers are per-household overridable (`finances.mortgage.rateRiseUpliftPP` / `rateRiseFloorPct`); the defaults live in `intelligence-constants.js`. Relabelled from "stress test" 2026-07-02 (A5).
 
 ---
 

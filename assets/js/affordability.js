@@ -15,7 +15,8 @@ import {
   SPARE_BANDS_GBP,
   LISA_CAP_GBP,
   LTV_TIERS,
-  STRESS_UPLIFT_PP,
+  RATE_RISE_UPLIFT_PP,
+  RATE_RISE_FLOOR_PCT,
   STRESS_WARNING_PCT,
 } from './intelligence-constants.js';
 
@@ -91,8 +92,11 @@ function monthlyOutgoings(finances) {
  * Pure: returns a plain object, no side effects.
  *
  * Verdict drivers (worst-band wins): LTI, payment/take-home, spare-cash post-move.
- * Stressed-rate payment is NOT a verdict driver — it surfaces as a `whyVerdict`
- * warning when > 60% of take-home.
+ * The rate-rise sensitivity payment is NOT a verdict driver — it surfaces as a
+ * `whyVerdict` warning when > 60% of take-home. Sensitivity rate = the higher of
+ * (assumed rate + uplift) and an absolute floor; defaults live in
+ * intelligence-constants.js, overridable via finances.mortgage.rateRiseUpliftPP /
+ * rateRiseFloorPct.
  *
  * @param {object} args
  * @param {number} args.price        target purchase price (GBP).
@@ -116,7 +120,9 @@ export function assessAffordability({ price, finances, criteria, councilTaxBand:
 
   const rate = Number(finances?.mortgage?.ratePctAssumed || 0);
   const term = Number(finances?.mortgage?.termYears || 0);
-  const stressedRate = rate + STRESS_UPLIFT_PP;
+  const rateRiseUpliftPP = Number(finances?.mortgage?.rateRiseUpliftPP ?? RATE_RISE_UPLIFT_PP);
+  const rateRiseFloorPct = Number(finances?.mortgage?.rateRiseFloorPct ?? RATE_RISE_FLOOR_PCT);
+  const stressedRate = Math.max(rate + rateRiseUpliftPP, rateRiseFloorPct);
   const ftb = finances?.firstTimeBuyer !== false;
 
   // Verdict-side numbers (assumes the user buys at the target deposit).
@@ -171,7 +177,7 @@ export function assessAffordability({ price, finances, criteria, councilTaxBand:
   }
   if (stressedPaymentToIncomePct > STRESS_WARNING_PCT) {
     whyVerdict.push(
-      `Stress test: at +${STRESS_UPLIFT_PP}pp (${stressedRate.toFixed(2)}%) payment rises to ${stressedPaymentToIncomePct.toFixed(1)}% of take-home — exceeds the lender resilience floor.`,
+      `Rate-rise sensitivity: at ${stressedRate.toFixed(2)}% the payment would be ${stressedPaymentToIncomePct.toFixed(1)}% of take-home — exceeds the ${STRESS_WARNING_PCT}% resilience floor.`,
     );
   }
   if (!lisaOk && p > LISA_CAP_GBP) {
@@ -201,6 +207,7 @@ export function assessAffordability({ price, finances, criteria, councilTaxBand:
     depositGapToTier,
     monthlyPI,
     monthlyPIStressed,
+    rateRiseRatePct: stressedRate,
     monthlyTotal,
     monthlySpareAfter,
     monthlySpareNow,
@@ -315,6 +322,7 @@ export const BANDS = {
   spare: { ...SPARE_BANDS_GBP },
   lisaCap: LISA_CAP_GBP,
   ltvTiers: [...LTV_TIERS],
-  stressUpliftPP: STRESS_UPLIFT_PP,
+  rateRiseUpliftPP: RATE_RISE_UPLIFT_PP,
+  rateRiseFloorPct: RATE_RISE_FLOOR_PCT,
   stressWarningPct: STRESS_WARNING_PCT,
 };

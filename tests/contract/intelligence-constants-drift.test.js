@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
   LTI_BANDS, PAYMENT_BANDS_PCT, SPARE_BANDS_GBP, LISA_CAP_GBP, LTV_TIERS,
-  STRESS_UPLIFT_PP, FIT_BANDS, FIT_WEIGHTS,
+  RATE_RISE_UPLIFT_PP, RATE_RISE_FLOOR_PCT, FIT_BANDS, FIT_WEIGHTS,
 } from '../../assets/js/intelligence-constants.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -41,14 +41,16 @@ export async function register({ test, assertEqual }) {
     }
   });
 
-  test('constants drift (5.3): LISA cap, LTV tiers, stress uplift match the code', () => {
+  test('constants drift (5.3): LISA cap, LTV tiers, rate-rise sensitivity match the code', () => {
     const lisa = grab(/purchase price \*\*≤ £([\d,]+)\*\*/, 'the LISA cap');
     assertEqual(num(lisa[1]), LISA_CAP_GBP, `LISA cap: doc £${lisa[1]}, code £${LISA_CAP_GBP}`);
     const ltv = grab(/\*\*(\d+)% · (\d+)% · (\d+)% · (\d+)% · (\d+)%\*\*/, 'the LTV tier list');
     assertEqual(JSON.stringify(ltv.slice(1, 6).map(num)), JSON.stringify(LTV_TIERS),
       'LTV_TIERS: the doc tier list diverged from the code');
-    const stress = grab(/Stressed rate = assumed rate \+ (\d+) percentage points/, 'the stress uplift');
-    assertEqual(num(stress[1]), STRESS_UPLIFT_PP, `STRESS_UPLIFT_PP: doc +${stress[1]}pp, code +${STRESS_UPLIFT_PP}pp`);
+    const rise = grab(/Sensitivity rate = max\(assumed rate \+ ([\d.]+) percentage points?, ([\d.]+)% absolute floor\)/,
+      'the rate-rise sensitivity rule');
+    assertEqual(num(rise[1]), RATE_RISE_UPLIFT_PP, `RATE_RISE_UPLIFT_PP: doc +${rise[1]}pp, code +${RATE_RISE_UPLIFT_PP}pp`);
+    assertEqual(num(rise[2]), RATE_RISE_FLOOR_PCT, `RATE_RISE_FLOOR_PCT: doc ${rise[2]}%, code ${RATE_RISE_FLOOR_PCT}%`);
   });
 
   test('constants drift (5.3): FIT_BANDS + FIT_WEIGHTS match the code', () => {

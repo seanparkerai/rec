@@ -47,18 +47,20 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     );
   });
 
-  // --- Stress-test warning -----------------------------------------------------
+  // --- Rate-rise sensitivity warning --------------------------------------------
 
-  await test('affordability: high stressed rate flagged in whyVerdict', () => {
-    // £380k at 5.35% contract → 8.35% stressed payment ≈ £2,508 = 69.9% of take-home.
+  await test('affordability: high rate-rise sensitivity flagged in whyVerdict', () => {
+    // £380k at 5.35% contract → sensitivity rate max(5.35+1, 7.5) = 7.5%;
+    // payment still > 60% of take-home on the sample finances.
     const r = at(380_000);
+    assertEqual(r.rateRiseRatePct, 7.5, 'sensitivity rate = the 7.5% floor at a 5.35% contract rate');
     assert(
       r.bandSignals.stressedPaymentToIncome > 60,
-      `expected stressed ratio > 60%, got ${r.bandSignals.stressedPaymentToIncome}`,
+      `expected sensitivity ratio > 60%, got ${r.bandSignals.stressedPaymentToIncome}`,
     );
     assert(
-      r.whyVerdict.some((s) => /Stress test:/.test(s)),
-      'expected whyVerdict to mention the stress test; got: ' + r.whyVerdict.join(' | '),
+      r.whyVerdict.some((s) => /Rate-rise sensitivity:/.test(s)),
+      'expected whyVerdict to mention rate-rise sensitivity; got: ' + r.whyVerdict.join(' | '),
     );
   });
 

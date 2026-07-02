@@ -135,7 +135,7 @@ export const STEPS = [
     id: 'mortgage',
     title: 'Mortgage & affordability',
     include: (s) => !isCashBuyer(s),
-    intro: 'These figures produce an INDICATIVE borrowing range only (roughly 4–4.5× income, stress-tested ~3% above the rate). It is an estimate to orient your search — not mortgage advice.',
+    intro: 'These figures produce an INDICATIVE borrowing range only (roughly 4–4.5× income, with an illustrative rate-rise sensitivity check at ~7.5%). It is an estimate to orient your search — not mortgage advice.',
     fields: [
       { path: 'criteria.mortgage.ratePctAssumed', label: 'Assumed interest rate (%)', type: 'number', inputmode: 'decimal' },
       { path: 'criteria.mortgage.termYears', label: 'Term (years)', type: 'number', inputmode: 'numeric' },

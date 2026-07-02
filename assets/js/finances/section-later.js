@@ -52,7 +52,7 @@ function renderAffordWidget(finData, criData, price) {
   setText('afford-lisa', r.bandSignals.lisaEligible ? 'Yes' : 'No');
   setText('afford-monthly', gbp(r.monthlyPI));
   const stressedEl = $('afford-stressed');
-  if (stressedEl) stressedEl.innerHTML = `${esc(gbp(r.monthlyPIStressed))}<small>+3pp</small>`;
+  if (stressedEl) stressedEl.innerHTML = `${esc(gbp(r.monthlyPIStressed))}<small>@${r.rateRiseRatePct.toFixed(2)}%</small>`;
   setText('afford-spare', gbp(r.monthlySpareAfter));
   setHTML('afford-why', r.whyVerdict.map((s) => `<li>${esc(s)}</li>`).join(''));
 }
