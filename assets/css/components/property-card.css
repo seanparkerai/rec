@@ -1,0 +1,106 @@
+/* components/property-card.css — THE shared property-card family (step 3.4b,
+   Linear-dense anchor). One primary design all three property surfaces drive
+   from (⚙ 3.1 decision 2): a clean row on hairlines — the Rejected page's
+   register — that scales from a 320px phone list to a two-column tablet grid
+   via container queries. Tokens only; no hex, no off-scale spacing.
+   Loaded via @import from base.css. Consumed from 3.4c onward (strangler). */
+
+.prop-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3) var(--space-4);
+  align-items: start;
+  padding-block: var(--space-4);
+  border-block-end: 1px solid var(--hairline);
+  container-type: inline-size;
+  container-name: propcard;
+}
+.prop-card:last-child { border-block-end: none; }
+
+/* ── Media well ─────────────────────────────────────────────────────────── */
+.prop-card__media-link { display: block; border-radius: var(--rec-radius-sm); }
+.prop-card__media-link:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.prop-card__media {
+  inline-size: clamp(4.5rem, 24cqi, 8.5rem);
+  aspect-ratio: 4 / 3;
+  border-radius: var(--rec-radius-sm);
+  overflow: hidden;
+  background: color-mix(in oklch, var(--ink) 6%, var(--paper));
+}
+.prop-card__img { inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
+.prop-card__media--none {
+  display: grid; place-items: center;
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+
+/* ── Body ───────────────────────────────────────────────────────────────── */
+.prop-card__body { display: flex; flex-direction: column; gap: var(--space-1); min-inline-size: 0; }
+
+.prop-card__head { display: flex; align-items: baseline; gap: var(--space-2); }
+.prop-card__price {
+  margin-inline-start: auto;
+  font-family: var(--font-data);
+  font-weight: 500;
+  font-size: var(--text-base);
+  white-space: nowrap;
+}
+.prop-card__dot {
+  inline-size: 0.625rem; block-size: 0.625rem; border-radius: 50%;
+  align-self: center; flex: none;
+  background: color-mix(in oklch, var(--ink) 35%, var(--paper));
+}
+.prop-card__dot--strong   { background: color-mix(in oklch, var(--accent) 90%, var(--paper)); }
+.prop-card__dot--possible { background: color-mix(in oklch, var(--accent) 55%, var(--paper)); }
+.prop-card__dot--stretch  { background: color-mix(in oklch, var(--accent) 30%, var(--paper)); }
+.prop-card__verdict {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.prop-card__badge {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  border: 1px solid var(--hairline);
+  border-radius: var(--rec-radius-sm);
+  padding: 0 var(--space-2);
+  white-space: nowrap;
+}
+.prop-card__badge--liked  { color: var(--accent); border-color: color-mix(in oklch, var(--accent) 40%, var(--paper)); }
+.prop-card__badge--reject { color: color-mix(in oklch, var(--ink) 70%, var(--paper)); }
+
+.prop-card__title { margin: 0; font-size: var(--text-base); font-weight: 500; line-height: 1.3; }
+.prop-card__title-link { color: inherit; text-decoration: none; }
+.prop-card__title-link:hover { color: var(--accent); }
+.prop-card__title-link:focus-visible { outline: var(--focus-ring); outline-offset: 2px; border-radius: var(--rec-radius-sm); }
+
+.prop-card__place { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
+.prop-card__meta {
+  margin: 0;
+  font-family: var(--font-data);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.prop-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); }
+
+/* ── Thumb-zone actions: full-width row under the content on narrow cards ── */
+.prop-card__actions {
+  grid-column: 1 / -1;
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);
+  min-block-size: var(--tap-min);
+}
+
+/* ── Compact (the dense Rejected/Passed list register) ──────────────────── */
+.prop-card--compact { padding-block: var(--space-3); gap: var(--space-2) var(--space-3); }
+.prop-card--compact .prop-card__media { inline-size: clamp(3.5rem, 16cqi, 5rem); }
+.prop-card--compact .prop-card__title { font-size: var(--text-sm); }
+
+/* ── Wide-card adaptation (container, not viewport): actions join the body ── */
+@container propcard (min-width: 560px) {
+  .prop-card__actions { grid-column: 2; }
+  .prop-card__body { gap: var(--space-2); }
+}

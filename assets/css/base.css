@@ -17,6 +17,7 @@
 @import url("components/filter-sheet.css");
 @import url("components/finance-stage.css");
 @import url("components/shell-fallback.css");
+@import url("components/property-card.css");
 
 /* ---- Typography root: body sans, display serif, mono numerals -------- */
 html { color-scheme: light dark; }
