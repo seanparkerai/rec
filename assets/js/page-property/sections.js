@@ -231,6 +231,21 @@ export function buildWhy(scored) {
   ].filter(Boolean));
 }
 
+// ── Collapsible section shell (3.5d long-scroll relief) ──────────────────────
+// Long sections fold behind a native <details> — OPEN by default so nothing is
+// ever hidden, but a phone-length dossier can be collapsed while scanning.
+// Native disclosure: keyboard-accessible, reduced-motion-free, zero JS state.
+function collapsibleSection(label, body) {
+  return el('section', { class: 'dossier-section' }, [
+    el('details', { class: 'dossier-fold', open: '' }, [
+      el('summary', { class: 'dossier-fold__summary' }, [
+        el('h2', { class: 'dossier-section__label' }, label),
+      ]),
+      ...(Array.isArray(body) ? body : [body]).filter(Boolean),
+    ]),
+  ]);
+}
+
 // ── Price history ─────────────────────────────────────────────────────────────
 export function buildPriceHistory(listing) {
   const series = priceHistorySeries(listing.price_history);
@@ -252,20 +267,15 @@ export function buildPriceHistory(listing) {
       ]);
     }));
   }
-  return el('section', { class: 'dossier-section' }, [
-    el('h2', { class: 'dossier-section__label' }, 'Price history'),
-    body,
-  ]);
+  return collapsibleSection('Price history', body);
 }
 
 // ── Description ──────────────────────────────────────────────────────────────
 export function buildDescription(listing) {
   if (!listing.description) return null;
   const paras = String(listing.description).split(/\n{2,}|\r\n\r\n/).map((s) => s.trim()).filter(Boolean);
-  return el('section', { class: 'dossier-section' }, [
-    el('h2', { class: 'dossier-section__label' }, 'Description'),
-    el('div', { class: 'dossier-prose' }, (paras.length ? paras : [String(listing.description)]).map((p) => el('p', {}, p))),
-  ]);
+  return collapsibleSection('Description',
+    el('div', { class: 'dossier-prose' }, (paras.length ? paras : [String(listing.description)]).map((p) => el('p', {}, p))));
 }
 
 // ── Area context ─────────────────────────────────────────────────────────────

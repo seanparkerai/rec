@@ -34,6 +34,21 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
+  test('dossier folds: Description and Price history collapse behind open-by-default <details>', async () => {
+    const { buildDescription, buildPriceHistory, dom } = await load();
+    const desc = buildDescription({ description: 'First paragraph.\n\nSecond paragraph.' });
+    const fold = desc.querySelector('details.dossier-fold');
+    assert(fold && fold.hasAttribute('open'), 'description folds behind an OPEN-by-default details');
+    assertEqual(fold.querySelector('summary h2.dossier-section__label')?.textContent, 'Description',
+      'the section label IS the summary (one heading, one disclosure)');
+    assertEqual(fold.querySelectorAll('.dossier-prose p').length, 2, 'paragraph splitting preserved');
+    const hist = buildPriceHistory({ price_history: null });
+    assert(hist.querySelector('details.dossier-fold[open] summary h2')?.textContent === 'Price history',
+      'price history uses the same fold shell');
+    assertEqual(buildDescription({}), null, 'no description → no section at all');
+    dom.window.close();
+  });
+
   test('dossier membership: null when no membership is attached (section drops out)', async () => {
     const { buildAreaMembership, dom } = await load();
     assertEqual(buildAreaMembership({ areas: [] }), null);
