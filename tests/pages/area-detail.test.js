@@ -62,6 +62,20 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
+  test('area detail: the research-status cue slot sits under key-facts, hidden until JS proves incompleteness (6.4)', () => {
+    const dom = detailDom();
+    const doc = dom.window.document;
+    const { Node } = dom.window;
+    const cue = doc.getElementById('research-status');
+    assert(cue, 'the research-status cue element exists');
+    assert(cue.hasAttribute('hidden'), 'the cue ships hidden — a complete dossier never shows it');
+    assertEqual(cue.textContent.trim(), '', 'the cue ships empty — copy comes from the shared researchStatusLine()');
+    const follows = (a, b) => !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    assert(follows(doc.querySelector('.stat-strip'), cue), 'the cue follows the key-facts strip');
+    assert(follows(cue, doc.querySelector('.area-toc')), 'the cue precedes the TOC + article body');
+    dom.window.close();
+  });
+
   test('area detail: primary sections stay unfolded editorial; no inline styles (DESIGN.md §6.7)', () => {
     const dom = detailDom();
     const doc = dom.window.document;

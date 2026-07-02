@@ -9,6 +9,7 @@ import {
   commuteBandClass, renderTransport, renderPrices, renderProsCons, renderImages, renderSources,
   renderEssentials, matchedPrice, renderVerdictStrip,
 } from './page-area-detail/sections.js';
+import { researchStatusLine } from './areas/completeness.js';
 
 function attachFootAfford(a, finances, criteria) {
   const wrap = document.getElementById('area-foot-afford');
@@ -58,6 +59,16 @@ async function renderArea(a) {
     <span>${esc(a.postcode)}</span>
     ${a.subRegion ? `<span aria-hidden="true">·</span><span>${esc(a.subRegion)}</span>` : ''}
   `;
+
+  // 6.4: honest research-status cue — the same completeness() rule the research
+  // tooling queues by (area-status.mjs), so the page and the queue can never
+  // disagree about how researched an area is. Plain text; hidden when complete.
+  const statusLine = researchStatusLine(a);
+  const statusCue = $('research-status');
+  if (statusCue && statusLine) {
+    statusCue.textContent = statusLine;
+    statusCue.hidden = false;
+  }
 
   // Tiles
   $('tile-status').textContent = a.status || 'directory';

@@ -27,22 +27,11 @@ export const DETAIL_FIELDS = [
   'rightmove',
 ];
 
-// Fields that count toward "researched" completeness. Each entry says how to
-// detect whether the field is populated (non-empty / non-null).
-export const CONTENT_FIELDS = [
-  { key: 'overview',            test: (v) => typeof v === 'string' && v.trim().length > 0 },
-  { key: 'character',           test: (v) => typeof v === 'string' && v.trim().length > 0 },
-  { key: 'amenities',           test: (v) => Array.isArray(v) && v.length > 0 },
-  { key: 'schools',             test: (v) => Array.isArray(v) && v.length > 0 },
-  { key: 'transport.commutes',  test: (v) => Array.isArray(v) && v.length > 0 },
-  { key: 'prices',              test: (v) => v && Object.values(v).some((x) => x != null && x !== '') },
-  { key: 'thingsToDo',          test: (v) => Array.isArray(v) && v.length > 0 },
-  { key: 'placesToEat',         test: (v) => Array.isArray(v) && v.length > 0 },
-  { key: 'pros',                test: (v) => Array.isArray(v) && v.length > 0 },
-  { key: 'cons',                test: (v) => Array.isArray(v) && v.length > 0 },
-  { key: 'whoItSuits',          test: (v) => (typeof v === 'string' && v.trim().length > 0) || (Array.isArray(v) && v.length > 0) },
-  { key: 'sources',             test: (v) => Array.isArray(v) && v.length > 0 },
-];
+// Research-completeness rules (CONTENT_FIELDS, getField, completeness, deriveStatus)
+// moved to assets/js/areas/completeness.js (Phase 6.4) so the area-detail page can
+// render the honest research-status cue from the SAME rule the tooling uses. Re-exported
+// here verbatim — every existing `from './area-fields.mjs'` import keeps working.
+export { CONTENT_FIELDS, getField, completeness, deriveStatus } from '../assets/js/areas/completeness.js';
 
 // priceSummary — the lightweight per-type price subset baked into the directory index
 // (and per-area files) so the list/map pages can compute affordability fit dots without
@@ -75,26 +64,3 @@ export function isOnboardingStub(rec) {
   return !!rec && rec.source === 'household-onboarding';
 }
 
-export function getField(obj, path) {
-  return path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
-}
-
-// Returns { filled, total, missing[], percent } against CONTENT_FIELDS.
-export function completeness(area) {
-  const missing = [];
-  let filled = 0;
-  for (const { key, test } of CONTENT_FIELDS) {
-    if (test(getField(area, key))) filled += 1;
-    else missing.push(key);
-  }
-  const total = CONTENT_FIELDS.length;
-  return { filled, total, missing, percent: Math.round((filled / total) * 100) };
-}
-
-// Derive a status label from completeness (overrides nothing if already set
-// explicitly upstream — callers decide whether to apply).
-export function deriveStatus({ filled, total }) {
-  if (filled === 0) return 'stub';
-  if (filled === total) return 'researched';
-  return 'partial';
-}

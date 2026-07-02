@@ -27,6 +27,17 @@
 
 #btn-star.is-starred { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
 
+/* 6.4: honest research-status cue — a quiet editorial note, not an alert.
+   Background tint per DESIGN.md §3 (no coloured left-border pills). */
+.research-status {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  background: var(--paper-2);
+  border-radius: var(--rec-radius-sm);
+}
+
 /* 3.7d: tail sections share the property dossier's fold shell (property.css
    .dossier-fold, loaded via the dashboard.css import). The editorial h2 IS the
    summary — sit it flush in the summary's flex row (Pico gives h2 a bottom
