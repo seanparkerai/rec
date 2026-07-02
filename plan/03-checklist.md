@@ -102,7 +102,7 @@
 - [ ] 3.9 Profile/journey/ask/saved/rejected passes; a11y hardening (contrast + focus lint rules on); real-browser smoke tier if warranted.
 
 **Phase 4 — Intelligence engine (module-by-module per §10.0)** *(entered 2026-07-01 while ⚙ 3.1 design review is pending — Phase-3 builds 3.4–3.9 resume the moment it lands; expansion below from segments/10.6 + the 2026-06-19 log)*
-- [ ] 4.1 Interface-pin the engine surface: one contract test pinning the public exports of `refinement/{config,engine,observations,persistence,radius,radius-persistence,scope,trends-glance,view}.js` + `learned-preferences/{search,signals,weights}.js` so a rebuild can't silently drop/rename API another module leans on.
+- [x] 4.1 Interface pinned: `tests/contract/engine-interface.test.js` — every named export of the 9 refinement + 3 learned-preferences modules listed and asserted by static source parse (12 tests; additions free, removals/renames deliberate). 873/873. *(2026-07-01)*
 - [ ] 4.2 B3 ⚠: Fisher's exact test (2×2 value vs rest-of-pool, RAW counts — an exact test needs integers; decay keeps driving Wilson/lift/p̂) replaces the normal-approximation z-test feeding BH-FDR; characterization of today's p-values first, then the swap + re-pin.
 - [ ] 4.3 B6: gate-pass-rate logging — the engine result carries per-gate pass counts per dimension; the Stage-3 persistence writes them into the `refinement_runs` audit row so thresholds get calibrated against real data, not guessed.
 - [ ] 4.4 B5 decision recorded (ADR-style in the plan): KEEP the explainable five-gate core; the Bayesian Beta-Bernoulli redesign is declined while the gates remain a product asset — revisit only if 4.3's calibration data shows systematic miscalibration.
