@@ -38,7 +38,7 @@ reversible user action in the UI. No hard deletes, ever.
 | Radius scraper enforcement | `tools/fetch-listings.mjs` (`loadRadiusTuning` → `applyRadiusTuning`) |
 | Radius portal lane (cards + Apply/Keep/Snooze/Dismiss) | `assets/js/page-refinement.js` + `refinement/view.js` (`toRadiusCard`, `classifySuggestions.radius`) |
 | Radius storage (read tuning + override via learned_preferences) | `assets/js/storage/refinement.js` (`getAreaRadiusTuning` / `applyRadiusSuggestion` / `keepAreaRadius` / `clearAreaRadius`) |
-| Tables | `refinement_suggestions`, `refinement_runs`, `scrape_probation`, `area_search_tuning` (engine-managed, untracked); state on `learned_preferences` |
+| Tables | `refinement_suggestions`, `refinement_runs` (each run also audits `weights_snapshot` — the learned signal→weight map as of that run, P10i 2026-07-02), `scrape_probation`, `area_search_tuning` (engine-managed, untracked); state on `learned_preferences` |
 
 ## The two levers (both reversible)
 - **Display-hide** (low stakes): "Hide these from view" writes a rule into

@@ -232,6 +232,28 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
+  // ── weights_snapshot (step 4.8, P10i: taste-over-time audit trail) ────────────
+  test('persistence: planRun records the learned-weights snapshot on the run row', () => {
+    const run = runRefinementEngine(strongSignal(), { now: new Date(BASE), config: cfg, dimensions: [dim] });
+    const weights = { 'type:flat': -0.21, 'beds:3': 0.08 };
+    const plan = planRun(run, { householdId: HH, now: new Date(BASE), weightsSnapshot: weights });
+    assertEqual(plan.runRow.weights_snapshot, weights, 'flat signal→weight map carried verbatim');
+    const bare = planRun(run, { householdId: HH, now: new Date(BASE) });
+    assertEqual(bare.runRow.weights_snapshot, null, 'no snapshot supplied → explicit null, not undefined');
+  });
+
+  test('persistence: renderPlanSql writes weights_snapshot as jsonb (NULL when absent)', () => {
+    const run = runRefinementEngine(strongSignal(), { now: new Date(BASE), config: cfg, dimensions: [dim] });
+    const withSnap = renderPlanSql(planRun(run, {
+      householdId: HH, now: new Date(BASE), weightsSnapshot: { 'type:flat': -0.21 },
+    }));
+    assert(withSnap.includes('weights_snapshot'), 'run-row insert names the column');
+    assert(withSnap.includes('{"type:flat":-0.21}'), 'snapshot serialised as jsonb');
+    const without = renderPlanSql(planRun(run, { householdId: HH, now: new Date(BASE) }));
+    assert(without.includes('weights_snapshot'), 'column always present so the insert shape is stable');
+    assert(/weights_snapshot[\s\S]*NULL/.test(without), 'absent snapshot renders NULL');
+  });
+
   // ── renderProbationSql (step 4.6b: the reconsider status-hint write) ──────────
   test('persistence: renderProbationSql emits status-guarded UPDATEs, area-scoped, in a transaction', () => {
     const sql = renderProbationSql([

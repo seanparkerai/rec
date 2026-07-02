@@ -503,7 +503,10 @@ CREATE TABLE IF NOT EXISTS refinement_runs (
   run_at               timestamptz NOT NULL DEFAULT now(),
   params               jsonb NOT NULL DEFAULT '{}',  -- config snapshot used for the run
   candidates_evaluated int NOT NULL DEFAULT 0,
-  actionable_count     int NOT NULL DEFAULT 0
+  actionable_count     int NOT NULL DEFAULT 0,
+  weights_snapshot     jsonb                         -- P10i (2026-07-02): learned signal->weight
+                                                     -- map as of this run; NULL pre-migration /
+                                                     -- before a household's first recompute
 );
 
 ALTER TABLE refinement_runs ENABLE ROW LEVEL SECURITY;

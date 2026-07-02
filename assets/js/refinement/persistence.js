@@ -91,6 +91,9 @@ export function paramsOf(config) {
  * @param {string} ctx.householdId
  * @param {Array}  [ctx.existingRows]    current refinement_suggestions rows (this household).
  * @param {Set}    [ctx.dismissedKeys]   `${dim}:${value}` keys the user has dismissed.
+ * @param {object} [ctx.weightsSnapshot] flat signal→weight map (step 4.8, P10i): the learned
+ *                                       weights AS OF this run, audited on the run row so
+ *                                       weight evolution/drift can be analysed post-hoc.
  * @param {Date|string} [ctx.now]
  * @returns {{ upserts:Array, runRow:object, actionableCount:number, trackedCount:number }}
  */
@@ -144,6 +147,8 @@ export function planRun(engineRun, ctx = {}) {
     params: { ...paramsOf(engineRun.config), feedback, gate_stats: engineRun.gate_stats || {} },
     candidates_evaluated: engineRun.candidates.length,
     actionable_count: actionableCount,
+    // weights_snapshot (P10i, step 4.8): the learned weights as of this run.
+    weights_snapshot: ctx.weightsSnapshot || null,
   };
 
   return { upserts, runRow, actionableCount, trackedCount: upserts.length };
@@ -194,8 +199,8 @@ export function renderPlanSql(plan) {
   const r = plan.runRow;
   lines.push(
     'WITH new_run AS (\n'
-    + '  INSERT INTO refinement_runs (household_id, run_at, params, candidates_evaluated, actionable_count)\n'
-    + `  VALUES (${lit(r.household_id)}, ${lit(r.run_at)}, ${jsonLit(r.params)}, ${lit(r.candidates_evaluated)}, ${lit(r.actionable_count)})\n`
+    + '  INSERT INTO refinement_runs (household_id, run_at, params, candidates_evaluated, actionable_count, weights_snapshot)\n'
+    + `  VALUES (${lit(r.household_id)}, ${lit(r.run_at)}, ${jsonLit(r.params)}, ${lit(r.candidates_evaluated)}, ${lit(r.actionable_count)}, ${r.weights_snapshot ? jsonLit(r.weights_snapshot) : 'NULL'})\n`
     + '  RETURNING id\n'
     + ')\n'
     + "INSERT INTO sync_log (actor, action, table_name, row_id, at)\n"

@@ -21,13 +21,15 @@
 //     aggregates?:{systemDecayed,perDimension}  // preferred: decayed counts from SQL
 //     reactions?:[...]                           // OR raw rows (aggregated in JS)
 //     existingSuggestions?:[...], dismissedKeys?:["dim:value", ...],
-//     probationRows?:[...] }                     // scrape_probation rows (reconsider detection)
+//     probationRows?:[...],                      // scrape_probation rows (reconsider detection)
+//     learnedDerived?:{...} }                    // learned_preferences.derived (weights snapshot)
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { runRefinementEngine, scoreFromAggregates } from '../assets/js/refinement/engine.js';
 import { resolveConfig, DIMENSIONS } from '../assets/js/refinement/config.js';
 import { priorRunsFromRows, planRun, renderPlanSql, renderProbationSql } from '../assets/js/refinement/persistence.js';
 import { reconsiderUpdates } from '../assets/js/refinement/scope.js';
+import { effectiveWeights } from '../assets/js/learned-preferences.js';
 import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
@@ -64,6 +66,7 @@ async function loadInputs() {
       existingSuggestions: bundle.existingSuggestions || [],
       dismissedKeys: new Set(bundle.dismissedKeys || []),
       probationRows: bundle.probationRows || [],
+      learnedDerived: bundle.learnedDerived || null,
     };
   }
   if (!SERVICE_KEY) throw new Error('no service key — use --from-file <bundle.json> (build via MCP) for the sandbox path');
@@ -77,17 +80,18 @@ async function loadInputs() {
   // Stage 7: the household's chosen sensitivity preset + dismiss memory live in
   // learned_preferences (reserved overrides key + dismissals). Read them so a portal
   // preset change / dismissal takes effect on this run.
-  const lp = (await restGetAll(`learned_preferences?select=overrides,dismissals&household_id=eq.${householdId}`))[0] || {};
+  const lp = (await restGetAll(`learned_preferences?select=overrides,dismissals,derived&household_id=eq.${householdId}`))[0] || {};
   const preset = lp.overrides?.__refinement_settings?.preset || 'cautious';
   const dismissedKeys = new Set(Object.keys(lp.dismissals || {}).filter((k) => k.includes(':')));
   return {
     householdId, now: new Date().toISOString(), config: resolveConfig({ preset }),
     aggregates: null, reactions, existingSuggestions, dismissedKeys, probationRows,
+    learnedDerived: lp.derived || null,
   };
 }
 
 async function main() {
-  const { householdId, now, config, aggregates, reactions, existingSuggestions, dismissedKeys, probationRows } = await loadInputs();
+  const { householdId, now, config, aggregates, reactions, existingSuggestions, dismissedKeys, probationRows, learnedDerived } = await loadInputs();
   if (!householdId) throw new Error('no householdId resolved');
 
   const priorRunsQualified = priorRunsFromRows(existingSuggestions);
@@ -106,7 +110,12 @@ async function main() {
     ? scoreFromAggregates(aggregates, { config, now, dimensions: DIMENSIONS, priorRunsQualified })
     : runRefinementEngine(filtered || [], { config, now, dimensions: DIMENSIONS, priorRunsQualified });
 
-  const plan = planRun(run, { householdId, existingRows: existingSuggestions, dismissedKeys, now });
+  // weights_snapshot (P10i, step 4.8): flatten the live learned weights to a
+  // signal→weight map for the run-row audit trail. effectiveWeights with empty
+  // overrides = the derived layer only, and it drops reserved/non-numeric entries.
+  const weightsSnapshot = learnedDerived ? effectiveWeights(learnedDerived, {}) : null;
+
+  const plan = planRun(run, { householdId, existingRows: existingSuggestions, dismissedKeys, now, weightsSnapshot });
 
   // Reconsider detection (step 4.6b): the same GENUINE reactions decide whether a
   // paused area's status hint should flip. Aggregates-mode bundles carry no raw
