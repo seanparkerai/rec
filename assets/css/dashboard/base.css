@@ -27,6 +27,26 @@
   color: var(--ink);
   max-width: 60ch;
 }
+/* 3.6a verdict-led strip: the readiness verdict takes the display voice and the
+   descriptive prose demotes to a quiet second line (only when a verdict shows —
+   cold-start with no deposit target keeps the prose-first look unchanged). */
+.page-lede .lede-verdict {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+  line-height: 1.25; letter-spacing: -0.012em;
+  color: var(--ink);
+  max-width: 56ch;
+}
+.page-lede .lede-verdict[hidden] { display: none; }
+.page-lede--verdict .lede-prose {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  letter-spacing: normal;
+  color: var(--ink-muted);
+}
 .page-lede .lede-meta {
   list-style: none; margin: 0; padding: 0;
   display: grid; gap: var(--space-3);

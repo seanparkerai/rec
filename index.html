@@ -23,10 +23,10 @@
   <main id="main" class="container">
     <header class="page-head">
       <h1>Where you&rsquo;re at</h1>
-      <p class="lead" id="page-lead">A snapshot of your search — progress, shortlist, journey.</p>
     </header>
 
     <section class="page-lede" id="home-lede" aria-label="Search summary">
+      <p class="lede-verdict" id="lede-verdict" hidden></p>
       <p class="lede-prose" id="lede-prose">Loading your search snapshot…</p>
       <ul class="lede-meta">
         <li><span class="lede-key">Budget</span><span class="lede-val num" id="lede-budget">—</span></li>
@@ -40,7 +40,45 @@
 
     <div class="bento" aria-label="Dashboard">
 
-      <h2 class="band-label">Goal progress</h2>
+      <h2 class="band-label">Act</h2>
+
+      <section class="tile-card tile-readiness" id="tile-readiness" aria-labelledby="tr-label">
+        <header class="tile-head">
+          <h2 id="tr-label">Your readiness right now.</h2>
+        </header>
+        <p class="readiness-headline" id="readiness-headline">Calculating&hellip;</p>
+        <dl class="readiness-stats" id="readiness-stats" aria-label="Months to deposit goal at different savings rates"></dl>
+        <div class="readiness-next" id="readiness-next" aria-live="polite">
+          <span class="readiness-next-label">Next action</span>
+          <span class="readiness-next-text" id="readiness-next-text">Loading&hellip;</span>
+        </div>
+        <footer class="cell-foot"><a data-nav="pages/journey.html">Full checklist &rarr;</a></footer>
+      </section>
+
+      <section class="tile-card tile-journey" id="tile-journey" aria-labelledby="tj-label">
+        <header class="tile-head">
+          <h2 id="tj-label">Buying journey</h2>
+          <a data-nav="pages/journey.html" class="tile-head-action">Open journey &rarr;</a>
+        </header>
+        <ul class="journey-track" id="tj-track"></ul>
+        <div class="journey-next">
+          <span class="journey-next-label">Next</span>
+          <span class="journey-next-text" id="tj-next-text">Loading&hellip;</span>
+          <button type="button" class="journey-tick" id="tj-next-tick" aria-label="Mark next action done" disabled>&check;</button>
+        </div>
+      </section>
+
+      <section class="tile-card tile-ask" id="tile-ask" aria-labelledby="tk-label">
+        <header class="tile-head">
+          <h2 id="tk-label">Ask anything</h2>
+        </header>
+        <div class="ask-input-wrap">
+          <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="tk-caption" />
+          <p class="ask-caption" id="tk-caption">Coming soon &mdash; <a data-nav="pages/ask.html">read what this will do &rarr;</a></p>
+        </div>
+      </section>
+
+      <h2 class="band-label">Money</h2>
 
       <section class="tile-card tile-deposit" id="tile-deposit" aria-labelledby="td-label">
         <header class="tile-head">
@@ -81,53 +119,6 @@
         </div>
         <footer class="cell-foot"><a data-nav="pages/finances.html">Full breakdown &rarr;</a></footer>
       </section>
-
-      <section class="tile-card tile-readiness" id="tile-readiness" aria-labelledby="tr-label">
-        <header class="tile-head">
-          <h2 id="tr-label">Your readiness right now.</h2>
-        </header>
-        <p class="readiness-headline" id="readiness-headline">Calculating&hellip;</p>
-        <dl class="readiness-stats" id="readiness-stats" aria-label="Months to deposit goal at different savings rates"></dl>
-        <div class="readiness-next" id="readiness-next" aria-live="polite">
-          <span class="readiness-next-label">Next action</span>
-          <span class="readiness-next-text" id="readiness-next-text">Loading&hellip;</span>
-        </div>
-        <footer class="cell-foot"><a data-nav="pages/journey.html">Full checklist &rarr;</a></footer>
-      </section>
-
-      <section class="tile-card tile-scenarios-fan" id="tile-scenarios-fan" aria-labelledby="tsf-label">
-        <header class="tile-head">
-          <h2 id="tsf-label">What would change the date</h2>
-        </header>
-        <svg class="scenarios-fan" id="tsf-svg" viewBox="0 0 320 140" preserveAspectRatio="none" aria-label="Months-to-target scenarios"></svg>
-        <p class="scenarios-fan-caption" id="tsf-caption">&mdash;</p>
-        <footer class="cell-foot"><a data-nav="pages/finances.html">See projections &rarr;</a></footer>
-      </section>
-
-      <section class="tile-card tile-networth" id="tile-networth" aria-labelledby="tnw-label">
-        <header class="tile-head">
-          <h2 id="tnw-label">Your effective deposit</h2>
-        </header>
-        <div class="networth-cols">
-          <svg class="networth-donut" id="tnw-svg" viewBox="0 0 200 200" aria-label="Net-worth composition"></svg>
-          <dl class="networth-stats" id="tnw-stats"></dl>
-        </div>
-        <p class="networth-caption" id="tnw-caption">&mdash;</p>
-        <footer class="cell-foot"><a data-nav="pages/finances.html">Full deposit picture &rarr;</a></footer>
-      </section>
-
-      <section class="tile-card tile-withdraw-ready" id="tile-withdraw-ready" aria-labelledby="tws-label">
-        <header class="tile-head">
-          <h2 id="tws-label">Withdrawal &amp; seasoning</h2>
-        </header>
-        <div class="seasoning-bar" id="tws-bar" aria-label="Seasoning progress">
-          <span class="seasoning-bar__fill" id="tws-fill"></span>
-          <span class="seasoning-bar__marker" id="tws-marker"></span>
-        </div>
-        <p class="seasoning-bar__caption" id="tws-caption">&mdash;</p>
-      </section>
-
-      <h2 class="band-label">Affordability</h2>
 
       <section class="tile-card tile-afford" id="tile-afford" aria-labelledby="ta-label">
         <header class="tile-head">
@@ -190,7 +181,39 @@
         <footer class="cell-foot"><a data-nav="pages/finances.html">See deposit risk detail &rarr;</a></footer>
       </section>
 
-      <h2 class="band-label">Search</h2>
+      <section class="tile-card tile-networth" id="tile-networth" aria-labelledby="tnw-label">
+        <header class="tile-head">
+          <h2 id="tnw-label">Your effective deposit</h2>
+        </header>
+        <div class="networth-cols">
+          <svg class="networth-donut" id="tnw-svg" viewBox="0 0 200 200" aria-label="Net-worth composition"></svg>
+          <dl class="networth-stats" id="tnw-stats"></dl>
+        </div>
+        <p class="networth-caption" id="tnw-caption">&mdash;</p>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">Full deposit picture &rarr;</a></footer>
+      </section>
+
+      <section class="tile-card tile-scenarios-fan" id="tile-scenarios-fan" aria-labelledby="tsf-label">
+        <header class="tile-head">
+          <h2 id="tsf-label">What would change the date</h2>
+        </header>
+        <svg class="scenarios-fan" id="tsf-svg" viewBox="0 0 320 140" preserveAspectRatio="none" aria-label="Months-to-target scenarios"></svg>
+        <p class="scenarios-fan-caption" id="tsf-caption">&mdash;</p>
+        <footer class="cell-foot"><a data-nav="pages/finances.html">See projections &rarr;</a></footer>
+      </section>
+
+      <section class="tile-card tile-withdraw-ready" id="tile-withdraw-ready" aria-labelledby="tws-label">
+        <header class="tile-head">
+          <h2 id="tws-label">Withdrawal &amp; seasoning</h2>
+        </header>
+        <div class="seasoning-bar" id="tws-bar" aria-label="Seasoning progress">
+          <span class="seasoning-bar__fill" id="tws-fill"></span>
+          <span class="seasoning-bar__marker" id="tws-marker"></span>
+        </div>
+        <p class="seasoning-bar__caption" id="tws-caption">&mdash;</p>
+      </section>
+
+      <h2 class="band-label">Track</h2>
 
       <section class="tile-card tile-shortlist" id="tile-shortlist" aria-labelledby="ts-label">
         <header class="tile-head">
@@ -213,32 +236,6 @@
         <p class="criteria-prose" id="tc-prose">Loading&hellip;</p>
         <dl class="spec-strip" id="tc-strip"></dl>
       </section>
-
-      <h2 class="band-label">Next steps</h2>
-
-      <section class="tile-card tile-journey" id="tile-journey" aria-labelledby="tj-label">
-        <header class="tile-head">
-          <h2 id="tj-label">Buying journey</h2>
-          <a data-nav="pages/journey.html" class="tile-head-action">Open journey &rarr;</a>
-        </header>
-        <ul class="journey-track" id="tj-track"></ul>
-        <div class="journey-next">
-          <span class="journey-next-label">Next</span>
-          <span class="journey-next-text" id="tj-next-text">Loading&hellip;</span>
-          <button type="button" class="journey-tick" id="tj-next-tick" aria-label="Mark next action done" disabled>&check;</button>
-        </div>
-      </section>
-
-      <section class="tile-card tile-ask" id="tile-ask" aria-labelledby="tk-label">
-        <header class="tile-head">
-          <h2 id="tk-label">Ask anything</h2>
-        </header>
-        <div class="ask-input-wrap">
-          <input class="ask-input" type="text" disabled placeholder="Ask anything about your search&hellip;" aria-describedby="tk-caption" />
-          <p class="ask-caption" id="tk-caption">Coming soon &mdash; <a data-nav="pages/ask.html">read what this will do &rarr;</a></p>
-        </div>
-      </section>
-
     </div>
   </main>
 
