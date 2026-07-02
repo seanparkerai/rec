@@ -8,6 +8,7 @@ import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
 import { esc, byId as $ } from './dom.js';
 import { isLiveArea } from './areas/area-ref.js';
+import { matchedPrice } from './areas/matched-price.js';
 
 const HAMPS_WILTS_CENTRE = [51.05, -1.6];
 const DEFAULT_ZOOM = 9;
@@ -183,21 +184,6 @@ function markerStyle(area, isShortlisted) {
   return { radius: 3, color: getCSSVar('--ink-muted') || ink, fillColor: paper, fillOpacity: 0.7, weight: 1 };
 }
 
-function matchedPriceForMap(area, criteria) {
-  const ps = area?.priceSummary;
-  if (!ps) return null;
-  const PROP_TO_KEY = {
-    Detached: 'avgDetached', Bungalow: 'avgDetached',
-    'Semi-detached': 'avgSemi', Terraced: 'avgTerraced', 'Flat / Apartment': 'avgFlat',
-  };
-  for (const t of (criteria?.propertyTypePrefs?.preferred || [])) {
-    const k = PROP_TO_KEY[t];
-    if (k && ps[k] != null) return ps[k];
-  }
-  for (const k of ['avgSemi', 'avgTerraced', 'avgDetached', 'avgFlat']) if (ps[k] != null) return ps[k];
-  return null;
-}
-
 // Build the real listings catchment: a circle of each area's geofenceRadiusMi (default
 // 3 mi) around its centre. This mirrors what the fetcher actually does — listings are
 // attributed to the nearest LIVE area whose geofence they fall inside
@@ -283,7 +269,7 @@ async function loadAreaMarkers({ fit = true } = {}) {
       const approx = a.coordsSource === 'postcode-outward-approx';
       // Fit dot + council tax band in the popup.
       let fitHtml = '';
-      const matched = matchedPriceForMap(a, criteria);
+      const matched = matchedPrice(a, criteria).price;
       if (finances && criteria && matched) {
         const r = assessAffordability({ price: matched, finances, criteria });
         const dotClass = {

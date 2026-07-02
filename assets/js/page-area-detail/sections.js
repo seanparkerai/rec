@@ -4,6 +4,10 @@
 import { esc, byId as $ } from '../dom.js';
 import { gbp } from '../format.js';
 import { assessAffordability } from '../affordability.js';
+import { matchedPrice } from '../areas/matched-price.js';
+
+// Re-exported so page-area-detail.js keeps its one import surface for sections.
+export { matchedPrice };
 
 const PLACEHOLDER = '<p class="muted mb-0">Content for this section is being researched and will be added in a future update.</p>';
 
@@ -167,24 +171,6 @@ export function renderEssentials(a) {
   if (list) list.innerHTML = rows.map(([l, v]) =>
     `<div class="field-view"><dt>${esc(l)}</dt><dd>${esc(String(v))}</dd></div>`
   ).join('');
-}
-
-export function matchedPrice(area, criteria) {
-  const ps = area?.priceSummary || area?.prices || null;
-  if (!ps) return { price: null, label: null };
-  const PROP_TO_KEY = {
-    Detached: 'avgDetached', Bungalow: 'avgDetached',
-    'Semi-detached': 'avgSemi', Terraced: 'avgTerraced', 'Flat / Apartment': 'avgFlat',
-  };
-  const preferred = criteria?.propertyTypePrefs?.preferred || [];
-  for (const t of preferred) {
-    const k = PROP_TO_KEY[t];
-    if (k && ps[k] != null) return { price: ps[k], label: t };
-  }
-  for (const [k, label] of [['avgSemi', 'Semi'], ['avgTerraced', 'Terraced'], ['avgDetached', 'Detached'], ['avgFlat', 'Flat']]) {
-    if (ps[k] != null) return { price: ps[k], label };
-  }
-  return { price: null, label: null };
 }
 
 export function renderVerdictStrip(a, finances, criteria) {

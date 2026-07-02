@@ -5,6 +5,7 @@ import { assessAffordability } from './affordability.js';
 import { gbp } from './format.js';
 import { esc, byId as $ } from './dom.js';
 import { mountAreaPicker } from './areas/area-picker.js';
+import { matchedPrice } from './areas/matched-price.js';
 
 let areas = [];
 let shortlist = new Set();
@@ -72,30 +73,6 @@ function updateSubRegions({ preserve = false } = {}) {
 // ---- Fit / price helpers (Phase 4b) --------------------------------
 
 const VERDICT_ORDER = { comfortable: 0, stretch: 1, tight: 2, 'out-of-reach': 3, unknown: 4 };
-
-// Pick the most relevant average for an area: match the user's preferred
-// property type if a price exists, else fall back through the list.
-function matchedPrice(area, criteria) {
-  const ps = area?.priceSummary;
-  if (!ps) return { price: null, label: null };
-  const PROP_TO_KEY = {
-    Detached: 'avgDetached',
-    Bungalow: 'avgDetached',        // bungalows priced like detacheds in the dataset
-    'Semi-detached': 'avgSemi',
-    Terraced: 'avgTerraced',
-    'Flat / Apartment': 'avgFlat',
-  };
-  const preferred = criteria?.propertyTypePrefs?.preferred || [];
-  for (const t of preferred) {
-    const k = PROP_TO_KEY[t];
-    if (k && ps[k] != null) return { price: ps[k], label: t };
-  }
-  // Fall back: cheapest available avg (so verdict tends toward "best case").
-  for (const [k, label] of [['avgSemi', 'Semi'], ['avgTerraced', 'Terraced'], ['avgDetached', 'Detached'], ['avgFlat', 'Flat']]) {
-    if (ps[k] != null) return { price: ps[k], label };
-  }
-  return { price: null, label: null };
-}
 
 function verdictFor(area) {
   if (!finData || !criData) return 'unknown';
