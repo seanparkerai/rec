@@ -15,45 +15,170 @@
   },
   "coordsSource": "web-verified:Newtown is the west-of-Avon part of Downton SP5; listing-centroid(50.99068,-1.75884) corroborated by getthedata SP5-3HU Batten Rd(50.99601,-1.75620 ~290m) & SP5-3NQ Mesh Pond(50.9913,-1.7636); agrees with stored 50.9873,-1.7612 ~400m; note: not the SP3/SN8/SO43 Newtowns; 2026-06-04",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
   "active": true,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "overview": "Newtown is the west-of-Avon arm of Downton, the large amenity-complete village about 6 miles south of Salisbury on the New Forest's edge. It is a cluster of quiet lanes between the A338 Salisbury–Ringwood road and the Avon's water-meadows, facing the historic Borough across the village's braided river crossings, with the hamlet of Wick immediately south. Functionally it is simply the western end of Downton (parish population around 3,000): everything the village offers — Co-op, surgery, pharmacy, library, both schools and the pubs — is a short walk over The Borough's bridges, while Downton's employment side (the leisure centre on Wick Lane and the Batten Road industrial estate, home of Downton Brewery) sits on this bank.",
+  "character": "Quiet residential lanes of mixed-era housing — post-war family homes and bungalows with older cottages toward the river — on the working west side of a thriving, historic village; the tone is everyday Downton rather than chocolate-box, with the industrial estate and leisure centre nearby and water-meadows between the houses and the Borough.",
+  "amenities": [
+    "All of Downton's amenities within walking distance: Co-op food store, pharmacy, library and café on the village high street",
+    "Downton Surgery (NHS GP practice) in the village",
+    "Downton Leisure Centre with gym, on Wick Lane on the Newtown/west side",
+    "Batten Road industrial estate on this bank — local employment and Downton Brewery",
+    "Four village pubs across the bridges (White Horse, King's Arms, Wooden Spoon, Bull Hotel)"
+  ],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/126475",
+      "name": "Downton CofE VA Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good (2020)",
+      "distance": "in village"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/23/144389",
+      "name": "The Trafalgar School at Downton",
+      "type": "State (Secondary)",
+      "phase": "Secondary",
+      "ofsted": "Good (2023)",
+      "distance": "Breamore Road, east side of village"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "roads": "A338 Salisbury–Ringwood runs along Newtown's western edge; Salisbury ~6 miles north, Fordingbridge and the New Forest ~10 minutes south",
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~6 miles via the A338",
+        "typical": "~15 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station, then direct South Western Railway",
+        "typical": "<1h 30m from Salisbury"
+      },
+      {
+        "to": "Fordingbridge / New Forest",
+        "mode": "Drive",
+        "notes": "Gateway to the New Forest",
+        "typical": "~10 min"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "asOf": "2026-07",
+    "summary": "Sold prices in Downton averaged about £406,000 over the last year — one of the more affordable full-amenity villages south of Salisbury (the wider SP5 postcode averages ~£503,000, pulled up by premium valley villages). Newtown's lanes mix post-war semis and bungalows with pricier riverside and Borough-facing homes.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/downton.html"
+  },
+  "thingsToDo": [
+    "The Moot — 18th-century pleasure gardens in Norman castle earthworks",
+    "Downton Cuckoo Fair (May), drawing around 20,000 visitors",
+    "Water-meadow and Avon Valley Path walks from the door",
+    "Downton Brewery on Batten Road, on the Newtown side",
+    "St Laurence Church (Grade I listed) and the Downton Heritage Trail",
+    "New Forest National Park a 10-minute drive south"
+  ],
+  "placesToEat": [
+    {
+      "url": "https://www.beerintheevening.com/pubs/s/30/3023/White_Horse/Downton",
+      "name": "White Horse, Downton",
+      "type": "Pub",
+      "notes": "Traditional pub in The Borough, across the bridges"
+    },
+    {
+      "url": "https://www.beerintheevening.com/pubs/s/30/3019/Kings_Arms/Downton",
+      "name": "King's Arms, Downton",
+      "type": "Pub",
+      "notes": "Village local in the historic centre"
+    },
+    {
+      "url": "https://camra.org.uk/pubs/wooden-spoon-downton-192128",
+      "name": "Wooden Spoon, Downton",
+      "type": "Pub",
+      "notes": "Two-bar village pub built 1740; popular for drinkers and diners"
+    },
+    {
+      "url": "https://www.discoverdownton.uk/food-and-drink",
+      "name": "The Bull Hotel, Downton",
+      "type": "Hotel & pub",
+      "notes": "Village hotel with dining and EV fast charging"
+    }
+  ],
+  "pros": [
+    "Full village amenities including both a Good primary and a Good secondary school",
+    "One of the more affordable full-amenity villages south of Salisbury",
+    "Leisure centre and local employment (Batten Road estate) on this side of the river",
+    "New Forest National Park and Salisbury both within an easy drive"
+  ],
+  "cons": [
+    "A338 traffic along Newtown's western edge",
+    "Batten Road industrial estate adjoins the housing",
+    "No railway station — Salisbury (~6 miles) for rail",
+    "The village centre and most pubs are across the river crossings"
+  ],
+  "whoItSuits": "Buyers who want Downton's full-service village life at its more affordable, working western edge — families using both village schools, and anyone who values the leisure centre, brewery and Batten Road employment within walking distance.",
   "broadbandMedianMbps": null,
-  "nearestStation": null,
-  "primarySupermarket": null,
+  "nearestStation": "Salisbury (~6 miles)",
+  "primarySupermarket": "Co-op, Downton",
   "images": [],
   "sources": [
-    {
-      "url": "https://en.wikipedia.org/wiki/Whiteparish",
-      "label": "Whiteparish (incl. Newton hamlet) - Wikipedia"
-    },
     {
       "url": "https://en.wikipedia.org/wiki/Downton,_Wiltshire",
       "label": "Downton, Wiltshire - Wikipedia"
     },
     {
-      "url": "https://en.wikipedia.org/wiki/Charlton-All-Saints",
-      "label": "Charlton-All-Saints - Wikipedia"
+      "url": "https://downtonparishcouncil.gov.uk/tourist-information/village-history",
+      "label": "Downton Parish Council - Village History"
     },
     {
-      "url": "https://en.wikipedia.org/wiki/Newtown,_Hampshire",
-      "label": "Newtown, Hampshire (name collision) - Wikipedia"
+      "url": "https://www.british-history.ac.uk/vch/wilts/vol11/pp19-77",
+      "label": "Parishes: Downton - Victoria County History (British History Online)"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/downton.html",
+      "label": "Rightmove - Downton sold prices"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/sp5.html",
+      "label": "Rightmove - SP5 house prices"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/126475",
+      "label": "Ofsted - Downton CofE VA Primary School"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/23/144389",
+      "label": "Ofsted - The Trafalgar School at Downton"
+    },
+    {
+      "url": "https://www.nhs.uk/services/clinic/downton-surgery/AXG0G",
+      "label": "NHS - Downton Surgery"
+    },
+    {
+      "url": "https://camra.org.uk/pubs/wooden-spoon-downton-192128",
+      "label": "CAMRA - Wooden Spoon, Downton (built 1740)"
+    },
+    {
+      "url": "https://www.discoverdownton.uk/food-and-drink",
+      "label": "Discover Downton - Food and drink"
+    },
+    {
+      "url": "https://www.downtonbrewery.com/",
+      "label": "Downton Brewery (Batten Road)"
+    },
+    {
+      "url": "https://www.streetcheck.co.uk/postcode/sp53nf",
+      "label": "StreetCheck - Wick Lane SP5 3NF (west-of-Avon Downton)"
+    },
+    {
+      "url": "http://downtonvillage.co.uk/",
+      "label": "Downton Village - amenities directory"
     }
   ],
   "rightmove": {

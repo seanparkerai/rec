@@ -15,27 +15,107 @@
   },
   "coordsSource": "os-opendata:place-centre",
   "houseTypeIds": [],
-  "status": "directory",
+  "status": "researched",
   "priceSummary": null,
   "councilTaxBand": null,
   "geofenceRadiusMi": 3,
   "searchRadiusMi": 3,
   "active": true,
-  "overview": "",
-  "character": "",
-  "amenities": [],
-  "schools": [],
+  "overview": "Ebble is the Ordnance Survey locality label for the Ebble valley — the southernmost of Salisbury's five river valleys, usually called the Chalke Valley — rather than a village in its own right. The River Ebble is a rare chalk stream that rises near Alvediston and flows east below Cranborne Chase through Ebbesbourne Wake, Fifield Bavant, Broad Chalke, Bishopstone, Stratford Tony, Coombe Bissett, Homington, Odstock and Nunton before joining the Avon at Bodenham, three to four miles south-west of Salisbury. The catalogue pin sits on open downland south of Stratford Tony and Coombe Bissett; there is no settlement called Ebble to buy in — each of the valley's villages has its own record.",
+  "character": "A quiet chalk-stream valley within the Cranborne Chase National Landscape: water-meadows and winterbourne stretches along the Ebble, flint-and-brick villages strung along the single valley road, and high open downland rising to the Ox Drove ridgeway on the southern ridge.",
+  "amenities": [
+    "No amenities of its own — 'Ebble' is a locality label, not a village",
+    "Coombe Bissett (lower valley, on the A354): church, village primary and the Fox and Goose pub",
+    "Broad Chalke (mid valley): church, village primary and the Queen's Head inn",
+    "Full city amenities in Salisbury, 3–8 miles down the valley"
+  ],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/126382",
+      "name": "Coombe Bissett CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "Coombe Bissett, lower valley"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/150220",
+      "name": "Broad Chalke CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "Broad Chalke, mid valley"
+    }
+  ],
   "transport": {
-    "commutes": []
+    "roads": "Single valley road along the Ebble (Coombe Bissett–Broad Chalke–Ebbesbourne Wake); the A354 Salisbury–Blandford road crosses the valley at Coombe Bissett",
+    "commutes": [
+      {
+        "to": "Salisbury",
+        "mode": "Drive",
+        "notes": "~3 miles from Coombe Bissett, ~8 from the upper valley, via the A354 or valley road",
+        "typical": "~10-20 min"
+      },
+      {
+        "to": "Salisbury",
+        "mode": "Bus",
+        "notes": "Salisbury Reds 29 (Salisbury–Shaftesbury via Bishopstone and Bowerchalke) and 29A (Salisbury–Broad Chalke) serve the valley villages",
+        "typical": "~35-50 min"
+      },
+      {
+        "to": "London Waterloo",
+        "mode": "Train",
+        "notes": "Via Salisbury station; no station in the valley",
+        "typical": "~90 min from Salisbury"
+      }
+    ]
   },
-  "prices": {},
-  "thingsToDo": [],
-  "placesToEat": [],
-  "pros": [],
-  "cons": [],
-  "whoItSuits": [],
+  "prices": {
+    "asOf": "2026-07",
+    "summary": "Ebble is a valley label, not a settlement, so it has no housing market of its own — use the individual village records (Coombe Bissett, Homington, Odstock, Nunton, Stratford Tony, Bishopstone, Broad Chalke, Bowerchalke, Ebbesbourne Wake) and the SP5 sold-price record for context.",
+    "sourceUrl": "https://www.rightmove.co.uk/house-prices/sp5.html"
+  },
+  "thingsToDo": [
+    "Chalke History Festival at Church Bottom, Broad Chalke (22–28 June 2026) — 175+ talks",
+    "Ox Drove ridgeway walks on the downs above the southern valley side",
+    "Chalk-stream walks along the Ebble between the valley villages",
+    "Salisbury's city sights at the valley mouth"
+  ],
+  "placesToEat": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Coombe_Bissett",
+      "name": "Fox and Goose, Coombe Bissett",
+      "type": "Pub",
+      "notes": "Village pub on the A354 in the lower valley"
+    },
+    {
+      "url": "https://whatpub.com/pubs/SAL/17/queens-head-broad-chalke",
+      "name": "Queen's Head, Broad Chalke",
+      "type": "Pub",
+      "notes": "19th-century rural pub in the mid valley"
+    },
+    {
+      "url": "https://www.bishopstone-salisbury.co.uk/home",
+      "name": "White Hart, Bishopstone",
+      "type": "Pub & restaurant",
+      "notes": "18th-century family pub beside the Coombe Bissett–Broad Chalke road"
+    }
+  ],
+  "pros": [
+    "One of the loveliest chalk-stream valleys in the Cranborne Chase National Landscape",
+    "A chain of well-kept villages, each covered by its own record",
+    "Village primaries at Coombe Bissett and Broad Chalke plus an hourly-ish Salisbury bus",
+    "Salisbury within a 10–20 minute drive from most of the valley"
+  ],
+  "cons": [
+    "'Ebble' itself is not a place you can buy in — it is a catalogue label for the valley",
+    "No railway station anywhere in the valley",
+    "Amenities are thin outside Coombe Bissett and Broad Chalke",
+    "A single valley road; the upper valley is a slow, winding drive"
+  ],
+  "whoItSuits": "No one directly — this row is the OS locality label for the Ebble (Chalke) valley. Buyers drawn to the valley should use the individual village records: Coombe Bissett, Homington, Odstock, Nunton, Stratford Tony, Bishopstone, Broad Chalke, Bowerchalke and Ebbesbourne Wake.",
   "broadbandMedianMbps": null,
-  "nearestStation": null,
+  "nearestStation": "Salisbury (3–8 miles depending on village)",
   "primarySupermarket": null,
   "images": [],
   "sources": [
@@ -54,6 +134,42 @@
     {
       "url": "https://www.wiltshire.gov.uk/media/1013/Landscape-Type-5-December-2005/pdf/lca-dec-05-type-5.pdf",
       "label": "Landscape Type 5: Chalk River Valley (Ebble River Valley) - Wiltshire Council"
+    },
+    {
+      "url": "https://hwwhite.co.uk/the-chalke-valley/stratford-tony/",
+      "label": "Stratford Tony, the Chalke Valley - Whites"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Coombe_Bissett",
+      "label": "Coombe Bissett - Wikipedia"
+    },
+    {
+      "url": "https://whatpub.com/pubs/SAL/17/queens-head-broad-chalke",
+      "label": "Queen's Head, Broad Chalke - WhatPub (CAMRA)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/126382",
+      "label": "Ofsted - Coombe Bissett CE Primary School"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/150220",
+      "label": "Ofsted - Broad Chalke CofE Primary School"
+    },
+    {
+      "url": "https://bustimes.org/services/29-salisbury-broadchalke-ludwell-shaftesbury",
+      "label": "Salisbury Reds 29 (Salisbury–Shaftesbury via the Chalke Valley) - bustimes.org"
+    },
+    {
+      "url": "https://www.salisburyreds.co.uk/services/SWWD/29A",
+      "label": "Salisbury Reds 29A (Salisbury–Broad Chalke)"
+    },
+    {
+      "url": "https://www.chalkefestival.com/",
+      "label": "Chalke History Festival, Broad Chalke"
+    },
+    {
+      "url": "https://www.rightmove.co.uk/house-prices/sp5.html",
+      "label": "Rightmove - SP5 house prices"
     }
   ],
   "rightmove": {

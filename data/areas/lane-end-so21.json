@@ -15,7 +15,7 @@
   },
   "coordsSource": "web-verified:getthedata-osopennames-centre;getthedata-osopostcode-SO21-1JZ;cross-check-ukpostcodecheck-32m-gap37m; 2026-06-05",
   "houseTypeIds": [],
-  "status": "partial",
+  "status": "researched",
   "priceSummary": {
     "avgDetached": 1058605,
     "avgSemi": 541803,
@@ -105,10 +105,10 @@
   ],
   "placesToEat": [
     {
-      "url": "https://whatpub.com/pubs/HAS/00337/ship-inn-owslebury",
+      "url": "https://theshipinnowslebury.co.uk/",
       "name": "The Ship Inn, Owslebury",
       "type": "Country pub with rooms",
-      "notes": "Half a mile away in Owslebury; oldest pub in the area"
+      "notes": "Half a mile away in Owslebury; 17th-century country pub, verified trading 2026"
     },
     {
       "url": "https://www.thephoenixtwyford.co.uk/",
@@ -158,6 +158,10 @@
     {
       "url": "https://www.thetrainline.com/train-times/winchester-to-london-waterloo",
       "title": "Trainline — Winchester to London Waterloo"
+    },
+    {
+      "url": "https://theshipinnowslebury.co.uk/",
+      "title": "The Ship Inn, Owslebury (verified trading 2026)"
     }
   ],
   "rightmove": {
