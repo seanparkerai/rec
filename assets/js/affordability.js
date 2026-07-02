@@ -181,7 +181,13 @@ export function assessAffordability({ price, finances, criteria, councilTaxBand:
     );
   }
   if (!lisaOk && p > LISA_CAP_GBP) {
-    whyVerdict.push(`Price exceeds the £${(LISA_CAP_GBP / 1000).toFixed(0)}k LISA cap — bonus forfeited.`);
+    // A4: the £450k LISA cap does not align with the £500k SDLT FTB-relief
+    // ceiling — the band between them is a sharper failure than the plain cap.
+    if (ftb && p <= 500_000) {
+      whyVerdict.push(`£${(LISA_CAP_GBP / 1000).toFixed(0)}k–£500k mismatch: FTB stamp-duty relief still applies, but the LISA bonus is lost — and LISA funds used for this purchase pay the 25% withdrawal charge.`);
+    } else {
+      whyVerdict.push(`Price exceeds the £${(LISA_CAP_GBP / 1000).toFixed(0)}k LISA cap — bonus forfeited.`);
+    }
   }
   if (sdlt > 0 && ftb && p > 500_000) {
     whyVerdict.push(`FTB SDLT relief lost above £500k — standard rates apply (£${sdlt.toLocaleString('en-GB')}).`);

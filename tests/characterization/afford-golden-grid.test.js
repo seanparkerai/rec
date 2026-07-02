@@ -117,7 +117,10 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(at(400600).verdict, 'out-of-reach', 'LTI 6.01 is out of reach');
     assert(at(450000).bandSignals.lisaEligible === true, 'LISA holds at exactly £450k');
     assert(at(450001).bandSignals.lisaEligible === false, 'LISA lost at £450,001');
-    assert(at(450001).whyVerdict.some((s) => /LISA cap/.test(s)), 'the LISA loss is explained');
+    assert(at(450001).whyVerdict.some((s) => /mismatch:.*LISA bonus is lost/.test(s)),
+      'the LISA loss in the £450k–£500k band is explained via the A4 mismatch line');
+    assert(at(500001).whyVerdict.some((s) => /LISA cap — bonus forfeited/.test(s)),
+      'above £500k the generic LISA-cap line holds');
     assert(at(500001).whyVerdict.some((s) => /FTB SDLT relief lost/.test(s)), 'the FTB cliff is explained');
     const spare = (bills) => assessAffordability({ price: 280000, finances: finC(bills), criteria: {} });
     assert(spare(1790).monthlySpareAfter > 400 && spare(1790).verdict === 'comfortable',

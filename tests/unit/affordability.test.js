@@ -38,12 +38,26 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assertEqual(r.bandSignals.lisaEligible, true);
   });
 
-  await test('affordability: £451k → LISA NOT eligible', () => {
+  await test('affordability: £451k → LISA NOT eligible; A4 mismatch band explained', () => {
     const r = at(451_000);
     assertEqual(r.bandSignals.lisaEligible, false);
+    // 5.6 (A4): in the £450k–£500k band the sharper cap-mismatch line renders —
+    // SDLT FTB relief kept, LISA bonus lost, 25% charge to use LISA funds.
     assert(
-      r.whyVerdict.some((s) => /LISA cap/.test(s)),
-      'expected whyVerdict to mention LISA cap; got: ' + r.whyVerdict.join(' | '),
+      r.whyVerdict.some((s) => /mismatch:.*25% withdrawal charge/.test(s)),
+      'expected the £450k–£500k mismatch line; got: ' + r.whyVerdict.join(' | '),
+    );
+  });
+
+  await test('affordability: above £500k the generic LISA-cap line returns (A4 band only)', () => {
+    const r = at(600_000);
+    assert(
+      r.whyVerdict.some((s) => /LISA cap — bonus forfeited/.test(s)),
+      'expected the generic cap line above £500k; got: ' + r.whyVerdict.join(' | '),
+    );
+    assert(
+      !r.whyVerdict.some((s) => /mismatch/.test(s)),
+      'the mismatch line must not render above £500k',
     );
   });
 

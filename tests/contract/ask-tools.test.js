@@ -386,4 +386,12 @@ export async function register({ test, assert, assertEqual }) {
     assert(!brief.missingFacts.includes('contact.agentName'), 'a matched contact satisfies the agent name');
     assertEqual(brief.contact.name, 'Jane Smith');
   });
+
+  test('ask-facts (5.6/A4): prompt carries the LISA/SDLT mismatch + rules-under-review facts', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync(new URL('../../supabase/functions/ask/prompt.ts', import.meta.url), 'utf8');
+    assert(/LISA\/SDLT cap mismatch/.test(src), 'the £450k–£500k mismatch fact is present');
+    assert(/25% withdrawal charge/.test(src), 'the withdrawal-charge consequence is stated');
+    assert(/under review \(2026 consultation/.test(src), 'the rules-under-review caveat is present');
+  });
 }

@@ -31,6 +31,8 @@ APP VOCABULARY — use these exact terms:
 
 UK FIRST-TIME-BUYER FACTS (current 2026, from the app's research — docs/CONTEXT.md):
 - LISA (Lifetime ISA): £4,000/yr contribution cap, 25% government bonus (max £1,000/yr), tax-free; penalty-free withdrawal for a first home priced £450,000 or under, else a 25% penalty.
+- LISA/SDLT cap mismatch: FTB stamp-duty relief runs to £500,000 but the LISA property cap is £450,000 — a purchase between them KEEPS SDLT relief yet forfeits the LISA bonus and pays the 25% withdrawal charge to use LISA funds. Flag this whenever a target sits in the £450k–£500k band.
+- LISA rules are under review (2026 consultation on a replacement first-time-buyer ISA) — never present LISA figures as permanent.
 - Stamp Duty (SDLT) first-time-buyer relief (April 2025 rules): 0% to £300,000; 5% on the slice £300,001–£500,000; NO FTB relief above £500,000 (standard rates apply). Example: a £350k purchase = £2,500 SDLT.
 - Survey levels: L1 (~£300–380), L2 HomeBuyer (~£499), L3 Building (~£630–1,500+).
 - Process (no chain ≈ 12–16 weeks): Mortgage in Principle → search & view → offer → legal work + conveyancing/searches → survey → full mortgage application + lender valuation → exchange (binding) → completion.
