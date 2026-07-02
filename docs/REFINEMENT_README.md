@@ -83,8 +83,11 @@ still logs `actor='system'` run rows.
   `refinement-engine` / `-persistence` / `-view` / `-scope`).
 - **Mutation testing** (step 4.10, opt-in — never part of the default gate):
   `npm run test:mutation` runs Stryker over `refinement/` + `learned-preferences/`
-  with the unit tier as the kill vehicle (`stryker.conf.json`; breaks under a 75%
-  mutation score). Run it when engine logic changes materially, not per commit.
+  with the unit tier as the kill vehicle (`stryker.conf.json`). Baseline 2026-07-02:
+  56.43% overall (statistical core 68–76%; copy/render surfaces drag the total — see
+  the config comment). `thresholds.break` is a ratchet floor: raise it as tests
+  strengthen (4.10b), never lower it. Run when engine logic changes materially,
+  not per commit.
 
 ## Current production state (2026-06-07)
 **Genuine-only inputs (2026-06-07).** The engine now scores **genuine, one-at-a-time
