@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "_comment": "Step 5.2 (04-program §5): mutation testing over the FINANCE CALCULATORS — the trust surface (§3.10b), scoped separately from the engine config (stryker.conf.json) so each domain's ratchet floor stays honest. Kill vehicles: the unit tier (calc suites) AND the characterization tier (the 5.1 golden-master grid — SDLT band edges, LTV tiers, LISA caps live there). OPT-IN via `npm run test:mutation:finance`; never part of the default gate. `break` is a RATCHET FLOOR set just under the measured baseline — only ever raised.",
+  "mutate": [
+    "assets/js/finances/calc-*.js",
+    "assets/js/finance-derive.js",
+    "assets/js/affordability.js"
+  ],
+  "testRunner": "command",
+  "commandRunner": { "command": "node tools/run-all-tests.mjs --tier unit && node tools/run-all-tests.mjs --tier characterization" },
+  "coverageAnalysis": "off",
+  "reporters": ["clear-text", "progress"],
+  "thresholds": { "high": 90, "low": 80, "break": 50 },
+  "tempDirName": ".stryker-tmp-finance",
+  "incremental": true,
+  "incrementalFile": "reports/stryker-finance-incremental.json"
+}

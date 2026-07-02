@@ -14,6 +14,7 @@
     "test:new": "node tools/run-all-tests.mjs",
     "typecheck": "tsc --noEmit",
     "test:mutation": "stryker run",
+    "test:mutation:finance": "stryker run stryker.finance.conf.json",
     "test:legacy": "node tools/run-intelligence-tests.mjs"
   },
   "devDependencies": {

@@ -35,4 +35,5 @@ data/_backup/
 
 # Stryker mutation testing (opt-in, step 4.10)
 .stryker-tmp/
+.stryker-tmp-finance/
 reports/
