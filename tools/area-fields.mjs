@@ -63,6 +63,18 @@ export function bakePriceSummary(prices) {
   } : null;
 }
 
+// isOnboardingStub — the ONE predicate for household-onboarding stub records (Phase 6.3).
+// Stubs are created at RUNTIME by the portal's add-area flow (source='household-onboarding',
+// active=false, via the gated member INSERT policy). They are per-household provisional rows,
+// not curated catalog content, so they are NEVER materialised into repo files or the parity
+// snapshot: tools/sync-areas-from-supabase.mjs skips them and
+// tests/contract/areas-db-repo-parity.test.js excludes them — both through THIS predicate,
+// so the rule cannot drift between the materialiser and the gate. Takes the area RECORD
+// (the jsonb `data` payload / per-area-file shape) — callers with DB rows pass `row.data`.
+export function isOnboardingStub(rec) {
+  return !!rec && rec.source === 'household-onboarding';
+}
+
 export function getField(obj, path) {
   return path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
 }

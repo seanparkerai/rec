@@ -39,7 +39,7 @@ import { readFile, readdir, writeFile, unlink, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { DETAIL_FIELDS, bakePriceSummary } from './area-fields.mjs';
+import { DETAIL_FIELDS, bakePriceSummary, isOnboardingStub } from './area-fields.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const AREAS_DIR = resolve(root, 'data/areas');
@@ -178,11 +178,12 @@ export async function materialise(rows, { prune = false, dryRun = false } = {}) 
   // RUNTIME in the live DB (source='household-onboarding', active=false, inserted via the
   // gated member INSERT policy). They are per-household provisional rows, NOT curated
   // catalog content, so they must NOT be materialised into committed repo files or the
-  // parity snapshot — the parity test already excludes them by the same predicate
-  // (tests/areas-db-repo-parity.test.js isOnboardingStub). Filtering here keeps the
-  // materialiser and the test in lockstep: a member-added stub never becomes a repo file.
-  const skipped = rows.filter((r) => r.data?.source === 'household-onboarding').map((r) => r.id);
-  rows = rows.filter((r) => r.data?.source !== 'household-onboarding');
+  // parity snapshot. The predicate is the SHARED `isOnboardingStub` (area-fields.mjs,
+  // Phase 6.3) — the parity test (tests/contract/areas-db-repo-parity.test.js) imports
+  // the same one, keeping the materialiser and the gate in lockstep by construction:
+  // a member-added stub never becomes a repo file.
+  const skipped = rows.filter((r) => isOnboardingStub(r.data)).map((r) => r.id);
+  rows = rows.filter((r) => !isOnboardingStub(r.data));
   const dumpIds = new Set(rows.map((r) => r.id));
   const written = [];
   const unchanged = [];

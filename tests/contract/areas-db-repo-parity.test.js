@@ -46,8 +46,10 @@ export async function register({ test, assert, assertEqual }) {
   // NOT materialised into the repo — they have no per-area file and are not in the
   // snapshot. Exclude them from the DB⇄repo comparison so a member-added stub can never
   // trip this curated-catalog parity gate (forward guard — a no-op until/unless a stub is
-  // ever materialised, since curated areas carry no `source` key).
-  const isOnboardingStub = (rec) => !!rec && rec.source === 'household-onboarding';
+  // ever materialised, since curated areas carry no `source` key). The predicate is the
+  // SHARED tools/area-fields.mjs export (Phase 6.3) — the same one the materialiser
+  // filters by, so the gate and the skip rule cannot drift apart.
+  const { isOnboardingStub } = await import('../../tools/area-fields.mjs');
   const snap = (existsSync(join(root, snapPath)) ? readJson(snapPath) : []).filter((r) => !isOnboardingStub(r));
   const snapById = new Map(snap.map((r) => [r.id, r]));
   const fileIds = readdirSync(join(root, 'data/areas'))
