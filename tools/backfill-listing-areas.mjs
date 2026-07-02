@@ -79,17 +79,10 @@ export function summarise(perListing) {
   return { listings: perListing.length, withMembership: withMembership.length, empty, totalRows, drift };
 }
 
-// ── SQL emit (apply via MCP) ──────────────────────────────────────────────────
-function sqlLiteral(v) {
-  if (v === null || v === undefined) return 'NULL';
-  if (typeof v === 'boolean') return v ? 'true' : 'false';
-  if (typeof v === 'number') return String(v);
-  return `'${String(v).replace(/'/g, "''")}'`;
-}
-
-// emitSql deleted (step 2.10): a raw TRUNCATE+INSERT write path would bypass the
-// deriving replace_listing_areas RPC (step 2.9). The RPC (restReplace below) is the
-// ONLY membership writer; --from-file runs are report-only.
+// emitSql + its sqlLiteral helper deleted (steps 2.10/2.20): a raw TRUNCATE+INSERT
+// write path would bypass the deriving replace_listing_areas RPC (step 2.9). The
+// RPC (restReplace below) is the ONLY membership writer; --from-file runs are
+// report-only.
 
 // ── REST (CI) ─────────────────────────────────────────────────────────────────
 const REST_HEADERS = () => ({ apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` });

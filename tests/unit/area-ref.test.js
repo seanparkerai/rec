@@ -5,7 +5,7 @@
 // run-intelligence-tests.mjs.
 import {
   isPendingArea, isLiveArea, resolveAreaRef, buildAreaIndex, resolveAreaById,
-  isCuratedDisabled, excludeCuratedDisabled,
+  isCuratedDisabled,
 } from '../../assets/js/areas/area-ref.js';
 
 export async function register({ test, assert, assertEqual }) {
@@ -78,19 +78,9 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(isCuratedDisabled(null), false, 'null is safe');
   });
 
-  test('area-ref: excludeCuratedDisabled drops disabled ids, keeps active + off-catalog stubs', () => {
-    const catalog = [
-      { id: 'oakley-rg23', active: true },
-      { id: 'hambledon-po7', active: false },        // curated disable → dropped
-      { id: 'bordon-gu35', active: false },          // curated disable → dropped
-    ];
-    // 'alresford-hampshire' is an onboarding stub: absent from the catalog → passes through.
-    const ids = ['oakley-rg23', 'hambledon-po7', 'bordon-gu35', 'alresford-hampshire'];
-    const kept = excludeCuratedDisabled(ids, catalog);
-    assertEqual(kept.join(','), 'oakley-rg23,alresford-hampshire', 'only disabled curated ids are removed');
-    assertEqual(excludeCuratedDisabled([], catalog).length, 0, 'empty ids safe');
-    assertEqual(excludeCuratedDisabled(ids, null).join(','), ids.join(','), 'no catalog → nothing dropped');
-  });
+  // (excludeCuratedDisabled deleted in step 2.20 — production-dead since the 2.13
+  // RPC cutover; the rule's homes are isCuratedDisabled above + the pinned SQL
+  // mirror asserted by tests/contract/household-feed.test.js.)
 
   // ── display object ──────────────────────────────────────────────────────────
   test('area-ref: resolveAreaRef returns the canonical display shape', () => {

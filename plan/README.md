@@ -43,6 +43,7 @@
 | `logs/2026-06-18-optimisation.md` | Session log: repo legibility optimisation pass | Historical context |
 | `logs/2026-06-19-refinement.md` | Session log: refinement-engine recalibration + expansion | Before engine work |
 | `logs/2026-07-01-listings-m2m.md` | Session log **+ flagship current-state briefing & known-weakness list** | **Before any listings-pipeline work** |
+| `logs/2026-07-01-flagship-exit.md` | Phase-2 exit review — contract verification, weakness disposition, what ⚙ 2.16/2.11b still owe | End of flagship work; before reopening the pipeline |
 
 ## Known drift (scan findings, 2026-07-01 — to be folded into the segment rewrites)
 

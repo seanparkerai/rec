@@ -34,8 +34,10 @@ detailed spec. Retired one-shots live in [`archive/`](archive/README.md).
 | `fetch-listings.mjs` | The primary scheduled fetcher — runs the Apify actor, normalises, validates, upserts to Supabase. | Scheduled (GitHub Actions); see `docs/FETCH_SCHEDULE.md`. |
 | `listings-normalise.mjs` | Pure normalisation/validation/dedup helpers; consumed by `fetch-listings.mjs` and tests. | Library — not run directly. |
 | `import-apify-runs.mjs` | Backfills `listings` from existing Apify dataset items (no new actor run). | One-off backfill. |
-| `backfill-geofence.mjs` | Recomputes the geofence verdict over existing `listings` rows (pure recompute, no Apify). | After geofence-logic changes. |
-| `purge-listings.mjs` | Maintenance purge of the heavy `listings` table. | Periodic maintenance. |
+| `backfill-geofence.mjs` | Recomputes the geofence verdict over existing `listings` rows (pure recompute, no Apify). | Via the `remembership` workflow; after geofence-logic changes. |
+| `backfill-listing-areas.mjs` | Recomputes the `listing_areas` m2m membership via the deriving RPC (pure recompute, £0). | Via the `remembership` workflow; after area/radius changes. |
+| `lib/geofence-universe.mjs` | THE canonical geofence village universe (active OR household-linked + tuning) — pure core + DB/repo edges. | Library — consumed by every geofence tool. |
+| `purge-listings.mjs` | Maintenance purge of the heavy `listings` table (+ its `listing_areas` junction rows). | Periodic maintenance. |
 
 ## Refinement engine (v3 L4)
 | Script | What it does | When to run |

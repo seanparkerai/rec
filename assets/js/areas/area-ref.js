@@ -33,24 +33,15 @@ export function isLiveArea(area) {
 
 // A CURATED disable: an area deliberately crossed off the catalog (active:false)
 // that is NOT a household-onboarding stub. This is the SINGLE rule the scraper
-// (tools/fetch-listings.mjs, householdRowsToVillages) and the display feed
-// (storage/listings/feed.js, getListings) BOTH obey, so a disabled area is never
-// re-fetched NOR shown — while a "Researching" onboarding stub (also active:false)
-// is exempt and keeps rendering. Centralising the rule here is what keeps the scrape
-// side and the display side in lockstep; neither re-derives it inline.
+// (tools/fetch-listings.mjs, householdRowsToVillages) obeys client-side, and the
+// household_feed RPC applies the SAME predicate in SQL over areas.data (see
+// supabase/archive/schema-household-feed.sql) — so a disabled area is never
+// re-fetched NOR shown, while a "Researching" onboarding stub (also active:false)
+// is exempt and keeps rendering. (The old client-side feed helper
+// excludeCuratedDisabled died with the 2.13 RPC cutover — the rule's two homes
+// are here and the pinned SQL mirror.)
 export function isCuratedDisabled(area) {
   return !!area && area.active === false && area.source !== 'household-onboarding';
-}
-
-// Scope a list of household-linked area ids to those that should still surface
-// listings: drop any id that is a curated disable per the catalog. Curated rows in
-// the catalog (data/areas.json) carry `active`; onboarding stubs are absent from it,
-// so an id not in the catalog passes through untouched (a located stub still shows).
-// Pure — the feed passes its active-linked ids + the catalog and gets back the ids
-// whose listings may be displayed.
-export function excludeCuratedDisabled(areaIds, catalog) {
-  const disabled = new Set((catalog || []).filter(isCuratedDisabled).map((a) => a.id));
-  return (areaIds || []).filter((id) => !disabled.has(id));
 }
 
 // Canonical display object for one area record. `town` falls back through the same

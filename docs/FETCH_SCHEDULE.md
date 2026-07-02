@@ -6,6 +6,10 @@ DST-safe. Each run is identical: a **24-hour recency window** (`MAX_DAYS_SINCE_A
 that simply covers listings posted since the previous pass. The slots just give more
 points in the day; nothing else about the fetch changes.
 
+Adjacent (not a fetch — £0): `.github/workflows/remembership.yml` re-computes the stored
+listings' geofence fields + `listing_areas` membership after each successful radius-tune
+run and weekly (Sun 05:45 UTC), so area/radius changes never leave stale membership.
+
 There are **two** triggers, by design. They cooperate; they never double-charge Apify
 within a slot.
 
