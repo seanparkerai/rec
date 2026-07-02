@@ -1,14 +1,30 @@
 /* components/property-card.css — THE shared property-card family (step 3.4b,
-   Linear-dense anchor). One primary design all three property surfaces drive
-   from (⚙ 3.1 decision 2): a clean row on hairlines — the Rejected page's
-   register — that scales from a 320px phone list to a two-column tablet grid
-   via container queries. Tokens only; no hex, no off-scale spacing.
-   Loaded via @import from base.css. Consumed from 3.4c onward (strangler). */
+   Linear-dense anchor; mobile register redesigned 3.10, owner-directed
+   2026-07-02). One primary design all three property surfaces drive from
+   (⚙ 3.1 decision 2). MOBILE-FIRST: on phones the property photo leads
+   full-width (the image IS the card's hero — maximised for iPhone browsing)
+   with the content stacked beneath in reading order: price headline · title ·
+   place · data line · tags · thumb-zone actions. From a 560px container the
+   row-on-hairlines register returns — the Rejected page's cleanliness bar —
+   with a compact side thumb. The --compact variant (dense Rejected/Passed
+   list) keeps the small-thumb row at EVERY width. Tokens only; no hex, no
+   off-scale spacing. Loaded via @import from base.css. */
 
 .prop-card {
+  /* Pico gives every <article> floated-card chrome (background, shadow, radius,
+     inner padding, margin) — seen live 2026-07-02: each card rendered as a white
+     box that inset the photo behind double padding (and shadow-floated cards are
+     a DESIGN.md §3 ban). Flatten it: the register is rows on hairlines. */
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  padding-inline: 0;
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-3) var(--space-4);
+  /* Mobile-first: single column — media on top, body + actions stack below. */
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
   align-items: start;
   padding-block: var(--space-4);
   border-block-end: 1px solid var(--hairline);
@@ -26,13 +42,17 @@
   .prop-card--returned { transition: outline-color 0.4s ease; }
 }
 
-/* ── Media well ─────────────────────────────────────────────────────────── */
-.prop-card__media-link { display: block; border-radius: var(--rec-radius-sm); }
+/* ── Media well — full-bleed hero on phones ─────────────────────────────── */
+.prop-card__media-link { display: block; border-radius: var(--rec-radius); }
 .prop-card__media-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .prop-card__media {
-  inline-size: clamp(4.5rem, 24cqi, 8.5rem);
-  aspect-ratio: 4 / 3;
-  border-radius: var(--rec-radius-sm);
+  /* The photo spans the card: widest tap target on the page (dossier
+     affordance) and the image detail phones actually browse by. 16/10 keeps
+     ~2½ cards per viewport; aspect-ratio reserves the box so images can lazy-
+     load with zero layout shift. */
+  inline-size: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--rec-radius);
   overflow: hidden;
   background: color-mix(in oklch, var(--ink) 6%, var(--paper));
 }
@@ -41,18 +61,20 @@
   display: grid; place-items: center;
   color: var(--ink-muted);
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
 }
 
 /* ── Body ───────────────────────────────────────────────────────────────── */
 .prop-card__body { display: flex; flex-direction: column; gap: var(--space-1); min-inline-size: 0; }
 
-.prop-card__head { display: flex; align-items: baseline; gap: var(--space-2); }
+.prop-card__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-2); }
 .prop-card__price {
   margin-inline-start: auto;
   font-family: var(--font-data);
   font-weight: 500;
-  font-size: var(--text-base);
+  /* The lead datum (DESIGN.md §5.3 — numbers first): step up on the stacked
+     phone register, back to base size in the dense row register below. */
+  font-size: var(--text-lg);
   white-space: nowrap;
 }
 .prop-card__dot {
@@ -103,13 +125,36 @@
   min-block-size: var(--tap-min);
 }
 
-/* ── Compact (the dense Rejected/Passed list register) ──────────────────── */
-.prop-card--compact { padding-block: var(--space-3); gap: var(--space-2) var(--space-3); }
-.prop-card--compact .prop-card__media { inline-size: clamp(3.5rem, 16cqi, 5rem); }
+/* ── Compact (the dense Rejected/Passed list register): keeps the small-thumb
+      row at EVERY width — a rejected row must never balloon into a hero. ── */
+.prop-card--compact {
+  grid-template-columns: auto 1fr;
+  padding-block: var(--space-3);
+  gap: var(--space-2) var(--space-3);
+}
+.prop-card--compact .prop-card__media,
+.prop-card--compact .prop-card__media-link {
+  inline-size: clamp(3.5rem, 16cqi, 5rem);
+  aspect-ratio: 4 / 3;
+  border-radius: var(--rec-radius-sm);
+}
+.prop-card--compact .prop-card__media--none { font-size: var(--text-xl); }
+.prop-card--compact .prop-card__price { font-size: var(--text-base); }
 .prop-card--compact .prop-card__title { font-size: var(--text-sm); }
 
-/* ── Wide-card adaptation (container, not viewport): actions join the body ── */
+/* ── Wide-card register (container, not viewport): from 560px the clean
+      row-on-hairlines returns — side thumb, base-size price, actions join
+      the body column. Compact rules above out-rank these by specificity. ── */
 @container propcard (min-width: 560px) {
+  .prop-card { grid-template-columns: auto 1fr; gap: var(--space-3) var(--space-4); }
+  .prop-card__media,
+  .prop-card__media-link {
+    inline-size: clamp(4.5rem, 24cqi, 8.5rem);
+    aspect-ratio: 4 / 3;
+    border-radius: var(--rec-radius-sm);
+  }
+  .prop-card__media--none { font-size: var(--text-xl); }
+  .prop-card__price { font-size: var(--text-base); }
   .prop-card__actions { grid-column: 2; }
   .prop-card__body { gap: var(--space-2); }
 }

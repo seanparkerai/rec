@@ -82,6 +82,26 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
+  test('prop-card: mobile-first image-led register pinned at CSS source (3.10, owner-directed)', async () => {
+    const { readFileSync } = await import('node:fs');
+    const css = readFileSync(new URL('../../assets/css/components/property-card.css', import.meta.url), 'utf8');
+    const upTo560 = css.split('@container propcard (min-width: 560px)')[0];
+    const after560 = css.split('@container propcard (min-width: 560px)')[1] || '';
+    // Phones: single-column stacked card, photo spans the card, box reserved.
+    assert(/\.prop-card\s*{[^}]*grid-template-columns:\s*1fr\b/s.test(upTo560),
+      'base register is single-column (image leads, content stacks)');
+    assert(/inline-size:\s*100%/.test(upTo560) && /aspect-ratio:\s*16\s*\/\s*10/.test(upTo560),
+      'media is full-width with a reserved aspect box (zero-CLS lazy load)');
+    // Pico article chrome is flattened — shadow-floated cards are a §3 ban.
+    assert(/box-shadow:\s*none/.test(upTo560) && /background:\s*transparent/.test(upTo560),
+      'Pico <article> card chrome is reset on .prop-card');
+    // The dense row returns for wide containers; compact keeps it at every width.
+    assert(/grid-template-columns:\s*auto 1fr/.test(after560),
+      'row-on-hairlines register returns from 560px containers');
+    assert(/\.prop-card--compact\s*{[^}]*grid-template-columns:\s*auto 1fr/s.test(upTo560),
+      'compact (Rejected/Passed) register stays a small-thumb row on phones');
+  });
+
   test('prop-card: helpers — title/place/meta fallbacks shared by every surface', async () => {
     const { propertyTitle, propertyPlace, propertyMeta, buildPropertyCard, dom } = await load();
     assertEqual(propertyTitle({ beds: 2, property_type: 'flat' }), '2-bed flat');

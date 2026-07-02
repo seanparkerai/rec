@@ -243,6 +243,14 @@ html, body { overflow-x: clip; }
   display: flex; flex-direction: column; gap: 2px;
   margin: 0; padding: 0; list-style: none;
 }
+/* Cluster separators (owner findability note, 2026-07-02): a quiet hairline
+   before each group start so Saved/Rejected and Journey/Profile read as their
+   own clusters in the flat list — structure, not colour, carries the cue. */
+.nav-drawer__nav li.nav-drawer__sep {
+  border-top: 1px solid var(--hairline);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+}
 .nav-drawer__nav a {
   position: relative;
   display: flex; align-items: center; gap: var(--space-2);

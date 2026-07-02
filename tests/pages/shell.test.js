@@ -74,6 +74,13 @@ export async function register({ test, assert, assertEqual }) {
       'index.html → pages/listings.html → pages/areas.html → pages/finances.html → pages/ask.html',
       'Home · Listings · Areas · Finances · Ask lead the drawer, in that order');
     assertEqual(items.length, 11, 'the full 10-item nav + latent admin entry survive the reorder');
+    // Owner guarantee (2026-07-02): the property-decision links are individually
+    // present and named after their pages — Saved listings + Rejected & passed.
+    const byNav = (nav) => doc.querySelector(`.nav-drawer__nav a[data-nav="${nav}"]`);
+    assertEqual(byNav('pages/saved-listings.html')?.textContent, 'Saved listings',
+      'the Saved listings (liked properties) link is present and page-named');
+    assertEqual(byNav('pages/rejected.html')?.textContent, 'Rejected & passed',
+      'the Rejected & passed link is present and page-named');
   });
 
   test('shell: index.html and bare / mark Home active identically (incl. both brand lockups)', async () => {
