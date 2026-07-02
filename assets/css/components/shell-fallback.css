@@ -1,0 +1,42 @@
+/* components/shell-fallback.css — shell resilience surfaces (step 3.3).
+   The minimal brand-only header used when the real header partial fails or
+   times out, and the visible role="alert" strip naming what failed.
+   Token-driven; state is carried in TEXT (the strip), never colour alone.
+   Imported via base.css (append-only). */
+
+.site-header--fallback {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  min-block-size: var(--header-h);
+  padding-inline: max(var(--space-3), env(safe-area-inset-left));
+  background: var(--paper);
+  border-bottom: 1px solid var(--hairline);
+}
+.site-header--fallback .brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  min-block-size: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.shell-error {
+  padding: var(--space-2) max(var(--space-3), env(safe-area-inset-left));
+  background: var(--danger-soft);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  border-bottom: 1px solid var(--hairline-strong);
+}
+.shell-error a {
+  color: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  /* inline link inside a 1-line strip: give it the 24px floor via padding */
+  display: inline-block;
+  padding-block: var(--space-1);
+}

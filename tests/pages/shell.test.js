@@ -98,6 +98,38 @@ export async function register({ test, assert, assertEqual }) {
     assert(doc.querySelector('.site-footer, footer'), 'healthy include still injected');
   });
 
+  test('shell (3.3): a hung partial fetch times out — shell resolves, fallback + visible error', async () => {
+    const dom = pageDom('/pages/listings.html');
+    const doc = dom.window.document;
+    const hangingFetch = (href) =>
+      /header\.html/.test(href) ? new Promise(() => {}) : diskFetch(href);
+    const origError = console.error; console.error = () => {};
+    let failures;
+    try { ({ failures } = await injectIncludes({ doc, urlFor, fetchFn: hangingFetch, timeoutMs: 25 })); }
+    finally { console.error = origError; }
+    assertEqual(failures.length, 1, 'only the hung partial failed');
+    assert(doc.querySelector('.site-header--fallback .brand'), 'minimal brand-only header rendered');
+    const alert = doc.querySelector('.shell-error[role="alert"]');
+    assert(alert, 'a visible role="alert" strip names the failure');
+    assert(alert.textContent.includes('header.html'), 'the strip names WHAT failed');
+    assert(alert.querySelector('a[href=""]'), 'same-URL refresh link offered');
+    assert(doc.getElementById('nav-drawer'), 'healthy partials still injected');
+  });
+
+  test('shell (3.3): a 404 footer leaves a comment + the error strip; header stays real', async () => {
+    const dom = new JSDOM(
+      '<body><div data-include="components/header.html"></div><div data-include="components/nope.html"></div></body>',
+      { url: `${ORIGIN}/index.html` },
+    );
+    const doc = dom.window.document;
+    const origError = console.error; console.error = () => {};
+    try { await injectIncludes({ doc, urlFor, fetchFn: diskFetch, timeoutMs: 500 }); }
+    finally { console.error = origError; }
+    assert(doc.getElementById('nav-toggle'), 'real header injected');
+    assert(!doc.querySelector('.site-header--fallback'), 'no fallback when the header succeeded');
+    assert(doc.querySelector('.shell-error[role="alert"]'), 'strip still surfaces the footer failure');
+  });
+
   test('shell: normalisePath treats index.html, trailing slash, and bare path as equal', async () => {
     const loc = { origin: ORIGIN, href: `${ORIGIN}/` };
     const a = normalisePath(`${ORIGIN}/index.html`, loc);

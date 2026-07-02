@@ -12,22 +12,68 @@ import { url as configUrl, STORAGE_NS } from './config.js';
 export const THEME_KEY = `${STORAGE_NS}:theme`;
 
 /* ---------- Partial includes: <div data-include="components/header.html"></div> ---------- */
+
+/** Race a fetch against a timeout so a hung CDN can never stall `shell:ready`
+ *  (page modules await that event — before step 3.3 a hanging partial left the
+ *  whole page dark forever). The losing fetch is simply abandoned. */
+function withTimeout(promise, ms, path) {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`include timeout after ${ms}ms: ${path}`)), ms);
+    promise.then(
+      (v) => { clearTimeout(t); resolve(v); },
+      (e) => { clearTimeout(t); reject(e); },
+    );
+  });
+}
+
+/** Minimal chrome when the real header partial is unavailable: a brand-only
+ *  bar with a working home link, so the page is never chrome-less. */
+function buildHeaderFallback(doc, urlFor) {
+  const header = doc.createElement('header');
+  header.className = 'site-header site-header--fallback';
+  const a = doc.createElement('a');
+  a.className = 'brand';
+  a.setAttribute('href', urlFor('index.html'));
+  a.textContent = 'GR';
+  header.append(a);
+  return header;
+}
+
+/** Visible failure surface (step 3.3 — errors were console-only): one
+ *  role="alert" strip naming what failed, with a same-URL refresh link. */
+function showShellError(doc, failures) {
+  if (!doc.body || doc.querySelector('.shell-error')) return;
+  const strip = doc.createElement('div');
+  strip.className = 'shell-error';
+  strip.setAttribute('role', 'alert');
+  strip.textContent = `Part of the page failed to load (${failures.join(', ')}). `;
+  const retry = doc.createElement('a');
+  retry.setAttribute('href', '');
+  retry.textContent = 'Refresh to retry';
+  strip.append(retry);
+  doc.body.prepend(strip);
+}
+
 /**
  * @param {object} [opts]
  * @param {Document} [opts.doc]
  * @param {(p: string) => string} [opts.urlFor]
  * @param {(href: string) => Promise<{ok: boolean, status: number, text(): Promise<string>}>} [opts.fetchFn]
+ * @param {number} [opts.timeoutMs]
+ * @returns {Promise<{failures: string[]}>}
  */
 export async function injectIncludes({
   doc = document,
   urlFor = configUrl,
   fetchFn = (href) => fetch(href),
+  timeoutMs = 4000,
 } = {}) {
+  const failures = [];
   const nodes = [...doc.querySelectorAll('[data-include]')];
   await Promise.all(nodes.map(async (el) => {
     const path = el.getAttribute('data-include') || '';
     try {
-      const res = await fetchFn(urlFor(path));
+      const res = await withTimeout(fetchFn(urlFor(path)), timeoutMs, path);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const html = await res.text();
       const tpl = doc.createElement('template');
@@ -35,9 +81,15 @@ export async function injectIncludes({
       el.replaceWith(tpl.content);
     } catch (e) {
       console.error('Include failed:', path, e);
-      el.replaceWith(doc.createComment(`include failed: ${path}`));
+      failures.push(path);
+      // The header slot degrades to a minimal brand bar (never chrome-less);
+      // nav/footer slots leave a comment (their loss is survivable).
+      if (/header\.html$/.test(path)) el.replaceWith(buildHeaderFallback(doc, urlFor));
+      else el.replaceWith(doc.createComment(`include failed: ${path}`));
     }
   }));
+  if (failures.length) showShellError(doc, failures);
+  return { failures };
 }
 
 /* ---------- Active nav + resolve data-nav hrefs ---------- */
