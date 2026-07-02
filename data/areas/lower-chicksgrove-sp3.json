@@ -28,7 +28,16 @@
     "No shop or school in the hamlet - nearest services are in Tisbury (~2 miles)",
     "Tisbury has the nearest railway station, shops and schools"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/126388",
+      "name": "St John's CE Primary School, Tisbury",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good (2019)",
+      "distance": "~2 mi west in Tisbury"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -95,6 +104,10 @@
     {
       "url": "https://www.ruralview.co.uk/wp-content/uploads/rps_rvs-TSB150022.pdf",
       "label": "Rural View - Little Cottage, Lower Chicksgrove (local Chilmark stone, setting)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/126388",
+      "label": "Ofsted - St John's CE Primary School, Tisbury"
     }
   ],
   "rightmove": {

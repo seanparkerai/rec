@@ -72,7 +72,14 @@
     "Walking towards the Clarendon estate and Clarendon Way",
     "Easy access to Salisbury attractions - the Cathedral and Old Sarum"
   ],
-  "placesToEat": [],
+  "placesToEat": [
+    {
+      "url": "https://whatpub.com/pubs/SAL/1/green-dragon-alderbury",
+      "name": "Green Dragon, Alderbury",
+      "type": "Pub",
+      "notes": "~1.5 mi west in Alderbury; Grade I listed 14th-century inn, Dickens's 'Blue Dragon' in Martin Chuzzlewit"
+    }
+  ],
   "pros": [
     "Quiet, historic village very close to Salisbury",
     "Attractive Grade II* church and an active village hall",
@@ -108,6 +115,14 @@
     {
       "url": "https://clarendoncofe.org/churches/west-grimstead-st-john/",
       "label": "West Grimstead, St John - The Clarendon Churches"
+    },
+    {
+      "url": "https://whatpub.com/pubs/SAL/1/green-dragon-alderbury",
+      "label": "Green Dragon, Alderbury - WhatPub (CAMRA)"
+    },
+    {
+      "url": "https://camra.org.uk/pubs/green-dragon-alderbury-191940",
+      "label": "CAMRA - Green Dragon, Alderbury (Grade I listed inn)"
     }
   ],
   "rightmove": {

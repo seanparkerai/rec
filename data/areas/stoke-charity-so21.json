@@ -29,7 +29,24 @@
     "Everyday shops and services in nearby Sutton Scotney",
     "No shop, pub or school within Stoke Charity itself"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": null,
+      "name": "Micheldever CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 mi east in Micheldever (Dever Valley Federation)"
+    },
+    {
+      "url": "https://www.southwonston.hants.sch.uk/",
+      "name": "South Wonston Primary School",
+      "type": "State (Community)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2.5 mi south in South Wonston"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -96,6 +113,14 @@
     {
       "url": "https://www.british-history.ac.uk/vch/hants/vol3/pp447-451",
       "label": "British History Online - VCH Hampshire, Stoke Charity"
+    },
+    {
+      "url": "https://www.bartonstacey.hants.sch.uk/",
+      "label": "Barton Stacey Primary School (Dever Valley Federation with Micheldever CE)"
+    },
+    {
+      "url": "https://www.southwonston.hants.sch.uk/",
+      "label": "South Wonston Primary School"
     }
   ],
   "rightmove": {

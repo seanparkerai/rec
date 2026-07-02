@@ -30,7 +30,24 @@
     "The Yew Tree pub at nearby Lower Wield",
     "No shop or pub in Northington itself - facilities are spread across the valley"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116308",
+      "name": "Preston Candover CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~2.5 mi north in the Candover valley"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Perins_School",
+      "name": "Perins School",
+      "type": "State (Academy)",
+      "phase": "Secondary",
+      "ofsted": null,
+      "distance": "~3.5 mi south in New Alresford"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -98,6 +115,14 @@
     {
       "url": "http://candovervalley.org/",
       "label": "Candover Valley - parish councils and community"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116308",
+      "label": "Ofsted - Preston Candover CE Primary School"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Perins_School",
+      "label": "Perins School, New Alresford - Wikipedia"
     }
   ],
   "rightmove": {

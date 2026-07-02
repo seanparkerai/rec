@@ -29,7 +29,16 @@
     "Bus stop on the A36 with services to Salisbury and Wilton",
     "No village shop - everyday shopping is in Wilton or Salisbury"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/146098",
+      "name": "Wilton CofE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 mi south in Wilton"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -101,6 +110,10 @@
     {
       "url": "https://hwwhite.co.uk/wylye-valley/south-newton-and-stoford/",
       "label": "H&W White - South Newton and Stoford (Wylye Valley)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/146098",
+      "label": "Ofsted - Wilton CofE Primary School"
     }
   ],
   "rightmove": {

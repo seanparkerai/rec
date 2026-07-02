@@ -74,7 +74,20 @@
     "Trafalgar Park (Nelson's former estate) close by",
     "The New Forest National Park within easy reach"
   ],
-  "placesToEat": [],
+  "placesToEat": [
+    {
+      "url": "https://camra.org.uk/pubs/wooden-spoon-downton-192128",
+      "name": "Wooden Spoon, Downton",
+      "type": "Pub",
+      "notes": "~2 mi south in Downton; two-bar village pub built 1740"
+    },
+    {
+      "url": "https://www.beerintheevening.com/pubs/s/30/3023/White_Horse/Downton",
+      "name": "White Horse, Downton",
+      "type": "Pub",
+      "notes": "~2 mi south in The Borough, Downton"
+    }
+  ],
   "pros": [
     "Very private, rural Avon-valley setting",
     "Fishing lakes on the doorstep",
@@ -110,6 +123,10 @@
     {
       "url": "https://mapcarta.com/N496219028",
       "label": "Witherington Farm / Fishery - Mapcarta"
+    },
+    {
+      "url": "https://camra.org.uk/pubs/wooden-spoon-downton-192128",
+      "label": "CAMRA - Wooden Spoon, Downton (built 1740)"
     }
   ],
   "rightmove": {

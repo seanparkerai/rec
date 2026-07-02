@@ -30,7 +30,24 @@
     "Oxdrove Way and Three Castles Path long-distance walking routes",
     "No village shop - everyday shopping is in Alresford or Alton"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116300",
+      "name": "Medstead CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~2.5 mi south-east in Medstead"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116308",
+      "name": "Preston Candover CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~3 mi west in Preston Candover"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -97,6 +114,14 @@
     {
       "url": "https://www.hampshire-history.com/upper-wield-church/",
       "label": "Hampshire History - St James Church, Upper Wield"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116300",
+      "label": "Ofsted - Medstead CE Primary School"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116308",
+      "label": "Ofsted - Preston Candover CE Primary School"
     }
   ],
   "rightmove": {

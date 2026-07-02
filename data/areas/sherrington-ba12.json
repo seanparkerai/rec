@@ -80,7 +80,14 @@
     "Walking and riding in Great Ridge Wood and the Wylye-valley downland",
     "Longleat, Stourhead and Shearwater Lake all within reach"
   ],
-  "placesToEat": [],
+  "placesToEat": [
+    {
+      "url": "https://bellinnwylye.co.uk/",
+      "name": "The Bell Inn, Wylye",
+      "type": "Pub",
+      "notes": "~1 mi across the valley in Wylye; open six days a week"
+    }
+  ],
   "pros": [
     "Exceptionally pretty, peaceful thatched village around a mill pond",
     "Within the Cranborne Chase National Landscape with Great Ridge Wood on the doorstep",
@@ -116,6 +123,10 @@
     {
       "url": "https://www.ratedtrips.com/walking/wylye-valley-villages",
       "label": "Wylye Valley Villages walk - RatedTrips/AA"
+    },
+    {
+      "url": "https://bellinnwylye.co.uk/",
+      "label": "The Bell Inn, Wylye"
     }
   ],
   "rightmove": {

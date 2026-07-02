@@ -25,9 +25,10 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
 ## Open items
 
 ### Content (needs web research per CLAUDE.md §7)
-- [ ] Area research batches — queue via `node tools/area-status.mjs --missing`; write each area to
-      Supabase via MCP, then materialise (`sync-areas-from-supabase` → `build-areas`, §18.5).
-      Complete one fully evidenced batch before committing records.
+- [x] Area research batches **COMPLETE (2026-07-02, fable-overhaul 6.5/6.6)** — all 196 areas are
+      `researched` with zero missing content fields (`area-status --missing` is empty). Written
+      DB-first per §18.5, web-cited per §7. Area **imagery** (`images[]`) remains queued below with
+      the house-type imagery work.
 - [ ] House-type content + imagery batches (15 types, several still `draft-no-sources`):
       research → splice → licence-safe images → sources → tests → commit per batch.
 

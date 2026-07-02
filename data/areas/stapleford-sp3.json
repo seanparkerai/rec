@@ -29,7 +29,24 @@
     "The Pelican Inn pub and restaurant (with rooms) at Serrington",
     "No village shop - everyday shopping is in Wilton or Salisbury"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/134977",
+      "name": "Wylye Valley CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good (2023)",
+      "distance": "~4 mi up the valley at Codford (the nearer Steeple Langford site closed 2010)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/146098",
+      "name": "Wilton CofE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~4.5 mi south-east in Wilton"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -90,6 +107,14 @@
     {
       "url": "https://hwwhite.co.uk/wylye-valley/stapleford/",
       "label": "H&W White - Stapleford (Wylye Valley)"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/134977",
+      "label": "Ofsted - Wylye Valley CE Primary School, Codford"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Steeple_Langford",
+      "label": "Steeple Langford - Wikipedia (school merged to Codford; site closed 2010)"
     }
   ],
   "rightmove": {

@@ -29,7 +29,24 @@
     "River Dever and surrounding downland",
     "No shop or pub in Wonston itself"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://www.southwonston.hants.sch.uk/",
+      "name": "South Wonston Primary School",
+      "type": "State (Community)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2 mi south in South Wonston"
+    },
+    {
+      "url": "https://www.bartonstacey.hants.sch.uk/",
+      "name": "Barton Stacey Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~2.5 mi north-west in Barton Stacey"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -92,6 +109,14 @@
     {
       "url": "https://www.thetrainline.com/train-times/micheldever-to-london-waterloo",
       "label": "Trainline - Micheldever to London Waterloo times"
+    },
+    {
+      "url": "https://www.southwonston.hants.sch.uk/",
+      "label": "South Wonston Primary School"
+    },
+    {
+      "url": "https://www.bartonstacey.hants.sch.uk/",
+      "label": "Barton Stacey Primary School (Dever Valley Federation)"
     }
   ],
   "rightmove": {

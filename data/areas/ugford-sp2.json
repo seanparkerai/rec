@@ -29,7 +29,16 @@
     "Bus service runs along the A30, though most residents drive",
     "Main shopping in Wilton and Salisbury"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/146098",
+      "name": "Wilton CofE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "adjoining Wilton, under 1 mi"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -95,6 +104,10 @@
     {
       "url": "https://getoutside.ordnancesurvey.co.uk/local/ugford-clump-wiltshire",
       "label": "Ugford Clump - Ordnance Survey GetOutside"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/146098",
+      "label": "Ofsted - Wilton CofE Primary School"
     }
   ],
   "rightmove": {

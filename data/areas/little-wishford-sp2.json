@@ -28,7 +28,24 @@
     "Nearest pubs and services in Stoford, South Newton and Great Wishford",
     "Main shopping in Wilton and Salisbury"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/146098",
+      "name": "Wilton CofE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~3 mi south in Wilton"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/134977",
+      "name": "Wylye Valley CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good (2023)",
+      "distance": "~6 mi up the valley at Codford"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -55,7 +72,14 @@
     "Visit neighbouring Great Wishford with its historic St Giles church and Oak Apple Day traditions",
     "Walking and cycling towards Grovely Wood and National Cycle Route 24"
   ],
-  "placesToEat": [],
+  "placesToEat": [
+    {
+      "url": "https://whatpub.com/pubs/SAL/43/royal-oak-great-wishford",
+      "name": "Royal Oak, Great Wishford",
+      "type": "Pub",
+      "notes": "~1 mi north at Great Wishford; 17th-century ivy-clad village pub, restored and reopened"
+    }
+  ],
   "pros": [
     "Peaceful riverside valley setting",
     "Close to Salisbury and Wilton yet thoroughly rural",
@@ -87,6 +111,14 @@
     {
       "url": "https://www.british-history.ac.uk/vch/wilts/vol15/pp284-294",
       "label": "VCH Wiltshire vol. 15: Great Wishford - British History Online"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/146098",
+      "label": "Ofsted - Wilton CofE Primary School"
+    },
+    {
+      "url": "https://whatpub.com/pubs/SAL/43/royal-oak-great-wishford",
+      "label": "Royal Oak, Great Wishford - WhatPub (CAMRA)"
     }
   ],
   "rightmove": {

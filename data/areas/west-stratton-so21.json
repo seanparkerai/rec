@@ -29,7 +29,16 @@
     "No shop or school in the village itself",
     "Micheldever station nearby for commuting"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": null,
+      "name": "Micheldever CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": null,
+      "distance": "~1.5 mi south in Micheldever (Dever Valley Federation)"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -92,6 +101,10 @@
     {
       "url": "https://www.omio.co.uk/trains/micheldever/london-waterloo-3kkif",
       "label": "Omio - Micheldever to London Waterloo times"
+    },
+    {
+      "url": "https://www.bartonstacey.hants.sch.uk/",
+      "label": "Barton Stacey Primary School (Dever Valley Federation with Micheldever CE)"
     }
   ],
   "rightmove": {

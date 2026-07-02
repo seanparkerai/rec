@@ -29,7 +29,24 @@
     "The Angel pub nearby towards Privett",
     "No village shop or post office - everyday shopping is in Alresford or Petersfield"
   ],
-  "schools": [],
+  "schools": [
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116312",
+      "name": "Ropley CofE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~3 mi north-west in Ropley"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116288",
+      "name": "Four Marks CE Primary School",
+      "type": "State (Church of England)",
+      "phase": "Primary",
+      "ofsted": "Good",
+      "distance": "~3.5 mi north in Four Marks"
+    }
+  ],
   "transport": {
     "commutes": [
       {
@@ -96,6 +113,14 @@
     {
       "url": "https://www.alltrails.com/en-gb/trail/england/hampshire/west-tisted-commons-and-churches-circular",
       "label": "AllTrails - West Tisted Commons and Churches Circular"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116312",
+      "label": "Ofsted - Ropley CofE Primary School"
+    },
+    {
+      "url": "https://reports.ofsted.gov.uk/provider/21/116288",
+      "label": "Ofsted - Four Marks CE Primary School"
     }
   ],
   "rightmove": {
