@@ -36,6 +36,20 @@ export async function register({ test, assert, assertEqual }) {
     assert(byId.get('1').length >= 2, 'member of both overlapping villages');
   });
 
+  // ── writer helper: a repeated geo verdict never yields two primaries ──
+  test('groupByListing: duplicate geo verdicts for one listing collapse to one membership set (one is_primary)', () => {
+    // Raw Apify pages can return the same listing twice; two full verdicts for
+    // the same rightmove_id used to merge into one set with TWO is_primary rows,
+    // which replace_listing_areas rejects ("exactly one is_primary … got 2").
+    const home = { rightmove_id: '5', lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase, SO32' };
+    const geo = [home, { ...home }].map((l) => ({ l, g: withinGeofence(l, { villages: VILLAGES }) }));
+    const rows = membershipRowsFor(geo);
+    assertEqual(rows.filter((r) => r.is_primary).length, 2, 'precondition: the flat rows DO carry the duplicate');
+    const grouped = groupByListing(rows).get('5');
+    assertEqual(grouped.filter((r) => r.is_primary).length, 1, 'exactly one primary after grouping');
+    assertEqual(new Set(grouped.map((r) => r.area_id)).size, grouped.length, 'no duplicate area rows');
+  });
+
   // ── backfill: is_primary is aligned to the listing's STORED area_id ──
   test('backfill membershipFor: verdict-driven rows, no drift when stored primary matches', () => {
     const row = { rightmove_id: '3', lat: 50.9386, lng: -1.2031, address: 'Forest Road, Waltham Chase', area_id: 'waltham-chase-so32' };
