@@ -3,7 +3,30 @@
    search bar and collapsed directory below it stay reachable; it grows to a
    comfortable fixed height on laptop. Live map uses svh/dvh per §10. */
 
-.map-card { padding: 0; overflow: hidden; gap: 0; height: 50svh; min-height: 320px; margin-bottom: var(--space-4); }
+/* 3.7b map-first (⚙ 3.1 wireframe, lean form): on phones the map fills the
+   viewport minus the sticky header once the page chrome scrolls away, with a
+   one-tap floating jump to the directory below (the draggable-sheet variant
+   was judged over-engineering for a zero-build page — deviation recorded). */
+.map-card { position: relative; padding: 0; overflow: hidden; gap: 0; height: calc(100dvh - var(--header-h, 4rem) - var(--space-8)); min-height: 360px; margin-bottom: var(--space-4); }
+.map-to-list {
+  position: absolute; bottom: max(var(--space-3), env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+  z-index: 1100; /* above Leaflet's panes/controls (they top out at 1000) */
+  display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4);
+  font-size: var(--text-sm); font-weight: 500; text-decoration: none; white-space: nowrap;
+  color: var(--ink); background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: blur(8px) saturate(150%); backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid var(--hairline); border-radius: 999px;
+}
+.map-to-list:hover { border-color: var(--accent); color: var(--accent-ink); }
+.map-to-list:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+/* The jump target lands clear of the sticky header (§11 Focus Not Obscured). */
+.area-search-row { scroll-margin-top: calc(var(--header-h, 4rem) + var(--space-3)); }
+@media (min-width: 768px) {
+  /* Tablet/desktop: the directory is visible alongside the scroll — the jump chip
+     is a phone affordance; the map returns to its comfortable banded height. */
+  .map-to-list { display: none; }
+  .map-card { height: 50svh; min-height: 320px; }
+}
 .map-canvas {
   height: 100%; min-height: 0; width: 100%;
   border-radius: 0;

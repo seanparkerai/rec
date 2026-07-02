@@ -25,6 +25,19 @@ function shimDialog(dlg) {
 }
 
 export async function register({ test, assert, assertEqual }) {
+  test('areas page: map-first with a one-tap jump to the directory (step 3.7b)', () => {
+    const dom = areasDom();
+    const doc = dom.window.document;
+    const chip = doc.querySelector('.map-card .map-to-list');
+    assertEqual(chip?.getAttribute('href'), '#directory', 'the floating chip jumps to the directory');
+    const target = doc.getElementById('directory');
+    assert(target, 'the jump target exists');
+    assert(doc.querySelector('.map-card').compareDocumentPosition(target) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
+      'map leads, directory follows — map-first order');
+    assert(!doc.querySelector('[style]'), 'no inline styles (DESIGN.md §6.7)');
+    dom.window.close();
+  });
+
   test('areas page: the inline filter-sheet script is gone; the shared module wires it', async () => {
     const dom = areasDom();
     const doc = dom.window.document;
