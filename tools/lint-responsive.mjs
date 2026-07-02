@@ -177,6 +177,32 @@ for (const file of cssFiles) {
     if (!isKnownToken(m[1])) add('r-undefined-token', file, m.index, text, `var(${m[1]})`);
   }
 
+  // r-focus-kill — a rule that removes the focus outline must provide a
+  // visible replacement in the SAME block (box-shadow, background, border);
+  // otherwise keyboard focus disappears (§11 focus-visible floor, 3.9e).
+  // A container-level `:focus-within` indicator is a legitimate exception —
+  // it goes to the allow-list with its reason, never silently.
+  for (const block of text.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const body = block[2];
+    if (!/outline\s*:\s*(?:none|0)\b/.test(body)) continue;
+    const replaced = /box-shadow\s*:\s*(?!\s*none\b)[^;]+/.test(body)
+      || /\bbackground(?:-color)?\s*:/.test(body)
+      || /\bborder(?:-color)?\s*:/.test(body)
+      || /outline\s*:\s*(?!\s*(?:none\b|0\b))[^;]/.test(body);
+    if (!replaced) {
+      add('r-focus-kill', file, block.index, text, `${norm(block[1])} { outline: none }`);
+    }
+  }
+
+  // r-focus-ring-as-outline — `--focus-ring` is a BOX-SHADOW value
+  // (0 0 0 3px <color>); used as `outline:` it is invalid at computed-value
+  // time, which silently KILLS the global focus outline instead of drawing a
+  // ring (found live ×29 at 3.9e). box-shadow: var(--focus-ring) or
+  // outline: 2px solid var(--accent) are the working idioms.
+  for (const m of text.matchAll(/outline\s*:\s*var\(\s*--focus-ring\s*\)/g)) {
+    add('r-focus-ring-as-outline', file, m.index, text, 'outline: var(--focus-ring)');
+  }
+
   // r-tap-target — interactive selector with a literal size < 44px.
   for (const block of text.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const selector = block[1];

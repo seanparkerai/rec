@@ -28,7 +28,7 @@
 
 /* ── Media well ─────────────────────────────────────────────────────────── */
 .prop-card__media-link { display: block; border-radius: var(--rec-radius-sm); }
-.prop-card__media-link:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.prop-card__media-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .prop-card__media {
   inline-size: clamp(4.5rem, 24cqi, 8.5rem);
   aspect-ratio: 4 / 3;
@@ -84,7 +84,7 @@
 .prop-card__title { margin: 0; font-size: var(--text-base); font-weight: 500; line-height: 1.3; }
 .prop-card__title-link { color: inherit; text-decoration: none; }
 .prop-card__title-link:hover { color: var(--accent); }
-.prop-card__title-link:focus-visible { outline: var(--focus-ring); outline-offset: 2px; border-radius: var(--rec-radius-sm); }
+.prop-card__title-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--rec-radius-sm); }
 
 .prop-card__place { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
 .prop-card__meta {

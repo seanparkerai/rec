@@ -83,7 +83,7 @@
   transition: background 0.12s, border-color 0.12s, opacity 0.12s;
 }
 .listings-fetch-btn:hover { background: var(--accent); border-color: var(--accent); }
-.listings-fetch-btn:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listings-fetch-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .listings-fetch-btn:disabled { opacity: 0.55; cursor: progress; }
 
 /* Status line + token box wrap onto their own full-width row beneath the controls. */

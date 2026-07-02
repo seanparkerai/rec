@@ -36,7 +36,7 @@
 }
 .listings-mode:last-child { border-right: 0; }
 .listings-mode:hover { color: var(--ink); }
-.listings-mode:focus-visible { outline: var(--focus-ring); outline-offset: -2px; }
+.listings-mode:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .listings-mode[aria-pressed="true"] {
   color: var(--paper); font-weight: 600;
   background: color-mix(in oklch, var(--accent) 80%, var(--ink));
@@ -100,7 +100,7 @@
   transition: background 0.12s, border-color 0.12s, color 0.12s;
 }
 .deck-react__btn:hover { border-color: var(--ink-muted); }
-.deck-react__btn:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.deck-react__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .deck-react__btn--like:hover { background: color-mix(in oklch, var(--accent) 14%, var(--paper)); border-color: var(--accent); }
 .deck-react__btn--reject[aria-pressed="true"] {
   font-weight: 600;
@@ -118,7 +118,7 @@
   color: var(--paper); border: 0; border-radius: var(--rec-radius-sm);
   background: color-mix(in oklch, var(--accent) 80%, var(--ink));
 }
-.deck-done__browse:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.deck-done__browse:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* Desktop: constrain the deck to a comfortable reading column with side media. */
 @media (min-width: 768px) {

@@ -23,7 +23,7 @@
   transition: color 0.12s, border-color 0.12s, background 0.12s;
 }
 .listing-subchip:hover { color: var(--ink); border-color: var(--ink-muted); }
-.listing-subchip:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-subchip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .listing-subchip[aria-pressed="true"] {
   font-weight: 600; border-style: solid;
   color: color-mix(in oklch, var(--accent) 80%, var(--ink));
@@ -42,7 +42,7 @@
 }
 .deck-save { width: 100%; min-height: 48px; font-size: var(--text-base); }
 .listing-save:hover, .deck-save:hover { background: var(--accent); }
-.listing-save:focus-visible, .deck-save:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-save:focus-visible, .deck-save:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .listing-save[disabled], .deck-save[disabled] {
   background: color-mix(in oklch, var(--ink) 12%, var(--paper));
   color: var(--ink-subtle); cursor: not-allowed;
@@ -81,7 +81,7 @@
   transition: background 0.12s, border-color 0.12s, color 0.12s;
 }
 .btn-rm:hover { background: color-mix(in oklch, var(--accent) 16%, var(--paper)); border-color: var(--accent); color: var(--accent); }
-.btn-rm:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.btn-rm:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .btn-map {
   display: inline-flex; align-items: center; justify-content: center;
   width: var(--tap-min); height: var(--tap-min); min-height: var(--tap-min); flex-shrink: 0;
@@ -93,13 +93,13 @@
   transition: background 0.12s, border-color 0.12s, color 0.12s;
 }
 .btn-map:hover { background: color-mix(in oklch, var(--accent) 8%, var(--paper)); border-color: var(--accent); color: var(--accent); }
-.btn-map:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.btn-map:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .btn-map { transition: none; } }
 .deck-card__links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 
 /* ── Clickable media → our dossier (keyboard-accessible link) ──────────────── */
 .deck-media-link { display: block; height: 100%; cursor: pointer; outline-offset: -2px; position: relative; }
-.deck-media-link:focus-visible { outline: var(--focus-ring); }
+.deck-media-link:focus-visible { outline: 2px solid var(--accent); }
 .deck-media-link:hover .deck-media__img { opacity: 0.92; transition: opacity 0.15s; }
 
 /* Collapsed "Reviewed (N)" section pinned at the bottom of the list. */
@@ -112,7 +112,7 @@
   min-height: var(--tap-min); font-family: var(--font-body); font-weight: 600; color: var(--ink-muted);
   list-style-position: inside;
 }
-.reviewed-collapse__summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.reviewed-collapse__summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .reviewed-collapse__count {
   display: inline-flex; align-items: center; justify-content: center;
   min-width: 1.5rem; height: 1.5rem; padding: 0 0.4rem;
@@ -184,7 +184,7 @@
   list-style: none; cursor: pointer; min-height: 32px; /* comfortable target (§11) */
 }
 .training__summary::-webkit-details-marker { display: none; }
-.training__summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; border-radius: var(--rec-radius-sm); }
+.training__summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--rec-radius-sm); }
 .training__summary-hint {
   margin-left: auto; display: inline-flex; align-items: center; gap: var(--space-1);
   font-size: var(--text-xs); color: var(--ink-muted); white-space: nowrap;

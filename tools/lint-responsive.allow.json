@@ -1,4 +1,12 @@
 {
+  "r-focus-kill|assets/css/pages/ask.css|/* Pico draws a focus ring/box-shadow on form fields; the ring now lives on the field wrapper, so neutralise it on the inner control. */ .ask-field .ask-input:focus { outline: none }": {
+    "count": 1,
+    "reason": "Container-level indicator: .ask-field:focus-within draws the ring on the composer wrapper (ask.css:193), so the inner textarea suppresses its own — keyboard focus stays visible. Sanctioned 2026-07-02 (3.9e)."
+  },
+  "r-focus-kill|assets/css/pages/property.css|.dossier-gallery:focus-visible { outline: none }": {
+    "count": 1,
+    "reason": "Double-ring dedup: the global *:focus-visible box-shadow (base.css:90, lower specificity, not overridden here) still renders on the gallery group — this rule only drops the redundant second outline on a large block. Sanctioned 2026-07-02 (3.9e)."
+  },
   "r-no-style-assign|assets/js/dashboard/tile-deposit.js|.style.strokeDashoffset =": {
     "count": 1,
     "reason": "Deposit-arc SVG animation: strokeDashoffset is a numeric SVG presentation value driven per-frame; a CSS-var indirection adds no safety. Sanctioned 2026-07-01 (v1 baseline port)."

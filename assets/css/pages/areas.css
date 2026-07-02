@@ -60,7 +60,7 @@
 .area-disclosure__summary .result-summary { margin: 0; }
 .area-disclosure__summary:hover .area-disclosure__label { color: var(--accent); }
 .area-disclosure__summary:focus-visible {
-  outline: var(--focus-ring); outline-offset: -2px;
+  outline: 2px solid var(--accent); outline-offset: -2px;
 }
 @media (prefers-reduced-motion: reduce) {
   .area-disclosure__label::before { transition: none; }

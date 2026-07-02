@@ -52,7 +52,7 @@
   cursor: pointer; font-size: var(--text-xs); color: var(--ink-muted);
   list-style-position: inside; min-height: 28px; display: inline-flex; align-items: center;
 }
-.listing-why > summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-why > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .listing-why__list { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: 0.2rem; }
 .listing-why__item { display: flex; align-items: baseline; gap: var(--space-2); font-size: var(--text-sm); color: var(--ink); }
 .listing-why__sign { font-family: var(--font-data); width: 1rem; flex: none; }
@@ -68,7 +68,7 @@
   cursor: pointer; font-size: var(--text-xs); color: var(--ink-muted);
   list-style-position: inside; min-height: 28px; display: inline-flex; align-items: center;
 }
-.listing-areas > summary:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-areas > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .listing-areas__list { margin: var(--space-2) 0 0; font-size: var(--text-sm); color: var(--ink); line-height: 1.5; }
 
 /* ── Reaction + personal-status controls (L3) ─────────────────────────────── */
@@ -104,7 +104,7 @@
 .listing-react-toggle[open] > summary::before { transform: rotate(90deg); }
 .listing-react-toggle > summary:hover { color: var(--ink); }
 .listing-react-toggle > summary:focus-visible {
-  outline: var(--focus-ring); outline-offset: 2px; border-radius: var(--rec-radius-sm);
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--rec-radius-sm);
 }
 .listing-react-toggle[open] > .reaction-picker--row { width: 100%; margin-top: var(--space-2); }
 .listing-react { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
@@ -122,7 +122,7 @@
 .listing-chip:hover { color: var(--ink); border-color: var(--ink-muted); }
 .listing-react__btn:focus-visible,
 .listing-chip:focus-visible,
-.listing-status:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-status:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* Pressed (current) reaction — pair colour with weight so it is not colour-only (§11). */
 .listing-react__btn[aria-pressed="true"] {
@@ -164,7 +164,7 @@
   border: 1px solid var(--hairline); border-radius: var(--rec-radius-sm);
   background: var(--paper); color: var(--ink);
 }
-.listing-rating:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.listing-rating:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 
 /* ── 3.4c: Browse chrome inside the shared prop-card thumb-zone slot ──────────

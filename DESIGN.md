@@ -56,6 +56,12 @@ All visual values come from `assets/css/tokens.css`. Component CSS **never** har
 - `--rec-radius: 12px`, `--rec-radius-sm: 8px`. No other values.
 - Shadow used **sparingly** for genuine elevation (sheet, dialog), never decoration.
 - `--focus-ring`: single token, ≥3:1 contrast both sides, applied via `:focus-visible` only.
+  It is a **box-shadow value** (`0 0 0 3px <color>`) — apply it as `box-shadow: var(--focus-ring)`.
+  As `outline:` it is invalid at computed-value time and silently KILLS the global focus outline
+  (found live ×29, fixed 2026-07-02; `r-focus-ring-as-outline` lints against return). Component
+  outlines use `2px solid var(--accent)` — the same idiom as the global `*:focus-visible` in
+  `base.css`. Removing an outline without a same-block replacement is linted (`r-focus-kill`);
+  container-level `:focus-within` indicators are allow-listed with reasons, never silent.
 
 ### Motion
 - One orchestrated reveal per page, CSS only.

@@ -18,7 +18,7 @@
   border: 1px solid var(--hairline); border-radius: 999px;
 }
 .map-to-list:hover { border-color: var(--accent); color: var(--accent-ink); }
-.map-to-list:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.map-to-list:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 /* The jump target lands clear of the sticky header (§11 Focus Not Obscured). */
 .area-search-row { scroll-margin-top: calc(var(--header-h, 4rem) + var(--space-3)); }
 @media (min-width: 768px) {
