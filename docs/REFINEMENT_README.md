@@ -81,6 +81,10 @@ still logs `actor='system'` run rows.
   `--probation-file <rows>.json` (sandbox). Exits non-zero on paused-but-active drift.
 - **Tests**: `node tools/run-all-tests.mjs` (the refinement suites are
   `refinement-engine` / `-persistence` / `-view` / `-scope`).
+- **Mutation testing** (step 4.10, opt-in — never part of the default gate):
+  `npm run test:mutation` runs Stryker over `refinement/` + `learned-preferences/`
+  with the unit tier as the kill vehicle (`stryker.conf.json`; breaks under a 75%
+  mutation score). Run it when engine logic changes materially, not per commit.
 
 ## Current production state (2026-06-07)
 **Genuine-only inputs (2026-06-07).** The engine now scores **genuine, one-at-a-time

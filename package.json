@@ -13,9 +13,11 @@
     "sync-areas": "node tools/sync-areas-from-supabase.mjs",
     "test:new": "node tools/run-all-tests.mjs",
     "typecheck": "tsc --noEmit",
+    "test:mutation": "stryker run",
     "test:legacy": "node tools/run-intelligence-tests.mjs"
   },
   "devDependencies": {
+    "@stryker-mutator/core": "^9.6.1",
     "happy-dom": "^20.10.6",
     "jsdom": "^29.1.1",
     "typescript": "^6.0.3"
