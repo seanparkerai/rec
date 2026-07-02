@@ -1,71 +1,8 @@
-/* ── List + media cards (overhauled) ──────────────────────────────────────────
-   Editorial media rows: a cover-cropped photo + a generously-spaced content
-   column. Hairline-bordered (NOT shadow-floated SaaS cards per DESIGN.md §3).
-   Mobile-first: photo on top, stacking; ≥768px the photo moves to the left. ── */
-.listing-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
-
-.listing-card {
-  display: grid;
-  grid-template-columns: 1fr;          /* mobile-first: media above content */
-  border: 1px solid var(--hairline);
-  border-radius: var(--rec-radius);
-  overflow: hidden;
-  background: var(--paper);
-  /* Keep a card clear of the sticky header when scrolled/focused into view on
-     return from a dossier (§11 Focus Not Obscured). */
-  scroll-margin-top: calc(var(--header-h, 4rem) + var(--space-3));
-}
-
-/* Brief highlight on the card you came back to (paired with focus, not colour-only). */
-.listing-card--returned { outline: 2px solid var(--accent); outline-offset: 2px; }
-@media (prefers-reduced-motion: no-preference) {
-  .listing-card--returned { transition: outline-color 0.4s ease; }
-}
-
-/* Media well — fixed aspect, cover-cropped, so an image is never squashed. */
-.listing-media,
-.listing-media--none { aspect-ratio: 16 / 10; overflow: hidden; }
-.listing-media { background: color-mix(in oklch, var(--ink) 6%, var(--paper)); }
-.listing-media__img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.listing-media--none {
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-size: var(--text-2xl);
-  color: color-mix(in oklch, var(--accent) 45%, var(--ink));
-  background: color-mix(in oklch, var(--accent) 8%, var(--paper));
-}
-
-.listing-card__content {
-  min-width: 0; padding: var(--space-4);
-  display: grid; gap: var(--space-2); align-content: start;
-}
-.listing-card__head { display: flex; align-items: center; gap: var(--space-2); }
-.listing-card__head .fit-dot { width: 0.75rem; height: 0.75rem; flex: none; }
-.listing-card__price {
-  margin-left: auto; font-family: var(--font-data); font-feature-settings: "tnum";
-  font-size: var(--text-lg); font-weight: 500; color: var(--ink); white-space: nowrap;
-}
-.listing-card__title {
-  margin: 0; font-family: var(--font-display); font-optical-sizing: auto;
-  font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
-}
-.listing-card__title-link { color: inherit; text-decoration: none; }
-.listing-card__title-link:hover { color: var(--accent); }
-.listing-card__title-link:focus-visible { outline: var(--focus-ring); outline-offset: 2px; border-radius: 2px; }
-.listing-card__place { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
-.listing-card__meta { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-subtle); overflow-wrap: anywhere; }
-.listing-card__open {
-  width: max-content; min-height: var(--tap-min); display: inline-flex; align-items: center;
-  font-size: var(--text-sm); font-weight: 500; text-decoration: none;
-  color: color-mix(in oklch, var(--accent) 80%, var(--ink));
-}
-.listing-card__open:hover { color: var(--accent); }
-.listing-card__open:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
-
-/* Tablet portrait and up: photo left, content right (horizontal media row). */
-@media (min-width: 768px) {
-  .listing-card { grid-template-columns: 18rem 1fr; }
-  .listing-media, .listing-media--none { aspect-ratio: auto; height: 100%; min-height: 13.5rem; }
-}
+/* ── Listing chrome shared by the feed rows and the review deck ───────────────
+   The card anatomy itself is the shared property-card family (3.4b/c/d:
+   components/property-card.css); this file keeps the chrome that composes into
+   its slots — fit dots, verdict labels, tags, the why/membership expanders,
+   and the reaction/status/rating controls — plus the review deck's pieces. ── */
 
 /* ── 5-band listing fit dots (reuses .fit-dot base from tile-shortlist.css;
    .fit-dot--stretch / --unknown already exist and are intentionally reused). ── */

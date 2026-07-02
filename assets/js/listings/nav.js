@@ -83,6 +83,6 @@ export function restoreListFocus(container, page) {
   const focusable = card.querySelector('a, button, select') || card;
   if (!focusable.hasAttribute('tabindex') && focusable === card) card.setAttribute('tabindex', '-1');
   try { focusable.focus({ preventScroll: true }); } catch { focusable.focus(); }
-  card.classList.add('listing-card--returned');
-  setTimeout(() => card.classList.remove('listing-card--returned'), 1600);
+  card.classList.add('prop-card--returned');
+  setTimeout(() => card.classList.remove('prop-card--returned'), 1600);
 }

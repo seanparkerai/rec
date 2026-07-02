@@ -14,8 +14,17 @@
   border-block-end: 1px solid var(--hairline);
   container-type: inline-size;
   container-name: propcard;
+  /* Keep a card clear of the sticky header when scrolled/focused into view on
+     return from a dossier (§11 Focus Not Obscured; listings/nav.js restore). */
+  scroll-margin-top: calc(var(--header-h, 4rem) + var(--space-3));
 }
 .prop-card:last-child { border-block-end: none; }
+
+/* Brief highlight on the card you came back to (paired with focus, not colour-only). */
+.prop-card--returned { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .prop-card--returned { transition: outline-color 0.4s ease; }
+}
 
 /* ── Media well ─────────────────────────────────────────────────────────── */
 .prop-card__media-link { display: block; border-radius: var(--rec-radius-sm); }
