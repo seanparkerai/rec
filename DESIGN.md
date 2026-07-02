@@ -38,6 +38,10 @@ All visual values come from `assets/css/tokens.css`. Component CSS **never** har
 - Light and dark themes share the same hue ladder, flipped in lightness.
 - Light: dominant ≈ `oklch(99% 0.005 95)` background, ink ≈ `oklch(20% 0.02 250)`, accent ≈ `oklch(55% 0.12 160)`.
 - Dark: background ≈ `oklch(15% 0.015 250)`, ink ≈ `oklch(94% 0.01 95)`, accent ≈ `oklch(72% 0.13 160)`.
+- **Legacy fallback (C1, 2026-07-01):** `tokens.css` ends with an `@supports not (color: oklch(…))`
+  block of sRGB approximations — custom properties fail at *usage* time, so an override block is the
+  only working fallback. Any new oklch/`color-mix` token must be added there too;
+  `tests/contract/tokens-fallback.test.js` fails the harness if it isn't.
 
 ### Spacing — 4 px base, no exceptions
 `--space-1 … --space-24` (4/8/12/16/24/32/48/64/96 px). If a value isn't on the scale, change the layout, not the token.

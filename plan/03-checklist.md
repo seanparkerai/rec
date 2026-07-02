@@ -91,7 +91,7 @@
 
 **Phase 3 — Mobile-first UI/UX overhaul (IA rethink, page-by-page on existing foundations)** *(entered 2026-07-01; 3.2–3.3 are IA-independent and proceed while ⚙ 3.1 review is pending; 3.4–3.9 expand to atomic once the review lands)*
 - [ ] 3.1 IA + navigation proposal → ⚙ owner design review before build. **Proposal AUTHORED + committed: [`05-ia-proposal.md`](05-ia-proposal.md)** (bottom tab bar on phones; Properties = Browse|Saved|Passed segments with URLs preserved; verdict-led Home bands; per-page wireframe note + anchor; 4 framed review decisions). *Awaiting owner review — the only open input for 3.4+.*
-- [ ] 3.2 C1: OKLCH/`color-mix` `@supports` fallbacks in `tokens.css` (rail phase).
+- [x] 3.2 C1: OKLCH/`color-mix` fallbacks live in `tokens.css` (rail phase, named + pre-authorised). Mechanism corrected from the validation note: custom properties fail at USAGE time, so "plain value declared first" can't work — an `@supports not (color: oklch(…))` override block carries sRGB approximations for every modern colour token, in all three theme scopes (light, forced dark, system-auto dark). New contract rail `tests/contract/tokens-fallback.test.js` (3 tests): block exists + is legacy-safe, every oklch/color-mix token has a fallback, dark fallbacks cover both dark paths. DESIGN.md colour contract updated. 855/855. *(2026-07-01)*
 - [ ] 3.3 Shell resilience: partial-injection timeout + minimal fallback + visible error; theme/header extracted to modules; page tests.
 - [ ] 3.4 Listings feed page rebuild (cards, thumb-zone reactions, pagination/virtual scroll, controls) — the flagship's face.
 - [ ] 3.5 Property dossier rebuild (collapsible sections, lazy gallery + srcset).
