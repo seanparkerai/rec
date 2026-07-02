@@ -4,13 +4,16 @@
 > (832 KB / 11,068 lines — split 2026-07-01, owner-directed, content preserved). The root
 > `fable_refactor.md` is now a pointer stub kept so old references resolve.
 >
-> **Status (2026-07-02, Phase-5 exit):** Phases **1** (test-harness core), **2** (⭐ flagship
-> listings pipeline), **3** (mobile-first UI/UX overhaul) and **5** (finances trust surface —
+> **Status (2026-07-02, mid-Phase-6):** Phases **1** (test-harness core), **2** (⭐ flagship
+> listings pipeline), **3** (mobile-first UI/UX overhaul — plus post-phase owner-directed 3.10/3.11
+> image-led Rightmove-register listings redesign) and **5** (finances trust surface —
 > A3/A4/A5/A7 corrections shipped, golden grids + drift rail + mutation floor live) are
-> **COMPLETE**; Phase 4 complete except owner-gated ⚙ 4.9 + optional 4.10b. Harness 959/959;
+> **COMPLETE**; Phase 4 complete except owner-gated ⚙ 4.9 + optional 4.10b. Harness 980/980;
 > finance mutation 87.04 (floor 86).
 > Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag; 2.11b + 4.9 unlock
-> with it). Next open phase: **6** (areas content & data quality — expand on entry).
+> with it). Current phase: **6** (areas content & data quality) — 6.1 matched-price ONE HOME +
+> 6.2 priceSummary ONE BAKE done; next **6.3** (stub predicate unified), then 6.4; 6.5/6.6 are
+> web-research content batches (data sessions, §18 ceremonies).
 > **Resume at the first unticked line of `03-checklist.md`.**
 
 ## How to use this directory (cold-resume protocol)
