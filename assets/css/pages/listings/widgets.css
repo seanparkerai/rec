@@ -166,7 +166,7 @@
   height: 0.45rem; border-radius: 999px; overflow: hidden;
   background: color-mix(in oklch, var(--danger) 30%, var(--paper));
 }
-.training-balance__likes { display: block; height: 100%; background: var(--positive); border-radius: 999px; transition: width 0.25s ease-out; }
+.training-balance__likes { display: block; height: 100%; width: var(--fill-pct, 0%); /* set via setProperty (DESIGN.md §6.7 idiom) */ background: var(--positive); border-radius: 999px; transition: width 0.25s ease-out; }
 .training-balance__label { margin: 0; font-family: var(--font-data); font-size: var(--text-xs); color: var(--ink-muted); }
 .training__next { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); }
 .training__next--alert {

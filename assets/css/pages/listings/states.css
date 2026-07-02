@@ -55,6 +55,7 @@
 }
 .deck-progress__fill {
   display: block; height: 100%; border-radius: 999px;
+  width: var(--fill-pct, 0%); /* set via setProperty (DESIGN.md §6.7 idiom) */
   background: color-mix(in oklch, var(--accent) 80%, var(--ink));
   transition: width 0.2s ease-out;
 }

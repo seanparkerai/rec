@@ -45,7 +45,7 @@ export function buildSummary({ review, like, pass, reject, gated, hiddenJunk, hi
 export function buildDeckProgress(done, total) {
   const pct = total ? Math.round((done / total) * 100) : 0;
   const fill = el('span', { class: 'deck-progress__fill' });
-  fill.style.width = `${pct}%`;
+  fill.style.setProperty('--fill-pct', `${pct}%`); // the sanctioned dynamic-value idiom (DESIGN.md §6.7)
   return el('div', { class: 'deck-progress' }, [
     el('div', {
       class: 'deck-progress__bar', role: 'progressbar',
@@ -101,7 +101,7 @@ export function buildTrainingProgress(p, deckDone, deckTotal, opts = {}) {
   const total = p.likes + p.rejects;
   const likePct = total ? Math.round((p.likes / total) * 100) : 0;
   const likeFill = el('span', { class: 'training-balance__likes' });
-  likeFill.style.width = `${likePct}%`;
+  likeFill.style.setProperty('--fill-pct', `${likePct}%`); // the sanctioned dynamic-value idiom (DESIGN.md §6.7)
   const balance = el('div', { class: 'training-balance' }, [
     el('div', { class: 'training-balance__track', 'aria-hidden': 'true' }, [likeFill]),
     el('p', { class: 'training-balance__label num' }, total

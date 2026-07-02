@@ -48,7 +48,6 @@ export function buildGallery(listing) {
   const main = el('div', { class: 'dossier-gallery__main' },
     [mainImg, multi ? prev : null, multi ? next : null, expand, counter].filter(Boolean));
   mainImg.addEventListener('error', () => { main.classList.add('is-broken'); }, { once: true });
-  mainImg.style.cursor = 'zoom-in';
 
   let thumbBtns = [];
   const show = (n) => {
