@@ -9,14 +9,19 @@
 }
 .dossier-back:hover, .dossier-back:focus-visible { color: var(--accent); }
 
-/* Layout: single column on mobile; main + sticky rail on desktop. */
+/* Layout: single column on mobile; main + sticky rail on desktop.
+   Mobile-first the rail DISSOLVES (display: contents) so its children join the
+   .dossier grid directly — that makes the whole dossier the sticky containing
+   block for the thumb-zone action card below (3.5c: pinned inside the short
+   rail, the bar could never actually ride over the dossier body). ≥1024 the
+   rail re-forms as the sticky right column. */
 .dossier { display: grid; grid-template-columns: 1fr; gap: var(--space-5, 2rem); margin-top: var(--space-2); }
 .dossier__main { min-width: 0; display: grid; gap: var(--space-5, 2rem); align-content: start; }
-.dossier__rail { display: grid; gap: var(--space-4); align-content: start; }
+.dossier__rail { display: contents; }
 
 @media (min-width: 1024px) {
   .dossier { grid-template-columns: minmax(0, 1fr) 22rem; gap: var(--space-6); }
-  .dossier__rail { position: sticky; top: var(--space-4); }
+  .dossier__rail { display: grid; gap: var(--space-4); align-content: start; position: sticky; top: var(--space-4); }
 }
 
 /* ── Gallery ──────────────────────────────────────────────────────────────── */
