@@ -12,6 +12,7 @@ import { describeSignal } from '../learned-preferences.js';
 import { buildReasonPicker } from '../listings/reactions-ui.js';
 import { PERSONAL_STATUSES } from '../listings/reactions.js';
 import { VERDICT_LABELS, STATUS_LABELS, PERSONAL_STATUS_LABELS } from '../listings/labels.js';
+import { buildPropertyCard } from '../listings/property-card.js';
 
 const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}&from=listings`;
 
@@ -177,22 +178,14 @@ function buildMedia(listing, base, href) {
   return href ? wrapLink(inner) : inner;
 }
 
-function metaLine(listing) {
-  return [
-    listing.beds != null ? `${listing.beds} bed` : '',
-    listing.baths != null ? `${listing.baths} bath` : '',
-    listing.property_type || '',
-    addedText(listing),
-  ].filter(Boolean).join(' · ');
-}
-
+// The Browse feed row IS the shared property-card (step 3.4c): buildPropertyCard
+// owns the anatomy (media well · verdict head · mono price · title/place/meta);
+// this builder only composes Browse's own chrome — status/drop/geo/flag chips,
+// the membership + "why" expanders, and the reaction/status/links thumb-zone —
+// into its named slots. Rows sit as role="listitem" articles inside the page's
+// .prop-list register.
 export function buildRow(listing, idx, scored, area, ctx = {}) {
   const verdict = scored?.verdict || 'unknown';
-
-  const placeBits = [];
-  if (listing.address) placeBits.push(listing.address);
-  else if (area?.name) placeBits.push(area.name);
-  if (listing.outcode) placeBits.push(listing.outcode);
 
   const tags = [];
   if (listing.status && listing.status !== 'live') {
@@ -203,7 +196,6 @@ export function buildRow(listing, idx, scored, area, ctx = {}) {
   if (listing.update_reason === 'new') tags.push(el('span', { class: 'listing-tag listing-tag--new' }, 'New'));
   tags.push(...geoChips(listing, area));
   tags.push(...flagChips(listing, ctx.hiddenRules));
-  const tagRow = tags.length ? el('div', { class: 'listing-tags' }, tags) : null;
 
   const controls = ctx.onSave
     ? el('div', { class: 'listing-controls' }, [
@@ -221,39 +213,30 @@ export function buildRow(listing, idx, scored, area, ctx = {}) {
   // Stage 6b: the external Rightmove link as a clear button, visually distinct
   // from the image-link (which opens OUR dossier).
   const rmLink = listing.url
-    ? el('a', { class: 'listing-card__rm btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
+    ? el('a', { class: 'btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
     : null;
-  const cardLinks = (rmLink || mapBtn(listing))
-    ? el('div', { class: 'listing-card__links' }, [rmLink, mapBtn(listing)].filter(Boolean))
+  const links = (rmLink || mapBtn(listing))
+    ? el('div', { class: 'listing-links' }, [rmLink, mapBtn(listing)].filter(Boolean))
+    : null;
+  const actions = (controls || links)
+    ? el('div', { class: 'listing-row-actions' }, [controls, links].filter(Boolean))
     : null;
 
-  const content = el('div', { class: 'listing-card__content' }, [
-    el('div', { class: 'listing-card__head' }, [
-      el('span', { class: `fit-dot fit-dot--${verdict}`, 'aria-hidden': 'true' }),
-      el('span', { class: `verdict verdict--${verdict}` }, VERDICT_LABELS[verdict]),
-      ctx.reviewed ? el('span', { class: 'listing-card__reviewed-tag' }, '✓ Reviewed') : null,
-      el('span', { class: 'listing-card__price num' }, fmtPrice(listing.price)),
-    ].filter(Boolean)),
-    el('p', { class: 'listing-card__title' }, [
-      el('a', { class: 'listing-card__title-link', href: dossierHref(listing) },
-        listing.title || `${listing.beds ?? '?'}-bed ${listing.property_type || 'property'}`),
-    ]),
-    el('p', { class: 'listing-card__place' }, placeBits.join(' · ')),
-    el('p', { class: 'listing-card__meta num' }, metaLine(listing)),
-    tagRow,
-    buildAreaMembership(listing, area),
-    buildWhy(scored, listing, area),
-    controls,
-    cardLinks,
-  ].filter(Boolean));
-
-  const reviewedClass = ctx.reviewed
-    ? ` listing-card--reviewed listing-card--${REVIEWED_MOD[ctx.reaction?.reaction] || 'reviewed'}`
-    : '';
-  return el('li', { class: `listing-card${reviewedClass}`, 'data-id': listing.rightmove_id }, [
-    buildMedia(listing, 'listing-media', dossierHref(listing)),
-    content,
-  ]);
+  const card = buildPropertyCard(listing, {
+    href: dossierHref(listing),
+    areaName: area?.name || '',
+    verdict,
+    verdictLabel: VERDICT_LABELS[verdict],
+    badge: ctx.reviewed
+      ? { label: '✓ Reviewed', tone: REVIEWED_MOD[ctx.reaction?.reaction] || 'neutral' }
+      : null,
+    metaExtra: addedText(listing),
+    tags,
+    details: [buildAreaMembership(listing, area), buildWhy(scored, listing, area)].filter(Boolean),
+    actions,
+  });
+  card.setAttribute('role', 'listitem');
+  return card;
 }
 
 // Reaction verb → reviewed-card modifier (green "actioned" tint, distinct per verb).

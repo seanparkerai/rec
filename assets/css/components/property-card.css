@@ -104,3 +104,8 @@
   .prop-card__actions { grid-column: 2; }
   .prop-card__body { gap: var(--space-2); }
 }
+
+/* ── The register: prop-cards stacked on hairlines — the shared list shell
+      every property surface renders into (rows carry their own padding-block
+      and border-block-end, so the shell is just a clean reset). ─────────── */
+.prop-list { list-style: none; margin: 0; padding: 0; }

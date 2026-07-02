@@ -16,7 +16,8 @@ import {
   saveListingsReviewCount,
 } from './storage.js';
 import { getDerivedFinances } from './finance-load.js';
-import { createListingsControls } from './listings/controls.js';
+import { createListingsControls, LISTING_SORTS } from './listings/controls.js';
+import { wireFilterSheet } from './listings/filter-sheet.js';
 import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
 import { suggestionListHTML } from './suggestions/card.js';
@@ -50,8 +51,10 @@ async function render() {
   const conflictsEl = main.querySelector('[data-conflicts]');
   const showOOR = main.querySelector('[data-show-oor]');
   const showHidden = main.querySelector('[data-show-hidden]');
-  const browseOnly = main.querySelector('[data-browse-only]');
+  const filterTrigger = main.querySelector('[data-filter-trigger]');
   const filterBar = main.querySelector('[data-listings-filter]');
+  const emptyNone = main.querySelector('[data-empty-none]');
+  const emptyDone = main.querySelector('[data-empty-done]');
   const reviewCountEl = main.querySelector('[data-review-count]');
   const modeBtns = [...main.querySelectorAll('[data-mode]')];
   if (!listEl) return;
@@ -145,9 +148,34 @@ async function render() {
     scoreOf: (l) => scoreOf(l).score,
     ratingOf: (l) => Number(ratings[l.rightmove_id]) || 0,
     areaNameOf: (l) => areaOf(l)?.name || '',
-    onChange: () => { if (mode === 'browse') paint(); },
+    onChange: () => { if (mode === 'browse') paint(); sheet?.refresh(); },
   });
   controls.wire(filterBar, listings);
+
+  // Filter sheet (3.4c): the controls live in a native <dialog> — a modal
+  // bottom-sheet on phones behind the "Filters" trigger, an inline card at
+  // ≥768px. The trigger row mirrors what's active as pills so a narrowed feed
+  // is never a mystery. (Controls wiring above is unchanged — the sheet only
+  // relocates the markup.)
+  const describeActiveFilters = () => {
+    const s = controls.state || {};
+    const pills = [];
+    if (s.search && s.search.trim()) pills.push(`“${s.search.trim()}”`);
+    if (s.sort && s.sort !== 'fit') pills.push(LISTING_SORTS.find((o) => o.key === s.sort)?.label || s.sort);
+    if (s.type && s.type !== 'all') pills.push(s.type);
+    if (s.beds && s.beds !== 'all') pills.push(`${s.beds}+ beds`);
+    if (s.status && s.status !== 'all') pills.push(s.status.replace(/_/g, ' '));
+    if (showOOR?.checked) pills.push('incl. out-of-reach');
+    if (showHidden?.checked) pills.push('incl. hidden');
+    return pills;
+  };
+  const sheet = wireFilterSheet({
+    dlg: main.querySelector('#listings-filter-sheet'),
+    openBtn: main.querySelector('[data-open-filters]'),
+    closeBtn: main.querySelector('[data-close-filters]'),
+    activeEl: main.querySelector('[data-active-filters]'),
+    describe: describeActiveFilters,
+  });
 
   // Reviewed set (Stage 4 Browse collapse). "Reviewed" = the user pressed Save on
   // the property. Seeded from the local marker store UNION the ids that already
@@ -473,14 +501,20 @@ async function render() {
     reviewPersistTimer = setTimeout(() => { saveListingsReviewCount(n); }, 1200);
   }
 
+  // The two empty states are static page markup (siblings of the register, so
+  // the role="list" container only ever holds listitem cards); paint() toggles
+  // whichever applies — 'none' (no listings at all) or 'done' (feed cleared).
+  function setEmpty(which) {
+    if (emptyNone) emptyNone.hidden = which !== 'none';
+    if (emptyDone) emptyDone.hidden = which !== 'done';
+  }
+
   function paint() {
     const includeOOR = !!(showOOR && showOOR.checked);
     const includeHidden = !!(showHidden && showHidden.checked);
     if (!listings.length) {
-      listEl.replaceChildren(el('li', { class: 'listings-empty' }, [
-        el('p', {}, 'No listings yet.'),
-        el('p', { class: 'listings-empty__hint' }, 'The daily fetch hasn’t populated the listings table yet — tap 24hr / 3d / 7d above to pull now (runs server-side; no token needed), or check the Apify / Supabase secrets are set.'),
-      ]));
+      listEl.replaceChildren();
+      setEmpty('none');
       if (summaryEl) clear(summaryEl);
       persistReviewCount(0);
       return;
@@ -531,18 +565,7 @@ async function render() {
     // Rejected pages, so there is no reviewed split to render here any more.
     const frag = document.createDocumentFragment();
     feed.unreviewed.forEach((r) => frag.appendChild(cardFor(r, false)));
-    if (!feed.unreviewed.length) {
-      frag.appendChild(el('li', { class: 'listings-empty' }, [
-        el('p', {}, 'Nothing left to review here.'),
-        el('p', { class: 'listings-empty__hint' }, [
-          'Properties you’ve passed or rejected are on the ',
-          el('a', { href: url('pages/rejected.html') }, 'Rejected'),
-          ' page; the ones you liked are on ',
-          el('a', { href: url('pages/saved-listings.html') }, 'Saved'),
-          '.',
-        ]),
-      ]));
-    }
+    setEmpty(feed.unreviewed.length ? null : 'done');
     listEl.replaceChildren(frag);
     // A reused node is detached+reattached by the commit, which drops focus —
     // restore it so keyboard flow (Tab through cards) survives a repaint.
@@ -610,14 +633,14 @@ async function render() {
     const review = m === 'review';
     listEl.hidden = review;
     if (deckEl) deckEl.hidden = !review;
-    if (browseOnly) browseOnly.hidden = review;
-    if (filterBar) filterBar.hidden = review;
+    if (filterTrigger) filterTrigger.hidden = review;
+    if (review) { sheet?.hide(); setEmpty(null); } else { sheet?.sync(); }
     if (review) { if (summaryEl) clear(summaryEl); paintDeck(); } else { paint(); }
     updateLearning(); // re-evaluates the mode guard (hides the top widget in review)
   }
   modeBtns.forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
-  if (showOOR) showOOR.addEventListener('change', () => { if (mode === 'browse') paint(); });
-  if (showHidden) showHidden.addEventListener('change', () => { if (mode === 'browse') paint(); });
+  if (showOOR) showOOR.addEventListener('change', () => { if (mode === 'browse') paint(); sheet?.refresh(); });
+  if (showHidden) showHidden.addEventListener('change', () => { if (mode === 'browse') paint(); sheet?.refresh(); });
 
   // A reaction made ANYWHERE (notably the dossier page in the same tab, or a
   // background revalidation) fires `reactions-changed` from saveListingReaction.

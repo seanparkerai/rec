@@ -229,3 +229,9 @@
 }
 .listing-rating:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 
+
+/* ── 3.4c: Browse chrome inside the shared prop-card thumb-zone slot ──────────
+   The reaction picker + status select (.listing-controls, above) and the
+   external links stack as one composition handed to the card's actions slot. */
+.listing-row-actions { display: flex; flex-direction: column; gap: var(--space-2); width: 100%; }
+.listing-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }

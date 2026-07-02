@@ -105,3 +105,6 @@
   100% { background: transparent; }
 }
 .listings-summary--received { animation: summary-received 1.2s var(--ease-out) 1; border-radius: var(--rec-radius-sm); }
+
+/* ── 3.4c: reveal toggles live in the filter sheet with the facets ─────────── */
+.listings-filter__reveals { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }

@@ -38,46 +38,8 @@
           Review<span class="listings-mode__count num" data-review-count hidden></span>
         </button>
       </div>
-      <div class="listings-filter" data-listings-filter role="search" hidden>
-        <input type="search" class="listings-filter__search" data-control="search"
-               placeholder="Search address, postcode, title, area or type…" aria-label="Search listings" />
-        <div class="listings-filter__facets">
-          <label class="listings-filter__field">
-            <span class="listings-filter__label">Sort</span>
-            <select data-control="sort" aria-label="Sort listings"></select>
-          </label>
-          <label class="listings-filter__field">
-            <span class="listings-filter__label">Type</span>
-            <select data-control="type" aria-label="Filter by house type"><option value="all">Any type</option></select>
-          </label>
-          <label class="listings-filter__field">
-            <span class="listings-filter__label">Beds</span>
-            <select data-control="beds" aria-label="Filter by minimum bedrooms">
-              <option value="all">Any beds</option>
-              <option value="1">1+</option>
-              <option value="2">2+</option>
-              <option value="3">3+</option>
-              <option value="4">4+</option>
-              <option value="5">5+</option>
-            </select>
-          </label>
-          <label class="listings-filter__field">
-            <span class="listings-filter__label">Status</span>
-            <select data-control="status" aria-label="Filter by status"><option value="all">Any status</option></select>
-          </label>
-          <button type="button" class="listings-filter__clear outline secondary" data-control="clear">Clear</button>
-        </div>
-      </div>
       <p data-listings-summary class="listings-summary"></p>
       <div class="listings-actions">
-        <label class="listings-toggle" data-browse-only>
-          <input type="checkbox" data-show-oor />
-          Show out-of-reach
-        </label>
-        <label class="listings-toggle" data-browse-only>
-          <input type="checkbox" data-show-hidden />
-          Show hidden (auction / over-55)
-        </label>
         <div class="listings-fetch-group" role="group" aria-label="Pull new listings from Rightmove">
           <button type="button" class="listings-fetch-btn" data-fetch-days="1">24hr</button>
           <button type="button" class="listings-fetch-btn" data-fetch-days="3">3d</button>
@@ -87,7 +49,69 @@
       <p class="listings-fetch-status" data-fetch-status role="status" aria-live="polite" hidden></p>
     </section>
 
-    <ol class="listing-list" data-listings aria-label="Live listings ranked by fit"></ol>
+    <div class="filter-trigger-row" data-filter-trigger hidden>
+      <div class="active-filters" data-active-filters aria-live="polite">No filters set.</div>
+      <button type="button" data-open-filters aria-haspopup="dialog" aria-controls="listings-filter-sheet">Filters</button>
+    </div>
+
+    <dialog class="filter-sheet" id="listings-filter-sheet" aria-labelledby="listings-filter-title">
+      <article>
+        <header>
+          <h2 id="listings-filter-title">Filters</h2>
+          <button type="button" class="outline secondary" data-close-filters aria-label="Close">Done</button>
+        </header>
+        <div class="listings-filter" data-listings-filter role="search">
+          <input type="search" class="listings-filter__search" data-control="search"
+                 placeholder="Search address, postcode, title, area or type…" aria-label="Search listings" />
+          <div class="listings-filter__facets">
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Sort</span>
+              <select data-control="sort" aria-label="Sort listings"></select>
+            </label>
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Type</span>
+              <select data-control="type" aria-label="Filter by house type"><option value="all">Any type</option></select>
+            </label>
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Beds</span>
+              <select data-control="beds" aria-label="Filter by minimum bedrooms">
+                <option value="all">Any beds</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+              </select>
+            </label>
+            <label class="listings-filter__field">
+              <span class="listings-filter__label">Status</span>
+              <select data-control="status" aria-label="Filter by status"><option value="all">Any status</option></select>
+            </label>
+            <button type="button" class="listings-filter__clear outline secondary" data-control="clear">Clear</button>
+          </div>
+          <div class="listings-filter__reveals">
+            <label class="listings-toggle">
+              <input type="checkbox" data-show-oor />
+              Show out-of-reach
+            </label>
+            <label class="listings-toggle">
+              <input type="checkbox" data-show-hidden />
+              Show hidden (auction / over-55)
+            </label>
+          </div>
+        </div>
+      </article>
+    </dialog>
+
+    <div class="prop-list" data-listings role="list" aria-label="Live listings ranked by fit"></div>
+    <div class="listings-empty" data-empty-none hidden>
+      <p>No listings yet.</p>
+      <p class="listings-empty__hint">The daily fetch hasn’t populated the listings table yet — tap 24hr / 3d / 7d above to pull now (runs server-side; no token needed), or check the Apify / Supabase secrets are set.</p>
+    </div>
+    <div class="listings-empty" data-empty-done hidden>
+      <p>Nothing left to review here.</p>
+      <p class="listings-empty__hint">Properties you’ve passed or rejected are on the <a href="rejected.html">Rejected</a> page; the ones you liked are on <a href="saved-listings.html">Saved</a>.</p>
+    </div>
     <section class="review-deck" data-review-deck aria-label="Review recent listings" hidden></section>
 
     <!-- Shared suggestion actions: live announcements + the "removes N listings" confirm -->
