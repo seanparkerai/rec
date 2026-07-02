@@ -22,6 +22,10 @@ For tools and data: `index.html`, `pages/areas.html`, `pages/finances.html`, `pa
 
 - Compact rhythm: tight rows, dense tables, monospace numerals.
 - Asymmetric / bento layouts — never a uniform grid of identical cards.
+  **Sanctioned exception (owner decision 2026-07-02):** the property-listings photo feed
+  (`.prop-list--grid` on Browse/Saved) flows the image-led card 2-up ≥768 and 3-up ≥1280 — a
+  content/media index (photos ARE the content, like a gallery), not a SaaS card grid. Cards stay
+  flat (whitespace separation, no shadows, no boxes); the §3 shadow-floated-card ban still applies.
 - Sticky thumb-zone primary actions on mobile (safe-area-inset aware).
 - Filters as chip rows with scroll-snap; full filter sets open in `<dialog>`.
 - Keyboard-first: every action has a visible focus state and a sensible Tab order.

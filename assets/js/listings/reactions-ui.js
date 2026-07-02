@@ -23,6 +23,7 @@ import {
 } from './picker-state.js';
 
 const REACTION_LABELS = { like: 'Like', pass: 'Pass', reject: 'Reject' };
+const SAVED_LABELS = { like: 'Liked', pass: 'Passed', reject: 'Rejected' };
 
 /** The primary-reason vocabulary for a verb ([] for pass — no reasons). */
 function reasonsForVerb(verb) {
@@ -140,11 +141,27 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
   const errorMsg = el('span', { class: 'listing-save-error', hidden: true, role: 'alert' });
   const saveRow = el('div', { class: 'listing-save-row' }, [saveBtn, errorMsg]);
 
+  // Decided one-liner (owner decision 2026-07-02): once a decision is saved the
+  // whole zone collapses to "✓ Liked — change"; tapping it re-opens the picker.
+  const confirmBtn = el('button', {
+    type: 'button', class: 'reaction-confirm', hidden: true,
+  });
+  confirmBtn.addEventListener('click', () => {
+    confirmBtn.hidden = true;
+    verbGroup.hidden = false;
+    renderReasons();
+    refreshSaveState();
+    verbBtns.find((b) => b.dataset.react === draft.verb)?.focus();
+  });
+
+  // Progressive reveal: an untouched card shows only the three verbs — the
+  // reasons vocabulary (renderReasons) and the Save row appear after a verb tap.
   const refreshSaveState = () => {
     saveBtn.disabled = !draft.verb;
     saveBtn.setAttribute('aria-disabled', String(!draft.verb));
+    saveRow.hidden = !draft.verb;
   };
-  // After a save, show a confirmed state until the user changes something.
+  // After a save, collapse to the confirmed one-liner until the user re-opens.
   function markSaved() {
     wrap.classList.add('is-saved');
     wrap.classList.remove('is-save-error');
@@ -152,6 +169,12 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
     saveBtn.setAttribute('aria-pressed', 'true');
     errorMsg.hidden = true;
     errorMsg.textContent = '';
+    verbGroup.hidden = true;
+    reasonsEl.hidden = true;
+    saveRow.hidden = true;
+    confirmBtn.textContent = `✓ ${SAVED_LABELS[draft.verb] || 'Saved'} — change`;
+    confirmBtn.setAttribute('aria-label', `You ${draft.verb === 'like' ? 'liked' : draft.verb === 'pass' ? 'passed on' : 'rejected'} this property — change your decision`);
+    confirmBtn.hidden = false;
     onDraftChange?.(null); // persisted — no in-progress draft to preserve any more
   }
   function markDirty() {
@@ -210,7 +233,7 @@ export function buildReasonPicker({ variant = 'row', current = null, onReact, on
   refreshSaveState();
 
   const wrap = el('div', { class: `${V.wrap} reaction-picker reaction-picker--${variant}` }, [
-    verbGroup, reasonsEl, saveRow,
+    verbGroup, reasonsEl, saveRow, confirmBtn,
   ]);
   // A saved decision with NO divergent in-progress draft renders as confirmed; a
   // rehydrated dirty draft stays editable (Save enabled, not "Saved ✓").

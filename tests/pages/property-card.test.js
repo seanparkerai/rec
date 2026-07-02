@@ -45,22 +45,29 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(titleLink.tagName, 'A', 'title is a real link when href is given');
     assertEqual(card.querySelector('.prop-card__place').textContent, 'Church Lane, Swanmore · SO32');
     assertEqual(card.querySelector('.prop-card__meta').textContent, '3 bed · 1 bath · cottage');
+    assert(card.querySelector('.prop-card__head').firstElementChild.classList.contains('prop-card__price'),
+      'price leads the head (Rightmove register, 3.11)');
     assert(!card.querySelector('[style]'), 'no inline style attributes anywhere (DESIGN.md §6.7)');
     dom.window.close();
   });
 
-  test('prop-card: slots compose — badge, metaExtra, tags, details, thumb-zone actions, compact', async () => {
+  test('prop-card: slots compose — badge, metaExtra, overlay, tags, details, thumb-zone actions, compact', async () => {
     const { buildPropertyCard, dom } = await load();
     const doc = globalThis.document;
     const tag = doc.createElement('span'); tag.textContent = '↓ £10,000';
+    const over = doc.createElement('span'); over.textContent = 'New';
     const detail = doc.createElement('details'); detail.className = 'why';
     const actions = doc.createElement('div'); actions.className = 'reactions';
     const card = buildPropertyCard(LISTING, {
       badge: { label: 'Rejected', tone: 'reject' },
       metaExtra: 'Actioned 3 Jun 2026',
-      tags: [tag], details: [detail], actions, compact: true,
+      overlay: [over], tags: [tag], details: [detail], actions, compact: true,
     });
     assert(card.classList.contains('prop-card--compact'), 'compact register applies');
+    assert(card.querySelector('.prop-card__figure > .prop-card__overlay span'),
+      'overlay chips sit in the photo figure, as siblings of the media (outside any link)');
+    assert(!card.querySelector('.prop-card__media .prop-card__overlay'),
+      'overlay is never nested inside the media box (the labelled link would swallow its text)');
     assertEqual(card.querySelector('.prop-card__badge--reject').textContent, 'Rejected');
     assert(card.querySelector('.prop-card__meta').textContent.endsWith('· Actioned 3 Jun 2026'),
       'metaExtra joins the data line');
@@ -82,24 +89,30 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
-  test('prop-card: mobile-first image-led register pinned at CSS source (3.10, owner-directed)', async () => {
+  test('prop-card: image-led at EVERY width pinned at CSS source (3.11 Rightmove register, owner decision)', async () => {
     const { readFileSync } = await import('node:fs');
     const css = readFileSync(new URL('../../assets/css/components/property-card.css', import.meta.url), 'utf8');
-    const upTo560 = css.split('@container propcard (min-width: 560px)')[0];
-    const after560 = css.split('@container propcard (min-width: 560px)')[1] || '';
-    // Phones: single-column stacked card, photo spans the card, box reserved.
-    assert(/\.prop-card\s*{[^}]*grid-template-columns:\s*1fr\b/s.test(upTo560),
+    // The 560px thumbnail fallback is GONE — the cover photo leads everywhere.
+    assert(!css.includes('@container propcard (min-width: 560px)'),
+      'no wide-container thumbnail register remains (the "extremely small image" regression)');
+    assert(/\.prop-card\s*{[^}]*grid-template-columns:\s*1fr\b/s.test(css),
       'base register is single-column (image leads, content stacks)');
-    assert(/inline-size:\s*100%/.test(upTo560) && /aspect-ratio:\s*16\s*\/\s*10/.test(upTo560),
-      'media is full-width with a reserved aspect box (zero-CLS lazy load)');
+    assert(/inline-size:\s*100%/.test(css) && /aspect-ratio:\s*3\s*\/\s*2/.test(css),
+      'media is a full-width 3:2 cover photo with a reserved aspect box (zero-CLS lazy load)');
     // Pico article chrome is flattened — shadow-floated cards are a §3 ban.
-    assert(/box-shadow:\s*none/.test(upTo560) && /background:\s*transparent/.test(upTo560),
+    assert(/box-shadow:\s*none/.test(css) && /background:\s*transparent/.test(css),
       'Pico <article> card chrome is reset on .prop-card');
-    // The dense row returns for wide containers; compact keeps it at every width.
-    assert(/grid-template-columns:\s*auto 1fr/.test(after560),
-      'row-on-hairlines register returns from 560px containers');
-    assert(/\.prop-card--compact\s*{[^}]*grid-template-columns:\s*auto 1fr/s.test(upTo560),
-      'compact (Rejected/Passed) register stays a small-thumb row on phones');
+    // Wide screens: the same photo-led card flows into the sanctioned grid.
+    assert(/@media \(min-width: 768px\)[\s\S]*?\.prop-list--grid[\s\S]*?repeat\(2, 1fr\)/.test(css),
+      '2-up photo grid from tablet portrait (§6.1 canonical breakpoint)');
+    assert(/@media \(min-width: 1280px\)[\s\S]*?\.prop-list--grid[\s\S]*?repeat\(3, 1fr\)/.test(css),
+      '3-up from 1280');
+    // Compact (Rejected/Passed) keeps the dense small-thumb row at every width.
+    assert(/\.prop-card--compact\s*{[^}]*grid-template-columns:\s*auto 1fr/s.test(css),
+      'compact (Rejected/Passed) register stays a small-thumb row');
+    // Overlay chips never intercept the photo's dossier tap target.
+    assert(/\.prop-card__overlay\s*{[^}]*pointer-events:\s*none/s.test(css),
+      'photo overlay is click-transparent');
   });
 
   test('prop-card: helpers — title/place/meta fallbacks shared by every surface', async () => {

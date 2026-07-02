@@ -2,8 +2,9 @@
 // a thin composition of THE shared property-card family (step 3.4d). The shared
 // builder owns the anatomy (media well · badge + mono price · title/place/meta);
 // Saved composes its own chrome into the slots — the "why you liked it" positive
-// chips, the collapsed reaction editor, the 1–10 rating control, and the external
-// Rightmove link. No page state, no storage; imported by page-saved-listings.js.
+// chips, the self-collapsing reaction picker, and the 1–10 rating control.
+// External links live in the dossier (3.11). No page state, no storage;
+// imported by page-saved-listings.js.
 import { el } from '../dom.js';
 import { url } from '../config.js';
 import { LIKE_REASONS, LIKE_SUBREASONS } from '../listings/reactions.js';
@@ -45,25 +46,13 @@ function buildPositives(reasons) {
  * @param {object} ctx  { reaction, rating, onSave(listing, draft), onRate(listing, n) }
  */
 export function buildSavedCard(listing, ctx = {}) {
-  const controls = el('div', { class: 'listing-controls' }, [
-    // The like/reasons/Save controls are collapsed by default on Saved — the
-    // "why you liked it" chips above already summarise the decision, and the
-    // full editor also lives in the dossier. A native <details> keeps it
-    // editable here without the buttons crowding every card on load
-    // (keyboard- and reduced-motion-friendly; no JS).
-    el('details', { class: 'listing-react-toggle' }, [
-      el('summary', { class: 'listing-react-toggle__summary' }, 'Edit reaction'),
-      buildReasonPicker({ variant: 'row', current: ctx.reaction, onSave: (d) => ctx.onSave(listing, d) }),
-    ]),
+  // The saved decision renders through the picker's own collapsed one-liner
+  // ("✓ Liked — change"), so no extra disclosure wrapper is needed; the rating
+  // is the one live control. External links live in the dossier (3.11).
+  const actions = el('div', { class: 'listing-controls' }, [
+    buildReasonPicker({ variant: 'row', current: ctx.reaction, onSave: (d) => ctx.onSave(listing, d) }),
     buildRatingControl({ value: ctx.rating, onChange: (n) => ctx.onRate(listing, n) }),
   ]);
-  const rmLink = listing.url
-    ? el('a', { class: 'btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
-    : null;
-  const actions = el('div', { class: 'listing-row-actions' }, [
-    controls,
-    rmLink ? el('div', { class: 'listing-links' }, [rmLink]) : null,
-  ].filter(Boolean));
 
   const card = buildPropertyCard(listing, {
     href: dossierHref(listing.rightmove_id),

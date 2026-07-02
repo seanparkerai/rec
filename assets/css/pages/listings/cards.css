@@ -71,42 +71,34 @@
 .listing-areas > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .listing-areas__list { margin: var(--space-2) 0 0; font-size: var(--text-sm); color: var(--ink); line-height: 1.5; }
 
-/* ── Reaction + personal-status controls (L3) ─────────────────────────────── */
-/* A calm vertical stack: the verbs/reasons/save picker, then the single secondary
-   control (status on the feed, priority on Saved) set off by a hairline. Reads far
-   tidier than the old wrap-and-float row. */
+/* ── Reaction controls (L3) ───────────────────────────────────────────────── */
+/* Browse hands the bare picker to the card's actions slot (3.11 — no status
+   select, no link row on the card); Saved stacks picker + rating in
+   .listing-controls. */
+.prop-card__actions > .reaction-picker--row { width: 100%; }
 .listing-controls {
-  display: flex; flex-direction: column; align-items: stretch; gap: var(--space-3);
-  margin: var(--space-3) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--hairline);
+  display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2);
+  width: 100%;
 }
 .listing-controls > .reaction-picker--row { width: 100%; }
-.listing-controls > .listing-status-wrap,
-.listing-controls > .listing-rating-wrap {
-  align-self: flex-start; padding-top: var(--space-3); border-top: 1px solid var(--hairline);
-}
+.listing-controls > .listing-rating-wrap { align-self: flex-start; }
 
-/* Saved page: the reaction editor is collapsed by default behind a quiet
-   disclosure so cards stay calm on load (the "why you liked it" chips above
-   already summarise it). Native <details> — keyboard-accessible, no JS. */
-.listing-react-toggle { width: 100%; }
-.listing-react-toggle > summary {
-  list-style: none; cursor: pointer;
+/* Decided one-liner (3.11): once a decision is saved the picker collapses to a
+   single quiet "✓ Liked — change" button; tapping it re-opens the controls.
+   A real button, plain-text styled — Pico's button chrome reset away. */
+.reaction-confirm {
   display: inline-flex; align-items: center; gap: var(--space-2);
-  min-height: 32px; /* comfortable target (§11) */
-  font-family: var(--font-body); font-size: var(--text-sm); color: var(--ink-muted);
+  width: auto; margin: 0; padding: 0 var(--space-2);
+  min-height: var(--tap-min); /* full touch target (§10) */
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
+  color: color-mix(in oklch, var(--accent) 80%, var(--ink));
+  background: transparent; border: 0; box-shadow: none; cursor: pointer;
   transition: color 0.12s;
 }
-.listing-react-toggle > summary::-webkit-details-marker { display: none; }
-.listing-react-toggle > summary::before {
-  content: "›"; display: inline-block; font-size: 1.1em; line-height: 1;
-  color: var(--ink-muted); transition: transform 0.15s ease;
-}
-.listing-react-toggle[open] > summary::before { transform: rotate(90deg); }
-.listing-react-toggle > summary:hover { color: var(--ink); }
-.listing-react-toggle > summary:focus-visible {
-  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--rec-radius-sm);
-}
-.listing-react-toggle[open] > .reaction-picker--row { width: 100%; margin-top: var(--space-2); }
+.reaction-confirm:hover { color: var(--accent); }
+.reaction-confirm:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--rec-radius-sm); }
+.reaction-confirm[hidden] { display: none; }
+
 .listing-react { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
 /* Row-variant verbs read as proper buttons (comfortable 40px target, §10/§11). */
 .reaction-picker--row .listing-react__btn { min-height: var(--tap-min); padding: 0.4rem 0.95rem; font-size: var(--text-sm); }
@@ -165,10 +157,3 @@
   background: var(--paper); color: var(--ink);
 }
 .listing-rating:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-
-/* ── 3.4c: Browse chrome inside the shared prop-card thumb-zone slot ──────────
-   The reaction picker + status select (.listing-controls, above) and the
-   external links stack as one composition handed to the card's actions slot. */
-.listing-row-actions { display: flex; flex-direction: column; gap: var(--space-2); width: 100%; }
-.listing-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }

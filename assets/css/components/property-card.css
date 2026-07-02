@@ -1,20 +1,19 @@
 /* components/property-card.css — THE shared property-card family (step 3.4b,
-   Linear-dense anchor; mobile register redesigned 3.10, owner-directed
-   2026-07-02). One primary design all three property surfaces drive from
-   (⚙ 3.1 decision 2). MOBILE-FIRST: on phones the property photo leads
-   full-width (the image IS the card's hero — maximised for iPhone browsing)
-   with the content stacked beneath in reading order: price headline · title ·
-   place · data line · tags · thumb-zone actions. From a 560px container the
-   row-on-hairlines register returns — the Rejected page's cleanliness bar —
-   with a compact side thumb. The --compact variant (dense Rejected/Passed
-   list) keeps the small-thumb row at EVERY width. Tokens only; no hex, no
-   off-scale spacing. Loaded via @import from base.css. */
+   Linear-dense anchor; Rightmove register 3.11, owner decision 2026-07-02).
+   One primary design all three property surfaces drive from (⚙ 3.1 decision 2).
+   MOBILE-FIRST and IMAGE-LED AT EVERY WIDTH: the 3:2 cover photo spans the
+   card (the photo IS how you browse property), with a short content stack
+   beneath in reading order: price + verdict headline · title · place · data
+   line · exception chips · the reaction zone. There is no thumbnail fallback
+   for Browse/Saved — on wide screens the SAME card flows into a 2/3-up photo
+   grid via .prop-list--grid. Only the --compact variant (the dense
+   Rejected/Passed list) keeps the small-thumb hairline row, at every width.
+   Tokens only; no hex, no off-scale spacing. Loaded via @import from base.css. */
 
 .prop-card {
   /* Pico gives every <article> floated-card chrome (background, shadow, radius,
-     inner padding, margin) — seen live 2026-07-02: each card rendered as a white
-     box that inset the photo behind double padding (and shadow-floated cards are
-     a DESIGN.md §3 ban). Flatten it: the register is rows on hairlines. */
+     inner padding, margin) — and shadow-floated cards are a DESIGN.md §3 ban.
+     Flatten it: photo + text on whitespace, hairlines between stacked rows. */
   background: transparent;
   box-shadow: none;
   border: 0;
@@ -22,7 +21,7 @@
   margin: 0;
   padding-inline: 0;
   display: grid;
-  /* Mobile-first: single column — media on top, body + actions stack below. */
+  /* Single column — media on top, body + actions stack below, at EVERY width. */
   grid-template-columns: 1fr;
   gap: var(--space-3);
   align-items: start;
@@ -42,16 +41,16 @@
   .prop-card--returned { transition: outline-color 0.4s ease; }
 }
 
-/* ── Media well — full-bleed hero on phones ─────────────────────────────── */
+/* ── Media well — the 3:2 cover photo leads the card ────────────────────── */
 .prop-card__media-link { display: block; border-radius: var(--rec-radius); }
 .prop-card__media-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .prop-card__media {
   /* The photo spans the card: widest tap target on the page (dossier
-     affordance) and the image detail phones actually browse by. 16/10 keeps
-     ~2½ cards per viewport; aspect-ratio reserves the box so images can lazy-
-     load with zero layout shift. */
+     affordance) and the image detail the feed is browsed by. 3:2 is the
+     Rightmove-app register; aspect-ratio reserves the box so images can
+     lazy-load with zero layout shift. */
   inline-size: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 3 / 2;
   border-radius: var(--rec-radius);
   overflow: hidden;
   background: color-mix(in oklch, var(--ink) 6%, var(--paper));
@@ -64,17 +63,29 @@
   font-size: var(--text-2xl);
 }
 
+/* Overlay chips (price drop / New) sit on the photo's top-left corner — the
+   figure wrapper exists only when a card carries them. pointer-events pass
+   through so the whole photo stays the dossier tap target; the chips are
+   already opaque (paper-mixed backgrounds) so they hold contrast on any image. */
+.prop-card__figure { position: relative; min-inline-size: 0; }
+.prop-card__overlay {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  display: flex; flex-wrap: wrap; gap: var(--space-1);
+  pointer-events: none;
+}
+
 /* ── Body ───────────────────────────────────────────────────────────────── */
 .prop-card__body { display: flex; flex-direction: column; gap: var(--space-1); min-inline-size: 0; }
 
 .prop-card__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-2); }
 .prop-card__price {
-  margin-inline-start: auto;
   font-family: var(--font-data);
   font-weight: 500;
-  /* The lead datum (DESIGN.md §5.3 — numbers first): step up on the stacked
-     phone register, back to base size in the dense row register below. */
-  font-size: var(--text-lg);
+  /* The lead datum leads the line (DESIGN.md §5.3 — numbers first): price
+     opens the content block at display size, Rightmove-style. */
+  font-size: var(--text-xl);
   white-space: nowrap;
 }
 .prop-card__dot {
@@ -93,6 +104,7 @@
 }
 
 .prop-card__badge {
+  margin-inline-start: auto;
   font-size: var(--text-sm);
   color: var(--ink-muted);
   border: 1px solid var(--hairline);
@@ -118,15 +130,16 @@
 
 .prop-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); }
 
-/* ── Thumb-zone actions: full-width row under the content on narrow cards ── */
+/* ── Thumb-zone actions: full-width row under the content ────────────────── */
 .prop-card__actions {
   grid-column: 1 / -1;
   display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);
   min-block-size: var(--tap-min);
 }
 
-/* ── Compact (the dense Rejected/Passed list register): keeps the small-thumb
-      row at EVERY width — a rejected row must never balloon into a hero. ── */
+/* ── Compact (the dense Rejected/Passed list register): the small-thumb
+      hairline row at EVERY width — an archive row must never balloon into a
+      hero. ── */
 .prop-card--compact {
   grid-template-columns: auto 1fr;
   padding-block: var(--space-3);
@@ -142,24 +155,27 @@
 .prop-card--compact .prop-card__price { font-size: var(--text-base); }
 .prop-card--compact .prop-card__title { font-size: var(--text-sm); }
 
-/* ── Wide-card register (container, not viewport): from 560px the clean
-      row-on-hairlines returns — side thumb, base-size price, actions join
-      the body column. Compact rules above out-rank these by specificity. ── */
-@container propcard (min-width: 560px) {
-  .prop-card { grid-template-columns: auto 1fr; gap: var(--space-3) var(--space-4); }
-  .prop-card__media,
-  .prop-card__media-link {
-    inline-size: clamp(4.5rem, 24cqi, 8.5rem);
-    aspect-ratio: 4 / 3;
-    border-radius: var(--rec-radius-sm);
-  }
-  .prop-card__media--none { font-size: var(--text-xl); }
-  .prop-card__price { font-size: var(--text-base); }
-  .prop-card__actions { grid-column: 2; }
-  .prop-card__body { gap: var(--space-2); }
-}
-
-/* ── The register: prop-cards stacked on hairlines — the shared list shell
-      every property surface renders into (rows carry their own padding-block
-      and border-block-end, so the shell is just a clean reset). ─────────── */
+/* ── The register: the shared list shell every property surface renders into.
+      Single photo-led column by default (rows carry their own padding-block
+      and border-block-end). ─────────────────────────────────────────────── */
 .prop-list { list-style: none; margin: 0; padding: 0; }
+
+/* Photo-led grid (3.11, owner decision 2026-07-02): Browse and Saved add
+   .prop-list--grid so the SAME image-led card flows 2-up from tablet portrait
+   and 3-up from 1280 — the cover photo never degrades to a thumbnail. Cards in
+   the grid separate by whitespace, not hairlines or shadow boxes (§3 ban;
+   sanctioned as a content/media index, not a SaaS card grid — DESIGN.md §1).
+   Page-level layout, so viewport media queries at canonical breakpoints (§6.1);
+   the dense Rejected list never takes the modifier. */
+@media (min-width: 768px) {
+  .prop-list--grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4) var(--space-6);
+    align-items: start;
+  }
+  .prop-list--grid > .prop-card { border-block-end: 0; padding-block: 0 var(--space-4); }
+}
+@media (min-width: 1280px) {
+  .prop-list--grid { grid-template-columns: repeat(3, 1fr); }
+}

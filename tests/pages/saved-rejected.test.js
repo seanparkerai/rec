@@ -47,7 +47,7 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
-  test('saved card: a thin composition of the shared family — badge, positives, edit/rate/link actions', async () => {
+  test('saved card: a thin composition of the shared family — badge, positives, collapsed picker, rating', async () => {
     const dom = withDom(pageDom('saved-listings.html'));
     const { buildSavedCard } = await import('../../assets/js/page-saved-listings/card.js');
     const card = buildSavedCard(LISTING, {
@@ -63,9 +63,14 @@ export async function register({ test, assert, assertEqual }) {
       'title links to the dossier with from=saved context');
     assert(card.querySelector('.listing-positives'), '"why you liked it" chips compose into the body');
     const actions = card.querySelector('.prop-card__actions');
-    assert(actions?.querySelector('.listing-react-toggle'), 'collapsed reaction editor in the thumb zone');
+    assert(!actions?.querySelector('.listing-react-toggle'),
+      'the old <details> disclosure is gone — the picker self-collapses (3.11)');
+    const confirm = actions?.querySelector('.reaction-confirm');
+    assert(confirm && !confirm.hidden && /Liked/.test(confirm.textContent),
+      'the saved decision renders as the collapsed "✓ Liked — change" one-liner');
+    assert(actions?.querySelector('.listing-react')?.hidden, 'verb buttons stay hidden behind the one-liner');
     assert(actions?.querySelector('.listing-rating-wrap, [class*="rating"]'), 'rating control in the thumb zone');
-    assert(actions?.querySelector('.btn-rm'), 'Rightmove link in the thumb zone');
+    assert(!card.querySelector('.btn-rm'), 'no external Rightmove link on the card (dossier-only, 3.11)');
     assert(![...card.querySelectorAll('*')].some((n) => [...n.classList].some((c) => c.startsWith('listing-card'))),
       'no legacy .listing-card__* classes remain');
     assert(!card.querySelector('[style]'), 'no inline styles (DESIGN.md §6.7)');

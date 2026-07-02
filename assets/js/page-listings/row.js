@@ -1,6 +1,6 @@
 // page-listings/row.js — pure view-builders for a single listing: the feed row
 // (buildRow) and the review-deck card (buildDeckCard), plus their shared low-level
-// pieces (media well, geo/flag chips, the explainable "why" details, status select).
+// pieces (media well, geo/flag chips, the explainable "why" details).
 // Builders take data + handler callbacks and return DOM nodes; they hold no page
 // state. Split from page-listings.js; imported by it.
 import { el } from '../dom.js';
@@ -10,8 +10,7 @@ import { classifyListing, HIDE_LABELS } from '../listings/flags.js';
 import { matchingHideRule } from '../refinement/view.js';
 import { describeSignal } from '../learned-preferences.js';
 import { buildReasonPicker } from '../listings/reactions-ui.js';
-import { PERSONAL_STATUSES } from '../listings/reactions.js';
-import { VERDICT_LABELS, STATUS_LABELS, PERSONAL_STATUS_LABELS } from '../listings/labels.js';
+import { VERDICT_LABELS, STATUS_LABELS } from '../listings/labels.js';
 import { buildPropertyCard } from '../listings/property-card.js';
 
 const dossierHref = (listing) => `${url('pages/property.html')}?id=${encodeURIComponent(listing.rightmove_id)}&from=listings`;
@@ -134,19 +133,6 @@ function buildWhy(scored, listing = null, area = null) {
   ]);
 }
 
-// Personal-status select (lives on the shortlist record, not a parallel machine).
-function buildStatus(listing, current, onStatus) {
-  const sel = el('select', { class: 'listing-status', 'aria-label': 'Personal status' }, [
-    el('option', { value: '' }, 'No status'),
-    ...PERSONAL_STATUSES.map((s) => el('option', { value: s, selected: current === s }, PERSONAL_STATUS_LABELS[s])),
-  ]);
-  sel.addEventListener('change', () => onStatus(sel.value || null));
-  return el('label', { class: 'listing-status-wrap' }, [
-    el('span', { class: 'listing-status__label' }, 'Status'),
-    sel,
-  ]);
-}
-
 // Shared media well with graceful fallback: a broken/blocked image swaps to a
 // monogram so a card never shows a stretched or empty box. `base` is the BEM block.
 // When `href` is given (Stage 6b), the media is a keyboard-accessible link that
@@ -178,48 +164,46 @@ function buildMedia(listing, base, href) {
   return href ? wrapLink(inner) : inner;
 }
 
-// The Browse feed row IS the shared property-card (step 3.4c): buildPropertyCard
-// owns the anatomy (media well · verdict head · mono price · title/place/meta);
-// this builder only composes Browse's own chrome — status/drop/geo/flag chips,
-// the membership + "why" expanders, and the reaction/status/links thumb-zone —
-// into its named slots. Rows sit as role="listitem" articles inside the page's
-// .prop-list register.
+// The Browse feed row IS the shared property-card (step 3.4c; slimmed to the
+// Rightmove register 3.11, owner decision 2026-07-02): a big cover photo, then
+// price · verdict / data line / address, with exception chips only. Recency and
+// price-drop signals overlay the photo; distance is core data on the meta line;
+// the why/membership expanders, external links and status control all live in
+// the dossier (one tap away via photo or title). Actions = the reaction picker
+// alone. Rows sit as role="listitem" articles inside the page's .prop-list
+// register.
 export function buildRow(listing, idx, scored, area, ctx = {}) {
   const verdict = scored?.verdict || 'unknown';
 
+  // Photo overlay: the two "look now" signals sit on the cover image.
+  const overlay = [];
+  const drop = lastPriceDrop(listing);
+  if (drop) overlay.push(el('span', { class: 'listing-tag listing-tag--drop' }, `↓ ${fmtPrice(drop)}`));
+  if (listing.update_reason === 'new') overlay.push(el('span', { class: 'listing-tag listing-tag--new' }, 'New'));
+
+  // Exception chips only: sale status, the location caution, classifier flags.
   const tags = [];
   if (listing.status && listing.status !== 'live') {
     tags.push(el('span', { class: `listing-tag listing-tag--${listing.status}` }, STATUS_LABELS[listing.status] || listing.status));
   }
-  const drop = lastPriceDrop(listing);
-  if (drop) tags.push(el('span', { class: 'listing-tag listing-tag--drop' }, `↓ ${fmtPrice(drop)}`));
-  if (listing.update_reason === 'new') tags.push(el('span', { class: 'listing-tag listing-tag--new' }, 'New'));
-  tags.push(...geoChips(listing, area));
+  if (listing.corroborated === false) {
+    tags.push(el('span', { class: 'listing-tag listing-tag--warn', title: 'The map position and the address text disagree on the village' }, '⚠ location unconfirmed'));
+  }
   tags.push(...flagChips(listing, ctx.hiddenRules));
 
-  const controls = ctx.onSave
-    ? el('div', { class: 'listing-controls' }, [
-        buildReasonPicker({
-          variant: 'row',
-          current: ctx.reaction,
-          draft: ctx.draft || null,
-          onDraftChange: ctx.onDraftChange || null,
-          onSave: (d) => ctx.onSave(listing, d),
-        }),
-        buildStatus(listing, ctx.status, (status) => ctx.onStatus(listing, status)),
-      ])
-    : null;
+  // Distance is core scan-time data — it joins the mono data line.
+  const distance = listing.distance_mi != null && (area?.name || listing.area_id)
+    ? `${Number(listing.distance_mi).toFixed(1)} mi from ${area?.name || listing.area_id}`
+    : '';
 
-  // Stage 6b: the external Rightmove link as a clear button, visually distinct
-  // from the image-link (which opens OUR dossier).
-  const rmLink = listing.url
-    ? el('a', { class: 'btn-rm', href: listing.url, target: '_blank', rel: 'noopener' }, 'View on Rightmove ↗')
-    : null;
-  const links = (rmLink || mapBtn(listing))
-    ? el('div', { class: 'listing-links' }, [rmLink, mapBtn(listing)].filter(Boolean))
-    : null;
-  const actions = (controls || links)
-    ? el('div', { class: 'listing-row-actions' }, [controls, links].filter(Boolean))
+  const actions = ctx.onSave
+    ? buildReasonPicker({
+        variant: 'row',
+        current: ctx.reaction,
+        draft: ctx.draft || null,
+        onDraftChange: ctx.onDraftChange || null,
+        onSave: (d) => ctx.onSave(listing, d),
+      })
     : null;
 
   const card = buildPropertyCard(listing, {
@@ -230,9 +214,9 @@ export function buildRow(listing, idx, scored, area, ctx = {}) {
     badge: ctx.reviewed
       ? { label: '✓ Reviewed', tone: REVIEWED_MOD[ctx.reaction?.reaction] || 'neutral' }
       : null,
-    metaExtra: addedText(listing),
+    metaExtra: distance,
+    overlay,
     tags,
-    details: [buildAreaMembership(listing, area), buildWhy(scored, listing, area)].filter(Boolean),
     actions,
   });
   card.setAttribute('role', 'listitem');

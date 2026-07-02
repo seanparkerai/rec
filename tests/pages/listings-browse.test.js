@@ -75,7 +75,7 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
-  test('buildRow: a browse row IS a shared prop-card with every slot composed', async () => {
+  test('buildRow: the Rightmove register (3.11) — photo-led card, core data only, dossier owns the rest', async () => {
     const dom = pageDom();
     const { buildRow } = await loadBuilders(dom);
     const row = buildRow(LISTING, 0, SCORED, AREA, {
@@ -91,31 +91,68 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(row.querySelector('.prop-card__price')?.textContent, '£350,000');
     assert(row.querySelector('.prop-card__title-link')?.getAttribute('href')?.includes('property.html?id=9911'),
       'title links to OUR dossier');
-    const tagText = row.querySelector('.prop-card__tags')?.textContent || '';
-    assert(tagText.includes('0.8 mi · Swanmore'), 'geo chip composes into the shared tag slot');
-    assert(row.querySelector('details.listing-areas'), 'area-membership details compose into the body');
-    assert(row.querySelector('details.listing-why'), 'the "why this verdict" expander composes into the body');
+    assert(/0\.8 mi from Swanmore/.test(row.querySelector('.prop-card__meta')?.textContent || ''),
+      'distance is core data on the mono data line, not a chip');
+    assert(!row.querySelector('.listing-tag--geo'), 'no geo chip — distance moved to the data line');
+    assert(!row.querySelector('details.listing-areas') && !row.querySelector('details.listing-why'),
+      'the membership + why expanders live in the dossier, not on the card');
     const actions = row.querySelector('.prop-card__actions');
-    assert(actions?.querySelector('.reaction-picker--row'), 'the reaction row lands in the thumb-zone slot');
-    assert(actions?.querySelector('select.listing-status'), 'the personal-status select lands in the thumb-zone slot');
-    assert(actions?.querySelector('.btn-rm'), 'the external Rightmove link lands in the thumb-zone slot');
+    assert(actions?.querySelector('.reaction-picker--row'), 'the reaction picker lands in the thumb-zone slot');
+    assert(!actions?.querySelector('select.listing-status'), 'no status select on the card (dossier-only)');
+    assert(!row.querySelector('.btn-rm') && !row.querySelector('.btn-map'),
+      'no external Rightmove/map links on the card (dossier-only)');
     assert(![...row.querySelectorAll('*')].some((n) => [...n.classList].some((c) => c.startsWith('listing-card'))),
       'no legacy .listing-card__* classes remain in the row');
     assert(!row.querySelector('[style]'), 'no inline styles (DESIGN.md §6.7)');
     dom.window.close();
   });
 
-  test('buildRow: added-date joins the shared data line; reviewed maps to the shared badge', async () => {
+  test('buildRow: drop/New overlay the photo; reviewed maps to the shared badge', async () => {
     const dom = pageDom();
     const { buildRow } = await loadBuilders(dom);
-    const row = buildRow(LISTING, 0, SCORED, AREA, { reviewed: false, hiddenRules: [] });
-    assert(/First seen/.test(row.querySelector('.prop-card__meta')?.textContent || ''),
-      'addedText composes via metaExtra into the mono data line');
+    const fresh = buildRow({ ...LISTING, update_reason: 'new' }, 0, SCORED, AREA, { reviewed: false, hiddenRules: [] });
+    const overlay = fresh.querySelector('.prop-card__figure .prop-card__overlay');
+    assert(/New/.test(overlay?.textContent || ''), 'the New chip sits ON the cover photo');
+    assert(!/New/.test(fresh.querySelector('.prop-card__tags')?.textContent || ''),
+      'the New chip is not duplicated in the tag row');
+    const plain = buildRow(LISTING, 0, SCORED, AREA, { reviewed: false, hiddenRules: [] });
+    assert(!plain.querySelector('.prop-card__overlay'), 'no overlay wrapper without a signal to show');
     const reviewed = buildRow(LISTING, 0, SCORED, AREA, {
       reviewed: true, reaction: { reaction: 'like' }, hiddenRules: [],
     });
     assert(/Reviewed/.test(reviewed.querySelector('.prop-card__badge')?.textContent || ''),
       'reviewed state renders through the shared badge slot');
+    dom.window.close();
+  });
+
+  test('reaction picker: progressive reveal — verbs only, then reasons+Save, then the ✓ one-liner', async () => {
+    const dom = pageDom();
+    const { buildRow } = await loadBuilders(dom);
+    // Untouched card: three verbs, nothing else.
+    const row = buildRow(LISTING, 0, SCORED, AREA, {
+      reaction: null, reviewed: false, hiddenRules: [], onSave: async () => {},
+    });
+    const picker = row.querySelector('.reaction-picker--row');
+    assert(picker && !picker.querySelector('.listing-react').hidden, 'verb row is visible on an untouched card');
+    assert(picker.querySelector('.listing-save-row').hidden, 'no Save button before a verb is chosen');
+    assert(picker.querySelector('.listing-reasons').hidden, 'no reason chips before a verb is chosen');
+    assert(picker.querySelector('.reaction-confirm').hidden, 'no confirmed one-liner before a decision');
+    // Tap a verb: reasons + Save appear.
+    picker.querySelector('[data-react="like"]').click();
+    assert(!picker.querySelector('.listing-save-row').hidden, 'Save appears after a verb tap');
+    assert(!picker.querySelector('.listing-reasons').hidden, 'the like-reasons vocabulary appears after a verb tap');
+    // A saved decision renders collapsed to the one-liner; tapping re-opens.
+    const decided = buildRow(LISTING, 0, SCORED, AREA, {
+      reaction: { reaction: 'like', reasons: [] }, reviewed: true, hiddenRules: [], onSave: async () => {},
+    });
+    const dp = decided.querySelector('.reaction-picker--row');
+    const confirm = dp.querySelector('.reaction-confirm');
+    assert(!confirm.hidden && /Liked/.test(confirm.textContent), 'decided card collapses to "✓ Liked — change"');
+    assert(dp.querySelector('.listing-react').hidden && dp.querySelector('.listing-save-row').hidden,
+      'verbs and Save are hidden behind the one-liner');
+    confirm.click();
+    assert(confirm.hidden && !dp.querySelector('.listing-react').hidden,
+      'the one-liner re-opens the picker for a change of mind');
     dom.window.close();
   });
 

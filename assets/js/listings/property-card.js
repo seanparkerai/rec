@@ -73,7 +73,8 @@ function buildMedia(listing, href) {
  * @param {string}  [opts.verdictLabel] display label for the verdict (caller owns vocab).
  * @param {{label:string, tone?:string}} [opts.badge]  surface badge (e.g. Rejected/Passed/Saved).
  * @param {string}  [opts.metaExtra]    appended data-line text (e.g. "Actioned 3 Jun 2026").
- * @param {Node[]}  [opts.tags]         chip nodes (caller-built; price drops, geo, flags).
+ * @param {Node[]}  [opts.overlay]      chip nodes laid OVER the cover photo (price drop, New).
+ * @param {Node[]}  [opts.tags]         chip nodes (caller-built; exception chips — status, flags).
  * @param {Node[]}  [opts.details]      expandable/why/membership nodes (caller-built).
  * @param {Node}    [opts.actions]      the thumb-zone action row (reactions, status, links).
  * @param {boolean} [opts.compact]      dense list-row variant (the Rejected-page register).
@@ -84,11 +85,13 @@ export function buildPropertyCard(listing, opts = {}) {
   const title = propertyTitle(listing);
   const meta = [propertyMeta(listing), opts.metaExtra || ''].filter(Boolean).join(' · ');
 
+  // Price leads the head (the Rightmove register, owner decision 2026-07-02);
+  // the verdict follows it, the badge sits at the far edge.
   const head = el('div', { class: 'prop-card__head' }, [
+    el('span', { class: 'prop-card__price' }, fmtPrice(listing.price)),
     opts.verdict ? el('span', { class: `prop-card__dot prop-card__dot--${opts.verdict}`, 'aria-hidden': 'true' }) : null,
     opts.verdictLabel ? el('span', { class: `prop-card__verdict prop-card__verdict--${opts.verdict || 'unknown'}` }, opts.verdictLabel) : null,
     opts.badge ? el('span', { class: `prop-card__badge prop-card__badge--${opts.badge.tone || 'neutral'}` }, opts.badge.label) : null,
-    el('span', { class: 'prop-card__price' }, fmtPrice(listing.price)),
   ].filter(Boolean));
 
   const body = el('div', { class: 'prop-card__body' }, [
@@ -105,8 +108,19 @@ export function buildPropertyCard(listing, opts = {}) {
     opts.actions ? el('div', { class: 'prop-card__actions' }, [opts.actions]) : null,
   ].filter(Boolean));
 
+  // Overlay chips sit OVER the photo but OUTSIDE the labelled dossier link —
+  // pointer-events pass through to the photo, and the chip text stays in the
+  // accessibility tree (the link's aria-label would otherwise swallow it).
+  const media = buildMedia(listing, href);
+  const figure = Array.isArray(opts.overlay) && opts.overlay.length
+    ? el('div', { class: 'prop-card__figure' }, [
+        media,
+        el('div', { class: 'prop-card__overlay' }, opts.overlay),
+      ])
+    : media;
+
   return el('article', {
     class: `prop-card${opts.compact ? ' prop-card--compact' : ''}`,
     'data-id': listing.rightmove_id,
-  }, [buildMedia(listing, href), body]);
+  }, [figure, body]);
 }
