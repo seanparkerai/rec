@@ -202,29 +202,6 @@
   <script type="module" src="../assets/js/page-criteria.js"></script>
   <script type="module" src="../assets/js/page-profile-detail.js"></script>
   <script type="module" src="../assets/js/page-profile-page.js"></script>
-  <script>
-    // Highlight current TOC entry on scroll.
-    (() => {
-      const links = document.querySelectorAll('.about-toc a');
-      const map = new Map();
-      links.forEach((a) => {
-        const id = a.getAttribute('href').slice(1);
-        const sec = document.getElementById(id);
-        if (sec) map.set(sec, a);
-      });
-      if (!map.size) return;
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          const a = map.get(e.target);
-          if (!a) return;
-          if (e.isIntersecting) {
-            links.forEach((x) => x.removeAttribute('aria-current'));
-            a.setAttribute('aria-current', 'true');
-          }
-        });
-      }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
-      map.forEach((_a, sec) => io.observe(sec));
-    })();
-  </script>
+  <script type="module" src="../assets/js/toc-observer.js"></script>
 </body>
 </html>

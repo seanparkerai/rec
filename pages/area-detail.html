@@ -163,31 +163,6 @@
   <div data-include="components/footer.html"></div>
   <script type="module" src="../assets/js/components.js"></script>
   <script type="module" src="../assets/js/page-area-detail.js"></script>
-  <script>
-    // Sticky TOC active-link highlighting + auto-scroll mobile pill into view.
-    (() => {
-      const links = document.querySelectorAll('.area-toc a');
-      const map = new Map();
-      links.forEach((a) => {
-        const id = a.getAttribute('href').slice(1);
-        const sec = document.getElementById(id);
-        if (sec) map.set(sec, a);
-      });
-      if (!map.size) return;
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          const a = map.get(e.target);
-          if (!a || !e.isIntersecting) return;
-          links.forEach((x) => x.removeAttribute('aria-current'));
-          a.setAttribute('aria-current', 'true');
-          // Scroll mobile chip row so active pill is visible.
-          if (matchMedia('(max-width: 1023.98px)').matches) {
-            a.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-          }
-        });
-      }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
-      map.forEach((_a, sec) => io.observe(sec));
-    })();
-  </script>
+  <script type="module" src="../assets/js/toc-observer.js"></script>
 </body>
 </html>
