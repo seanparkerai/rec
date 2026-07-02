@@ -4,9 +4,22 @@
    reuses the .check-list / .check-row* rows defined at the foot of this file. */
 
 /* ── Page-head progress ──────────────────────────────────────────────────── */
+/* 3.9c: the "where you are" line is PINNED (⚙ 3.1 wireframe) — sticky under
+   the header while the long timeline scrolls, on the finance-toc/area-toc
+   register (blurred paper, hairline seam, full-bleed to the page gutters). */
 .tl-progress {
   display: flex; flex-wrap: wrap; align-items: baseline;
-  gap: var(--space-2) var(--space-4); margin: 0 0 var(--space-6);
+  gap: var(--space-2) var(--space-4);
+  position: sticky;
+  top: var(--header-h, 4rem);
+  z-index: 5;
+  margin: 0 calc(-1 * var(--space-3)) var(--space-6);
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  backdrop-filter: saturate(160%) blur(12px);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
 }
 .tl-overall {
   font-family: var(--font-data); font-feature-settings: "tnum";
