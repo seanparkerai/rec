@@ -72,10 +72,10 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       `python3 -m http.server`.
 - [ ] Split `base.css` into the component partials + container queries on cards/sidebar
       (8A leftover; `sheet`/`segmented`/`table` scaffolds exist under `assets/css/components/`).
-- [ ] Map upgrade (8B): swap Leaflet + Geoman → MapLibre GL JS v5 + maplibre-gl-draw;
-      Hampshire/Wiltshire PMTiles slice at `assets/maps/uk-south.pmtiles`; token-driven light/dark
-      style; mobile bottom-sheet detents; port `page-map.js` (markers, shortlist, zones —
-      storage API unchanged).
+- [x] Map upgrade (8B) — **DECLINED 2026-07-02** (overhaul step 3.7c): keep Leaflet 1.9.4 +
+      Geoman. Metric geofence circles are native Leaflet (no GL equivalent), zone drawing has
+      no free MapLibre parity, and the CDN-dependency/weight ledger worsens on a zero-build
+      page. Rationale + revisit trigger recorded in `plan/04-program.md` §5b.
 - [ ] Compare drawer on the Areas page: multi-select 2–4 areas → bottom drawer with side-by-side
       mono columns (Phase 6 follow-up).
 - [ ] **B4 — Shortlist single source:** make `getShortlist()` Supabase-first — touches

@@ -97,6 +97,23 @@ learned-preferences at ~75–80% threshold, opt-in, added in their phases. devDe
   calibration data shows systematic miscalibration (e.g. gates passing noise or starving
   obvious signals across many runs), reopen as its own named phase.
 
+- **2026-07-02 — 3.7c declined: KEEP Leaflet 1.9.4 + Geoman; no MapLibre GL + PMTiles swap.**
+  The queued 8B upgrade (old `docs/CHECKLIST.md`) predates the overhaul; re-weighed at 3.7c under
+  the improving-only latitude it fails on value-vs-churn. The map's job — ~190 `circleMarker`s +
+  metric geofence rings over Hampshire/Wiltshire — is native Leaflet (`L.circle` takes metres; GL
+  has no metres-radius primitive, forcing turf-synthesized polygons or zoom-interpolated pixel
+  radii for the single most load-bearing visual). Zone drawing is real user data (Geoman
+  draw/edit/drag/snap → localStorage GeoJSON) with **no free MapLibre parity**: maplibre-gl-draw
+  is stale mapbox-compat, terra-draw is a different API and another CDN dep — a rewrite with new
+  failure modes either way. The dependency ledger moves the wrong way for a zero-build page:
+  today 2 CDN deps (~55 KB gz) with theme = raster-URL swap; after, 3–4 deps (~230 KB+ gz) plus
+  either a multi-MB self-hosted PMTiles artifact (+ regeneration tooling) or still-remote vector
+  styles, and a WebGL floor on old devices. Nothing on the map wishlist requires vector tiles;
+  the genuine improvements (Geoman toolbar a11y labels, coordinate-quality cues, active-flag
+  UX) are stack-independent and stay queued for 3.9/the visual pass. **Revisit trigger:** CARTO's
+  free raster endpoints retire, or the post-refactor visual pass judges raster tiles below the
+  design bar on retina phones — reopen as its own named phase, terra-draw parity spike first.
+
 ## 6. Owner-action items (each one flagged as a checklist step when reached)
 
 1. Add repo secrets `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DB_URL`
