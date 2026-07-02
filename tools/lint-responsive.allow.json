@@ -3,10 +3,6 @@
     "count": 1,
     "reason": "Deposit-arc SVG animation: strokeDashoffset is a numeric SVG presentation value driven per-frame; a CSS-var indirection adds no safety. Sanctioned 2026-07-01 (v1 baseline port)."
   },
-  "r-no-style-assign|assets/js/finances/section-deposit.js|.style.width =": {
-    "count": 1,
-    "reason": "Deposit progress bar fill: dynamic percentage width on one element; predates the --x setProperty idiom. Migrate when Phase 3 rebuilds the finances page. Sanctioned 2026-07-01 (v1 baseline port)."
-  },
   "r-no-style-assign|assets/js/page-area-detail.js|.style.viewTransitionName =": {
     "count": 1,
     "reason": "Cross-document View Transition: view-transition-name must be set programmatically on the morphing element (area title). Sanctioned 2026-07-01 (v1 baseline port)."

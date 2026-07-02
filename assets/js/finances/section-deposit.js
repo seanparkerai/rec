@@ -14,7 +14,8 @@ export function renderTiles(finData) {
   const pct = fin.calcDepositProgress(savedNum, target);
   const months = fin.calcMonthsToTarget(savedNum, target, finData.savings?.monthlyContribution || 0);
   setText('tile-progress', String(pct));
-  const bar = $('progress-bar'); if (bar) bar.style.width = `${pct}%`;
+  // Sanctioned dynamic-value idiom (DESIGN.md §6.7): CSS consumes --fill-pct.
+  const bar = $('progress-bar'); if (bar) bar.style.setProperty('--fill-pct', `${pct}%`);
   setText('tile-saved', Number.isFinite(saved) ? gbp(saved) : '—');
   const goalMo = Number(finData.savings?.monthlyContribution || 0);
   const avgMo = finData.savings?.avgMonthlyDepositEstimate;

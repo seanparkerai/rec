@@ -25,6 +25,8 @@
 }
 .finance-hero-num small { font-size: 0.4em; color: var(--ink-muted); margin-left: 0.15em; font-weight: 400; vertical-align: 0.6em; }
 .finance-hero-pct .progress { height: 6px; margin-top: var(--space-3); }
+/* Fill driven by section-deposit.js via setProperty (DESIGN.md §6.7 idiom). */
+.finance-hero-pct .progress > span { width: var(--fill-pct, 0%); }
 .finance-hero-stats {
   margin: 0; display: grid; gap: var(--space-3);
   grid-template-columns: 1fr;
