@@ -126,9 +126,9 @@
     "https://en.wikipedia.org/wiki/Privett_(disambiguation)"
   ],
   "rightmove": {
-    "resolvedAt": "2026-06-02T21:14:52.793Z",
+    "locationIdentifier": "POSTCODE^1493103",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "locationIdentifier": "POSTCODE^356774"
+    "resolvedAt": "2026-07-03T11:04:07.949Z"
   }
 }

@@ -138,9 +138,9 @@
     "https://www.testvalley.gov.uk/benefitsandcounciltax/counciltax/council-tax-charges"
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^4405594",
+    "locationIdentifier": "POSTCODE^800280",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:15:28.462Z"
+    "resolvedAt": "2026-07-03T11:04:38.700Z"
   }
 }

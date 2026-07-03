@@ -108,9 +108,9 @@
     }
   ],
   "rightmove": {
-    "resolvedAt": "2026-06-02T21:15:16.332Z",
+    "locationIdentifier": "POSTCODE^809182",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "locationIdentifier": "POSTCODE^4374142"
+    "resolvedAt": "2026-07-03T11:04:26.660Z"
   }
 }

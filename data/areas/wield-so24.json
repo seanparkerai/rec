@@ -122,9 +122,9 @@
     "https://www.thetrainline.com/train-times/basingstoke-to-london-waterloo"
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^4112083",
+    "locationIdentifier": "POSTCODE^357017",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:16:20.362Z"
+    "resolvedAt": "2026-07-03T11:05:32.993Z"
   }
 }

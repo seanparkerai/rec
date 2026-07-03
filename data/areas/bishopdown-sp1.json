@@ -96,9 +96,9 @@
     "https://www.google.com/maps"
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1597176",
+    "locationIdentifier": "POSTCODE^1235931",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:11.632Z"
+    "resolvedAt": "2026-07-03T11:03:30.109Z"
   }
 }

@@ -381,5 +381,11 @@
       "title": "Curbridge Meadows, Whiteley — Crest Nicholson (Good-rated primary on development)",
       "accessedAt": "2026-06-04"
     }
-  ]
+  ],
+  "rightmove": {
+    "locationIdentifier": "POSTCODE^677130",
+    "identifierType": "POSTCODE",
+    "identifierQuality": "tight",
+    "resolvedAt": "2026-07-03T11:05:29.950Z"
+  }
 }

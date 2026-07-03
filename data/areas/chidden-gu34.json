@@ -105,9 +105,9 @@
     "https://reports.ofsted.gov.uk/"
   ],
   "rightmove": {
-    "resolvedAt": "2026-06-02T21:14:30.565Z",
+    "locationIdentifier": "POSTCODE^1568759",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "locationIdentifier": "POSTCODE^1493104"
+    "resolvedAt": "2026-07-03T11:03:47.403Z"
   }
 }

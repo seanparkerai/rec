@@ -126,9 +126,9 @@
     "https://www.alton.gov.uk/shopping-in-alton/"
   ],
   "rightmove": {
-    "locationIdentifier": "POSTCODE^1595405",
+    "locationIdentifier": "POSTCODE^356868",
     "identifierType": "POSTCODE",
     "identifierQuality": "tight",
-    "resolvedAt": "2026-06-02T21:14:08.188Z"
+    "resolvedAt": "2026-07-03T11:03:25.492Z"
   }
 }
