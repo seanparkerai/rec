@@ -10,6 +10,12 @@
 # (adr/0008) independently blocks deleting `main` even if it were listed. Each branch is
 # deleted individually so one bad name doesn't abort the rest; missing branches are
 # reported, not fatal.
+#
+# TRIGGERS. Two, because the GitHub App integration used by Claude sessions cannot call
+# the dispatch API (403) — but it CAN push. (1) workflow_dispatch with a `branches`
+# input, for humans; (2) a push to main touching `.github/prune-branches.txt` — the
+# file's non-comment lines are the deletion list, so a session prunes by committing the
+# list. The file is a one-shot request record, not state: it stays in-tree after the run.
 
 name: prune-branches
 
@@ -20,6 +26,9 @@ on:
         description: "Space-separated branch names to delete (never main)"
         required: true
         type: string
+  push:
+    branches: [main]
+    paths: ['.github/prune-branches.txt']
 
 permissions:
   contents: write
@@ -36,6 +45,10 @@ jobs:
           BRANCHES: ${{ inputs.branches }}
         run: |
           set -u
+          # Dispatch input wins; otherwise read the pushed control file (strip comments/blanks).
+          if [ -z "${BRANCHES:-}" ] && [ -f .github/prune-branches.txt ]; then
+            BRANCHES=$(grep -v '^#' .github/prune-branches.txt | tr '\n' ' ')
+          fi
           failed=0
           for b in $BRANCHES; do
             case "$b" in

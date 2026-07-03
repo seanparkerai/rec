@@ -1,0 +1,30 @@
+# prune-branches control file — non-comment lines are deleted by the prune-branches
+# workflow on push to main (see .github/workflows/prune-branches.yml).
+# 2026-07-03: superseded session branches + pre-rename backup (all work re-landed on main).
+backup/pre-rename-2026-05-25
+claude/active-flag-authority-cleanup-f1r32t
+claude/error-resolution-hc7lr3
+claude/fable-5md-planning-overhaul-i8qyxp
+claude/fable-overhaul-listings-yub7j7
+claude/fable-overhaul-resume-p22s5n
+claude/fable-refactor-phase-8-exit-joq3rw
+claude/fable-refactor-plan-update-66ymk2
+claude/fable-refactor-plan-yfmzmq
+claude/fable-refactor-resume-prompts-f7f0xy
+claude/fable-refactor-validation-516zhj
+claude/github-failed-runs-vw307a
+claude/listing-areas-m2m-origin-toteu9
+claude/listings-card-redesign-h33k8f
+claude/listings-decline-analysis-t8xp1r
+claude/live-feed-stats-admin-rpc-y4gtgc
+claude/outreach-compose-ask-8oihmq
+claude/overhaul-program-checklist-208vaa
+claude/per-area-learned-radius-e1a0d5
+claude/phase-3-4c-browse-rebuild-72obc9
+claude/phase-5-12-exit-score-wxq8n1
+claude/phase-5-2-checkpoint-ag0oa8
+claude/phase-5-2-resume-vertu6
+claude/prompt-fable-overhaul-gflp9y
+claude/repo-cleanup-organization-86qeg9
+claude/resume-after-credits-0i915w
+claude/unified-setup-profile-edit-jsc6cg
