@@ -1,4 +1,8 @@
-// page-profile-page.js — coordinator for the unified "Your Profile" page.
+// page-profile-page.js — THE single coordinator for the unified "Your Profile" page
+// (§19: one thin page entry). The page's three sibling modules are composed here in
+// the load order the old per-<script> setup used, so behaviour is byte-identical:
+// the editorial About card, then the Search criteria section, then the field-engine
+// detail sections + Areas picker. profile.html loads ONLY this module (step 8.1).
 //
 // 1. First-run banner (runs before render): an empty household — no Supabase row, so
 //    getProfile() returns the redacted `_SAMPLE` fixture (or null) — is no longer
@@ -9,6 +13,9 @@
 //    module clears it once auth/data is resolved.
 // 2. Save-bar proxy: the sticky bottom bar delegates to the criteria section's own
 //    Cancel/Save buttons (preserving the prior save-bar proxy behaviour).
+import './page-profile.js';
+import './page-criteria.js';
+import './page-profile-detail.js';
 import {
   getProfile, getCriteria, getHouseholdAreas, getCurrentUser, hasRealUserData,
 } from './storage.js';

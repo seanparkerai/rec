@@ -43,4 +43,23 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(JSON.stringify(targets), JSON.stringify(sectionIds), 'spine order mirrors the page order exactly');
     dom.window.close();
   });
+
+  test('profile: ONE page entry (step 8.1) — the coordinator composes the sibling modules', () => {
+    const dom = profileDom();
+    const doc = dom.window.document;
+    const pageScripts = [...doc.querySelectorAll('script[src]')]
+      .map((s) => s.getAttribute('src'))
+      .filter((src) => /\/page-/.test(src));
+    assertEqual(JSON.stringify(pageScripts), JSON.stringify(['../assets/js/page-profile-page.js']),
+      'profile.html loads exactly one page module (§19: one thin entry per page)');
+    dom.window.close();
+    // The coordinator must compose the three siblings in the legacy <script> order, so
+    // behaviour (editorial card → criteria → detail sections) is byte-identical.
+    const src = readFileSync(join(ROOT, 'assets/js/page-profile-page.js'), 'utf8');
+    const order = ['./page-profile.js', './page-criteria.js', './page-profile-detail.js']
+      .map((m) => src.indexOf(`import '${m}'`));
+    assert(order.every((i) => i !== -1), 'all three sibling modules are imported');
+    assertEqual(JSON.stringify(order), JSON.stringify(order.slice().sort((a, b) => a - b)),
+      'imports keep the legacy execution order');
+  });
 }
