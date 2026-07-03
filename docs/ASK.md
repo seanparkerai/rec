@@ -104,7 +104,10 @@ The function source is version-controlled here; **do not hand-edit it in the Sup
    # optional: override where templates are fetched from
    supabase secrets set OUTREACH_TEMPLATES_URL=https://georgianrectory.com/data/outreach-templates.json
    ```
-   `SUPABASE_URL` and `SUPABASE_ANON_KEY` are provided to the function automatically.
+   `SUPABASE_URL` is provided automatically. The RLS-scoped client key is the
+   `SB_PUBLISHABLE_KEY` function secret if set, else the committed publishable key baked into
+   `index.ts` (the platform-injected `SUPABASE_ANON_KEY` is the legacy JWT key, disabled
+   2026-07-03 — no longer read).
 3. **Deploy:**
    ```bash
    supabase functions deploy ask

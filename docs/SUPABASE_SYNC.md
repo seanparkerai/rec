@@ -291,14 +291,14 @@ SELECT tablename FROM pg_tables WHERE schemaname='public' AND NOT rowsecurity;  
 Baseline 2026-07-03: **clean** (zero rows — every public table has RLS). Any future row is a
 stop-everything security finding, not a note.
 
-**Legacy anon JWT key: still ENABLED** (`get_publishable_keys`, `type:"legacy"`,
-`disabled:false`). Nothing in the repo uses it, but the platform still injects it as the
-`SUPABASE_ANON_KEY` env that `supabase/functions/ask/index.ts` reads for its RLS-scoped client.
-⚙ **Owner action to finish E1** (dashboard-only — no MCP tool can disable keys), in this order:
-1. Point the `ask` function at the publishable key (set a function secret, e.g.
-   `SB_PUBLISHABLE_KEY=sb_publishable_…`, and switch `index.ts` to prefer it over
-   `SUPABASE_ANON_KEY`), redeploy, re-run the ASK.md smoke test.
-2. Only then disable the legacy JWT keys in Dashboard → Settings → API. Disabling first breaks Ask.
+**Legacy anon JWT key: DISABLED by the owner 2026-07-03** — out of the documented order (the
+dashboard action landed *before* the `ask` repoint), which broke the deployed `ask` function's
+RLS-scoped client (it read the platform-injected legacy `SUPABASE_ANON_KEY`). **Source fixed the
+same day:** `supabase/functions/ask/index.ts` now prefers an `SB_PUBLISHABLE_KEY` function secret
+and falls back to the committed publishable key (public by design, RLS-enforced — same key as the
+browser client). ⚙ **Remaining step: redeploy** (`supabase functions deploy ask`, or MCP
+`deploy_edge_function` from a session where connector approvals work), then re-run the ASK.md §5
+smoke test. Until redeployed, Ask returns 401 for every signed-in user.
 
 **Secret keys:** never committed anywhere. The only `service_role` consumer is
 `tools/backfill-content-direct.mjs`, which reads it from the environment (its header says so);

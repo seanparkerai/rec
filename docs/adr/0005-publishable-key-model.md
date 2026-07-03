@@ -36,3 +36,8 @@ redeploy, smoke-test; (2) only then disable legacy JWT keys.
 The client key model matches the platform's target state and any RLS regression is a
 stop-everything finding, not a note. Outstanding: the two-step owner dashboard action in
 §7 — until it is done, the legacy key remains enabled and this ADR is not fully realised.
+
+**Update 2026-07-03 (later the same day):** the owner disabled the legacy JWT keys ahead of
+step 1, temporarily breaking Ask. `index.ts` was repointed the same day (prefers the
+`SB_PUBLISHABLE_KEY` function secret, falls back to the committed publishable key); the ADR is
+fully realised once the function is redeployed and smoke-tested (SUPABASE_SYNC.md §7).

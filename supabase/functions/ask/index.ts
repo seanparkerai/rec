@@ -15,6 +15,12 @@ import { buildSystemPrompt, PROMPT_VERSION } from "./prompt.ts";
 import { capToolResult, fitConvoToBudget } from "./pure.js";
 
 const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
+// RLS-scoped client key. The platform-injected SUPABASE_ANON_KEY is the LEGACY
+// JWT key, disabled by the owner 2026-07-03 (adr/0005 E1) — using it now fails
+// auth. Prefer the SB_PUBLISHABLE_KEY function secret; fall back to the same
+// publishable key the browser client commits (public by design, RLS-enforced).
+const SUPABASE_KEY = Deno.env.get("SB_PUBLISHABLE_KEY") ??
+  "sb_publishable_3Bv1m_CG1DkIoqBhKjXp-A_vWS_kNFV";
 // This is a thin natural-language front-end over the household's own Supabase
 // data: pick a read-only tool, pass sane args, narrate a compact result. The
 // "smart" work (affordability, ranking, dedup, template fill) is deterministic
@@ -64,7 +70,7 @@ Deno.serve(async (req) => {
   const authHeader = req.headers.get("Authorization") ?? "";
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_ANON_KEY")!,
+    SUPABASE_KEY,
     { global: { headers: { Authorization: authHeader } }, auth: { persistSession: false } },
   );
   const { data: { user } } = await supabase.auth.getUser();

@@ -4,8 +4,10 @@ Date: 2026-07-03 (step 10.4; owner dashboard action pending)
 
 ## Status
 
-Proposed (awaiting the owner's dashboard action — no API surface for branch
-protection is available to Claude sessions in this environment)
+Accepted (owner reported completing the dashboard action, 2026-07-03 — no API surface exists
+in Claude sessions to verify it; flip back to Proposed if the ruleset isn't actually saved).
+The decision is also mirrored locally: `.claude/settings.json` denies `git push --force*`, so a
+session can't attempt a history rewrite even before the server-side ruleset would reject it.
 
 ## State / rail
 

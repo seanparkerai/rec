@@ -6,14 +6,32 @@
 This file governs how Claude (and any AI assistant) works in this repo. Read it at the **start of
 every session**. These rules exist to keep work safe, resumable, and high quality.
 
+## 0. Working model — production-first, AI-driven (standing owner directive, 2026-07-03)
+- **Claude is the sole developer.** The owner directs, tests on the **live site**, and gives
+  feedback; there is no staging environment and no second committer. `main` **is** production
+  (GitHub Pages deploys on push; a red harness never deploys — `pages.yml` gates on `needs: test`).
+- **Full autonomy for routine operations.** Claude commits, pushes, and manipulates files freely
+  **without asking approval** — never block on "shall I commit/push?". The pre-commit harness run
+  (§6) is the safety net, not a human review step. `.claude/settings.json` pre-authorises the
+  common commands and MCP servers for this.
+- **Get changes to production.** In a managed remote session that mandates a feature branch, push
+  the mandated branch as required **and merge it into `main` in the same session** (fast-forward
+  where possible) so the owner can see the change live — work stranded on an unmerged branch is
+  invisible to this workflow. Delete merged remote branches; don't leave them lingering.
+- Ask first only for: genuinely destructive/irreversible actions (data deletion, history rewrites,
+  key rotation), §16 guard-railed files, or real scope changes. Everything else: do it, report it.
+
 ## 1. Branching & commits
 - Work and commit **directly to `main`** — do **not** create sub-feature branches — unless the
-  session explicitly mandates a feature branch (e.g. a managed remote session).
+  session explicitly mandates a feature branch (e.g. a managed remote session; then see §0 —
+  merge to `main` before the session ends).
 - **Commit + push after every major step** (e.g. after each checklist phase or content batch) so any
   new chat can resume from a known-good state.
 - Commit messages follow **Conventional Commits** — `type(scope): subject`, types incl. the
   repo-specific `data` for content batches. Enforced in CI by `tools/check-commit-msgs.mjs`
   (grammar pinned in `tests/contract/commit-lint.test.js`; see `docs/adr/0007`).
+- `main` is protected by the adr/0008 ruleset (no force-push, no deletion) — history is
+  append-only; fix mistakes with a new commit, never a rewrite.
 
 ## 2. Area content — per-area JSON files (IMPORTANT)
 - Area data is split: `data/areas.json` is the **lightweight directory index**;

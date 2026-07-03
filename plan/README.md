@@ -28,8 +28,10 @@
 > CLAUDE.md re-baselined incl. the §16 Mechanical-rails inventory; final §2.7 leanness sweep —
 > legacy runner deleted, dead CSS cut, stale page-list claims fixed). Harness **1128/1128**.
 > **Owner-gated remainder (the only open items):** ⚙ 2.16 secrets (deferred 2026-07-02 — do not
-> re-nag; 2.11b + 4.9 unlock with it); Ask smoke test (7.1f); E1 finish (repoint ask off the
-> legacy key, then disable it — SUPABASE_SYNC.md §7 / adr/0005); the adr/0008 `main` ruleset.
+> re-nag; 2.11b + 4.9 unlock with it); Ask smoke test (7.1f); **redeploy the `ask` function**
+> (E1 closer: owner disabled legacy keys 2026-07-03 before the repoint — source fixed same day,
+> `supabase functions deploy ask` pending; SUPABASE_SYNC.md §7 / adr/0005). ✅ CLOSED 2026-07-03:
+> the adr/0008 `main` ruleset (owner-reported, ADR flipped to Accepted).
 > Future work starts as a NEW program (a fresh §0.2 intake), not by reopening this plan.
 > For app-side content/ops sessions, `docs/CHECKLIST.md` remains the live tracker.
 
