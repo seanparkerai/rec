@@ -68,9 +68,12 @@ async function _getHid() {
 }
 
 // Invalidate cached household_id on auth state change (sign out / sign in).
+// Boot is also the first retry window for journalled offline writes (9.2) —
+// drainPendingWrites is hoisted (function declaration below).
 _initSb().then((sb) => {
   if (!sb) return;
   sb.auth.onAuthStateChange(() => { _hid = null; });
+  drainPendingWrites();
 });
 
 // ── Toast (minimal, CSS-classless, non-intrusive) ─────────────────────
@@ -166,6 +169,37 @@ async function _sbUpsert(table, value) {
   }
 }
 
+// ── Pending-write drain (overhaul 9.2 / R2b) ──────────────────────────
+// Retries every journalled write: on boot (below) and when the browser comes
+// back online. _sbUpsert itself is the verifier — success clears the table's
+// journal entry, failure re-journals it — so "journal empty afterwards" IS the
+// ack. (A deep-equal re-read would false-mismatch: Postgres jsonb does not
+// preserve key order.) Single-flight so boot + online can't drain concurrently;
+// the per-table re-read of the journal picks up any newer value a user edit
+// journalled mid-drain (latest per table wins — blob semantics).
+let _drainP = null;
+function drainPendingWrites() {
+  if (_drainP) return _drainP;
+  _drainP = (async () => {
+    try {
+      const tables = Object.keys(readPendingWrites());
+      for (const table of tables) {
+        const entry = readPendingWrites()[table];
+        if (entry) await _sbUpsert(table, entry.value);
+      }
+      const remaining = Object.keys(readPendingWrites()).length;
+      if (tables.length && remaining === 0) _toast('Offline changes synced.');
+      else if (remaining > 0) _toast(`${remaining} unsaved change${remaining === 1 ? '' : 's'} — will retry when back online.`, true);
+      return { attempted: tables.length, remaining };
+    } finally { _drainP = null; }
+  })();
+  return _drainP;
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => { drainPendingWrites(); });
+}
+
 // ── Read pattern ──────────────────────────────────────────────────────
 // Resolution order (per CLAUDE.md §18: Supabase is source of truth for user state):
 //   1. localStorage cache — returned immediately, revalidated against Supabase in background.
@@ -259,4 +293,4 @@ export const _internal = { key, readLocal, writeLocal: _writeLocalEnhanced, remo
 export const hasRealUserData = (b) => !!b && !b._SAMPLE;
 
 // Internal helpers shared with sibling storage modules (not part of the public surface).
-export { readLocal, writeLocal, removeLocal, _initSb, _getHid, _toast, _sbGet, _sbUpsert, _get, _save, _normShortlist, readPendingWrites, _journalPendingWrite, _clearPendingWrite };
+export { readLocal, writeLocal, removeLocal, _initSb, _getHid, _toast, _sbGet, _sbUpsert, _get, _save, _normShortlist, readPendingWrites, _journalPendingWrite, _clearPendingWrite, drainPendingWrites };

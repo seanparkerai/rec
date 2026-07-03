@@ -101,4 +101,48 @@ export async function register({ test, assert, assertEqual }) {
     assert(entry, 'write held in the journal when household_id is unavailable');
     assertEqual(entry.value.v, 'offline-edit');
   });
+
+  // ── 9.2 — the retry drain ──────────────────────────────────────────────────
+
+  test('pending-writes (9.2): drain flushes journalled writes and empties the journal (offline → online round trip)', async () => {
+    // Go "offline": journal two failed writes.
+    let core = await loadCore({ failWrites: ['profile', 'criteria'] });
+    await core._sbUpsert('profile', { v: 'edit-1' });
+    await core._sbUpsert('criteria', { v: 'edit-2' });
+    assertEqual(Object.keys(core._internal.readPendingWrites()).length, 2, 'both writes journalled while offline');
+    // Come back "online": same journal (shared localStorage), a client that accepts writes.
+    globalThis.__REC_TEST_SB__ = new MockSupabaseClient(
+      { household_members: [{ user_id: 'user-001', household_id: HID }] }, { session: SESSION });
+    core._resetStorageForTests();
+    const { attempted, remaining } = await core.drainPendingWrites();
+    assertEqual(attempted, 2);
+    assertEqual(remaining, 0, 'journal empty after the drain');
+    const drained = globalThis.__REC_TEST_SB__.writes.filter((w) => w.op === 'upsert').map((w) => w.table).sort();
+    assertEqual(drained.join(','), 'criteria,profile', 'both journalled values reached the client');
+  });
+
+  test('pending-writes (9.2): still-failing writes stay journalled (drain is safe to repeat)', async () => {
+    const core = await loadCore({ failWrites: ['profile'] });
+    await core._sbUpsert('profile', { v: 'edit' });
+    const { attempted, remaining } = await core.drainPendingWrites();
+    assertEqual(attempted, 1);
+    assertEqual(remaining, 1, 'failed retry keeps the entry for the next drain');
+    assertEqual(core._internal.readPendingWrites().profile.value.v, 'edit');
+  });
+
+  test('pending-writes (9.2): drain is single-flight — concurrent calls share one pass', async () => {
+    const core = await loadCore({ failWrites: ['profile'] });
+    await core._sbUpsert('profile', { v: 'edit' });
+    const [a, b] = await Promise.all([core.drainPendingWrites(), core.drainPendingWrites()]);
+    assert(a === b || (a.attempted === b.attempted && a.remaining === b.remaining),
+      'concurrent drains resolve to the same pass');
+  });
+
+  test('pending-writes (9.2): drain with an empty journal is a no-op', async () => {
+    const core = await loadCore();
+    const { attempted, remaining } = await core.drainPendingWrites();
+    assertEqual(attempted, 0);
+    assertEqual(remaining, 0);
+    assertEqual(globalThis.__REC_TEST_SB__.writes.length, 0, 'no writes fired');
+  });
 }
