@@ -4,18 +4,20 @@
 > (832 KB / 11,068 lines — split 2026-07-01, owner-directed, content preserved). The root
 > `fable_refactor.md` is now a pointer stub kept so old references resolve.
 >
-> **Status (2026-07-03):** Phases **1–7 COMPLETE** — 1 (test-harness core), 2 (⭐ flagship
+> **Status (2026-07-03):** Phases **1–8 COMPLETE** — 1 (test-harness core), 2 (⭐ flagship
 > listings pipeline), 3 (mobile-first UI/UX overhaul + owner-directed 3.10/3.11 image-led
 > listings redesign), 4 (intelligence engine — 4.10b mutation ratchet done 2026-07-03:
 > 56.43→**74.86%**, core 78–91 per module, floor 73; only owner-gated ⚙ 4.9 open), 5 (finances
 > trust surface — mutation 87.04, floor 86), 6 (areas content & data quality — 196/196
 > researched, zero missing fields), 7 (Ask → claude-sonnet-5, v6 deployed; owner browser smoke
-> test queued). Harness **1065/1065**.
+> test queued), 8 (profile, criteria, journey — one profile entry per §19; template↔dataNeeded
+> two-way rail; journey.json repo-only decision; field-engine branch matrix pinned; Compose
+> a11y pass; + owner-directed 8.W workflows audit: CI/Pages had failed on every push since the
+> Phase-7 merge (Node 20 vs `--experimental-strip-types`) — fixed, all on Node 22, workflows
+> pruned 11→9). Harness **1097/1097 across 104 suites**.
 > Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag; 2.11b + 4.9 unlock
-> with it); Ask smoke test (7.1f). Current phase: **8** (profile, criteria, journey) — expand on
-> entry per §0.2 mode-2; reality notes: three profile modules are 249/94/48 lines and already
-> field-engine-driven, the outreach grid is gone (Ask Compose authors outreach), journey.json is
-> repo-static with tick-state in Supabase `journey_progress`.
+> with it); Ask smoke test (7.1f). Current phase: **9** (backend/storage resilience, segment
+> `10.9`) — expand on entry per §0.2 mode-2; then 10 (process & rails re-baseline).
 > **Resume at the first unticked line of `03-checklist.md`.**
 
 ## How to use this directory (cold-resume protocol)
