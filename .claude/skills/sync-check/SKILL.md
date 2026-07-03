@@ -9,7 +9,11 @@ Applies to sessions touching data, schema, or user-state. The table inventory li
 `docs/SUPABASE_SYNC.md` §0; the enforced list in `tests/supabase-sync.test.js`.
 
 ## Session start (§18.2)
-1. `mcp__supabase__list_tables` — schema intact, RLS on every table.
+1. `mcp__supabase__list_tables` — schema intact, RLS on every table — **plus the E2
+   sweep** (9.6): `execute_sql` →
+   `SELECT tablename FROM pg_tables WHERE schemaname='public' AND NOT rowsecurity;`
+   — must return zero rows; any row is a stop-everything security finding
+   (RLS-off is the dominant Supabase breach class). Baseline: clean 2026-07-03.
 2. `node tools/check-supabase-freshness.mjs` (or `execute_sql` `MAX(updated_at)` per
    table) vs `data/snapshots/sync-state.json`.
 3. **User-state table fresher** → the user edited in the portal: pull the row via

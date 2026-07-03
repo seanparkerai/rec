@@ -227,7 +227,9 @@ universe as the user.
   use Supabase Auth directly. Not Claude's concern unless changing the flow.
 - **Storage buckets** — not currently used. If we add image hosting via Supabase Storage, that gets
   its own §6 in this document and its own sync test.
-- **Edge functions** — none today. Same note as above.
+- **Edge functions** — one: `ask` (the assistant; see `docs/ASK.md`). It only READS user state,
+  RLS-scoped via the caller's forwarded JWT — its key handling is covered in §7 below; its
+  deploy/versioning is Ask-surface concern, not sync-contract concern.
 - **Realtime subscriptions** — out of scope; the app polls on navigation.
 
 ---
@@ -270,3 +272,34 @@ Known repair queue (found 2026-07-01, fixed by the 2.11 canonical re-backfill): 
 geofence-passing listings with zero membership rows (invisible to every feed) —
 90359223, 173588246, 90374985, 174197870 — plus 1 near-miss (87986133, geofence_pass=false,
 correctly membership-less).
+
+---
+
+## 7. Key model (E1) + RLS sweep (E2) — verified 2026-07-03 (overhaul 9.6)
+
+**Client key: modern.** `assets/js/supabase-client.js` ships the `sb_publishable_*` key
+(`get_publishable_keys` confirms it live + enabled; the repo copy matches). Publishable keys are
+client-safe **iff RLS is enforced everywhere** — which the E2 sweep verifies mechanically.
+
+**E2 RLS sweep** (now step 1 of the §18.2 ceremony, `.claude/skills/sync-check/SKILL.md`):
+
+```sql
+SELECT tablename FROM pg_tables WHERE schemaname='public' AND NOT rowsecurity;  -- must be []
+```
+
+Baseline 2026-07-03: **clean** (zero rows — every public table has RLS). Any future row is a
+stop-everything security finding, not a note.
+
+**Legacy anon JWT key: still ENABLED** (`get_publishable_keys`, `type:"legacy"`,
+`disabled:false`). Nothing in the repo uses it, but the platform still injects it as the
+`SUPABASE_ANON_KEY` env that `supabase/functions/ask/index.ts` reads for its RLS-scoped client.
+⚙ **Owner action to finish E1** (dashboard-only — no MCP tool can disable keys), in this order:
+1. Point the `ask` function at the publishable key (set a function secret, e.g.
+   `SB_PUBLISHABLE_KEY=sb_publishable_…`, and switch `index.ts` to prefer it over
+   `SUPABASE_ANON_KEY`), redeploy, re-run the ASK.md smoke test.
+2. Only then disable the legacy JWT keys in Dashboard → Settings → API. Disabling first breaks Ask.
+
+**Secret keys:** never committed anywhere. The only `service_role` consumer is
+`tools/backfill-content-direct.mjs`, which reads it from the environment (its header says so);
+the `ask` function uses the anon-key + forwarded caller JWT pattern (belt-and-braces
+`household_id` filters in its executors) and holds no secret key.
