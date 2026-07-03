@@ -78,7 +78,11 @@ to buy. User-editable via the area picker's "Home" toggle
 (`storage#setHouseholdAreaOrigin`, step 2.19).
 
 Note: `checklists` and `outreach_templates` have **no** mirror table — those catalogues are
-repo-JSON-only.
+repo-JSON-only. **`data/journey.json` is the same class by decision (2026-07-03, step 8.3):**
+it stays repo-only content with no mirror table — it is single-editor curated content whose
+changes are code-reviewed, and the only stateful part (which tasks are ticked) already lives in
+Supabase `journey_progress`. A `journey_phases` table would add sync surface for zero owner
+benefit. Revisit trigger: a real need for portal/multi-editor journey edits.
 
 **`listings` — the live-content class (v3, see §1).** Written exclusively by
 `tools/fetch-listings.mjs` (service role) and changing hourly, it has no review/cite value the way
