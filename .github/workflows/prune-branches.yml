@@ -1,0 +1,52 @@
+# prune-branches — delete superseded remote branches (repo maintenance).
+#
+# WHY. Managed Claude Code remote sessions push per-session `claude/*` branches whose
+# work re-lands on `main` (CLAUDE.md §0 — production-first, direct-to-main). The session
+# credential can push but cannot DELETE refs (403), so stale branches accumulate. This
+# workflow lets the Actions GITHUB_TOKEN (contents: write) do the deletion instead —
+# dispatch it with a space-separated list of branches.
+#
+# SAFETY. `main` (and anything not explicitly listed) is never touched; the ruleset
+# (adr/0008) independently blocks deleting `main` even if it were listed. Each branch is
+# deleted individually so one bad name doesn't abort the rest; missing branches are
+# reported, not fatal.
+
+name: prune-branches
+
+on:
+  workflow_dispatch:
+    inputs:
+      branches:
+        description: "Space-separated branch names to delete (never main)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Delete listed branches
+        env:
+          BRANCHES: ${{ inputs.branches }}
+        run: |
+          set -u
+          failed=0
+          for b in $BRANCHES; do
+            case "$b" in
+              main|HEAD|refs/*)
+                echo "::warning::refusing to delete protected/ref-form name: $b"; continue ;;
+            esac
+            if git push origin --delete "$b"; then
+              echo "deleted: $b"
+            else
+              echo "::warning::could not delete: $b (missing or protected)"
+              failed=$((failed+1))
+            fi
+          done
+          echo "done ($failed warnings)"
