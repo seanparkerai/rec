@@ -6,7 +6,7 @@
 // guards that the committed index stays a faithful projection and that the known,
 // intentional 195-files / 191-index gap doesn't silently change.
 //
-// Node-only (reads repo files); wired into tools/run-intelligence-tests.mjs.
+// Node-only (reads repo files); wired into the tiered harness (tools/run-all-tests.mjs).
 
 // Duplicate-Rightmove-ID / merged village variants that were removed from
 // villages.csv (build's source) but whose researched per-area files remain on disk

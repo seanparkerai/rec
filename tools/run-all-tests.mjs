@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-// run-all-tests.mjs — the tiered test runner (Phase 1 of the overhaul, §5 blueprint;
-// see plan/segments/10.10-tooling-tests.md). Stood up BESIDE the legacy runner
-// (tools/run-intelligence-tests.mjs), which stays the canonical commit gate until
-// step 1.13 cuts over — both must be green during the strangler migration.
+// run-all-tests.mjs — THE canonical test harness and commit gate (`npm test`;
+// Phase 1 of the overhaul, §5 blueprint; see plan/segments/10.10-tooling-tests.md).
+// Originally stood up beside the legacy runner as a strangler; the cut-over
+// completed at step 1.13 and the legacy forwarder was deleted in the Phase-10
+// leanness sweep (10.6).
 //
 // Discovery: tests/<tier>/**/*.test.js for tiers unit → contract → characterization
 // → integration → pages. Every suite keeps the legacy contract:
@@ -145,7 +146,7 @@ if (!onlyTier) {
 }
 
 // ---- report ------------------------------------------------------------------
-console.log('run-all-tests — tiered harness (strangler; legacy runner remains the gate until cut-over)\n');
+console.log('run-all-tests — the tiered harness (canonical commit gate, npm test)\n');
 for (const tier of TIERS) {
   if (!byTier.has(tier)) continue;
   const { files, results, ms } = byTier.get(tier);

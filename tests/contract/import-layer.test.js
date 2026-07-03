@@ -4,7 +4,7 @@
 // (the sanctioned data layer) or `auth-guard.js` (the auth layer). Those two
 // infrastructure modules are intentionally NOT in the scanned families.
 //
-// Node-only (reads source files); wired into tools/run-intelligence-tests.mjs,
+// Node-only (reads source files); wired into the tiered harness (tools/run-all-tests.mjs),
 // deliberately not into the browser harness tests.html.
 
 export async function register({ test, assert, assertEqual, fixtures }) {

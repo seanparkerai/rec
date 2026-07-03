@@ -15,7 +15,7 @@
 // sync time and re-checked by the freshness pass (CLAUDE.md §18.2/§18.3, run via the
 // Supabase MCP connector at session start/end). Like the supabase-sync suite, the live
 // comparison is reported as skipped here rather than run, because no DB connection
-// exists in the Node harness. Node-only; wired into tools/run-intelligence-tests.mjs.
+// exists in the Node harness. Node-only; wired into the tiered harness (tools/run-all-tests.mjs).
 
 const EPS = 1e-9; // coords are the same JSON round-trip on both sides; allow float dust only.
 

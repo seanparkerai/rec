@@ -11,11 +11,9 @@
     "build": "node tools/build-areas.mjs",
     "area-status": "node tools/area-status.mjs",
     "sync-areas": "node tools/sync-areas-from-supabase.mjs",
-    "test:new": "node tools/run-all-tests.mjs",
     "typecheck": "tsc --noEmit",
     "test:mutation": "stryker run",
-    "test:mutation:finance": "stryker run stryker.finance.conf.json",
-    "test:legacy": "node tools/run-intelligence-tests.mjs"
+    "test:mutation:finance": "stryker run stryker.finance.conf.json"
   },
   "devDependencies": {
     "@stryker-mutator/core": "^9.6.1",

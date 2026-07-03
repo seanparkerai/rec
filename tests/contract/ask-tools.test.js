@@ -2,7 +2,7 @@
 // helpers (supabase/functions/ask/pure.js). Covers listing filter/rank/gating,
 // area search, finance-summary shaping, and outreach draft fill. Node-only
 // (pure.js is a plain ESM module loadable in both Deno and Node); wired into
-// run-intelligence-tests.mjs.
+// run-all-tests.mjs.
 import {
   rankAndFilterListings, buildListingsQuery, scoreListingFit, searchAreasPure,
   shapeFinancesSummary, computeDepositSavings, renderOutreachDraft, bandForScore,

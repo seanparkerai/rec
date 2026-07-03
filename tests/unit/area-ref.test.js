@@ -2,7 +2,7 @@
 // resolver (assets/js/areas/area-ref.js). Covers the live/pending classification, the
 // canonical display object, the household-array-driven name lookup, and graceful
 // fallback for an id the household hasn't selected. Node-only; wired into
-// run-intelligence-tests.mjs.
+// run-all-tests.mjs.
 import {
   isPendingArea, isLiveArea, resolveAreaRef, buildAreaIndex, resolveAreaById,
   isCuratedDisabled,

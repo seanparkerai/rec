@@ -3,7 +3,7 @@
 // field patch transform (place-kind reverse, postcode-kind short-circuit, town/
 // county/postcode/outcode fill, the conservative county-mismatch flag, soft-fail),
 // and the shared isFetchEligible() predicate. Node-only; no network. Wired into
-// run-intelligence-tests.mjs.
+// run-all-tests.mjs.
 import { enrichPatch, isFetchEligible, deriveOutcode } from '../../assets/js/areas/area-enrich.js';
 
 export async function register({ test, assert, assertEqual }) {

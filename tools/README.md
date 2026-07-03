@@ -10,7 +10,7 @@ detailed spec. Retired one-shots live in [`archive/`](archive/README.md).
 ## Test & verification
 | Script | What it does | When to run |
 |--------|--------------|-------------|
-| `run-intelligence-tests.mjs` | The single test harness — runs every `tests/*.test.js` in Node plus the Supabase sync suite. `npm test`. | Before every commit (CLAUDE.md §6). |
+| `run-all-tests.mjs` | The tiered test harness — tier-0 type-check, the five `tests/<tier>/` tiers, responsive lint, Supabase sync suite. `npm test`; `--tier <name>` for one tier. | Before every commit (CLAUDE.md §6). |
 | `lint-responsive.mjs` | Responsive-doctrine lint (DESIGN.md §6); exported into the harness. | With any CSS/layout change. |
 | `check-supabase-freshness.mjs` | Session-start freshness check — local snapshot vs `MAX(updated_at)` per table (CLAUDE.md §8 Step 0). | Start of a data session. |
 | `test-postcodes-accuracy.mjs` | Diagnostic: live postcodes.io accuracy vs curated ground truth. Not part of the build. | Ad-hoc, when geocoding looks off. |

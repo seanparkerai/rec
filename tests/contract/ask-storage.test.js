@@ -2,7 +2,7 @@
 // user-state table (Ask feature). Mirrors the sync-test pattern: it asserts the
 // table is registered + classified in the sync snapshot, and that the schema
 // validator (tests/schemas.js#validateAskConversation) enforces the persisted
-// message shape. Node-only; wired into run-intelligence-tests.mjs.
+// message shape. Node-only; wired into the tiered harness (tools/run-all-tests.mjs).
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

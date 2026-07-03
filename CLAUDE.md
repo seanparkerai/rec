@@ -56,8 +56,8 @@ every session**. These rules exist to keep work safe, resumable, and high qualit
   `tsconfig.json` scope), `tests/{unit,contract,characterization,integration,pages}/` (pages = jsdom
   DOM tests), the semantic responsive lint (justified ratcheting baseline,
   `tools/lint-responsive.allow.json`), and the Supabase sync suite. `--tier <name>` runs one tier for
-  fast iteration. `tools/run-intelligence-tests.mjs` is a deprecated forwarder (deleted once nothing
-  references it).
+  fast iteration. (The pre-overhaul runner `run-intelligence-tests.mjs` was deleted in the 10.6
+  leanness sweep.)
 - Add/extend benchmark tests (calculators, JSON schemas) as features grow so regressions surface early.
 - **Supabase sync tests are non-negotiable** for commits touching data, schema, or
   `assets/js/storage.js` (they run inside the unified harness). The **offline** suite

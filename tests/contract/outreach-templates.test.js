@@ -1,5 +1,5 @@
 // outreach-templates.test.js — Phase 1/2 tests for the template registry and renderer.
-// Runs via tools/run-intelligence-tests.mjs (Node, no DOM).
+// Runs via tools/run-all-tests.mjs (Node, no DOM).
 import { validateOutreachTemplate } from '../schemas.js';
 
 // Sample context used for renderer and leak tests.

@@ -7,9 +7,11 @@ plans live in `docs/archive/` (index: `docs/README.md`).
 
 **Status:** the app is feature-complete through v3 live listings and the Model Refinement Engine
 (Stages 1–9 shipped 2026-06-05 — operate it via `docs/REFINEMENT_README.md`). Supabase is the live
-backend (auth + the tracked tables per `docs/SUPABASE_SYNC.md` §0, all RLS-enabled). Pages: Home,
-About/Search, Areas (+ detail), Journey, Finances, House types, Map, Listings, Saved, Property
-dossier, Outreach, Refinement, Data-sync.
+backend (auth + the tracked tables per `docs/SUPABASE_SYNC.md` §0, all RLS-enabled). Pages
+(re-baselined 2026-07-03, 10.6): Home (`index.html`) + Profile, Areas (+ detail incl. the map),
+Journey, Finances, Listings, Saved, Rejected, Property dossier, Refinement, Ask, Login — the old
+Map / Outreach / House-types / Data-sync / Setup pages were folded into these surfaces or retired
+during the 2026-06/07 overhaul (outreach now lives in Ask Compose; setup in the profile).
 
 **Area research:** the live queue and per-status counts come from `node tools/area-status.mjs`
 (`--missing` to filter, `--id <area-id>` to inspect one) — counts are never hardcoded here.
