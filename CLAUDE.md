@@ -213,7 +213,10 @@ The app uses **Supabase** for cloud storage and authentication.
 
 1. Add a table to `supabase/schema.sql` (RLS policies via `is_household_member()`).
 2. Apply the migration via `mcp__supabase__apply_migration` — never by hand-copying SQL into the
-   dashboard. The connector keeps migration history aligned with project state.
+   dashboard. The connector keeps migration history aligned with project state. Then regenerate
+   `types/supabase.d.ts` via `mcp__supabase__generate_typescript_types` (refresh its dated header)
+   — the tier-0 JSDoc annotations type against it, and this step applies to **every** schema
+   migration, not just new tables.
 3. Add a `get<Type>()` / `save<Type>()` pair to `assets/js/storage.js` (`_get` / `_save` pattern).
 4. Do **not** call Supabase directly from any page module — go through `storage.js`.
 5. Extend `tests/supabase-sync.test.js` to cover the new table (see §6).

@@ -165,6 +165,7 @@ If any of steps 1–4 fails or surfaces an unexpected change, **stop and check w
 | User says "add a new house type" | Edit `data/house-types.json` · UPSERT into `house_types` mirror · update snapshot |
 | Claude refactors a calculator | No Supabase write — code only |
 | Claude touches `supabase/schema.sql` | NOT allowed via direct edit — open a phase, draft the migration, apply via `mcp__supabase__apply_migration` |
+| Claude applies any schema migration | After `apply_migration`: regenerate `types/supabase.d.ts` via `mcp__supabase__generate_typescript_types`, refresh its dated header, commit it alongside the migration's reference slice — the tier-0 JSDoc annotations (9.7) type against this file, so a stale copy means the type net checks the OLD schema |
 
 ### 2.3 Session end (mandatory, before commit)
 

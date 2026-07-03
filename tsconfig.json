@@ -12,9 +12,12 @@
     "lib": ["es2022", "dom", "dom.iterable"]
   },
   "include": [
+    "types/cdn-modules.d.ts",
+    "types/supabase.d.ts",
     "assets/js/shell-core.js",
     "assets/js/config.js",
     "assets/js/dom.js",
-    "assets/js/format.js"
+    "assets/js/format.js",
+    "assets/js/storage/ask.js"
   ]
 }

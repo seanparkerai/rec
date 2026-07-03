@@ -5,6 +5,13 @@
 // localStorage write-through cache. Re-exported by storage.js via `export *`.
 import { _initSb, _getHid, readLocal, writeLocal, removeLocal } from './core.js';
 
+// Generated row types (9.7 / R4): type-only JSDoc imports from types/supabase.d.ts —
+// regenerated from the live schema after every migration (docs/SUPABASE_SYNC.md).
+/** @typedef {import('../../../types/supabase.js').Database['public']['Tables']['ask_conversations']} AskConversationsTable */
+/** @typedef {AskConversationsTable['Row']} AskConversationRow */
+/** @typedef {Pick<AskConversationRow, 'id' | 'title' | 'updated_at'>} AskConversationListItem */
+/** @typedef {Pick<AskConversationRow, 'id' | 'title' | 'messages' | 'created_at' | 'updated_at'>} AskConversation */
+
 // Conversation LIST cache (overhaul 9.3 / R3): stale-while-revalidate over the
 // id/title/updated_at index ONLY — bounded and cheap. Full message bodies stay
 // live-fetch by design: conversations are unbounded relational rows, and caching
@@ -15,6 +22,7 @@ const _invalidateListCache = () => removeLocal(LIST_KEY);
 
 // Network fetch of the list; null means "couldn't fetch" (so callers never
 // mistake a failure for an empty list and clobber the cache with []).
+/** @returns {Promise<AskConversationListItem[] | null>} */
 async function _fetchConversationList() {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return null;
@@ -35,6 +43,10 @@ async function _fetchConversationList() {
 // List the household's conversations, newest first (id + title + timestamp only).
 // Cache-first: a cached list renders instantly and is revalidated in the
 // background; onUpdate(fresh) fires if the server copy differs.
+/**
+ * @param {(fresh: AskConversationListItem[]) => void} [onUpdate]
+ * @returns {Promise<AskConversationListItem[]>}
+ */
 export async function listAskConversations(onUpdate) {
   const cached = readLocal(LIST_KEY);
   if (cached !== null) {
@@ -54,6 +66,10 @@ export async function listAskConversations(onUpdate) {
 }
 
 // Fetch one conversation's full record (incl. messages).
+/**
+ * @param {string} id
+ * @returns {Promise<AskConversation | null>}
+ */
 export async function getAskConversation(id) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid || !id) return null;
@@ -73,6 +89,11 @@ export async function getAskConversation(id) {
 }
 
 // Create a new conversation; returns the inserted row (with its generated id) or null.
+/**
+ * @param {string} [title]
+ * @param {AskConversationRow['messages']} [messages]
+ * @returns {Promise<AskConversation | null>}
+ */
 export async function createAskConversation(title = 'New chat', messages = []) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid) return null;
@@ -92,9 +113,15 @@ export async function createAskConversation(title = 'New chat', messages = []) {
 }
 
 // Update an existing conversation's title and/or messages.
+/**
+ * @param {string} id
+ * @param {{ title?: string, messages?: AskConversationRow['messages'] }} [changes]
+ * @returns {Promise<boolean>}
+ */
 export async function saveAskConversation(id, { title, messages } = {}) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid || !id) return false;
+  /** @type {AskConversationsTable['Update']} */
   const patch = {};
   if (title !== undefined) patch.title = title;
   if (messages !== undefined) patch.messages = messages;
@@ -115,6 +142,10 @@ export async function saveAskConversation(id, { title, messages } = {}) {
 }
 
 // Delete a conversation.
+/**
+ * @param {string} id
+ * @returns {Promise<boolean>}
+ */
 export async function deleteAskConversation(id) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
   if (!sb || !hid || !id) return false;
