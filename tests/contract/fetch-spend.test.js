@@ -1,4 +1,4 @@
-// fetch-spend.test.js — the Apify spend rail (step 10.3; plan/04-program.md §4
+// fetch-spend.test.js — the Apify spend rail (step 10.3; docs/archive/plan-2026-07-overhaul/04-program.md §4
 // "MISSING RAIL: Apify/fetch spend"). Real money: the fetcher bills per result.
 // This suite makes every spend parameter a LOUD diff — a refactor or env-default
 // change that uncaps the budget, raises the per-target result cap, or drops the

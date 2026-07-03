@@ -10,7 +10,7 @@ Accepted
 
 `tools/run-all-tests.mjs` + the `tests/{unit,contract,characterization,integration,pages}/`
 tiers — the §5 test re-architecture, a §4.4 foundational change (owner-mandated in
-`plan/01-protocol.md` §5).
+`docs/archive/plan-2026-07-overhaul/01-protocol.md` §5).
 
 ## Context
 

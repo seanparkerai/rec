@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// check-rls.mjs — the RLS guard rail (overhaul step 1.11; plan/04-program.md §4).
+// check-rls.mjs — the RLS guard rail (overhaul step 1.11; docs/archive/plan-2026-07-overhaul/04-program.md §4).
 //
 // Every public table in the live database MUST have Row Level Security enabled:
 // the browser ships the publishable key, so RLS is the entire authorisation

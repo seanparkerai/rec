@@ -11,7 +11,7 @@ session can't attempt a history rewrite even before the server-side ruleset woul
 
 ## State / rail
 
-The `main` branch itself (G1, `plan/02-intake.md` §8.1) and the deploy path
+The `main` branch itself (G1, `docs/archive/plan-2026-07-overhaul/02-intake.md` §8.1) and the deploy path
 (`.github/workflows/pages.yml`).
 
 ## Context

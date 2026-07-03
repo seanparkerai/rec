@@ -1,8 +1,12 @@
-# plan/ — The Master Refactor & Overhaul Program (directory)
+# The Master Refactor & Overhaul Program (ARCHIVED 2026-07-03)
 
-> **This directory is the overhaul program.** It replaces the single-file `fable_refactor.md`
-> (832 KB / 11,068 lines — split 2026-07-01, owner-directed, content preserved). The root
-> `fable_refactor.md` is now a pointer stub kept so old references resolve.
+> **⚠ ARCHIVED — this program is CLOSED and this directory is a historical record.** It was
+> the repo-root `plan/` directory, moved here at close-out (2026-07-03, owner-directed tidy).
+> Nothing in here is a live instruction: the live tracker is `docs/CHECKLIST.md`, the operating
+> rules are `CLAUDE.md`, and the rails this program created are enforced by `npm test` and
+> recorded in `docs/adr/`. Future work starts as a NEW program (fresh §0.2 intake), never by
+> reopening this one. (Lineage: split 2026-07-01 from the single-file `fable_refactor.md`,
+> 832 KB / 11,068 lines; its root pointer stub was deleted at archive time — git history has both.)
 >
 > **Status (2026-07-03): ALL PHASES 1–10 COMPLETE — the overhaul program is CLOSED.**
 > Phases — 1 (test-harness core), 2 (⭐ flagship

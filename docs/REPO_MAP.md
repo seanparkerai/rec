@@ -21,7 +21,7 @@
 | `tests/` | Pure-JS test harness — `*.test.js`, run by `tools/run-all-tests.mjs`. |
 | `supabase/` | Backend — schema (reference), edge functions (`functions/ask`). MCP is canonical. |
 | `docs/` | Live operating docs (this file, sync contract, data model, engine guides). Index: `docs/README.md`. |
-| `plan/` | **The Master Refactor & Overhaul Program** — mandate, protocol, living checklist (`plan/03-checklist.md` is the overhaul's resume point), segment deep-dives, session logs. Start at `plan/README.md`. |
+| `docs/archive/plan-2026-07-overhaul/` | The 2026-06→07 Master Refactor & Overhaul Program — **CLOSED 2026-07-03, all phases 1–10 complete** and archived. Start at its `README.md`; `docs/CHECKLIST.md` is the live tracker. |
 | `.claude/` | Claude Code config — skills (resume/sync-check/area-research) + settings. |
 | `.github/workflows/` | CI / deploy / scheduled fetch pipelines (guard-railed). |
 

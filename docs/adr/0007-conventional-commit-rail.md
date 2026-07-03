@@ -8,7 +8,7 @@ Accepted
 
 ## State / rail
 
-Commit-message discipline (G3, `plan/02-intake.md` §8.1): `tools/check-commit-msgs.mjs` +
+Commit-message discipline (G3, `docs/archive/plan-2026-07-overhaul/02-intake.md` §8.1): `tools/check-commit-msgs.mjs` +
 `tests/contract/commit-lint.test.js` + the `commit-lint` job in `.github/workflows/ci.yml`.
 
 ## Context

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // run-all-tests.mjs — THE canonical test harness and commit gate (`npm test`;
-// Phase 1 of the overhaul, §5 blueprint; see plan/segments/10.10-tooling-tests.md).
+// Phase 1 of the overhaul, §5 blueprint; see docs/archive/plan-2026-07-overhaul/segments/10.10-tooling-tests.md).
 // Originally stood up beside the legacy runner as a strangler; the cut-over
 // completed at step 1.13 and the legacy forwarder was deleted in the Phase-10
 // leanness sweep (10.6).

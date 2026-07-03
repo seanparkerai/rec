@@ -22,5 +22,11 @@ day-to-day work; the live docs are indexed in [`../README.md`](../README.md).
   `LISTINGS_REVIEW_GROUPS_PLAN.md`.
 - One-offs: `SUPABASE_MIGRATION.md`, `STRICT_Codex_Prompt_Remaining_Areas.md`.
 - `DATA_ALIGN_PLAN.md` — data-contract / finance-unification plan (was `data-align.md` at
-  the repo root). Partly executed (Phase 5, 2026-06-16); the remainder is now owned by
-  `fable_refactor.md` §10.9. Archived 2026-06-20.
+  the repo root). Partly executed (Phase 5, 2026-06-16); the remainder was completed by the
+  overhaul program's §10.9 (below). Archived 2026-06-20.
+- `plan-2026-07-overhaul/` — **the Master Refactor & Overhaul Program (2026-06-16 →
+  2026-07-03), CLOSED with all phases 1–10 complete** (harness 1128/1128). Was the repo-root
+  `plan/` directory (itself split from the 832 KB `fable_refactor.md`, whose root pointer stub
+  was deleted at archive time — both live in git history). Start at its `README.md` for the
+  full phase-by-phase record; the rails it created are enforced by `npm test` and documented
+  in CLAUDE.md §16 + `docs/adr/`. Archived 2026-07-03.

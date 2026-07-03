@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // check-commit-msgs.mjs — the conventional-commit rail (overhaul step 10.2; G3,
-// plan/02-intake.md §8.1). Dependency-free by design — see docs/adr/0007: the
+// docs/archive/plan-2026-07-overhaul/02-intake.md §8.1). Dependency-free by design — see docs/adr/0007: the
 // grammar below IS the contract, pinned by tests/contract/commit-lint.test.js,
 // so drift is a test failure rather than a transitive-dependency surprise.
 //

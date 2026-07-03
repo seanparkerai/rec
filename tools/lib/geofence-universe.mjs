@@ -1,5 +1,5 @@
 // tools/lib/geofence-universe.mjs — THE canonical geofence village universe
-// (flagship step 2.4; plan/04-program.md §3 collapse #1).
+// (flagship step 2.4; docs/archive/plan-2026-07-overhaul/04-program.md §3 collapse #1).
 //
 // Universe definition (areas-table-canonical, CLAUDE.md §18.5):
 //   every area that HAS coordinates and is (active !== false) OR household-linked

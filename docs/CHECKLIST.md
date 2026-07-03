@@ -48,7 +48,7 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       actually become actionable; added the sensitivity nudge; expanded the engine to
       `price_band/beds/outdoor/parking/outcode` (migration `refinement_expand_dimensions`); added the
       notify-only Trends & nudges lane; added `.github/workflows/refinement-run.yml`. See
-      `docs/REFINEMENT_README.md` + the `plan/logs/2026-06-19-refinement.md` session log.
+      `docs/REFINEMENT_README.md` + the `docs/archive/plan-2026-07-overhaul/logs/2026-06-19-refinement.md` session log.
 - [ ] **Enable the scheduled run** — add repo secrets (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
       `SUPABASE_DB_URL`; optional `REFINEMENT_HOUSEHOLD_ID`) so `refinement-run.yml` runs daily.
 - [ ] §4.1 "Why?" reaction-rate sparkline + sample rejected listings (needs extra
@@ -78,7 +78,7 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
 - [x] Map upgrade (8B) — **DECLINED 2026-07-02** (overhaul step 3.7c): keep Leaflet 1.9.4 +
       Geoman. Metric geofence circles are native Leaflet (no GL equivalent), zone drawing has
       no free MapLibre parity, and the CDN-dependency/weight ledger worsens on a zero-build
-      page. Rationale + revisit trigger recorded in `plan/04-program.md` §5b.
+      page. Rationale + revisit trigger recorded in `docs/archive/plan-2026-07-overhaul/04-program.md` §5b.
 - [ ] Compare drawer on the Areas page: multi-select 2–4 areas → bottom drawer with side-by-side
       mono columns (Phase 6 follow-up).
 - [ ] **B4 — Shortlist single source:** make `getShortlist()` Supabase-first — touches
