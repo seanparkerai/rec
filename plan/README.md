@@ -4,7 +4,7 @@
 > (832 KB / 11,068 lines — split 2026-07-01, owner-directed, content preserved). The root
 > `fable_refactor.md` is now a pointer stub kept so old references resolve.
 >
-> **Status (2026-07-03):** Phases **1–8 COMPLETE** — 1 (test-harness core), 2 (⭐ flagship
+> **Status (2026-07-03):** Phases **1–9 COMPLETE** — 1 (test-harness core), 2 (⭐ flagship
 > listings pipeline), 3 (mobile-first UI/UX overhaul + owner-directed 3.10/3.11 image-led
 > listings redesign), 4 (intelligence engine — 4.10b mutation ratchet done 2026-07-03:
 > 56.43→**74.86%**, core 78–91 per module, floor 73; only owner-gated ⚙ 4.9 open), 5 (finances
@@ -14,10 +14,16 @@
 > two-way rail; journey.json repo-only decision; field-engine branch matrix pinned; Compose
 > a11y pass; + owner-directed 8.W workflows audit: CI/Pages had failed on every push since the
 > Phase-7 merge (Node 20 vs `--experimental-strip-types`) — fixed, all on Node 22, workflows
-> pruned 11→9). Harness **1097/1097 across 104 suites**.
+> pruned 11→9), **9** (backend/storage resilience — failed-write journal + revalidation clobber
+> guard + retry drain closing the silent-revert bug; ask-list stale-while-revalidate cache;
+> snapshot slimmed to high-water marks; REFERENCE-ONLY schema rail over 32 reconciled
+> migrations; key-model verified (legacy-JWT owner action recorded in SUPABASE_SYNC.md §7) +
+> RLS sweep in the §18.2 ceremony; generated `types/supabase.d.ts` wired into tier-0 via JSDoc;
+> R7 owner-ruled: last-write-wins + clobber guard, version columns declined —
+> SUPABASE_SYNC.md §8). Harness **1116/1116**.
 > Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag; 2.11b + 4.9 unlock
-> with it); Ask smoke test (7.1f). Current phase: **9** (backend/storage resilience, segment
-> `10.9`) — expand on entry per §0.2 mode-2; then 10 (process & rails re-baseline).
+> with it); Ask smoke test (7.1f); E1 finish (repoint ask off the legacy key, then disable it —
+> SUPABASE_SYNC.md §7). Current phase: **10** (process & rails re-baseline).
 > **Resume at the first unticked line of `03-checklist.md`.**
 
 ## How to use this directory (cold-resume protocol)

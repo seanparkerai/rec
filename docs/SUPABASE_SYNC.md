@@ -304,3 +304,31 @@ stop-everything security finding, not a note.
 `tools/backfill-content-direct.mjs`, which reads it from the environment (its header says so);
 the `ask` function uses the anon-key + forwarded caller JWT pattern (belt-and-braces
 `household_id` filters in its executors) and holds no secret key.
+
+## 8. Multi-device conflict strategy (R7) — ruled 2026-07-03 (overhaul 9.8)
+
+**The strategy is last-write-wins, protected by the pending-write clobber guard. Owner-ruled
+2026-07-03; version-column conflict detection is DECLINED unless a real need appears.**
+
+What that means mechanically — all of it already shipped, nothing new to build:
+
+- **Last-write-wins**: user-state writes are whole-blob UPSERTs keyed by `household_id`
+  (`storage/core.js` `_save`). Two devices editing the same table concurrently → the later
+  write replaces the earlier one wholesale. No merge, no prompt.
+- **Clobber guard (9.1)**: a failed/offline write is journalled under `pending-writes`, and
+  `_get` revalidation will not overwrite the local cache (or fire `onUpdate`) for a table with
+  a journalled write — so a stale server row can never silently revert an edit on the device
+  that made it.
+- **Retry drain (9.2)**: journalled writes re-send at boot and on the `online` event; the
+  journal keeps the latest value per table, so the device's newest edit is what lands.
+
+**Why this is the right size**: one household, two members, low concurrency, and every
+user-state table is a per-household singleton blob (§0). The realistic conflict is "both
+editing the profile in the same minute", whose worst case is one device's field-set winning —
+recoverable by re-entering the losing edit. Version-column optimistic concurrency (an
+`expected_version` check on every write + a conflict prompt) would touch every `_save` call
+site in the guard-railed storage layer to defend against that shrug.
+
+**Revisit trigger** (what would reopen R7): a real lost-edit report from concurrent editing,
+household membership growing beyond the couple, or any table whose blob becomes high-frequency
+collaborative state. Until then: declined.
