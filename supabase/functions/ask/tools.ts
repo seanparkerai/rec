@@ -30,14 +30,16 @@ export const TOOLS = [
       "Get the household's full finances record plus a derived summary (deposit target, deposit saved, " +
       "deposit gap, monthly contribution, naive months-to-target, income, mortgage estimate). Use for " +
       "any question about affordability, deposit, savings, income, or budget headroom.",
-    input_schema: { type: "object", properties: {} },
+    strict: true,
+    input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
   {
     name: "get_budget_breakdown",
     description:
       "Get the household's monthly money-flow inputs: ongoing bills, recurring expenses and one-time " +
       "costs from the finances record. Use for 'where does my money go' / monthly outgoings questions.",
-    input_schema: { type: "object", properties: {} },
+    strict: true,
+    input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
   {
     name: "query_listings",
@@ -58,6 +60,7 @@ export const TOOLS = [
         keyword: { type: "string", description: "free text matched in title/description/address" },
         limit: { type: "number", description: "max rows to return (default 10, capped at 25)" },
       },
+      required: [],
     },
   },
   {
@@ -76,14 +79,16 @@ export const TOOLS = [
     description:
       "Get the household's shortlist: saved listing ids with personal status " +
       "(new/saved/viewed/offered/rejected) and any 1–10 ratings.",
-    input_schema: { type: "object", properties: {} },
+    strict: true,
+    input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
   {
     name: "get_reactions_summary",
     description:
       "Get a distilled summary of the household's like/pass/reject reactions plus their learned " +
       "preference weights (what they tend to favour or avoid). Use for 'what do I tend to like' questions.",
-    input_schema: { type: "object", properties: {} },
+    strict: true,
+    input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
   {
     name: "search_areas",
@@ -100,6 +105,7 @@ export const TOOLS = [
         town: { type: "string" },
         limit: { type: "number" },
       },
+      required: [],
     },
   },
   {
@@ -116,19 +122,22 @@ export const TOOLS = [
   {
     name: "get_household_areas",
     description: "Get the household's selected/confirmed search areas (their actual search zone).",
-    input_schema: { type: "object", properties: {} },
+    strict: true,
+    input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
   {
     name: "get_trends",
     description:
       "Get savings/investment trend series: investment monthly history (deposits/withdrawals/net) and " +
       "the savings position. Use for 'how is X trending' questions.",
-    input_schema: { type: "object", properties: {} },
+    strict: true,
+    input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
   {
     name: "get_journey_status",
     description: "Get the buying-journey progress (done/next) and the readiness checklist.",
-    input_schema: { type: "object", properties: {} },
+    strict: true,
+    input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
   {
     name: "get_outreach_templates",
@@ -137,12 +146,15 @@ export const TOOLS = [
       "description, tone, best-practice notes, sources, data needed). Use to browse the catalogue or " +
       "ground your tone on the researched best practice — but author the email yourself, don't copy a " +
       "template verbatim. Prefer get_outreach_brief when you are about to write one.",
+    strict: true,
     input_schema: {
       type: "object",
+      additionalProperties: false,
       properties: {
         recipientRole: { type: "string", description: "optional filter, e.g. estate-agent" },
         stage: { type: "string", description: "optional stage filter: A (Search) | B (Offer) | C (Post-acceptance) | D (Pre-completion)" },
       },
+      required: [],
     },
   },
   {
@@ -155,6 +167,11 @@ export const TOOLS = [
       "reference is given, and a list of missing facts to ask about. You then write the email yourself — do " +
       "not copy the exemplar verbatim, and never invent figures, names, dates or prices. Read-only: drafts " +
       "only, never sends or saves.",
+    // DELIBERATELY NOT strict (the 7.1b exception, pinned by the tool-contract
+    // rail): `extra` is a free-form object ({ offerAmount, viewingDateOption1,
+    // surveyFindings, … } — whatever the user supplied), and strict schemas
+    // cannot carry an open object (additionalProperties must be false on every
+    // object, including nested ones). Closing it would silently drop user facts.
     input_schema: {
       type: "object",
       properties: {

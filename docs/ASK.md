@@ -75,8 +75,8 @@ exemplars). The flow:
 - The launcher (`assets/js/ask/compose.js`, opened from the Ask page / deep-linked as
   `ask.html?compose=role:intent:ref` or `?composeTemplate=<id>`) frames the brief as selectable
   options (who → situation → property → tone) plus a free-text escape hatch, and sends one
-  structured `[COMPOSE]` turn **on `claude-sonnet-4-6`** (authoring is a generation task; Q&A stays
-  on the Haiku default).
+  structured `[COMPOSE]` turn **on `claude-sonnet-5`** (authoring is a generation task; since 7.1a
+  Q&A shares the same Sonnet 5 default).
 - The model calls **`get_outreach_brief`** (read-only): it returns the best-matching template
   exemplar, that template's best-practice notes, the household facts permitted for the recipient
   (privacy-filtered — see below), the saved contact, the grounded property, and a `missingFacts`
@@ -146,18 +146,25 @@ The function source is version-controlled here; **do not hand-edit it in the Sup
   user-text boundary** so `tool_use`/`tool_result` pairing is never orphaned; and a 400 "prompt is too
   long" triggers one aggressive-trim retry (`MIN_CONVO_CHARS`) before surfacing a friendly "start a new
   chat / ask something shorter" message instead of the raw API error.
-- **Model** — default `claude-haiku-4-5` for data Q&A (a constrained tool-routing + short-narration
-  workload — the cheapest tier — and the deterministic work lives in `pure.js`, not the model). No
-  `thinking` parameter is sent, so thinking stays off (zero thinking tokens). **Compose turns route to
-  `claude-sonnet-4-6`** (authoring an email is a higher-quality generation task), which the client
-  requests per-turn; **`claude-opus-4-8` is removed from the allow-list**
-  (its default-on thinking against a shared `max_tokens` ceiling is the wrong shape for a lookup
-  front-end). A request for any other model falls back to the Haiku default.
-- **Strict tool use** — the fully-specified tools (`query_listings`, `get_listing`, `search_areas`,
-  `get_area`) set `strict: true` + `additionalProperties: false`, so the model's tool arguments are
-  schema-valid by construction. `get_outreach_brief` stays non-strict (its `extra` param is
-  intentionally free-form). Smoke-test after deploy to confirm the current API line needs
-  no beta header for `strict`.
+- **Model** — default **`claude-sonnet-5`** for Q&A AND compose (owner decision 2026-07-03, plan
+  7.1a: near-Opus tool-use quality at $2/$10-per-MTok intro pricing to Aug 2026, then $3/$15; the
+  deterministic work still lives in `pure.js`). The plan's original P1 target `claude-fable-5`
+  shipped as the premium $10/$50 tier with always-on thinking and refusal-fallback requirements —
+  rejected for this workload. `claude-haiku-4-5` stays in the allow-list as the manual step-down;
+  `claude-sonnet-4-6` remains accepted only for cached clients. Sonnet 5 runs ADAPTIVE thinking when
+  the `thinking` param is omitted (a silent default change vs 4.6) and thinking spend counts against
+  `max_tokens`, so the function sends an explicit `thinking:{type:"disabled"}` on Sonnet 5 to protect
+  the 1024-token brevity budget (zero thinking tokens; the usage log's `thinking=` field proves it).
+  Premium tiers (Opus/Fable) are NOT reachable; any other requested model falls back to the default.
+  Note Sonnet 5's tokenizer is ~30% denser — the char-based context budgets remain sized for the
+  smallest allowed window (Haiku 200k).
+- **Strict tool use** — ALL tools except one set `strict: true` + `additionalProperties: false` +
+  an explicit `required` array (7.1b), so tool arguments are schema-valid by construction.
+  `get_outreach_brief` is the pinned exception (its `extra` param is intentionally free-form and
+  strict schemas cannot carry an open object). The whole surface — tool names, strict invariants,
+  the model allow-list, and a `PROMPT_VERSION` ↔ content-hash ratchet — is pinned by the
+  tool-contract rail `tests/contract/ask-tool-contract.test.js` (04-program §4). Bump
+  `PROMPT_VERSION` in `prompt.ts` and re-pin the hash on any prompt edit.
 
 ## 7. Gotchas
 

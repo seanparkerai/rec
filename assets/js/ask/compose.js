@@ -15,7 +15,7 @@ import { getListings, getContacts } from '../storage.js';
 import { saveEntry, newEntryId } from '../outreach-store.js';
 import { buildMailto } from '../outreach-renderer.js';
 
-const COMPOSE_MODEL = 'claude-sonnet-4-6';   // authoring is a generation task → Sonnet (§3.3)
+const COMPOSE_MODEL = 'claude-sonnet-5';     // authoring is a generation task → Sonnet (§3.3; 7.1a upgrade)
 const COMPOSE_MAX_TOKENS = 1536;             // subject + body + note + refinements
 
 const RECIPIENTS = [

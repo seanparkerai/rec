@@ -11,29 +11,37 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { CORS } from "../_shared/cors.ts";
 import { TOOLS, runTool, type ToolCtx } from "./tools.ts";
-import { buildSystemPrompt } from "./prompt.ts";
+import { buildSystemPrompt, PROMPT_VERSION } from "./prompt.ts";
 import { capToolResult, fitConvoToBudget } from "./pure.js";
 
 const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 // This is a thin natural-language front-end over the household's own Supabase
 // data: pick a read-only tool, pass sane args, narrate a compact result. The
 // "smart" work (affordability, ranking, dedup, template fill) is deterministic
-// in pure.js, not the model — exactly the cheapest-tier workload (Ask plan P1-2).
-// Default to Haiku 4.5 (lowest cost); keep Sonnet 4.6 as an optional, non-default
-// manual step-up; Opus is intentionally NOT reachable. No thinking parameter is
-// sent, so thinking stays off on both models (zero thinking tokens billed).
-const DEFAULT_MODEL = "claude-haiku-4-5";
-const ALLOWED_MODELS = new Set(["claude-haiku-4-5", "claude-sonnet-4-6"]);
+// in pure.js, not the model. Default is Sonnet 5 (owner decision 2026-07-03,
+// plan 7.1a: near-Opus tool use at $2/$10 intro pricing; the P1 target
+// claude-fable-5 shipped as the premium $10/$50 tier and was rejected for this
+// workload). Haiku 4.5 stays as the manual step-down; Sonnet 4.6 remains
+// accepted only so cached clients keep working. Opus/Fable are NOT reachable.
+// Sonnet 5 runs ADAPTIVE thinking when the thinking param is omitted (a silent
+// default change vs 4.6) — thinking spend counts against max_tokens, so the
+// 1024-token brevity budget would be eaten by it. THINKING_OFF_MODELS therefore
+// sends an explicit disabled; Haiku/Sonnet 4.6 are thinking-off by default.
+const DEFAULT_MODEL = "claude-sonnet-5";
+const ALLOWED_MODELS = new Set(["claude-sonnet-5", "claude-haiku-4-5", "claude-sonnet-4-6"]);
+const THINKING_OFF_MODELS = new Set(["claude-sonnet-5"]);
 const MAX_TOOL_LOOPS = 6;
 const MAX_TOKENS = 1024;            // default backstop behind the P1-3 brevity contract
 const MAX_TOKENS_CEILING = 2048;   // hard cap on a client-raised budget (compose turns)
 const MAX_HISTORY_TURNS = 24;        // cap conversation length sent upstream
 const MAX_TURN_CHARS = 16_000;       // per-turn hard char cap (abuse guard)
 // Context-window guards: the whole conversation (incl. accumulated tool_result turns)
-// is re-sent on every tool-loop iteration, so it must stay under the model's 200k-token
-// window. MAX_TOOL_RESULT_CHARS bounds a single read; MAX_CONVO_CHARS bounds the thread
-// sent upstream (~140k tokens, leaving headroom for system + tools + the reply);
-// MIN_CONVO_CHARS is the aggressive budget for the one retry after a 400 "prompt too long".
+// is re-sent on every tool-loop iteration, so it must stay under the SMALLEST allowed
+// model's window (Haiku 4.5: 200k tokens; Sonnet 5 has 1M and a ~30%-denser tokenizer,
+// so these char budgets are conservative there). MAX_TOOL_RESULT_CHARS bounds a single
+// read; MAX_CONVO_CHARS bounds the thread sent upstream (~140k Haiku tokens, leaving
+// headroom for system + tools + the reply); MIN_CONVO_CHARS is the aggressive budget
+// for the one retry after a 400 "prompt too long".
 const MAX_TOOL_RESULT_CHARS = 24_000;
 const MAX_CONVO_CHARS = 480_000;
 const MIN_CONVO_CHARS = 120_000;
@@ -99,7 +107,15 @@ Deno.serve(async (req) => {
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
           },
-          body: JSON.stringify({ model, max_tokens: maxTokens, stream: true, system, tools: TOOLS, messages: msgs }),
+          body: JSON.stringify({
+            model,
+            max_tokens: maxTokens,
+            stream: true,
+            system,
+            tools: TOOLS,
+            messages: msgs,
+            ...(THINKING_OFF_MODELS.has(model) ? { thinking: { type: "disabled" } } : {}),
+          }),
         });
 
       try {
@@ -178,7 +194,7 @@ Deno.serve(async (req) => {
         // is provided by the Supabase runtime; absent off-platform, so guard it).
         const logUsage = () =>
           console.log(
-            `ask usage household=${householdId} model=${model} ` +
+            `ask usage household=${householdId} model=${model} prompt=${PROMPT_VERSION} ` +
             `in=${usageTotals.input} out=${usageTotals.output} ` +
             `cache_read=${usageTotals.cacheRead} cache_write=${usageTotals.cacheWrite} ` +
             `thinking=${usageTotals.thinking}`,

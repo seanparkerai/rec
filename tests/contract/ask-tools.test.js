@@ -394,4 +394,52 @@ export async function register({ test, assert, assertEqual }) {
     assert(/25% withdrawal charge/.test(src), 'the withdrawal-charge consequence is stated');
     assert(/under review \(2026 consultation/.test(src), 'the rules-under-review caveat is present');
   });
+
+  // ── 7.1e sanitisation audit (P2): PostgREST .or() injection cases ──────────
+  // buildListingsQuery pushes the `area` term into a PostgREST or= expression
+  // (`col.ilike.%term%` alternatives). PostgREST's or= grammar uses commas to
+  // separate conditions and parentheses to group them, and % / * are pattern
+  // wildcards — so sanitizeFilterTerm strips `,()*%\\`. The remaining content is
+  // DATA inside one ilike pattern: PostgREST parameterizes condition values, so a
+  // term cannot become SQL. These tests pin the structural closure: whatever the
+  // model passes, the built expression keeps exactly the 4 template alternatives.
+  const hostileAreas = [
+    "a' or 1=1 --",
+    'so23),(status.eq.hidden',
+    'x%,price.gte.0',
+    '(((,,,%%%',
+    'romsey*,rightmove_id.neq.0',
+  ];
+  test('7.1e: hostile area terms cannot add or() conditions (structural closure)', () => {
+    for (const area of hostileAreas) {
+      const plan = buildListingsQuery({ area });
+      const or = plan.filters.find((f) => f.kind === 'or' && /ilike/.test(f.expr));
+      if (!or) { assert(true, 'fully-stripped term builds no area filter at all'); continue; }
+      const parts = or.expr.split(',');
+      assertEqual(parts.length, 4, `area '${area}' must keep exactly 4 alternatives, got: ${or.expr}`);
+      for (const part of parts) {
+        assert(/^(area_id|outcode|postcode|address)\.ilike\.%[^,()*%\\]*%$/.test(part),
+          `alternative stays a closed ilike pattern: ${part}`);
+      }
+    }
+  });
+
+  test('7.1e: a fully-hostile term degrades to no filter, never a broken expression', () => {
+    const plan = buildListingsQuery({ area: ',,,((()))%%%***' });
+    assert(!plan.filters.some((f) => f.kind === 'or' && /ilike/.test(f.expr)),
+      'nothing survives sanitisation → no area push-down (pure.js still filters in-memory)');
+  });
+
+  test('7.1e: keyword terms are never pushed into a PostgREST expression', () => {
+    const plan = buildListingsQuery({ keyword: 'evil,(%injection)' });
+    assert(plan.wantsKeyword, 'keyword search is recognised');
+    assert(!plan.filters.some((f) => f.kind === 'or' && /evil/.test(f.expr)),
+      'keyword matching happens in pure.js over the fetched slice, not in the DB expression');
+  });
+
+  test('7.1e: price inputs coerce to numbers — non-numeric input builds no price filter', () => {
+    const plan = buildListingsQuery({ maxPrice: '400000,status.eq.hidden' });
+    assert(!plan.filters.some((f) => f.kind === 'or' && /hidden/.test(f.expr)),
+      'a non-numeric maxPrice cannot smuggle a condition (Number() → NaN → dropped)');
+  });
 }

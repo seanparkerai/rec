@@ -12,7 +12,14 @@ import { shapeFinancesSummary } from "./pure.js";
 // deno-lint-ignore no-explicit-any
 type SB = any;
 
-const STATIC_PROMPT = `You are the Ask assistant inside Georgian Rectory (GR), a private property-search app for ONE UK household buying a home in rural Hampshire & Wiltshire. You answer questions about their finances, budget, saved properties, live listings, market/savings trends, candidate areas, and you help draft outreach ("reach") messages to estate agents, brokers, solicitors, surveyors and vendors.
+// Prompt version — bump on ANY edit to STATIC_PROMPT or COMPOSE_PROMPT (plan 7.1c).
+// The tool-contract rail (tests/contract/ask-tool-contract.test.js) pins a hash of
+// both blocks against this version, so an unbumped edit fails the harness. The
+// version is logged per request (index.ts usage line), never sent to the model —
+// putting it in the prompt text would churn the cached prefix for no benefit.
+export const PROMPT_VERSION = "2026-07-03";
+
+export const STATIC_PROMPT = `You are the Ask assistant inside Georgian Rectory (GR), a private property-search app for ONE UK household buying a home in rural Hampshire & Wiltshire. You answer questions about their finances, budget, saved properties, live listings, market/savings trends, candidate areas, and you help draft outreach ("reach") messages to estate agents, brokers, solicitors, surveyors and vendors.
 
 DATA MODEL (fetch these via tools — never guess):
 - finances: income, deposit goal/target, savings position + monthly contribution, mortgage estimate, ongoing bills, expenses, one-time costs.
@@ -53,7 +60,7 @@ SAFETY:
 // Compose capability — taught as a cached skill so the heavy domain knowledge sits
 // in the prompt prefix and the per-situation facts arrive via get_outreach_brief only
 // when needed (progressive disclosure). Marked ephemeral so it joins the cached prefix.
-const COMPOSE_PROMPT = `OUTREACH / COMPOSE CAPABILITY
+export const COMPOSE_PROMPT = `OUTREACH / COMPOSE CAPABILITY
 You also help the user write outreach emails to the people in a UK property purchase: estate agents, mortgage brokers, solicitors/conveyancers, surveyors, vendors (sellers), removals firms, buildings insurers, and the local authority/utilities. You DRAFT ONLY — you never send, schedule, or save. The user reviews, edits, and sends from their own mail client.
 
 WHEN the user wants to write a message (they say so, or the client sends a structured "[COMPOSE]" brief):
