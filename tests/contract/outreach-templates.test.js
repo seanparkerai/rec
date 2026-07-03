@@ -155,6 +155,35 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     }
   });
 
+  // ── dataNeeded ↔ placeholder parity rail (step 8.2) ───────────────────
+  // dataNeeded is hand-written per template; a body referencing {{a.path}}
+  // that dataNeeded omits renders as a silent blank/literal in a real email.
+  // Both directions are drift: an undeclared USED path breaks rendering, an
+  // unused DECLARED path is a stale requirement that over-gates the template.
+  // A mismatch here is fixed in data/outreach-templates.json, never by
+  // relaxing this rail. Today (2026-07-03) all 24 templates are clean.
+  const placeholderPaths = (t) => {
+    const text = `${t.subjectTemplate || ''}\n${t.bodyTemplate || ''}`;
+    const used = new Set();
+    for (const m of text.matchAll(/\{\{#if ([^}]+)\}\}/g)) used.add(m[1].trim());
+    for (const m of text.matchAll(/\{\{([^#/}][^}]*)\}\}/g)) used.add(m[1].trim());
+    return used;
+  };
+
+  for (const tmpl of templates) {
+    test(`outreach-templates: dataNeeded ≡ placeholders — ${tmpl.id}`, () => {
+      const used = placeholderPaths(tmpl);
+      assert(used.size > 0, `${tmpl.id}: parser found no placeholders — the rail regex went stale`);
+      const declared = new Set(tmpl.dataNeeded || []);
+      const missing = [...used].filter((p) => !declared.has(p));
+      const unused = [...declared].filter((p) => !used.has(p));
+      assert(missing.length === 0,
+        `${tmpl.id}: body/subject use paths dataNeeded omits (would render blank): ${missing.join(', ')}`);
+      assert(unused.length === 0,
+        `${tmpl.id}: dataNeeded declares paths the template never uses: ${unused.join(', ')}`);
+    });
+  }
+
   // ── Renderer tests ────────────────────────────────────────────────────
   // Import the renderer dynamically. This requires the file to exist (Phase 2).
   let renderer = null;
