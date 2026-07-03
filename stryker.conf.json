@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-  "_comment": "Step 4.10 (04-program §5): mutation testing over the intelligence engine — the place a silent bug is most costly after the finance calculators (which get their own scope in Phase 5). OPT-IN via `npm run test:mutation`; never part of the default `npm test` gate. The kill vehicle is the unit tier (the engine suites all live there); the command runner keeps our zero-framework harness. MEASURED BASELINE 2026-07-02: 56.43% overall in 7m36s (3,603 mutants) — the statistical core is healthy (weights 75.5 / scope 75.3 / engine 69.2 / persistence 68.2) and the drag is copy/render surfaces (trends-glance 23.0 render half, signals 34.2 label tables, view copy strings), where killing mutants means brittle string-pinning. `break` is therefore a RATCHET FLOOR (raise it as 4.10b strengthens the core toward the blueprint's 75–80 target; never lower it), not the aspiration.",
+  "_comment": "Step 4.10 (04-program §5): mutation testing over the intelligence engine — the place a silent bug is most costly after the finance calculators (which get their own scope in Phase 5). OPT-IN via `npm run test:mutation`; never part of the default `npm test` gate. The kill vehicle is the unit tier (the engine suites all live there); the command runner keeps our zero-framework harness — incremental caching can't see kill-vehicle changes under the command runner, so always `--force` after strengthening tests. RE-MEASURED 2026-07-03 (step 4.10b, 3,281 mutants, 9m42s): 74.86% overall — statistical core at/above the blueprint's 75–80 (engine 85.0 / persistence 91.2 / weights 90.1 / radius 78.7 / radius-persistence 77.4 / trends-glance pure half 85.7) via the four *-hardening unit suites (exact-value anchors, boundary equalities, SQL goldens, table pins); trends-glance's RENDER half excised in-source ('Stryker disable all' with reason). Remaining drag is copy/label surfaces accepted as-is: view.js 66.0 card copy, signals.js 61.9 residual regex/label mutants, config 40.9 / observations 56.6 / search 63.6 — headroom for a future ratchet, not debt. `break` stays a RATCHET FLOOR (raise-only, kept just under measurement; was 55 at the 2026-07-02 56.43% baseline).",
   "mutate": [
     "assets/js/refinement/**/*.js",
     "assets/js/learned-preferences/**/*.js"
@@ -9,7 +9,7 @@
   "commandRunner": { "command": "node tools/run-all-tests.mjs --tier unit" },
   "coverageAnalysis": "off",
   "reporters": ["clear-text", "progress"],
-  "thresholds": { "high": 80, "low": 75, "break": 55 },
+  "thresholds": { "high": 80, "low": 75, "break": 73 },
   "tempDirName": ".stryker-tmp",
   "incremental": true,
   "incrementalFile": "reports/stryker-incremental.json"

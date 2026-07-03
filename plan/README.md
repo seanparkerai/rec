@@ -4,16 +4,18 @@
 > (832 KB / 11,068 lines — split 2026-07-01, owner-directed, content preserved). The root
 > `fable_refactor.md` is now a pointer stub kept so old references resolve.
 >
-> **Status (2026-07-02, mid-Phase-6):** Phases **1** (test-harness core), **2** (⭐ flagship
-> listings pipeline), **3** (mobile-first UI/UX overhaul — plus post-phase owner-directed 3.10/3.11
-> image-led Rightmove-register listings redesign) and **5** (finances trust surface —
-> A3/A4/A5/A7 corrections shipped, golden grids + drift rail + mutation floor live) are
-> **COMPLETE**; Phase 4 complete except owner-gated ⚙ 4.9 + optional 4.10b. Harness 980/980;
-> finance mutation 87.04 (floor 86).
+> **Status (2026-07-03):** Phases **1–7 COMPLETE** — 1 (test-harness core), 2 (⭐ flagship
+> listings pipeline), 3 (mobile-first UI/UX overhaul + owner-directed 3.10/3.11 image-led
+> listings redesign), 4 (intelligence engine — 4.10b mutation ratchet done 2026-07-03:
+> 56.43→**74.86%**, core 78–91 per module, floor 73; only owner-gated ⚙ 4.9 open), 5 (finances
+> trust surface — mutation 87.04, floor 86), 6 (areas content & data quality — 196/196
+> researched, zero missing fields), 7 (Ask → claude-sonnet-5, v6 deployed; owner browser smoke
+> test queued). Harness **1065/1065**.
 > Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag; 2.11b + 4.9 unlock
-> with it). Current phase: **6** (areas content & data quality) — 6.1 matched-price ONE HOME +
-> 6.2 priceSummary ONE BAKE done; next **6.3** (stub predicate unified), then 6.4; 6.5/6.6 are
-> web-research content batches (data sessions, §18 ceremonies).
+> with it); Ask smoke test (7.1f). Current phase: **8** (profile, criteria, journey) — expand on
+> entry per §0.2 mode-2; reality notes: three profile modules are 249/94/48 lines and already
+> field-engine-driven, the outreach grid is gone (Ask Compose authors outreach), journey.json is
+> repo-static with tick-state in Supabase `journey_progress`.
 > **Resume at the first unticked line of `03-checklist.md`.**
 
 ## How to use this directory (cold-resume protocol)
