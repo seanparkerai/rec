@@ -9,19 +9,19 @@
 }
 .dossier-back:hover, .dossier-back:focus-visible { color: var(--accent); }
 
-/* Layout: single column on mobile; main + sticky rail on desktop.
-   Mobile-first the rail DISSOLVES (display: contents) so its children join the
-   .dossier grid directly — that makes the whole dossier the sticky containing
-   block for the thumb-zone action card below (3.5c: pinned inside the short
-   rail, the bar could never actually ride over the dossier body). ≥1024 the
-   rail re-forms as the sticky right column. */
+/* Layout: single column on mobile; main + rail column on desktop.
+   Nothing here is sticky (owner decision 2026-07-03, superseding 3.5c): the
+   reaction/action card reads as a normal section in page flow, after the main
+   dossier content — never a floating always-visible bar. Mobile-first the rail
+   still DISSOLVES (display: contents) so its children join the single column
+   below the body; ≥1024 it re-forms as a static right column. */
 .dossier { display: grid; grid-template-columns: 1fr; gap: var(--space-5, 2rem); margin-top: var(--space-2); }
 .dossier__main { min-width: 0; display: grid; gap: var(--space-5, 2rem); align-content: start; }
 .dossier__rail { display: contents; }
 
 @media (min-width: 1024px) {
   .dossier { grid-template-columns: minmax(0, 1fr) 22rem; gap: var(--space-6); }
-  .dossier__rail { display: grid; gap: var(--space-4); align-content: start; position: sticky; top: var(--space-4); }
+  .dossier__rail { display: grid; gap: var(--space-4); align-content: start; }
 }
 
 /* ── Gallery ──────────────────────────────────────────────────────────────── */
@@ -262,21 +262,13 @@
 .dossier-actions .listing-status-wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
 .dossier-actions .listing-status { flex: 1; }
 
-/* Mobile-first: the action card pins to the thumb zone (§10); it un-pins at
-   laptop (1024) where the rail itself becomes sticky. */
+/* The action card sits in normal flow at every width (owner decision
+   2026-07-03: no sticky/floating reaction bar — it lives lower on the page,
+   after the dossier body). Safe-area padding kept for phones where the card
+   is the last thing before the home indicator. */
 .dossier-actions {
-  position: sticky; bottom: 0; z-index: 5;
   padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
-  border-radius: var(--rec-radius) var(--rec-radius) 0 0;
-  box-shadow: 0 -1px 0 var(--hairline);
-}
-@media (min-width: 1024px) {
-  .dossier-actions {
-    position: static; z-index: auto;
-    padding-bottom: var(--space-4);
-    border-radius: var(--rec-radius);
-    box-shadow: none;
-  }
+  border-radius: var(--rec-radius);
 }
 
 /* ── Not-found ────────────────────────────────────────────────────────────── */
