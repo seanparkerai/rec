@@ -4,7 +4,8 @@
 > (832 KB / 11,068 lines — split 2026-07-01, owner-directed, content preserved). The root
 > `fable_refactor.md` is now a pointer stub kept so old references resolve.
 >
-> **Status (2026-07-03):** Phases **1–9 COMPLETE** — 1 (test-harness core), 2 (⭐ flagship
+> **Status (2026-07-03): ALL PHASES 1–10 COMPLETE — the overhaul program is CLOSED.**
+> Phases — 1 (test-harness core), 2 (⭐ flagship
 > listings pipeline), 3 (mobile-first UI/UX overhaul + owner-directed 3.10/3.11 image-led
 > listings redesign), 4 (intelligence engine — 4.10b mutation ratchet done 2026-07-03:
 > 56.43→**74.86%**, core 78–91 per module, floor 73; only owner-gated ⚙ 4.9 open), 5 (finances
@@ -20,11 +21,17 @@
 > migrations; key-model verified (legacy-JWT owner action recorded in SUPABASE_SYNC.md §7) +
 > RLS sweep in the §18.2 ceremony; generated `types/supabase.d.ts` wired into tier-0 via JSDoc;
 > R7 owner-ruled: last-write-wins + clobber guard, version columns declined —
-> SUPABASE_SYNC.md §8). Harness **1116/1116**.
-> Owner-gated remainder: ⚙ 2.16 secrets (deferred 2026-07-02 — do not re-nag; 2.11b + 4.9 unlock
-> with it); Ask smoke test (7.1f); E1 finish (repoint ask off the legacy key, then disable it —
-> SUPABASE_SYNC.md §7). Current phase: **10** (process & rails re-baseline).
-> **Resume at the first unticked line of `03-checklist.md`.**
+> SUPABASE_SYNC.md §8), **10** (process & rails re-baseline — `docs/adr/` live with 0001–0008
+> and the shape rail (G2); conventional-commit rail in harness+CI as a dependency-free checker
+> (G3, adr/0007); the last missing rail closed: Apify spend pinned end-to-end (fetch-spend);
+> G1 re-scoped to a force-push/deletion ruleset (adr/0008, Proposed — one owner minute);
+> CLAUDE.md re-baselined incl. the §16 Mechanical-rails inventory; final §2.7 leanness sweep —
+> legacy runner deleted, dead CSS cut, stale page-list claims fixed). Harness **1128/1128**.
+> **Owner-gated remainder (the only open items):** ⚙ 2.16 secrets (deferred 2026-07-02 — do not
+> re-nag; 2.11b + 4.9 unlock with it); Ask smoke test (7.1f); E1 finish (repoint ask off the
+> legacy key, then disable it — SUPABASE_SYNC.md §7 / adr/0005); the adr/0008 `main` ruleset.
+> Future work starts as a NEW program (a fresh §0.2 intake), not by reopening this plan.
+> For app-side content/ops sessions, `docs/CHECKLIST.md` remains the live tracker.
 
 ## How to use this directory (cold-resume protocol)
 
