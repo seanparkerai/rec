@@ -101,7 +101,30 @@ export async function register({ test, assert, assertEqual }) {
       `docs/CHECKLIST.md hardcodes progress counts (${hits.map((h) => `"${h[0]}"`).join(', ')}) — point to \`node tools/area-status.mjs\` instead`);
   });
 
-  // ── 5. docs/README.md index is complete and link-valid ────────────────────
+  // ── 5. ADRs (docs/adr/) follow the template shape with unique numbering ───
+  test('docs-consistency: every ADR has the template fields and a unique number', () => {
+    const dir = join(ROOT, 'docs/adr');
+    const files = readdirSync(dir).filter((f) => /^\d{4}-.+\.md$/.test(f) && f !== '0000-template.md');
+    assert(files.length > 0, 'expected at least one ADR in docs/adr/');
+    const seen = new Map();
+    const problems = [];
+    for (const f of files) {
+      const n = f.slice(0, 4);
+      if (seen.has(n)) problems.push(`duplicate ADR number ${n}: ${seen.get(n)} vs ${f}`);
+      seen.set(n, f);
+      const src = readFileSync(join(dir, f), 'utf8');
+      for (const field of ['## Status', '## Context', '## Decision', '## Consequences']) {
+        if (!src.includes(field)) problems.push(`${f} missing "${field}"`);
+      }
+      if (!/^Date: \d{4}-\d{2}-\d{2}/m.test(src)) problems.push(`${f} missing "Date: YYYY-MM-DD" line`);
+      if (!/^(Proposed|Accepted|Superseded by \d{4}|Declined)\b/m.test(src.split('## Status')[1] ?? '')) {
+        problems.push(`${f} Status is not one of Proposed/Accepted/Superseded by NNNN/Declined`);
+      }
+    }
+    assert(problems.length === 0, `ADR shape violations:\n  ${problems.join('\n  ')}`);
+  });
+
+  // ── 6. docs/README.md index is complete and link-valid ────────────────────
   test('docs-consistency: every live doc is indexed in docs/README.md and every index link resolves', () => {
     const index = read('docs/README.md');
     const live = readdirSync(join(ROOT, 'docs'))

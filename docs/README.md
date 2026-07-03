@@ -14,6 +14,7 @@ Live operating docs for this repo, one line each. Historical material lives in
 | [`DATA_MODEL.md`](DATA_MODEL.md) | Reference for every data shape in the app and where it lives/flows. |
 | [`INTELLIGENCE_RULES.md`](INTELLIGENCE_RULES.md) | Reviewable constants + rationale for the affordability/fit/learning engines. |
 | [`SUPABASE_SYNC.md`](SUPABASE_SYNC.md) | Operational detail behind CLAUDE.md §18 — the bidirectional sync contract. |
+| [`adr/`](adr/README.md) | Architecture Decision Records — every §4 rail change maps to one (G2). |
 | [`SCHEMA_NOTES.md`](SCHEMA_NOTES.md) | Live Supabase schema facts discovered via MCP (refinement-engine Stage 1). |
 | [`REFINEMENT_README.md`](REFINEMENT_README.md) | How the refinement engine fits together and how to operate it. |
 | [`ASK.md`](ASK.md) | The Ask assistant — how it works, the tool catalogue, and how to deploy/operate it. |
