@@ -297,8 +297,9 @@ RLS-scoped client (it read the platform-injected legacy `SUPABASE_ANON_KEY`). **
 same day:** `supabase/functions/ask/index.ts` now prefers an `SB_PUBLISHABLE_KEY` function secret
 and falls back to the committed publishable key (public by design, RLS-enforced — same key as the
 browser client); shipped live by the `deploy-ask` workflow (run #2, 2026-07-03 — the standing CI
-deploy path, gated on the `SUPABASE_ACCESS_TOKEN` repo secret the owner added). E1 is closed;
-the remaining nicety is the owner's ASK.md §5 browser smoke test (7.1f).
+deploy path, gated on the `SUPABASE_ACCESS_TOKEN` repo secret the owner added). E1 is closed, and the
+owner ran the live browser smoke test the same evening (7.1f — "deposit gap" answered correctly
+on the deployed site). The key model is fully realised end-to-end.
 
 **Secret keys:** never committed anywhere. The only `service_role` consumer is
 `tools/backfill-content-direct.mjs`, which reads it from the environment (its header says so);
