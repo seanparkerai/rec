@@ -77,6 +77,7 @@ _initSb().then((sb) => {
 // Appends a small banner to the page; respects prefers-reduced-motion.
 let _toastEl = null;
 function _toast(msg, isError = false) {
+  if (typeof document === 'undefined') return; // Node (test tier) — nothing to render into
   if (!_toastEl) {
     _toastEl = document.createElement('div');
     _toastEl.setAttribute('role', 'status');
@@ -106,6 +107,27 @@ function _toast(msg, isError = false) {
   _toastEl._timer = setTimeout(() => { _toastEl.style.opacity = '0'; }, 3500);
 }
 
+// ── Pending-write journal (overhaul 9.1 / R2a) ────────────────────────
+// A failed upsert leaves the newest value only in the localStorage cache.
+// Without a record of that, the next _get() revalidation would overwrite the
+// cache with the stale Supabase row — silently reverting the user's edit on
+// screen. The journal remembers which tables have an unconfirmed write
+// (latest value per table — blob semantics), so revalidation holds off until
+// the write lands. Draining the journal (retry) is step 9.2.
+const PENDING_KEY = 'pending-writes';
+function readPendingWrites() { return readLocal(PENDING_KEY) ?? {}; }
+function _journalPendingWrite(table, value) {
+  const p = readPendingWrites();
+  p[table] = { value, queuedAt: new Date().toISOString() };
+  writeLocal(PENDING_KEY, p);
+}
+function _clearPendingWrite(table) {
+  const p = readPendingWrites();
+  if (!(table in p)) return;
+  delete p[table];
+  writeLocal(PENDING_KEY, p);
+}
+
 // ── Supabase read/upsert helpers ──────────────────────────────────────
 async function _sbGet(table) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
@@ -126,7 +148,8 @@ async function _sbGet(table) {
 
 async function _sbUpsert(table, value) {
   const [sb, hid] = await Promise.all([_initSb(), _getHid()]);
-  if (!sb || !hid) return;
+  if (!sb) return; // no backend configured (fresh install) — nothing to sync to
+  if (!hid) { _journalPendingWrite(table, value); return; } // offline / session hiccup — hold the write
   try {
     const { error } = await sb
       .from(table)
@@ -135,7 +158,9 @@ async function _sbUpsert(table, value) {
         { onConflict: 'household_id' }
       );
     if (error) throw error;
+    _clearPendingWrite(table); // a newer write for this table just landed
   } catch (e) {
+    _journalPendingWrite(table, value);
     console.error(`storage: write ${table}`, e.message);
     _toast(`Sync error (${table}): ${e.message}`, true);
   }
@@ -157,6 +182,9 @@ async function _get(lsKey, table, fallbackJson, onUpdate) {
     // Fast path. Kick off revalidation; return cache immediately.
     _sbGet(table).then((fresh) => {
       if (fresh === null) return;
+      // An unconfirmed local write means the server row is the STALE side —
+      // overwriting the cache here would silently revert the user's edit (9.1).
+      if (readPendingWrites()[table]) return;
       if (JSON.stringify(fresh) !== JSON.stringify(cached)) {
         writeLocal(lsKey, fresh);
         if (onUpdate) onUpdate(fresh);
@@ -222,7 +250,7 @@ const _writeLocalEnhanced = (k, v) => {
   return true;
 };
 
-export const _internal = { key, readLocal, writeLocal: _writeLocalEnhanced, removeLocal };
+export const _internal = { key, readLocal, writeLocal: _writeLocalEnhanced, removeLocal, readPendingWrites };
 
 // hasRealUserData — true only when a blob is a populated, non-sample row.
 // A fresh household with no Supabase row gets the redacted `_SAMPLE` fixture
@@ -231,4 +259,4 @@ export const _internal = { key, readLocal, writeLocal: _writeLocalEnhanced, remo
 export const hasRealUserData = (b) => !!b && !b._SAMPLE;
 
 // Internal helpers shared with sibling storage modules (not part of the public surface).
-export { readLocal, writeLocal, removeLocal, _initSb, _getHid, _toast, _sbGet, _sbUpsert, _get, _save, _normShortlist };
+export { readLocal, writeLocal, removeLocal, _initSb, _getHid, _toast, _sbGet, _sbUpsert, _get, _save, _normShortlist, readPendingWrites, _journalPendingWrite, _clearPendingWrite };

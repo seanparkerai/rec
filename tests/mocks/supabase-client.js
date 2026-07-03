@@ -25,12 +25,14 @@ const MOCK_SESSION = {
 };
 
 class MockQuery {
-  constructor(rows, writes, table) {
+  constructor(rows, writes, table, failWrite = false) {
     this._rows = [...rows];
     this._writes = writes;
     this._table = table;
     this._single = false;
     this._maybe = false;
+    this._failWrite = failWrite;
+    this._writeError = null;
   }
   select() { return this; }
   eq(col, val) { this._rows = this._rows.filter((r) => r?.[col] === val); return this; }
@@ -66,12 +68,14 @@ class MockQuery {
   }
   upsert(values, opts) {
     const rows = Array.isArray(values) ? values : [values];
+    if (this._failWrite) { this._writeError = { message: 'mock write failure (test)' }; return this; }
     this._writes.push({ table: this._table, op: 'upsert', values: rows, opts });
     return this;
   }
   update(values) { this._writes.push({ table: this._table, op: 'update', values }); return this; }
   delete() { this._writes.push({ table: this._table, op: 'delete' }); return this; }
   then(resolve, reject) {
+    if (this._writeError) return Promise.resolve({ data: null, error: this._writeError }).then(resolve, reject);
     let data = this._rows;
     let error = null;
     if (this._single) {
@@ -86,9 +90,10 @@ class MockQuery {
 
 export class MockSupabaseClient {
   /** @param {Record<string, object[]>} tables — table name → fixture rows */
-  constructor(tables = {}, { session = MOCK_SESSION } = {}) {
+  constructor(tables = {}, { session = MOCK_SESSION, failWrites = [] } = {}) {
     this.tables = tables;
     this.writes = [];
+    this.failWrites = new Set(failWrites); // table names whose writes error (9.1 journal tests)
     this._session = session;
     this.auth = {
       getSession: async () => ({ data: { session: this._session }, error: null }),
@@ -97,7 +102,7 @@ export class MockSupabaseClient {
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
     };
   }
-  from(table) { return new MockQuery(this.tables[table] ?? [], this.writes, table); }
+  from(table) { return new MockQuery(this.tables[table] ?? [], this.writes, table, this.failWrites.has(table)); }
   rpc(fn, args) {
     this.writes.push({ op: 'rpc', fn, args });
     const impl = this.tables.__rpc?.[fn];
