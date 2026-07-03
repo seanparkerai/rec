@@ -105,6 +105,11 @@ export function coverage(criteria, derived) {
 }
 
 // ── rendering ────────────────────────────────────────────────────────────────
+// Stryker disable all: render half — DOM + Chart.js wiring (canvas options, caption
+// copy, innerHTML shells). Excised from mutation scope at step 4.10b: killing these
+// mutants means byte-pinning captions and Chart.js option objects, which is brittleness,
+// not safety. The behaviour is guarded by the pure helpers above (mutation-scored) and
+// the jsdom pages tier. The pure aggregation half MUST stay above this line.
 
 const charts = {}; // id → Chart instance (destroyed before re-render to avoid leaks)
 
