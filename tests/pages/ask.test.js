@@ -37,4 +37,33 @@ export async function register({ test, assert, assertEqual }) {
     assert(/100dvh/.test(css), 'the chat column fills the live viewport via dvh');
     assert(!/\d(vh)\b/.test(css.replace(/dvh|svh|lvh/g, '')), 'no raw vh anywhere in ask.css');
   });
+
+  test('ask: Compose a11y contract (step 8.5) — every control labelled, output announced', () => {
+    const html = readFileSync(join(ROOT, 'pages/ask.html'), 'utf8');
+    const dom = new JSDOM(html, { url: 'https://example.test/pages/ask.html' });
+    const doc = dom.window.document;
+    const compose = doc.getElementById('ask-compose');
+    assert(compose?.tagName === 'DIALOG' && compose.getAttribute('aria-label'),
+      'Compose is a named native dialog');
+    // §11: every form control programmatically labelled — a wrapping <label>,
+    // an aria-label, an aria-labelledby, or an id another label points at.
+    for (const el of compose.querySelectorAll('input, select, textarea')) {
+      const labelled = el.closest('label')
+        || el.getAttribute('aria-label')
+        || el.getAttribute('aria-labelledby')
+        || (el.id && doc.querySelector(`label[for="${el.id}"]`));
+      assert(labelled, `compose control ${el.id || el.name || el.type} has a programmatic label`);
+    }
+    // The drafted message is ANNOUNCED: it streams into the transcript, whose
+    // assistant bubbles are aria-live regions (transcript.js), and the draft
+    // action bar carries its own polite status region for copy/log feedback.
+    const draftTpl = [...doc.querySelectorAll('template')]
+      .find((t) => t.content.querySelector('.ask-draft__status'));
+    assert(draftTpl?.content.querySelector('.ask-draft__status[role="status"][aria-live="polite"]'),
+      'the draft card template carries a polite live status region');
+    const transcriptSrc = readFileSync(join(ROOT, 'assets/js/ask/transcript.js'), 'utf8');
+    assert(/setAttribute\('aria-live',\s*'polite'\)/.test(transcriptSrc),
+      'assistant bubbles are aria-live polite (the drafted email is announced as it streams)');
+    dom.window.close();
+  });
 }
