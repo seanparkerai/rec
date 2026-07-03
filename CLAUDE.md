@@ -1,6 +1,6 @@
 # CLAUDE.md — Operating Rules for this Repository
 
-> **Last reconciled 2026-06-18.** If reality and this file disagree, **reality wins — fix this file.**
+> **Last reconciled 2026-07-03 (Phase-10 re-baseline).** If reality and this file disagree, **reality wins — fix this file.**
 > Inventories (tables, files, counts) are never restated here — each has one named source of truth.
 
 This file governs how Claude (and any AI assistant) works in this repo. Read it at the **start of
@@ -11,7 +11,9 @@ every session**. These rules exist to keep work safe, resumable, and high qualit
   session explicitly mandates a feature branch (e.g. a managed remote session).
 - **Commit + push after every major step** (e.g. after each checklist phase or content batch) so any
   new chat can resume from a known-good state.
-- Use clear, descriptive commit messages.
+- Commit messages follow **Conventional Commits** — `type(scope): subject`, types incl. the
+  repo-specific `data` for content batches. Enforced in CI by `tools/check-commit-msgs.mjs`
+  (grammar pinned in `tests/contract/commit-lint.test.js`; see `docs/adr/0007`).
 
 ## 2. Area content — per-area JSON files (IMPORTANT)
 - Area data is split: `data/areas.json` is the **lightweight directory index**;
@@ -197,6 +199,24 @@ The following files are **never touched** by feature work. Modifying any of them
 
 If a phase appears to require a change to any of these, stop and re-plan as a separate, named phase.
 
+### Mechanical rails (the tests that enforce the contracts)
+
+Beyond the file list above, the system's contracts are guarded mechanically — a violation fails
+`npm test`, not a code review. The named rails and their homes (Phase-10 re-baseline, 2026-07-03):
+**areas↔DB parity** (`tests/contract/areas-db-repo-parity.test.js`), **schema REFERENCE-ONLY**
+(`tests/contract/schema-reference-only.test.js` — MCP migration history is the one schema truth),
+**reference integrity** (`tests/contract/asset-links.test.js` — every relative path in JS/CSS/HTML
+resolves, including JSDoc type imports), **docs anti-rot + ADR shape**
+(`tests/contract/docs-consistency.test.js`), **Ask tool surface**
+(`tests/contract/ask-tool-contract.test.js` — tool names/schemas + prompt hash), **RLS**
+(`tools/check-rls.mjs` in CI + the §18.2 ceremony sweep), **Apify spend**
+(`tests/contract/fetch-spend.test.js` — budget cap, per-target cap, demand gates),
+**commit grammar** (`tools/check-commit-msgs.mjs` in CI, `tests/contract/commit-lint.test.js`),
+the **tier-0 type ratchet** (`tsconfig.json` include list — grow-only) and the
+**responsive-lint baseline** (`tools/lint-responsive.allow.json` — justified fingerprints only).
+Changing what a rail enforces is a §16-class event: it needs its own named phase **and an ADR in
+`docs/adr/`** (G2/G4 — a rail change = an ADR + a green run of the full suite).
+
 ## 17. Backend: Supabase
 
 The app uses **Supabase** for cloud storage and authentication.
@@ -286,7 +306,7 @@ to the Supabase row via MCP `execute_sql`, verified by re-SELECT inside the same
 - **Content — `areas` (RELAXED 2026-06-04, owner decision):** the DB wins; if a file and the DB
   disagree, the file is re-materialised. Every area change follows the §2 write path: **write the DB
   via MCP → `sync-areas-from-supabase` → `build-areas` → `verify-area-coords --online` →
-  `run-intelligence-tests` → commit.** `data/snapshots/areas.json` +
+  `run-all-tests` → commit.** `data/snapshots/areas.json` +
   `tests/contract/areas-db-repo-parity.test.js` guard this. An id/postcode migration also rewrites
   `data/source/villages.csv` and carries references (incl. the user-state `area_confirmations`
   keys — the narrow §18.4 relaxation).
