@@ -7,8 +7,13 @@ import {
 } from '../storage.js';
 
 export function createHistory({ openBtn, dialog, listEl, newBtn, closeBtn }, { onSwitch, onNew, getCurrentId }) {
+  // Cache-first list (storage 9.3): render() runs once with the cached copy,
+  // and again via the onUpdate callback if background revalidation differs.
   async function refresh() {
-    const convos = await listAskConversations();
+    render(await listAskConversations(render));
+  }
+
+  function render(convos) {
     listEl.replaceChildren();
     if (!convos.length) {
       const empty = document.createElement('p');
