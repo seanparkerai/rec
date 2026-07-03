@@ -434,18 +434,26 @@ function orderOutcodesByFocus(outcodes, spec) {
 }
 
 // ── Apify actor ──────────────────────────────────────────────────────────────
-async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null) {
-  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
-  const url =
-    `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
-    `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
-  const input = {
+// Actor input for one search target. Pure — extracted (step 10.3) so the spend
+// rail (tests/contract/fetch-spend.test.js) can pin the two cost levers on every
+// run: maxItems (per-target result cap) and maxBudget (hard USD cap; PPE actors
+// self-terminate at the limit, so no overrun is possible).
+function buildActorInput(locationIdentifier, spec = null, radiusMiles = null, band = null) {
+  return {
     listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max }) }],
     maxItems: RESULTS_PER_OUTCODE,
     monitoringMode: false,
     includePriceHistory: false,
     maxBudget: APIFY_MAX_BUDGET_USD,   // USD hard cap; actor self-terminates at limit
   };
+}
+
+async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null) {
+  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
+  const url =
+    `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
+    `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
+  const input = buildActorInput(locationIdentifier, spec, radiusMiles, band);
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -976,4 +984,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
