@@ -17,7 +17,7 @@ import { capToolResult, fitConvoToBudget } from "./pure.js";
 const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 // RLS-scoped client key. The platform-injected SUPABASE_ANON_KEY is the LEGACY
 // JWT key, disabled by the owner 2026-07-03 (adr/0005 E1) — using it now fails
-// auth. Prefer the SB_PUBLISHABLE_KEY function secret; fall back to the same
+// auth. Prefer the SB_PUBLISHABLE_KEY function secret (unset today; deploy-ask CI ships the fallback); fall back to the same
 // publishable key the browser client commits (public by design, RLS-enforced).
 const SUPABASE_KEY = Deno.env.get("SB_PUBLISHABLE_KEY") ??
   "sb_publishable_3Bv1m_CG1DkIoqBhKjXp-A_vWS_kNFV";
