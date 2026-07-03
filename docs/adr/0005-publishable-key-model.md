@@ -39,5 +39,6 @@ stop-everything finding, not a note. Outstanding: the two-step owner dashboard a
 
 **Update 2026-07-03 (later the same day):** the owner disabled the legacy JWT keys ahead of
 step 1, temporarily breaking Ask. `index.ts` was repointed the same day (prefers the
-`SB_PUBLISHABLE_KEY` function secret, falls back to the committed publishable key); the ADR is
-fully realised once the function is redeployed and smoke-tested (SUPABASE_SYNC.md §7).
+`SB_PUBLISHABLE_KEY` function secret, falls back to the committed publishable key) and
+redeployed via the new `deploy-ask` CI workflow the same evening — the ADR is fully realised
+(owner browser smoke test outstanding; SUPABASE_SYNC.md §7).
