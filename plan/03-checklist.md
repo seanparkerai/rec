@@ -173,7 +173,7 @@
 - [x] 7.1c Prompt versioning: PROMPT_VERSION exported from prompt.ts, logged per request; static+compose block hashes pinned so any prompt edit without a version bump fails the rail.
 - [x] 7.1d Tool-contract rail (04-program §4): new tests/contract/ask-tool-contract.test.js — pins the 13 tool names, the strict/additionalProperties invariants (incl. the 7.1b exception), TOOL_LABELS coverage in transcript.js, ALLOWED_MODELS/DEFAULT_MODEL, and the prompt-version↔hash ratchet.
 - [x] 7.1e Sanitisation audit (P2): injection cases pinned in tests/contract/ask-tools.test.js — buildListingsQuery's PostgREST `.or()` expressions must stay structurally closed under hostile area/keyword input (sanitizeFilterTerm strips `,()*%\`); the "PostgREST parameterizes values" assumption documented.
-- [ ] 7.1f Harness green → commit + merge → deploy `ask` via MCP deploy_edge_function → owner runs the docs/ASK.md browser smoke test (sandbox cannot reach api.anthropic.com); verify cache_read>0 + sane latency in the edge logs afterwards.
+- [x] 7.1f DONE (2026-07-03): harness 1006/1006 → committed + merged → `ask` v6 deployed via MCP (ACTIVE, verify_jwt on, entrypoint ask/index.ts; no boot errors in the edge logs). OWNER ACTION: run the docs/ASK.md browser smoke test (one question on the ask page), then confirm the usage log line shows model=claude-sonnet-5, prompt=2026-07-03, thinking=0 and cache_read>0 on the second turn. Rollback = redeploy the previous commit's four files.
 
 **Phase 8 — Profile, criteria, journey** *(expand on entry)*
 - [ ] 8.1 Unify the three profile modules; auto-generate template dataNeeded; journey.json → content-table decision; field-engine reactivity; outreach-via-Ask polish.
