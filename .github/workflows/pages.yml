@@ -19,11 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+      # Node 22+ required (ask-tool-contract loads TS via --experimental-strip-types).
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
           cache: npm
       # Dev-tooling deps only (jsdom for the tests/pages tier, typescript for
       # Tier-0); the deploy job below still uploads the repo as-is, no build.
@@ -40,7 +41,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

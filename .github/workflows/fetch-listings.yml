@@ -109,6 +109,10 @@ on:
         description: 'Hard USD spend cap passed to Apify actor. Actor self-terminates at this limit.'
         type: string
         default: '25'
+      area_ids:
+        description: 'Comma-separated area ids to restrict the fetch to (blank = all demand). Replaces the old one-off suzanne-backfill workflow: a targeted standing-stock pull is foundation_mode + this list.'
+        type: string
+        default: ''
   schedule:
     # Four daily slots — 08:00, 12:00, 14:00, 18:00 Europe/London. Each slot gets
     # TWO UTC ticks bracketing it across DST; the gate step keeps only the in-season
@@ -223,12 +227,12 @@ jobs:
             echo "In the ${SLOT}:00 window and no fetch yet there today — proceeding with the slot fetch."
             echo "run=true" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: steps.gate.outputs.run == 'true'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         if: steps.gate.outputs.run == 'true'
         with:
-          node-version: '20'
+          node-version: '22'
       - name: Fetch listings
         if: steps.gate.outputs.run == 'true'
         env:
@@ -249,4 +253,6 @@ jobs:
           FETCH_LIMIT: ${{ inputs.fetch_limit || '0' }}
           RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '200' }}
           CLUSTER_CAP_MI: ${{ inputs.cluster_cap_mi || '7' }}
+          # Optional per-area restriction (scheduled runs carry no inputs → all demand).
+          AREA_IDS: ${{ inputs.area_ids || '' }}
         run: node tools/fetch-listings.mjs

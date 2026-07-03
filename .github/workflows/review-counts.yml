@@ -14,8 +14,11 @@
 # Triggers (kept as live as GitHub Actions allows):
 #   - workflow_dispatch: tap "Run workflow" (phone-friendly) or trigger via the API.
 #   - workflow_run after `fetch-listings`: the listings set just changed, so recompute.
-#   - schedule: every 15 minutes (best-effort; GitHub cron is delayed under load) as the
-#     backstop so criteria/area/reaction edits made between scrapes still propagate.
+#   - schedule: hourly (workflow-audit 2026-07-03: the previous */15 cron was throttled
+#     by GitHub to ~hourly in practice anyway — sub-hourly crons on a busy platform are
+#     aspirational — so this states the real cadence honestly and cuts scheduler noise).
+#     The workflow_run chase after each fetch covers the moments that actually matter;
+#     the hourly tick is the backstop so criteria/area/reaction edits still propagate.
 #
 # Requires repo secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (already set for the
 # fetch / refinement jobs). If absent the job no-ops with a clear message, never red.
@@ -28,7 +31,7 @@ on:
     workflows: ["fetch-listings"]
     types: [completed]
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '7 * * * *'   # hourly, offset from :00 to dodge top-of-hour scheduler congestion
 
 concurrency:
   group: review-counts
@@ -39,12 +42,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Guard — required secrets present
         id: guard
