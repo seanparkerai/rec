@@ -17,6 +17,9 @@ added 2026-06-21; `household_review_stats` added 2026-06-22, **all RLS-enabled**
 `data/snapshots/sync-state.json` (the snapshot also carries a high-water entry for the untracked
 `listings` table). The enforced list lives in `tests/supabase-sync.test.js`; any other
 doc, test, or rule that states a different count is wrong and must be reconciled to this section.
+The snapshot holds **current high-water marks + one-line caveats only** (9.4/R5 split, 2026-07-03);
+write **history** appends to `docs/archive/sync-changelog.md`, never back into the snapshot notes.
+Underscore-prefixed snapshot keys (e.g. the top-level `_note`) are metadata, not tables.
 
 - **21 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
   `finances`, `goals`, `shortlist`, `zones`, `journey_checks`, `journey_progress`, `contacts`,

@@ -1,45 +1,41 @@
 {
+  "_note": "High-water marks + one-line current caveats only (overhaul 9.4 / R5 split, 2026-07-03). The full write history that used to accumulate in these _note fields is preserved verbatim in docs/archive/sync-changelog.md — append new history there, not here.",
   "profile": {
     "last_synced_at": "2026-06-21T01:06:20Z",
-    "_note": "2026-07-01 §18.2 reconciliation: live MAX(updated_at) 2026-06-21T01:06:20Z > prior snapshot (2026-06-15) — a user portal edit; Supabase wins, high-water pulled forward, no data written. | 2026-06-15: all 3 profile rows migrated to the unified canonical schema (assets/js/profile-schema.js). Value-preserving re-nest of the historical flat/nested/summary shapes into one structure (person/household/employment/creditProfile/debts/pension + editorial summary fields); idempotency-checked before write, re-SELECT verified. No user values changed."
+    "_note": "Unified canonical schema since 2026-06-15 (assets/js/profile-schema.js)."
   },
   "criteria": {
     "last_synced_at": "2026-06-17T23:28:00Z",
-    "_note": "2026-06-17: household 9628b44f (Luke Clifford) budget.min 250000→300000 (owner-directed). This was the lowest min across all 3 households, so the fetcher's union price floor (priceBandForAreas, lowest budget.min) rises 250k→300k; union ceiling unchanged at 425k. Written direct to Supabase via MCP, re-SELECT verified. 2026-06-04: budget.min 200000→250000, budget.max 400000→425000 (owner-tightened search band)."
+    "_note": "Owner search band budget.min £300k / max £425k — drives the fetcher's union price floor."
   },
   "finances": {
     "last_synced_at": "2026-06-16T14:16:21Z",
-    "_note": "2026-06-16 data-contract repair (data-align.md Phase 5): moved f36e6215 savings.totalSavings(£53,000)->current (a derived-only key the old wizard wrote as raw input, so every reader saw £0); stripped legacy duplicate depositTarget/depositReached from 4deadb32 (canonical target lives in goal.targetDeposit=£50,000); _note + monthlyAverage preserved. 9628b44f already clean. Re-SELECT verified derived deposit savings: 9628b44f=£32,994.45, 4deadb32=£52,500, f36e6215=£53,000. 2026-05-28 overhaul A1: removed goal.targetSavingsRange (single canonical deposit target)."
+    "_note": "Canonical deposit target lives in goal.targetDeposit (2026-06-16 data-contract repair)."
   },
   "shortlist": {
-    "last_synced_at": "2026-06-28T10:37:12Z",
-    "_note": "2026-07-01 §18.2 reconciliation: live 2026-06-28T10:37:12Z > prior snapshot (2026-05-25) — portal shortlist activity; Supabase wins, high-water pulled forward, no data written."
+    "last_synced_at": "2026-06-28T10:37:12Z"
   },
   "zones": {
-    "last_synced_at": "2026-06-03T23:36:16Z",
-    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-03T23:36:16Z > prior snapshot (2026-05-25) — owner-household portal write (content verified: empty FeatureCollection); Supabase wins, high-water pulled forward, no data written."
+    "last_synced_at": "2026-06-03T23:36:16Z"
   },
   "journey_checks": {
-    "last_synced_at": "2026-06-15T21:07:15Z",
-    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-15T21:07:15Z > prior snapshot (2026-05-25) — household 4deadb32 portal edit; Supabase wins, high-water pulled forward, no data written."
+    "last_synced_at": "2026-06-15T21:07:15Z"
   },
   "journey_progress": {
     "last_synced_at": "2026-06-07T00:00:00Z",
     "_class": "user-state",
-    "_note": "v3 buying-journey timeline tick state ({ tasks: { taskId: true } } from data/journey.json). Table created 2026-06-07 via add_journey_progress migration; 0 rows until first tick. Tracked sync table (19th user-state)."
+    "_note": "Journey tick state ({ tasks: { taskId: true } } vs data/journey.json); 0 rows until first tick."
   },
   "contacts": {
-    "last_synced_at": "2026-06-15T21:07:40Z",
-    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-15T21:07:40Z > prior snapshot (2026-05-25) — household 4deadb32 portal edit (agent contacts); Supabase wins, high-water pulled forward, no data written."
+    "last_synced_at": "2026-06-15T21:07:40Z"
   },
   "outreach": {
-    "last_synced_at": "2026-06-15T21:07:40Z",
-    "_note": "2026-07-01 §18.2 reconciliation (pre-2.12): live 2026-06-15T21:07:40Z > prior snapshot (2026-05-25) — household 4deadb32 portal edit (outreach log); Supabase wins, high-water pulled forward, no data written."
+    "last_synced_at": "2026-06-15T21:07:40Z"
   },
   "areas": {
     "count": 192,
     "last_synced_at": "2026-07-02T22:22:36Z",
-    "_note": "2026-07-02 6.6 missing-field sweep COMPLETE: 16× schools + 5× placesToEat across 19 areas written as surgical jsonb patches (schools/placesToEat + sources keys only) via MCP UPDATE…FROM(VALUES), re-SELECT shape-verified 19/19, materialised with zero sync drift. area-status --missing is now EMPTY — 196/196 researched, no missing content fields. High-water = the sweep's 22:22:36Z batch. | 2026-07-02 6.5 content batch A COMPLETE: researched + wrote lane-end-so21 (partial→researched, Ship Inn spot-check verified trading), ebble-sp5 and newtown-sp5 (directory→researched) via MCP UPDATE, each re-SELECT verified by jsonb equality, then materialised. ebble-sp5 is honestly recorded as the OS locality label for the Ebble/Chalke valley (not a settlement — verificationNotes recommends deactivation, owner decision); newtown-sp5 is the west-of-Avon arm of Downton. All 196 areas now status=researched at the area grain (the 16× schools / 5× placesToEat field gaps are 6.6). High-water = lane-end's 22:11:58Z write. | 2026-07-02 §18.2 recovery (6.5 session): a prior session died mid-batch after writing worthy-down-so21 (researched, 21:45:08Z) to the DB but before materialising — recovered by materialising that row (sync-areas-from-supabase, jsonb-equality-verified transcript; snapshot + index + docs/AREAS.md regenerated). The 4 other rows newer than the prior high-water (horton-heath/cranborne/witchampton/chettle -dorset, 15:40Z) are household-onboarding stubs added via the portal picker — skipped by the materialiser by design. High-water pulled to the live MAX. | 2026-07-01 §18.2 reconciliation: 10 rows newer than the prior 2026-06-05 high-water — 9 are household-onboarding stubs (skipped by the materialiser by design) and 1 (mead-end-sp5) is a sub-second trigger touch whose content is field-verified identical to data/areas/mead-end-sp5.json. No materialisation needed; high-water pulled to the live MAX. | count = directory INDEX entries (data/areas.json), built from data/source/villages.csv (192 villages). The per-area files (data/areas/*.json) AND the Supabase areas mirror are 196: the 4 extra are deactivated duplicate-Rightmove / merged variants intentionally kept out of the index — charlwood-so24, colemore-gu32, flexcombe-gu33, froxfield-green-gu32 (flexcombe-gu33 research merged into the canonical flexcombe-gu32). Guarded by tests/areas-index-sync.test.js. (Corrected 2026-06-03: the prior note's gu34 ids were stale.) 2026-06-03: 100 areas down-synced from Supabase (DB was source for this run); repo now 192 researched + 1 partial (lane-end-so21) + 3 directory (ebble-sp5, newtown-sp5, worthy-down-so21 — not yet researched in Supabase). 2026-06-03: added whiteley-po15 (researched). 2026-06-04: chillworth-so16 set active:false (soft-ignored — pruned from the fetcher's L7.5 active set; still in index/mirror); its 277 listings rejected. 2026-06-04: hambledon-po7 likewise set active:false; its 244 listings rejected (212 new wrong_area). 2026-06-04: soft-ignored 6 more areas (active:false) — newton-stacey-sp11, wherwell-sp11, bordon-gu35, sherrington-ba12, tisbury-sp3, southwick-po17. All 8 removed areas' listings (969 total) re-tagged reject/removed_area — a new administrative reason EXCLUDED from preference learning (see assets/js/listings/reactions.js SYSTEM_REJECT_REASONS + learned-preferences weights.js isTraining), so wholesale area ignores no longer skew learned type/outcode/price weights. 2026-06-04 (L7.6): set active:false on 4 more areas — dundridge-so32, kimbridge-so51, pucknall-so51, embley-so51; corrected the mis-placed waltham-chase-so32 pin (was 50.9675,-1.2077 ~2mi N of the village; now provisional listing-centroid 50.9363,-1.2023 pending the web-verification pass). Their 63 listings were RE-ATTRIBUTED to active neighbours via the new name-aware geofence tiebreak (tools/listings-normalise.mjs withinGeofence) — 0 orphaned, 0 deleted; the 6 liked Dundridge homes are now correctly on waltham-chase-so32. Supabase areas mirror updated via jsonb_set (5 rows). 2026-06-04 (Phase 2 coord alignment): DB is now the SOURCE OF TRUTH for areas (CLAUDE.md §18.5 relaxed); new tools/sync-areas-from-supabase.mjs materialises DB->repo, guarded by tests/areas-db-repo-parity.test.js + data/snapshots/areas.json. Applied 10 web-verified coord corrections (droxford, firsdown, great-wishford, middle-winterslow, south-newton, sutton-scotney, swanmore, west-grimstead, west-meon, west-winterslow); reconciled 6 id/postcode migrations carrying villages.csv + area_confirmations keys (lake->sp4, little-langford->sp3, steeple-langford->sp3, ugford->sp2 from the manifest; monkwood->so24 + totford->so24 newly surfaced by the parity check); normalised 3 directory areas' invalid 'needs_review' status->directory. verify-area-coords --online: 196 areas / 0 hard flags. 2026-06-04 (Romsey removal + monkwood, owner-directed): deactivated (active:false) the 5 town=Romsey villages (awbridge/dunbridge/lockerley/sherfield-english/shootash) to stop Romsey-direction wrong-area pulls — the Winchester-towned SO51 villages (michelmersh/timsbury/braishfield) are kept as the wanted coverage; active areas 183->178. Fixed monkwood-so24 town Petersfield->Winchester (matches the canonical DB + the SO24/Alresford geography). 2026-06-08 (DB->repo content-drift reconciliation, deferred from Phase 1-3 / PR #14 ce7db52): materialised the live areas mirror (high-water 2026-06-05T17:04:43Z; 145 rows had a newer updated_at than the prior 2026-06-04T19:49:10Z snapshot, but most were no-op trg_touch_areas bumps already in sync). tools/sync-areas-from-supabase.mjs wrote 81 files / 115 unchanged; after build-areas the net committed change is 39 web-verified coord corrections (coords+coordsSource only, content byte-for-byte preserved — proven field-by-field; no status/price/school/source drift). The settlementType(50)/regionDir(1, monkwood)/name(1, porton-down->Porton) DB values are CSV-owned in the build pipeline (postcode-regions.csv is per-outcode, villages.csv owns name/id) so build-areas reverts them — they net to zero committed change and remain DB-richer-than-repo on those unused index fields (no app consumer; deferred). Added a household-onboarding skip to the materialiser (0 such rows today; forward-guard). Fixed verify-area-coords.mjs Check 1 substring-collision (coordsSource notes mentioning 'outcode' were false-flagged) -> 196/196 corroborated, 0 hard flags."
+    "_note": "count = directory INDEX entries (villages.csv); per-area files + DB mirror = 196 (4 deactivated variants kept out of the index — guarded by tests/areas-index-sync.test.js). 196/196 researched, zero missing content fields (2026-07-02). Household-onboarding stubs are never materialised."
   },
   "house_types": {
     "count": 15,
@@ -47,7 +43,7 @@
   },
   "goals": {
     "last_synced_at": "2026-05-28T21:51:27Z",
-    "_note": "2026-05-28 overhaul A1+A3: deposit.hopedFor set to the canonical target; gapToHoped recomputed; readiness.checklist blob retired (D4 — source is now readiness_checklist table)"
+    "_note": "Readiness checklist blob retired — source is the readiness_checklist table."
   },
   "readiness_checklist": {
     "count": 13,
@@ -55,63 +51,61 @@
   },
   "investments_accounts": {
     "count": 1,
-    "last_synced_at": "2026-05-28T18:00:45Z",
-    "_note": "2026-05-28: portfolio snapshot updated (figures live in Supabase)"
+    "last_synced_at": "2026-05-28T18:00:45Z"
   },
   "investments_history": {
     "count": 13,
-    "last_synced_at": "2026-05-28T20:00:00Z",
-    "_note": "2026-05-28: monthly net figures corrected; 2026-03 zero-activity row inserted (ISA annual reset month)"
+    "last_synced_at": "2026-05-28T20:00:00Z"
   },
   "debts_credit_cards": {
     "count": 1,
     "last_synced_at": "2026-06-02T19:42:15Z",
-    "_note": "2026-06-02: 1 row present (entered via MCP); no app UI yet"
+    "_note": "1 row (entered via MCP); no app UI yet."
   },
   "debts_student_loans": {
     "count": 0,
     "last_synced_at": null,
-    "_note": "empty — no student loan debt entered; no app UI yet"
+    "_note": "Empty — no student loan debt entered; no app UI yet."
   },
   "debts_other": {
     "count": 0,
     "last_synced_at": null,
-    "_note": "empty — no other debts entered; no app UI yet"
+    "_note": "Empty — no other debts entered; no app UI yet."
   },
   "listing_reactions": {
     "count": 3689,
     "last_synced_at": "2026-06-07T12:30:00Z",
     "_class": "user-state (append-only)",
-    "_note": "v3 L3: append-only reaction log (like/pass/reject + reason, listing_snapshot). 1136 rows as of 2026-06-04 (264 on 2026-06-03; 0 at table creation 2026-05-30). 2026-06-04: bulk reject batches via MCP — unwanted property types (Flat/Apartment/Penthouse→wrong_house_type/flat, plus Maisonette/Ground Flat/Ground Maisonette/Retirement/Coach House/Park Home/Land/Plot/Mobile Home/House Share/HMO/Garages/Farm Land/Equestrian/Not Specified→reject) and all chillworth-so16 listings→reject/wrong_area. 2026-06-04: PRICE-BAND batch — 265 active listings priced >£440k bulk-rejected reject/too_expensive (reasons sub-detail over_budget → price-band training signal), with snapshots so weights.js#isTraining keeps them; the 1 over-£440k liked listing preserved (§18.5). Active pool 945→680. Append-only — Supabase always wins; snapshot pulled live via MCP, never written back by Claude. Tracked sync table #18 (16 user-state + 2 content). 2026-06-07 (reaction-learning cleanup): 230 previously-UNTAGGED rejects given a reason via MCP UPDATE — 226 explicitly-excluded property types (flats/apartments/maisonettes/park homes/retirement/land/plots) -> wrong_house_type, 4 over-£425k -> too_expensive (reversible backup: reactions_relabeled_20260607.json — preserved in git history; the root backups/ dir was removed from the working tree 2026-06-12). The remaining 242 untagged rejects (terraced/semi/detached in budget) left untagged and now NON-TRAINING via the new reactions.js#isUnattributedReject gate (weights.js#isTraining + trainingProgress). Total rows 3689 (52 like + 16 pass + 3621 reject). learned_preferences NOT rewritten here — it recomputes in-browser on the next reaction with the new gate. Refinement findings regenerated from GENUINE individual reactions only (en-masse bulk/admin sweeps excluded; baseline 0.986->0.819): detached/semi/bungalow/cottage no longer surface as 'rejected'."
+    "_note": "Append-only reaction log — Supabase always wins; snapshot pulled live via MCP, never written back. Untagged legacy rejects are non-training (reactions.js#isUnattributedReject)."
   },
   "learned_preferences": {
     "count": 1,
     "last_synced_at": "2026-07-01T17:23:34Z",
     "_class": "user-state",
-    "_note": "2026-07-01 §18.2 reconciliation: live 2026-07-01T17:23:34Z — engine/portal recompute; Supabase wins, high-water pulled forward. | v3 L4/L5: distilled preference weights, one row/household (derived = Layer 2 from the reaction log; overrides = Layer 3 manual/AI; dismissals = L5 conflict-prompt quiet-until map, added by migration learned_preferences_dismissals_l5). 1 row present, recomputed from the reaction log as of 2026-06-03 (0 at table creation 2026-05-31). Recomputed user-state — Supabase wins; snapshot pulled live via MCP. Tracked sync table #19 (17 user-state + 2 content). 2026-06-05 (Refinement Stage 5): overrides/dismissals confirmed EMPTY ({}); the Approach-B display-hide lever stores hide rules under overrides.__refinement_hidden (reserved key, skipped by effectiveWeights, preserved by recomputeLearnedPreferences). updated_at bumped to 15:19:38 by a hide/undo round-trip verification that was fully reverted (content unchanged)."
+    "_note": "Distilled weights, one row/household (derived from the reaction log + overrides + dismissals; overrides.__refinement_hidden is the reserved display-hide key). Recomputed user-state — Supabase wins."
   },
   "household_areas": {
     "count": 196,
     "last_synced_at": "2026-06-08T00:00:00Z",
     "_class": "user-state",
-    "_note": "Phase 2: per-household area SELECTION layer (relational: household_id, area_id, added_via, status; PK (household_id,area_id); RLS via is_household_member()). NOT a blob — composed by storage.js#getHouseholdAreas, which resolves each linked area_id against the repo catalog (curated) or the Supabase areas.data row (household-onboarding stub). Owner household (9628b44f) seeded 2026-06-08 with all 196 curated catalog areas (added_via='curated-seed') so their view is unchanged. New households start EMPTY until onboarding (Phase 3). Tracked sync table (20th user-state). Created by migration household_areas_and_gated_stub_insert; the same migration added a gated areas INSERT policy (members may insert only source='household-onboarding' + active=false stubs — curated catalog stays read-only). The areas mirror itself was NOT backfilled/re-materialised in this phase (owner decision: existing 145-row DB↔repo content drift deferred to a separate reconciliation), so the areas block below is unchanged."
+    "_note": "Relational per-household area selection (PK household_id+area_id), composed by storage.js#getHouseholdAreas; owner household seeded with the full curated catalog; members may INSERT only household-onboarding stubs."
   },
   "area_confirmations": {
     "count": 1,
     "last_synced_at": "2026-06-04T16:23:26Z",
     "_class": "user-state",
-    "_note": "v3 Step5: per-household area location review confirmations blob ({ confirmed: { areaId: isoTimestamp } }), one row/household. 1 row present (count was previously 191 — a copy-paste error from the areas block, corrected 2026-06-03 against live via MCP). Tracked sync table #20 (18 user-state + 2 content). 2026-06-04 (Phase 2): value-preserving id-key remap (narrow §18.4 relaxation) carrying 6 area-id migrations — lake-sp3->lake-sp4, ugford-sp4->ugford-sp2, little-langford-sp4->little-langford-sp3, steeple-langford-sp4->steeple-langford-sp3, monkwood-gu34->monkwood-so24, totford-so20->totford-so24 — original confirmation timestamps preserved."
+    "_note": "Per-household location-review confirmations blob ({ confirmed: { areaId: isoTimestamp } }), one row/household."
   },
   "ask_conversations": {
     "count": 0,
     "last_synced_at": null,
     "_class": "user-state",
-    "_note": "Ask feature: natural-language assistant chat threads (id, household_id, title, messages jsonb [{role,content,ts}], created_at, updated_at). RLS via is_household_member() (FOR ALL). Browser-owned persistence (storage/ask.js write-through); the Edge Function 'ask' only READS user state. 0 rows until first conversation saved. Tracked sync table (21st user-state)."
+    "_note": "Assistant chat threads (messages jsonb); browser-owned persistence via storage/ask.js; the ask Edge Function only READS user state."
   },
   "listings": {
     "count": 652,
     "last_synced_at": "2026-06-04T23:55:00Z",
     "_class": "live-content",
-    "_note": "v3 L1: fetcher-written live content (NOT git-versioned, NOT one of the 20 tracked git-synced tables). Backfilled 2026-05-31 with 1298 real listings via tools/import-apify-runs.mjs (storage read of already-paid Apify datasets, no new spend) across 12 outcodes; 0 unmatched, 0 out-of-region. Fetcher BASELINE_PRICE_MAX lowered 500k→450k so over-budget listings stop arriving. 2026-06-04 P5 junk purge (Supabase MCP, user-approved): DELETEd 1,671 baseline-violating rows that were NOT liked (excluded type / >£450k / <£100k / <2 beds); 3,086→1,415, feed-visible 2,539→1,252, 0 baseline-violators remain. The reject SIGNAL persists in the append-only listing_reactions log (unchanged at 3,244) so feed suppression survives the purge; all 20 liked rows preserved. Forward maintenance now via tools/purge-listings.mjs. 2026-06-04 P7 removed-area purge (Supabase MCP, user-approved): DELETEd 551 not-liked listings across the 9 inactive (active:false) areas tagged reject/removed_area — 1,415→864, feed-visible 1,252→737. KEPT the 3 once-liked homes in those areas (ever-liked is never purged: 174896075 chillworth-so16, 173703758 + 174230156 newton-stacey-sp11) and 1 active-area straggler (88535232 whiteley-po15, still wrongly tagged removed_area); listing_reactions untouched at 3,244; 551 delete rows logged to sync_log. 2026-06-04 (L7.6 re-attribution): the 63 listings in the 4 newly-inactive areas (dundridge/kimbridge/pucknall/embley) were re-homed to active neighbours (waltham-chase/swanmore/dunbridge/michelmersh) via the name-aware tiebreak + corrected Waltham Chase pin; all in-buffer, 0 orphaned, so 0 deleted (count stays 864); the 6 liked moved dundridge-so32 -> waltham-chase-so32. 2026-06-04 (Phase 2 re-attribution): pure geofence recompute (tools/backfill-geofence.mjs, £0) against the corrected pins — 226 rows changed (204 re-homed, incl. the 48 former wield-gu35 orphans now on the real wield-so24 pin; 20 newly out-of-buffer; 4 recovered). area_id NOT IN areas now 0. 143 listings geofence_pass=false (out of every village buffer — feed-excluded, NOT deleted; orphan report emitted by area_id: over-wallop-so20 59, wield-so24 45, steeple-langford-sp3 12, little-durnford-sp4 11, bishop-s-waltham-so32 5, woodminton-sp5 5, others ≤2). Romsey (user decision: no Romsey area created): the 50 Romsey-post-town SO51 listings all geofence in-buffer (~1mi) to WANTED neighbours — dunbridge-so51 19, michelmersh-so51 15, timsbury-so51 10, braishfield-so51 4, awbridge-so51 1, bramshaw-so43 1; 0 liked — so KEPT (deleting would drop legit wanted-village inventory). 0 deletions this step; count stays 864. 2026-06-04 (Romsey purge, owner-directed): DELETEd 20 not-liked listings in the 5 deactivated town=Romsey villages (864->844); the 1 ever-liked Dunbridge home preserved (area_id stays dunbridge-so51, shown via the liked view). The 29 Romsey-post-town listings on the KEPT Winchester-towned villages (michelmersh 15 / timsbury 10 / braishfield 4) retained as legitimate wanted-village inventory."
+    "_note": "Fetcher-written live content — NOT git-synced, never mirrored by Claude; maintained by the fetch/purge/backfill tools."
   }
 }

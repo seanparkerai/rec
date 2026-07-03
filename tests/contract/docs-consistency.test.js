@@ -75,7 +75,7 @@ export async function register({ test, assert, assertEqual }) {
   // ── 3. Tracked-table claims agree with the snapshot ───────────────────────
   test('docs-consistency: every "N tracked" literal equals the snapshot-derived count', () => {
     const snapshot = JSON.parse(read('data/snapshots/sync-state.json'));
-    const tracked = Object.keys(snapshot).filter((t) => t !== 'listings');
+    const tracked = Object.keys(snapshot).filter((t) => t !== 'listings' && !t.startsWith('_'));
     for (const doc of ['CLAUDE.md', 'docs/SUPABASE_SYNC.md']) {
       const src = read(doc);
       for (const m of src.matchAll(/(\d+)\s+(?:of the \d+\s+)?(?:are\s+)?["“*]*tracked/gi)) {
@@ -87,7 +87,7 @@ export async function register({ test, assert, assertEqual }) {
 
   test('docs-consistency: SUPABASE_SYNC.md §0 names every tracked table', () => {
     const snapshot = JSON.parse(read('data/snapshots/sync-state.json'));
-    const tracked = Object.keys(snapshot).filter((t) => t !== 'listings');
+    const tracked = Object.keys(snapshot).filter((t) => t !== 'listings' && !t.startsWith('_'));
     const src = read('docs/SUPABASE_SYNC.md');
     const missing = tracked.filter((t) => !src.includes(`\`${t}\``));
     assert(missing.length === 0,
