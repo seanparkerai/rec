@@ -1,3 +1,4 @@
+-- REFERENCE ONLY — applied to the live project as migration listing_reactions_multi_reason (20260531115047); do not re-run.
 -- schema-multi-reason.sql — DDL for v3 L3 multi-reason feedback.
 -- Fully idempotent — safe to re-run on an existing project.
 -- DO NOT run from a page; apply via the Supabase MCP connector:

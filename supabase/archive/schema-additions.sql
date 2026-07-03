@@ -1,3 +1,4 @@
+-- REFERENCE ONLY — applied to the live project as migration phase5_expanded_data_model (20260526); do not re-run.
 -- schema-additions.sql — idempotent DDL for expanded data model (Phase 5).
 -- DO NOT run from Claude Code directly.
 -- Apply via the companion Supabase prompt using the MCP connector:

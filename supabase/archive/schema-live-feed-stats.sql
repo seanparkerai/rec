@@ -1,3 +1,4 @@
+-- REFERENCE ONLY — applied to the live project 2026-06-22 via MCP execute_sql (apply_migration was approval-gated that session, so this one is OUTSIDE the migration history — verified present + rejecting non-admin callers); do not re-run.
 -- schema-live-feed-stats.sql — the /live-feed admin kiosk DB surface.
 -- Migration intent name: live_feed_stats_admin_rpc (LIVE_FEED_PLAN §2) + the
 -- household_review_stats derived cache (added 2026-06-22 for the "to review" hero).

@@ -1,6 +1,8 @@
--- IMPORTANT: Fully idempotent — safe to re-run on an existing project.
--- rec — Supabase database schema
--- Run in Supabase → SQL Editor → New query → paste → Run.
+-- REFERENCE ONLY — the live schema truth is the MCP migration history (see
+-- supabase/README.md); never run this against the live project (CLAUDE.md §18.5:
+-- all DDL via mcp__supabase__apply_migration, never the dashboard).
+-- rec — Supabase base database schema (original tables), kept as readable
+-- reference and for bootstrapping a hypothetical fresh project. Idempotent.
 
 BEGIN;
 

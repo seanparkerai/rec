@@ -1,3 +1,4 @@
+-- REFERENCE ONLY — applied to the live project as migration listings_l1 (20260530214201); do not re-run.
 -- schema-listings.sql — DDL for the v3 "Live Listings" feature (Phase L1).
 -- Fully idempotent — safe to re-run on an existing project.
 -- DO NOT run from a page; apply via the Supabase MCP connector:

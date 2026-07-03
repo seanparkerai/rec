@@ -1,3 +1,4 @@
+-- REFERENCE ONLY — applied to the live project as migration household_feed_rpc (20260701232138); do not re-run.
 -- schema-household-feed.sql — the ONE per-household visibility predicate
 -- (flagship step 2.12; plan/04-program.md §3 collapse #4).
 -- Migration intent name: household_feed_rpc.
