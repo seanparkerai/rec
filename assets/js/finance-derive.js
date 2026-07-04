@@ -9,6 +9,8 @@
 // for cross-resource savings totals); receive the enriched object that all
 // consumer code expects.
 
+import { trailingMonthlyAverage } from './savings-average.js';
+
 const num = (v) => {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
@@ -135,13 +137,20 @@ export function deriveFinances(raw, opts = {}) {
     ? round2(savingsGap / monthlyContribution)
     : 0;
 
-  // Prefer pre-computed net average from investments_history (excludes market gains).
-  // Falls back to portfolio÷months estimate only when history is absent (fresh install).
+  // Monthly savings-rate average, in priority order:
+  //   1. LIVE from investments_history (opts.history) — the real reflection; moves
+  //      automatically as months are added, no stored snapshot to go stale.
+  //   2. Pre-computed snapshot (raw.savings.monthlyAverage) — offline/no-history fallback.
+  //   3. portfolio÷months estimate — fresh install with neither.
+  const liveAvg = opts.history ? trailingMonthlyAverage(opts.history) : null;
   const preComputedNet   = num(raw.savings?.monthlyAverage?.net);
   const preComputedGross = num(raw.savings?.monthlyAverage?.gross);
   let avgMonthlyDepositEstimate = null;
   let avgMonthlyDepositGross    = null;
-  if (preComputedNet > 0) {
+  if (liveAvg && liveAvg.net > 0) {
+    avgMonthlyDepositEstimate = liveAvg.net;
+    avgMonthlyDepositGross    = liveAvg.gross || null;
+  } else if (preComputedNet > 0) {
     avgMonthlyDepositEstimate = preComputedNet;
     avgMonthlyDepositGross    = preComputedGross || null;
   } else {

@@ -9,7 +9,7 @@
 //
 // Thin glue over the guard-railed storage layer (§16) + finance-derive (§16-exempt);
 // it adds no new math of its own.
-import { getFinances, getInvestments } from './storage.js';
+import { getFinances, getInvestments, getInvestmentsHistory } from './storage.js';
 import { deriveFinances } from './finance-derive.js';
 
 /**
@@ -23,16 +23,21 @@ export async function getDerivedFinances(opts = {}) {
   const onUpdate = typeof opts.onUpdate === 'function' ? opts.onUpdate : null;
   let lastFin = null;
   let lastInv = null;
+  let lastHist = null;
   const emit = () => {
     if (!onUpdate || !lastFin) return;
-    onUpdate(deriveFinances(lastFin, { investments: lastInv }));
+    onUpdate(deriveFinances(lastFin, { investments: lastInv, history: lastHist }));
   };
-  const [finances, investments] = await Promise.all([
+  // History feeds the LIVE savings-rate average (savings-average.js); it is
+  // read-only and rarely changes mid-session, so it is not revalidated.
+  const [finances, investments, history] = await Promise.all([
     getFinances(onUpdate ? { onUpdate: (f) => { lastFin = f; emit(); } } : {}),
     getInvestments(onUpdate ? { onUpdate: (i) => { lastInv = i; emit(); } } : {}),
+    getInvestmentsHistory().catch(() => null),
   ]);
   lastFin = finances;
   lastInv = investments;
+  lastHist = history;
   if (!finances) return null;
-  return deriveFinances(finances, { investments });
+  return deriveFinances(finances, { investments, history });
 }

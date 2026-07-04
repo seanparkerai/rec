@@ -1,6 +1,6 @@
 // page-finances.js — finances page coordinator.
 // All rendering is delegated to assets/js/finances/section-*.js modules.
-import { getFinances, getCriteria, getInvestments } from './storage.js';
+import { getFinances, getCriteria, getInvestments, getInvestmentsHistory } from './storage.js';
 import { deriveFinances } from './finance-derive.js';
 import { mountSavingsEditor } from './savings-editor.js';
 
@@ -24,6 +24,7 @@ import {
 let finData = null;
 let criData = null;
 let rawInvestments = null;
+let rawHistory = null;
 
 function renderEverything() {
   // Verdict-led lede (3.8a) — answers the page's question before the topics.
@@ -88,13 +89,15 @@ async function init() {
     // fresh values on the next visit. Revisit only if mid-session portal edits
     // become a real workflow.
     try { rawInvestments = await getInvestments(); } catch { rawInvestments = null; }
+    // History drives the LIVE savings-rate average (deriveFinances → savings-average.js).
+    try { rawHistory = await getInvestmentsHistory(); } catch { rawHistory = null; }
     const rawFinances = await getFinances({
       onUpdate: (fresh) => {
-        finData = deriveFinances(fresh, { investments: rawInvestments });
+        finData = deriveFinances(fresh, { investments: rawInvestments, history: rawHistory });
         renderEverything();
       },
     });
-    finData = deriveFinances(rawFinances, { investments: rawInvestments });
+    finData = deriveFinances(rawFinances, { investments: rawInvestments, history: rawHistory });
     try { criData = await getCriteria(); } catch (e) { console.error('criteria fetch failed', e); criData = null; }
     renderEverything();
     initTopicNav();
@@ -104,8 +107,9 @@ async function init() {
       openerId: 'edit-savings-btn',
       onSaved: async () => {
         try { rawInvestments = await getInvestments(); } catch { /* keep prior */ }
+        try { rawHistory = await getInvestmentsHistory(); } catch { /* keep prior */ }
         const rawFin = await getFinances();
-        finData = deriveFinances(rawFin, { investments: rawInvestments });
+        finData = deriveFinances(rawFin, { investments: rawInvestments, history: rawHistory });
         renderEverything();
       },
     });

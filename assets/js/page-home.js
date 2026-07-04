@@ -1,6 +1,6 @@
 // page-home.js — dashboard coordinator.
 // All tile rendering is delegated to assets/js/dashboard/tile-*.js modules.
-import { getFinances, getProfile, getCriteria, getInvestments, getGoals } from './storage.js';
+import { getFinances, getProfile, getCriteria, getInvestments, getInvestmentsHistory, getGoals } from './storage.js';
 import { normalizeProfile } from './profile-schema.js';
 import { deriveFinances } from './finance-derive.js';
 import { byId } from './dom.js';
@@ -42,9 +42,11 @@ function clearStuckLoading() {
 
 async function init() {
   markLoading();
-  let rawFinances = null, rawInvestments = null, profile = null, criteria = null, goals = null;
+  let rawFinances = null, rawInvestments = null, rawHistory = null, profile = null, criteria = null, goals = null;
 
   try { rawInvestments = await getInvestments(); } catch { rawInvestments = null; }
+  // History drives the LIVE savings-rate average (deriveFinances → savings-average.js).
+  try { rawHistory = await getInvestmentsHistory(); } catch { rawHistory = null; }
 
   const renderAll = (financesData) => {
     renderLede(profile, criteria, financesData, goals);
@@ -71,14 +73,14 @@ async function init() {
 
   try {
     rawFinances = await getFinances({
-      onUpdate: (fresh) => renderAll(deriveFinances(fresh, { investments: rawInvestments })),
+      onUpdate: (fresh) => renderAll(deriveFinances(fresh, { investments: rawInvestments, history: rawHistory })),
     });
   } catch (e) { console.error('finances error', e); }
   try { profile = normalizeProfile(await getProfile()); } catch (e) { console.error('profile error', e); }
   try { criteria = await getCriteria(); } catch (e) { console.error('criteria error', e); }
   try { goals = await getGoals(); } catch (e) { console.error('goals error', e); }
 
-  const financesData = deriveFinances(rawFinances, { investments: rawInvestments });
+  const financesData = deriveFinances(rawFinances, { investments: rawInvestments, history: rawHistory });
   renderAll(financesData);
 
   // "Listings to review" total (self-contained; never blocks the bento).

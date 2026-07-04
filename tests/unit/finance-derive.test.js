@@ -152,6 +152,26 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(d.savings.avgMonthlyDepositGross, 2600);
   });
 
+  await test('derive: LIVE history average outranks the stored monthlyAverage snapshot', () => {
+    // Stored snapshot says 2100/2600; live history says 3000 net — history wins.
+    const withHistory = { ...RAW, savings: { ...RAW.savings, monthlyAverage: { net: 2100, gross: 2600 } } };
+    const inv = { trading212ISA: { currentPortfolioValue: 24000, earmarkPct: 100 } };
+    const hist = { monthlySummary: [
+      { month: '2020-01', deposits: 3000, withdrawals: 0, net: 3000 },
+      { month: '2020-02', deposits: 3000, withdrawals: 0, net: 3000 },
+    ] };
+    const d = deriveFinances(withHistory, { investments: inv, history: hist });
+    assertEqual(d.savings.avgMonthlyDepositEstimate, 3000, 'live history overrides the snapshot');
+    assertEqual(d.savings.avgMonthlyDepositGross, 3000);
+  });
+
+  await test('derive: falls back to the stored snapshot when history has no rows', () => {
+    const withHistory = { ...RAW, savings: { ...RAW.savings, monthlyAverage: { net: 2100, gross: 2600 } } };
+    const inv = { trading212ISA: { currentPortfolioValue: 24000, earmarkPct: 100 } };
+    const d = deriveFinances(withHistory, { investments: inv, history: { monthlySummary: [] } });
+    assertEqual(d.savings.avgMonthlyDepositEstimate, 2100, 'empty history → snapshot fallback');
+  });
+
   await test('derive: avgMonthlyDepositEstimate falls back to portfolio÷months when monthlyAverage absent', () => {
     // Build an investments fixture opened exactly 12 months ago.
     const opened = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
