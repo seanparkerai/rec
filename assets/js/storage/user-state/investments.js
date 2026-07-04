@@ -119,6 +119,7 @@ export async function getInvestmentsHistory() {
         // metadata and current per-ticker exposure.
         let epochs = {};
         let tickerExposure = {};
+        let summary = null;
         try {
           const { data: acct } = await sb
             .from('investments_accounts')
@@ -131,6 +132,13 @@ export async function getInvestmentsHistory() {
             for (const ep of arr) {
               if (ep?.id) epochs[ep.id] = { label: ep.label ?? ep.id, start: ep.start ?? null, end: ep.end ?? null };
             }
+          }
+          // Extend-only: surface the declared account value so analysePerformance()
+          // can attribute unrealised market growth (currentValue − cash basis).
+          // Without it every consumer saw currentValue 0 and growth clamped to £0.
+          const declared = Number(acctData?.currentPortfolioValue);
+          if (Number.isFinite(declared) && declared > 0) {
+            summary = { currentValueDeclared: declared };
           }
           const holdings = acctData?.holdings;
           if (Array.isArray(holdings)) {
@@ -154,6 +162,7 @@ export async function getInvestmentsHistory() {
           _status: 'from-supabase',
           epochs,
           tickerExposure,
+          ...(summary ? { summary } : {}),
           monthlySummary: data.map((r) => ({
             month: r.month, deposits: r.deposits, withdrawals: r.withdrawals,
             net: r.net, dividends: r.dividends, interest: r.interest,

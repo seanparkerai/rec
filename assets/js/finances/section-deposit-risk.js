@@ -4,6 +4,7 @@ import { getInvestments, getGoals } from '../storage.js';
 import { assessDepositRisk } from '../deposit-risk.js';
 import { gbp } from '../format.js';
 import { SVG_NS as SVG_NS_F } from '../svg.js';
+import { svgViewWidth } from './chart-helpers.js';
 
 export async function renderDepositRiskTile(finData) {
   const svg = document.getElementById('dr-waterfall-svg');
@@ -33,7 +34,9 @@ export async function renderDepositRiskTile(finData) {
     { label: 'If −20%', value: current * 0.8, kind: 'drop' },
   ];
 
-  const W = 500, H = 200, PAD_L = 50, PAD_R = 12, PAD_T = 18, PAD_B = 36;
+  // Rendered-width viewBox: value/label text stays legible on phones.
+  const W = svgViewWidth(svg, 500), H = 200, PAD_L = 12, PAD_R = 12, PAD_T = 18, PAD_B = 36;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const colW = (W - PAD_L - PAD_R) / steps.length;
   const maxV = Math.max(...steps.map((s) => s.value), 1);
   const ys = (v) => H - PAD_B - (v / maxV) * (H - PAD_T - PAD_B);

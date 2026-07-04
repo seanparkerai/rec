@@ -48,6 +48,22 @@ function renderEverything() {
   renderDepositRiskTile(finData);
 }
 
+/* The custom SVG charts draw at the container's rendered width (chart-helpers
+   svgViewWidth) so their text stays legible on phones; redraw them when the
+   viewport size settles. Chart.js canvases handle their own resizing. */
+function initSvgChartResize() {
+  let timer = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      renderEpochComparison();
+      renderTickerTreemap();
+      renderRealisedUnrealised();
+      if (finData) renderDepositRiskTile(finData);
+    }, 200);
+  });
+}
+
 /* Sticky topic-nav scrollspy: mark the in-view topic's chip aria-current. */
 function initTopicNav() {
   const links = Array.from(document.querySelectorAll('.finance-toc a[data-topic]'));
@@ -82,6 +98,7 @@ async function init() {
     try { criData = await getCriteria(); } catch (e) { console.error('criteria fetch failed', e); criData = null; }
     renderEverything();
     initTopicNav();
+    initSvgChartResize();
     // Editing cash savings / ISA value re-derives the deposit total everywhere.
     mountSavingsEditor({
       openerId: 'edit-savings-btn',

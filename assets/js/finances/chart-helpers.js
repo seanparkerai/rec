@@ -19,11 +19,26 @@ export function chartOpts({ yLabel, stacked = false } = {}) {
     animation: prefersReducedMotion() ? false : { duration: 300 },
     plugins: {
       legend: { labels: { color: ink, font: { size: 11 } } },
-      tooltip: { mode: 'index', intersect: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        // Show the human month ("Jan 2026") in the tooltip title, not "2026-01".
+        callbacks: { title: (items) => items.length ? fmtMonthLabel(items[0].label) : '' },
+      },
     },
     interaction: { mode: 'nearest', axis: 'x', intersect: false },
     scales: {
-      x: { stacked, ticks: { color: ink, font: { size: 10 } }, grid: { color: grid } },
+      // autoSkip + maxTicksLimit keep the axis readable as months accumulate
+      // over time (the series grows with every new deposit); maxRotation:0 stops
+      // labels tilting to vertical on a phone. Labels render as "Jan 2026".
+      x: {
+        stacked,
+        ticks: {
+          color: ink, font: { size: 10 },
+          autoSkip: true, maxTicksLimit: 8, maxRotation: 0, minRotation: 0,
+          callback(value) { return fmtMonthLabel(this.getLabelForValue(value)); },
+        },
+        grid: { color: grid },
+      },
       y: { stacked, ticks: { color: ink, font: { size: 10 }, callback: (v) => '£' + Math.round(v).toLocaleString() }, grid: { color: grid }, title: { display: !!yLabel, text: yLabel, color: ink, font: { size: 10 } } },
     },
   };
@@ -33,8 +48,21 @@ export function setStub(sectionId, captionId) {
   const card = document.getElementById(sectionId);
   if (!card) return;
   const wrap = card.querySelector('.chart-wrap') || card.querySelector('svg');
-  if (wrap && wrap.tagName === 'DIV') wrap.innerHTML = '<p class="muted">ISA history not yet imported — run <code>node tools/import-trading212.mjs</code> to populate this chart.</p>';
+  if (wrap && wrap.tagName === 'DIV') wrap.innerHTML = '<p class="muted">No investment history on file yet — this chart fills in automatically once monthly history rows exist in Supabase.</p>';
   if (wrap && wrap.tagName === 'svg') wrap.replaceChildren();
   const cap = document.getElementById(captionId);
-  if (cap) cap.textContent = 'Run the Trading 212 importer to see this chart.';
+  if (cap) cap.textContent = 'Waiting for investment history.';
+}
+
+/**
+ * Width the custom SVG charts should draw at: the element's rendered width in
+ * CSS px (clamped 300–900), so text set in viewBox units displays ~1:1 on every
+ * device instead of shrinking on phones. Falls back to the chart's designed
+ * width when the SVG has no layout yet (e.g. jsdom).
+ */
+export function svgViewWidth(svg, fallback) {
+  const w = svg?.clientWidth;
+  return Number.isFinite(w) && w > 0
+    ? Math.min(900, Math.max(300, Math.round(w)))
+    : fallback;
 }

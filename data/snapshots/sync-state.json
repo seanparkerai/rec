@@ -9,8 +9,8 @@
     "_note": "Owner search band budget.min £300k / max £425k — drives the fetcher's union price floor."
   },
   "finances": {
-    "last_synced_at": "2026-06-16T14:16:21Z",
-    "_note": "Canonical deposit target lives in goal.targetDeposit (2026-06-16 data-contract repair)."
+    "last_synced_at": "2026-07-04T09:27:04Z",
+    "_note": "Canonical deposit target lives in goal.targetDeposit (2026-06-16 data-contract repair); savings.monthlyAverage recomputed 2026-07-04 for the Jul-2025–Jun-2026 window."
   },
   "shortlist": {
     "last_synced_at": "2026-06-28T10:37:12Z"
@@ -51,11 +51,13 @@
   },
   "investments_accounts": {
     "count": 1,
-    "last_synced_at": "2026-05-28T18:00:45Z"
+    "last_synced_at": "2026-07-04T09:26:48Z",
+    "_note": "Owner T212 S&S ISA updated from the 2026-07-04 activity statement — account value £34,472.19, per-holding values verified."
   },
   "investments_history": {
-    "count": 13,
-    "last_synced_at": "2026-05-28T20:00:00Z"
+    "count": 15,
+    "last_synced_at": "2026-07-04T09:26:56Z",
+    "_note": "Owner rows through 2026-07 (2026-06 is a statement-derived reconciliation month; 2026-07 partial)."
   },
   "debts_credit_cards": {
     "count": 1,

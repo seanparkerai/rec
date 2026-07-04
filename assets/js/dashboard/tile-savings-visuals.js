@@ -30,7 +30,7 @@ export async function renderSavingsSpark(financesData) {
 
   if (series.isStub || series.points.length === 0) {
     svg.replaceChildren();
-    if (caption) caption.textContent = 'Run the Trading 212 importer to see your savings trajectory.';
+    if (caption) caption.textContent = 'Your savings trajectory appears automatically once investment history is on file.';
     return;
   }
 

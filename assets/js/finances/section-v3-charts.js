@@ -6,7 +6,7 @@ import { buildSavingsSeries } from '../savings-series.js';
 import { gbp } from '../format.js';
 import { cssVar } from '../css-vars.js';
 import { SVG_NS as SVG_NS_F } from '../svg.js';
-import { chartOpts, fmtMonthLabel, setStub } from './chart-helpers.js';
+import { chartOpts, fmtMonthLabel, setStub, svgViewWidth } from './chart-helpers.js';
 
 const _v3Charts = {};
 
@@ -67,15 +67,21 @@ export async function renderMonthlyDeposits(finData) {
     options: chartOpts({ yLabel: '£ per month' }),
   });
 
+  // Average over COMPLETE months only — the current month is still filling up
+  // and would drag the average down every time the page is viewed mid-month.
+  const now = new Date();
+  const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const completed = series.filter((p) => p.month < thisMonth);
+  const avgSrc = completed.length > 0 ? completed : series;
   const goalMo = Number(finData?.savings?.monthlyContribution ?? 0);
-  const avg = data.reduce((s, v) => s + v, 0) / data.length;
+  const avg = avgSrc.reduce((s, p) => s + p.delta, 0) / avgSrc.length;
   if (cap) {
     if (goalMo > 0) {
       const delta = avg - goalMo;
       const dir = delta >= 0 ? 'above' : 'below';
-      cap.textContent = `Avg ${gbp(Math.round(avg))}/mo across ${data.length} months — ${gbp(Math.abs(Math.round(delta)))} ${dir} the ${gbp(goalMo)} goal.`;
+      cap.textContent = `Avg ${gbp(Math.round(avg))}/mo across ${avgSrc.length} complete months — ${gbp(Math.abs(Math.round(delta)))} ${dir} the ${gbp(goalMo)} goal.`;
     } else {
-      cap.textContent = `Avg ${gbp(Math.round(avg))}/mo across ${data.length} months.`;
+      cap.textContent = `Avg ${gbp(Math.round(avg))}/mo across ${avgSrc.length} complete months.`;
     }
   }
 }
@@ -166,37 +172,44 @@ export async function renderEpochComparison() {
 
   if (epochs.length === 0) {
     svg.replaceChildren();
-    if (cap) cap.textContent = 'Run the Trading 212 importer to compare strategy epochs.';
+    if (cap) cap.textContent = 'Strategy epochs appear automatically once investment history is on file.';
     return;
   }
 
-  const W = 600, H = 180, PAD_L = 140, PAD_R = 40, PAD_T = 20, PAD_B = 20;
-  const rowH = (H - PAD_T - PAD_B) / epochs.length;
+  // Mobile-first rows: full-width label line, bar + right-anchored value below.
+  // Drawn at the container's rendered width (svgViewWidth) so 12px text stays
+  // 12px on a phone — the old fixed-600 viewBox halved it at 320px and clipped
+  // long labels in the 140-unit left gutter.
+  const W = svgViewWidth(svg, 600);
+  const PAD_X = 8, PAD_T = 8, ROW_H = 48, BAR_H = 14, VALUE_W = 165;
+  const H = PAD_T + epochs.length * ROW_H + 4;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const maxContrib = Math.max(...epochs.map((e) => e.contributedDuringEpoch), 1);
+  const barMax = W - 2 * PAD_X - VALUE_W;
 
   svg.replaceChildren();
   epochs.forEach((ep, i) => {
-    const y = PAD_T + i * rowH + 4;
+    const y = PAD_T + i * ROW_H;
     const labelEl = document.createElementNS(SVG_NS_F, 'text');
-    labelEl.setAttribute('x', String(PAD_L - 8));
-    labelEl.setAttribute('y', String(y + rowH / 2 + 4));
-    labelEl.setAttribute('text-anchor', 'end');
+    labelEl.setAttribute('x', String(PAD_X));
+    labelEl.setAttribute('y', String(y + 13));
     labelEl.setAttribute('class', 'epoch-comparison__label');
     labelEl.textContent = ep.label;
     svg.appendChild(labelEl);
 
-    const barW = ((ep.contributedDuringEpoch / maxContrib) * (W - PAD_L - PAD_R - 80));
+    const barW = Math.max(2, (ep.contributedDuringEpoch / maxContrib) * barMax);
     const bar = document.createElementNS(SVG_NS_F, 'rect');
-    bar.setAttribute('x', String(PAD_L));
-    bar.setAttribute('y', String(y + 8));
-    bar.setAttribute('width', String(Math.max(2, barW)));
-    bar.setAttribute('height', String(rowH - 24));
+    bar.setAttribute('x', String(PAD_X));
+    bar.setAttribute('y', String(y + 22));
+    bar.setAttribute('width', String(barW));
+    bar.setAttribute('height', String(BAR_H));
     bar.setAttribute('class', 'epoch-comparison__bar');
     svg.appendChild(bar);
 
     const val = document.createElementNS(SVG_NS_F, 'text');
-    val.setAttribute('x', String(PAD_L + barW + 6));
-    val.setAttribute('y', String(y + rowH / 2 + 4));
+    val.setAttribute('x', String(W - PAD_X));
+    val.setAttribute('y', String(y + 22 + BAR_H / 2 + 4));
+    val.setAttribute('text-anchor', 'end');
     val.setAttribute('class', 'epoch-comparison__value');
     val.textContent = `${gbp(Math.round(ep.contributedDuringEpoch))}${ep.returnPct != null ? ` · ${ep.returnPct > 0 ? '+' : ''}${ep.returnPct}%/yr est` : ''}`;
     svg.appendChild(val);
@@ -228,7 +241,11 @@ export async function renderTickerTreemap() {
   const total = entries.reduce((s, e) => s + e.value, 0);
   if (total === 0) { svg.replaceChildren(); if (cap) cap.textContent = '—'; return; }
 
-  const W = 600, H = 360;
+  // Draw at rendered width so tile labels stay legible on phones; height
+  // tracks width but stays inside the CSS max-height (420px) to avoid
+  // letterboxing on wide screens.
+  const W = svgViewWidth(svg, 600), H = Math.round(Math.min(420, Math.max(220, W * 0.6)));
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.replaceChildren();
 
   function drawRect(item, x, y, w, h) {
@@ -294,7 +311,7 @@ export async function renderRealisedUnrealised() {
 
   if (perf.isStub) {
     svg.replaceChildren();
-    if (cap) cap.textContent = 'Run the Trading 212 importer to compare realised vs unrealised P&L.';
+    if (cap) cap.textContent = 'Realised vs unrealised P&L appears automatically once investment history is on file.';
     return;
   }
 
@@ -302,7 +319,8 @@ export async function renderRealisedUnrealised() {
   const unrealised = Math.max(0, perf.unrealisedGain || 0);
   const max = Math.max(Math.abs(realised), Math.abs(unrealised), 1);
 
-  const W = 400, H = 120, PAD_L = 120, PAD_R = 12, ROW_H = 36;
+  const W = svgViewWidth(svg, 400), H = 120, PAD_L = 100, PAD_R = 12, ROW_H = 36;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const barW = (v) => Math.max(2, (Math.abs(v) / max) * (W - PAD_L - PAD_R - 60));
 
   svg.replaceChildren();
