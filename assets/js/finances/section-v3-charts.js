@@ -123,8 +123,13 @@ export async function renderISAStackedArea(finData) {
     contrib.push(cumContrib); divs.push(cumDiv); ints.push(cumInt);
   });
   const perf = analysePerformance(history);
-  const growthEnd = Math.max(0, perf.unrealisedGain);
-  const growth = labels.map((_, i) => Math.round((growthEnd * (i + 1) / labels.length)));
+  // Investment gains = everything the balance is worth beyond contributions,
+  // dividends and interest — i.e. realised + unrealised P&L. Deriving it as
+  // (currentValue − netContributed − dividends − interest) guarantees the stack
+  // sums to the REAL portfolio value; using unrealised alone silently dropped
+  // realised gains and understated the "balance" caption by that amount.
+  const gainsEnd = Math.max(0, perf.currentValue - perf.netContributed - perf.dividendsReceived - perf.interestEarned);
+  const growth = labels.map((_, i) => Math.round((gainsEnd * (i + 1) / labels.length)));
 
   if (_v3Charts.isaStacked) _v3Charts.isaStacked.destroy();
   _v3Charts.isaStacked = new Chart(canvas, {
@@ -135,16 +140,16 @@ export async function renderISAStackedArea(finData) {
         { label: 'Contributed', data: contrib, borderColor: cssVar('--accent'),      backgroundColor: cssVar('--accent-soft'),    fill: true, tension: 0.1, pointRadius: 0 },
         { label: 'Dividends',   data: divs,    borderColor: cssVar('--accent-ink'),  backgroundColor: cssVar('--hairline'),        fill: true, tension: 0.1, pointRadius: 0 },
         { label: 'Interest',    data: ints,    borderColor: cssVar('--ink-muted'),   backgroundColor: cssVar('--hairline'),        fill: true, tension: 0.1, pointRadius: 0 },
-        { label: 'Market growth', data: growth, borderColor: cssVar('--ink-subtle'), backgroundColor: cssVar('--hairline-strong'), fill: true, tension: 0.1, pointRadius: 0 },
+        { label: 'Investment gains', data: growth, borderColor: cssVar('--ink-subtle'), backgroundColor: cssVar('--hairline-strong'), fill: true, tension: 0.1, pointRadius: 0 },
       ],
     },
     options: chartOpts({ yLabel: '£', stacked: true }),
   });
 
-  const total = perf.netContributed + perf.dividendsReceived + perf.interestEarned + growthEnd;
+  const total = perf.netContributed + perf.dividendsReceived + perf.interestEarned + gainsEnd;
   const pct = (n) => total > 0 ? Math.round((n / total) * 100) : 0;
   const cap = document.getElementById('isasa-caption');
-  if (cap) cap.textContent = `Of ${gbp(Math.round(total))} balance: ${pct(perf.netContributed)}% contributed, ${pct(perf.dividendsReceived + perf.interestEarned)}% dividends + interest, ${pct(growthEnd)}% market growth.`;
+  if (cap) cap.textContent = `Of ${gbp(Math.round(total))} balance: ${pct(perf.netContributed)}% contributed, ${pct(perf.dividendsReceived + perf.interestEarned)}% dividends + interest, ${pct(gainsEnd)}% investment gains.`;
 }
 
 export async function renderDividendsInterest() {
