@@ -12,7 +12,11 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # Do NOT cancel in-progress deploys. Cancelling the workflow does not cancel the
+  # Pages backend publish it already handed off; the next deploy then collides with
+  # it and the backend returns "Deployment failed, try again later." Queue instead so
+  # each production deploy runs to completion — the GitHub-recommended Pages setting.
+  cancel-in-progress: false
 
 jobs:
   test:
