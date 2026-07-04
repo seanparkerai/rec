@@ -29,7 +29,7 @@ export async function renderDepositRiskTile() {
     .filter((s) => [10, 20].includes(s.pctDrop))
     .map((s) => `<li class="deposit-risk-row">
       If markets drop ${s.pctDrop}%: <strong class="num">${gbp(s.newValue)}</strong>
-      <span class="muted"> — that's ${gbp(s.gapImpact)} off your deposit</span>
+      <span class="muted"> — that's ${gbp(Math.abs(s.gapImpact))} off your deposit</span>
     </li>`)
     .join('');
 

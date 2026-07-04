@@ -89,7 +89,7 @@ export async function renderDepositRiskTile(finData) {
   if (detailsBody) {
     detailsBody.innerHTML = risk.scenarios
       .filter((s) => [10, 20].includes(s.pctDrop))
-      .map((s) => `<div class="dr-waterfall-row"><span>Markets drop ${s.pctDrop}%</span><span class="num">${gbp(s.newValue)}</span><span class="num">${gbp(s.gapImpact)} deposit impact</span></div>`)
+      .map((s) => `<div class="dr-waterfall-row"><span>Markets drop ${s.pctDrop}%</span><span class="num">${gbp(s.newValue)}</span><span class="num">${gbp(Math.abs(s.gapImpact))} off deposit</span></div>`)
       .join('');
   }
 }
