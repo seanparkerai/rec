@@ -42,8 +42,8 @@
     "last_synced_at": "2026-05-26T10:51:53.837Z"
   },
   "goals": {
-    "last_synced_at": "2026-05-28T21:51:27Z",
-    "_note": "Readiness checklist blob retired — source is the readiness_checklist table."
+    "last_synced_at": "2026-07-04T10:43:43Z",
+    "_note": "Readiness checklist blob retired — source is the readiness_checklist table. deposit.currentSavings/gapToHoped recalibrated 2026-07-04 to the live £34,472.19 deposit-eligible total."
   },
   "readiness_checklist": {
     "count": 13,

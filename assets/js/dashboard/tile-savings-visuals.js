@@ -2,7 +2,7 @@
 // trajectory, scenarios fan (save rates ±£500/mo, +£5k windfall), networth donut
 // (ISA vs cash vs debt), and withdrawal readiness seasoning timeline. DOM-rendering
 // tile for the home dashboard.
-import { getInvestments, getInvestmentsHistory, getGoals } from '../storage.js';
+import { getInvestments, getInvestmentsHistory, getGoals, getCreditCardDebt } from '../storage.js';
 import { lisaUsableWindow } from '../finances.js';
 import { buildSavingsSeries } from '../savings-series.js';
 import { getSavingsVelocity } from '../savings-velocity.js';
@@ -156,10 +156,17 @@ export async function renderNetworthDonut(financesData) {
   const caption = document.getElementById('tnw-caption');
   if (!svg || !financesData) return;
 
-  const isaValue = Number(financesData?.savings?.totalSavings ?? 0)
-    - Number(financesData?.savings?.cashSavings ?? 0);
-  const cashValue = Number(financesData?.savings?.cashSavings ?? 0);
-  const cardDebt = Number(financesData?.debts?.creditCardsBalance ?? 0);
+  // Cash held OUTSIDE investments is finances.savings.current (deriveFinances
+  // folds it into totalSavings). The earmarked-ISA portion is the remainder.
+  const cashValue = Number(financesData?.savings?.current
+    ?? financesData?.savings?.cashSavings ?? 0);
+  const isaValue = Math.max(0, Number(financesData?.savings?.totalSavings ?? 0) - cashValue);
+
+  // Card debt is a real household liability (debts_credit_cards) that drags the
+  // effective deposit — it is not on the finances blob, so read it live.
+  let cardDebt = 0;
+  try { cardDebt = Number((await getCreditCardDebt())?.totalBalance) || 0; }
+  catch { cardDebt = 0; }
 
   const total = Math.max(1, isaValue + cashValue);
   const effective = Math.max(0, isaValue + cashValue - cardDebt);

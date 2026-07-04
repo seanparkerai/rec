@@ -6,4 +6,5 @@
 export * from './user-state/singletons.js';
 export * from './user-state/readiness.js';
 export * from './user-state/investments.js';
+export * from './user-state/debts.js';
 export * from './user-state/shortlist.js';

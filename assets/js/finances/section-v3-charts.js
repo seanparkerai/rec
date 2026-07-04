@@ -27,13 +27,30 @@ export async function renderSavingsOverTime(finData) {
   const actual = series.points.map((p) => p.cumulative);
   const targetVals = labels.map(() => goal);
 
+  // Latest known pot value = deposit-eligible savings (cash + earmarked ISA),
+  // which includes market growth the contributions line can't show. Anchor it as
+  // a single emphasised point on the final month so the chart reconciles to what
+  // the deposit actually is today, not just what was paid in.
+  const lastContrib = series.points[series.points.length - 1].cumulative;
+  const valueToday = Number(finData?.savings?.totalSavings ?? 0);
+  const growth = Math.round(valueToday - lastContrib);
+  const showValueToday = valueToday > 0 && Math.abs(growth) >= 1;
+  const valuePoint = labels.map((_, i) => (i === labels.length - 1 ? Math.round(valueToday) : null));
+
   if (_v3Charts.savingsOverTime) _v3Charts.savingsOverTime.destroy();
   _v3Charts.savingsOverTime = new Chart(canvas, {
     type: 'line',
     data: {
       labels,
       datasets: [
-        { label: 'Actual cumulative', data: actual, borderColor: cssVar('--accent'), backgroundColor: cssVar('--accent-soft'), fill: true, tension: 0.15, pointRadius: 2 },
+        { label: 'Contributed', data: actual, borderColor: cssVar('--accent'), backgroundColor: cssVar('--accent-soft'), fill: true, tension: 0.15, pointRadius: 2 },
+        ...(showValueToday ? [{
+          label: 'Value today (incl. growth)',
+          data: valuePoint,
+          borderColor: cssVar('--accent-ink'),
+          backgroundColor: cssVar('--accent-ink'),
+          pointRadius: 5, pointHoverRadius: 6, showLine: false, spanGaps: false,
+        }] : []),
         { label: 'Target', data: targetVals, borderColor: cssVar('--ink-muted'), borderDash: [4, 4], pointRadius: 0, fill: false },
       ],
     },
@@ -42,9 +59,11 @@ export async function renderSavingsOverTime(finData) {
 
   if (cap) {
     const eta = series.targetLine.etaMonth;
-    const last = series.points[series.points.length - 1];
-    if (eta) cap.textContent = `At current pace you hit ${gbp(goal)} in ${fmtMonthLabel(eta)} — ${gbp(Math.round(last.cumulative))} saved so far.`;
-    else cap.textContent = `${gbp(Math.round(last.cumulative))} saved across ${series.points.length} months.`;
+    const potBit = showValueToday
+      ? ` Pot is worth ${gbp(Math.round(valueToday))} today (${growth >= 0 ? '+' : '−'}${gbp(Math.abs(growth))} market ${growth >= 0 ? 'growth' : 'movement'}).`
+      : '';
+    if (eta) cap.textContent = `${gbp(Math.round(lastContrib))} contributed; at current pace you hit ${gbp(goal)} in ${fmtMonthLabel(eta)}.${potBit}`;
+    else cap.textContent = `${gbp(Math.round(lastContrib))} contributed across ${series.points.length} months.${potBit}`;
   }
 }
 
