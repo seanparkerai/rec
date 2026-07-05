@@ -4,12 +4,12 @@ import { fromConflict, fromEngineCard, combineSuggestions } from '../../assets/j
 export async function register({ test, assert, assertEqual }) {
   const areasMeta = { 'wherwell-sp11': { name: 'Wherwell', geofenceRadiusMi: 5 } };
 
-  test('model: tighten-buffer maps to a setAreaRadius apply with the proposed miles', () => {
+  test('model: tighten-buffer maps to a BOTH-levers apply with the proposed miles (2026-07-05)', () => {
     const n = fromConflict({ key: 'tighten:wherwell-sp11', kind: 'tighten-buffer', message: 'm', suggestion: 's', threshold: 5, proposed: 2, areaId: 'wherwell-sp11' }, { areasMeta });
     assertEqual(n.source, 'live');
     assertEqual(n.dimension, 'radius');
     assertEqual(n.label, 'Wherwell');
-    assertEqual(n.apply.fn, 'setAreaRadius');
+    assertEqual(n.apply.fn, 'tightenRadiusBoth', 'instant feed filter + tuner intent in one tap');
     assertEqual(n.apply.args.areaId, 'wherwell-sp11');
     assertEqual(n.apply.args.miles, 2);
   });

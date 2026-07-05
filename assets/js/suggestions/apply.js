@@ -5,6 +5,7 @@
 import {
   setAreaRadiusOverride, raiseBudgetMax, lowerMinBeds, acceptPropertyType, excludePropertyType,
   stopSearchingArea, hideSuggestion, snoozeSuggestion, dismissSuggestion, setConflictState,
+  keepAreaRadius,
 } from '../storage.js';
 import { dismissUntil } from '../meta-observations.js';
 import { liveSuppressKey } from '../refinement/live.js';
@@ -17,6 +18,7 @@ export const DISMISS_SENTINEL = '9999-12-31T00:00:00.000Z';
 const DEFAULT_DEPS = {
   setAreaRadiusOverride, raiseBudgetMax, lowerMinBeds, acceptPropertyType, excludePropertyType,
   stopSearchingArea, hideSuggestion, snoozeSuggestion, dismissSuggestion, setConflictState,
+  keepAreaRadius,
 };
 
 /** Perform a suggestion's Apply action. Returns true on success. */
@@ -26,6 +28,15 @@ export async function applySuggestion(n, deps = DEFAULT_DEPS) {
   const ar = a.args || {};
   switch (a.fn) {
     case 'setAreaRadius': return deps.setAreaRadiusOverride(ar.areaId, ar.miles);
+    // One action, BOTH radius levers (2026-07-05): the instant household feed filter
+    // (criteria.location.areaRadiusOverrides — visible on next paint) AND the tuner
+    // intent (learned_preferences.overrides.__area_radius_override — the service-role
+    // tuner pins area_search_tuning from it, shrinking the paid Apify search disk).
+    case 'tightenRadiusBoth': {
+      const okFeed = await deps.setAreaRadiusOverride(ar.areaId, ar.miles);
+      const okIntent = await deps.keepAreaRadius({ areaId: ar.areaId, radiusMi: ar.miles });
+      return okFeed && okIntent;
+    }
     case 'stopArea':      return deps.stopSearchingArea({ value: ar.value });
     case 'raiseBudget':   return deps.raiseBudgetMax(ar.value);
     case 'lowerMinBeds':  return deps.lowerMinBeds(ar.value);

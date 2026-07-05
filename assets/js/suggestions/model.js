@@ -41,7 +41,8 @@ export function fromConflict(c, { areasMeta = {} } = {}) {
       const label = areasMeta[c.areaId]?.name || c.areaId;
       return {
         ...base, dimension: 'radius', dimensionLabel: 'Search radius', label,
-        apply: { fn: 'setAreaRadius', args: { areaId: c.areaId, miles: c.proposed } },
+        // Both levers (2026-07-05): instant feed filter + tuner intent, one tap.
+        apply: { fn: 'tightenRadiusBoth', args: { areaId: c.areaId, miles: c.proposed } },
         applyLabel: `Tighten to ~${c.proposed} mi`,
       };
     }

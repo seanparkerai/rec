@@ -20,6 +20,7 @@ export async function register({ test, assert, assertEqual }) {
       snoozeSuggestion: rec('snoozeSuggestion'),
       dismissSuggestion: rec('dismissSuggestion'),
       setConflictState: rec('setConflictState'),
+      keepAreaRadius: rec('keepAreaRadius'),
     };
   }
 
@@ -29,6 +30,26 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(deps.calls[0].name, 'setAreaRadiusOverride');
     assertEqual(deps.calls[0].args[0], 'wherwell-sp11');
     assertEqual(deps.calls[0].args[1], 2);
+  });
+
+  test('apply: tightenRadiusBoth moves BOTH radius levers (feed override + tuner intent)', async () => {
+    const deps = makeDeps();
+    const ok = await applySuggestion({ apply: { fn: 'tightenRadiusBoth', args: { areaId: 'wherwell-sp11', miles: 2 } } }, deps);
+    assertEqual(ok, true);
+    assertEqual(deps.calls.length, 2);
+    assertEqual(deps.calls[0].name, 'setAreaRadiusOverride', 'instant feed filter first');
+    assertEqual(deps.calls[0].args[0], 'wherwell-sp11');
+    assertEqual(deps.calls[0].args[1], 2);
+    assertEqual(deps.calls[1].name, 'keepAreaRadius', 'tuner intent second');
+    assertEqual(deps.calls[1].args[0].areaId, 'wherwell-sp11');
+    assertEqual(deps.calls[1].args[0].radiusMi, 2);
+  });
+
+  test('apply: tightenRadiusBoth reports failure if either lever fails', async () => {
+    const deps = makeDeps();
+    deps.keepAreaRadius = (...args) => { deps.calls.push({ name: 'keepAreaRadius', args }); return Promise.resolve(false); };
+    const ok = await applySuggestion({ apply: { fn: 'tightenRadiusBoth', args: { areaId: 'a', miles: 1 } } }, deps);
+    assertEqual(ok, false);
   });
 
   test('apply: stopArea forwards the area value', async () => {

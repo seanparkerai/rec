@@ -21,6 +21,7 @@ import {
   getRefinementPreset, setRefinementPreset, resetTraining,
   getReactionLog, getLearnedPreferences, getCriteria,
   applyRadiusSuggestion, keepAreaRadius, clearAreaRadius, getAreaRadiusTuning,
+  setAreaRadiusOverride, clearAreaRadiusOverride,
   setConflictState,
   setPropertyTypePriority, clearPropertyTypePriority,
 } from './storage.js';
@@ -140,7 +141,7 @@ function petalsHTML(petals) {
 // 'applied' → "Searching at X mi" + Reset to learned. `extra.appliedMi` carries the
 // live area_search_tuning radius for the applied lane; `extra.petals` the per-sector array.
 function radiusCardHTML(c, variant, extra = {}) {
-  const data = `data-dim="area_radius" data-value="${esc(c.value)}" data-area="${esc(c.areaId)}" data-current="${c.currentMi ?? ''}" data-label="${esc(c.label)}"`;
+  const data = `data-dim="area_radius" data-value="${esc(c.value)}" data-area="${esc(c.areaId)}" data-current="${c.currentMi ?? ''}" data-recommended="${c.recommendedMi ?? ''}" data-label="${esc(c.label)}"`;
   const arrow = c.direction === 'widen' ? '↔' : '→';
   let actions = '';
   if (variant === 'radius') {
@@ -352,9 +353,27 @@ function wireActions(refresh) {
       undismiss: { fn: () => undismissSuggestion({ dimension, value }), msg: `${label} back in your suggestions.` },
       unsnooze: { fn: () => unsnoozeSuggestion({ dimension, value }), msg: `${label} resumed.` },
       // Radius lane: accept the learned radius, pin the current one, or reset to learned.
-      'apply-radius': { fn: () => applyRadiusSuggestion({ areaId }), msg: `Applied the learned search radius for ${label}.` },
+      // Apply moves BOTH levers (2026-07-05): the suggestion status for the tuner AND
+      // the instant household feed filter, so the feed tightens on the next paint
+      // instead of waiting for the next service-role tuner run.
+      'apply-radius': {
+        fn: async () => {
+          const ok = await applyRadiusSuggestion({ areaId });
+          const rec = Number(btn.dataset.recommended);
+          if (ok && Number.isFinite(rec) && rec > 0) await setAreaRadiusOverride(areaId, rec);
+          return ok;
+        },
+        msg: `Applied the learned search radius for ${label} — your feed updates now; the fetcher follows on its next run.`,
+      },
       'keep-radius': { fn: () => keepAreaRadius({ areaId, radiusMi: currentMi }), msg: `Keeping ${label} at ${currentMi.toFixed(1)} mi.` },
-      'clear-radius': { fn: () => clearAreaRadius({ areaId }), msg: `${label} back to the learned radius.` },
+      'clear-radius': {
+        fn: async () => {
+          const ok = await clearAreaRadius({ areaId });
+          if (ok) await clearAreaRadiusOverride(areaId); // symmetric undo of the feed lever
+          return ok;
+        },
+        msg: `${label} back to the learned radius.`,
+      },
     };
     const h = ONE_TAP[action];
     const ok = h ? await h.fn() : false;
