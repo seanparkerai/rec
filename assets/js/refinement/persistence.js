@@ -211,6 +211,65 @@ export function renderPlanSql(plan) {
   return lines.join('\n\n');
 }
 
+// ── REST rendering (PostgREST request descriptors — the no-psql apply path) ──────
+// 2026-07-05 (owner-directed): the scheduled job used to apply its plan with `psql`,
+// which needed a SUPABASE_DB_URL secret nobody wanted to mint. These builders express
+// the SAME plan as PostgREST requests executable with the service-role key the other
+// scheduled jobs already use. Pure: they return { method, path, headers, body }
+// descriptors; the driver (tools/refinement-run.mjs --apply) performs the fetches.
+//
+// Status stickiness note: the SQL upsert carried a CASE guard so a concurrent user
+// action could never be overwritten. Here `resolveStatus` (planRun) has already folded
+// the user-owned statuses into each upsert row read moments earlier, so
+// `resolution=merge-duplicates` writes back the preserved value; the residual race is
+// the seconds between the job's read and write — acceptable for a daily batch, and the
+// next run self-heals from the user's row anyway.
+
+/** The suggestion-upsert request (null when the plan has no upserts). */
+export function restSuggestionsUpsert(plan) {
+  if (!plan.upserts.length) return null;
+  return {
+    method: 'POST',
+    path: 'refinement_suggestions?on_conflict=household_id,dimension,value',
+    headers: { Prefer: 'resolution=merge-duplicates' },
+    body: plan.upserts,
+  };
+}
+
+/** The run-audit insert; `return=representation` so the driver learns the new run id. */
+export function restRunInsert(plan) {
+  return {
+    method: 'POST',
+    path: 'refinement_runs',
+    headers: { Prefer: 'return=representation' },
+    body: [plan.runRow],
+  };
+}
+
+/** The sync_log entry linking the audit trail to the new run row. */
+export function restSyncLogInsert(runId, plan) {
+  return {
+    method: 'POST',
+    path: 'sync_log',
+    body: [{ actor: 'system', action: 'update', table_name: 'refinement_suggestions', row_id: runId, at: plan.runRow.run_at }],
+  };
+}
+
+/**
+ * The reconsider status-hint PATCHes (step 4.6b) for the REST apply path. Each carries
+ * the same FROM-status guard as the SQL (`status=eq.<from>` filter), so a concurrent
+ * bring-back/restore makes it a harmless no-op — never a scrape-scope change.
+ */
+export function restProbationPatches(updates = [], { householdId, now } = {}) {
+  const nowIso = (now ? new Date(now) : new Date()).toISOString();
+  return (updates || []).map((u) => ({
+    method: 'PATCH',
+    path: `scrape_probation?household_id=eq.${encodeURIComponent(householdId)}`
+      + `&dimension=eq.area&value=eq.${encodeURIComponent(u.value)}&status=eq.${encodeURIComponent(u.from)}`,
+    body: { status: u.to, updated_at: nowIso },
+  }));
+}
+
 /**
  * Render the reconsider status-hint flips (step 4.6b, scope.js#reconsiderUpdates) as
  * one guarded, idempotent batch. Each UPDATE is scoped to the household + area row AND

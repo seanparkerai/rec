@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 // refinement-run.mjs — Stage 3 scheduled job driver for the Model Refinement Engine
 // (docs/archive/REFINEMENT_PLAN.md §3). Snapshots reactions → runs the pure engine → plans the
-// persistence writes → EMITS idempotent SQL. It never executes DDL/DML itself: the
-// caller runs the emitted SQL (Claude via the Supabase MCP connector in this sandbox;
-// CI via `psql`). NOTIFY-ONLY — the plan touches only refinement_suggestions /
+// persistence writes → applies them. Two apply paths:
+//   • `--apply` (CI default since 2026-07-05): writes the plan through PostgREST with the
+//     service-role key — the same secrets the other scheduled jobs use; no psql/DB URL.
+//   • SQL emit (default/`--emit-sql`): prints the idempotent SQL for a dry run or for
+//     Claude to apply via the Supabase MCP connector in the sandbox.
+// NOTIFY-ONLY — the plan touches only refinement_suggestions /
 // refinement_runs / sync_log, plus the scrape_probation STATUS HINT (step 4.6b:
 // active ↔ reconsider — both statuses keep the area paused, so scrape scope never
 // changes here; only the user's bring-back does that). Never listings / criteria /
@@ -27,7 +30,10 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { runRefinementEngine, scoreFromAggregates } from '../assets/js/refinement/engine.js';
 import { resolveConfig, DIMENSIONS } from '../assets/js/refinement/config.js';
-import { priorRunsFromRows, planRun, renderPlanSql, renderProbationSql } from '../assets/js/refinement/persistence.js';
+import {
+  priorRunsFromRows, planRun, renderPlanSql, renderProbationSql,
+  restSuggestionsUpsert, restRunInsert, restSyncLogInsert, restProbationPatches,
+} from '../assets/js/refinement/persistence.js';
 import { reconsiderUpdates } from '../assets/js/refinement/scope.js';
 import { effectiveWeights } from '../assets/js/learned-preferences.js';
 import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
@@ -81,7 +87,8 @@ async function loadInputs() {
   // learned_preferences (reserved overrides key + dismissals). Read them so a portal
   // preset change / dismissal takes effect on this run.
   const lp = (await restGetAll(`learned_preferences?select=overrides,dismissals,derived&household_id=eq.${householdId}`))[0] || {};
-  const preset = lp.overrides?.__refinement_settings?.preset || 'cautious';
+  // No stored preset → resolveConfig falls back to DEFAULT_PRESET (balanced, 2026-07-05).
+  const preset = lp.overrides?.__refinement_settings?.preset;
   const dismissedKeys = new Set(Object.keys(lp.dismissals || {}).filter((k) => k.includes(':')));
   return {
     householdId, now: new Date().toISOString(), config: resolveConfig({ preset }),
@@ -142,6 +149,38 @@ async function main() {
     + `  baseline reject rate: area=${(run.baseline.area ?? 0).toFixed(3)} property_type=${(run.baseline.property_type ?? 0).toFixed(3)}\n`
     + `  top candidates:\n${top.join('\n')}\n`
     + `  probation reconsider flips: ${probationFlips.length}${flips.length ? `\n${flips.join('\n')}` : ''}\n\n`);
+
+  // ── APPLY VIA POSTGREST (2026-07-05, owner-directed) ─────────────────────────
+  // `--apply` writes the plan itself through PostgREST with the service-role key —
+  // the same two secrets every other scheduled job already uses. No psql, no
+  // SUPABASE_DB_URL. The SQL emit paths below remain for dry runs / the MCP sandbox.
+  if (process.argv.includes('--apply')) {
+    if (!SERVICE_KEY) throw new Error('--apply needs SUPABASE_SERVICE_ROLE_KEY');
+    const restWrite = async ({ method, path, headers = {}, body }) => {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+        method,
+        headers: {
+          apikey: SERVICE_KEY,
+          Authorization: `Bearer ${SERVICE_KEY}`,
+          'Content-Type': 'application/json',
+          ...headers,
+        },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error(`PostgREST ${method} ${path} → ${res.status}: ${await res.text()}`);
+      return res;
+    };
+    const upsert = restSuggestionsUpsert(plan);
+    if (upsert) await restWrite(upsert);
+    const runRes = await restWrite(restRunInsert(plan));
+    const runId = (await runRes.json())[0]?.id ?? null;
+    if (runId != null) await restWrite(restSyncLogInsert(runId, plan));
+    for (const patch of restProbationPatches(probationFlips, { householdId, now })) {
+      await restWrite(patch);
+    }
+    process.stderr.write(`  applied via PostgREST: ${plan.upserts.length} suggestion upserts + run row ${runId ?? '(id unknown)'} + sync_log + ${probationFlips.length} probation flips\n`);
+    return;
+  }
 
   const emit = arg('--emit-sql');
   if (emit) {

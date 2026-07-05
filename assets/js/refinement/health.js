@@ -1,24 +1,24 @@
 // refinement/health.js — engine-health view-model for the Trends page. PURE: no DOM,
-// no I/O, injectable clock. The daily server evaluation (refinement-run.yml) can fail
-// SILENTLY: its required-secrets guard skips the Evaluate/Apply steps while the workflow
-// still reports green, so refinement_runs quietly stops gaining rows and the page shows
-// month-old data with no hint anything is wrong (exactly what happened 2026-06-08 →
-// 2026-07-05). This module turns "how old is the latest run row?" into an honest,
+// no I/O, injectable clock. The daily server evaluation (refinement-run.yml) once failed
+// SILENTLY for a month (2026-06-08 → 2026-07-05): its secrets guard skipped the apply
+// steps while the workflow still reported green, so refinement_runs quietly stopped
+// gaining rows. This module turns "how old is the latest run row?" into an honest,
 // user-facing state so staleness is a headline, not a silent lie.
 //
-// Diagnosis baked into the copy (secrets audit, 2026-07-05): SUPABASE_URL and
-// SUPABASE_SERVICE_ROLE_KEY demonstrably work (the listings fetcher uses them daily);
-// the one secret the refinement job needs on top is SUPABASE_DB_URL. So a stale state
-// most likely means that single secret is missing — the ownerAction says exactly that.
+// Since the same-day fix the job applies via PostgREST using only SUPABASE_URL +
+// SUPABASE_SERVICE_ROLE_KEY — secrets that already exist and are exercised daily by the
+// listings fetcher; no extra secret can go missing again. A stale state therefore means
+// the run itself errored (or the schedule stopped); the ownerAction points at the run
+// log, never at minting credentials.
 
 /** A run older than this is presented as stale (daily cadence + generous slack). */
 export const STALE_AFTER_HOURS = 36;
 
 export const OWNER_ACTION =
-  'Add the missing repo secret: GitHub → Settings → Secrets and variables → Actions → '
-  + 'New repository secret → name SUPABASE_DB_URL, value = the Postgres connection string '
-  + '(Supabase Dashboard → Connect → Connection string → URI, session pooler). '
-  + 'Then Actions → refinement-run → Run workflow.';
+  'Open GitHub → Actions → refinement-run, check the latest run\'s log, and tap '
+  + '"Run workflow" to retry. It needs only the SUPABASE_URL and '
+  + 'SUPABASE_SERVICE_ROLE_KEY repo secrets, which the daily listings fetcher already '
+  + 'uses — nothing new to create.';
 
 /** Whole days between two dates (floored, never negative). */
 function daysBetween(then, now) {
@@ -61,9 +61,9 @@ export function buildEngineHealth({ meta = null, now = new Date() } = {}) {
   return {
     state: 'stale', lastRunAt: runAt, ageDays,
     headline: `The daily server evaluation last ran ${ageLabel(ageDays)}.`,
-    detail: 'The scheduled job reports green but is skipping its work — its secrets guard fails when '
-      + 'the SUPABASE_DB_URL repo secret is missing. Trends on this page are computed live from your '
-      + 'reactions either way; only fetcher-side enforcement waits on the job.',
+    detail: 'The scheduled job has not recorded a run recently — its latest run log will say why. '
+      + 'Trends on this page are computed live from your reactions either way; only '
+      + 'fetcher-side enforcement waits on the job.',
     ownerAction: OWNER_ACTION,
   };
 }

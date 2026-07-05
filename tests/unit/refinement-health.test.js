@@ -20,14 +20,18 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(h.state, 'stale');
   });
 
-  test('health: a month-old run is stale, names SUPABASE_DB_URL and carries the fix', () => {
+  test('health: a month-old run is stale, points at the run log, and never asks for new secrets', () => {
     const h = buildEngineHealth({ meta: { run_at: '2026-06-07T12:00:00Z' }, now });
     assertEqual(h.state, 'stale');
     assertEqual(h.ageDays, 28);
     assert(h.headline.includes('28 days ago'), h.headline);
-    assert(h.detail.includes('SUPABASE_DB_URL'), 'detail names the missing secret');
+    assert(h.detail.includes('run log'), 'detail points at the workflow run log');
     assertEqual(h.ownerAction, OWNER_ACTION);
-    assert(OWNER_ACTION.includes('SUPABASE_DB_URL'), 'fix names the secret to add');
+    // The 2026-07-05 no-psql redesign: the job runs on the two secrets that already
+    // exist; the fix must NEVER tell the owner to mint a new credential.
+    assert(!OWNER_ACTION.includes('SUPABASE_DB_URL'), 'no dead-secret mention');
+    assert(!/new repository secret|connection string|password/i.test(OWNER_ACTION), 'no credential-minting ask');
+    assert(OWNER_ACTION.includes('Run workflow'), 'fix is a retry, not a setup task');
   });
 
   test('health: no run row at all → never, still reassures live computation', () => {

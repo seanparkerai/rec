@@ -1,24 +1,28 @@
 # refinement-run — Model Refinement Engine scheduled evaluation.
 #
-# Runs tools/refinement-run.mjs on a GitHub runner (which has the service-role key,
-# unlike the Claude sandbox), then applies the emitted SQL plan with psql. NOTIFY-ONLY:
-# the plan touches only refinement_suggestions / refinement_runs / sync_log — never
-# listings, criteria, zones, or the scrape scope. The engine proposes; the user confirms.
+# Runs tools/refinement-run.mjs on a GitHub runner. Since 2026-07-05 (owner-directed
+# §16 phase) the job EVALUATES AND APPLIES in one step via PostgREST (`--apply`) using
+# the service-role key — the same two secrets every other scheduled job here already
+# uses. The former psql apply path (and its SUPABASE_DB_URL secret, which was never
+# provisioned and silently skipped every run 2026-06-08 → 2026-07-05) is gone for good.
+# NOTIFY-ONLY: the plan touches only refinement_suggestions / refinement_runs /
+# sync_log (+ the scrape_probation status HINT) — never listings, criteria, zones, or
+# the scrape scope. The engine proposes; the user confirms.
 #
 # WHY A CADENCE. The persistence gate requires a value to qualify on several CONSECUTIVE
 # runs before it becomes actionable (Cautious 5 / Balanced 3 / Aggressive 2). With no
 # regular cadence the counter never accumulates, so suggestions never surface. A daily
-# run lets forming patterns mature into suggestions over a few days.
+# run lets forming patterns mature into suggestions over a few days. (The Trends page
+# additionally evaluates LIVE in the browser — this job is the enforcement/audit path.)
 #
 # Triggers:
 #   - workflow_dispatch: tap "Run workflow" in the Actions tab (phone-friendly).
 #   - schedule: once daily at 06:00 UTC. Best-effort timing is fine — this is idempotent
-#     (the SQL is an UPSERT with a status guard; re-running the same day is harmless).
+#     (the upsert carries a status guard; re-running the same day is harmless).
 #
-# REQUIRED REPO SECRETS (the owner must add these before the schedule does anything):
-#   - SUPABASE_URL               e.g. https://<project>.supabase.co  (PostgREST reads)
-#   - SUPABASE_SERVICE_ROLE_KEY  service role key (reads reactions/suggestions/prefs)
-#   - SUPABASE_DB_URL            Postgres connection string (psql applies the SQL plan)
+# REQUIRED REPO SECRETS (both present and used daily by fetch-listings):
+#   - SUPABASE_URL               e.g. https://<project>.supabase.co  (PostgREST reads + writes)
+#   - SUPABASE_SERVICE_ROLE_KEY  service role key
 # OPTIONAL:
 #   - REFINEMENT_HOUSEHOLD_ID    target a specific household; omitted → the first household
 #
@@ -56,17 +60,27 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ] || [ -z "$SUPABASE_DB_URL" ]; then
-            echo "::warning::refinement-run skipped — set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY and SUPABASE_DB_URL repo secrets to enable it."
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::warning::refinement-run skipped — set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY repo secrets to enable it."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Evaluate — emit the SQL plan
-        if: steps.guard.outputs.ready == 'true'
+      - name: Evaluate + apply via PostgREST
+        if: steps.guard.outputs.ready == 'true' && inputs.dry_run != true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          HOUSEHOLD_ID: ${{ secrets.REFINEMENT_HOUSEHOLD_ID }}
+        run: |
+          ARGS=""
+          if [ -n "$HOUSEHOLD_ID" ]; then ARGS="--household $HOUSEHOLD_ID"; fi
+          node tools/refinement-run.mjs $ARGS --apply
+
+      - name: Dry run — evaluate + print the SQL plan only
+        if: steps.guard.outputs.ready == 'true' && inputs.dry_run == true
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
@@ -75,14 +89,7 @@ jobs:
           ARGS=""
           if [ -n "$HOUSEHOLD_ID" ]; then ARGS="--household $HOUSEHOLD_ID"; fi
           node tools/refinement-run.mjs $ARGS --emit-sql /tmp/refinement-plan.sql
-
-      - name: Apply — run the plan with psql
-        if: steps.guard.outputs.ready == 'true' && inputs.dry_run != true
-        env:
-          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
-          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f /tmp/refinement-plan.sql
+          cat /tmp/refinement-plan.sql
 
       - name: Invariant — scrape-scope check (non-blocking)
         if: steps.guard.outputs.ready == 'true'

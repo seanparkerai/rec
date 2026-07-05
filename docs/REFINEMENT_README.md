@@ -75,8 +75,11 @@ still logs `actor='system'` run rows.
 ## Operating it
 - **Run an evaluation** (sandbox): build a bundle via Supabase MCP, then
   `node tools/refinement-run.mjs --from-file <bundle>.json --emit-sql <out>.sql` and apply
-  the SQL via MCP. CI/REST: set `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` and pipe
-  stdout into `psql`. The job reads the household's persisted **preset** + dismiss memory.
+  the SQL via MCP. CI/REST (2026-07-05): set `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`
+  and run `node tools/refinement-run.mjs --apply` — the plan is applied over PostgREST
+  with the service role (same pattern as `radius-tune.mjs --apply`; **no
+  `SUPABASE_DB_URL` / psql**). The job reads the household's persisted **preset** +
+  dismiss memory.
 - **Check scope drift**: `node tools/refinement-scope-check.mjs` (REST) or
   `--probation-file <rows>.json` (sandbox). Exits non-zero on paused-but-active drift.
 - **Tests**: `node tools/run-all-tests.mjs` (the refinement suites are
@@ -225,7 +228,9 @@ writes exactly what `renderRadiusSql` would. (`--emit-sql` / stdout SQL remain f
 ## Known follow-ups (deferred, documented)
 - The §4.1 "Why?" reaction-rate **sparkline + sample rejected listings** (need extra
   `listing_reactions` time-series reads beyond the counts-only `metrics`).
-- **Enable the scheduled run.** `.github/workflows/refinement-run.yml` ships the daily cadence +
-  scope-check; it no-ops until the owner adds the `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and
-  `SUPABASE_DB_URL` repo secrets (optional `REFINEMENT_HOUSEHOLD_ID`). Passing a monotonic
-  `SCRAPER_RUN_INDEX` to `fetch-listings.mjs` remains a separate scraper-enforcement step.
+- ~~Enable the scheduled run~~ **DONE 2026-07-05**: `.github/workflows/refinement-run.yml`
+  now evaluates AND applies via PostgREST (`--apply`) using only `SUPABASE_URL` +
+  `SUPABASE_SERVICE_ROLE_KEY` — both long-present and exercised daily by the fetcher.
+  The never-provisioned `SUPABASE_DB_URL` requirement (which silently skipped every run
+  2026-06-08 → 2026-07-05) is retired. Passing a monotonic `SCRAPER_RUN_INDEX` to
+  `fetch-listings.mjs` remains a separate scraper-enforcement step.
