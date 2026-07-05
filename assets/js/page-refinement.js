@@ -24,6 +24,8 @@ import {
   setConflictState,
 } from './storage.js';
 import { renderTrendsGlance } from './refinement/trends-glance.js';
+import { buildEngineHealth } from './refinement/health.js';
+import { renderEngineHealth } from './refinement/ui/health.js';
 import { buildObservations, observationDismissKey } from './refinement/observations.js';
 import { dismissUntil } from './meta-observations.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
@@ -407,6 +409,9 @@ async function refresh() {
     getRefinementMeta(), getScrapeProbation(), getRefinementPreset(), getReactionLog(),
     getLearnedPreferences(), getCriteria(), getAreaRadiusTuning(),
   ]);
+  // Engine health first: is the daily server evaluation actually landing rows?
+  try { renderEngineHealth($('ref-health'), buildEngineHealth({ meta })); }
+  catch (e) { console.error('engine health render error', e); }
   // The top "Trends at a glance" band — never let a glance failure blank the page.
   try { renderTrendsGlance({ reactionLog, prefs, criteria }); }
   catch (e) { console.error('trends glance render error', e); }

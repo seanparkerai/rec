@@ -448,3 +448,29 @@
 .glance-chip--never { background: var(--paper-2); }
 .glance-chip--never .glance-chip__icon { color: var(--danger); }
 .glance-coverage__note { margin: 0; font-size: var(--text-sm); color: var(--ink-muted); line-height: 1.45; }
+
+/* ── engine-health strip (refinement/ui/health.js) — fresh = quiet line; stale/never
+   = prominent wash naming the exact owner fix. Tone paired with an icon, never
+   colour-only. ─────────────────────────────────────────────────────────────────── */
+.ref-health {
+  margin-block: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--rec-radius-sm);
+  border-left: 3px solid var(--ink-subtle);
+  background: var(--paper-2);
+  font-size: var(--text-sm);
+}
+.ref-health[hidden] { display: none; }
+.ref-health--fresh { border-left-color: var(--accent); }
+.ref-health--stale,
+.ref-health--never { border-left-color: var(--danger); background: var(--danger-soft); }
+.ref-health__headline { margin: 0; font-weight: 600; }
+.ref-health__icon { font-family: var(--font-data); }
+.ref-health--fresh .ref-health__icon { color: var(--accent-ink); }
+.ref-health--stale .ref-health__icon,
+.ref-health--never .ref-health__icon { color: var(--danger); }
+.ref-health__detail { margin: var(--space-1) 0 0; color: var(--ink-muted); }
+.ref-health__fix { margin-top: var(--space-2); }
+.ref-health__fix summary { cursor: pointer; font-weight: 600; }
+.ref-health__fix p { margin: var(--space-2) 0; overflow-wrap: anywhere; }
+.ref-health__link { display: inline-flex; align-items: center; gap: var(--space-1); }
