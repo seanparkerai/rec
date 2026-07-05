@@ -195,6 +195,14 @@ affordability comfortable +0.25 / stretch +0.10 / tight -0.05 · beds ideal +0.1
 below-min -0.30 · type preferred +0.15 / acceptable 0 / excluded -0.40 · price in-budget +0.10 /
 over-budget -0.20 · LISA-eligible +0.08 · EPC meets min +0.05.
 
+**Type feed order (`typePriorityMax` ±0.25, added 2026-07-05).** When the user applies a
+ranked type order (`criteria.propertyTypePrefs.priority`, learned from genuine keep-rates on
+the Trends page or reordered manually), the flat preferred/acceptable tiers are replaced by a
+graded contribution: linear from +0.25 at rank 1 to −0.25 at the last rank
+(`refinement/type-priority.js#typePriorityDelta`). `excluded` still wins; no saved order ⇒
+the legacy 3-tier behaviour, bit-identical. This is what makes the default 'fit' sort lead
+with the user's best-kept types.
+
 **Manual rating (`ratingMax` +0.20, POSITIVE-ONLY).** A saved listing can carry a 1–10
 priority rating (stored on the `shortlist` row). It enters `scoreListingFit` as a single
 contribution `clamp(ratingMax × (rating−1)/9, 0, ratingMax)` — rating 10 adds the full +0.20,

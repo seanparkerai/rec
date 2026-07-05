@@ -1,6 +1,9 @@
-/* pages/refinement.css — the Refinement control panel (Stage 4, read-only).
-   anchor: Linear-dense. Compact rows, hairline rules, mono numerals, accent reserved
-   for confidence/active state. Tokens only — no hard-coded hex/px type/arbitrary space. */
+/* pages/refinement.css — the Trends control centre (2026-07-05 overhaul; originally the
+   Stage-4 read-only Refinement panel). anchor: Linear-dense. Compact rows, hairline
+   rules, mono numerals, accent reserved for confidence/active state. Tokens only — no
+   hard-coded hex/px type/arbitrary space. New sections live as partials below
+   (pages/refinement/); the base file keeps the shared .ref-* system. */
+@import 'refinement/feed-order.css'; /* "Your feed order" — ranked type priority */
 
 .ref-section { margin-block: var(--space-4); }
 .ref-section__head {

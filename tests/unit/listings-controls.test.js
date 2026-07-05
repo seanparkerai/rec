@@ -87,6 +87,20 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(out[0].rightmove_id, 'b');
   });
 
+  test('controls: fit sort reorders listings that differ only by type rank (2026-07-05)', () => {
+    // The type-priority contribution flows through scoreOf: same listing, different
+    // property_type rank → different fit score → different default feed position.
+    const scoreListingFitStub = (l) => 0.5 + ({ Cottage: 0.25, Detached: 0, Terraced: -0.25 }[l.property_type] || 0);
+    const listings = [
+      { rightmove_id: 't1', property_type: 'Terraced', first_seen: '2026-07-03' },
+      { rightmove_id: 'c1', property_type: 'Cottage', first_seen: '2026-07-01' },
+      { rightmove_id: 'd1', property_type: 'Detached', first_seen: '2026-07-02' },
+    ];
+    const out = sortListings(listings, { sort: 'fit' }, { scoreOf: scoreListingFitStub });
+    assertEqual(out.map((l) => l.rightmove_id).join(','), 'c1,d1,t1',
+      'feed leads with the top-ranked type despite recency favouring the others');
+  });
+
   test('controls: rating sort uses the ratingOf accessor', () => {
     const ratingOf = (l) => ({ a: 2, b: 10, c: 5 }[l.rightmove_id]);
     const out = sortListings(sample, { sort: 'rating' }, { ratingOf });

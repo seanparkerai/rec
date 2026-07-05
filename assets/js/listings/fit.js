@@ -15,6 +15,7 @@
 
 import { assessAffordability } from '../affordability.js';
 import { LISTING_VERDICTS, FIT_BANDS, FIT_WEIGHTS } from '../intelligence-constants.js';
+import { priorityRank, typePriorityDelta } from '../refinement/type-priority.js';
 
 const norm = (s) => String(s || '').trim().toLowerCase();
 
@@ -145,10 +146,19 @@ export function scoreListingFit({ listing, finances, criteria, area, learnedPref
   else if (idealBeds && beds >= idealBeds) add('beds', `${beds} beds — meets your ideal`, W.bedsIdeal);
   else if (minBeds && beds >= minBeds) add('beds', `${beds} beds — meets your minimum`, W.bedsMin);
 
-  // Property type vs preferences.
+  // Property type vs preferences. An applied feed order (prefs.priority, 2026-07-05)
+  // grades the contribution by rank and REPLACES the legacy preferred/acceptable
+  // tiers; `excluded` always wins; no priority saved ⇒ exact legacy behaviour.
   const prefs = criteria?.propertyTypePrefs || {};
   const type = listing?.property_type;
   if (typeIn(prefs.excluded, type)) add('type', `${type} — an excluded type`, W.typeExcluded);
+  else if (Array.isArray(prefs.priority) && prefs.priority.length) {
+    const rank = priorityRank(prefs.priority, type);
+    if (rank != null) {
+      add('type', `${type} — #${rank + 1} in your feed order`,
+        typePriorityDelta(rank, prefs.priority.length, W.typePriorityMax));
+    }
+  }
   else if (typeIn(prefs.preferred, type)) add('type', `${type} — a preferred type`, W.typePreferred);
   else if (typeIn(prefs.acceptable, type)) add('type', `${type} — acceptable`, W.typeAcceptable);
 

@@ -76,5 +76,8 @@ export async function register({ test, assertEqual }) {
     for (const [key, docVal] of wants) {
       assertEqual(num(docVal), FIT_WEIGHTS[key], `FIT_WEIGHTS.${key}: doc ${docVal}, code ${FIT_WEIGHTS[key]}`);
     }
+    // 2026-07-05: the ranked type feed order's graded weight has its own doc paragraph.
+    const tp = grab(/Type feed order \(`typePriorityMax` ±([\d.]+)/, 'the typePriorityMax paragraph');
+    assertEqual(num(tp[1]), FIT_WEIGHTS.typePriorityMax, `FIT_WEIGHTS.typePriorityMax: doc ${tp[1]}, code ${FIT_WEIGHTS.typePriorityMax}`);
   });
 }

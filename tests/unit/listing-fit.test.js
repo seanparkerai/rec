@@ -67,6 +67,47 @@ export async function register({ test, assert, assertEqual, fixtures }) {
     assert(excluded.score <= preferred.score, `excluded ${excluded.score} <= preferred ${preferred.score}`);
   });
 
+  // ── Ranked type feed order (propertyTypePrefs.priority, 2026-07-05) ──────────
+  test('listing-fit: an applied priority order grades types — top rank above bottom rank', () => {
+    const cri = { ...criteria, propertyTypePrefs: { ...(criteria.propertyTypePrefs || {}), priority: ['cottage', 'detached', 'terraced'] } };
+    const top = scoreListingFit({ listing: mk({ property_type: 'Cottage' }), finances, criteria: cri });
+    const mid = scoreListingFit({ listing: mk({ property_type: 'Detached' }), finances, criteria: cri });
+    const bottom = scoreListingFit({ listing: mk({ property_type: 'Terraced' }), finances, criteria: cri });
+    assert(top.score > bottom.score, `rank 1 ${top.score} > last rank ${bottom.score}`);
+    assert(top.score > mid.score || top.score === mid.score + 0, 'rank 1 at least matches mid');
+    assert(top.contributions.some((c) => c.signal === 'type' && /#1 in your feed order/.test(c.label)),
+      'contribution names the rank');
+  });
+
+  test('listing-fit: priority replaces preferred/acceptable, but excluded still wins', () => {
+    const cri = {
+      ...criteria,
+      propertyTypePrefs: {
+        excluded: ['terraced'],
+        preferred: ['terraced'], // deliberately contradictory — excluded must win
+        priority: ['terraced', 'detached'],
+      },
+    };
+    const r = scoreListingFit({ listing: mk({ property_type: 'Terraced' }), finances, criteria: cri });
+    assert(r.contributions.some((c) => c.signal === 'type' && /excluded/.test(c.label)),
+      'excluded branch taken despite rank 1');
+  });
+
+  test('listing-fit: absent/empty priority keeps the legacy 3-tier behaviour bit-identical', () => {
+    const legacy = scoreListingFit({ listing: mk({ property_type: 'Detached' }), finances, criteria });
+    const emptyPriority = scoreListingFit({
+      listing: mk({ property_type: 'Detached' }), finances,
+      criteria: { ...criteria, propertyTypePrefs: { ...(criteria.propertyTypePrefs || {}), priority: [] } },
+    });
+    assertEqual(emptyPriority.score, legacy.score, 'empty priority → legacy scoring');
+    // A type not in the applied order gets no type contribution at all (delta 0).
+    const unranked = scoreListingFit({
+      listing: mk({ property_type: 'Detached' }), finances,
+      criteria: { ...criteria, propertyTypePrefs: { priority: ['cottage', 'bungalow'] } },
+    });
+    assert(!unranked.contributions.some((c) => c.signal === 'type'), 'unranked type → no type contribution');
+  });
+
   test('listing-fit: below-minimum beds scores below an ideal-beds home (same price)', () => {
     const ideal = scoreListingFit({ listing: mk({ beds: 3 }), finances, criteria });
     const tooSmall = scoreListingFit({ listing: mk({ beds: 1 }), finances, criteria });

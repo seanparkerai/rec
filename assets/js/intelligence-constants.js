@@ -68,6 +68,13 @@ export const FIT_WEIGHTS = {
   typePreferred: 0.15,
   typeAcceptable: 0.0,
   typeExcluded: -0.40,
+  // Ranked type order (criteria.propertyTypePrefs.priority, 2026-07-05): graded
+  // linearly from +typePriorityMax (rank 1) to −typePriorityMax (last rank) via
+  // refinement/type-priority.js#typePriorityDelta. Replaces preferred/acceptable
+  // when a priority order is applied; excluded still wins. Stronger than
+  // typePreferred so the order visibly drives the default 'fit' sort, weaker than
+  // the typeExcluded penalty.
+  typePriorityMax: 0.25,
   priceInBudget: 0.10,
   priceOverBudget: -0.20,
   lisaEligible: 0.08,

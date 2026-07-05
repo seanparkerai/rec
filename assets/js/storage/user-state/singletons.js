@@ -99,6 +99,45 @@ export async function excludePropertyType(type) {
   return true;
 }
 
+/**
+ * Apply a ranked property-type feed order (§16-extension, 2026-07-05 Trends overhaul).
+ * `order` is an ordered array of type names, best-first; stored normalised + de-duped
+ * under propertyTypePrefs.priority with prioritySource ('learned' | 'manual') and
+ * priorityAt. Preserves excluded/preferred/acceptable untouched — the fit engine
+ * (listings/fit.js) uses priority when present and falls back to the 3-tier otherwise.
+ */
+export async function setPropertyTypePriority(order, { source = 'learned' } = {}) {
+  if (!Array.isArray(order)) return false;
+  const seen = new Set();
+  const priority = [];
+  for (const t of order) {
+    const n = _normType(t);
+    if (!n || seen.has(n)) continue;
+    seen.add(n);
+    priority.push(n);
+  }
+  if (!priority.length) return false;
+  const cri = (await getCriteria()) || {};
+  const prefs = { ...(cri.propertyTypePrefs || {}) };
+  prefs.priority = priority;
+  prefs.prioritySource = source === 'manual' ? 'manual' : 'learned';
+  prefs.priorityAt = new Date().toISOString();
+  await saveCriteria({ ...cri, propertyTypePrefs: prefs });
+  return true;
+}
+
+/** Remove the ranked feed order (back to the simple preferred/acceptable tiers). */
+export async function clearPropertyTypePriority() {
+  const cri = (await getCriteria()) || {};
+  const prefs = { ...(cri.propertyTypePrefs || {}) };
+  if (!('priority' in prefs) && !('prioritySource' in prefs) && !('priorityAt' in prefs)) return true;
+  delete prefs.priority;
+  delete prefs.prioritySource;
+  delete prefs.priorityAt;
+  await saveCriteria({ ...cri, propertyTypePrefs: prefs });
+  return true;
+}
+
 export async function getFinances(opts = {})  { return _get('finances',  'finances',  'fixtures/finances.sample', opts.onUpdate || null); }
 export async function saveFinances(d)         { return _save('finances', 'finances',  d); }
 

@@ -22,10 +22,13 @@ import {
   getReactionLog, getLearnedPreferences, getCriteria,
   applyRadiusSuggestion, keepAreaRadius, clearAreaRadius, getAreaRadiusTuning,
   setConflictState,
+  setPropertyTypePriority, clearPropertyTypePriority,
 } from './storage.js';
 import { renderTrendsGlance } from './refinement/trends-glance.js';
 import { buildEngineHealth } from './refinement/health.js';
 import { renderEngineHealth } from './refinement/ui/health.js';
+import { computeTypePriority } from './refinement/type-priority.js';
+import { renderFeedOrder } from './refinement/ui/feed-order.js';
 import { buildObservations, observationDismissKey } from './refinement/observations.js';
 import { dismissUntil } from './meta-observations.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
@@ -416,6 +419,25 @@ async function refresh() {
   try { renderTrendsGlance({ reactionLog, prefs, criteria }); }
   catch (e) { console.error('trends glance render error', e); }
   renderReactions(reactionLog);
+  // "Your feed order" — the ranked type priority (learned vs applied) + Apply/undo.
+  try {
+    renderFeedOrder($('ref-feed-order'), {
+      learned: computeTypePriority(reactionLog),
+      prefs: criteria?.propertyTypePrefs || {},
+      onApply: async (order, source) => {
+        const ok = await setPropertyTypePriority(order, { source });
+        announce(ok
+          ? (source === 'manual' ? 'Feed order updated.' : 'Feed order applied — your listings now lead with your best-kept types.')
+          : 'Could not save the feed order — please try again.');
+        if (ok) await refresh();
+      },
+      onClear: async () => {
+        const ok = await clearPropertyTypePriority();
+        announce(ok ? 'Back to simple type preferences.' : 'Could not change that right now — please try again.');
+        if (ok) await refresh();
+      },
+    });
+  } catch (e) { console.error('feed order render error', e); }
   renderMeter(meta, prefs);
   renderPresets(preset);
   renderNudge(meta, groups, preset);
