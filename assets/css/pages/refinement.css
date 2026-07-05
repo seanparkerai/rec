@@ -4,6 +4,7 @@
    hard-coded hex/px type/arbitrary space. New sections live as partials below
    (pages/refinement/); the base file keeps the shared .ref-* system. */
 @import 'refinement/feed-order.css'; /* "Your feed order" — ranked type priority */
+@import 'refinement/league.css';     /* "Where your areas stand" — the area league table */
 
 .ref-section { margin-block: var(--space-4); }
 .ref-section__head {

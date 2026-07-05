@@ -30,6 +30,8 @@ import { buildEngineHealth } from './refinement/health.js';
 import { renderEngineHealth } from './refinement/ui/health.js';
 import { computeTypePriority } from './refinement/type-priority.js';
 import { renderFeedOrder } from './refinement/ui/feed-order.js';
+import { buildAreaLeague, leagueHeadline } from './refinement/area-league.js';
+import { renderAreaLeague } from './refinement/ui/area-league.js';
 import { buildObservations, observationDismissKey } from './refinement/observations.js';
 import { dismissUntil } from './meta-observations.js';
 import { loadCombinedSuggestions } from './suggestions/sources.js';
@@ -426,7 +428,7 @@ function wireTraining() {
 }
 
 async function refresh() {
-  const [{ combined, groups }, meta, probation, preset, reactionLog, prefs, criteria, tuning] = await Promise.all([
+  const [{ combined, groups, areasMeta }, meta, probation, preset, reactionLog, prefs, criteria, tuning] = await Promise.all([
     loadCombinedSuggestions({ now: new Date() }),
     getRefinementMeta(), getScrapeProbation(), getRefinementPreset(), getReactionLog(),
     getLearnedPreferences(), getCriteria(), getAreaRadiusTuning(),
@@ -457,6 +459,15 @@ async function refresh() {
       },
     });
   } catch (e) { console.error('feed order render error', e); }
+  // "Where your areas stand" — the ranked area league (worst first, inline actions).
+  try {
+    const leagueRows = buildAreaLeague({
+      reactionLog, areasMeta, tuning, probation,
+      radiusOverrides: criteria?.location?.areaRadiusOverrides || {},
+      now: new Date(),
+    });
+    renderAreaLeague($('ref-league'), { rows: leagueRows, headline: leagueHeadline(leagueRows) });
+  } catch (e) { console.error('area league render error', e); }
   renderMeter(meta, prefs);
   renderPresets(preset);
   renderNudge(meta, groups, preset);

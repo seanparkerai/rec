@@ -1,0 +1,72 @@
+/* pages/refinement/league.css — "Where your areas stand" (Pillar C, 2026-07-05).
+   Anchor: Linear-dense — compact rows, mono numerals, hairline rules. Tokens only.
+   Mobile-first: the table lives in its own horizontal-scroll container so the page
+   never scrolls sideways at 320px; secondary columns hide below 768px instead. */
+
+.lg-headline {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.lg-controls { margin: 0 0 var(--space-2); }
+.lg-search input[type="search"] {
+  max-width: 22rem;
+  font-size: var(--text-base, 1rem); /* iOS zoom floor */
+}
+
+.lg-scroll { overflow-x: auto; }
+
+.lg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  margin: 0;
+}
+.lg-table th {
+  text-align: left;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--hairline);
+}
+.lg-cell {
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+}
+.lg-cell--num { font-family: var(--font-data); white-space: nowrap; }
+.lg-sub { color: var(--ink-muted); font-size: var(--text-xs); }
+.lg-name { font-weight: 600; }
+.lg-row--paused .lg-cell { color: var(--ink-muted); }
+.lg-row--zero .lg-cell--name { border-left: 3px solid var(--danger); }
+
+.lg-badge {
+  display: inline-block;
+  margin-left: var(--space-1);
+  padding: 0 var(--space-1);
+  font-size: var(--text-xs);
+  font-family: var(--font-data);
+  color: var(--ink-muted);
+  background: var(--paper-3);
+  border-radius: var(--rec-radius-sm);
+}
+.lg-badge--zero { color: var(--danger); background: var(--danger-soft); }
+
+.lg-cell--actions {
+  white-space: nowrap;
+}
+.lg-cell--actions .ref-action { margin-right: var(--space-1); }
+
+.lg-footer { margin-top: var(--space-2); }
+
+/* Below 768px the secondary columns (trend, radius) hide so the essentials fit
+   without sideways scrolling; the scroll container remains the safety net. */
+.lg-cell--trend, .lg-table th:nth-child(5) { display: none; }
+.lg-cell--reason, .lg-table th:nth-child(4) { display: none; }
+@media (min-width: 768px) {
+  .lg-cell--trend, .lg-table th:nth-child(5) { display: table-cell; }
+  .lg-cell--reason, .lg-table th:nth-child(4) { display: table-cell; }
+}
