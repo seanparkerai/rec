@@ -19,10 +19,6 @@ import { getDerivedFinances } from './finance-load.js';
 import { createListingsControls, LISTING_SORTS } from './listings/controls.js';
 import { wireFilterSheet } from './filter-sheet.js';
 import { wireReturnTracking, restoreListFocus } from './listings/nav.js';
-import { loadCombinedSuggestions } from './suggestions/sources.js';
-import { suggestionListHTML } from './suggestions/card.js';
-import { applySuggestion, snoozeSuggestionUnified, dismissSuggestionUnified } from './suggestions/apply.js';
-import { createConfirm } from './suggestions/confirm.js';
 import { scoreListingFit } from './listings/fit.js';
 import { classifyListing } from './listings/flags.js';
 import { latestPerListing } from './listings/reactions.js';
@@ -30,7 +26,7 @@ import { decidedSets, isDecided, foldDecision } from './listings/suppress.js';
 import { partitionFeed } from './listings/feed-partition.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
-  diversifySelection, listingBucketKey, trainingProgress,
+  diversifySelection, listingBucketKey,
   inferOutdoorSpace, inferParking,
 } from './learned-preferences.js';
 import { hiddenRulesFromOverrides, listingHiddenByRefinement } from './refinement/view.js';
@@ -40,15 +36,13 @@ import { el, clear } from './dom.js';
 import { wireListingsFetch } from './listings/fetch.js';
 // View-builders extracted from this coordinator (REFACTOR: page-listings split).
 import { buildRow, buildDeckCard, REVIEWED_MOD } from './page-listings/row.js';
-import { buildSummary, buildDeckProgress, buildTrainingProgress, topLearnedSignals } from './page-listings/progress.js';
+import { buildSummary, buildDeckProgress } from './page-listings/progress.js';
 
 async function render() {
   const main = document.querySelector('#main') || document.body;
   const listEl = main.querySelector('[data-listings]') || main.querySelector('.area-list');
   const deckEl = main.querySelector('[data-review-deck]');
   const summaryEl = main.querySelector('[data-listings-summary]');
-  const learningEl = main.querySelector('[data-learning]');
-  const conflictsEl = main.querySelector('[data-conflicts]');
   const showOOR = main.querySelector('[data-show-oor]');
   const showHidden = main.querySelector('[data-show-hidden]');
   const filterTrigger = main.querySelector('[data-filter-trigger]');
@@ -267,7 +261,6 @@ async function render() {
     repaintPreservingScroll(); // re-partitions + calls renderSummary()
     flagDecisionDestination(d.reaction);
     updateReviewCount();
-    updateLearning();
     scheduleRetrain();
   };
 
@@ -296,29 +289,6 @@ async function render() {
       && !listingHiddenByRefinement(l, hiddenRules) && !isDecidedListing(l)),
     listingBucketKey,
   );
-  // ── learning state / training feedback (Stage 5 rich, balance-aware) ──────
-  const deckDoneCount = () => deckOrder.filter((l) => isReviewed(l.rightmove_id)).length;
-  // The top-of-page widget loads collapsed; remember the user's expand choice so
-  // an in-place repaint (e.g. after saving a reaction) doesn't snap it shut.
-  let learningExpanded = false;
-  function updateLearning() {
-    if (!learningEl) return;
-    // In review mode the deck renders its own training widget (paintDeck), so the
-    // top-of-page copy is suppressed to avoid showing two identical widgets.
-    if (!listings.length || mode === 'review') { learningEl.hidden = true; return; }
-    const p = trainingProgress(Object.values(reactions));
-    clear(learningEl);
-    learningEl.hidden = false;
-    learningEl.classList.add('learning-status--rich');
-    learningEl.classList.toggle('learning-status--cold', p.cold);
-    learningEl.classList.toggle('training--imbalanced', p.imbalanced);
-    learningEl.appendChild(buildTrainingProgress(p, deckDoneCount(), deckOrder.length, {
-      collapsible: true,
-      expanded: learningExpanded,
-      onToggle: (open) => { learningExpanded = open; },
-      learned: topLearnedSignals(effective),
-    }));
-  }
   function updateReviewCount() {
     const n = deckOrder.filter((l) => !isReviewed(l.rightmove_id)).length;
     if (reviewCountEl) { reviewCountEl.hidden = n === 0; reviewCountEl.textContent = n ? ` ${n}` : ''; }
@@ -352,78 +322,6 @@ async function render() {
     // Route to where passed/rejected properties now live (off the feed).
     summaryEl.appendChild(el('span', { class: 'listings-summary__sep', 'aria-hidden': 'true' }, '·'));
     summaryEl.appendChild(el('a', { class: 'listings-summary__link', href: url('pages/rejected.html') }, 'Passed & rejected →'));
-  }
-
-  // ── Refinement suggestions (L5 + engine) — the SHARED inbox ───────────────
-  // The same combined suggestions render here and on the Trends page (one model, one
-  // card, one set of Apply/Snooze/Dismiss actions — suggestions/*). Apply performs the
-  // real rule change (tighten a village radius, stop searching an area, re-accept/exclude
-  // a type, raise budget, lower beds) and the feed reflects it immediately.
-  const confirm = createConfirm({ reprobeRuns: 6 });
-  let suggestionsById = new Map();
-  const announceSug = (text) => {
-    const r = main.querySelector('[data-sug-live]');
-    if (r) { r.textContent = ''; r.textContent = text; }
-  };
-
-  // Re-read the feed-affecting state that an Apply may have changed (criteria budget/
-  // beds/excluded types, per-area radius overrides, learned hide rules, probation) and
-  // repaint — so the list updates the instant a suggestion is applied.
-  async function refreshFeedState() {
-    const [freshCriteria, freshLearned, probationRows2] = await Promise.all([
-      getCriteria(), getLearnedPreferences(), getScrapeProbation(),
-    ]);
-    if (freshCriteria) {
-      criteria.budget = freshCriteria.budget;
-      criteria.size = freshCriteria.size;
-      criteria.propertyTypePrefs = freshCriteria.propertyTypePrefs;
-      criteria.location = freshCriteria.location;
-      searchRadiusMi = Number(freshCriteria?.location?.searchRadiusMi ?? 3);
-      radiusOverrides = freshCriteria?.location?.areaRadiusOverrides || {};
-    }
-    overrides = freshLearned?.overrides || overrides;
-    effective = effectiveWeights(freshLearned?.derived || {}, overrides);
-    hiddenRules = hiddenRulesFromOverrides(overrides);
-    probationSet = new Set((probationRows2 || []).map((p) => normArea(p.value)));
-    scoreCache.clear();
-    hiddenRulesRev += 1;
-    if (mode === 'browse') paint();
-  }
-
-  async function updateConflicts() {
-    if (!conflictsEl) return;
-    const { combined } = await loadCombinedSuggestions({ now: new Date() });
-    suggestionsById = new Map(combined.map((n) => [n.id, n]));
-    conflictsEl.innerHTML = suggestionListHTML(combined);
-  }
-
-  async function handleSuggestionAction(btn) {
-    const n = suggestionsById.get(btn.dataset.sugId);
-    if (!n) return;
-    const action = btn.dataset.action;
-    if (action === 'apply') {
-      const run = async () => {
-        const ok = await applySuggestion(n);
-        if (ok) { announceSug(`Applied: ${n.label}.`); await refreshFeedState(); await updateConflicts(); }
-        else announceSug('Could not apply that right now — please try again.');
-        return ok;
-      };
-      if (n.confirm) confirm.open({ action: n.confirmAction, dimension: n.dimension, value: n.value || n.areaId, label: n.label, onConfirm: run });
-      else { btn.disabled = true; await run(); }
-      return;
-    }
-    btn.disabled = true;
-    const ok = action === 'snooze' ? await snoozeSuggestionUnified(n) : await dismissSuggestionUnified(n);
-    if (ok) { announceSug(action === 'snooze' ? `Snoozed ${n.label} for 30 days.` : `Dismissed ${n.label}.`); await updateConflicts(); }
-    else { btn.disabled = false; announceSug('Could not do that right now — please try again.'); }
-  }
-
-  if (conflictsEl) {
-    confirm.wire();
-    conflictsEl.addEventListener('click', (e) => {
-      const btn = e.target.closest?.('[data-action]');
-      if (btn) handleSuggestionAction(btn);
-    });
   }
 
   // ── debounced authoritative re-training (full reaction log) ─────────────
@@ -462,8 +360,6 @@ async function render() {
       }
     } catch { /* surfaced via storage toast */ }
     retraining = false;
-    updateLearning();
-    updateConflicts();
     if (changed && mode === 'browse') repaintPreservingScroll();
   }
 
@@ -589,7 +485,6 @@ async function render() {
     await onSave(cur, d); // throws on failure → picker error state, deck stays put
     paintDeck();
     updateReviewCount();
-    updateLearning();
     scheduleRetrain();
   };
   function paintDeck() {
@@ -598,7 +493,6 @@ async function render() {
     const total = deckOrder.length;
     const done = deckOrder.filter((l) => isReviewed(l.rightmove_id)).length;
     deckEl.appendChild(buildDeckProgress(done, total));
-    deckEl.appendChild(buildTrainingProgress(trainingProgress(Object.values(reactions)), done, total));
     if (!total) {
       deckEl.appendChild(el('div', { class: 'deck-done' }, [
         el('p', { class: 'deck-done__title' }, 'Nothing recent to review'),
@@ -636,7 +530,6 @@ async function render() {
     if (filterTrigger) filterTrigger.hidden = review;
     if (review) { sheet?.hide(); setEmpty(null); } else { sheet?.sync(); }
     if (review) { if (summaryEl) clear(summaryEl); paintDeck(); } else { paint(); }
-    updateLearning(); // re-evaluates the mode guard (hides the top widget in review)
   }
   modeBtns.forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
   if (showOOR) showOOR.addEventListener('change', () => { if (mode === 'browse') paint(); sheet?.refresh(); });
@@ -665,9 +558,7 @@ async function render() {
 
   wireReturnTracking(listEl, 'listings');
 
-  updateLearning();
   updateReviewCount();
-  updateConflicts();
   setMode('browse');
   // After the first Browse paint, snap focus back to the card the user came from.
   restoreListFocus(listEl, 'listings');

@@ -28,9 +28,6 @@
       <p class="lead">Properties on the market across your areas, ranked by fit. Each verdict combines affordability, your criteria, and the matched area — affordability is a hard gate, so out-of-reach homes are hidden by default. Open “Why this verdict” on any row to see what counted for and against.</p>
     </header>
 
-    <div data-learning class="learning-status" role="status" hidden></div>
-    <div data-conflicts class="conflict-prompts" aria-label="Suggestions"></div>
-
     <section class="listings-controls">
       <div role="group" class="listings-modes" data-modes aria-label="View mode">
         <button type="button" class="listings-mode" data-mode="browse" aria-pressed="true">Browse</button>
@@ -113,17 +110,6 @@
       <p class="listings-empty__hint">Properties you’ve passed or rejected are on the <a href="rejected.html">Rejected</a> page; the ones you liked are on <a href="saved-listings.html">Saved</a>.</p>
     </div>
     <section class="review-deck" data-review-deck aria-label="Review recent listings" hidden></section>
-
-    <!-- Shared suggestion actions: live announcements + the "removes N listings" confirm -->
-    <p data-sug-live class="ref-sr-only" role="status" aria-live="polite"></p>
-    <dialog id="ref-confirm" class="ref-dialog" aria-labelledby="ref-confirm-title">
-      <h2 id="ref-confirm-title" class="ref-dialog__title">Apply this change?</h2>
-      <p id="ref-confirm-msg" class="ref-dialog__msg"></p>
-      <footer class="ref-dialog__actions">
-        <button type="button" id="ref-confirm-cancel" class="ref-dialog__btn ref-dialog__btn--ghost">Cancel</button>
-        <button type="button" id="ref-confirm-ok" class="ref-dialog__btn ref-dialog__btn--primary">Apply</button>
-      </footer>
-    </dialog>
   </main>
 
   <div data-include="components/footer.html"></div>
