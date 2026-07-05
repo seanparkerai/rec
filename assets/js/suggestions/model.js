@@ -105,6 +105,7 @@ export function fromEngineCard(card) {
   const hasLever = isArea || isType;
   return {
     source: 'engine',
+    origin: card.origin || 'server', // 'live' = computed in-browser, no server row exists
     id: `${dim}:${card.value}`,
     kind: isArea ? 'engine-area' : isType ? 'engine-type' : 'engine-trend',
     dimension: dim,                     // engine dimension drives snooze/dismiss

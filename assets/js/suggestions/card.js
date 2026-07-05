@@ -33,6 +33,10 @@ export function suggestionCardHTML(n) {
       <details class="ref-why"><summary>Why?</summary>
         <ul class="ref-why__list">${n.whyLines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>
       </details>` : '';
+  // Live-computed engine cards (no server row yet) say so — the daily job will pick
+  // the same pattern up on its next run; the maths is identical either way.
+  const origin = (n.source === 'engine' && n.origin === 'live')
+    ? '<p class="ref-card__origin">Computed live from your latest reactions</p>' : '';
   const actions = (n.actions || []).map((a) => actionButton(n, a)).join('');
   return `
     <article class="ref-card${mod}" data-sug-card="${esc(n.id)}">
@@ -46,6 +50,7 @@ export function suggestionCardHTML(n) {
       ${note}
       ${stats}
       ${why}
+      ${origin}
       <footer class="ref-card__actions">${actions}</footer>
     </article>`;
 }

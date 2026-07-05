@@ -55,6 +55,13 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(n.apply.fn, 'stopArea');
     assertEqual(n.confirm, true);
     assertEqual(n.value, 'foo-sp1');
+    assertEqual(n.origin, 'server', 'origin defaults to server for legacy cards');
+  });
+
+  test('model: origin passes through so the apply router can branch on live cards', () => {
+    const card = { dimension: 'area', value: 'foo-sp1', label: 'Foo (SP1)', dimensionLabel: 'Area', reason: 'r', whyLines: [], tier: 'probable', tierLabel: 'Probable', origin: 'live' };
+    assertEqual(fromEngineCard(card).origin, 'live');
+    assertEqual(fromEngineCard({ ...card, origin: 'both' }).origin, 'both');
   });
 
   test('model: an engine property_type card maps to a confirmed excludeType (hide)', () => {

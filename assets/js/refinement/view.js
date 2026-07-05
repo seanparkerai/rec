@@ -3,7 +3,7 @@
 // from storage.getRefinementSuggestions() + the run meta and returns plain objects the
 // page renderer turns into markup. Kept pure so the formatting (plain-English copy,
 // the volume-artefact note, the confidence meter, the inbox cap/ranking) is unit-tested.
-import { resolveConfig } from './config.js';
+import { resolveConfig, DEFAULT_PRESET } from './config.js';
 import { REASON_COUNTS_KEY } from '../learned-preferences/weights.js';
 
 export const TIER_LABEL = {
@@ -87,11 +87,11 @@ export const PRESET_OPTIONS = [
   { id: 'aggressive', label: 'Aggressive', blurb: 'Surfaces suggestions sooner, on lighter evidence.' },
 ];
 
-/** Read the persisted preset from an overrides blob (defaults to 'cautious'). */
+/** Read the persisted preset from an overrides blob (defaults to DEFAULT_PRESET). */
 export function presetFromOverrides(overrides = {}) {
   const s = overrides && typeof overrides === 'object' ? overrides[REFINEMENT_SETTINGS_KEY] : null;
   const p = s && typeof s === 'object' ? s.preset : null;
-  return PRESET_OPTIONS.some((o) => o.id === p) ? p : 'cautious';
+  return PRESET_OPTIONS.some((o) => o.id === p) ? p : DEFAULT_PRESET;
 }
 
 const normKey = (s) => String(s ?? '').trim().toLowerCase();
@@ -250,6 +250,7 @@ export function toCard(row, effective = null) {
     whyLines,
     whySignals,
     runsQualified: row.runs_qualified ?? 0,
+    origin: row.origin || 'server', // 'live' | 'both' | 'server' (refinement/live.js merge)
   };
 }
 

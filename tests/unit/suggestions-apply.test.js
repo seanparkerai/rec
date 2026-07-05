@@ -86,6 +86,19 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(live.calls[0].args[1].kind, 'snooze');
   });
 
+  test('apply: snooze of a LIVE-ORIGIN engine card writes the sug: dismissals key (no row to flip)', async () => {
+    const deps = makeDeps();
+    await snoozeSuggestionUnified({ source: 'engine', origin: 'live', dimension: 'area', value: 'Foo-SP1' }, deps);
+    assertEqual(deps.calls[0].name, 'setConflictState', 'no snoozeSuggestion row-flip attempted');
+    assertEqual(deps.calls[0].args[0], 'sug:area:foo-sp1', 'sug: key, value normalised');
+    assertEqual(deps.calls[0].args[1].kind, 'snooze');
+
+    // A merged card (server row exists → origin 'both') still flips the row.
+    const both = makeDeps();
+    await snoozeSuggestionUnified({ source: 'engine', origin: 'both', dimension: 'area', value: 'foo-sp1' }, both);
+    assertEqual(both.calls[0].name, 'snoozeSuggestion');
+  });
+
   test('apply: dismiss routes engine→row status, live→far-future dismissals', async () => {
     const eng = makeDeps();
     await dismissSuggestionUnified({ source: 'engine', dimension: 'property_type', value: 'terraced' }, eng);

@@ -474,3 +474,6 @@
 .ref-health__fix summary { cursor: pointer; font-weight: 600; }
 .ref-health__fix p { margin: var(--space-2) 0; overflow-wrap: anywhere; }
 .ref-health__link { display: inline-flex; align-items: center; gap: var(--space-1); }
+
+/* origin caption on live-computed engine cards (suggestions/card.js) */
+.ref-card__origin { margin: var(--space-1) 0 0; font-size: var(--text-xs); color: var(--ink-subtle); }

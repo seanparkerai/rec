@@ -120,6 +120,34 @@ data this lifts `terraced`/`flat` to ~1.19 (clears Balanced, gated by Cautious) 
 in SQL. The Hide/Stop buttons stay dormant until an actionable suggestion appears (lift ≥ `MIN_LIFT`,
 and the persistence gate is met across consecutive runs).
 
+### Live in-browser evaluation + Balanced default (2026-07-05)
+The Trends overhaul removed the page's dependency on the scheduled job. The daily workflow had
+been **silently skipping** its Evaluate/Apply steps since 2026-06-08 (required-secrets guard —
+`SUPABASE_DB_URL` missing) while reporting green, so the page served June-7 rows for a month.
+Three changes:
+
+- **Live engine** (`assets/js/refinement/live.js`): `loadCombinedSuggestions()` now runs the SAME
+  pure engine in the browser over the genuine reaction log on every page load.
+  `computeLiveRows()` uses **time-based persistence** — a value is `actionable` iff it clears
+  gates 1–4 both *now* and on the log truncated to `now − PERSISTENCE_DAYS` (per-preset:
+  14/7/3) — immune to cron cadence. `mergeSuggestionRows()` merges live rows under the server's
+  `refinement_suggestions` at the ROW level: user-decision statuses
+  (`confirmed_*`/`dismissed`/`snoozed`) always win, live wins metrics/tier, engine-owned server
+  rows the live data no longer supports are dropped, and `area_radius` rows pass through
+  (tuner-owned). Live-only cards carry `origin: 'live'`; their snooze is recorded under a
+  `sug:dim:value` dismissals key (no server row to flip). The server job is unchanged — it remains
+  the enforcement path (scrape probation subtraction, radius tuning) and the cross-device memory.
+- **Balanced is the shipped default** (`DEFAULT_PRESET`): the 2026-07 genuine baseline sits at
+  ~0.88, capping achievable lift at ≈1.14 — below Cautious's `MIN_LIFT` 1.20, so as a default it
+  could never act (every real run logged `actionable_count = 0`).
+- **Per-dimension area gates** (`FIXED.DIM_GATES.area`: `MIN_EFFECTIVE_SAMPLE` 8, `MIN_DISTINCT`
+  5, `WILSON_FLOOR` 0.65, applied via `engine.js#dimConfig`): reactions spread across ~190 area
+  buckets, so per-area n is structurally small — an all-reject area's CC-Wilson lower bound is
+  ≈0.66 at n_eff=10 and the flat 0.80/0.88 floors would need 20–30 judgements per area. FDR +
+  lift + persistence still guard against noise. The engine-health strip
+  (`refinement/health.js` + `refinement/ui/health.js`) surfaces a stale/never server run and
+  names the exact fix.
+
 ## Per-area learned search radius (2026-06-21)
 Every area was scraped + geofenced with the **same ~3 mi** radius, but the accept/reject data shows
 the optimal radius varies ~9× per area (tight suburban cores see likes only within ~0.3–0.5 mi; rural

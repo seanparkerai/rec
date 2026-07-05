@@ -42,12 +42,14 @@ export async function register({ test, assert, assertEqual }) {
     return out;
   };
 
-  const cfg = resolveConfig(); // Cautious defaults
+  // The suite exercises the strict Cautious levers explicitly (the shipped default
+  // moved to Balanced in the 2026-07-05 recalibration — pinned in the sanity test).
+  const cfg = resolveConfig({ preset: 'cautious' });
   const typeOf = (run, value) => run.dimensions.property_type.candidates.find((c) => c.value === value);
   const rankIndex = (run, value) => run.candidates.findIndex((c) => c.value === value);
 
   // ── config sanity ────────────────────────────────────────────────────────────
-  test('refinement-config: Cautious is the shipped default with the documented levers', () => {
+  test('refinement-config: Balanced is the shipped default; Cautious keeps its documented levers', () => {
     assertEqual(cfg.preset, 'cautious');
     assertEqual(cfg.WILSON_FLOOR, 0.88);
     assertEqual(cfg.MIN_LIFT, 1.20); // rebased 2026-06-19 to the genuine-baseline headroom (was 1.6)
@@ -56,7 +58,13 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(cfg.HALF_LIFE_DAYS, 150);
     assertEqual(cfg.GLOBAL_MIN_FEEDBACK, 300);
     assertEqual(cfg.DIM_MIN_FEEDBACK, 150);
-    assertEqual(DEFAULT_PRESET, 'cautious');
+    // 2026-07-05 recalibration: Cautious's MIN_LIFT 1.20 exceeds the genuine baseline's
+    // achievable lift ceiling (~1.14), so as a default it produced zero actionable rows.
+    assertEqual(DEFAULT_PRESET, 'balanced');
+    assertEqual(resolveConfig().preset, 'balanced');
+    // Every preset carries the time-based persistence window (refinement/live.js).
+    assert(PRESETS.cautious.PERSISTENCE_DAYS > PRESETS.balanced.PERSISTENCE_DAYS, 'cautious waits longer');
+    assert(PRESETS.balanced.PERSISTENCE_DAYS > PRESETS.aggressive.PERSISTENCE_DAYS, 'aggressive waits least');
     // Aggressive lowers the bar; Balanced sits between.
     assert(PRESETS.aggressive.WILSON_FLOOR < PRESETS.balanced.WILSON_FLOOR, 'aggressive floor lower');
     assert(PRESETS.balanced.WILSON_FLOOR < PRESETS.cautious.WILSON_FLOOR, 'balanced floor lower than cautious');

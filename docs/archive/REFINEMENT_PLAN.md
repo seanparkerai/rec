@@ -565,12 +565,22 @@ All live in one config module. **Shipped defaults below are the Cautious preset*
 (Luke's choice). The four constants that vary by preset are listed separately in
 the preset matrix. Confirm before Stage 1 migration.
 **Preset matrix (the levers the preset buttons change):**
-| Constant | Cautious (default) | Balanced | Aggressive |
+| Constant | Cautious | Balanced (default) | Aggressive |
 |---|---|---|---|
 | `WILSON_FLOOR` | 0.88 | 0.80 | 0.72 |
 | `MIN_LIFT` | 1.20 | 1.10 | 1.05 |
 | `PERSISTENCE_RUNS` | 5 | 3 | 2 |
+| `PERSISTENCE_DAYS` | 14 | 7 | 3 |
 | `FDR_Q` | 0.05 | 0.10 | 0.15 |
+
+> **Default flipped to Balanced + per-dimension area gates, 2026-07-05.** Against the genuine
+> baseline (~0.88 reject in mid-2026 data) Cautious's `MIN_LIFT` 1.20 exceeded the achievable lift
+> ceiling (≈1.14), so the shipped default produced 0 actionable rows on every real run — the default
+> is now **Balanced**. `PERSISTENCE_DAYS` backs the browser's live evaluation (time-based
+> persistence, `refinement/live.js`); the server job keeps `PERSISTENCE_RUNS`. `DIM_GATES.area`
+> (`MIN_EFFECTIVE_SAMPLE` 8, `MIN_DISTINCT` 5, `WILSON_FLOOR` 0.65) recognises that ~190 area
+> buckets each see structurally few judgements (an all-reject area's CC-Wilson lower bound is only
+> ≈0.66 at n_eff=10). See `assets/js/refinement/config.js` + `docs/REFINEMENT_README.md`.
 
 > **`MIN_LIFT` rebased 2026-06-19 (was 1.6 / 1.3 / 1.15).** `lift = p_hat / baseline`, and the
 > *genuine-only* baseline the engine scores against is ~0.82 — so the maximum achievable lift is

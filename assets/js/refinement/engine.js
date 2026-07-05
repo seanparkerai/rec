@@ -142,6 +142,18 @@ export function benjaminiHochberg(items, q) {
   return items;
 }
 
+/**
+ * Effective config for one dimension: the flat config shadowed by any per-dimension
+ * gate overrides in `config.DIM_GATES[dimension]` (2026-07-05 recalibration — the area
+ * dimension spreads reactions across ~190 buckets, so its sample/confidence gates are
+ * calibrated separately; see config.js). Returns the flat config untouched when no
+ * override exists, so every other dimension is bit-identical to the pre-override engine.
+ */
+export function dimConfig(config, dimension) {
+  const over = config.DIM_GATES && config.DIM_GATES[dimension];
+  return over ? { ...config, ...over } : config;
+}
+
 /** Confidence tier from the Wilson lower bound (§2.7). */
 export function tierFor(wilsonLower, config) {
   if (wilsonLower >= config.TIER_STRONG) return 'strong';
@@ -257,7 +269,7 @@ export function scoreFromAggregates(aggregates, opts = {}) {
 
   for (const dim of dimensions) {
     const agg = perDim[dim] || { dimDecayed: 0, values: [] };
-    const dimGateOpen = globalGateOpen && agg.dimDecayed >= config.DIM_MIN_FEEDBACK;
+    const dimGateOpen = globalGateOpen && agg.dimDecayed >= dimConfig(config, dim).DIM_MIN_FEEDBACK;
 
     // Baseline decayed reject rate across the whole dimension pool (§2.4),
     // plus the RAW pool totals Fisher's exact test needs (integers).
@@ -310,24 +322,25 @@ export function scoreFromAggregates(aggregates, opts = {}) {
   // Gates 1–5 + tier + volume_artefact + reason (§2.6–2.8).
   for (const dim of dimensions) {
     const { dimGateOpen, p0 } = perDimension[dim];
+    const dcfg = dimConfig(config, dim); // per-dimension gate overrides (DIM_GATES)
     for (const c of perDimension[dim].candidates) {
       const gates = {
         global: dimGateOpen,
-        sample: c.n_eff >= config.MIN_EFFECTIVE_SAMPLE
-          && c.distinct_rejected_listings >= config.MIN_DISTINCT,
-        confidence: c.wilson_lower >= config.WILSON_FLOOR,
-        disproportionality: c.fdr_significant && c.lift >= config.MIN_LIFT,
+        sample: c.n_eff >= dcfg.MIN_EFFECTIVE_SAMPLE
+          && c.distinct_rejected_listings >= dcfg.MIN_DISTINCT,
+        confidence: c.wilson_lower >= dcfg.WILSON_FLOOR,
+        disproportionality: c.fdr_significant && c.lift >= dcfg.MIN_LIFT,
       };
       const qualifiesThisRun = gates.global && gates.sample && gates.confidence && gates.disproportionality;
       const prior = priorRunsQualified[`${c.dimension}:${c.value}`] || 0;
       const runs_qualified = qualifiesThisRun ? prior + 1 : 0; // consecutive; resets on a miss
-      gates.persistence = runs_qualified >= config.PERSISTENCE_RUNS;
+      gates.persistence = runs_qualified >= dcfg.PERSISTENCE_RUNS;
 
       c.gates = gates;
       c.qualifies_this_run = qualifiesThisRun;
       c.runs_qualified = runs_qualified;
       c.actionable = qualifiesThisRun && gates.persistence;
-      c.tier = tierFor(c.wilson_lower, config);
+      c.tier = tierFor(c.wilson_lower, dcfg);
       c.volume_artefact = c.k_raw >= config.VOLUME_ARTEFACT_MIN_REJECTS
         && c.lift <= config.VOLUME_ARTEFACT_MAX_LIFT;
       c.reason = reasonSummary(c, p0);

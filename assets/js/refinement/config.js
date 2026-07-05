@@ -24,13 +24,18 @@
  * docs/archive/REFINEMENT_PLAN.md §5 + docs/REFINEMENT_README.md on any change here.
  */
 export const PRESETS = {
-  cautious:   { WILSON_FLOOR: 0.88, MIN_LIFT: 1.20, PERSISTENCE_RUNS: 5, FDR_Q: 0.05 },
-  balanced:   { WILSON_FLOOR: 0.80, MIN_LIFT: 1.10, PERSISTENCE_RUNS: 3, FDR_Q: 0.10 },
-  aggressive: { WILSON_FLOOR: 0.72, MIN_LIFT: 1.05, PERSISTENCE_RUNS: 2, FDR_Q: 0.15 },
+  cautious:   { WILSON_FLOOR: 0.88, MIN_LIFT: 1.20, PERSISTENCE_RUNS: 5, PERSISTENCE_DAYS: 14, FDR_Q: 0.05 },
+  balanced:   { WILSON_FLOOR: 0.80, MIN_LIFT: 1.10, PERSISTENCE_RUNS: 3, PERSISTENCE_DAYS: 7,  FDR_Q: 0.10 },
+  aggressive: { WILSON_FLOOR: 0.72, MIN_LIFT: 1.05, PERSISTENCE_RUNS: 2, PERSISTENCE_DAYS: 3,  FDR_Q: 0.15 },
 };
 
-/** Shipped default preset (plan §4.6 — Cautious). */
-export const DEFAULT_PRESET = 'cautious';
+/**
+ * Shipped default preset (owner decision 2026-07-05 — Balanced). Cautious was the
+ * original default, but against the measured genuine baseline (reject rate ≈ 0.88,
+ * capping achievable lift at ≈ 1/0.88 ≈ 1.14 < its MIN_LIFT 1.20) it could never
+ * produce an actionable suggestion — every real run logged actionable_count = 0.
+ */
+export const DEFAULT_PRESET = 'balanced';
 
 /**
  * Dimensions the engine scores (2026-06-19 expansion). `area` + `property_type` are the
@@ -75,6 +80,20 @@ export const FIXED = {
   FDR_PER_DIMENSION: true,    // BH family = per dimension vs one pooled family (§2.5 switch)
   VOLUME_ARTEFACT_MAX_LIFT: 1.0,   // a value is an artefact only when lift ≤ this (§2.8)
   VOLUME_ARTEFACT_MIN_REJECTS: 30, // …and its raw reject count is "high" (≥ this) (§2.8)
+
+  // ── per-dimension gate overrides (2026-07-05 recalibration) ─────────────────────
+  // The flat gates are calibrated for the type dimension, where every reaction lands in
+  // one of ~12 buckets. The AREA dimension spreads the same reactions across ~190
+  // buckets, so per-area genuine volume is structurally small: an all-reject area's
+  // continuity-corrected Wilson lower bound is ≈ 0.66 at n_eff=10 and only reaches
+  // ≈ 0.72 at n_eff=13 — the flat 0.80/0.88 floors mathematically require ~20–30
+  // judgements per area, which a 190-area rotation never accrues. A 0.65 floor lets a
+  // consistently-rejected area surface from ~10 decayed judgements while FDR + lift +
+  // persistence still guard against noise. Any key here shadows the flat constant for
+  // that dimension only (engine.js `dimConfig`).
+  DIM_GATES: {
+    area: { MIN_EFFECTIVE_SAMPLE: 8, MIN_DISTINCT: 5, WILSON_FLOOR: 0.65 },
+  },
 
   // ── per-area learned search radius (radius.js; docs/REFINEMENT_README.md "Radius") ──
   // The radius learner reads the time-decayed distance_mi of LIKED homes per area and

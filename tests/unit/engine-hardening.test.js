@@ -128,14 +128,34 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   test('hardening: sample gate is inclusive at MIN_EFFECTIVE_SAMPLE and MIN_DISTINCT', () => {
+    // property_type carries NO DIM_GATES override, so it exercises the flat constants.
     const mk = (n, distinct) => scoreFromAggregates(
       agg(cfg.GLOBAL_MIN_FEEDBACK, {
-        area: { dimDecayed: cfg.DIM_MIN_FEEDBACK, values: [val('x', n, n, { distinct })] },
+        property_type: { dimDecayed: cfg.DIM_MIN_FEEDBACK, values: [val('x', n, n, { distinct })] },
       }),
     ).candidates[0].gates.sample;
     assertEqual(mk(cfg.MIN_EFFECTIVE_SAMPLE, cfg.MIN_DISTINCT), true, 'both == pass');
     assertEqual(mk(cfg.MIN_EFFECTIVE_SAMPLE - 1e-9, cfg.MIN_DISTINCT), false, 'n_eff below fails');
     assertEqual(mk(cfg.MIN_EFFECTIVE_SAMPLE, cfg.MIN_DISTINCT - 1), false, 'distinct below fails');
+  });
+
+  test('hardening: area DIM_GATES override shadows the flat sample/confidence gates (2026-07-05)', () => {
+    const over = cfg.DIM_GATES.area;
+    assert(over.MIN_EFFECTIVE_SAMPLE < cfg.MIN_EFFECTIVE_SAMPLE, 'area sample gate is looser');
+    const mk = (n, distinct) => scoreFromAggregates(
+      agg(cfg.GLOBAL_MIN_FEEDBACK, {
+        area: { dimDecayed: cfg.DIM_MIN_FEEDBACK, values: [val('x', n, n, { distinct })] },
+      }),
+    ).candidates[0].gates;
+    // Inclusive at the OVERRIDE boundary, not the flat one.
+    assertEqual(mk(over.MIN_EFFECTIVE_SAMPLE, over.MIN_DISTINCT).sample, true, 'override == passes');
+    assertEqual(mk(over.MIN_EFFECTIVE_SAMPLE - 1e-9, over.MIN_DISTINCT).sample, false, 'below override fails');
+    assertEqual(mk(over.MIN_EFFECTIVE_SAMPLE, over.MIN_DISTINCT - 1).sample, false, 'distinct below fails');
+    // Confidence gate uses the override WILSON_FLOOR: an all-reject area at n_eff=10 has
+    // a CC-Wilson lower bound ≈ 0.655 — above the 0.65 override, below every flat floor.
+    const g10 = mk(10, 10);
+    assertEqual(g10.confidence, true, 'all-reject n=10 area clears the 0.65 override floor');
+    assertEqual(mk(8, 8).confidence, false, 'n=8 (≈0.60) still below the floor — sample alone is not enough');
   });
 
   test('hardening: continuity correction switches OFF at exactly CONTINUITY_N_MAX', () => {

@@ -250,10 +250,10 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   // ── Stage 7: sensitivity preset persistence ────────────────────────────────
-  test('view: presetFromOverrides reads the reserved settings key, defaults to cautious', () => {
-    assertEqual(presetFromOverrides({}), 'cautious');
-    assertEqual(presetFromOverrides({ [REFINEMENT_SETTINGS_KEY]: { preset: 'balanced' } }), 'balanced');
-    assertEqual(presetFromOverrides({ [REFINEMENT_SETTINGS_KEY]: { preset: 'nonsense' } }), 'cautious', 'invalid → default');
+  test('view: presetFromOverrides reads the reserved settings key, defaults to balanced', () => {
+    assertEqual(presetFromOverrides({}), 'balanced'); // DEFAULT_PRESET (2026-07-05 recalibration)
+    assertEqual(presetFromOverrides({ [REFINEMENT_SETTINGS_KEY]: { preset: 'cautious' } }), 'cautious');
+    assertEqual(presetFromOverrides({ [REFINEMENT_SETTINGS_KEY]: { preset: 'nonsense' } }), 'balanced', 'invalid → default');
     assertEqual(PRESET_OPTIONS.length, 3);
   });
 

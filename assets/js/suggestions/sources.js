@@ -7,17 +7,26 @@ import {
 } from '../storage.js';
 import { detectConflicts } from '../meta-observations.js';
 import { effectiveWeights, deriveSearchSpec } from '../learned-preferences.js';
-import { classifySuggestions } from '../refinement/view.js';
+import { classifySuggestions, presetFromOverrides } from '../refinement/view.js';
+import { resolveConfig } from '../refinement/config.js';
+import { computeLiveRows, mergeSuggestionRows } from '../refinement/live.js';
 import { RECENCY_DAYS } from '../intelligence-constants.js';
 import { combineSuggestions } from './model.js';
 
 /**
  * Load + combine both suggestion sources.
+ *
+ * Since the 2026-07-05 overhaul the engine also runs LIVE in the browser
+ * (refinement/live.js): its rows merge with the server's refinement_suggestions at the
+ * ROW level (user decisions win; live wins metrics; stale server rows drop) before
+ * classification, so a dead server cron can never blank or stale the inbox. Pass
+ * `live: false` to classify the server rows alone (tests / diagnostics).
+ *
  * @returns {Promise<{ combined, groups, conflicts, areasMeta }>}
  *   combined  — NormalizedSuggestion[] for the shared inbox (engine first, then live)
  *   groups    — classifySuggestions() buckets (the Trends page reuses active/probation/…)
  */
-export async function loadCombinedSuggestions({ now = new Date() } = {}) {
+export async function loadCombinedSuggestions({ now = new Date(), live = true } = {}) {
   const [reactionLog, criteria, areas, learned, engineRows] = await Promise.all([
     getReactionLog(), getCriteria(), getHouseholdAreas(), getLearnedPreferences(), getRefinementSuggestions(),
   ]);
@@ -32,9 +41,14 @@ export async function loadCombinedSuggestions({ now = new Date() } = {}) {
     pruneCandidates: { areas: searchSpec.dropAreas, outcodes: searchSpec.dropOutcodes },
   });
 
+  // Live evaluation at the user's chosen sensitivity, merged under the server rows.
+  const config = resolveConfig({ preset: presetFromOverrides(learned?.overrides || {}) });
+  const liveRows = live ? computeLiveRows(reactionLog, { now, config, dismissals }) : null;
+  const rows = mergeSuggestionRows(engineRows || [], liveRows);
+
   // P10a (step 4.5): thread the learned weights so every engine card carries
   // whySignals + the learned-weight "Why?" line.
-  const groups = classifySuggestions(engineRows || [], undefined, now, { effective });
+  const groups = classifySuggestions(rows, config, now, { effective });
   const combined = combineSuggestions({ conflicts, engineInbox: groups.inbox, areasMeta });
   return { combined, groups, conflicts, areasMeta };
 }

@@ -7,6 +7,7 @@ import {
   stopSearchingArea, hideSuggestion, snoozeSuggestion, dismissSuggestion, setConflictState,
 } from '../storage.js';
 import { dismissUntil } from '../meta-observations.js';
+import { liveSuppressKey } from '../refinement/live.js';
 
 export const SNOOZE_DAYS = 30;
 // Far-future timestamp = a permanent dismiss in the learned_preferences.dismissals map
@@ -47,7 +48,15 @@ export async function applySuggestion(n, deps = DEFAULT_DEPS) {
 
 /** Snooze a suggestion for 30 days (engine → row status; live → dismissals object). */
 export async function snoozeSuggestionUnified(n, deps = DEFAULT_DEPS) {
-  if (n.source === 'engine') return deps.snoozeSuggestion({ dimension: n.dimension, value: n.value, days: SNOOZE_DAYS });
+  if (n.source === 'engine') {
+    // A live-computed card has NO refinement_suggestions row to flip — the status
+    // UPDATE would silently match nothing and the card would bounce straight back.
+    // Its snooze memory lives in the dismissals map instead (computeLiveRows honours it).
+    if (n.origin === 'live') {
+      return deps.setConflictState(liveSuppressKey(n.dimension, n.value), { kind: 'snooze', until: dismissUntil(new Date(), SNOOZE_DAYS) });
+    }
+    return deps.snoozeSuggestion({ dimension: n.dimension, value: n.value, days: SNOOZE_DAYS });
+  }
   return deps.setConflictState(n.id, { kind: 'snooze', until: dismissUntil(new Date(), SNOOZE_DAYS) });
 }
 

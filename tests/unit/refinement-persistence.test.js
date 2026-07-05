@@ -13,7 +13,7 @@ import {
 import { resolveConfig } from '../../assets/js/refinement/config.js';
 
 export async function register({ test, assert, assertEqual }) {
-  const cfg = resolveConfig();
+  const cfg = resolveConfig({ preset: 'cautious' }); // suite pins the strict levers explicitly
   const HH = '9628b44f-447e-4c5b-bbbc-b2ce51efbbbe';
   const BASE = Date.parse('2026-06-05T00:00:00Z');
   const HOUR = 3_600_000;
