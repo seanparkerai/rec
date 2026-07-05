@@ -47,9 +47,15 @@ function buildMedia(listing, href) {
   const inner = listing.image_url
     ? (() => {
         const img = el('img', {
-          class: 'prop-card__img', src: listing.image_url, alt: href ? '' : `Photo of ${title}`,
+          class: 'prop-card__img', alt: href ? '' : `Photo of ${title}`,
           loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
         });
+        // src LAST — the fetch starts the instant src is assigned, so loading=lazy
+        // and referrerpolicy=no-referrer must already be in place or the browser
+        // eager-loads every card at once with a referrer. Rightmove's media host
+        // hotlink-protects referrer-bearing bursts (403), which the error handler
+        // below then swaps to a monogram — i.e. images that flash in then vanish.
+        img.src = listing.image_url;
         const box = el('div', { class: 'prop-card__media' }, [img]);
         img.addEventListener('error', () => box.replaceWith(monogram()), { once: true });
         return box;

@@ -147,9 +147,13 @@ function buildMedia(listing, base, href) {
         const img = el('img', {
           // Inside the labelled dossier link the image is decorative (alt="" avoids
           // a double announcement); standalone it carries the property as its alt.
-          class: `${base}__img`, src: listing.image_url, alt: href ? '' : `Photo of ${title}`,
+          class: `${base}__img`, alt: href ? '' : `Photo of ${title}`,
           loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
         });
+        // src LAST — assigning it starts the fetch, so loading=lazy and
+        // referrerpolicy=no-referrer must be set first (else every card eager-loads
+        // with a referrer and Rightmove hotlink-403s the burst → images vanish).
+        img.src = listing.image_url;
         const box = el('div', { class: base }, [img]);
         // Replace only the inner box on error; any wrapping link stays in place.
         img.addEventListener('error', () => box.replaceWith(monogram()), { once: true });

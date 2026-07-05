@@ -78,6 +78,40 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
+  test('prop-card: img src is assigned AFTER loading+referrerpolicy (no eager referrer-bearing fetch)', async () => {
+    // Regression: el() applies attrs in key order, so a src listed before
+    // loading/referrerpolicy kicks off the fetch with neither in effect — the
+    // browser eager-loads every card WITH a referrer, and Rightmove hotlink-403s
+    // the burst, so all images flash in then vanish. Assert the policy attrs are
+    // present at the moment src is set (i.e. src is assigned last).
+    const { buildPropertyCard, dom } = await load();
+    const proto = dom.window.HTMLImageElement.prototype;
+    const orig = Object.getOwnPropertyDescriptor(proto, 'src');
+    let policyAtSrc = null;
+    let loadingAtSrc = null;
+    Object.defineProperty(proto, 'src', {
+      configurable: true,
+      get() { return this.getAttribute('src'); },
+      set(v) {
+        policyAtSrc = this.getAttribute('referrerpolicy');
+        loadingAtSrc = this.getAttribute('loading');
+        this.setAttribute('src', v);
+      },
+    });
+    try {
+      const card = buildPropertyCard(LISTING, { href: '/x' });
+      assertEqual(card.querySelector('.prop-card__img').getAttribute('src'), LISTING.image_url,
+        'src still lands on the image');
+      assertEqual(policyAtSrc, 'no-referrer',
+        'referrerpolicy is already set when src is assigned (fetch honours no-referrer)');
+      assertEqual(loadingAtSrc, 'lazy',
+        'loading=lazy is already set when src is assigned (off-screen cards do not eager-load)');
+    } finally {
+      Object.defineProperty(proto, 'src', orig);
+    }
+    dom.window.close();
+  });
+
   test('prop-card: media falls back to a monogram — missing image and broken image alike', async () => {
     const { buildPropertyCard, dom } = await load();
     const bare = buildPropertyCard({ ...LISTING, image_url: null }, {});
