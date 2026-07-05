@@ -2,7 +2,7 @@
 
 **Domain:** The Layer 4 refinement engine — learning area & property-type patterns from user reactions and surfacing actionable suggestions. The engine is pure deterministic statistics; the UI wraps it with persistence, logging, and control.
 
-**Naming convention:** `engine.js` (statistical pipeline, pure); `view.js` (view-model builders for the control panel, pure); `config.js` (tunable constants); `scope.js` (scope mutation); `persistence.js` (DB mutation planning); `trends-glance.js` (quick-glance summary rendering).
+**Naming convention:** `engine.js` (statistical pipeline, pure); `view.js` (view-model builders for the control panel, pure); `config.js` (tunable constants); `scope.js` (scope mutation); `persistence.js` (DB mutation planning); `trends-glance.js` (quick-glance summary rendering). 2026-07-05 overhaul: `live.js` (in-browser evaluation + server-row merge, pure); `type-priority.js` (ranked type feed order, pure); `area-league.js` (per-area decision table, pure); `health.js` (engine-health view-model, pure); `ui/` (DOM renderers for health / feed-order / area-league — markup only, no storage access).
 
 **Entry points & architecture:**
 - `engine.js` — deterministic statistical core: normalise → time-decay → Wilson lower bound → baseline + lift + two-proportion test → Benjamini-Hochberg FDR → five gates → tiers → ranking. Takes a snapshot, returns ranked candidates. NO UI, NO Supabase, NO randomness.

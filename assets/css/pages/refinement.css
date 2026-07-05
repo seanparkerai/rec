@@ -481,3 +481,21 @@
 
 /* origin caption on live-computed engine cards (suggestions/card.js) */
 .ref-card__origin { margin: var(--space-1) 0 0; font-size: var(--text-xs); color: var(--ink-subtle); }
+
+/* ── 2026-07-05 restructure: evidence grouping + collapsed history ─────────────── */
+.ref-sub-h {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-base);
+}
+.ref-section .ref-glance .ref-sub-h:first-child { margin-top: 0; }
+.ref-evidence-block { margin-top: var(--space-4); }
+
+.ref-history { margin-block: var(--space-2); }
+.ref-history > summary {
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: var(--space-2) 0;
+}
+.ref-history > summary::marker { color: var(--ink-muted); }
+.ref-history > .ref-list { margin: var(--space-2) 0 var(--space-3); }

@@ -324,7 +324,7 @@ function wireActions(refresh) {
       const preset = btn.dataset.preset || 'balanced';
       const ok = await setRefinementPreset(preset);
       announce(ok
-        ? `Sensitivity set to ${preset}. Your forming patterns will surface as suggestions on the next evaluation.`
+        ? `Sensitivity set to ${preset}. Suggestions on this page re-evaluate immediately.`
         : 'Could not save that setting — please try again.');
       if (ok) await refresh(); else btn.disabled = false;
       return;
@@ -404,9 +404,10 @@ function wireTraining() {
     renderPresets(preset); // optimistic
     const ok = await setRefinementPreset(preset);
     announce(ok
-      ? `Sensitivity set to ${preset}. This applies the next time the engine evaluates your feedback.`
+      ? `Sensitivity set to ${preset}. This page re-evaluates immediately; the daily job follows on its next run.`
       : 'Could not save that setting — please try again.');
-    if (!ok) renderPresets(await getRefinementPreset());
+    if (ok) await refresh(); // live engine reads the preset — re-evaluate now
+    else renderPresets(await getRefinementPreset());
   });
 
   // Reset training — strong confirm, scoped.
