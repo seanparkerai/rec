@@ -111,6 +111,15 @@ export const FIT_WEIGHTS = {
 //                   evidence against that home's bed count or price band — so those
 //                   move at 0.35× strength. A reaction with no reasons is undiscounted
 //                   (full contribution to every signal — backward-compatible).
+//   BULK_DISCOUNT   a bulk-provenance reaction (an en-masse sweep — ADR 0009 durable
+//                   source, heuristic fallback) trains at this multiple of its recency
+//                   weight. A 200-listing price sweep carries real but COARSE signal;
+//                   at 0.3× it can no longer drown one-at-a-time manual reviews
+//                   (owner decision, 2026-07-06). Admin rows stay fully excluded.
+//   SUPERSEDED_DISCOUNT  a graded reaction with a LATER graded reaction on the same
+//                   listing trains at this multiple — the newest judgement counts in
+//                   full, the changed mind lingers only faintly. A `pass` never
+//                   supersedes a graded reaction.
 export const LEARNED_PREF = {
   COLD_START_MIN: 10,
   HALF_LIFE_DAYS: 30,
@@ -119,6 +128,8 @@ export const LEARNED_PREF = {
   SMOOTHING: 3,
   STRONG_FRACTION: 0.5,
   UNATTRIBUTED_DISCOUNT: 0.35,
+  BULK_DISCOUNT: 0.3,
+  SUPERSEDED_DISCOUNT: 0.4,
   // Pass weak-negative: a pass contributes this fraction of a graded reaction's
   // recency weight as a LOCAL penalty to the discrimination of signals it carries
   // (capped at 0.5 of the range in deriveWeights). Never bootstraps cold-start,

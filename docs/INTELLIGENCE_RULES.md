@@ -278,6 +278,18 @@ the attributed signal (probability shares stay ≤ 1, every reaction contributes
 `w` to mass exactly once). Counts (`n`, hence `MIN_SIGNAL_N`/confidence) are untouched —
 the discount applies to mass, not counts.
 
+**Provenance discount + supersede (2026-07-06, owner decision).** `deriveWeights` classifies
+every row's provenance (`reaction-provenance.js#classifyProvenance` — the durable ADR-0009
+`source` column wins, minute-burst heuristic as fallback). A **bulk** row (en-masse sweep)
+trains at `BULK_DISCOUNT` (0.3×) of its recency weight: its reason attribution is real but
+coarse signal that must never drown one-at-a-time reviews (pre-fix, the 2026-06-04 sweep's
+3.3k rejects trained at full weight). A graded row **superseded** by a later graded row on
+the same listing trains at `SUPERSEDED_DISCOUNT` (0.4×) — the newest judgement counts in
+full, the changed mind lingers only faintly; a `pass` never supersedes. Both multipliers
+scale the row's `w` *before* mass accumulation (numerators and denominators stay
+consistent); bulk rows still count toward `gradedCount`/cold start. `meta` records
+`bulk_discount`, `superseded_discount`, `bulkTrained`, `supersededTrained`.
+
 **Unattributed rejects don't train (2026-06).** The "no reasons ⇒ undiscounted" path above
 applies to **likes** (which train on their own merit). A **reject** carrying *no* reason at
 all (no `reasons[]`, no scalar `reason`) is now a **non-training** signal
@@ -339,9 +351,11 @@ types, focus outcodes). Learned weights only *add* focus or exclude on a **stron
 **Constants (`LEARNED_PREF`, `RECENCY_DAYS`, `TRAINING_MILESTONES`)** — CALIBRATED, revisable; change
 them and this section together:
 `COLD_START_MIN` 10 graded · `HALF_LIFE_DAYS` 30 · `MAX_LEARNED_WEIGHT` 0.30 · `MIN_SIGNAL_N` 2 ·
-`SMOOTHING` 3 · `STRONG_FRACTION` 0.5 · `UNATTRIBUTED_DISCOUNT` 0.35 · `RECENCY_DAYS` 14 ·
+`SMOOTHING` 3 · `STRONG_FRACTION` 0.5 · `UNATTRIBUTED_DISCOUNT` 0.35 · `BULK_DISCOUNT` 0.3 ·
+`SUPERSEDED_DISCOUNT` 0.4 · `RECENCY_DAYS` 14 ·
 `TRAINING_MILESTONES` { usable 30, solid 80, mature 160 }. *(v3 L4 — added 2026-05-31; reason
-attribution + baths signal + milestones added 2026-05-31.)*
+attribution + baths signal + milestones added 2026-05-31; provenance/supersede discounts
+added 2026-07-06.)*
 
 ### Multi-reason feedback + training progress (v3 L4 upgrade)
 

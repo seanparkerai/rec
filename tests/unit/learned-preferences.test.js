@@ -444,6 +444,70 @@ export async function register({ test, assert, assertEqual }) {
     assert(!spec.focusTypes.includes('cottage'), 'weak learned signal ignored');
   });
 
+  // ── provenance + supersede discounts (2026-07-06, owner decision) ──────────
+  test('learned-prefs: a bulk-source reject trains at exactly BULK_DISCOUNT of a manual one', () => {
+    // Same-count, same-age reject cohorts differing ONLY in declared provenance:
+    // their price-band weights must sit in the exact BULK_DISCOUNT ratio.
+    const rs = [
+      ...many(10, 'like').map((r) => ({ ...r, source: 'manual' })),
+      ...Array.from({ length: 5 }, (_, i) => ({
+        ...react('reject', { id: `man-${i}`, price: 460_000 }, 1, `man-${i}`),
+        reasons: [{ key: 'too_expensive', detail: null, note: null }], source: 'manual',
+      })),
+      ...Array.from({ length: 5 }, (_, i) => ({
+        ...react('reject', { id: `blk-${i}`, price: 260_000 }, 1, `blk-${i}`),
+        reasons: [{ key: 'too_expensive', detail: null, note: null }], source: 'bulk',
+      })),
+    ];
+    const { derived, meta } = deriveWeights(rs, { now: NOW });
+    assertEqual(meta.bulkTrained, 5, 'bulk rows counted in meta');
+    const manualW = derived['price-band:450-500k'].weight;
+    const bulkW = derived['price-band:250-300k'].weight;
+    assert(manualW < 0 && bulkW < 0, 'both cohorts train negative');
+    assert(Math.abs(bulkW / manualW - LEARNED_PREF.BULK_DISCOUNT) < 0.02,
+      `bulk/manual weight ratio ${(bulkW / manualW).toFixed(3)} ≠ BULK_DISCOUNT ${LEARNED_PREF.BULK_DISCOUNT}`);
+  });
+
+  test('learned-prefs: bulk rows still count toward cold start (they carry signal at 0.3×)', () => {
+    const rs = Array.from({ length: LEARNED_PREF.COLD_START_MIN }, (_, i) => ({
+      ...react('reject', { id: `b-${i}` }, 1, `b-${i}`),
+      reasons: [{ key: 'too_expensive', detail: null, note: null }], source: 'bulk',
+    }));
+    const { meta } = deriveWeights(rs, { now: NOW });
+    assert(!meta.coldStart, 'a bulk-only log past COLD_START_MIN is not cold');
+    assertEqual(meta.gradedCount, LEARNED_PREF.COLD_START_MIN);
+  });
+
+  test('learned-prefs: a later reject supersedes an earlier like — the like lingers at 0.4×', () => {
+    // Listing L carries a unique beds:4 signal; liked 10d ago, rejected today.
+    const L = { id: 'L', beds: 4 };
+    const base = many(10, 'like').map((r) => ({ ...r, source: 'manual' }));
+    const flip = [
+      { ...react('like', L, 10, 'L-like'), listing_id: 'L', source: 'manual' },
+      { ...react('reject', L, 1, 'L-reject'), listing_id: 'L', source: 'manual',
+        reasons: [{ key: 'too_small', detail: null, note: null }] },
+    ];
+    const dampened = deriveWeights([...base, ...flip], { now: NOW });
+    const undamped = deriveWeights([...base, ...flip], { now: NOW, supersededDiscount: 1 });
+    assertEqual(dampened.meta.supersededTrained, 1, 'exactly the old like is superseded');
+    assert(dampened.derived['beds:4'].weight < 0, 'the newest judgement (reject) wins the sign');
+    assert(dampened.derived['beds:4'].weight < undamped.derived['beds:4'].weight,
+      'discounting the stale like leaves the reject MORE dominant than counting both in full');
+  });
+
+  test('learned-prefs: a later pass never supersedes a like', () => {
+    const L = { id: 'L2', beds: 4 };
+    const rs = [
+      ...many(10, 'like').map((r) => ({ ...r, source: 'manual' })),
+      { ...react('like', L, 10, 'L2-like'), listing_id: 'L2', source: 'manual' },
+      { ...react('like', { id: 'L3', beds: 4 }, 9, 'L3-like'), listing_id: 'L3', source: 'manual' },
+      { ...react('pass', L, 1, 'L2-pass'), listing_id: 'L2', source: 'manual' },
+    ];
+    const { derived, meta } = deriveWeights(rs, { now: NOW });
+    assertEqual(meta.supersededTrained, 0, 'a pass is not a graded supersession');
+    assert(derived['beds:4'].weight > 0, 'the like keeps its positive weight (pass only dampens)');
+  });
+
   test('learned-prefs: deriveSearchSpec surfaces strong-negative area/outcode prune candidates', () => {
     const eff = {
       'area:hatherden-sp11': -LEARNED_PREF.MAX_LEARNED_WEIGHT,   // strong − → drop candidate

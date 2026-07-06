@@ -21,10 +21,11 @@
 //   • genuineReactions()   → the Refinement findings filter (so baseline/lift are real);
 //   • provenanceSummary()  → the portal's honest "your reactions" engagement display.
 //
-// NOTE: this is deliberately NOT used by the learned-preference WEIGHTS engine. There,
-// reason-attributed bulk rejects (too_expensive → price, wrong_area → area) carry
-// correct, attributable signal and are kept; only unattributed rejects are dropped
-// (see learned-preferences/weights.js + reactions.js isUnattributedReject).
+// NOTE: since 2026-07-06 (owner decision) the learned-preference WEIGHTS engine also
+// consumes this classification — bulk rows still train (their reason attribution is
+// real signal) but at LEARNED_PREF.BULK_DISCOUNT of their recency weight, so a sweep
+// can never drown one-at-a-time reviews (see learned-preferences/weights.js §3a;
+// unattributed rejects stay fully dropped via reactions.js isUnattributedReject).
 
 import { isNonTrainingReaction } from './reactions.js';
 

@@ -2,7 +2,8 @@
 // Layer 2 derive + Layer 2⊕3 effective weights (REFACTOR P7c). Pure. No DOM/IO.
 import { LEARNED_PREF, RECENCY_DAYS, TRAINING_MILESTONES } from '../intelligence-constants.js';
 import { signalsForListing, implicatedKinds } from './signals.js';
-import { isNonTrainingReaction, isUnattributedReject } from '../listings/reactions.js';
+import { isNonTrainingReaction, isUnattributedReject, latestPerListing } from '../listings/reactions.js';
+import { classifyProvenance } from '../listings/reaction-provenance.js';
 
 const GRADED = new Set(['like', 'reject']);
 const PASS   = new Set(['pass']);
@@ -116,6 +117,15 @@ export function trainingProgress(reactions, opts = {}) {
  *   1. Keep only GRADED reactions (like/reject) that carry a snapshot.
  *   2. Below COLD_START_MIN graded reactions ⇒ return {} (honest cold start).
  *   3. Each reaction gets a recency weight 0.5^(ageDays / HALF_LIFE_DAYS).
+ *   3a. PROVENANCE + SUPERSEDE (2026-07-06, owner decision). A bulk-provenance
+ *      reaction (en-masse sweep — durable ADR-0009 `source`, heuristic fallback via
+ *      classifyProvenance) has its recency weight multiplied by BULK_DISCOUNT (0.3):
+ *      real but coarse signal that must not drown one-at-a-time reviews. A graded
+ *      reaction SUPERSEDED by a later graded reaction on the same listing is
+ *      multiplied by SUPERSEDED_DISCOUNT (0.4): the newest judgement counts in full,
+ *      the changed mind lingers only faintly (a `pass` never supersedes). Both scale
+ *      the row's `w` BEFORE mass accumulation, so numerators and denominators stay
+ *      consistent. Admin rows remain fully excluded (isTraining).
  *   3b. REASON ATTRIBUTION. If a reaction carries reasons, the signal kinds those
  *      reasons IMPLICATE get the full recency weight; every other signal kind is
  *      multiplied by UNATTRIBUTED_DISCOUNT (d, default 0.35). A reaction with no
@@ -153,11 +163,19 @@ export function deriveWeights(reactions, opts = {}) {
   const discount = opts.unattributedDiscount ?? LEARNED_PREF.UNATTRIBUTED_DISCOUNT;
   const passWeight = opts.passWeight ?? LEARNED_PREF.PASS_WEIGHT;
   const viewedMult = opts.viewedMultiplier ?? LEARNED_PREF.VIEWED_MULTIPLIER;
+  const bulkDiscount = opts.bulkDiscount ?? LEARNED_PREF.BULK_DISCOUNT;
+  const supersededDiscount = opts.supersededDiscount ?? LEARNED_PREF.SUPERSEDED_DISCOUNT;
   const statusMap = opts.statusMap ?? {};
 
-  const all = Array.isArray(reactions) ? reactions : [];
+  // Provenance over the WHOLE log (the heuristic's minute-buckets need every row;
+  // durable ADR-0009 sources win row-by-row regardless).
+  const all = classifyProvenance(Array.isArray(reactions) ? reactions : []);
   const graded = all.filter(isTraining);
   const passes = all.filter((r) => r && PASS.has(r.reaction)  && r.listing_snapshot);
+  // Supersede: the newest GRADED row per listing counts in full; earlier graded rows
+  // on the same listing are discounted. Built over graded rows only, so a later
+  // `pass` (or an admin/unattributed row) never supersedes a real judgement.
+  const latestGraded = latestPerListing(graded);
 
   const meta = {
     coldStart: graded.length < coldMin,
@@ -165,6 +183,10 @@ export function deriveWeights(reactions, opts = {}) {
     decay_basis: 'days',
     half_life_days: halfLife,
     unattributed_discount: discount,
+    bulk_discount: bulkDiscount,
+    superseded_discount: supersededDiscount,
+    bulkTrained: 0,
+    supersededTrained: 0,
     computed_at: now.toISOString(),
   };
   if (meta.coldStart) return { derived: {}, meta };
@@ -177,7 +199,11 @@ export function deriveWeights(reactions, opts = {}) {
     const ageDays = Math.max(0, (now.getTime() - new Date(r.created_at).getTime()) / 86_400_000);
     const status = statusMap[r.listing_id];
     const statusMult = (status === 'viewed' || status === 'offered') ? viewedMult : 1;
-    const w = Math.pow(0.5, ageDays / halfLife) * statusMult;
+    const bulkMult = r.provenance === 'bulk' ? bulkDiscount : 1;
+    const supersededMult = !r.listing_id || latestGraded.get(r.listing_id) === r ? 1 : supersededDiscount;
+    if (bulkMult !== 1) meta.bulkTrained += 1;
+    if (supersededMult !== 1) meta.supersededTrained += 1;
+    const w = Math.pow(0.5, ageDays / halfLife) * statusMult * bulkMult * supersededMult;
     const liked = r.reaction === 'like';
     if (liked) likedMass += w; else rejectedMass += w;
 
