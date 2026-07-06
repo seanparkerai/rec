@@ -73,6 +73,37 @@ export async function register({ test, assert, assertEqual }) {
     assert(classifyProvenance(burst(k, 'reject', MIN)).every((r) => r.provenance === 'bulk'), 'k per minute is bulk');
   });
 
+  test('provenance (ADR 0009): a durable source wins verbatim over the heuristic', () => {
+    // A slow sweep (< BULK_PER_MIN) the heuristic would call individual is bulk when
+    // the writer declared it; a durable 'manual' inside a burst stays individual.
+    const slowSweep = { ...one('reject', '2026-06-05T10:00:00Z', 'too_expensive'), source: 'bulk' };
+    const inBurst = burst(8, 'reject', MIN).map((r, i) => (i === 0 ? { ...r, source: 'manual' } : r));
+    const cls = classifyProvenance([slowSweep, ...inBurst]);
+    assertEqual(cls[0].provenance, 'bulk', 'declared bulk wins even at slow cadence');
+    assertEqual(cls[1].provenance, 'individual', 'declared manual wins even inside a burst');
+    assert(cls.slice(2).every((r) => r.provenance === 'bulk'), 'undeclared burst rows fall back to heuristic');
+  });
+
+  test('provenance (ADR 0009): source admin/import map to admin/bulk; unknown falls back', () => {
+    const cls = classifyProvenance([
+      { ...one('reject', '2026-06-05T11:00:00Z'), source: 'admin' },
+      { ...one('like', '2026-06-05T11:01:00Z'), source: 'import' },
+      { ...one('reject', '2026-06-05T11:02:00Z', 'too_small'), source: 'someday-new-value' },
+    ]);
+    assertEqual(cls[0].provenance, 'admin', "source 'admin' verbatim");
+    assertEqual(cls[1].provenance, 'bulk', "'import' is en-masse, never an individual judgement");
+    assertEqual(cls[2].provenance, 'individual', 'unrecognised source → heuristic fallback');
+  });
+
+  test('provenance (ADR 0009): genuineReactions honours durable sources', () => {
+    const g = genuineReactions([
+      { ...one('reject', '2026-06-06T09:00:00Z', 'too_expensive'), source: 'bulk' },
+      { ...one('reject', '2026-06-06T09:10:00Z', 'too_small'), source: 'manual' },
+    ]);
+    assertEqual(g.length, 1, 'declared-bulk slow sweep is dropped from the genuine signal');
+    assertEqual(g[0].reason, 'too_small');
+  });
+
   test('provenance: tolerates empty / undated input', () => {
     assertEqual(genuineReactions([]).length, 0, 'empty log');
     assertEqual(provenanceSummary(null).total, 0, 'null log');

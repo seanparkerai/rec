@@ -12,9 +12,12 @@
 //       swept, looked "99% rejected, strong pattern"); and
 //   (b) makes the "how many homes have I reviewed?" count meaningless (3.6k vs ~360).
 //
-// Provenance separates the genuine, one-at-a-time signal from the sweeps. It is read
-// at use-time from the existing log (created_at bursts + the removed_area tag) — no
-// schema column, no migration. Two consumers:
+// Provenance separates the genuine, one-at-a-time signal from the sweeps. Since
+// ADR 0009 the log carries a durable `source` column, self-declared by every writer
+// ('manual'/'bulk'/'admin'/'import') and heuristic-backfilled once over the historical
+// rows; classifyProvenance() prefers that durable value and falls back to the read-time
+// heuristic (created_at bursts + the removed_area tag) for rows without one (old
+// localStorage caches, fixtures). Two consumers:
 //   • genuineReactions()   → the Refinement findings filter (so baseline/lift are real);
 //   • provenanceSummary()  → the portal's honest "your reactions" engagement display.
 //
@@ -35,6 +38,13 @@ export const REACTION_CADENCE = { BULK_PER_MIN: 6 };
 
 const GRADED = new Set(['like', 'reject']);
 
+/**
+ * Durable `source` (ADR 0009) → provenance class. 'import' is en-masse re-ingested
+ * data, not a one-at-a-time judgement, so it classes as 'bulk'. Unknown/absent
+ * values fall through to the read-time heuristic.
+ */
+const SOURCE_TO_PROVENANCE = { manual: 'individual', bulk: 'bulk', admin: 'admin', import: 'bulk' };
+
 /** Minute-bucket key for a timestamp (UTC, truncated to the minute). 'na' if undated. */
 function minuteKey(created_at) {
   const t = new Date(created_at).getTime();
@@ -51,17 +61,18 @@ export const PROVENANCE = ['individual', 'bulk', 'admin'];
  *   • 'bulk'       — part of an en-masse minute-burst (≥ BULK_PER_MIN graded that minute).
  *   • 'individual' — a genuine, one-at-a-time judgement.
  *
- * Rules: a `like` is ALWAYS individual — you never bulk-like (verified in the data,
- * every reasoned like was entered alone). Only a `reject` can be 'bulk'. A `pass`
- * (non-graded soft skip) is 'individual'. Admin wins over bulk.
+ * Rules: a durable `source` (ADR 0009) wins verbatim when recognised. On the
+ * heuristic path: a `like` is ALWAYS individual — you never bulk-like (verified in
+ * the data, every reasoned like was entered alone). Only a `reject` can be 'bulk'.
+ * A `pass` (non-graded soft skip) is 'individual'. Admin wins over bulk.
  *
- * @param {Array} log   reaction rows { reaction, reason?, reasons?, created_at }
+ * @param {Array} log   reaction rows { reaction, reason?, reasons?, created_at, source? }
  * @param {object} [opts] { bulkPerMin }
  */
 export function classifyProvenance(log, opts = {}) {
   const bulkPerMin = opts.bulkPerMin ?? REACTION_CADENCE.BULK_PER_MIN;
   const rows = Array.isArray(log) ? log : [];
-  // Count graded reactions per minute bucket — the burst signal.
+  // Count graded reactions per minute bucket — the burst signal (heuristic fallback).
   const perMinute = new Map();
   for (const r of rows) {
     if (!r || !GRADED.has(r.reaction)) continue;
@@ -69,6 +80,8 @@ export function classifyProvenance(log, opts = {}) {
     perMinute.set(k, (perMinute.get(k) || 0) + 1);
   }
   return rows.map((r) => {
+    const durable = r ? SOURCE_TO_PROVENANCE[r.source] : undefined;
+    if (durable) return { ...r, provenance: durable };
     let provenance = 'individual';
     if (isNonTrainingReaction(r)) provenance = 'admin';
     else if (r && r.reaction === 'reject'

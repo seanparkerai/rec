@@ -350,11 +350,17 @@ CREATE TABLE IF NOT EXISTS listing_reactions (
   reason           text,                                    -- chip key / free text; PRIMARY reason key, dual-written for back-compat
   reasons          jsonb NOT NULL DEFAULT '[]'::jsonb,       -- v3 multi-reason: [{key, detail, note}] — source of truth (migration listing_reactions_multi_reason)
   listing_snapshot jsonb,                                   -- listing at reaction time (training durability)
+  source           text NOT NULL DEFAULT 'manual'           -- provenance, self-declared at insert (ADR 0009); historical rows heuristic-backfilled once
+                   CHECK (source IN ('manual','bulk','admin','import')),
   created_at       timestamptz NOT NULL DEFAULT now()
 );
 
--- Idempotent column add (so re-running on an existing table picks up multi-reason).
+-- Idempotent column adds (so re-running on an existing table picks up multi-reason
+-- and the ADR-0009 provenance column; the live backfill ran once in migration
+-- listing_reactions_source_provenance and is not repeated here).
 ALTER TABLE listing_reactions ADD COLUMN IF NOT EXISTS reasons jsonb NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE listing_reactions ADD COLUMN IF NOT EXISTS source text NOT NULL DEFAULT 'manual'
+  CHECK (source IN ('manual','bulk','admin','import'));
 
 ALTER TABLE listing_reactions ENABLE ROW LEVEL SECURITY;
 

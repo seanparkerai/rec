@@ -1,5 +1,8 @@
 // types/supabase.d.ts — GENERATED from the live Supabase schema. DO NOT HAND-EDIT.
 // Generated: 2026-07-03 via mcp__supabase__generate_typescript_types (project qxmyrahqsopmaeokxdub).
+// 2026-07-06: listing_reactions.source added generator-faithfully after migration
+// listing_reactions_source_provenance (generator call blocked on approval this session —
+// re-run generate_typescript_types at the next opportunity; no other drift).
 // Regenerate after every schema migration — the §17/§18.5 schema-change ceremony
 // (docs/SUPABASE_SYNC.md) includes this as a step. Consumed type-only via JSDoc
 // `import('../types/supabase.js')` annotations (tier-0 checkJs); never shipped to the browser.
@@ -766,6 +769,7 @@ export type Database = {
           reaction: string
           reason: string | null
           reasons: Json
+          source: string
           user_id: string | null
         }
         Insert: {
@@ -777,6 +781,7 @@ export type Database = {
           reaction: string
           reason?: string | null
           reasons?: Json
+          source?: string
           user_id?: string | null
         }
         Update: {
@@ -788,6 +793,7 @@ export type Database = {
           reaction?: string
           reason?: string | null
           reasons?: Json
+          source?: string
           user_id?: string | null
         }
         Relationships: [

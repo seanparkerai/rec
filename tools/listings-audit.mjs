@@ -76,15 +76,17 @@ export function provenanceMix(reactions, opts = {}) {
   const bySource = {};
   const HEURISTIC_TWIN = { manual: 'individual', bulk: 'bulk', admin: 'admin' };
   const drift = { checked: 0, mismatches: 0 };
-  const classified = classifyProvenance(rows, opts);
-  for (const r of classified) {
-    if (r.source == null) continue;
+  // classifyProvenance is durable-first, so strip `source` to recover what the
+  // read-time heuristic alone would say — the drift check compares the two.
+  const heuristic = classifyProvenance(rows.map(({ source, ...r }) => r), opts); // eslint-disable-line no-unused-vars
+  rows.forEach((r, i) => {
+    if (r?.source == null) return;
     bySource[r.source] = (bySource[r.source] || 0) + 1;
     const twin = HEURISTIC_TWIN[r.source];
-    if (!twin) continue;
+    if (!twin) return;
     drift.checked += 1;
-    if (twin !== r.provenance) drift.mismatches += 1;
-  }
+    if (twin !== heuristic[i].provenance) drift.mismatches += 1;
+  });
   return { summary, bySource, drift, byReaction: countBy(rows, (r) => r?.reaction || '(none)') };
 }
 
