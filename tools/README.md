@@ -38,6 +38,7 @@ detailed spec. Retired one-shots live in [`archive/`](archive/README.md).
 | `backfill-listing-areas.mjs` | Recomputes the `listing_areas` m2m membership via the deriving RPC (pure recompute, £0). | Via the `remembership` workflow; after area/radius changes. |
 | `lib/geofence-universe.mjs` | THE canonical geofence village universe (active OR household-linked + tuning) — pure core + DB/repo edges. | Library — consumed by every geofence tool. |
 | `purge-listings.mjs` | Maintenance purge of the heavy `listings` table (+ its `listing_areas` junction rows). | Periodic maintenance. |
+| `listings-audit.mjs` | Read-only listings-health snapshot: lifecycle buckets, reaction provenance mix, orphan/snapshot coverage, junction hygiene, sync_log growth. `--json` for baselining. | Before/after any listings cleanup; ad-hoc health checks. |
 
 ## Refinement engine (v3 L4)
 | Script | What it does | When to run |
