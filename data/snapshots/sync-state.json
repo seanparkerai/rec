@@ -88,9 +88,9 @@
   },
   "household_areas": {
     "count": 220,
-    "last_synced_at": "2026-07-09T18:41:35Z",
+    "last_synced_at": "2026-07-09T19:10:00Z",
     "_class": "user-state",
-    "_note": "Relational per-household area selection (PK household_id+area_id), composed by storage.js#getHouseholdAreas; owner household seeded with the full curated catalog; members may INSERT only household-onboarding stubs. is_origin column dropped 2026-07-09 (ADR 0009); Botley/Curbridge/Curdridge stubs added + linked the same day."
+    "_note": "Relational per-household area selection (PK household_id+area_id), composed by storage.js#getHouseholdAreas; owner household seeded with the full curated catalog; members may INSERT only household-onboarding stubs. is_origin column dropped 2026-07-09 (ADR 0009); Botley/Curbridge/Curdridge stubs added + linked, and the 9 links to June-4 curated-disabled areas paused for state consistency, the same day."
   },
   "area_confirmations": {
     "count": 1,
