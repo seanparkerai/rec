@@ -64,7 +64,7 @@ aggregate), `request_rightmove_fetch` (portal→fetcher dispatch), and `replace_
 radius tuning, so a plain upsert would leave stale rows).
 
 **SECURITY DEFINER RPC (per-household read):** `household_feed(p_household_id, …)` — the ONE
-visibility predicate (2026-07-01, migration `household_feed_rpc`): membership ∩ non-origin
+visibility predicate (2026-07-01, migration `household_feed_rpc`): membership ∩
 active areas ∩ curated-disable rule ∩ `geofence_pass IS DISTINCT FROM false` ∩ the
 `passesBaseline` rule (constants + type regexes mirrored from
 `assets/js/listings/classify.js`, pinned by `tests/contract/household-feed.test.js` against
@@ -73,12 +73,11 @@ household members only (plus service contexts); anon/non-members get `forbidden`
 listing columns + an `areas` jsonb membership array. The storage feed read
 (`storage/listings/feed.js`) is repointed at it in step 2.13.
 
-**`household_areas.is_origin`** (boolean, default false): marks a home/commute-anchor area.
-An origin area contributes to commute math but is **excluded from listing-feed membership**
-(the `household_feed` RPC drops it from the household scope) AND from the **fetcher demand
-set** (it is not scraped) — its catchment is where the household LIVES, not where they want
-to buy. User-editable via the area picker's "Home" toggle
-(`storage#setHouseholdAreaOrigin`, step 2.19).
+**`household_areas.is_origin` — RETIRED (2026-07-09, ADR 0009, owner directive):** the
+home/commute-anchor mechanic was never an intended feature. The column is dropped
+(migrations `remove_is_origin_from_household_feed` + `drop_is_origin_from_household_areas`),
+the RPC/fetcher no longer read it, and the area picker's "Home" toggle is removed — **every
+active (non-paused) household area is in feed and fetch scope.**
 
 Note: `checklists` and `outreach_templates` have **no** mirror table — those catalogues are
 repo-JSON-only. **`data/journey.json` is the same class by decision (2026-07-03, step 8.3):**

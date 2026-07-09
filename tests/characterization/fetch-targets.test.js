@@ -16,7 +16,7 @@ function fixtureUniverse() {
   // SP11: fully tight (two near villages + one far) → tight cluster disks.
   // SO32: one coarse village → whole-outcode fallback search.
   // GU32/GU33: two villages sharing ONE tight identifier → dedupe merge.
-  // PO15: origin-only area → demand-gated out entirely.
+  // PO15: zero-demand area (no active household links) → demand-gated out.
   return new Map([
     ['SP11', [
       V('wherwell-sp11', 'SP11', 51.10, -1.50, tight('POSTCODE^1')),
@@ -33,8 +33,8 @@ function fixtureUniverse() {
   ]);
 }
 
-// Demand set as main() builds it: every area ≥1 active household links,
-// with is_origin links dropped before the set is formed (whiteley excluded).
+// Demand set as main() builds it: every area with ≥1 active household link
+// (whiteley excluded here purely as the zero-demand fixture).
 const DEMAND = new Set([
   'wherwell-sp11', 'goodworth-sp11', 'hatherden-sp11',
   'waltham-chase-so32', 'dundridge-so32', 'flexcombe-gu32', 'flexcombe-gu33',
@@ -66,7 +66,7 @@ export async function register({ test, assert, assertEqual }) {
       { label: 'SO32', id: null, r: null, areas: ['dundridge-so32', 'waltham-chase-so32'] },
       // GU32+GU33 share one tight identifier → merged, union of areas, widest radius.
       { label: 'GU32:flexcombe-gu32+0=GU33:flexcombe-gu33+0', id: 'POSTCODE^5', r: 3, areas: ['flexcombe-gu32', 'flexcombe-gu33'] },
-      // PO15 (origin-only) is absent entirely — no target, no spend.
+      // PO15 (zero-demand) is absent entirely — no target, no spend.
     ];
     assertEqual(JSON.stringify(got, null, 1), JSON.stringify(want, null, 1));
   });

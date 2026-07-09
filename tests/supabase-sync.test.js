@@ -123,22 +123,22 @@ test('listing_areas is live-content (untracked): NOT in the tracked snapshot', a
 
 test('feed read goes through the ONE visibility predicate (household_feed RPC)', async () => {
   // Since step 2.13 the household-scoped read is a single household_feed RPC
-  // call — the RPC owns membership + origin exclusion + curated-disable +
-  // geofence + baseline (semantics pinned by tests/contract/household-feed.test.js
-  // against supabase/archive/schema-household-feed.sql). The retired client-side
-  // composition (page listing_areas → .in('rightmove_id', id-list) → local
-  // origin filter) must never come back beside it — two half-rules drift.
+  // call — the RPC owns membership + curated-disable + geofence + baseline
+  // (semantics pinned by tests/contract/household-feed.test.js against
+  // supabase/archive/schema-household-feed.sql). The retired client-side
+  // composition (page listing_areas → .in('rightmove_id', id-list)) must never
+  // come back beside it — two half-rules drift. The origin-area carve-out was
+  // REMOVED (ADR 0009): every active area is in scope, feed and fetcher alike.
   const feed = await readFile(resolve(root, 'assets/js/storage/listings/feed.js'), 'utf8');
   assert(/rpc\('household_feed'/.test(feed),
     'scoped feed read must call the household_feed RPC');
   assert(!/\.in\('area_id'/.test(feed) && !/\.in\('rightmove_id', memberIds\)/.test(feed),
     'the retired client-side membership/id-list scoping must not return');
   const sql = await readFile(resolve(root, 'supabase/archive/schema-household-feed.sql'), 'utf8');
-  assert(/ha\.is_origin = false/.test(sql) && /listing_areas/.test(sql),
-    'household_feed must own origin exclusion + junction membership');
-  // The fetcher demand set must drop origin areas too (cost corollary).
+  assert(/listing_areas/.test(sql), 'household_feed must own junction membership');
+  assert(!/is_origin\s*=/.test(sql), 'the retired is_origin predicate must not return to household_feed');
   const fetcher = await readFile(resolve(root, 'tools/fetch-listings.mjs'), 'utf8');
-  assert(/is_origin/.test(fetcher), 'fetcher must read is_origin and drop origin areas from the demand set');
+  assert(!/is_origin/.test(fetcher), 'the retired is_origin gate must not return to the fetcher demand set');
 });
 
 test('purge tool reuses the baseline + fingerprint contract (no drift, v3 P4)', async () => {

@@ -1,10 +1,10 @@
-// tests/listing-areas.test.js — m2m listing↔area membership + origin-area semantics.
+// tests/listing-areas.test.js — m2m listing↔area membership semantics.
 // Covers the pure building blocks of the junction (tools/listing-areas-writer.mjs +
 // the backfill's is_primary alignment) and the CONTRACT the feed read enforces:
 //   • Problem A — a listing stamped with area X but physically inside area Y is a
 //     member of Y, so a household holding Y sees it (the single area_id would hide it).
-//   • Problem B — an origin area is dropped from the household's feed scope, so a
-//     listing that sits ONLY in the origin's catchment is not surfaced.
+//   (The origin-area carve-out — old "Problem B" — was removed 2026-07-09, ADR 0009:
+//   every active link is in scope.)
 import { withinGeofence } from '../../tools/listings-normalise.mjs';
 import { membershipRowsFor, groupByListing } from '../../tools/listing-areas-writer.mjs';
 import { membershipFor } from '../../tools/backfill-listing-areas.mjs';
@@ -17,9 +17,9 @@ const VILLAGES = [
 ];
 
 // The feed's scope logic, mirrored purely so the contract is locked by a test:
-//   held = active, NON-origin area links; a listing is in-scope iff its membership
+//   held = ALL active area links; a listing is in-scope iff its membership
 //   set intersects the held set (what storage resolves via listing_areas + .in()).
-const heldAreas = (links) => links.filter((l) => l.status === 'active' && !l.is_origin).map((l) => l.area_id);
+const heldAreas = (links) => links.filter((l) => l.status === 'active').map((l) => l.area_id);
 const feedIncludes = (listingAreaIds, held) => listingAreaIds.some((a) => held.includes(a));
 
 export async function register({ test, assert, assertEqual }) {
@@ -78,24 +78,23 @@ export async function register({ test, assert, assertEqual }) {
     // The listing's primary area_id is one the household does NOT hold, but it is a
     // MEMBER of one the household does hold.
     const listingAreas = ['wickham-and-knowle-hampshire', 'waltham-chase-so32']; // primary would be wickham
-    const held = heldAreas([{ area_id: 'waltham-chase-so32', status: 'active', is_origin: false }]);
+    const held = heldAreas([{ area_id: 'waltham-chase-so32', status: 'active' }]);
     assert(feedIncludes(listingAreas, held), 'held via the overlap membership, not the primary');
     // A household holding neither → excluded.
-    const heldNone = heldAreas([{ area_id: 'swanmore-so32', status: 'active', is_origin: false }]);
+    const heldNone = heldAreas([{ area_id: 'swanmore-so32', status: 'active' }]);
     assert(!feedIncludes(listingAreas, heldNone), 'not a member of any held area → excluded');
   });
 
-  // ── Problem B: origin areas are excluded from feed scope ──
-  test('feed contract (Problem B): a listing only in an origin area is not surfaced', () => {
+  // ── Every ACTIVE link is in scope; only paused links drop out (ADR 0009) ──
+  test('feed contract: every active area link is held; paused links are not', () => {
     const links = [
-      { area_id: 'waltham-chase-so32', status: 'active', is_origin: false }, // target
-      { area_id: 'whiteley-po15', status: 'active', is_origin: true },        // origin (home/commute)
+      { area_id: 'waltham-chase-so32', status: 'active' },
+      { area_id: 'whiteley-po15', status: 'active' },     // ex-origin: now scoped in like any other
+      { area_id: 'swanmore-so32', status: 'inactive' },   // paused
     ];
     const held = heldAreas(links);
-    assertEqual(JSON.stringify(held), JSON.stringify(['waltham-chase-so32'])); // origin dropped
-    assert(!feedIncludes(['whiteley-po15'], held), 'origin-only listing excluded');
-    assert(feedIncludes(['waltham-chase-so32'], held), 'target listing still included');
-    // Membership itself is origin-agnostic: a whiteley listing IS a member of whiteley,
-    // it is simply not in the household's *scope* because origin is filtered out.
+    assertEqual(JSON.stringify(held), JSON.stringify(['waltham-chase-so32', 'whiteley-po15']));
+    assert(feedIncludes(['whiteley-po15'], held), 'active-area listing included — no origin carve-out');
+    assert(!feedIncludes(['swanmore-so32'], held), 'paused-only listing excluded');
   });
 }

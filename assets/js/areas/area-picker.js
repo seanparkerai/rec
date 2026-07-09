@@ -10,7 +10,7 @@
 import { el, on, clear } from '../dom.js';
 import { debouncedLookup, selectPlace } from './place-lookup.js';
 import { isFetchEligible } from './area-enrich.js';
-import { getHouseholdAreas, removeHouseholdArea, setHouseholdAreaOrigin } from '../storage.js';
+import { getHouseholdAreas, removeHouseholdArea } from '../storage.js';
 
 const HINT = 'Add at least one place you’d like to live. We match it to a researched village where we can, or create a placeholder we can enrich later.';
 
@@ -50,32 +50,7 @@ export async function mountAreaPicker(container, { onChange } = {}) {
     }
     for (const a of areas) {
       const paused = a._status === 'inactive';
-      const isOrigin = !!a._isOrigin;
       const name = a.name || a.id;
-      // Origin toggle (step 2.19): "I live/commute here" vs "I want to buy here".
-      // An origin area feeds commute math but is EXCLUDED from the property feed
-      // and the scrape — state carried in text (aria-pressed + label), never
-      // colour alone (§11).
-      const home = el('button', {
-        type: 'button',
-        class: 'area-picker__chip-home',
-        'aria-pressed': String(isOrigin),
-        'aria-label': isOrigin
-          ? `${name} is marked as home or commute base — tap to search it for properties instead`
-          : `Mark ${name} as home or commute base (excluded from your property feed)`,
-        title: isOrigin ? 'Home/commute base — not searched' : 'Mark as home/commute base',
-      }, 'Home');
-      on(home, 'click', async () => {
-        home.disabled = true;
-        const ok = await setHouseholdAreaOrigin(a.id, !isOrigin);
-        if (ok) {
-          await paintChosen();
-          notifyChanged();
-          status.textContent = !isOrigin
-            ? `${name} marked as home/commute base — it feeds commute context but won’t appear in your property feed.`
-            : `${name} is a search area again — its properties return to your feed.`;
-        } else { home.disabled = false; }
-      });
       const x = el('button', { type: 'button', class: 'area-picker__chip-x', 'aria-label': `Remove ${name}` }, '×');
       on(x, 'click', async () => {
         x.disabled = true;
@@ -83,10 +58,10 @@ export async function mountAreaPicker(container, { onChange } = {}) {
         if (ok) { await paintChosen(); notifyChanged(); }
         else { x.disabled = false; }
       });
-      const label = `${name}${isOrigin ? ' (home)' : ''}${paused ? ' (paused)' : ''}`;
+      const label = `${name}${paused ? ' (paused)' : ''}`;
       chosen.append(el('li', {
-        class: `area-picker__chip${paused ? ' is-paused' : ''}${isOrigin ? ' is-origin' : ''}`,
-      }, [label, home, x]));
+        class: `area-picker__chip${paused ? ' is-paused' : ''}`,
+      }, [label, x]));
     }
   }
 

@@ -154,19 +154,17 @@ primary is one you don't. Writers: both `tools/fetch-listings.mjs` and
 `replace_listing_areas` RPC; `tools/backfill-listing-areas.mjs` seeded existing rows.
 
 **One visibility predicate (2026-07-01):** the `household_feed(p_household_id, …)` SECURITY
-DEFINER RPC owns the whole per-household rule in one place — membership ∩ non-origin active
+DEFINER RPC owns the whole per-household rule in one place — membership ∩ active
 areas ∩ curated-disable ∩ `geofence_pass` ∩ baseline, ordered + paged, with the full membership
 set attached as `areas` jsonb. Contract: `supabase/archive/schema-household-feed.sql` +
 `tests/contract/household-feed.test.js` (fixture reference implementation:
 `tests/mocks/household-feed-rpc.js`). The storage feed read is pointed at it in step 2.13.
 
-**Origin areas** (`household_areas.is_origin=true`): a home/commute-anchor area. It counts for
-commute math but is **excluded from the listing feed and the fetcher demand set** — its
-catchment is where the household lives, not where they want to buy. Contrast a **target** area
-(the default) whose listings the household wants to see. **User-editable since step 2.19:**
-each chip in the reusable area picker (profile Areas section + areas/map page) carries a
-"Home" toggle writing the flag via `storage#setHouseholdAreaOrigin` — the original one-off
-SQL seed (Whiteley, 2026-07-01) is now just data this control manages.
+**Origin areas — RETIRED (2026-07-09, ADR 0009):** the `is_origin` home/commute-anchor
+carve-out (2026-07-01 → 2026-07-09) was removed by owner directive as a never-intended
+feature. The column is dropped, the RPC and fetcher no longer read it, and the picker's
+"Home" toggle is gone: **every active household area is a target** — the only per-area
+feed/fetch switch is the reversible pause (`status: active|inactive`).
 
 ### Listing lifecycle (audited + pinned, step 2.18)
 

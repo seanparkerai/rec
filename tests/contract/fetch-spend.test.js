@@ -4,8 +4,8 @@
 // change that uncaps the budget, raises the per-target result cap, or drops the
 // hard cap from the actor input fails the harness instead of the bank account.
 // Demand gating (the other spend lever) is pinned in tests/unit/fetch-listings
-// and tests/characterization/fetch-targets; the origin/active-link gates live in
-// network functions, so they are pinned here at source level.
+// and tests/characterization/fetch-targets; the active-link gate lives in
+// network functions, so it is pinned here at source level.
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -40,14 +40,15 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(res.stdout.trim(), '7 10', 'env overrides must reach APIFY_MAX_BUDGET_USD / RESULTS_PER_OUTCODE');
   });
 
-  test('fetch-spend: demand-set gates are present at source (origin + active-only)', () => {
-    // These live inside network functions (household_areas fetch + demand-set
-    // builder), so pin the load-bearing lines textually: origin areas are never
-    // scraped, and only active household links create demand.
-    assert(/if \(l\.is_origin\) continue;/.test(src),
-      'origin-area exclusion missing from the demand-set builder — the fetcher would scrape home/commute catchments');
+  test('fetch-spend: demand-set gate is present at source (active-only)', () => {
+    // This lives inside network functions (household_areas fetch + demand-set
+    // builder), so pin the load-bearing line textually: only active household
+    // links create demand. The old origin-area exclusion was REMOVED (ADR 0009)
+    // — every active link is demand; a reappearing is_origin gate is a regression.
     assert(/household_areas\?status=eq\.active/.test(src),
       'household_areas read no longer filters status=eq.active — paused areas would stay in the demand set');
+    assert(!/is_origin/.test(src),
+      'is_origin resurfaced in the fetcher — the origin mechanic was removed (ADR 0009)');
   });
 
   test('fetch-spend: the hard cap is documented as env-tunable, not hardcoded elsewhere', () => {

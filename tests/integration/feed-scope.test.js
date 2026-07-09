@@ -5,8 +5,8 @@
 // here by the fixture reference implementation (tests/mocks/household-feed-rpc.js,
 // itself contract-pinned against the SQL mirror) — so these assertions prove the
 // same visibility contract holds THROUGH the client: m2m membership scoping,
-// origin exclusion, active-link filtering, geofence_pass semantics, status
-// filter, ordering, and membership attachment.
+// active-link filtering (the origin carve-out was removed — ADR 0009),
+// geofence_pass semantics, status filter, ordering, and membership attachment.
 import { MockSupabaseClient } from '../mocks/supabase-client.js';
 import { buildHouseholdFeedRpc } from '../mocks/household-feed-rpc.js';
 
@@ -23,10 +23,10 @@ function fixtureTables() {
   return {
     household_members: [{ user_id: 'user-001', household_id: HID }],
     household_areas: [
-      { household_id: HID, area_id: 'a-target', status: 'active', is_origin: false },
-      { household_id: HID, area_id: 'a-second', status: 'active', is_origin: false },
-      { household_id: HID, area_id: 'a-origin', status: 'active', is_origin: true },   // home — excluded
-      { household_id: HID, area_id: 'a-paused', status: 'inactive', is_origin: false }, // paused — excluded
+      { household_id: HID, area_id: 'a-target', status: 'active' },
+      { household_id: HID, area_id: 'a-second', status: 'active' },
+      { household_id: HID, area_id: 'a-home', status: 'active' },     // ex-origin — now included like any active area
+      { household_id: HID, area_id: 'a-paused', status: 'inactive' }, // paused — excluded
     ],
     listing_areas: [
       // in-target: primary IS the held area
@@ -34,8 +34,8 @@ function fixtureTables() {
       // problem-A: physically inside a held area but primary stamped elsewhere
       { rightmove_id: 'overlap', area_id: 'a-unheld', distance_mi: 0.4, is_primary: true },
       { rightmove_id: 'overlap', area_id: 'a-second', distance_mi: 0.9, is_primary: false },
-      // problem-B: only inside the household's ORIGIN area
-      { rightmove_id: 'origin-only', area_id: 'a-origin', distance_mi: 0.3, is_primary: true },
+      // only inside the household's home area (ex-origin): surfaces like any other
+      { rightmove_id: 'home-only', area_id: 'a-home', distance_mi: 0.3, is_primary: true },
       // paused-area-only membership
       { rightmove_id: 'paused-only', area_id: 'a-paused', distance_mi: 0.2, is_primary: true },
       // member of a held area but geofence_pass=false on the row (belt-and-braces gate)
@@ -48,7 +48,7 @@ function fixtureTables() {
     listings: [
       L('in-target', { first_seen: '2026-06-03T00:00:00Z' }),
       L('overlap', { area_id: 'a-unheld', first_seen: '2026-06-05T00:00:00Z' }),
-      L('origin-only', { area_id: 'a-origin', first_seen: '2026-06-04T00:00:00Z' }),
+      L('home-only', { area_id: 'a-home', first_seen: '2026-06-04T00:00:00Z' }),
       L('paused-only', { area_id: 'a-paused', first_seen: '2026-06-02T00:00:00Z' }),
       L('gf-false', { pass: false, first_seen: '2026-06-06T00:00:00Z' }),
       L('gf-null', { pass: null, first_seen: '2026-06-01T00:00:00Z' }),
@@ -91,11 +91,11 @@ export async function register({ test, assert, assertEqual }) {
       'listing whose primary is unheld but which is a member of a held area IS visible');
   });
 
-  test('feed (Problem B): origin-area membership never surfaces a listing', async () => {
+  test('feed: EVERY active area surfaces — no origin carve-out (ADR 0009)', async () => {
     const { feed } = await loadFeed(fixtureTables());
     const rows = await quiet(() => feed.getListings({ limit: 50 }));
-    assert(!rows.some((r) => r.rightmove_id === 'origin-only'),
-      'origin-only listing is excluded from the feed');
+    assert(rows.some((r) => r.rightmove_id === 'home-only'),
+      'listing held only via the household\'s home area IS in the feed');
   });
 
   test('feed: paused (status≠active) area links do not scope listings in', async () => {
@@ -127,9 +127,9 @@ export async function register({ test, assert, assertEqual }) {
 
   test('feed: a household with no target areas gets an empty feed (short-circuit)', async () => {
     const t = fixtureTables();
-    t.household_areas = t.household_areas.filter((l) => l.area_id === 'a-origin'); // origin only
+    t.household_areas = t.household_areas.filter((l) => l.area_id === 'a-paused'); // paused only
     const { feed } = await loadFeed(t);
     const rows = await quiet(() => feed.getListings({ limit: 50 }));
-    assertEqual(rows.length, 0, 'origin-only household sees nothing (no target areas)');
+    assertEqual(rows.length, 0, 'paused-only household sees nothing (no target areas)');
   });
 }

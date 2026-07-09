@@ -119,7 +119,7 @@ async function _attachAreaMemberships(sb, rows) {
 }
 
 // The household-scoped read (step 2.13): ONE call to the household_feed RPC —
-// the single visibility predicate (membership ∩ non-origin active areas ∩
+// the single visibility predicate (membership ∩ active areas ∩
 // curated-disable ∩ geofence_pass ∩ baseline; see supabase/archive/
 // schema-household-feed.sql + docs/DATA_MODEL.md). This retired the client-side
 // composition (resolve area ids → page listing_areas → .in('rightmove_id', …)

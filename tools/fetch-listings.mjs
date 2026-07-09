@@ -531,7 +531,7 @@ async function loadHouseholdAreas() {
   if (!SERVICE_KEY) return { rows: [], links: [], ok: false };
   const headers = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` };
   try {
-    const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=household_id,area_id,is_origin`;
+    const laUrl = `${SUPABASE_URL}/rest/v1/household_areas?status=eq.active&select=household_id,area_id`;
     const laRes = await fetch(laUrl, { headers });
     if (!laRes.ok) throw new Error(`GET household_areas failed: ${laRes.status}`);
     const links = (await laRes.json()) || [];
@@ -763,11 +763,6 @@ async function main() {
   const areaHouseholds = new Map();
   for (const l of householdLinks || []) {
     if (!l?.area_id || !l?.household_id) continue;
-    // Origin areas (where the household LIVES, not where they want to buy) are
-    // excluded from the demand set: the fetcher must not spend Apify budget
-    // scraping a household's home/commute catchment whose listings the feed will
-    // never show (the display-side mirror of this drop is in storage/listings/feed.js).
-    if (l.is_origin) continue;
     if (!areaHouseholds.has(l.area_id)) areaHouseholds.set(l.area_id, new Set());
     areaHouseholds.get(l.area_id).add(l.household_id);
   }

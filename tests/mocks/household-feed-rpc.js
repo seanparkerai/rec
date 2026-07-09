@@ -7,7 +7,7 @@
 //
 // Semantics mirrored 1:1 from the SQL (any divergence is a bug HERE or THERE —
 // the contract test additionally pins the SQL text against classify.js):
-//   target areas  = household_areas(status='active', is_origin=false) minus
+//   target areas  = household_areas(status='active') minus
 //                   curated disables (areas.data active=false, not an
 //                   onboarding stub); an id absent from areas passes through
 //   membership    = DISTINCT listing_areas rows in any target area (a listing
@@ -45,7 +45,7 @@ export function buildHouseholdFeedRpc(tables, { session } = {}) {
       .some((m) => m?.user_id === uid && m?.household_id === p_household_id);
     if (!member) return { data: null, error: { message: 'household_feed: forbidden' } };
 
-    // Target areas: active, non-origin links minus curated disables.
+    // Target areas: active links minus curated disables.
     const areaById = new Map((tables.areas ?? []).map((a) => [a.id, a]));
     const isCuratedDisabled = (id) => {
       const a = areaById.get(id);
@@ -53,7 +53,7 @@ export function buildHouseholdFeedRpc(tables, { session } = {}) {
     };
     const targetAreas = new Set(
       (tables.household_areas ?? [])
-        .filter((l) => l?.household_id === p_household_id && l?.status === 'active' && !l?.is_origin)
+        .filter((l) => l?.household_id === p_household_id && l?.status === 'active')
         .map((l) => l.area_id)
         .filter((id) => !isCuratedDisabled(id)),
     );

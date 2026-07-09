@@ -311,7 +311,8 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   redirects unauthenticated users with a `next=` return path, and the admin⇔kiosk
   lock is enforced both client-side and in the DB (`live_feed_stats` admin check).
 - **Feed correctness:** `household_feed` centralises the visibility predicate
-  (membership ∩ active non-origin areas ∩ geofence ∩ baseline) and its baseline
+  (membership ∩ active areas ∩ geofence ∩ baseline; the non-origin clause was
+  removed 2026-07-09, ADR 0009) and its baseline
   regex/constants are parity-tested against `classify.js`
   (`tests/contract/household-feed.test.js`).
 - **Offline write safety:** the storage layer's pending-write journal + drain

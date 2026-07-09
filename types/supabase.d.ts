@@ -1,5 +1,8 @@
 // types/supabase.d.ts — GENERATED from the live Supabase schema. DO NOT HAND-EDIT.
 // Generated: 2026-07-03 via mcp__supabase__generate_typescript_types (project qxmyrahqsopmaeokxdub).
+// 2026-07-09: household_areas.is_origin removed to mirror migration
+// drop_is_origin_from_household_areas (generator unavailable this session — the
+// diff is mechanical: three dropped lines; regenerate at next schema change).
 // Regenerate after every schema migration — the §17/§18.5 schema-change ceremony
 // (docs/SUPABASE_SYNC.md) includes this as a step. Consumed type-only via JSDoc
 // `import('../types/supabase.js')` annotations (tier-0 checkJs); never shipped to the browser.
@@ -420,7 +423,6 @@ export type Database = {
           area_id: string
           created_at: string
           household_id: string
-          is_origin: boolean
           status: string
         }
         Insert: {
@@ -428,7 +430,6 @@ export type Database = {
           area_id: string
           created_at?: string
           household_id: string
-          is_origin?: boolean
           status?: string
         }
         Update: {
@@ -436,7 +437,6 @@ export type Database = {
           area_id?: string
           created_at?: string
           household_id?: string
-          is_origin?: boolean
           status?: string
         }
         Relationships: [

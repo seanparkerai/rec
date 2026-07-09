@@ -1,4 +1,8 @@
 -- REFERENCE ONLY — applied to the live project as migration household_feed_rpc (20260701232138); do not re-run.
+-- Amended 2026-07-09 by migration remove_is_origin_from_household_feed: the
+-- origin-area (home/commute anchor) exclusion was removed by owner directive —
+-- the feed shows every active (non-paused) household area. The is_origin
+-- column itself is dropped from household_areas.
 -- schema-household-feed.sql — the ONE per-household visibility predicate
 -- (flagship step 2.12; plan/04-program.md §3 collapse #4).
 -- Migration intent name: household_feed_rpc.
@@ -9,18 +13,18 @@
 -- CREATE OR REPLACE is idempotent.
 --
 -- WHY: before this RPC the feed's visibility rule lived client-side in
--- assets/js/storage/listings/feed.js — resolve non-origin active areas, drop
+-- assets/js/storage/listings/feed.js — resolve active areas, drop
 -- curated disables, page listing_areas for member ids, then filter listings by
 -- an .in('rightmove_id', …) id list (a URL-length scale wall) PLUS a
 -- belt-and-braces geofence_pass gate. This function owns the WHOLE predicate in
--- one place: membership ∩ non-origin active areas ∩ curated-disable rule ∩
+-- one place: membership ∩ active areas ∩ curated-disable rule ∩
 -- geofence_pass ∩ baseline, ordered and paged. The client (step 2.13) calls it
 -- and retires the id-list plumbing.
 --
 -- CONTRACT (pinned by tests/contract/household-feed.test.js against this file,
 -- and by the fixture reference implementation tests/mocks/household-feed-rpc.js):
---   * target areas  — household_areas rows with status='active' AND
---     is_origin=false, minus CURATED disables: areas.data active=false whose
+--   * target areas  — household_areas rows with status='active',
+--     minus CURATED disables: areas.data active=false whose
 --     source is not 'household-onboarding' (the excludeCuratedDisabled rule in
 --     assets/js/areas/area-ref.js; a stub keeps rendering, a disabled area
 --     never does; an id absent from areas passes through).
@@ -82,7 +86,6 @@ begin
     left join areas a on a.id = ha.area_id
     where ha.household_id = p_household_id
       and ha.status = 'active'
-      and ha.is_origin = false
       and not (
         (a.data ->> 'active')::boolean is false
         and coalesce(a.data ->> 'source', '') <> 'household-onboarding'

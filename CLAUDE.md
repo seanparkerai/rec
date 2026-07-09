@@ -287,9 +287,9 @@ list is in `tests/supabase-sync.test.js`. Never restate counts here.**
 - **System / engine** (`households`, `household_members`, `sync_log`, plus fetcher-written
   `listings` + its `listing_areas` m2m membership junction, and the engine-managed refinement
   tables): Supabase-managed; never synced or directly edited by Claude. (`listing_areas` records
-  every area whose geofence contains a listing — `listings.area_id` stays the single primary;
-  `household_areas.is_origin` marks home/commute anchors excluded from the feed + fetch. See
-  `docs/SUPABASE_SYNC.md` / `docs/DATA_MODEL.md`.)
+  every area whose geofence contains a listing — `listings.area_id` stays the single primary.
+  Every ACTIVE household area is in feed + fetch scope; the old `is_origin` home/commute
+  carve-out was removed 2026-07-09 — ADR 0009. See `docs/SUPABASE_SYNC.md` / `docs/DATA_MODEL.md`.)
 
 ### 18.2 Mandatory MCP-first session start
 

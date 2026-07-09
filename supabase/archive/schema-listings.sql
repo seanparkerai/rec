@@ -166,9 +166,10 @@ $$;
 -- browser anon key rewrite listing->area membership, bypassing RLS (audit H1, 2026-07-09).
 REVOKE EXECUTE ON FUNCTION replace_listing_areas(text, jsonb) FROM PUBLIC, anon, authenticated;
 
--- Origin areas: a home/commute-anchor area contributes to commute math but is
--- EXCLUDED from listing-feed membership + the fetcher demand set (its catchment is
--- where the household LIVES, not where they want to buy). Household-specific.
-ALTER TABLE household_areas ADD COLUMN IF NOT EXISTS is_origin boolean NOT NULL DEFAULT false;
+-- [RETIRED 2026-07-09, ADR 0009 / migration drop_is_origin_from_household_areas]
+-- The is_origin (home/commute anchor) column added below was removed by owner
+-- directive: every active household area is in feed + fetch scope. The ALTER is
+-- kept for the historical record only — the column no longer exists.
+-- ALTER TABLE household_areas ADD COLUMN IF NOT EXISTS is_origin boolean NOT NULL DEFAULT false;
 
 COMMIT;

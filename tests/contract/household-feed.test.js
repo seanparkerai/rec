@@ -3,9 +3,11 @@
 //   1. Fixture semantics via the reference implementation
 //      (tests/mocks/household-feed-rpc.js), pinning the same contracts the 2.2
 //      feed integration test pins for the client path: membership scoping,
-//      Problem A (membership beats primary), Problem B (origin exclusion),
-//      paused links, curated-disable vs onboarding stubs, cross-membership
-//      dedupe, geofence semantics, baseline, status/order/paging, forbidden.
+//      Problem A (membership beats primary), every-active-area inclusion (the
+//      is_origin home/commute carve-out was REMOVED 2026-07-09 — see
+//      docs/adr/0009), paused links, curated-disable vs onboarding stubs,
+//      cross-membership dedupe, geofence semantics, baseline,
+//      status/order/paging, forbidden.
 //   2. SQL-text pins over the DDL mirror (supabase/archive/
 //      schema-household-feed.sql): guard, clauses, and the classify.js
 //      constants + type regexes (translated \b→\y) — so the DB copy of the
@@ -42,20 +44,20 @@ function fixtureTables() {
       // catalog passes through (the excludeCuratedDisabled contract).
     ],
     household_areas: [
-      { household_id: HID, area_id: 'a-target', status: 'active', is_origin: false },
-      { household_id: HID, area_id: 'a-second', status: 'active', is_origin: false },
-      { household_id: HID, area_id: 'a-origin', status: 'active', is_origin: true },    // home — excluded
-      { household_id: HID, area_id: 'a-paused', status: 'inactive', is_origin: false }, // paused — excluded
-      { household_id: HID, area_id: 'a-disabled', status: 'active', is_origin: false }, // curated disable — excluded
-      { household_id: HID, area_id: 'a-stub', status: 'active', is_origin: false },     // stub — INCLUDED
+      { household_id: HID, area_id: 'a-target', status: 'active' },
+      { household_id: HID, area_id: 'a-second', status: 'active' },
+      { household_id: HID, area_id: 'a-home', status: 'active' },     // ex-origin — now a plain active area, INCLUDED
+      { household_id: HID, area_id: 'a-paused', status: 'inactive' }, // paused — excluded
+      { household_id: HID, area_id: 'a-disabled', status: 'active' }, // curated disable — excluded
+      { household_id: HID, area_id: 'a-stub', status: 'active' },     // stub — INCLUDED
     ],
     listing_areas: [
       { rightmove_id: 'in-target', area_id: 'a-target', distance_mi: 0.5, is_primary: true },
       // Problem A: inside a held area, primary stamped elsewhere
       { rightmove_id: 'overlap', area_id: 'a-unheld', distance_mi: 0.4, is_primary: true },
       { rightmove_id: 'overlap', area_id: 'a-second', distance_mi: 0.9, is_primary: false },
-      // Problem B: only inside the household's ORIGIN area
-      { rightmove_id: 'origin-only', area_id: 'a-origin', distance_mi: 0.3, is_primary: true },
+      // only inside the household's home area (ex-origin): now surfaces like any other
+      { rightmove_id: 'home-only', area_id: 'a-home', distance_mi: 0.3, is_primary: true },
       { rightmove_id: 'paused-only', area_id: 'a-paused', distance_mi: 0.2, is_primary: true },
       { rightmove_id: 'disabled-only', area_id: 'a-disabled', distance_mi: 0.2, is_primary: true },
       { rightmove_id: 'stub-one', area_id: 'a-stub', distance_mi: 0.4, is_primary: true },
@@ -75,7 +77,7 @@ function fixtureTables() {
     listings: [
       L('in-target', { first_seen: '2026-06-03T00:00:00Z' }),
       L('overlap', { area_id: 'a-unheld', first_seen: '2026-06-05T00:00:00Z' }),
-      L('origin-only', { area_id: 'a-origin', first_seen: '2026-06-04T00:00:00Z' }),
+      L('home-only', { area_id: 'a-home', first_seen: '2026-06-04T00:00:00Z' }),
       L('paused-only', { area_id: 'a-paused', first_seen: '2026-06-02T00:00:00Z' }),
       L('disabled-only', { area_id: 'a-disabled', first_seen: '2026-06-02T12:00:00Z' }),
       L('stub-one', { area_id: 'a-stub', first_seen: '2026-06-02T18:00:00Z' }),
@@ -108,9 +110,9 @@ export async function register({ test, assert, assertEqual }) {
       'listing whose primary is unheld but which is a member of a held area IS visible');
   });
 
-  test('household_feed (Problem B): origin membership never surfaces; paused links excluded', () => {
+  test('household_feed: EVERY active area surfaces (no origin carve-out); paused links excluded', () => {
     const ids = feed().data.map((r) => r.rightmove_id);
-    assert(!ids.includes('origin-only'), 'origin-only listing excluded');
+    assert(ids.includes('home-only'), 'listing in the household\'s home area IS visible (is_origin removed, ADR 0009)');
     assert(!ids.includes('paused-only'), 'inactive-link membership excluded');
   });
 
@@ -164,8 +166,8 @@ export async function register({ test, assert, assertEqual }) {
     const denied = buildHouseholdFeedRpc(fixtureTables(), { session: SESSION })({ p_household_id: 'house-002' });
     assert(denied.data === null && /forbidden/.test(denied.error?.message ?? ''), 'non-member forbidden');
     const t = fixtureTables();
-    t.household_areas = t.household_areas.filter((l) => l.area_id === 'a-origin');
-    assertEqual(feed({}, t).data.length, 0, 'origin-only household sees nothing');
+    t.household_areas = t.household_areas.filter((l) => l.area_id === 'a-paused');
+    assertEqual(feed({}, t).data.length, 0, 'paused-only household sees nothing');
   });
 
   // ── SQL-text pins over the DDL mirror ─────────────────────────────────────
@@ -178,12 +180,14 @@ export async function register({ test, assert, assertEqual }) {
       'is_household_member(p_household_id)',
       "raise exception 'household_feed: forbidden'",
       "ha.status = 'active'",
-      'ha.is_origin = false',
       "coalesce(a.data ->> 'source', '') <> 'household-onboarding'",
       'l.geofence_pass is distinct from false',
       'order by l.first_seen desc, l.rightmove_id',
       'limit p_limit offset p_offset',
     ]) assert(sql.includes(needle), `SQL mirror must contain: ${needle}`);
+    // The origin carve-out is RETIRED (ADR 0009): every active area is in the
+    // target set. A reappearing is_origin predicate is a regression.
+    assert(!/is_origin\s*=/.test(sql), 'SQL mirror must NOT reintroduce an is_origin predicate');
   });
 
   test('household_feed SQL: baseline constants + type regexes mirror classify.js exactly', () => {
