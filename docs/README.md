@@ -21,6 +21,7 @@ Live operating docs for this repo, one line each. Historical material lives in
 | [`FETCH_SCHEDULE.md`](FETCH_SCHEDULE.md) | Daily Rightmove fetch — timing, the two cooperating triggers, and DST-safe scheduling. |
 | [`LIVE_FEED_PLAN.md`](LIVE_FEED_PLAN.md) | The `/live-feed` admin kiosk — approved build plan (admin-only stats RPC + burn-in layout). |
 | [`USER_PROFILE.md`](USER_PROFILE.md) | Pointer doc: buyer profile lives in Supabase only, never in repo JSON. |
+| [`ISSUE_LOG.md`](ISSUE_LOG.md) | System-audit findings register — flaws/risks with severity, evidence, and recommended fixes. |
 
 `archive/` holds completed plans, one-off migration instructions, superseded progress logs and
 audit snapshots — kept for the record, not needed for day-to-day work. Notably:
