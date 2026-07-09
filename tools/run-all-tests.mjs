@@ -86,13 +86,26 @@ for (const tier of TIERS) {
   };
   const t0 = Date.now();
   for (const file of files) {
-    const mod = await import(pathToFileURL(file).href);
+    // A per-file try/catch turns an unloadable suite (e.g. a missing dev dep like
+    // jsdom, or a top-level import error) into a single counted FAIL line rather
+    // than an unhandled rejection that aborts the whole run with a raw stack.
+    let mod;
+    try {
+      mod = await import(pathToFileURL(file).href);
+    } catch (e) {
+      results.push({ name: `${file} failed to load`, pass: false, error: e?.message || String(e) });
+      continue;
+    }
     if (typeof mod.register !== 'function') {
       results.push({ name: `${file} exports register()`, pass: false, error: 'no register() export' });
       continue;
     }
-    await mod.register({ test, assert, assertEqual, fixtures });
-    await Promise.all(pending.splice(0));
+    try {
+      await mod.register({ test, assert, assertEqual, fixtures });
+      await Promise.all(pending.splice(0));
+    } catch (e) {
+      results.push({ name: `${file} register() threw`, pass: false, error: e?.message || String(e) });
+    }
   }
   byTier.set(tier, { files: files.length, results, ms: Date.now() - t0 });
 }

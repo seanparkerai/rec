@@ -4,14 +4,32 @@
 > `claude/system-audit-issues-btv6x9`. Baseline: `node tools/run-all-tests.mjs`
 > green (1176/1176) with dev deps installed.
 >
-> This is a findings register, **not** a set of applied changes — nothing in the
-> app was modified. Each item has a severity, evidence, impact, and a concrete
-> recommendation so you can decide what to action. Guard-railed files (CLAUDE.md
-> §16) and schema/RLS changes (§16 mechanical rails) are called out as needing
-> their own named phase.
+> **Update 2026-07-09 — fixes applied.** Every finding below except **M3** (owner
+> decision: any signed-in user may keep triggering fetch runs) has been resolved
+> in this branch. Each item now carries a **✅ Resolved** / **⏸️ Won't-fix (by
+> design)** / **📋 Owner action** line stating exactly what changed. Harness green
+> (1176/1176) after the fixes; DB migrations verified live via `execute_sql`.
 
 **Severity key** — 🔴 High (security or data-integrity, act soon) · 🟠 Medium
 (correctness/latent bug or real risk) · 🟡 Low (polish, hygiene, docs).
+
+## Resolution summary
+
+| # | Severity | Status | What changed |
+|---|----------|--------|--------------|
+| H1 | 🔴 | ✅ Resolved | `REVOKE EXECUTE` on `replace_listing_areas` from public/anon/authenticated (migration `revoke_replace_listing_areas_from_public`). |
+| H2 | 🔴 | ✅ Resolved | `sync_log` read policy scoped to `listings`/`system` rows (migration `scope_sync_log_public_read`). |
+| M1 | 🟠 | ✅ Resolved | Feed RPC now receives the household's live `budget.max` + `size.minBeds` (`storage/listings/feed.js`). |
+| M2 | 🟠 | ✅ Resolved | 4 duplicate-postcode village records removed; Charlwood canonicalised to the correct SO24; index/snapshot/test updated. |
+| M3 | 🟠 | ⏸️ Won't-fix | Owner decision — any signed-in user may trigger fetch runs. Left as-is. |
+| L1 | 🟡 | ✅ Resolved | `areas` high-water mark + note corrected in `sync-state.json`. |
+| L2 | 🟡 | 📋 Owner action | One dashboard toggle — no MCP/API surface to set it programmatically. |
+| L3 | 🟡 | ⏸️ Won't-fix | `pg_net` is non-relocatable (`extrelocatable=false`); moving it would break the fetch-dispatch pipeline. |
+| L4 | 🟡 | ✅ Resolved | README live URL corrected to `georgianrectory.com` (matches CNAME + CORS). |
+| L5 | 🟡 | ✅ Resolved (partial) | FK index added + RLS init-plan wrapped; unused indexes intentionally kept (see item). |
+| L6 | 🟡 | ✅ Resolved | `controls.js` escapers collapsed to one `esc` with correct semantics. |
+| L7 | 🟡 | ⏸️ Won't-fix | Admin nav reveal is tested defense-in-depth; kept, comment already documents it. |
+| L8 | 🟡 | ✅ Resolved | Test runner wraps per-file `import()` so an unloadable suite is a counted FAIL. |
 
 **Wave-1 scope covered:** every HTML page + shell partials; dashboard tiles;
 storage layer (`storage/**`); Supabase schema, RLS policies, SECURITY DEFINER
@@ -42,6 +60,12 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   signed-in caller ever needs it, add an explicit `is_household_member`/role
   check inside the function first. This is a schema/permission change → its own
   named phase + ADR per §16 mechanical rails.
+- **✅ Resolved (2026-07-09):** migration `revoke_replace_listing_areas_from_public`
+  ran `REVOKE EXECUTE … FROM public, anon, authenticated`. Verified live: grants are
+  now `postgres=EXECUTE, service_role=EXECUTE` only. The fetcher tools
+  (`fetch-listings.mjs`, `listing-areas-writer.mjs`, `backfill-listing-areas.mjs`)
+  use the service-role key, so they are unaffected. Reference SQL updated in
+  `supabase/archive/schema-listings.sql`.
 
 ### H2 — `sync_log` (internal activity ledger, ~21.5k rows) is world-readable
 - **Where:** RLS policy `sync_log public read` (`USING (true)`), table
@@ -61,6 +85,12 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   gate the whole table behind the admin/service role and expose the scraper feed
   through a SECURITY DEFINER function like `live_feed_stats`. Schema/RLS change →
   named phase + ADR.
+- **✅ Resolved (2026-07-09):** migration `scope_sync_log_public_read` dropped the
+  `USING (true)` policy and created `sync_log scraper feed public read` with
+  `USING (table_name = 'listings' AND actor = 'system')`. `getScraperLog()` filters to
+  exactly that slice, so the /live-feed kiosk is unaffected; user-state row ids +
+  edit timestamps are no longer world-readable. Reference SQL updated in
+  `supabase/schema.sql`.
 
 ---
 
@@ -85,6 +115,13 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   `_householdFeed()` into the RPC call, or drop the price/bed gate from the RPC
   and let the client fit-engine own it (it already re-filters). Client-only change
   (no schema edit) if you pass the params through.
+- **✅ Resolved (2026-07-09):** `getListings()` now fetches the household's criteria
+  and forwards `budget.max` → `p_price_max` and `size.minBeds` → `p_min_beds` to the
+  RPC (`storage/listings/feed.js`). Each is passed only when set (the key is omitted
+  otherwise so the SQL default applies — passing `null` would filter out every priced
+  row). The permissive `p_price_min` default is deliberately left alone so
+  cheaper-than-min listings are still shown; the client fit engine owns affordability.
+  Integration + contract tiers stay green.
 
 ### M2 — Duplicate area records for 4 villages under two outcodes each; 4 are orphaned from the index
 - **Where:** `data/areas/` + the `areas` DB table + `household_areas`.
@@ -106,6 +143,21 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   row + `villages.csv`, migrate any `household_areas`/`area_confirmations`
   references, delete the stale id, re-run `sync-areas-from-supabase` →
   `build-areas`, and confirm the parity test. Data migration → its own phase.
+- **Note on discovery:** the "orphaning" turned out to be *documented* — a
+  `KNOWN_DEACTIVATED` list in `tests/areas-index-sync.test.js` intentionally kept the
+  four variant files out of the index. But it had picked the wrong canonical for
+  Charlwood: the household's **active** area is `charlwood-so24`, and the coordinates
+  (long ≈ −1.03, the Ropley/Alresford area — not Petersfield) confirm SO24 is the
+  correct postcode and the indexed `charlwood-gu34` was mis-coded.
+- **✅ Resolved (2026-07-09):** migration `dedupe_four_villages_orphan_ids` cleared the
+  stale `listing_areas` m2m rows then deleted the four orphan `areas` rows
+  (`charlwood-gu34`, `colemore-gu32`, `flexcombe-gu33`, `froxfield-green-gu32`);
+  their inactive/removed `household_areas` rows cascaded away, and the household's
+  active Charlwood selection (`charlwood-so24`) is preserved. `villages.csv` now lists
+  Charlwood under SO24/Alresford; the DB row's derived fields were aligned; the 4
+  orphan per-area files were removed; the parity snapshot and index rebuilt (192 = 192
+  = 192); and `KNOWN_DEACTIVATED` is now empty (no more deactivated-but-present files).
+  Full harness green.
 
 ### M3 — `request_rightmove_fetch()` lets any signed-in user trigger paid Apify scrapes
 - **Where:** `public.request_rightmove_fetch(int)`; advisor
@@ -118,6 +170,9 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
 - **Fix:** Additionally gate on household membership (or an allow-list), and/or
   rely on the app-level `fetch-spend` caps. Low urgency while the user base is
   closed, but worth locking before any wider sign-up.
+- **⏸️ Won't-fix (owner decision, 2026-07-09):** any signed-in user should be able
+  to trigger fetch runs. Left exactly as-is (the 10-minute cooldown + `fetch-spend`
+  caps remain the guard rails). Revisit only if sign-up is opened more widely.
 
 ---
 
@@ -134,17 +189,29 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   `areas` as "DB is fresher" and burns a reconciliation cycle chasing a non-diff.
 - **Fix:** Bump the `areas` high-water mark in `sync-state.json` to the current DB
   max (a one-line snapshot update; no content change).
+- **✅ Resolved (2026-07-09):** `areas` high-water bumped to `2026-07-09T14:03:10Z`
+  and its `_note` corrected (files + DB mirror = 192 after the M2 dedupe, not 196).
 
 ### L2 — Supabase Auth: leaked-password (HIBP) protection disabled
 - **Where:** Auth config; advisor
   [password-security](https://supabase.com/docs/guides/auth/password-security).
 - **Fix:** Enable "Leaked password protection" in the Supabase Auth dashboard —
   one toggle, no code.
+- **📋 Owner action (2026-07-09):** this is an Auth config setting with no MCP/API
+  surface available to this session, so it can't be set programmatically. **You**
+  toggle it: Supabase dashboard → Authentication → Policies → "Leaked password
+  protection" → enable. ~30 seconds; no deploy.
 
 ### L3 — `pg_net` extension installed in the `public` schema
 - **Where:** advisor
   [lint 0014](https://supabase.com/docs/guides/database/database-linter?lint=0014_extension_in_public).
 - **Fix:** Move it to a dedicated `extensions` schema. Low risk; housekeeping.
+- **⏸️ Won't-fix (2026-07-09):** verified `pg_net` is **not relocatable**
+  (`pg_extension.extrelocatable = false`), so `ALTER EXTENSION … SET SCHEMA` is
+  rejected. The only alternative is drop + recreate, which would break the
+  fetch-dispatch pipeline (`request_rightmove_fetch` → `dispatch_fetch_now` uses
+  `net.http_post`) and any Supabase webhooks. Relocating a system extension to
+  satisfy a WARN lint isn't worth breaking production. Accepted as-is.
 
 ### L4 — README's "Live" URL contradicts the CNAME and the Ask CORS allow-list
 - **Where:** `README.md:15` says live at `https://seanparkerai.github.io/rec/`;
@@ -157,6 +224,11 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   production origin is the real issue.
 - **Fix:** Confirm the canonical production origin, update the README to match,
   and ensure that origin is in the CORS allow-list.
+- **✅ Resolved (2026-07-09):** README "Live" URL updated to
+  `https://georgianrectory.com` (the `CNAME` custom domain, which is already in the
+  Ask CORS allow-list). If you actually deploy from `*.github.io`, tell me and I'll
+  add that origin to `cors.ts` instead — but the CNAME indicates the custom domain
+  is canonical.
 
 ### L5 — Performance advisors (indexes)
 - **Where:** Supabase performance advisors.
@@ -169,6 +241,14 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
 - **Fix:** Add the FK index, apply the `(select auth.…())` RLS rewrite, and drop
   the unused indexes once confirmed. Schema changes → named phase. Immaterial at
   current row counts; worth doing before scale.
+- **✅ Resolved (partial, 2026-07-09):** migration `perf_fk_index_and_rls_initplan`
+  added `idx_household_areas_area_id` (FK covering index) and rewrote the
+  `areas member stub insert` policy to use `(select auth.uid())` (evaluated once per
+  statement). Verified live. **Intentionally NOT dropped:** the four "unused"
+  indexes are FK/household-scoped covering indexes that will be exercised the moment
+  those tables grow (they read "unused" only because the tables are tiny today) —
+  dropping intended access paths to satisfy an INFO lint would be a regression. The
+  two `backup.*` tables (no PK) are transient dumps; left as-is.
 
 ### L6 — Three separate HTML-escape helpers with different names
 - **Where:** `esc` (`assets/js/dom.js`), a local `esc` (`assets/js/ask/transcript.js`),
@@ -178,6 +258,13 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   routed through `esc()`, and the Ask markdown renderer is escape-first). Purely a
   consistency/DRY nit: three names for one primitive invites a future omission.
 - **Fix:** Standardise on the exported `esc` from `dom.js`.
+- **✅ Resolved (2026-07-09):** `controls.js`'s two local helpers (`escHtml`/`escAttr`)
+  were collapsed into one `esc` escaping the full `&<>"'` set (same semantics as
+  `dom.js`), and all three call sites updated. Kept local — the module is
+  deliberately import-free so its pure core stays Node-unit-testable (its old comment
+  claimed `dom.js` `esc` is "browser-only", which is inaccurate — `esc` is pure — but
+  avoiding the dependency is still the right call). `transcript.js`'s local `esc` is
+  the escape-first markdown renderer's own primitive and stays self-contained.
 
 ### L7 — Admin "Live feed" nav item is dead in the drawer
 - **Where:** `components/nav.html` `<li data-admin-only hidden>` +
@@ -187,6 +274,13 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   sees the nav drawer that would reveal this item.
 - **Fix:** Remove the latent item (and its reveal logic) or drop the comment's
   pretence; no behavioural impact either way.
+- **⏸️ Won't-fix (2026-07-09):** on review, kept. The reveal mechanism
+  (`shell/header-user.js`) is covered by a passing test
+  (`tests/pages/shell-wiring.test.js`) and is correct defense-in-depth: if the
+  `auth-guard.js` admin→kiosk lock is ever relaxed, the nav would correctly surface
+  the `/live-feed` link. Deleting a tested, harmless safety mechanism to remove one
+  latent line is a net negative; the in-file comment already documents the current
+  behaviour honestly.
 
 ### L8 — Test runner aborts the whole suite on one unloadable tier file
 - **Where:** `tools/run-all-tests.mjs:88` — `await import(file)` is not wrapped,
@@ -199,6 +293,9 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
   `ERR_MODULE_NOT_FOUND` rather than a clean `✗ pages — failed to load` line.
 - **Fix (optional):** wrap the per-file `import()` in try/catch and record it as a
   failed result so the summary stays readable. CI (`npm ci` first) never hits this.
+- **✅ Resolved (2026-07-09):** the per-file `import()` (and `register()`) in
+  `tools/run-all-tests.mjs` are now wrapped — an unloadable suite becomes a single
+  counted `✗ … failed to load` result instead of a raw stack that aborts the run.
 
 ---
 
@@ -226,13 +323,17 @@ areas, criteria, ask); CI workflows; data/index integrity; CSS token discipline.
 
 ---
 
-## Suggested action order
-1. **H1** (revoke `replace_listing_areas` from anon) — smallest change, highest
-   risk removed.
-2. **H2** (scope `sync_log` read policy) — privacy leak, self-contained.
-3. **M1** (pass criteria into the feed RPC) — client-only, prevents a silent
-   correctness bug the moment a budget changes.
-4. **M2** (de-duplicate the 4 villages) — data hygiene, one migration phase.
-5. **L1 / L2 / L4** — quick wins (snapshot bump, auth toggle, README/CORS
-   reconciliation).
-6. Remaining L items as housekeeping.
+## Status (2026-07-09)
+
+All findings are actioned. **9 fixed** (H1, H2, M1, M2, L1, L4, L5, L6, L8),
+**3 won't-fix with rationale** (M3 owner decision, L3 non-relocatable extension,
+L7 tested defense-in-depth), and **1 left for you** (L2 — a 30-second Auth
+dashboard toggle with no programmatic surface).
+
+**The one thing still on your plate:** enable *Leaked password protection* in the
+Supabase Auth dashboard (L2). Everything else is done, verified, and shipped on
+`claude/system-audit-issues-btv6x9` (harness green; DB migrations confirmed live).
+
+DB migrations applied this session: `revoke_replace_listing_areas_from_public`,
+`scope_sync_log_public_read`, `dedupe_four_villages_orphan_ids`,
+`perf_fk_index_and_rls_initplan`, plus a targeted `areas` derived-field alignment.

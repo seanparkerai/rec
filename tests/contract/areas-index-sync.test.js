@@ -3,18 +3,19 @@
 // data/areas.json is the lightweight DIRECTORY INDEX; data/areas/<id>.json are the
 // full per-area records (the source of truth, CLAUDE.md §2). tools/build-areas.mjs
 // builds the index from data/source/villages.csv, projecting INDEX_FIELDS. This test
-// guards that the committed index stays a faithful projection and that the known,
-// intentional 195-files / 191-index gap doesn't silently change.
+// guards that the committed index stays a faithful projection and that no per-area
+// file silently drifts out of the index.
 //
 // Node-only (reads repo files); wired into the tiered harness (tools/run-all-tests.mjs).
 
-// Duplicate-Rightmove-ID / merged village variants that were removed from
-// villages.csv (build's source) but whose researched per-area files remain on disk
-// AND in the Supabase areas mirror (195 rows). They are intentionally EXCLUDED from
-// the 191-entry directory index. flexcombe-gu33's research was merged into the
-// canonical flexcombe-gu32; the others are duplicate-postcode variants of villages
-// kept under a different postcode (e.g. colemore-gu34 stays, colemore-gu32 dropped).
-const KNOWN_DEACTIVATED = ['charlwood-so24', 'colemore-gu32', 'flexcombe-gu33', 'froxfield-green-gu32'];
+// Previously four duplicate-postcode village variants (charlwood-so24, colemore-gu32,
+// flexcombe-gu33, froxfield-green-gu32) were kept on disk + in the Supabase mirror but
+// excluded from the index. The 2026-07-09 audit dedupe (ISSUE_LOG M2) removed the
+// mis-postcoded duplicates entirely — for Charlwood the geographically-correct SO24
+// (Ropley/Alresford) record replaced the mis-coded GU34 one as canonical, matching the
+// household's active area selection. There are now no deactivated-but-present files:
+// every per-area file is indexed, so this set is empty and must stay empty.
+const KNOWN_DEACTIVATED = [];
 
 export async function register({ test, assert, assertEqual }) {
   const { readFileSync, readdirSync } = await import('node:fs');

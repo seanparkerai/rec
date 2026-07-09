@@ -140,17 +140,17 @@ export function createListingsControls({ scoreOf, ratingOf, areaNameOf, onChange
     if (typeSel) {
       const types = uniq((listings || []).map((l) => l.property_type)).sort((a, b) => a.localeCompare(b));
       typeSel.innerHTML = `<option value="all">Any type</option>` +
-        types.map((t) => `<option value="${escAttr(t)}">${escHtml(t)}</option>`).join('');
+        types.map((t) => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
     }
     const statusSel = root.querySelector('[data-control="status"]');
     if (statusSel) {
       const statuses = uniq((listings || []).map((l) => l.status));
       statusSel.innerHTML = `<option value="all">Any status</option>` +
-        statuses.map((s) => `<option value="${escAttr(s)}">${escHtml(STATUS_FILTER_LABELS[s] || s)}</option>`).join('');
+        statuses.map((s) => `<option value="${esc(s)}">${esc(STATUS_FILTER_LABELS[s] || s)}</option>`).join('');
     }
     const sortSel = root.querySelector('[data-control="sort"]');
     if (sortSel && !sortSel.options.length) {
-      sortSel.innerHTML = LISTING_SORTS.map((s) => `<option value="${s.key}">${escHtml(s.label)}</option>`).join('');
+      sortSel.innerHTML = LISTING_SORTS.map((s) => `<option value="${s.key}">${esc(s.label)}</option>`).join('');
     }
   }
 
@@ -190,9 +190,11 @@ export function createListingsControls({ scoreOf, ratingOf, areaNameOf, onChange
   return { state, apply, wire, populate, syncControls };
 }
 
-// Minimal escapers (the dom.js esc is browser-only; keep this module importable in
-// Node tests). Only used for option markup built from listing-derived strings.
-function escHtml(s) {
-  return String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+// Minimal escaper — one name/one behaviour, mirroring dom.js `esc` (escapes the
+// full &<>"' set so it is safe in both element text and quoted attributes). Kept
+// local so this module stays import-free and Node-unit-testable. Used only for
+// option markup built from listing-derived strings.
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-function escAttr(s) { return escHtml(s).replace(/'/g, '&#39;'); }

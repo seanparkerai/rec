@@ -330,8 +330,13 @@ CREATE TABLE IF NOT EXISTS sync_log (
 
 ALTER TABLE sync_log ENABLE ROW LEVEL SECURITY;
 
+-- Public read is scoped to the fetcher's scraper feed only (audit H2, 2026-07-09):
+-- the /live-feed kiosk reads listings/system rows via getScraperLog(); the rest of the
+-- ledger (incl. user-state row ids + edit timestamps) must not be world-readable.
 DROP POLICY IF EXISTS "sync_log public read" ON sync_log;
-CREATE POLICY "sync_log public read" ON sync_log FOR SELECT USING (true);
+DROP POLICY IF EXISTS "sync_log scraper feed public read" ON sync_log;
+CREATE POLICY "sync_log scraper feed public read" ON sync_log
+  FOR SELECT USING (table_name = 'listings' AND actor = 'system');
 
 -- -----------------------------------------------------------------------
 -- listing_reactions — v3 L3 reaction log (append-only graded preference signal).

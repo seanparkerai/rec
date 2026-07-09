@@ -12,7 +12,9 @@ private, access-controlled Supabase database — never committed to the repo.
 
 ## ✨ View live site
 
-**Live:** https://seanparkerai.github.io/rec/ — auto-deploys from `main` via GitHub Actions.
+**Live:** https://georgianrectory.com — auto-deploys from `main` via GitHub Actions
+(custom domain set by `CNAME`; this is also the origin the Ask edge function's CORS
+allow-list expects, see `supabase/functions/_shared/cors.ts`).
 
 ## Run it locally
 

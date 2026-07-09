@@ -6,6 +6,7 @@ import { readLocal, writeLocal, _initSb, _getHid, _toast } from '../core.js';
 import { normaliseReaction, latestPerListing } from '../../listings/reactions.js';
 import { _fetchAllReactionRows } from './_reactions-core.js';
 import { getAreaCatalog } from './content.js';
+import { getCriteria } from '../user-state/singletons.js';
 
 // ── Trigger a Rightmove fetch (server-side dispatch via Vault token) ───────
 // The fetcher (tools/fetch-listings.mjs) needs the Apify + service-role secrets,
@@ -125,16 +126,27 @@ async function _attachAreaMemberships(sb, rows) {
 // id list → belt-and-braces geofence gate): the id-list had a URL-length scale
 // wall, and two half-rules held apart can disagree. The RPC returns the full
 // membership set as `areas` jsonb; only display names are resolved client-side.
-async function _householdFeed(sb, hid, { limit, status, includeOutOfArea }) {
+async function _householdFeed(sb, hid, { limit, status, includeOutOfArea, priceMax, minBeds }) {
   let nameById = new Map();
   try { nameById = new Map((await getAreaCatalog() ?? []).map((a) => [a.id, a.name])); }
   catch (e) { console.error('storage: area catalog for membership names', e.message); }
+  // The RPC's price/beds gate must track the user's LIVE criteria, not the SQL
+  // function defaults (£250k–£425k / 2 beds). Only the upper bound + min-beds are
+  // forwarded when the user has set them: a numeric override is passed, otherwise
+  // the key is OMITTED so the SQL default applies (passing null would override the
+  // default with NULL and filter out every priced/bedded row). We deliberately do
+  // NOT forward a lower price bound — cheaper-than-min listings are still worth
+  // seeing, and the client fit engine owns affordability from there.
+  const priceCap = Number.isFinite(Number(priceMax)) && Number(priceMax) > 0 ? Math.round(Number(priceMax)) : null;
+  const bedsFloor = Number.isFinite(Number(minBeds)) && Number(minBeds) > 0 ? Math.round(Number(minBeds)) : null;
   const call = (lim, off) => sb.rpc('household_feed', {
     p_household_id: hid,
     p_status: status,
     p_include_out_of_area: includeOutOfArea,
     p_limit: lim,
     p_offset: off,
+    ...(priceCap != null ? { p_price_max: priceCap } : {}),
+    ...(bedsFloor != null ? { p_min_beds: bedsFloor } : {}),
   });
   try {
     const rows = [];
@@ -177,7 +189,15 @@ export async function getListings({ limit = 200, status = null, includeOutOfArea
   // render, mirroring getHouseholdAreas()'s fallback.
   if (scopeToHousehold) {
     const hid = await _getHid();
-    if (hid) return await _householdFeed(sb, hid, { limit, status, includeOutOfArea });
+    if (hid) {
+      // Forward the household's live budget ceiling + min-beds so the feed reflects
+      // the user's criteria rather than the RPC's hardcoded defaults (audit M1).
+      let criteria = null;
+      try { criteria = await getCriteria(); } catch { criteria = null; }
+      const priceMax = criteria?.budget?.max;
+      const minBeds = criteria?.size?.minBeds;
+      return await _householdFeed(sb, hid, { limit, status, includeOutOfArea, priceMax, minBeds });
+    }
   }
   // Unscoped read (saved view resolving live rows after an area is deselected,
   // signed-out shell, local dev). Rebuilt per page so filters and ordering are

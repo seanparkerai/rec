@@ -385,17 +385,6 @@
     "active": true
   },
   {
-    "id": "charlwood-gu34",
-    "name": "Charlwood",
-    "postcode": "GU34",
-    "coords": {
-      "lat": 51.07302,
-      "lng": -1.0316
-    },
-    "coordsSource": "web-verified:wikipedia-os-grid SU67943-30856;ropley-1839-tithe-map charlwood-lane-junction;cross-check adjacent monkwood SU667309; 2026-06-05",
-    "active": true
-  },
-  {
     "id": "charlwood-so24",
     "name": "Charlwood",
     "postcode": "SO24",
@@ -493,17 +482,6 @@
     },
     "coordsSource": "web-verified:Wikidata-P625(Q2020511);GENUKI/getthedata; cross-checked listing-centroid (n=17, gap~0.4km); 2026-06-04",
     "active": false
-  },
-  {
-    "id": "colemore-gu32",
-    "name": "Colemore",
-    "postcode": "GU32",
-    "coords": {
-      "lat": 51.0713,
-      "lng": -0.99372
-    },
-    "coordsSource": "web-verified:HistoricEngland-StPeterAdVincula-Colemore-SU706307;GENUKI-SU706307(51.07130,-0.99372)-exact-agree;NOTE-DB-outcode-GU32-but-Colemore-village-centre-is-GU34(parish-spans-both); 2026-06-05",
-    "active": true
   },
   {
     "id": "colemore-gu34",
@@ -792,17 +770,6 @@
     "active": true
   },
   {
-    "id": "flexcombe-gu33",
-    "name": "Flexcombe",
-    "postcode": "GU33",
-    "coords": {
-      "lat": 51.0228,
-      "lng": -0.9456
-    },
-    "coordsSource": "os-opendata:place-centre",
-    "active": false
-  },
-  {
     "id": "ford-sp4",
     "name": "Ford",
     "postcode": "SP4",
@@ -822,17 +789,6 @@
       "lng": -1.054
     },
     "coordsSource": "web-verified:getthedata-GU345FE/5GN-core;listing-centroid-agree~80m;WinchesterRd-A31; 2026-06-04",
-    "active": true
-  },
-  {
-    "id": "froxfield-green-gu32",
-    "name": "Froxfield Green",
-    "postcode": "GU32",
-    "coords": {
-      "lat": 51.02586,
-      "lng": -0.99752
-    },
-    "coordsSource": "web-verified:getthedata-GU321DQ-TheGreen;getthedata-GU321DH-TheGreen;wikipedia-WarMemorial-SU703256;centroid-rejected-2.7km-NE-HighCross; 2026-06-04",
     "active": true
   },
   {

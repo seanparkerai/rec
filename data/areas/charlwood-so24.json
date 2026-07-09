@@ -1,14 +1,14 @@
 {
   "id": "charlwood-so24",
   "name": "Charlwood",
-  "village": "",
+  "village": "Charlwood",
   "town": "Alresford",
   "county": "Hampshire",
   "postcode": "SO24",
-  "hubCity": "",
-  "regionDir": "",
-  "settlementType": "",
-  "subRegion": "",
+  "hubCity": "Southampton",
+  "regionDir": "North",
+  "settlementType": "Non-City",
+  "subRegion": "Alresford",
   "coords": {
     "lat": 51.07776,
     "lng": -1.03649

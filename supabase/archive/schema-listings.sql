@@ -160,6 +160,12 @@ BEGIN
 END;
 $$;
 
+-- This is a SECURITY-DEFINER write with no in-body caller check, so EXECUTE is locked
+-- to the service/owner roles only — the fetcher tools (service role) are its sole
+-- legitimate callers. Leaving it EXECUTE-able by anon/authenticated let anyone with the
+-- browser anon key rewrite listing->area membership, bypassing RLS (audit H1, 2026-07-09).
+REVOKE EXECUTE ON FUNCTION replace_listing_areas(text, jsonb) FROM PUBLIC, anon, authenticated;
+
 -- Origin areas: a home/commute-anchor area contributes to commute math but is
 -- EXCLUDED from listing-feed membership + the fetcher demand set (its catchment is
 -- where the household LIVES, not where they want to buy). Household-specific.
