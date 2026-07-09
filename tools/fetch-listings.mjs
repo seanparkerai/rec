@@ -813,8 +813,15 @@ async function main() {
     console.log(`learned prune: -${dropAreas.size} areas · -${dropOutcodes.size} outcodes`);
   }
   if (!DRY_RUN && reprobed.length) await markReprobed(reprobed, runIndex);
-  // AREA_IDS scope: restrict the fetch to a specific subset of area IDs.
-  // Applies to both curated repo areas and household stubs.
+  // Freeze the GLOBAL geofence/membership index BEFORE any AREA_IDS search scope:
+  // a scoped run must still stamp membership for EVERY in-demand area a fetched
+  // listing falls inside, or scoped runs silently create listing_areas drift
+  // (found in the 2026-07-09 coverage audit — the foundation pull had stamped
+  // membership against only its 74 requested areas).
+  const ALL_ACTIVE = flattenVillages(outcodeMap);          // global geofence index
+  // AREA_IDS scope: restrict the SEARCH TARGETS to a specific subset of area IDs.
+  // Applies to both curated repo areas and household stubs; membership/geofence
+  // verdicts above stay universe-wide.
   if (AREA_IDS?.size) {
     for (const [oc, arr] of [...outcodeMap]) {
       const kept = arr.filter((v) => AREA_IDS.has(v.id));
@@ -823,7 +830,6 @@ async function main() {
     }
     console.log(`area scope: restricted to ${AREA_IDS.size} specified area ID(s) (AREA_IDS)`);
   }
-  const ALL_ACTIVE = flattenVillages(outcodeMap);          // global geofence index
   // L7.4: build search targets for the chosen mode (outcode|village|cluster), then
   // order by learned focus (by outcode) and cap with FETCH_LIMIT.
   let targets = buildSearchTargets(outcodeMap, SEARCH_MODE);
@@ -853,6 +859,13 @@ async function main() {
       const band = priceBandForAreas(areas.map((a) => a.id), areaHouseholds, budgets);
       const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles, band);
       totalRaw += raw.length;
+      // Truncation sentinel: a page that fills the per-target cap almost certainly
+      // has MORE results we did not pay for — a silent coverage hole. Surface it
+      // loudly so the run log names the target to re-fetch (tighter disks or a
+      // higher RESULTS_PER_OUTCODE).
+      if (raw.length >= RESULTS_PER_OUTCODE) {
+        console.warn(`  ⚠ TRUNCATED: ${target.label} returned ${raw.length} = the ${RESULTS_PER_OUTCODE}-result cap — more listings likely exist beyond the cap`);
+      }
 
       const normalised = raw.map((r) => normaliseRawListing(r, { outcode: oc, source: SOURCE, now })).filter(Boolean);
 

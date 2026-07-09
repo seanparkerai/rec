@@ -166,6 +166,49 @@ feature. The column is dropped, the RPC and fetcher no longer read it, and the p
 "Home" toggle is gone: **every active household area is a target** — the only per-area
 feed/fetch switch is the reversible pause (`status: active|inactive`).
 
+### The visibility contract — every way a listing can be absent or hidden (2026-07-09 audit)
+
+**Invariant: a listing may only be invisible for a reason on this list.** Anything else is a
+bug — and it is checked mechanically, not by trust: `tools/audit-listing-coverage.mjs`
+(run nightly with `--fix` by `.github/workflows/coverage-sentinel.yml`, red run = violation)
+re-derives membership from coordinates, reconciles every `listings` row into exactly one
+bucket per household, and fails on any UNEXPLAINED residue.
+
+*Never fetched (absent from the DB):*
+1. **Not near any active area** — only areas in the demand set (≥1 active household link) are
+   searched, each within its search radius.
+2. **Outside the scraped price band** — searches run at the household-budget union band
+   (currently min £300k); cheaper listings are never fetched even though the feed would show
+   them. Known trade-off — widen a budget to widen the band.
+3. **Search-source filters** — houses/bungalows only, ≥2 beds, and the text-match new-build
+   drop (owner decision 2026-06-04) apply at source.
+4. **Per-target result cap** — 200 results/search; a capped page now logs a loud
+   `⚠ TRUNCATED` warning naming the target (2026-07-09).
+5. **Recency window** — scheduled runs only see listings added in the last ~day; standing
+   stock needs a FOUNDATION_MODE pull (recency filter omitted = all live stock;
+   `foundation-rural-thin.yml` covers the rural thin tail).
+
+*Fetched but not in the feed (in the DB, named bucket):*
+6. **`archived_at` set** — purge/archival with a recorded `archive_reason`; revealable via
+   `p_include_archived`.
+7. **No membership in one of YOUR active areas** — paused links, other households' areas.
+8. **`geofence_pass=false`** — outside every buffer; revealable via "out of area" toggle.
+9. **Baseline in the RPC** — excluded type / off-band KNOWN price / under-beds (unknown
+   values always pass).
+
+*In the feed but hidden client-side (each has a visible count + reveal):*
+10. **Affordability gate / junk (auction, over-55) / confirmed refinement hides** — "Show
+    hidden" reveals all three; counts in the feed summary.
+11. **Decided suppression** — liked → Saved page, passed/rejected → Rejected page (by id AND
+    property fingerprint so re-lists stay decided); never silently gone, always on a page.
+12. **Fingerprint dedupe** — same physical property collapses to one representative (counted).
+
+**Retired/forbidden mechanisms:** `is_origin` (ADR 0009); learned `dropAreas`/`dropOutcodes`
+narrowing only runs with `USE_LEARNED=1`, which no workflow sets; `scrape_probation` is
+user-driven pause, currently empty. Membership drift from AREA_IDS-scoped runs (the bug that
+hid whole catchments' worth of junction rows) was fixed 2026-07-09 — the geofence index is
+frozen before the search scope is applied — and the sentinel self-heals any residue nightly.
+
 ### Listing lifecycle (audited + pinned, step 2.18)
 
 `listings.status` ∈ `live | under_offer | sstc | withdrawn` — stamped by

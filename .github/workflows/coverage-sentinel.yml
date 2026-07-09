@@ -1,0 +1,39 @@
+# coverage-sentinel.yml — nightly guarantee that no listing is silently hidden.
+#
+# Runs tools/audit-listing-coverage.mjs --fix every evening (after the last fetch
+# slot) and on demand. The audit enforces the visibility contract (see
+# docs/DATA_MODEL.md "How a listing can be hidden"):
+#   * every active household-area link resolves, has coords, is not curated-disabled
+#   * zero listing_areas membership drift (self-healed by --fix, idempotent)
+#   * full accounting: every listing is SHOWN or in a named bucket — zero unexplained
+#   * staleness report for thinning areas (informational)
+# A red run = a real coverage violation that --fix could not repair — investigate,
+# do not ignore. Added 2026-07-09 (owner-directed reliability audit).
+
+name: coverage-sentinel
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '15 19 * * *'   # ~20:15 London in summer / 19:15 in winter — after the 18:00 fetch slot
+
+permissions:
+  contents: read
+
+concurrency:
+  group: coverage-sentinel
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Audit listing coverage (self-healing)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node tools/audit-listing-coverage.mjs --fix
