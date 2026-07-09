@@ -15,10 +15,13 @@
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY   — required to write
 //   APIFY_TOKEN, APIFY_ACTOR_ID               — required to fetch
 //   FETCH_LIMIT (optional)                     — cap targets processed (debug)
-//   MAX_DAYS_SINCE_ADDED (optional)            — recency window in days (default 3);
-//                                                overridden to 14 when FOUNDATION_MODE=1
-//   FOUNDATION_MODE=1 (optional)               — 14-day backfill: sets the recency
-//                                                window to 14 days for one-time pulls;
+//   MAX_DAYS_SINCE_ADDED (optional)            — recency window in days (default 3;
+//                                                Rightmove accepts 1/3/7/14 only);
+//                                                ignored when FOUNDATION_MODE=1
+//   FOUNDATION_MODE=1 (optional)               — standing-stock backfill: OMITS the
+//                                                recency filter entirely, so each search
+//                                                returns ALL live listings regardless of
+//                                                age (capped by RESULTS_PER_OUTCODE);
 //                                                print a dry-run cost estimate first
 //   APIFY_MAX_BUDGET_USD (optional)            — hard USD spend cap passed to the Apify
 //                                                actor; Apify self-terminates at this
@@ -701,7 +704,7 @@ async function loadSearchSpec() {
 // ── main ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log('=== L1 fetch-listings ===');
-  const modeLabel = FOUNDATION_MODE ? 'FOUNDATION(14d)' : `daily(${MAX_DAYS_SINCE_ADDED}d)`;
+  const modeLabel = FOUNDATION_MODE ? 'FOUNDATION(all standing stock)' : `daily(${MAX_DAYS_SINCE_ADDED}d)`;
   console.log(`actor: ${APIFY_ACTOR_ID} · mode: ${SEARCH_MODE} · recency: ${modeLabel} · resultsPerTarget: ${RESULTS_PER_OUTCODE} · budget-cap: $${APIFY_MAX_BUDGET_USD} · fetchLimit: ${FETCH_LIMIT || 'all'} · dry-run: ${DRY_RUN}`);
   if (!DRY_RUN && !SERVICE_KEY) throw new Error('SUPABASE_SERVICE_ROLE_KEY required to write (or set DRY_RUN=1)');
 
