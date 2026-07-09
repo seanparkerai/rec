@@ -1,0 +1,83 @@
+# foundation-rural-thin.yml — ONE-TAP standing-stock pull for the rural, listing-thin areas.
+#
+# WHY (2026-07-09, owner-directed): the scheduled fetches only ask Rightmove for
+# listings ADDED in the last day, so slow rural villages never accumulate their
+# months-old standing stock. This workflow runs the fetcher in FOUNDATION_MODE
+# (recency filter OMITTED — every live listing regardless of age) restricted to
+# the 74 areas that were BOTH thin in the feed (≤5 shown, 2026-07-09 yield sweep)
+# AND rural per the area records' character/overview data (the built-up areas are
+# already well covered and are deliberately excluded — no spend re-scraping them).
+#
+# Manual dispatch only — no schedule. Safe to re-run: upserts are idempotent and
+# the $25 Apify hard cap + 200-results-per-target cap bound every run. Tick
+# dry_run first for a cost preview (no writes, no spend).
+#
+# The area list is a point-in-time snapshot of the 2026-07-09 sweep. If it goes
+# stale, regenerate: feed-shown ≤5 per active household area (household_feed RPC,
+# areas jsonb attribution) ∩ rural character markers, minus non-residential
+# outliers (farley-mount-so21).
+
+name: foundation-rural-thin
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview targets + projected cost only — no Apify spend, no writes'
+        type: boolean
+        default: false
+      apify_budget_usd:
+        description: 'Hard USD spend cap (actor self-terminates at this limit)'
+        default: '25'
+
+permissions:
+  contents: read
+
+# Never overlap with a scheduled daily fetch (same Apify account, same tables).
+concurrency:
+  group: fetch-listings-daily
+  cancel-in-progress: false
+
+jobs:
+  foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Foundation pull — rural thin areas
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          # FOUNDATION_MODE omits maxDaysSinceAdded — ALL live listings, any age.
+          FOUNDATION_MODE: '1'
+          APIFY_MAX_BUDGET_USD: ${{ inputs.apify_budget_usd || '25' }}
+          SEARCH_MODE: cluster
+          RESULTS_PER_OUTCODE: '200'
+          CLUSTER_CAP_MI: '7'
+          # The 2026-07-09 rural∩thin snapshot (74 areas; see header for the recipe).
+          AREA_IDS: >-
+            ashley-so20,beauworth-so24,bentworth-gu34,bishopstone-sp5,bossington-so20,
+            bowerchalke-sp5,bradley-gu34,bramdean-so24,bramshaw-so43,broad-chalke-sp5,
+            brockwood-park-so24,brook-so20,broughton-so20,brown-candover-so24,charlwood-so24,
+            chettle-dorset,chidden-gu34,chilbolton-down-so20,chilmark-sp3,cranborne-dorset,
+            dean-land-sp5,dinton-sp3,east-dean-sp5,east-meon-gu32,east-stratton-so21,
+            east-tisted-gu34,east-tytherely-sp5,ebbesbourne-wake-sp5,ebble-sp5,filmore-hill-gu34,
+            four-marks-gu34,hampworth-sp5,houghton-so20,itchen-abbas-so21,kilmeston-so24,
+            king-s-somborne-so20,kitwood-so24,landford-sp5,lane-end-so21,lanford-wood-sp5,
+            leckford-so20,little-langford-sp3,little-sombourne-so20,longstock-so20,mead-end-sp5,
+            medstead-gu34,meonstoke-so32,micheldever-so21,middle-wallop-so20,monkwood-so24,
+            nether-wallop-so20,northington-so24,over-wallop-so20,plaitford-green-sp5,preshaw-so32,
+            preston-candover-rg25,privett-gu34,ropley-so24,steeple-langford-sp3,stockbridge-so20,
+            totford-so24,up-somborne-so20,upper-farringdon-gu34,upper-wield-so24,west-dean-sp5,
+            west-meon-gu32,west-stratton-so21,west-tisted-so24,west-tytherely-sp5,whiteparish-sp5,
+            wield-so24,witchampton-dorset,witherington-sp5,woodminton-sp5
+        run: |
+          # The fetcher expects a plain comma-separated AREA_IDS — strip the YAML
+          # folding whitespace before handing it over.
+          export AREA_IDS=$(echo "$AREA_IDS" | tr -d ' \n')
+          node tools/fetch-listings.mjs
