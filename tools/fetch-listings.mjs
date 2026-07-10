@@ -59,7 +59,7 @@ import { isCuratedDisabled } from '../assets/js/areas/area-ref.js';
 import { effectiveWeights, deriveSearchSpec, isRecent } from '../assets/js/learned-preferences.js';
 import { probationDropIds, reprobeThisRun } from '../assets/js/refinement/scope.js';
 import { resolveConfig } from '../assets/js/refinement/config.js';
-import { applyRadiusTuning, loadUniverseFromRepo } from './lib/geofence-universe.mjs';
+import { applyRadiusTuning, loadUniverseFromRepo, ringFloorInputs } from './lib/geofence-universe.mjs';
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 import { passesBaseline } from '../assets/js/listings/classify.js';
 import { membershipRowsFor, replaceListingAreas } from './listing-areas-writer.mjs';
@@ -396,15 +396,19 @@ function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   // The band is the per-target household-budget union when supplied; fallback otherwise.
   const priceMin = Number(opts.priceMin) || BASELINE_PRICE_MIN;
   const priceMax = Number(opts.priceMax) || BASELINE_PRICE_MAX;
+  // Beds floor: the per-target household union (lowest criteria minBeds across
+  // linked households) when supplied, else the baseline — so lowering a criteria
+  // minBeds widens the search at source ("my limits" follow the user downward).
+  const minBeds = Number(opts.minBeds) || BASELINE_MIN_BEDS;
   params.set('minPrice', String(priceMin));
   params.set('maxPrice', String(priceMax));
-  params.set('minBedrooms', String(BASELINE_MIN_BEDS));
+  params.set('minBedrooms', String(minBeds));
   params.set('dontShow', BASELINE_DONT_SHOW);
   params.set('propertyTypes', BASELINE_PROPERTY_TYPES.join(','));
   // A learned spec can tighten (raise minPrice, lower maxPrice, raise minBeds) within the band.
   if (spec?.priceMin && spec.priceMin > priceMin) params.set('minPrice', String(spec.priceMin));
   if (spec?.priceMax && spec.priceMax < priceMax) params.set('maxPrice', String(spec.priceMax));
-  if (spec?.minBeds && spec.minBeds > BASELINE_MIN_BEDS) params.set('minBedrooms', String(spec.minBeds));
+  if (spec?.minBeds && spec.minBeds > minBeds) params.set('minBedrooms', String(spec.minBeds));
   // L7.4: a search radius (miles) turns a point identifier (POSTCODE^/REGION^/
   // STATION^) into a tight disk — so a sparse outcode stops returning Andover.
   const radiusMiles = opts.radiusMiles ?? spec?.radiusMiles;
@@ -443,7 +447,7 @@ function orderOutcodesByFocus(outcodes, spec) {
 // self-terminate at the limit, so no overrun is possible).
 function buildActorInput(locationIdentifier, spec = null, radiusMiles = null, band = null) {
   return {
-    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max }) }],
+    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max, minBeds: band?.minBeds }) }],
     maxItems: RESULTS_PER_OUTCODE,
     monitoringMode: false,
     includePriceHistory: false,
@@ -551,28 +555,37 @@ async function loadHouseholdAreas() {
   }
 }
 
-// Per-household budget bands (service-role read): criteria.budget.{min,max} for
-// every household. A row without a positive max is skipped (treated as
+// Per-household criteria (service-role read): the budget band criteria.budget
+// {min,max} + the household's size.minBeds, PLUS the raw rows (for the ADR 0010
+// ring-floor derivation). A row without a positive max is skipped (treated as
 // unbudgeted → fallback band); a missing/invalid min falls back to
-// BASELINE_PRICE_MIN so a max-only budget never opens the floor to £0.
-// Returns Map household_id → { min, max }; empty on failure (fallback band).
-async function loadHouseholdBudgets() {
+// BASELINE_PRICE_MIN so a max-only budget never opens the floor to £0; a
+// missing/invalid minBeds folds in BASELINE_MIN_BEDS via the union.
+// Returns { budgets: Map household_id → { min, max, minBeds }, criteriaRows };
+// empty on failure (fallback band + default ring floor).
+async function loadHouseholdCriteria() {
   const budgets = new Map();
-  if (!SERVICE_KEY) return budgets;
+  if (!SERVICE_KEY) return { budgets, criteriaRows: [] };
   try {
     const url = `${SUPABASE_URL}/rest/v1/criteria?select=household_id,data`;
     const res = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } });
     if (!res.ok) throw new Error(`GET criteria failed: ${res.status}`);
-    for (const r of (await res.json()) || []) {
+    const criteriaRows = (await res.json()) || [];
+    for (const r of criteriaRows) {
       const b = r?.data?.budget || {};
       const min = Number(b.min), max = Number(b.max);
       if (!r?.household_id || !(Number.isFinite(max) && max > 0)) continue;
-      budgets.set(r.household_id, { min: Number.isFinite(min) && min > 0 ? min : BASELINE_PRICE_MIN, max });
+      const beds = Number(r?.data?.size?.minBeds);
+      budgets.set(r.household_id, {
+        min: Number.isFinite(min) && min > 0 ? min : BASELINE_PRICE_MIN,
+        max,
+        minBeds: Number.isFinite(beds) && beds > 0 ? Math.round(beds) : null,
+      });
     }
-    return budgets;
+    return { budgets, criteriaRows };
   } catch (e) {
-    console.warn('household budgets load failed:', e.message);
-    return budgets;
+    console.warn('household criteria load failed:', e.message);
+    return { budgets, criteriaRows: [] };
   }
 }
 
@@ -582,28 +595,36 @@ async function loadHouseholdBudgets() {
  * budget.max across them, so a single Rightmove search covers all of them. A
  * linked household with no stored budget folds in the fallback band (its
  * coverage never shrinks); a target whose areas have no household links at all
- * gets the fallback band unchanged. Pure — unit-tests without Supabase.
+ * gets the fallback band unchanged. The beds floor unions the same way — the
+ * LOWEST minBeds across linked households (a household without one folds in the
+ * fallback), so a lowered criteria minBeds widens the search at source instead
+ * of being silently pinned at the baseline. Pure — unit-tests without Supabase.
  * @param {Array<string>} areaIds  the target's area ids
  * @param {Map<string,Set<string>>} areaHouseholds  area_id → linked household ids
- * @param {Map<string,{min:number,max:number}>} budgets  household_id → band
- * @returns {{min:number,max:number}}
+ * @param {Map<string,{min:number,max:number,minBeds?:number}>} budgets  household_id → band
+ * @returns {{min:number,max:number,minBeds:number}}
  */
-function priceBandForAreas(areaIds, areaHouseholds, budgets, fallback = { min: BASELINE_PRICE_MIN, max: BASELINE_PRICE_MAX }) {
+function priceBandForAreas(areaIds, areaHouseholds, budgets, fallback = { min: BASELINE_PRICE_MIN, max: BASELINE_PRICE_MAX, minBeds: BASELINE_MIN_BEDS }) {
+  const fallbackBeds = Number(fallback.minBeds) || BASELINE_MIN_BEDS;
   const households = new Set();
   for (const id of areaIds || []) {
     for (const h of areaHouseholds?.get(id) || []) households.add(h);
   }
-  let min = Infinity, max = -Infinity, anyBudget = false, anyUnbudgeted = households.size === 0;
+  let min = Infinity, max = -Infinity, minBeds = Infinity, anyBudget = false, anyUnbudgeted = households.size === 0;
   for (const h of households) {
     const b = budgets?.get(h);
     if (b && Number.isFinite(b.min) && Number.isFinite(b.max) && b.min <= b.max) {
       min = Math.min(min, b.min); max = Math.max(max, b.max); anyBudget = true;
+      minBeds = Math.min(minBeds, Number.isFinite(b.minBeds) && b.minBeds > 0 ? b.minBeds : fallbackBeds);
     } else {
       anyUnbudgeted = true;
     }
   }
-  if (!anyBudget || anyUnbudgeted) { min = Math.min(min, fallback.min); max = Math.max(max, fallback.max); }
-  return { min, max };
+  if (!anyBudget || anyUnbudgeted) {
+    min = Math.min(min, fallback.min); max = Math.max(max, fallback.max);
+    minBeds = Math.min(minBeds, fallbackBeds);
+  }
+  return { min, max, minBeds };
 }
 
 const fmtPrice = (v) => `£${v % 1000 === 0 ? `${v / 1000}k` : v.toLocaleString('en-GB')}`;
@@ -732,14 +753,24 @@ async function main() {
     const skipped = householdRows.length - householdVillages.length;
     console.log(`household areas: +${householdVillages.length} eligible merged${skipped > 0 ? ` · ${skipped} linked row(s) skipped (curated/un-enriched/county-flagged)` : ''}`);
   }
+  // Per-household criteria: budget bands (per-target price union), beds floors,
+  // and the raw rows for the ADR 0010 ring floor. Loaded BEFORE tuning so the
+  // floor can be applied in the same pass.
+  const { budgets, criteriaRows } = await loadHouseholdCriteria();
+  const ringFloor = ringFloorInputs(criteriaRows);
   // Overlay the learned per-area search radius (area_search_tuning) onto every village
   // (curated + household stub) before clustering/targets, so a tuned area scrapes + geofences
   // at its learned radius instead of the uniform default. Override wins; an area inside its
   // exploration window widens to the ceil. No row → unchanged (file/default radius).
+  // RING FLOOR (ADR 0010): a learned radius may never shrink scope below the map's
+  // drawn ring — only a user pin (override_radius_mi) may. Applied even with no
+  // tuning rows, so a raised household display radius widens the scrape too.
   const radiusTuning = await loadRadiusTuning();
-  if (radiusTuning.size) {
-    const { tuned, exploring } = applyRadiusTuning(flattenVillages(outcodeMap), radiusTuning, new Date());
-    console.log(`radius tuning: ${tuned} area(s) at a learned radius${exploring ? ` · ${exploring} widened to ${RADIUS_CEIL_MI}mi for exploration` : ''}`);
+  {
+    const { tuned, exploring, floored } = applyRadiusTuning(flattenVillages(outcodeMap), radiusTuning, new Date(), ringFloor);
+    if (radiusTuning.size || floored) {
+      console.log(`radius tuning: ${tuned} area(s) at a learned radius${exploring ? ` · ${exploring} widened to ${RADIUS_CEIL_MI}mi for exploration` : ''}${floored ? ` · ${floored} floored at the drawn ring (ADR 0010)` : ''}`);
+    }
   }
   // Tight identifiers for located stubs: a stub with a full postcode but no
   // resolved Rightmove id would demote its whole outcode to a coarse search.
@@ -761,8 +792,7 @@ async function main() {
   if (resolvedTight) console.log(`stub identifiers: ${resolvedTight} full postcode(s) resolved → tight POSTCODE^ ids${DRY_RUN ? '' : ' (persisted to areas rows)'}`);
   // Per-target price bands: every household linked to a target's areas
   // contributes its budget; each search runs with the union (lowest min,
-  // highest max) so one search serves all interested households.
-  const budgets = await loadHouseholdBudgets();
+  // highest max, lowest minBeds) so one search serves all interested households.
   const areaHouseholds = new Map();
   for (const l of householdLinks || []) {
     if (!l?.area_id || !l?.household_id) continue;
@@ -873,7 +903,7 @@ async function main() {
       // actor honours the search-URL type/price filters only loosely, so this is
       // the GUARANTEE: out-of-band rows never reach the geofence or the upsert.
       // The price band is the same per-target household-budget union as the search URL.
-      const inBaseline = normalised.filter((l) => passesBaseline(l, { priceMin: band.min, priceMax: band.max }));
+      const inBaseline = normalised.filter((l) => passesBaseline(l, { priceMin: band.min, priceMax: band.max, minBeds: band.minBeds }));
       const offBaseline = normalised.length - inBaseline.length;
       totalOffBaseline += offBaseline;
 

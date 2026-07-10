@@ -131,6 +131,26 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(row.recommended_radius_mi, 0.8); // learner still records its recommendation (p90 0.5 + 0.3)
   });
 
+  // ── persistence: ring floor (ADR 0010) ─────────────────────────────────────────────
+  test('radius-persistence: a non-pinned learned shrink is floored at the drawn ring', () => {
+    // likes cluster ~0.5mi → recommendation ~0.8mi, but the auto-APPLIED radius may
+    // never fall under the ring (default 3mi). The recommendation + suggestion stay
+    // honest — Apply is the consent path that moves ring + pin together.
+    const learned = learnRadii(likes('suburb', [0.3, 0.35, 0.4, 0.45, 0.5, 0.42]), { config: cfg, now: NOW });
+    const plan = planRadii(learned, { now: NOW, tuningRows: [] });
+    const row = plan.tuningUpserts[0];
+    assertEqual(row.recommended_radius_mi, 0.8, 'the honest recommendation survives');
+    assertEqual(row.search_radius_mi, 3, 'applied search disk floored at the default ring');
+    assertEqual(row.geofence_radius_mi, 3, 'applied geofence floored at the default ring');
+    assertEqual(plan.suggestionUpserts.length, 1, 'the tighten suggestion still surfaces');
+    // A per-area ring (e.g. a household widened this area to 4mi) raises the floor.
+    const wide = planRadii(learned, { now: NOW, tuningRows: [], ringRadii: { suburb: 4 } }).tuningUpserts[0];
+    assertEqual(wide.search_radius_mi, 4, 'per-area ring raises the floor');
+    // A user pin (override) is exempt — explicit consent moved the ring with it.
+    const pinned = planRadii(learned, { now: NOW, tuningRows: [], overrides: { suburb: 1.0 } }).tuningUpserts[0];
+    assertEqual(pinned.search_radius_mi, 1, 'pin narrows below the ring');
+  });
+
   // ── persistence: exploration scheduling ────────────────────────────────────────────
   test('radius-persistence: first-time area gets a staggered last_explored_at, no window yet', () => {
     const learned = learnRadii(likes('fresh', [0.3, 0.35, 0.4, 0.45, 0.5, 0.42]), { config: cfg, now: NOW });
@@ -188,7 +208,7 @@ export async function register({ test, assert, assertEqual }) {
   });
 
   // ── fetcher overlay (applyRadiusTuning) ────────────────────────────────────────────
-  test('fetch overlay: learned radius / override / exploration ceil / no-row passthrough', () => {
+  test('fetch overlay: ring floor over learned / pin exempt / exploration ceil / no-row passthrough (ADR 0010)', () => {
     const villages = [
       { id: 'learned', searchRadiusMi: 3, geofenceRadiusKm: 3 / MILES_PER_KM },
       { id: 'override', searchRadiusMi: 3, geofenceRadiusKm: 3 / MILES_PER_KM },
@@ -204,11 +224,13 @@ export async function register({ test, assert, assertEqual }) {
     const { tuned, exploring } = applyRadiusTuning(villages, tuning, new Date(NOW));
     assertEqual(tuned, 3);
     assertEqual(exploring, 1);
-    assertEqual(villages[0].searchRadiusMi, 0.7);
-    assertEqual(villages[1].searchRadiusMi, 1.2);            // override wins
+    // ADR 0010: the learned 0.7mi shrink is FLOORED at the 3mi drawn ring; only the
+    // explicit user pin (override_radius_mi) may narrow below it.
+    assertEqual(villages[0].searchRadiusMi, 3);
+    assertEqual(villages[1].searchRadiusMi, 1.2);            // user pin exempt from the floor
     assertEqual(villages[2].searchRadiusMi, cfg.RADIUS_CEIL_MI); // exploration ceil
     assertEqual(villages[3].searchRadiusMi, 3);              // untuned unchanged
-    assert(Math.abs(villages[0].geofenceRadiusKm - 0.7 / MILES_PER_KM) < 1e-9, 'geofence km tracks the applied radius');
+    assert(Math.abs(villages[0].geofenceRadiusKm - 3 / MILES_PER_KM) < 1e-9, 'geofence km floored at the ring too');
   });
 
   // ── Directional ("petal") learning ──────────────────────────────────────────────────

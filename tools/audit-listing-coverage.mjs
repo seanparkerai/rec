@@ -11,6 +11,10 @@
 //      area_search_tuning override), every listing whose coordinates fall inside
 //      the geofence must have a listing_areas row. Drift = silent feed loss.
 //      --fix inserts the missing rows (is_primary=false; the primary never moves).
+//      RING FLOOR (ADR 0010): the checked radius is never below the map's drawn
+//      ring (criteria.location overrides/global, default 3mi) — the ring is the
+//      user's trust surface, so a learner-shrunk radius cannot bless a coverage
+//      hole. Only an explicit user pin (override_radius_mi) narrows the check.
 //   3. FULL ACCOUNTING — per household, every listings row lands in exactly one
 //      bucket: shown by household_feed, archived, outside-your-active-catchments,
 //      geofence-fail, excluded type, off-band price, under-beds. An UNEXPLAINED
@@ -27,6 +31,7 @@
 import {
   isAllowedPropertyType, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS,
 } from '../assets/js/listings/classify.js';
+import { ringFloorInputs } from './lib/geofence-universe.mjs';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/+$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -74,13 +79,15 @@ const typeExcluded = (t) => !isAllowedPropertyType(t);
 
 async function main() {
   console.log('=== audit-listing-coverage ===');
-  const [areas, links, tuning, listings, junction] = await Promise.all([
+  const [areas, links, tuning, listings, junction, criteriaRows] = await Promise.all([
     getAll('areas', 'id,data'),
     getAll('household_areas', 'household_id,area_id,status'),
     getAll('area_search_tuning', 'area_id,geofence_radius_mi,override_radius_mi'),
     getAll('listings', 'rightmove_id,lat,lng,price,beds,property_type,geofence_pass,archived_at,last_seen'),
     getAll('listing_areas', 'rightmove_id,area_id'),
+    getAll('criteria', 'household_id,data'),
   ]);
+  const { ringRadii, defaultRingMi } = ringFloorInputs(criteriaRows);
   const areaById = new Map(areas.map((a) => [a.id, a.data || {}]));
   const tuneById = new Map(tuning.map((t) => [t.area_id, t]));
   const activeLinks = links.filter((l) => l.status === 'active');
@@ -110,7 +117,11 @@ async function main() {
       const d = areaById.get(id) || {};
       if (!(d.coords && Number.isFinite(Number(d.coords.lat)))) return null;
       const t = tuneById.get(id) || {};
-      const radius = Number(t.override_radius_mi) || Number(t.geofence_radius_mi) || Number(d.geofenceRadiusMi) || 3;
+      // ADR 0010 ring floor: a user pin narrows the check (explicit consent, ring moved
+      // with it); otherwise the checked radius = max(learned/native, drawn ring).
+      const ringMi = Number(ringRadii[id]) > 0 ? Number(ringRadii[id]) : defaultRingMi;
+      const radius = Number(t.override_radius_mi)
+        || Math.max(Number(t.geofence_radius_mi) || Number(d.geofenceRadiusMi) || 3, ringMi);
       return { id, lat: Number(d.coords.lat), lng: Number(d.coords.lng), radius };
     })
     .filter(Boolean);

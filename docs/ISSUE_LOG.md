@@ -338,3 +338,57 @@ Supabase Auth dashboard (L2). Everything else is done, verified, and shipped on
 DB migrations applied this session: `revoke_replace_listing_areas_from_public`,
 `scope_sync_log_public_read`, `dedupe_four_villages_orphan_ids`,
 `perf_fk_index_and_rls_initplan`, plus a targeted `areas` derived-field alignment.
+
+---
+
+# Wave 2 — ring-trust audit (2026-07-10)
+
+> Owner directive: "if any single property is covered by a ring and becomes available
+> within my limits — it should become visible to me with no exceptions." This wave audited
+> every radius/limit consumer against that invariant.
+
+### W2-1 🔴 Learned radius auto-shrink hid 567 in-DB listings under drawn rings — ✅ Resolved (ADR 0010)
+- **Where:** `area_search_tuning` (autonomous `radius-tune` writes) vs the map ring
+  (`page-map.js`, criteria-driven, default 3 mi — never reads the tuning table).
+- **Evidence (live):** four actively-held areas tuned to 0.76 mi (stubbington-hampshire),
+  1.44 mi + a 0.55 mi petal (titchfield-common-hampshire), 1.62 mi (titchfield-hampshire),
+  2.87 mi (breamore-sp6) with **no user pin and no criteria override** — the only pin in
+  `learned_preferences` is a 3 mi *keep* on dundridge-so32. 567 listings already in the DB
+  sat inside the drawn 3 mi rings with no `listing_areas` row for those areas, so they never
+  reached the feed; the nightly sentinel blessed it because its drift radius used the same
+  shrunken values.
+- **Fix:** the drawn ring is now the coverage **floor** at three layers — `planRadii`
+  (write), `applyRadiusTuning` via `ringFloorInputs` (read: fetcher, backfills, importers),
+  and the sentinel's ring-aware drift radius (rail). Tightens below the ring are
+  suggestion-only; Apply moves ring + pin together (`tightenRadiusBoth`, unchanged). Live
+  tuning rows repaired to 3 mi and the 567 junction rows backfilled via MCP; a scoped
+  foundation fetch tops up the never-fetched annulus stock.
+
+### W2-2 🟠 Client radius filter judged listings by PRIMARY area only — ✅ Resolved
+- **Where:** `page-listings.js` + `dashboard/tile-review-count.js` (duplicated inline).
+- **Impact:** with a per-area override keyed on a primary the household doesn't hold, a
+  listing comfortably inside another held ring could be hidden (dormant today — no overrides
+  set — but a live trap for the first Apply). Both now share `makeRadiusFilter`
+  (`listings/feed-partition.js`): a listing passes if inside ANY member area's ring.
+
+### W2-3 🟠 Purge judged "baseline" with the static £250k–£425k band — ✅ Resolved
+- **Where:** `tools/purge-listings.mjs` `purgeDecision` → `passesBaseline(row)` (defaults).
+- **Impact:** raise a budget to £500k and the nightly-fetched £425k–£500k listings would be
+  deleted as baseline violations. Purge now derives a live union band (`unionBand`, widest
+  of live budgets ∪ static band — deletion stays conservative in both directions).
+
+### W2-4 🟡 Fetch pinned `minBedrooms=2` regardless of criteria — ✅ Resolved
+- **Where:** `tools/fetch-listings.mjs` `buildSearchUrl`.
+- **Impact:** lowering `size.minBeds` below 2 would never widen the search at source (the
+  feed RPC + engine already honour it). The per-target band now unions the lowest linked
+  minBeds (`priceBandForAreas`), applied to the search URL and the baseline gate.
+
+### W2-5 🟡 Stale `areas` snapshot mark (07-09 stub-row touches) — ✅ Resolved
+- High-water bumped to `2026-07-09T19:16:53Z`; the only rows past the old mark were
+  household-onboarding stubs (never materialised) — no file drift.
+
+**Verified healthy this wave:** the `household_feed` RPC visibility predicate (membership ∩
+active ∩ geofence ∩ baseline, price/beds forwarded from live criteria per wave-1 M1); the
+fetch price band already unions live budgets per target; fetch cadence (4 daily slots + 3-day
+overlap) and the truncation sentinel; demand gate + zero-demand drop; purge's liked-row
+protection; the ALL_ACTIVE freeze for scoped runs (2026-07-09 fix) — no recurrence.

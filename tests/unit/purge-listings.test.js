@@ -3,7 +3,7 @@
 // stale), that a liked property is never purged, and that a rejected re-list under a
 // NEW id is caught by physical-property fingerprint. The REST I/O in main() is not
 // exercised here (no network) — only the drift-free, reusable decision is tested.
-import { purgeDecision, buildPurgeContext, ageInDays, PURGE_REASONS } from '../../tools/purge-listings.mjs';
+import { purgeDecision, buildPurgeContext, ageInDays, PURGE_REASONS, unionBand } from '../../tools/purge-listings.mjs';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -25,6 +25,25 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(purgeDecision(row({ rightmove_id: '1', property_type: 'Flat' }), emptyCtx), 'baseline', 'excluded type');
     assertEqual(purgeDecision(row({ rightmove_id: '2', price: 999000 }), emptyCtx), 'baseline', 'over ceiling');
     assertEqual(purgeDecision(row({ rightmove_id: '3', beds: 1 }), emptyCtx), 'baseline', 'below min beds');
+  });
+
+  test('purge: the baseline band tracks live budgets — a raised budget protects its listings (W2-3)', () => {
+    // Owner raises budget.max to £500k: the fetcher writes £425k–£500k rows the same
+    // day — the purge must NOT delete them as "baseline" that night.
+    const criteriaRows = [
+      { household_id: 'h1', data: { budget: { min: 300000, max: 500000 }, size: { minBeds: 1 } } },
+    ];
+    const band = unionBand(criteriaRows);
+    assertEqual(band.priceMax, 500000, 'live max widens the band');
+    assertEqual(band.priceMin, 250000, 'floor never rises above the static min (conservative deletes)');
+    assertEqual(band.minBeds, 1, 'a lowered minBeds protects 1-bed rows');
+    const ctx = { ...emptyCtx, band };
+    assertEqual(purgeDecision(row({ rightmove_id: 'r1', price: 480000 }), ctx), null, 'in-limits row kept');
+    assertEqual(purgeDecision(row({ rightmove_id: 'r2', beds: 1 }), ctx), null, '1-bed kept under lowered floor');
+    assertEqual(purgeDecision(row({ rightmove_id: 'r3', price: 600000 }), ctx), 'baseline', 'beyond every limit still purged');
+    // No criteria rows → the static band (never narrower than it).
+    const empty = unionBand([]);
+    assertEqual(purgeDecision(row({ rightmove_id: 'r4', price: 480000 }), { ...emptyCtx, band: empty }), 'baseline');
   });
 
   test('purge: an in-baseline, recently-seen, undecided row is kept', () => {

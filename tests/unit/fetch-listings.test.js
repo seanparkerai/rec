@@ -268,6 +268,32 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(empty.min, BASELINE_PRICE_MIN); assertEqual(empty.max, BASELINE_PRICE_MAX);
   });
 
+  test('fetch-listings: priceBandForAreas unions the beds floor (lowest linked minBeds)', () => {
+    const areaHouseholds = new Map([
+      ['shared', new Set(['h1', 'h2'])],
+      ['solo-a', new Set(['h1'])],
+      ['nobeds', new Set(['h3'])],
+    ]);
+    const budgets = new Map([
+      ['h1', { min: 300000, max: 425000, minBeds: 1 }],
+      ['h2', { min: 330000, max: 400000, minBeds: 3 }],
+      ['h3', { min: 300000, max: 425000, minBeds: null }],   // budgeted but no minBeds stored
+    ]);
+    assertEqual(priceBandForAreas(['shared'], areaHouseholds, budgets).minBeds, 1, 'lowest across households');
+    assertEqual(priceBandForAreas(['solo-a'], areaHouseholds, budgets).minBeds, 1, 'a lowered criteria minBeds widens the search');
+    assertEqual(priceBandForAreas(['nobeds'], areaHouseholds, budgets).minBeds, BASELINE_MIN_BEDS, 'missing minBeds folds in the baseline');
+    assertEqual(priceBandForAreas(['nowhere'], areaHouseholds, budgets).minBeds, BASELINE_MIN_BEDS, 'unlinked area → baseline beds floor');
+  });
+
+  test('fetch-listings: buildSearchUrl applies the band beds floor at source', () => {
+    const lowered = buildSearchUrl('OUTCODE^1', null, { minBeds: 1 });
+    assert(lowered.includes('minBedrooms=1'), 'lowered criteria minBeds reaches the search URL');
+    const plain = buildSearchUrl('OUTCODE^1');
+    assert(plain.includes(`minBedrooms=${BASELINE_MIN_BEDS}`), 'baseline beds floor without a band');
+    const spec = buildSearchUrl('OUTCODE^1', { minBeds: 3 }, { minBeds: 1 });
+    assert(spec.includes('minBedrooms=3'), 'a learned spec may still tighten above the floor');
+  });
+
   // ── search-target dedupe ──
   test('fetch-listings: dedupeSearchTargets merges targets sharing one identifier', () => {
     const targets = [

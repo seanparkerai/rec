@@ -23,7 +23,7 @@ import { scoreListingFit } from './listings/fit.js';
 import { classifyListing } from './listings/flags.js';
 import { latestPerListing } from './listings/reactions.js';
 import { decidedSets, isDecided, foldDecision } from './listings/suppress.js';
-import { partitionFeed } from './listings/feed-partition.js';
+import { partitionFeed, makeRadiusFilter } from './listings/feed-partition.js';
 import {
   effectiveWeights, listingLearnedPrefs, isRecent,
   diversifySelection, listingBucketKey,
@@ -64,21 +64,13 @@ async function render() {
   // Household radius preference: hide listings beyond the chosen distance.
   // Applied as a pre-filter inside paint() so it composes with the other hides
   // (affordability gate, junk, refinements, decided) and is counted separately.
-  // Null distance_mi = pass through (not yet backfilled — don't hide it).
+  // MEMBERSHIP-AWARE (2026-07-10 audit): a listing passes if it sits inside ANY
+  // member area's ring, not just its primary's — see makeRadiusFilter.
   const normArea = (s) => String(s ?? '').trim().toLowerCase();
-  let searchRadiusMi = Number(criteria?.location?.searchRadiusMi ?? 3);
-  // Per-area radius overrides (set by Apply on a "tighten" suggestion) win over the
-  // global radius for their area; the rest fall back to the household default.
-  let radiusOverrides = criteria?.location?.areaRadiusOverrides || {};
   // Areas the household has stopped searching (scrape probation) are suppressed from the
   // feed immediately so Apply has instant effect, not just on the next scrape.
   let probationSet = new Set((probationRows || []).map((p) => normArea(p.value)));
-  const passesRadiusFilter = (listing) => {
-    if (listing.distance_mi == null) return true;
-    const r = Number(radiusOverrides[listing.area_id] ?? searchRadiusMi);
-    if (r === 0) return listing.geofence_pass === true;
-    return Number(listing.distance_mi) <= r;
-  };
+  const passesRadiusFilter = makeRadiusFilter(criteria);
 
   // Layer 2 ⊕ Layer 3 → the effective weights fed (per-listing) into scoring.
   let overrides = learned?.overrides || {};

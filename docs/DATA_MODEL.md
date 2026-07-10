@@ -176,12 +176,17 @@ bucket per household, and fails on any UNEXPLAINED residue.
 
 *Never fetched (absent from the DB):*
 1. **Not near any active area** — only areas in the demand set (≥1 active household link) are
-   searched, each within its search radius.
+   searched, each within its search radius. **The drawn map ring is the radius FLOOR
+   (ADR 0010, 2026-07-10):** a learned/tuned radius may only widen the search + membership
+   scope relative to the ring; only a user-applied tighten (which moves the ring in the same
+   action) may narrow it. Enforced write-side (`planRadii`), read-side (`applyRadiusTuning`)
+   and by the nightly sentinel's ring-aware drift check.
 2. **Outside the scraped price band** — searches run at the household-budget union band
    (currently min £300k); cheaper listings are never fetched even though the feed would show
    them. Known trade-off — widen a budget to widen the band.
-3. **Search-source filters** — houses/bungalows only, ≥2 beds, and the text-match new-build
-   drop (owner decision 2026-06-04) apply at source.
+3. **Search-source filters** — houses/bungalows only, the household union beds floor
+   (lowest criteria `size.minBeds`, baseline 2), and the text-match new-build drop (owner
+   decision 2026-06-04) apply at source.
 4. **Per-target result cap** — 200 results/search; a capped page now logs a loud
    `⚠ TRUNCATED` warning naming the target (2026-07-09).
 5. **Recency window** — scheduled runs only see listings added in the last ~day; standing
@@ -198,16 +203,22 @@ bucket per household, and fails on any UNEXPLAINED residue.
 
 *In the feed but hidden client-side (each has a visible count + reveal):*
 10. **Affordability gate / junk (auction, over-55) / confirmed refinement hides** — "Show
-    hidden" reveals all three; counts in the feed summary.
+    hidden" reveals all three; counts in the feed summary. The radius pre-filter is
+    MEMBERSHIP-AWARE (2026-07-10): a listing passes if it sits inside ANY member area's
+    ring (`makeRadiusFilter`, shared by Browse + the dashboard count), never hidden by its
+    primary area's distance alone.
 11. **Decided suppression** — liked → Saved page, passed/rejected → Rejected page (by id AND
     property fingerprint so re-lists stay decided); never silently gone, always on a page.
 12. **Fingerprint dedupe** — same physical property collapses to one representative (counted).
 
-**Retired/forbidden mechanisms:** `is_origin` (ADR 0009); learned `dropAreas`/`dropOutcodes`
-narrowing only runs with `USE_LEARNED=1`, which no workflow sets; `scrape_probation` is
-user-driven pause, currently empty. Membership drift from AREA_IDS-scoped runs (the bug that
-hid whole catchments' worth of junction rows) was fixed 2026-07-09 — the geofence index is
-frozen before the search scope is applied — and the sentinel self-heals any residue nightly.
+**Retired/forbidden mechanisms:** `is_origin` (ADR 0009); **autonomous radius shrink below
+the drawn ring** (ADR 0010 — the 2026-07-10 audit found the learner had silently shrunk four
+active areas to 0.76–2.87 mi under 3 mi rings, hiding 567 in-DB listings; tightens are now
+suggestion-only below the ring); learned `dropAreas`/`dropOutcodes` narrowing only runs with
+`USE_LEARNED=1`, which no workflow sets; `scrape_probation` is user-driven pause, currently
+empty. Membership drift from AREA_IDS-scoped runs (the bug that hid whole catchments' worth
+of junction rows) was fixed 2026-07-09 — the geofence index is frozen before the search scope
+is applied — and the sentinel self-heals any residue nightly.
 
 ### Listing lifecycle (audited + pinned, step 2.18)
 

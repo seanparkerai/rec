@@ -10,6 +10,37 @@
 import { dedupeByFingerprint } from './suppress.js';
 
 /**
+ * Build the household search-radius pre-filter (the `deps.passesRadius` callback).
+ * MEMBERSHIP-AWARE (2026-07-10 coverage audit): the map draws a ring around EVERY
+ * held area, so a listing must pass if it is inside ANY member area's ring — not
+ * just its primary's (a per-area override keyed on a primary the household doesn't
+ * even hold used to hide a listing that sat comfortably inside another held ring).
+ * The RPC attaches the full membership set as `listing.areas`
+ * ({ area_id, distance_mi }); each member area is tested against ITS ring radius
+ * (per-area override → household global, default 3mi; 0 = village-boundary mode →
+ * geofence_pass only). Rows without a membership set (unscoped reads, older
+ * fixtures) keep the legacy primary-area test, and a null distance always passes
+ * (never hide un-backfilled data). Pure.
+ * @param {object} [criteria]  household criteria (location.searchRadiusMi + areaRadiusOverrides)
+ */
+export function makeRadiusFilter(criteria) {
+  const globalMi = Number(criteria?.location?.searchRadiusMi ?? 3);
+  const overrides = criteria?.location?.areaRadiusOverrides || {};
+  const passesFor = (areaId, distanceMi, geofencePass) => {
+    const r = Number(overrides[areaId] ?? globalMi);
+    if (r === 0) return geofencePass === true;
+    return distanceMi == null ? true : Number(distanceMi) <= r;
+  };
+  return (listing) => {
+    const members = Array.isArray(listing.areas) ? listing.areas.filter((m) => m && m.area_id) : [];
+    if (members.length) {
+      return members.some((m) => passesFor(m.area_id, m.distance_mi, listing.geofence_pass));
+    }
+    return passesFor(listing.area_id, listing.distance_mi, listing.geofence_pass);
+  };
+}
+
+/**
  * Partition the raw listings into the rendered feed shape.
  * @param {Array} listings  raw listing rows (fetcher shape, keyed by rightmove_id)
  * @param {object} deps

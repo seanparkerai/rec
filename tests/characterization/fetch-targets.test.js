@@ -73,18 +73,28 @@ export async function register({ test, assert, assertEqual }) {
 
   test('targets golden-master: learned tuning reshapes the same universe deterministically', () => {
     const tuning = new Map([
-      // hatherden: learned tighter search radius
-      ['hatherden-sp11', { search_radius_mi: 1.5, geofence_radius_mi: 1.5, geofence_radii: null, explore_until: null, override_radius_mi: null }],
+      // hatherden: USER-PINNED tighter radius (override) — the only path that may
+      // narrow below the 3mi drawn ring (ADR 0010; a non-pinned learned shrink floors at it)
+      ['hatherden-sp11', { search_radius_mi: 1.5, geofence_radius_mi: 1.5, geofence_radii: null, explore_until: null, override_radius_mi: 1.5 }],
       // wherwell: inside an exploration window → widened to the ceiling
       ['wherwell-sp11', { search_radius_mi: 2, geofence_radius_mi: 2, geofence_radii: null, explore_until: '2026-12-01T00:00:00Z', override_radius_mi: null }],
     ]);
     const got = shape(composeTargets({ tuning }));
     const hath = got.find((t) => t.areas.includes('hatherden-sp11'));
-    assertEqual(hath.r, 1.5, 'learned radius drives the lone-village disk');
+    assertEqual(hath.r, 1.5, 'pinned radius drives the lone-village disk');
     const wher = got.find((t) => t.areas.includes('wherwell-sp11'));
     assert(wher.r > 3.3, `exploration widens the wherwell cluster (got ${wher.r})`);
     // Determinism: identical inputs → identical serialized output.
     assertEqual(JSON.stringify(got), JSON.stringify(shape(composeTargets({ tuning }))));
+  });
+
+  test('targets: a non-pinned learned shrink floors at the drawn ring (ADR 0010)', () => {
+    const tuning = new Map([
+      ['hatherden-sp11', { search_radius_mi: 1.5, geofence_radius_mi: 1.5, geofence_radii: null, explore_until: null, override_radius_mi: null }],
+    ]);
+    const got = shape(composeTargets({ tuning }));
+    const hath = got.find((t) => t.areas.includes('hatherden-sp11'));
+    assertEqual(hath.r, 3, 'learned 1.5mi without a pin is floored at the 3mi ring');
   });
 
   test('targets: cluster mode never issues more searches than outcode mode (cost invariant)', () => {

@@ -6,7 +6,7 @@
 // and the page pre-filters the decided pile before calling in), decided rows hide
 // unless "Show hidden", junk vs refinement never double-counts, unknown verbs fold
 // into the Passed group, and no count can go negative.
-import { partitionFeed } from '../../assets/js/listings/feed-partition.js';
+import { partitionFeed, makeRadiusFilter } from '../../assets/js/listings/feed-partition.js';
 
 export async function register({ test, assert, assertEqual }) {
   // Distinct addresses → distinct fingerprints (dedupeByFingerprint is exercised
@@ -103,5 +103,38 @@ export async function register({ test, assert, assertEqual }) {
     }));
     assertEqual(out.visible.map((r) => r.listing.rightmove_id).join(','), '3,2,1', 'controls order is authoritative');
     assert(out.visible.every((r) => r.scored && r.area), 'rows are fully hydrated');
+  });
+
+  // ── makeRadiusFilter (membership-aware, 2026-07-10 audit) ───────────────────────
+  test('radius-filter: a listing inside ANY member ring passes — never hidden by its primary alone', () => {
+    const criteria = { location: { searchRadiusMi: 3, areaRadiusOverrides: { 'primary-x': 0.5 } } };
+    const passes = makeRadiusFilter(criteria);
+    // Primary is tightened to 0.5mi, but the listing sits 1.0mi inside ANOTHER held
+    // ring (member-b at its 3mi default) — the old primary-only filter hid this.
+    assert(passes({
+      rightmove_id: '1', area_id: 'primary-x', distance_mi: 0.6, geofence_pass: true,
+      areas: [{ area_id: 'primary-x', distance_mi: 0.6 }, { area_id: 'member-b', distance_mi: 1.0 }],
+    }), 'inside member-b\'s ring → visible');
+    // Outside EVERY member ring → hidden.
+    assert(!passes({
+      rightmove_id: '2', area_id: 'primary-x', distance_mi: 0.6, geofence_pass: true,
+      areas: [{ area_id: 'primary-x', distance_mi: 0.6 }],
+    }), 'outside its only (overridden) ring → hidden');
+    // Per-member override applies to ITS ring; null distances always pass.
+    assert(passes({
+      rightmove_id: '3', area_id: 'primary-x', distance_mi: null, geofence_pass: true,
+      areas: [{ area_id: 'member-b', distance_mi: null }],
+    }), 'null distance never hides (un-backfilled data)');
+  });
+
+  test('radius-filter: legacy primary fallback + village-boundary (0) mode', () => {
+    const passes = makeRadiusFilter({ location: { searchRadiusMi: 2 } });
+    assert(passes({ area_id: 'a', distance_mi: 1.9 }), 'no membership set → primary distance vs global');
+    assert(!passes({ area_id: 'a', distance_mi: 2.1 }), 'beyond the global ring → hidden');
+    const boundary = makeRadiusFilter({ location: { searchRadiusMi: 0 } });
+    assert(boundary({ area_id: 'a', distance_mi: 2.5, geofence_pass: true }), '0 = geofence_pass only');
+    assert(!boundary({ area_id: 'a', distance_mi: 0.1, geofence_pass: false }), 'geofence fail hides in boundary mode');
+    const defaulted = makeRadiusFilter(null);
+    assert(defaulted({ area_id: 'a', distance_mi: 2.9 }), 'no criteria → 3mi default ring');
   });
 }

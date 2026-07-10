@@ -234,7 +234,7 @@ COMMIT;`;
 
 INSERT INTO area_search_tuning (area_id, geofence_radius_mi, search_radius_mi, recommended_radius_mi, override_radius_mi, geofence_radii, sample_size, like_count, method, confidence, explore_until, last_explored_at, computed_at, updated_at)
 VALUES
-  ('alpha-ab1', 1.2, 1.5, 1.2, NULL, '[1.2,1.5,1.2,1.2]'::jsonb, 9, 6.1, 'like-quantile-0.9+0.3mi', 'high', NULL, '2026-07-01T00:00:00.000Z', '2026-07-03T00:00:00.000Z', '2026-07-03T00:00:00.000Z')
+  ('alpha-ab1', 3, 3, 1.2, NULL, '[3,3,3,3]'::jsonb, 9, 6.1, 'like-quantile-0.9+0.3mi', 'high', NULL, '2026-07-01T00:00:00.000Z', '2026-07-03T00:00:00.000Z', '2026-07-03T00:00:00.000Z')
 ON CONFLICT (area_id) DO UPDATE SET
   recommended_radius_mi = EXCLUDED.recommended_radius_mi,
   override_radius_mi = EXCLUDED.override_radius_mi,

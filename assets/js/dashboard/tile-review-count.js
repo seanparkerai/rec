@@ -15,7 +15,7 @@ import { scoreListingFit } from '../listings/fit.js';
 import { classifyListing } from '../listings/flags.js';
 import { latestPerListing } from '../listings/reactions.js';
 import { decidedSets, isDecided } from '../listings/suppress.js';
-import { partitionFeed } from '../listings/feed-partition.js';
+import { partitionFeed, makeRadiusFilter } from '../listings/feed-partition.js';
 import { hiddenRulesFromOverrides, listingHiddenByRefinement } from '../refinement/view.js';
 import { url } from '../config.js';
 import { el, clear, byId } from '../dom.js';
@@ -24,16 +24,10 @@ import { el, clear, byId } from '../dom.js';
 function countToReview({ listings, criteria, finances, areas, learned, reactionLog, probationRows }) {
   const normArea = (s) => String(s ?? '').trim().toLowerCase();
 
-  // Household search radius (+ per-area overrides) — identical to page-listings.
-  const searchRadiusMi = Number(criteria?.location?.searchRadiusMi ?? 3);
-  const radiusOverrides = criteria?.location?.areaRadiusOverrides || {};
+  // Household search radius (+ per-area overrides) — the SAME shared membership-
+  // aware filter page-listings uses (makeRadiusFilter), so the count never drifts.
   const probationSet = new Set((probationRows || []).map((p) => normArea(p.value)));
-  const passesRadius = (listing) => {
-    if (listing.distance_mi == null) return true;
-    const r = Number(radiusOverrides[listing.area_id] ?? searchRadiusMi);
-    if (r === 0) return listing.geofence_pass === true;
-    return Number(listing.distance_mi) <= r;
-  };
+  const passesRadius = makeRadiusFilter(criteria);
 
   const overrides = learned?.overrides || {};
   const hiddenRules = hiddenRulesFromOverrides(overrides);

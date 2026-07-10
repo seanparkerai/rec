@@ -46,39 +46,105 @@ export function toVillage(a) {
 }
 
 /**
+ * The RING FLOOR (ADR 0010, 2026-07-10). The map's geofence rings are the user's
+ * trust surface: anything inside a drawn ring, within their limits, MUST be
+ * fetchable + members-stamped. The ring is drawn from criteria.location
+ * (areaRadiusOverrides[areaId] → searchRadiusMi → 3mi default), so the
+ * autonomously-learned radius (area_search_tuning) may only ever WIDEN scope
+ * relative to the ring — never silently shrink below it. Only an explicit user
+ * pin (override_radius_mi, written by Apply "tighten", which moves the drawn
+ * ring in the same action) may go under the floor.
+ *
+ * Derive the floor inputs from raw criteria rows [{ household_id, data }]:
+ *   defaultRingMi — the WIDEST household global ring (a 0/unset global draws the
+ *     3mi native ring, so it contributes 3); ≥ 3 by construction on failure/[].
+ *   ringRadii     — per-area max of (override ?? that household's global); an
+ *     override below another household's global never lowers the union (max).
+ * Pure — unit-tests without Supabase.
+ */
+export const DEFAULT_RING_MI = 3;
+export function ringFloorInputs(criteriaRows) {
+  const ringRadii = {};
+  let defaultRingMi = DEFAULT_RING_MI;
+  const globals = [];
+  for (const r of criteriaRows || []) {
+    const loc = r?.data?.location || {};
+    const g = Number(loc.searchRadiusMi);
+    const gRing = Number.isFinite(g) && g > 0 ? g : DEFAULT_RING_MI;
+    globals.push(gRing);
+    for (const [areaId, mi] of Object.entries(loc.areaRadiusOverrides || {})) {
+      const ov = Number(mi);
+      if (!Number.isFinite(ov) || ov <= 0) continue;
+      const ring = Math.max(ov, gRing);
+      if (ringRadii[areaId] == null || ring > ringRadii[areaId]) ringRadii[areaId] = ring;
+    }
+  }
+  if (globals.length) defaultRingMi = Math.max(...globals);
+  return { ringRadii, defaultRingMi };
+}
+
+/**
  * Apply learned per-area radii (area_search_tuning rows) onto village objects,
  * in place. Exploration windows widen to RADIUS_CEIL_MI and clear petals (the
  * full disk must be measured); otherwise override > learned search radius, with
  * the geofence scalar/petals following the tuning row. (Moved verbatim from
  * tools/fetch-listings.mjs so every consumer applies tuning identically.)
+ *
+ * RING FLOOR (ADR 0010): after tuning, every village WITHOUT a user pin is
+ * floored at its drawn-ring radius (opts.ringRadii[id] ?? opts.defaultRingMi,
+ * default 3mi) — search disk, geofence scalar and every petal alike — so the
+ * learner can only ever widen scope relative to the map. A user pin
+ * (override_radius_mi) is exempt: it was an explicit Apply that moved the drawn
+ * ring in the same action.
  */
-export function applyRadiusTuning(villages, tuning, now = new Date()) {
+export function applyRadiusTuning(villages, tuning, now = new Date(), opts = {}) {
+  const ringRadii = opts.ringRadii || {};
+  const defaultRingMi = Number.isFinite(Number(opts.defaultRingMi)) && Number(opts.defaultRingMi) > 0
+    ? Number(opts.defaultRingMi) : DEFAULT_RING_MI;
   let tuned = 0;
   let exploring = 0;
+  let floored = 0;
   for (const v of villages) {
     const t = tuning.get(v.id);
-    if (!t) continue;
-    const isExploring = t.explore_until != null && new Date(t.explore_until) > now;
-    if (isExploring) {
-      v.searchRadiusMi = RADIUS_CEIL_MI;
-      v.geofenceRadiusKm = RADIUS_CEIL_MI / MILES_PER_KM;
-      v.geofenceRadiiKm = null;            // measure the full disk while exploring
-      tuned += 1; exploring += 1;
-      continue;
+    const pinned = t != null && t.override_radius_mi != null;
+    if (t) {
+      const isExploring = t.explore_until != null && new Date(t.explore_until) > now;
+      if (isExploring) {
+        v.searchRadiusMi = RADIUS_CEIL_MI;
+        v.geofenceRadiusKm = RADIUS_CEIL_MI / MILES_PER_KM;
+        v.geofenceRadiiKm = null;            // measure the full disk while exploring
+        tuned += 1; exploring += 1;
+      } else {
+        const searchMi = pinned ? Number(t.override_radius_mi)
+          : t.search_radius_mi != null ? Number(t.search_radius_mi) : null;
+        if (searchMi != null && Number.isFinite(searchMi)) {
+          v.searchRadiusMi = searchMi;
+          const keepScalar = pinned ? Number(t.override_radius_mi)
+            : t.geofence_radius_mi != null ? Number(t.geofence_radius_mi) : searchMi;
+          v.geofenceRadiusKm = keepScalar / MILES_PER_KM;
+          v.geofenceRadiiKm = Array.isArray(t.geofence_radii) && t.geofence_radii.length
+            ? t.geofence_radii.map((mi) => Number(mi) / MILES_PER_KM)
+            : null;
+          tuned += 1;
+        }
+      }
     }
-    const searchMi = t.override_radius_mi != null ? Number(t.override_radius_mi)
-      : t.search_radius_mi != null ? Number(t.search_radius_mi) : null;
-    if (searchMi == null || !Number.isFinite(searchMi)) continue;
-    v.searchRadiusMi = searchMi;
-    const keepScalar = t.override_radius_mi != null ? Number(t.override_radius_mi)
-      : t.geofence_radius_mi != null ? Number(t.geofence_radius_mi) : searchMi;
-    v.geofenceRadiusKm = keepScalar / MILES_PER_KM;
-    v.geofenceRadiiKm = Array.isArray(t.geofence_radii) && t.geofence_radii.length
-      ? t.geofence_radii.map((mi) => Number(mi) / MILES_PER_KM)
-      : null;
-    tuned += 1;
+    if (pinned) continue;                    // user consent — the floor never overrides a pin
+    const floorMi = Number(ringRadii[v.id]) > 0 ? Number(ringRadii[v.id]) : defaultRingMi;
+    const floorKm = floorMi / MILES_PER_KM;
+    let raised = false;
+    if (!(Number(v.searchRadiusMi) >= floorMi)) {
+      if (v.searchRadiusMi != null || floorMi > DEFAULT_RING_MI) { v.searchRadiusMi = floorMi; raised = true; }
+    }
+    if (v.geofenceRadiusKm != null && v.geofenceRadiusKm < floorKm) { v.geofenceRadiusKm = floorKm; raised = true; }
+    else if (v.geofenceRadiusKm == null && floorMi > DEFAULT_RING_MI) { v.geofenceRadiusKm = floorKm; raised = true; }
+    if (Array.isArray(v.geofenceRadiiKm) && v.geofenceRadiiKm.some((p) => p < floorKm)) {
+      v.geofenceRadiiKm = v.geofenceRadiiKm.map((p) => Math.max(p, floorKm));
+      raised = true;
+    }
+    if (raised) floored += 1;
   }
-  return { tuned, exploring };
+  return { tuned, exploring, floored };
 }
 
 /**
@@ -90,7 +156,7 @@ export function applyRadiusTuning(villages, tuning, now = new Date()) {
  * outcode stay in `villages` (geofence matching is coordinate-driven) but cannot
  * join `outcodeMap` (target building needs an outcode).
  */
-export function buildUniverse(records, { links = new Set(), tuning = new Map(), now = new Date(), includeDisabled = false } = {}) {
+export function buildUniverse(records, { links = new Set(), tuning = new Map(), now = new Date(), includeDisabled = false, ringRadii, defaultRingMi } = {}) {
   const villages = [];
   let skippedNoCoords = 0;
   let skippedDisabled = 0;
@@ -109,14 +175,14 @@ export function buildUniverse(records, { links = new Set(), tuning = new Map(), 
       rightmove: d.rightmove,
     }));
   }
-  const { tuned, exploring } = applyRadiusTuning(villages, tuning, now);
+  const { tuned, exploring, floored } = applyRadiusTuning(villages, tuning, now, { ringRadii, defaultRingMi });
   const outcodeMap = new Map();
   for (const v of villages) {
     if (!v.outcode) continue;
     if (!outcodeMap.has(v.outcode)) outcodeMap.set(v.outcode, []);
     outcodeMap.get(v.outcode).push(v);
   }
-  return { villages, outcodeMap, stats: { total: villages.length, tuned, exploring, skippedNoCoords, skippedDisabled } };
+  return { villages, outcodeMap, stats: { total: villages.length, tuned, exploring, floored, skippedNoCoords, skippedDisabled } };
 }
 
 /** DB edge (authoritative): areas + household_areas + area_search_tuning via REST. */
@@ -133,14 +199,16 @@ export async function loadUniverseFromDb({
     if (!res.ok) throw new Error(`geofence-universe: GET ${path} failed: ${res.status} ${await res.text()}`);
     return res.json();
   };
-  const [areaRows, linkRows, tuningRows] = await Promise.all([
+  const [areaRows, linkRows, tuningRows, criteriaRows] = await Promise.all([
     get('areas?select=id,data'),
     get('household_areas?select=area_id'),
     get('area_search_tuning?select=area_id,search_radius_mi,geofence_radius_mi,override_radius_mi,geofence_radii,explore_until'),
+    get('criteria?select=household_id,data'),
   ]);
   const links = new Set(linkRows.map((l) => l.area_id));
   const tuning = new Map(tuningRows.map((t) => [t.area_id, t]));
-  return buildUniverse(areaRows, { links, tuning, now });
+  const { ringRadii, defaultRingMi } = ringFloorInputs(criteriaRows);
+  return buildUniverse(areaRows, { links, tuning, now, ringRadii, defaultRingMi });
 }
 
 /**

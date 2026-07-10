@@ -34,8 +34,8 @@
   },
   "areas": {
     "count": 192,
-    "last_synced_at": "2026-07-09T14:03:10Z",
-    "_note": "count = directory INDEX entries (villages.csv) = per-area files = DB mirror = 192. The 4 duplicate-postcode variants were removed in the 2026-07-09 audit dedupe (ISSUE_LOG M2; Charlwood's canonical is now the geographically-correct SO24 record). 192/192 researched, zero missing content fields. Household-onboarding stubs are never materialised."
+    "last_synced_at": "2026-07-09T19:16:53Z",
+    "_note": "count = directory INDEX entries (villages.csv) = per-area files = DB mirror = 192. The 4 duplicate-postcode variants were removed in the 2026-07-09 audit dedupe (ISSUE_LOG M2; Charlwood's canonical is now the geographically-correct SO24 record). 192/192 researched, zero missing content fields. Household-onboarding stubs are never materialised (mark includes the 07-09 19:16 stub-row touches — no file drift)."
   },
   "house_types": {
     "count": 15,

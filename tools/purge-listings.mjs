@@ -34,7 +34,10 @@
 //         APPLY=1 node tools/purge-listings.mjs    (DELETE the planned rows)
 
 import { pathToFileURL } from 'node:url';
-import { passesBaseline, propertyFingerprint } from '../assets/js/listings/classify.js';
+import {
+  passesBaseline, propertyFingerprint,
+  BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS,
+} from '../assets/js/listings/classify.js';
 import { decidedSets, isDecided } from '../assets/js/listings/suppress.js';
 import { latestPerListing } from '../assets/js/listings/reactions.js';
 
@@ -47,6 +50,34 @@ const STALE_DAYS = Number(process.env.STALE_DAYS) || 30;
 const DELETE_CHUNK = 100;
 
 export const PURGE_REASONS = ['baseline', 'rejected-stale', 'stale'];
+
+/**
+ * The live global union band across household budgets (criteria rows): lowest
+ * budget.min, highest budget.max, lowest size.minBeds — each falling back to the
+ * static classify.js constant when unset/invalid. This is the widest envelope any
+ * household's limits admit, so a purge judged against it never deletes a listing
+ * some household can see. Pure.
+ * @param {Array<{household_id:string,data:object}>} criteriaRows
+ * @returns {{priceMin:number,priceMax:number,minBeds:number}}
+ */
+export function unionBand(criteriaRows) {
+  let priceMin = Infinity, priceMax = -Infinity, minBeds = Infinity;
+  for (const r of criteriaRows || []) {
+    const b = r?.data?.budget || {};
+    const min = Number(b.min), max = Number(b.max);
+    if (Number.isFinite(max) && max > 0) {
+      priceMax = Math.max(priceMax, max);
+      priceMin = Math.min(priceMin, Number.isFinite(min) && min > 0 ? min : BASELINE_PRICE_MIN);
+    }
+    const beds = Number(r?.data?.size?.minBeds);
+    if (Number.isFinite(beds) && beds > 0) minBeds = Math.min(minBeds, Math.round(beds));
+  }
+  return {
+    priceMin: Number.isFinite(priceMin) ? Math.min(priceMin, BASELINE_PRICE_MIN) : BASELINE_PRICE_MIN,
+    priceMax: priceMax > 0 ? Math.max(priceMax, BASELINE_PRICE_MAX) : BASELINE_PRICE_MAX,
+    minBeds: Number.isFinite(minBeds) ? Math.min(minBeds, BASELINE_MIN_BEDS) : BASELINE_MIN_BEDS,
+  };
+}
 
 /** Age in days from last_seen (fallback first_seen). 0 (never stale) when unknown. */
 export function ageInDays(row, now = new Date()) {
@@ -81,10 +112,15 @@ export function purgeDecision(row, ctx) {
   const {
     likedIds, rejectedSets, now = new Date(),
     rejectHalfLifeDays = REJECT_HALF_LIFE_DAYS, staleDays = STALE_DAYS,
+    band = null,
   } = ctx || {};
   if (!row) return null;
   if (likedIds && likedIds.has(String(row.rightmove_id))) return null;       // liked → protected
-  if (!passesBaseline(row)) return 'baseline';
+  // The baseline band tracks the LIVE household budgets (ctx.band — the global
+  // union the fetcher scrapes at), not the static classify.js constants: a raised
+  // budget must never see its freshly-fetched, in-limits listings purged as
+  // "baseline violations" the same night. No band supplied → static defaults.
+  if (!passesBaseline(row, band || undefined)) return 'baseline';
   // NOTE (2.18 audit): an undocumented 'new-build' purge reason was removed here —
   // it arrived in an unrelated commit (fc5574a), was absent from PURGE_REASONS and
   // the header contract, crashed main() (no report bucket), and contradicted the
@@ -147,13 +183,20 @@ async function main() {
   console.log(`mode: ${DRY_RUN ? 'DRY RUN (no deletes — set APPLY=1 to delete)' : 'APPLY (will DELETE)'} · reject half-life: ${REJECT_HALF_LIFE_DAYS}d · stale: ${STALE_DAYS}d`);
   if (!SERVICE_KEY) throw new Error('SUPABASE_SERVICE_ROLE_KEY required to read/purge');
 
-  const [listings, reactions] = await Promise.all([
+  const [listings, reactions, criteriaRows] = await Promise.all([
     restGetAll('listings', 'rightmove_id,property_type,price,beds,address,last_seen,first_seen', 'rightmove_id.asc'),
     restGetAll('listing_reactions', 'listing_id,reaction,created_at,listing_snapshot', 'created_at.asc'),
+    restGetAll('criteria', 'household_id,data', 'household_id.asc'),
   ]);
   const liveById = new Map(listings.map((l) => [String(l.rightmove_id), l]));
   const now = new Date();
   const ctx = buildPurgeContext(reactions, liveById, now);
+  // Live union band across every household budget (lowest min, highest max, lowest
+  // minBeds) — the same envelope the fetcher scrapes at — so the purge's baseline
+  // check can never delete a listing some household's limits admit. Falls back to
+  // the static classify.js band per value when no budget is stored.
+  ctx.band = unionBand(criteriaRows);
+  console.log(`baseline band (live union): £${ctx.band.priceMin.toLocaleString('en-GB')}–£${ctx.band.priceMax.toLocaleString('en-GB')} · ≥${ctx.band.minBeds} beds`);
 
   const byReason = { baseline: [], 'rejected-stale': [], stale: [] };
   for (const l of listings) {

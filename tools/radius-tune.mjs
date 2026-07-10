@@ -32,6 +32,7 @@ import { resolveConfig } from '../assets/js/refinement/config.js';
 import { radiusOverridesFromOverrides } from '../assets/js/refinement/view.js';
 import { genuineReactions } from '../assets/js/listings/reaction-provenance.js';
 import { haversineKm, bearingDeg, MILES_PER_KM } from './listings-normalise.mjs';
+import { ringFloorInputs } from './lib/geofence-universe.mjs';
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qxmyrahqsopmaeokxdub.supabase.co').replace(/\/$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -147,6 +148,11 @@ async function loadInputs() {
     const bundle = JSON.parse(await readFile(fromFile, 'utf8'));
     const tuningRows = bundle.tuningRows || [];
     const overrides = bundle.overrides || overridesFromLearned(bundle.learnedPreferences);
+    // Ring floor (ADR 0010): from the bundle's criteria rows when supplied; a bundle
+    // without them floors at the 3mi default ring — never below the drawn map.
+    const ringFloor = bundle.ringRadii != null
+      ? { ringRadii: bundle.ringRadii, defaultRingMi: bundle.defaultRingMi }
+      : ringFloorInputs(bundle.criteriaRows || []);
     return {
       now: bundle.now || new Date().toISOString(),
       config: resolveConfig(bundle.config || {}),
@@ -154,6 +160,7 @@ async function loadInputs() {
       tuningRows,
       suggestionRows: bundle.suggestionRows || [],
       overrides,
+      ringFloor,
       currentRadii: bundle.currentRadii || currentRadiiFrom(tuningRows),
       dismissedKeys: new Set(bundle.dismissedKeys || []),
       useAll: !!bundle.allReactions,
@@ -180,6 +187,10 @@ async function loadInputs() {
   // write the service-role-only tuning table). Resolve + union them here.
   const prefsRows = await restGetAll('learned_preferences?select=household_id,overrides');
   const overrides = overridesFromLearned(prefsRows);
+  // Ring floor (ADR 0010): the drawn map ring per household (criteria.location) is the
+  // lower bound for every auto-applied radius — the learner may only widen scope.
+  const criteriaRows = await restGetAll('criteria?select=household_id,data');
+  const ringFloor = ringFloorInputs(criteriaRows);
   return {
     now: new Date().toISOString(),
     config: resolveConfig({}),
@@ -187,6 +198,7 @@ async function loadInputs() {
     tuningRows,
     suggestionRows,
     overrides,
+    ringFloor,
     currentRadii: currentRadiiFrom(tuningRows),
     dismissedKeys: new Set(),
     useAll: process.argv.includes('--all-reactions'),
@@ -194,7 +206,7 @@ async function loadInputs() {
 }
 
 async function main() {
-  const { now, config, reactions, tuningRows, suggestionRows, overrides, currentRadii, dismissedKeys, useAll } = await loadInputs();
+  const { now, config, reactions, tuningRows, suggestionRows, overrides, ringFloor, currentRadii, dismissedKeys, useAll } = await loadInputs();
   // A pinned area's "current" radius is its override, so suggestion direction/threshold
   // compares against what the user actually chose (not the stale default).
   const effectiveCurrent = { ...currentRadii, ...overrides };
@@ -210,7 +222,10 @@ async function main() {
   }
 
   const learned = learnRadii(filtered, { config, now, currentRadii: effectiveCurrent });
-  const plan = planRadii(learned, { now, tuningRows, suggestionRows, overrides, dismissedKeys });
+  const plan = planRadii(learned, {
+    now, tuningRows, suggestionRows, overrides, dismissedKeys,
+    ringRadii: ringFloor?.ringRadii, defaultRingMi: ringFloor?.defaultRingMi,
+  });
   const sql = renderRadiusSql(plan);
 
   // Human-readable summary (stderr so stdout can be piped as pure SQL).

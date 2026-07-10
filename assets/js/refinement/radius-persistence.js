@@ -45,8 +45,17 @@ function hashInt(str) {
  *   learned_preferences — the only place a user override originates, since the portal can't
  *   write the service-role-only tuning table directly). Wins over the learner.
  * @param {Set}    [ctx.dismissedKeys]   `area_radius:<areaId>` keys the user dismissed.
+ * @param {Object} [ctx.ringRadii]       per-area drawn-ring radii { areaId: miles } (ADR 0010).
+ * @param {number} [ctx.defaultRingMi]   the widest household global ring (default 3).
  * @param {Date|string} [ctx.now]
  * @returns {{ tuningUpserts:Array, suggestionUpserts:Array, exploringCount:number }}
+ *
+ * RING FLOOR (ADR 0010, 2026-07-10): the map's drawn ring is the user's trust surface —
+ * the AUTO-APPLIED radius (search disk, geofence scalar, every petal) is floored at the
+ * ring radius (ctx.ringRadii[areaId] ?? ctx.defaultRingMi ?? 3mi). The learner's honest
+ * view survives untouched in recommended_radius_mi and in the tighten SUGGESTION — which,
+ * when the user Applies it, moves the drawn ring and pins the override in one action
+ * (tightenRadiusBoth), keeping ring == pipeline. A user override is exempt from the floor.
  */
 export function planRadii(learned, ctx = {}) {
   const config = learned.config || {};
@@ -55,6 +64,10 @@ export function planRadii(learned, ctx = {}) {
   const nowIso = now.toISOString();
   const dismissedKeys = ctx.dismissedKeys || new Set();
   const overrides = ctx.overrides || {};
+  const ringRadii = ctx.ringRadii || {};
+  const defaultRingMi = Number.isFinite(Number(ctx.defaultRingMi)) && Number(ctx.defaultRingMi) > 0
+    ? Number(ctx.defaultRingMi) : (config.DEFAULT_RADIUS_MI || 3);
+  const ringFloorFor = (areaId) => (Number(ringRadii[areaId]) > 0 ? Number(ringRadii[areaId]) : defaultRingMi);
   const everyMs = (config.RADIUS_EXPLORE_EVERY_DAYS || 7) * DAY_MS;
   const windowMs = (config.RADIUS_EXPLORE_WINDOW_H || 12) * HOUR_MS;
 
@@ -82,10 +95,15 @@ export function planRadii(learned, ctx = {}) {
       : (prior && prior.override_radius_mi != null ? Number(prior.override_radius_mi) : null);
     const nSectors = config.RADIUS_SECTORS || 8;
     // An override pins the whole town to one radius (uniform petals). Otherwise the search
-    // disk is the widest petal (covers every sector) and the geofence is per-sector.
-    const applied = override != null ? override : (a ? a.searchMi : recommendedMi);
-    const geofenceScalar = override != null ? override : recommendedMi;
-    const geofenceRadii = override != null ? Array(nSectors).fill(override) : (a ? a.geofenceRadiiMi : null);
+    // disk is the widest petal (covers every sector) and the geofence is per-sector —
+    // each floored at the drawn ring (ADR 0010): the auto-applied radius may only ever
+    // WIDEN scope relative to the map; a pin (explicit user consent) is exempt.
+    const floor = ringFloorFor(areaId);
+    const applied = override != null ? override
+      : Math.max((a ? a.searchMi : recommendedMi) ?? floor, floor);
+    const geofenceScalar = override != null ? override : Math.max(recommendedMi ?? floor, floor);
+    const geofenceRadii = override != null ? Array(nSectors).fill(override)
+      : (a && a.geofenceRadiiMi ? a.geofenceRadiiMi.map((p) => Math.max(p, floor)) : null);
 
     // Exploration cadence (time-based) — only for a learner-recommended area with NO
     // override (a pinned area is never widened behind the user's back). A fresh area gets a
