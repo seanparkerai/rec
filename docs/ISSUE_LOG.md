@@ -392,3 +392,59 @@ active ∩ geofence ∩ baseline, price/beds forwarded from live criteria per wa
 fetch price band already unions live budgets per target; fetch cadence (4 daily slots + 3-day
 overlap) and the truncation sentinel; demand gate + zero-demand drop; purge's liked-row
 protection; the ALL_ACTIVE freeze for scoped runs (2026-07-09 fix) — no recurrence.
+
+---
+
+# Wave 3 — listing-collection functionality sweep (2026-07-14)
+
+> Owner directive: "audit listing collection end-to-end — scraper activity, per-area
+> visibility, areas/map view, trends — and separate genuine market inactivity from
+> system fault." Verified against live GitHub Actions history, pg_cron run details,
+> `sync_log`, `listing_areas` geometry, and the full harness (1181/1181 green).
+
+### W3 findings — one snapshot fix; everything else verified healthy
+
+**W3-1 🟡 Stale `areas` snapshot mark (07-13 fetcher touches) — ✅ Resolved.**
+The fetcher's Rightmove location-resolution wrote `rightmove.resolvedAt` to two
+household-onboarding **stub** rows (`wimborne-minster-dorset`, `fordingbridge-hampshire`)
+at 2026-07-13 21:10 — DB-only rows, never materialised, so no file drift. High-water
+bumped to `2026-07-13T21:10:40Z` (same class as W2-5 / wave-1 L1).
+
+**Verified healthy — scraper activity (positive):**
+- All four daily London slots dispatch punctually via pg_cron (every `cron.job_run_details`
+  row for `rightmove-fetch-*` succeeded; DST hour-guard picking the BST line correctly);
+  the GitHub `schedule` backstop gate-skips as designed.
+- The only two red runs in the window are explained: 07-13 13:27 was a GitHub-side
+  "Service Unavailable" resolving actions (that slot's punctual dispatch had already
+  fetched); 07-14 07:00 wrote its 121 listings but exited 1 because one target of 49
+  (`SO24:beauworth-so24`) got a transient Apify HTTP 502 — the fail-loud design working.
+  The owner's manual `request_rightmove_fetch()` at 09:00 re-ran all 49 targets green
+  (Beauworth included), inside the 24 h recency window, so nothing was missed.
+- `sync_log` daily listing writes are organic (weekdays 200–900, Sundays near-zero);
+  07-14's 221 writes exactly reconcile with the two run summaries (121 + 100).
+  `scrape_probation` is empty; spend stayed ~$19.60 vs the $25 cap.
+
+**Verified healthy — per-area visibility (the 7 thin areas are genuine market inactivity):**
+- 176 active areas; 169 have stamped listings. The 7 thin ones (`beauworth-so24`,
+  `kilmeston-so24`, `lane-end-so21`, `northington-so24`, `totford-so24`,
+  `west-stratton-so21` never; `preshaw-so32` 31 d) were ALL searched by the 07-09
+  foundation standing-stock pull (FOUNDATION_MODE, no recency filter) and are covered
+  by daily cluster targets. For the six "never" hamlets the nearest unarchived listing
+  in the whole DB sits just OUTSIDE their 3 mi rings (3.17–3.88 mi) — the ring interiors
+  are genuinely empty in-band while adjacent coverage demonstrably lands. Preshaw's one
+  in-ring listing (171824639, 2.95 mi) IS stamped for it. Zero membership drift
+  (nightly sentinel + direct geometry check agree); feed accounting zero-unexplained for
+  all three households.
+
+**Verified healthy — areas/map view:** `page-map.js` mirrors the fetcher's inclusion
+predicate (`isLiveArea`, per-area override → display radius → native ring, ADR 0010
+floor semantics); areas↔DB parity, asset-links, and pages tiers all green; the two
+DB-fresher rows were stub-row touches, not drift.
+
+**Verified healthy — trends:** `refinement/trends-glance.js` is read-only rendering
+(error-isolated per panel, Chart.js-optional text fallback) — no write path into feed,
+rings, or fetch scope. The live `area_search_tuning` rows all hold `search_radius_mi`
+at the 3 mi ring floor with sub-ring learned values parked in `recommended_radius_mi`
+(suggestion-only), recomputed 2026-07-14 — the ADR 0010 contract is holding in
+production. Refinement suggestions: 14 actionable / 25 forming / 1 confirmed_scrape,
+none affecting visibility without an explicit Apply.
