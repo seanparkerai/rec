@@ -238,8 +238,8 @@ Do **not** call Supabase from the page module directly (CLAUDE.md §17.4) — go
     liveWindow` (e.g. 3 min) — i.e. the fetcher is actively writing.
   - `dailyAverages(rows, { days })` helper if any averaging is done client-side (the RPC
     already provides the headline averages; this is for the feed's own "runs/day").
-  - `nextSlot(now)` → next scheduled London fetch among `08:00/12:00/14:00/18:00`
-    (display-only; mirrors `docs/FETCH_SCHEDULE.md`).
+  - `nextSlot(now)` → next scheduled London fetch slot (display-only; the slot list
+    lives in `FETCH_SLOTS`, mirroring `docs/FETCH_SCHEDULE.md`).
 - **`assets/js/live-feed/layout.js`** (new, pure): `nextLayout(prev)` cycles the burn-in
   arrangement variants deterministically (even wear), and `burnShift(tick)` returns small
   `{x,y}` pixel offsets. Kept pure so it is unit-testable.

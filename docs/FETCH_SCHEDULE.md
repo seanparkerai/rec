@@ -1,10 +1,17 @@
 # Daily Rightmove fetch — timing & triggering
 
 The fetch (`.github/workflows/fetch-listings.yml` → `tools/fetch-listings.mjs`) runs
-**four times a day — 08:00, 12:00, 14:00, 18:00 Europe/London** (England local time),
-DST-safe. Each run is identical: a **24-hour recency window** (`MAX_DAYS_SINCE_ADDED=1`)
-that simply covers listings posted since the previous pass. The slots just give more
-points in the day; nothing else about the fetch changes.
+**six times a day — 08:00, 10:00, 12:00, 14:00, 18:00, 21:00 Europe/London** (England
+local time), DST-safe. Each run is identical: a **24-hour recency window**
+(`MAX_DAYS_SINCE_ADDED=1`) that simply covers listings posted since the previous pass.
+The slots just give more points in the day; nothing else about the fetch changes.
+
+The 10:00 and 21:00 slots were added 2026-07-15 (owner decision, migration
+`rightmove_six_slot_dispatch`): 30 days of `listings.first_seen` data showed manual
+evening pulls (19:00–22:15) were the highest-yield fetches of the day — agents keep
+publishing after 18:00, which otherwise sat invisible until 08:00 — and near-daily
+manual mid-morning pulls filled the 08:00→12:00 gap. The two slots exist to replace
+that manual-trigger habit; the "Fetch now" RPC/button (§1b) remains for exceptions.
 
 Adjacent (not a fetch — £0): `.github/workflows/remembership.yml` re-computes the stored
 listings' geofence fields + `listing_areas` membership after each successful radius-tune
@@ -19,27 +26,30 @@ GitHub's hosted cron is best-effort and on this repo fired **3.5–6.5 h late ev
 so it cannot hit a target local time. The punctual trigger therefore lives in Supabase,
 which runs the schedule on the database itself (no queue backlog).
 
-- **Migrations:** `rightmove_noon_london_dispatch` (original) then
-  `rightmove_multi_slot_dispatch` (the four-slot extension) — canonical in the MCP
+- **Migrations:** `rightmove_noon_london_dispatch` (original), then
+  `rightmove_multi_slot_dispatch` (the four-slot extension), then
+  `rightmove_six_slot_dispatch` (added 10:00 + 21:00) — canonical in the MCP
   migration history.
 - **What it creates:**
   - `pg_cron` + `pg_net` extensions.
   - `private.trigger_rightmove_fetch(p_slot int default null, p_force boolean default false)`
     — a `SECURITY DEFINER` function in the (REST-hidden) `private` schema. Called with a
-    slot hour (8/12/14/18), it fires only when that **slot hour is the current
+    slot hour (8/10/12/14/18/21), it fires only when that **slot hour is the current
     Europe/London hour**, reads a GitHub token from **Vault**, and `POST`s to the
     workflow's `workflow_dispatch` API via `pg_net`.
   - `private.fetch_dispatch_slots` — one row per slot hour, enforcing **at most one
     dispatch per slot per London day** (so the two cron wakeups for a slot can never
     double-fire). The legacy single-row `private.fetch_dispatch_state` is kept current
     for the manual RPC + dashboards.
-  - **Eight** `cron.job`s — two per slot, `rightmove-fetch-<HHMM>-london-{a,b}`:
+  - **Twelve** `cron.job`s — two per slot, `rightmove-fetch-<HHMM>-london-{a,b}`:
     | slot (London) | cron `a` (summer/BST) | cron `b` (winter/GMT) |
     |---------------|-----------------------|-----------------------|
     | 08:00         | `0 7 * * *`           | `0 8 * * *`           |
+    | 10:00         | `0 9 * * *`           | `0 10 * * *`          |
     | 12:00         | `0 11 * * *`          | `0 12 * * *`          |
     | 14:00         | `0 13 * * *`          | `0 14 * * *`          |
     | 18:00         | `0 17 * * *`          | `0 18 * * *`          |
+    | 21:00         | `0 20 * * *`          | `0 21 * * *`          |
     The two UTC times bracket each slot across DST; the function's hour guard fires only
     the in-season one (e.g. summer 11:00 UTC = 12:00 BST; winter 12:00 UTC = 12:00 GMT).
 
@@ -117,8 +127,9 @@ front-end; until that ships you can call the RPC directly as above.
 
 ## 2. Backstop — GitHub `schedule` (free, imprecise)
 
-The workflow keeps its own `schedule` — **eight** UTC ticks, two bracketing each of the
-four slots (`0 7`/`0 8`, `0 11`/`0 12`, `0 13`/`0 14`, `0 17`/`0 18`) — plus a
+The workflow keeps its own `schedule` — **twelve** UTC ticks, two bracketing each of the
+six slots (`0 7`/`0 8`, `0 9`/`0 10`, `0 11`/`0 12`, `0 13`/`0 14`, `0 17`/`0 18`,
+`0 20`/`0 21`) — plus a
 **delay-tolerant, once-per-slot gate**. The gate reads which cron line fired
 (`github.event.schedule`), maps it to its slot, applies a floor at the slot's London hour,
 and skips if a real fetch already executed today inside that slot's time window

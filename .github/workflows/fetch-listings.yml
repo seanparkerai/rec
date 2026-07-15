@@ -5,14 +5,17 @@
 #
 # Triggers:
 #   - workflow_dispatch: tap "Run workflow" in the Actions tab (phone-friendly).
-#   - schedule: four times daily — 08:00, 12:00, 14:00, 18:00 Europe/London (England
-#     local time), DST-safe. Each run uses the 24-hour recency window
-#     (MAX_DAYS_SINCE_ADDED=1) and simply covers listings posted since the last pass.
-#     Comment out the `schedule` block to pause.
+#   - schedule: six times daily — 08:00, 10:00, 12:00, 14:00, 18:00, 21:00
+#     Europe/London (England local time), DST-safe. Each run uses the 24-hour recency
+#     window (MAX_DAYS_SINCE_ADDED=1) and simply covers listings posted since the last
+#     pass. Comment out the `schedule` block to pause.
+#     (10:00 + 21:00 added 2026-07-15, owner decision: 30 days of first_seen data showed
+#     manual evening pulls were the highest-yield fetches and near-daily manual
+#     mid-morning pulls filled the 08:00→12:00 gap — the slots replace the habit.)
 #
 # Timing design (READ THIS before changing the schedule or the gate):
-#   Goal: fire the fetch FOUR times per day, at 08:00 / 12:00 / 14:00 / 18:00
-#   Europe/London (England local time), DST-safe, never twice within a slot.
+#   Goal: fire the fetch SIX times per day, at 08:00 / 10:00 / 12:00 / 14:00 / 18:00 /
+#   21:00 Europe/London (England local time), DST-safe, never twice within a slot.
 #
 #   Two hard facts about GitHub-hosted cron force this design:
 #     1. Cron is UTC-only (no timezone field). London is UTC+1 in summer (BST) and
@@ -22,10 +25,11 @@
 #        the fire time to land in any narrow local-time window.
 #
 #   Therefore:
-#     - Each of the four slots gets TWO candidate UTC ticks bracketing it across DST
+#     - Each of the six slots gets TWO candidate UTC ticks bracketing it across DST
 #       (summer/BST = UTC+1 → London H = UTC H-1; winter/GMT = UTC+0 → London H = UTC H):
 #           slot 08:00 → 0 7  + 0 8       slot 14:00 → 0 13 + 0 14
-#           slot 12:00 → 0 11 + 0 12      slot 18:00 → 0 17 + 0 18
+#           slot 10:00 → 0 9  + 0 10      slot 18:00 → 0 17 + 0 18
+#           slot 12:00 → 0 11 + 0 12      slot 21:00 → 0 20 + 0 21
 #       Because GitHub fires them late, every tick is funnelled through the gate below.
 #     - The "Europe/London slot gate" job step, for scheduled runs only, reads which
 #       cron line fired (github.event.schedule), maps it to its intended slot, and:
@@ -42,7 +46,7 @@
 #       once-per-slot check can't be raced.
 #
 #   PRIMARY TRIGGER (punctual): Supabase pg_cron jobs call this workflow's
-#   workflow_dispatch API at exactly 08:00 / 12:00 / 14:00 / 18:00 Europe/London
+#   workflow_dispatch API at exactly 08:00 / 10:00 / 12:00 / 14:00 / 18:00 / 21:00 Europe/London
 #   (pg_cron runs on the database, so it is second-accurate — no GitHub queue backlog).
 #   See docs/FETCH_SCHEDULE.md. Those dispatch runs bypass the gate (event != schedule)
 #   and run immediately at the slot time.
@@ -114,18 +118,22 @@ on:
         type: string
         default: ''
   schedule:
-    # Four daily slots — 08:00, 12:00, 14:00, 18:00 Europe/London. Each slot gets
-    # TWO UTC ticks bracketing it across DST; the gate step keeps only the in-season
-    # one (summer/BST = UTC+1 so London H = UTC H-1; winter/GMT = UTC+0 so London H =
-    # UTC H). Do NOT collapse a pair to one line — see the header comment.
+    # Six daily slots — 08:00, 10:00, 12:00, 14:00, 18:00, 21:00 Europe/London. Each
+    # slot gets TWO UTC ticks bracketing it across DST; the gate step keeps only the
+    # in-season one (summer/BST = UTC+1 so London H = UTC H-1; winter/GMT = UTC+0 so
+    # London H = UTC H). Do NOT collapse a pair to one line — see the header comment.
     - cron: '0 7 * * *'   # 08:00 London during BST (summer)
     - cron: '0 8 * * *'   # 08:00 London during GMT (winter)
+    - cron: '0 9 * * *'   # 10:00 London during BST (summer)
+    - cron: '0 10 * * *'  # 10:00 London during GMT (winter)
     - cron: '0 11 * * *'  # 12:00 London during BST (summer)
     - cron: '0 12 * * *'  # 12:00 London during GMT (winter)
     - cron: '0 13 * * *'  # 14:00 London during BST (summer)
     - cron: '0 14 * * *'  # 14:00 London during GMT (winter)
     - cron: '0 17 * * *'  # 18:00 London during BST (summer)
     - cron: '0 18 * * *'  # 18:00 London during GMT (winter)
+    - cron: '0 20 * * *'  # 21:00 London during BST (summer)
+    - cron: '0 21 * * *'  # 21:00 London during GMT (winter)
   # Pushing a change to THIS file on main kicks off one immediate run.
   push:
     branches: [main]
@@ -148,7 +156,7 @@ jobs:
     steps:
       # Delay-tolerant, DST-safe, once-per-SLOT gate (see header for the full
       # rationale). For SCHEDULED runs only: map the firing cron line to its intended
-      # London slot (08/12/14/18), never execute before that slot's hour, and skip if
+      # London slot (08/10/12/14/18/21), never execute before that slot's hour, and skip if
       # a real fetch already ran today inside that slot's time window. Manual/push runs
       # bypass entirely. The punctual pg_cron dispatches (workflow_dispatch) land in
       # each slot's window, so on a normal day every scheduled tick here de-dupes away.
@@ -168,10 +176,12 @@ jobs:
           # the slot's window end (WEND = the next slot's hour, or 24 for the last).
           CRON='${{ github.event.schedule }}'
           case "$CRON" in
-            '0 7 * * *'|'0 8 * * *')   SLOT=8;  WEND=12 ;;
+            '0 7 * * *'|'0 8 * * *')   SLOT=8;  WEND=10 ;;
+            '0 9 * * *'|'0 10 * * *')  SLOT=10; WEND=12 ;;
             '0 11 * * *'|'0 12 * * *') SLOT=12; WEND=14 ;;
             '0 13 * * *'|'0 14 * * *') SLOT=14; WEND=18 ;;
-            '0 17 * * *'|'0 18 * * *') SLOT=18; WEND=24 ;;
+            '0 17 * * *'|'0 18 * * *') SLOT=18; WEND=21 ;;
+            '0 20 * * *'|'0 21 * * *') SLOT=21; WEND=24 ;;
             *) echo "::warning::Unrecognised schedule '$CRON' — proceeding."; echo "run=true" >> "$GITHUB_OUTPUT"; exit 0 ;;
           esac
 

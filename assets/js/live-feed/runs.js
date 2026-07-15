@@ -92,7 +92,7 @@ export function dailyAverages(runs, { days = 7, now = Date.now() } = {}) {
 }
 
 // Scheduled London fetch slots — display-only, mirrors docs/FETCH_SCHEDULE.md.
-export const FETCH_SLOTS = [8, 12, 14, 18];
+export const FETCH_SLOTS = [8, 10, 12, 14, 18, 21];
 
 // ms to add to a UTC instant to reach Europe/London wall-clock at that instant.
 function londonOffsetMs(date) {
@@ -112,7 +112,7 @@ function londonOffsetMs(date) {
 /**
  * The next scheduled London fetch slot after `now` (display-only). DST is handled
  * by computing the London offset at `now`; the ~1×/year hour-shift between a slot
- * and the next is immaterial to the four daytime slots.
+ * and the next is immaterial to the six daytime slots.
  * @param {Date|number|string} [now=new Date()]
  * @returns {{ at: Date, hour: number, label: string }}
  */

@@ -71,23 +71,30 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(a.runsPerDay, 0.29); // 2/7 → 0.29
   });
 
-  // ── nextSlot (Europe/London 08:00/12:00/14:00/18:00) ──────────────────────
+  // ── nextSlot (Europe/London 08:00/10:00/12:00/14:00/18:00/21:00) ──────────
   test('nextSlot: slots are the documented London schedule', () => {
-    assertEqual(JSON.stringify(FETCH_SLOTS), JSON.stringify([8, 12, 14, 18]));
+    assertEqual(JSON.stringify(FETCH_SLOTS), JSON.stringify([8, 10, 12, 14, 18, 21]));
   });
 
-  test('nextSlot: London 09:00 → next is 12:00', () => {
+  test('nextSlot: London 09:00 → next is 10:00', () => {
     // June = BST (UTC+1): 08:00Z === London 09:00.
     const slot = nextSlot(new Date('2026-06-22T08:00:00Z'));
-    assertEqual(slot.hour, 12);
-    assertEqual(slot.label, '12:00');
+    assertEqual(slot.hour, 10);
+    assertEqual(slot.label, '10:00');
+  });
+
+  test('nextSlot: London evening 19:00 → next is the 21:00 slot', () => {
+    // 18:00Z === London 19:00 (BST) → past 18:00, so next is 21:00.
+    const slot = nextSlot(new Date('2026-06-22T18:00:00Z'));
+    assertEqual(slot.hour, 21);
+    assertEqual(slot.label, '21:00');
   });
 
   test('nextSlot: after the last slot rolls to 08:00 next day', () => {
-    // 18:00Z === London 19:00 (BST) → past 18:00, so next is 08:00.
-    const slot = nextSlot(new Date('2026-06-22T18:00:00Z'));
+    // 21:30Z === London 22:30 (BST) → past 21:00, so next is 08:00 tomorrow.
+    const slot = nextSlot(new Date('2026-06-22T21:30:00Z'));
     assertEqual(slot.hour, 8);
-    assert(slot.at.getTime() > Date.parse('2026-06-22T18:00:00Z'), 'next slot is in the future');
+    assert(slot.at.getTime() > Date.parse('2026-06-22T21:30:00Z'), 'next slot is in the future');
   });
 
   // ── burn-in helpers ───────────────────────────────────────────────────────
