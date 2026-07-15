@@ -58,6 +58,13 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
       yet live-run against Apify (§16-guarded, its own named phase).
 
 ### UI / platform (each its own named phase)
+- [x] **Dispatch-token permanence + sentinel (2026-07-15, owner-directed)** — the expiring 30-day
+      GitHub PAT behind the punctual pg_cron fetch trigger was replaced with a **no-expiration
+      classic PAT** rotated into Vault (`github_fetch_dispatch_token`, verified live: forced
+      dispatch → HTTP 204 → run started). Added `.github/workflows/dispatch-sentinel.yml`
+      (named §16 workflow phase): nightly red-run + owner email if no punctual dispatch landed in
+      26 h, so the trigger can never die silently again. Zero credentials in the system now carry
+      an expiry date. Docs: `docs/FETCH_SCHEDULE.md` §1 (rotation recipe) + §3 (sentinel).
 - [x] **Remove the Report (Value Report) feature (2026-06-18)** — unused/redundant. Deleted
       `pages/report.html`, `assets/js/page-report.js`, `assets/js/page-report/`, `assets/js/report/`,
       `assets/css/pages/report.css`, `tests/report-format.test.js`; pruned the nav link, the

@@ -1,0 +1,60 @@
+# dispatch-sentinel.yml — nightly guarantee that the punctual fetch trigger is alive.
+#
+# The six daily fetch slots are dispatched punctually by Supabase pg_cron
+# (private.trigger_rightmove_fetch → Vault token → workflow_dispatch API — see
+# docs/FETCH_SCHEDULE.md §1). That path can die SILENTLY: pg_net fires
+# asynchronously and never checks the HTTP response, so a revoked/expired GitHub
+# token, a pg_cron outage, or a Vault edit stops punctual dispatch with zero
+# signal — fetches quietly degrade to the hours-late GitHub schedule backstop.
+#
+# This sentinel closes that gap: every night it asks "did at least one
+# workflow_dispatch-triggered fetch-listings run happen in the trailing 26 h?"
+# If not, the job FAILS — and GitHub emails the owner about the red run. Uses
+# only the built-in github.token (no secrets, nothing to expire). Added
+# 2026-07-15 alongside the rotation to a no-expiration dispatch token.
+#
+# A red run means the punctual trigger is dead. Diagnose in Supabase SQL Editor:
+#   select * from private.fetch_dispatch_slots order by slot_hour;   -- last per-slot dispatch
+#   select status_code, error_msg from net._http_response order by id desc limit 10;
+#   select * from cron.job_run_details where jobid in
+#     (select jobid from cron.job where jobname like 'rightmove-fetch-%-london-%')
+#     order by start_time desc limit 20;
+# 401 status codes = dead token → rotate per docs/FETCH_SCHEDULE.md §1 step 2.
+# Listings keep flowing (late) via the schedule backstop meanwhile.
+
+name: dispatch-sentinel
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '30 22 * * *'   # after the 21:00 London slot in both DST seasons; GitHub cron lateness only delays the alert
+
+permissions:
+  actions: read
+
+concurrency:
+  group: dispatch-sentinel
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Punctual dispatches ran in the last 26h?
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          since=$(date -u -d '26 hours ago' '+%Y-%m-%dT%H:%M:%SZ')
+          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/fetch-listings.yml/runs?event=workflow_dispatch&created=>=${since}&per_page=50"
+          runs=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$api")
+          # A dispatch run proves the token + pg_cron path works regardless of how
+          # the fetch itself ended; only count runs that actually executed or are
+          # executing (success / failure / queued / in_progress).
+          n=$(printf '%s' "$runs" | jq '[.workflow_runs[] | select(.conclusion=="success" or .conclusion=="failure" or .status=="queued" or .status=="in_progress")] | length')
+          echo "workflow_dispatch fetch-listings runs since $since: $n"
+          if [ "${n:-0}" -eq 0 ]; then
+            echo "::error::No punctual (workflow_dispatch) fetch ran in the last 26h — the Supabase pg_cron → GitHub dispatch path is dead (dead token / pg_cron outage / Vault edit). Fetches are degraded to the hours-late schedule backstop. Diagnose per the header comment of .github/workflows/dispatch-sentinel.yml and docs/FETCH_SCHEDULE.md §1."
+            exit 1
+          fi
+          echo "Punctual dispatch path is alive."

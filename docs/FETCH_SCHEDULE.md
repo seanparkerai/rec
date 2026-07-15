@@ -56,54 +56,41 @@ which runs the schedule on the database itself (no queue backlog).
 Dispatch runs arrive in GitHub Actions as `workflow_dispatch` events and **bypass the
 in-workflow gate**, so they run immediately at the slot time.
 
-### One-time setup you must do (storing the token)
+### The dispatch token (in place — no action needed)
 
-The function dispatches nothing until a GitHub token is in Vault. The token is a secret —
-create and store it yourself; never paste it into chat or commit it. **It lives only in
-Supabase Vault (server-side) — it is never sent to a browser or held on any device.**
+The Vault secret `github_fetch_dispatch_token` holds a **classic GitHub PAT with
+"No expiration"** (scopes `repo` + `workflow`), rotated **2026-07-15** (owner decision —
+replacing the 30-day token that triggered an expiry warning). Being non-expiring, the
+trigger can never lapse on a calendar; the account-wide scope of a classic token is
+mitigated because **it lives only in Supabase Vault (server-side) — it is never sent to a
+browser, held on any device, or committed anywhere**. The dispatch function looks the
+secret up **by name**, so rotation is invisible to the rest of the machinery. Death of the
+token (revocation, GitHub-side reset) is caught within a day by the dispatch sentinel (§3).
 
-1. **Create a GitHub Personal Access Token.** Pick ONE of:
+**To rotate** (only needed if the token is ever revoked/compromised): create a new classic
+PAT (*GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)*,
+scopes `repo` + `workflow`, Expiration **No expiration**), then in the Supabase SQL Editor:
 
-   - **Classic PAT — recommended for "always in place" (never expires).**
-     GitHub → *Settings → Developer settings → Personal access tokens → Tokens (classic)
-     → Generate new token (classic)*.
-     - **Scopes:** `workflow` + `repo` (`repo` is needed to dispatch on a private repo; if
-       `seanparkerai/rec` is public, `public_repo` + `workflow` suffices).
-     - **Expiration:** **No expiration** — so the trigger never lapses.
-     - Trade-off: classic tokens are account-wide in scope; this is mitigated by the token
-       living only in Vault.
+```sql
+select vault.update_secret(
+  (select id from vault.secrets where name = 'github_fetch_dispatch_token'),
+  new_secret := 'PASTE_TOKEN_HERE',
+  new_description := 'GitHub classic PAT (repo+workflow), NO EXPIRATION, rotated YYYY-MM-DD'
+);
+```
 
-   - **Fine-grained PAT — more locked-down, but expires (≤ 366 days).**
-     GitHub → *…Personal access tokens → Fine-grained tokens → Generate new token*.
-     - **Resource owner:** `seanparkerai`; **Repository access:** *Only select repositories*
-       → `seanparkerai/rec`.
-     - **Permissions → Repository → Actions:** **Read and write**.
-     - Set a calendar reminder to rotate before it expires (re-run step 2 to update Vault),
-       or the trigger silently stops.
+**Then test immediately** (forces a dispatch, ignoring the slot guard):
 
-   - **GitHub App — never expires AND repo-scoped (gold standard, more setup).** Ask if you
-     want this; it stores an App private key in Vault and mints short-lived tokens on demand.
+```sql
+select private.trigger_rightmove_fetch(p_force => true);
+-- expect: dispatched: slot=manual request_id=<n>
+select status_code from net._http_response order by id desc limit 1;  -- expect 204
+```
 
-2. **Store it in Supabase Vault** — Supabase dashboard → *SQL Editor*, run (paste your
-   token in place of `PASTE_TOKEN_HERE`):
-   ```sql
-   select vault.create_secret(
-     'PASTE_TOKEN_HERE',
-     'github_fetch_dispatch_token',
-     'GitHub fine-grained PAT (Actions: read+write) used by pg_cron to dispatch fetch-listings'
-   );
-   ```
-   The function looks the secret up **by name** (`github_fetch_dispatch_token`), so the name
-   must match exactly.
-
-3. **Test it immediately** (forces a dispatch, ignoring the slot guard) — SQL Editor:
-   ```sql
-   select private.trigger_rightmove_fetch(p_force => true);
-   ```
-   Expect `dispatched: slot=manual request_id=…`. Then check GitHub → *Actions → fetch-listings* for a
-   new run triggered by `workflow_dispatch` within a few seconds.
-
-   To rotate the token later, re-run step 2 with `vault.update_secret` (or delete + recreate).
+and confirm GitHub → *Actions → fetch-listings* shows a new `workflow_dispatch` run within
+a few seconds. (Alternatives considered and parked: fine-grained PAT = repo-scoped but
+forces an annual repaste; GitHub App = scoped + non-expiring but adds a token-minting
+service. The no-expiry classic PAT is the fewest-moving-parts permanent option.)
 
 ## 1b. Manual trigger from any device — `public.request_rightmove_fetch()`
 
@@ -137,6 +124,17 @@ and skips if a real fetch already executed today inside that slot's time window
 the time GitHub's hours-late tick fires, so the gate skips it. The schedule only does real
 work for a slot on a day the punctual dispatch failed — a genuine backstop. Full rationale
 is in the header comment of `.github/workflows/fetch-listings.yml`.
+
+## 3. Sentinel — the trigger can never die silently
+
+`.github/workflows/dispatch-sentinel.yml` (added 2026-07-15) runs nightly (22:30 UTC tick;
+GitHub cron lateness only delays the alert) and **fails loudly if no
+`workflow_dispatch`-triggered fetch ran in the trailing 26 h** — GitHub emails the owner
+about any red run automatically. That converts every silent-death mode of the punctual
+trigger (revoked/expired token, pg_cron outage, Vault edit, `pg_net` regression) into a
+next-day email, while the §2 schedule backstop keeps listings flowing (late) in the
+meantime. It uses only the built-in `github.token` — no secrets, nothing that can expire.
+Diagnosis recipes live in the workflow's header comment and §1 above.
 
 ## Operational notes
 
