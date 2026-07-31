@@ -10,8 +10,13 @@ export async function register({ test, assert, assertEqual }) {
 
   // ── L7.4: radius + clustered search targets ──
   test('fetch-listings: buildSearchUrl adds a radius when given one', () => {
+    // The emitted radius is the geometric one PLUS the centre-offset margin, snapped
+    // up onto Rightmove's radius enum — so a 3mi disk goes on the wire as 5mi. It is
+    // deliberately NOT 3: an off-ladder value returns zero results, and an
+    // exactly-equal one leaves the ring edge outside the searched disk. See
+    // tests/contract/fetch-radius.test.js + docs/adr/0011.
     const url = buildSearchUrl('POSTCODE^123', null, { radiusMiles: 3 });
-    assert(url.includes('radius=3'), 'radius disk applied');
+    assert(url.includes('radius=5'), 'radius disk applied, margin-padded and ladder-snapped');
     const plain = buildSearchUrl('OUTCODE^1');
     assert(!plain.includes('radius='), 'no radius without one (outcode mode)');
   });

@@ -83,6 +83,52 @@ same market cannot return strictly fewer listings unless its query was rejected.
 Coverage after the fix: **180/180 areas (100%)** in every county, with zero off-ladder radii
 emitted.
 
+## Wave 2 — the snap alone still left zero slack
+
+Re-auditing after the snap shipped, a **ring-point probe** (every area, 97 points each:
+centre plus 24 bearings at 4 shells of the 3mi ring — 18,139 points over the live
+universe) found **22 areas with ring points outside every search disk**, and a
+worst-case single-disk containment margin of **0.00mi**. The snap had made the radii
+legal but left the geometry exactly flush.
+
+Two causes, both structural:
+
+1. **Offset centres.** A disk is centred on the seed's Rightmove `POSTCODE^` point — a
+   postcode centroid that `tools/resolve-areas.mjs` obtains by *reverse-geocoding the
+   stored village coords* — while the geofence ring is centred on those coords
+   themselves. In rural Hampshire/Wiltshire the nearest postcode unit's centroid sits a
+   few hundred metres to ~1.5km away. The two circles are concentric only by accident.
+2. **Zero-margin geometry.** `clusterVillages` sets `radius = max(distance(seed, member)
+   + member.searchRadiusMi)`, so every member's ring is exactly flush with the disk
+   edge; a lone village gets `radius === its own ring`. Equal radii + offset centres
+   leaves a crescent of every ring permanently unsearched.
+
+**Decision:** a `SEARCH_MARGIN_MI = 1` centre-offset allowance is added *before* the
+snap (`wireRadiusFor()`), so the searched disk **strictly** contains the ring. One mile
+comfortably exceeds any reverse-geocode offset and also absorbs the fact that
+Rightmove's own distance metric cannot be verified from here. Because it is applied
+before quantisation it usually costs nothing beyond the rung the snap would have picked
+anyway; the visible change is that a lone 3mi village now goes on the wire at 5mi
+instead of 3mi. Re-probed after the change: **0 uncovered points, worst-case margin
++2.00mi, every ring contained by a single disk.**
+
+A second latent hole was found and instrumented rather than changed: in cluster mode an
+outcode containing even one village without a tight identifier is demoted to a single
+whole-outcode search carrying **no radius**, which returns only listings filed inside
+that outcode — so every village whose ring crosses the district boundary loses its
+cross-border coverage silently. Every area resolves tight today, so this never fires;
+a **coarse-fallback sentinel** now names the offending outcodes and areas in the run log
+if it ever does.
+
+## Live confirmation
+
+The first production run on the fixed build wrote new listings into
+`bemerton-sp2`, `wilton-sp2`, `broad-chalke-sp5`, `stockbridge-so20` and `upham-so32`
+within minutes — all of them multi-village cluster members that had returned `raw 0` on
+every run for weeks (the Salisbury SP1/SP2 areas had taken no new listing since
+2026-07-17). This is the empirical confirmation the sandbox could not obtain directly,
+since Rightmove is unreachable from it.
+
 ## Consequences
 
 - A new §16-class mechanical rail, `tests/contract/fetch-radius.test.js`, pins the ladder

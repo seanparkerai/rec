@@ -249,6 +249,38 @@ function snapRadiusUp(mi) {
   return RIGHTMOVE_RADII.find((r) => r >= n) ?? 40;
 }
 
+// CENTRE-OFFSET MARGIN (2026-07-31 audit, wave 2). A search disk is centred on the
+// seed's Rightmove POSTCODE^ point — a postcode centroid that tools/resolve-areas.mjs
+// obtained by REVERSE-GEOCODING the stored village coords — whereas the geofence ring
+// the user is shown is centred on those stored coords themselves. In rural Hampshire /
+// Wiltshire the nearest postcode unit's centroid sits a few hundred metres to ~1.5km
+// away, so the two circles are concentric only by accident.
+//
+// Cluster geometry gives every MEMBER's ring exactly zero slack (radius = max(distance
+// + that member's ring)), and a lone village gets radius === its own ring. Equal radii
+// + offset centres means a crescent of every ring falls outside the disk we actually
+// search — silently, and precisely the ADR 0010 guarantee ("anything inside the drawn
+// ring must be fetchable"). A ring-point probe over the live universe found 22 areas
+// with uncovered ring points and a worst-case single-disk containment margin of 0.00mi.
+//
+// 1 mile comfortably exceeds any reverse-geocode offset and also absorbs the fact that
+// we cannot verify Rightmove's own distance metric. It is added BEFORE the snap, so it
+// usually costs nothing extra beyond the rung the snap would have chosen anyway.
+const SEARCH_MARGIN_MI = 1;
+
+/**
+ * The radius actually put on the wire for a geometric disk radius: centre-offset
+ * margin first, then snapped up onto Rightmove's ladder. Null in, null out (a
+ * whole-outcode search carries no radius). Pure.
+ * @param {number|null|undefined} geometricMi @returns {number|null}
+ */
+function wireRadiusFor(geometricMi) {
+  if (geometricMi == null || geometricMi === '') return null;
+  const n = Number(geometricMi);
+  if (!Number.isFinite(n) || n < 0) return null;
+  return snapRadiusUp(n + SEARCH_MARGIN_MI);
+}
+
 /**
  * Greedy geometric set-cover: merge villages whose search disks overlap into one
  * search, so a dense outcode collapses to a few disks and a sparse one becomes
@@ -441,8 +473,9 @@ function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   if (spec?.minBeds && spec.minBeds > minBeds) params.set('minBedrooms', String(spec.minBeds));
   // L7.4: a search radius (miles) turns a point identifier (POSTCODE^/REGION^/
   // STATION^) into a tight disk — so a sparse outcode stops returning Andover.
-  // Snapped onto Rightmove's radius enum — an off-ladder value returns 0 results.
-  const radiusMiles = snapRadiusUp(opts.radiusMiles ?? spec?.radiusMiles);
+  // Centre-offset margin + snapped onto Rightmove's radius enum (an off-ladder
+  // value returns 0 results). The geofence still decides membership.
+  const radiusMiles = wireRadiusFor(opts.radiusMiles ?? spec?.radiusMiles);
   if (radiusMiles != null) params.set('radius', String(radiusMiles));
   return `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationIdentifier}&${params}`;
 }
@@ -905,6 +938,24 @@ async function main() {
   const worstCaseResults = targets.length * RESULTS_PER_OUTCODE;
   const estimatedCostUSD = (worstCaseResults / 1000) * 2;
   console.log(`targets: ${targets.length} (${SEARCH_MODE}) · active villages: ${ALL_ACTIVE.length}`);
+  // COARSE-FALLBACK SENTINEL (2026-07-31 audit, wave 2). In cluster mode an outcode
+  // containing even ONE village without a tight identifier is demoted to a single
+  // whole-outcode search carrying NO radius — which returns only listings filed
+  // inside that outcode. Every village whose ring crosses the outcode boundary then
+  // loses its cross-border coverage silently, and the run still logs a clean pass.
+  // Today every area resolves tight, so this never fires; it exists so that a newly
+  // added stub whose postcode fails typeahead NAMES itself instead of quietly
+  // hollowing out its whole district.
+  const coarse = targets.filter((t) => t.locationIdentifier == null);
+  if (coarse.length) {
+    const untight = coarse.flatMap((t) => (t.areas || [])
+      .filter((v) => v.rightmove?.identifierQuality !== 'tight')
+      .map((v) => v.id));
+    console.warn(`  ⚠ COVERAGE: ${coarse.length} outcode(s) demoted to a radius-less whole-outcode search `
+      + `(${coarse.map((t) => t.outcode).join(', ')}) — cross-border ring coverage is NOT guaranteed there. `
+      + `Unresolved area(s): ${untight.join(', ') || 'none (identifier lost upstream)'}. `
+      + `Fix with: node tools/resolve-areas.mjs --write`);
+  }
   console.log(`cost estimate: ${targets.length} targets × ${RESULTS_PER_OUTCODE} results = ${worstCaseResults} worst-case results → ~$${estimatedCostUSD.toFixed(2)} USD (@$2/1k) · hard cap: $${APIFY_MAX_BUDGET_USD}`);
   if (DRY_RUN) console.log('DRY RUN — no Apify calls or writes will be made');
 
@@ -1056,4 +1107,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, RIGHTMOVE_RADII, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
