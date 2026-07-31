@@ -62,11 +62,17 @@
 #
 # Cost guardrail: APIFY_MAX_BUDGET_USD (default 25) is passed to the actor as
 # maxBudget — Apify self-terminates at the cap. No overrun is possible on PPE actors.
-# results_per_target (maxItems) caps each search at 200 listings; a 24h cluster
-# normally returns far fewer NEW qualifying listings than that, so the cap is
-# headroom (full coverage), not the typical bill. Typical daily top-up (24h,
-# cluster): a few tens of results → ~$0.10/run. Foundation (14d): ~$4 worst-case;
-# the $25 maxBudget bounds any run regardless of the cap.
+# results_per_target (maxItems) caps each search at 1000 listings. It is a CAP, not a
+# quantity: the actor bills per result actually RETURNED, so headroom costs nothing
+# unless the listings genuinely exist — and if they do, they are precisely the listings
+# a lower cap would have dropped. A target that FILLS the cap is silently truncated, so
+# the cap is set well clear of any plausible real return (the ⚠ TRUNCATED sentinel in
+# tools/fetch-listings.mjs names any target that still hits it).
+# Typical daily top-up (24h, cluster): a few tens of results → ~$0.10/run. A portal
+# 14-day catch-up across all targets: low hundreds of results → well under $1. The $25
+# maxBudget bounds each actor call regardless of the cap.
+# Scope is unaffected by the cap: the demand gate and the coordinate geofence confine
+# every result to the household's own areas and their drawn radius.
 name: fetch-listings
 
 on:
@@ -102,9 +108,9 @@ on:
         type: string
         default: '0'
       results_per_target:
-        description: 'Max listings per search target (lower = cheaper on pay-per-event actors)'
+        description: 'Max listings per search target. A CAP, not a quantity — Apify bills per result actually returned, so headroom is free unless the listings genuinely exist. Kept as a runaway guard, set well clear of any plausible real return so a pull is never silently truncated.'
         type: string
-        default: '200'
+        default: '1000'
       cluster_cap_mi:
         description: 'Cluster disk cap (miles). Rightmove only accepts radius 0/0.25/0.5/1/3/5/10/15/20/30/40 — the emitted radius is snapped UP to that ladder, so a cap of 5 keeps disks tight instead of jumping to 10. Lower = tighter/less paid noise but more searches. 5≈69, 7≈43, 9≈34 searches.'
         type: string
@@ -261,7 +267,11 @@ jobs:
           APIFY_MAX_BUDGET_USD: ${{ inputs.apify_budget_usd || '25' }}
           SEARCH_MODE: ${{ inputs.search_mode || 'cluster' }}
           FETCH_LIMIT: ${{ inputs.fetch_limit || '0' }}
-          RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '200' }}
+          # Portal "Pull listings" dispatches (private.dispatch_fetch_now) send no
+          # results_per_target, so they inherit the declared default above. That default
+          # is therefore the ONE knob standing between a portal pull and silent
+          # truncation — see the cost note in the header before lowering it.
+          RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '1000' }}
           CLUSTER_CAP_MI: ${{ inputs.cluster_cap_mi || '5' }}
           # Optional per-area restriction (scheduled runs carry no inputs → all demand).
           AREA_IDS: ${{ inputs.area_ids || '' }}
