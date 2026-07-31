@@ -216,8 +216,38 @@ const DEFAULT_SEARCH_MI = 3;
 // exploration-ring radius (RADIUS_CEIL_MI) is reused when an area is inside its periodic
 // re-widening window so the boundary stays measurable.
 const { RADIUS_CEIL_MI } = resolveConfig();
-const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 7;   // max disk radius (mi); lower = tighter/cheaper-per-result but more runs
+// Cluster disks are capped at a radius Rightmove can actually express (see
+// RIGHTMOVE_RADII). 5mi is the largest allowed value below the old 7mi cap, so a
+// full cluster snaps to exactly 5 instead of ballooning to the next rung (10mi).
+const CLUSTER_CAP_MI = Number(process.env.CLUSTER_CAP_MI) || 5;   // max disk radius (mi); lower = tighter/cheaper-per-result but more runs
 const SEARCH_MODE = (process.env.SEARCH_MODE || 'outcode').toLowerCase();
+
+// Rightmove's `radius` parameter is an ENUM, not a free number — the search form
+// only ever emits these values. An off-ladder value (radius=6.9) is rejected and
+// the search returns ZERO results, exactly like an off-ladder maxDaysSinceAdded.
+// This silently blanked every multi-village cluster disk (36 of 56 targets) from
+// the introduction of cluster mode until 2026-07-31: only the lone-village disks,
+// which happen to sit at exactly 3.0mi, were ever really searched.
+const RIGHTMOVE_RADII = [0, 0.25, 0.5, 1, 3, 5, 10, 15, 20, 30, 40];
+
+/**
+ * Snap a geometric disk radius UP onto the nearest Rightmove-expressible value.
+ * ALWAYS up, never down: rounding down would shrink the searched disk below the
+ * geometry the cluster was built to cover and silently drop listings — the exact
+ * failure class the coverage sentinel exists to prevent. Rounding up only widens
+ * the paid search; the coordinate geofence still decides membership, so a wider
+ * disk costs a few more results but can never admit an out-of-ring listing.
+ * Above the top rung the value is clamped to 40 (Rightmove's maximum).
+ * Pure. @param {number|null|undefined} mi @returns {number|null}
+ */
+function snapRadiusUp(mi) {
+  // `== null` / '' mean "no radius" (a whole-outcode search) — NOT radius 0, which
+  // Rightmove reads as "this area only" and would pin the search to the postcode.
+  if (mi == null || mi === '') return null;
+  const n = Number(mi);
+  if (!Number.isFinite(n) || n < 0) return null;
+  return RIGHTMOVE_RADII.find((r) => r >= n) ?? 40;
+}
 
 /**
  * Greedy geometric set-cover: merge villages whose search disks overlap into one
@@ -411,7 +441,8 @@ function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   if (spec?.minBeds && spec.minBeds > minBeds) params.set('minBedrooms', String(spec.minBeds));
   // L7.4: a search radius (miles) turns a point identifier (POSTCODE^/REGION^/
   // STATION^) into a tight disk — so a sparse outcode stops returning Andover.
-  const radiusMiles = opts.radiusMiles ?? spec?.radiusMiles;
+  // Snapped onto Rightmove's radius enum — an off-ladder value returns 0 results.
+  const radiusMiles = snapRadiusUp(opts.radiusMiles ?? spec?.radiusMiles);
   if (radiusMiles != null) params.set('radius', String(radiusMiles));
   return `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationIdentifier}&${params}`;
 }
@@ -1025,4 +1056,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, RIGHTMOVE_RADII, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
