@@ -1,6 +1,6 @@
 // investment-performance.test.js — analysePerformance() + getVelocityFromHistory()
 
-import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution } from '../../assets/js/investment-performance.js';
+import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution, buildGainsCurve } from '../../assets/js/investment-performance.js';
 import { getVelocityFromHistory } from '../../assets/js/savings-velocity.js';
 
 // Stub history — should return zeros gracefully.
@@ -140,5 +140,51 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(etf.contributedDuringEpoch, 0);
     assertEqual(sp.monthsHeld, 5);
     assert(sp.returnPct !== null, 'expected stockpicker returnPct estimate');
+  });
+
+  // --- Gains curve -------------------------------------------------------------
+
+  await test('buildGainsCurve: empty / zero-gain inputs stay safe', () => {
+    assertEqual(buildGainsCurve([], 500).length, 0);
+    assertEqual(buildGainsCurve(null, 500).length, 0);
+    assertEqual(JSON.stringify(buildGainsCurve(SYNTHETIC_HISTORY.monthlySummary, 0)), '[0,0,0,0,0]');
+  });
+
+  await test('buildGainsCurve: ends exactly at the total so the stack reconciles', () => {
+    const curve = buildGainsCurve(SYNTHETIC_HISTORY.monthlySummary, 878);
+    assertEqual(curve.length, 5);
+    assertEqual(curve[curve.length - 1], 878);
+  });
+
+  await test('buildGainsCurve: monotonically increasing', () => {
+    const curve = buildGainsCurve(SYNTHETIC_HISTORY.monthlySummary, 878);
+    for (let i = 1; i < curve.length; i++) {
+      assert(curve[i] >= curve[i - 1], `curve dipped at ${i}: ${curve[i - 1]} → ${curve[i]}`);
+    }
+  });
+
+  await test('buildGainsCurve: back-loads gains toward the months holding the capital', () => {
+    // The regression this guards: a flat spread credited 1/5th of all growth to
+    // month 1, when month 1 held £2,000 of a pot that ended at £14,000.
+    const curve = buildGainsCurve(SYNTHETIC_HISTORY.monthlySummary, 1000);
+    const flatFirst = 1000 / 5;
+    assert(curve[0] < flatFirst, `first month should carry less than a flat 1/5 (${curve[0]} vs ${flatFirst})`);
+    // Capital at risk runs 2000, 5050, 8142, 11232, 14322; cumulated as weights
+    // that is 2000 … 40746, so month 1 carries 2000/40746 of the total.
+    assertEqual(curve[0], 49.08);
+  });
+
+  await test('buildGainsCurve: sorts by month rather than trusting input order', () => {
+    const shuffled = [...SYNTHETIC_HISTORY.monthlySummary].reverse();
+    assertEqual(JSON.stringify(buildGainsCurve(shuffled, 878)),
+      JSON.stringify(buildGainsCurve(SYNTHETIC_HISTORY.monthlySummary, 878)));
+  });
+
+  await test('buildGainsCurve: an all-negative account falls back to a flat spread', () => {
+    const draining = [
+      { month: '2025-06', net: -100, dividends: 0, interest: 0, realisedPnL: 0 },
+      { month: '2025-07', net: -100, dividends: 0, interest: 0, realisedPnL: 0 },
+    ];
+    assertEqual(JSON.stringify(buildGainsCurve(draining, 50)), '[25,50]');
   });
 }

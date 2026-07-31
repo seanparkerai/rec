@@ -16,7 +16,7 @@
 
 ## finances
 
-2026-06-16 data-contract repair (data-align.md Phase 5): moved f36e6215 savings.totalSavings(£53,000)->current (a derived-only key the old wizard wrote as raw input, so every reader saw £0); stripped legacy duplicate depositTarget/depositReached from 4deadb32 (canonical target lives in goal.targetDeposit=£50,000); _note + monthlyAverage preserved. 9628b44f already clean. Re-SELECT verified derived deposit savings: 9628b44f=£32,994.45, 4deadb32=£52,500, f36e6215=£53,000. 2026-05-28 overhaul A1: removed goal.targetSavingsRange (single canonical deposit target).
+2026-07-31 T212 import: savings.monthlyAverage recomputed for Jul-2025–Jun-2026 — the prior 2026-07-04 figures averaged a June that turned out to be a reconciliation plug rather than real deposits. savings._note repointed from the deleted data/investments.json to investments_accounts. | 2026-06-16 data-contract repair (data-align.md Phase 5): moved f36e6215 savings.totalSavings->current (a derived-only key the old wizard wrote as raw input, so every reader saw £0); stripped legacy duplicate depositTarget/depositReached from 4deadb32 (canonical target lives in goal.targetDeposit); _note + monthlyAverage preserved. 9628b44f already clean. Re-SELECT verified derived deposit savings for all three households (amounts in Supabase only, §18.1). 2026-05-28 overhaul A1: removed goal.targetSavingsRange (single canonical deposit target).
 
 ## shortlist
 
@@ -48,15 +48,15 @@ v3 buying-journey timeline tick state ({ tasks: { taskId: true } } from data/jou
 
 ## goals
 
-2026-05-28 overhaul A1+A3: deposit.hopedFor set to the canonical target; gapToHoped recomputed; readiness.checklist blob retired (D4 — source is now readiness_checklist table)
+2026-07-31: deposit.currentSavings and gapToHoped recalibrated to the rebuilt ISA valuation as at 2026-07-30 (amounts in Supabase only). | 2026-05-28 overhaul A1+A3: deposit.hopedFor set to the canonical target; gapToHoped recomputed; readiness.checklist blob retired (D4 — source is now readiness_checklist table)
 
 ## investments_accounts
 
-2026-05-28: portfolio snapshot updated (figures live in Supabase)
+2026-07-31: portfolio rebuilt from the 2026-05-01→2026-07-31 T212 activity export, rolled forward from the verified 2026-07-03 statement. Account revalued from 3 Jul to 30 Jul and holdings now carry unit counts (VHYL/VUSA/VEVE/SGLN/VFEM, plus the legacy TUN position at its stale 3 Jul value). Unit counts for the four Vanguard ETFs are anchored on the absolute share counts in the 1 Jul dividend rows; each was validated by dividing the 3 Jul statement value by the derived units and checking the implied price against the actual 3 Jul trade price (agreement within 0.15% on all three). SGLN pays no dividend and so has no anchor — the units pre-dating the export window are back-derived from the 3 Jul value and flagged unitsEstimated in the blob. | 2026-05-28: portfolio snapshot updated (figures live in Supabase)
 
 ## investments_history
 
-2026-05-28: monthly net figures corrected; 2026-03 zero-activity row inserted (ISA annual reset month)
+2026-07-31: 2026-05/06/07 replaced with exact deposit/dividend/interest figures from the T212 activity export. June had been carrying a reconciliation plug rather than deposits; the difference was relocated to the account-opening month 2025-05, where the original import is demonstrably incomplete (it recorded withdrawals exceeding deposits, impossible in an opening month). Total contributed capital is unchanged — only its placement in time moved. This is an inference, not evidence — a T212 export covering 2025-05-26 to 2026-04-30 would settle it. | 2026-05-28: monthly net figures corrected; 2026-03 zero-activity row inserted (ISA annual reset month)
 
 ## debts_credit_cards
 

@@ -9,8 +9,8 @@
     "_note": "Owner search band budget.min £300k / max £425k — drives the fetcher's union price floor."
   },
   "finances": {
-    "last_synced_at": "2026-07-04T09:27:04Z",
-    "_note": "Canonical deposit target lives in goal.targetDeposit (2026-06-16 data-contract repair); savings.monthlyAverage recomputed 2026-07-04 for the Jul-2025–Jun-2026 window."
+    "last_synced_at": "2026-07-31T09:10:20Z",
+    "_note": "Canonical deposit target lives in goal.targetDeposit (2026-06-16 data-contract repair); savings.monthlyAverage recomputed 2026-07-31 for the Jul-2025–Jun-2026 window after the T212 import corrected 2026-05/06/07. Amounts live in Supabase only (§18.1) — never restated here."
   },
   "shortlist": {
     "last_synced_at": "2026-06-28T10:37:12Z"
@@ -42,8 +42,8 @@
     "last_synced_at": "2026-05-26T10:51:53.837Z"
   },
   "goals": {
-    "last_synced_at": "2026-07-04T10:43:43Z",
-    "_note": "Readiness checklist blob retired — source is the readiness_checklist table. deposit.currentSavings/gapToHoped recalibrated 2026-07-04 to the live £34,472.19 deposit-eligible total."
+    "last_synced_at": "2026-07-31T09:13:18Z",
+    "_note": "Readiness checklist blob retired — source is the readiness_checklist table. deposit.currentSavings/gapToHoped recalibrated 2026-07-31 to the rebuilt ISA valuation."
   },
   "readiness_checklist": {
     "count": 13,
@@ -51,13 +51,13 @@
   },
   "investments_accounts": {
     "count": 1,
-    "last_synced_at": "2026-07-04T09:26:48Z",
-    "_note": "Owner T212 S&S ISA updated from the 2026-07-04 activity statement — account value £34,472.19, per-holding values verified."
+    "last_synced_at": "2026-07-31T09:09:37Z",
+    "_note": "Owner T212 S&S ISA rebuilt 2026-07-31 from the 2026-05-01→2026-07-31 activity export, rolled forward from the verified 2026-07-03 statement; valued as at 2026-07-30. Holdings now carry unit counts. SGLN units include a back-derived pre-May base (flagged unitsEstimated in the blob)."
   },
   "investments_history": {
     "count": 15,
-    "last_synced_at": "2026-07-04T09:26:56Z",
-    "_note": "Owner rows through 2026-07 (2026-06 is a statement-derived reconciliation month; 2026-07 partial)."
+    "last_synced_at": "2026-07-31T09:08:37Z",
+    "_note": "Owner rows through 2026-07, all complete months. 2026-05/06/07 are exact from the T212 export; the reconciliation plug 2026-06 had been carrying was relocated to the account-opening month 2025-05 — an inference pending a pre-2026-05 export, not evidence."
   },
   "debts_credit_cards": {
     "count": 1,

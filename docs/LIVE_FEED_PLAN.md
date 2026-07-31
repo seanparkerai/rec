@@ -53,8 +53,8 @@ periodic pixel-shift is applied.
 - **Savings = canonical deposit savings** (`assets/js/finance-derive.js#computeDepositSavings`):
   `cash (finances.data.savings.current) + earmarked ISA (investments_accounts.data:
   currentPortfolioValue × earmarkPct/100, or full value if earmarkPct=0)`.
-  Current values: **Luke ≈ £32,994.45** (cash £0 + ISA £32,994.45 @ 100%),
-  **Suzanne = £53,000** (cash £53,000, no investments). This formula is already mirrored in
+  Current values live in Supabase only (§18.1): Luke is ISA-only at a 100% earmark
+  with no cash, Suzanne is cash-only with no investments. This formula is already mirrored in
   `supabase/functions/ask/pure.js` and pinned by `tests/contract/ask-tools.test.js`; the SQL
   replica below adds a third mirror — **a parity test keeps all three in lockstep**.
 - Reference snapshot (will move): Luke 195 active areas; Suzanne 9 active areas.
@@ -349,7 +349,7 @@ Two logical regions:
   other account is bounced **off** `/live-feed`.
 - Left/right show the scraper feed and both user panels with correct live numbers; the
   scraper "live pulse" appears while a fetch run is actively writing `sync_log`.
-- Savings match `computeDepositSavings` (Luke ≈ £32,994.45, Suzanne = £53,000) — parity test
+- Savings match `computeDepositSavings` for both households — parity test
   green.
 - Averages render: new listings/day (7d & 30d) and likes/day (7d) + likes/week per user.
 - On each refresh the layout **rearranges** (scraper side + vertical/horizontal flip, user

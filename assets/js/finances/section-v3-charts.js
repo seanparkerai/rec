@@ -1,7 +1,7 @@
 // finances/section-v3-charts.js — renders v3 investment & savings charts: savings over time, monthly deposits, ISA stacked area, dividends/interest, epoch comparison, ticker treemap, realised/unrealised P&L. DOM. Rendered on the finances page.
 
 import { getInvestmentsHistory } from '../storage.js';
-import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution } from '../investment-performance.js';
+import { analysePerformance, getMonthlyCumulativeDeposits, getEpochAttribution, buildGainsCurve } from '../investment-performance.js';
 import { buildSavingsSeries } from '../savings-series.js';
 import { gbp } from '../format.js';
 import { cssVar } from '../css-vars.js';
@@ -59,8 +59,17 @@ export async function renderSavingsOverTime(finData) {
 
   if (cap) {
     const eta = series.targetLine.etaMonth;
+    // The gap between contributions and today's value is NOT all market movement:
+    // dividends, interest and realised P&L stayed in the account and are part of
+    // it. Name them, rather than crediting the market with income it didn't make.
+    const perf = analysePerformance(history);
+    const income = perf.isStub ? 0
+      : Math.round(perf.dividendsReceived + perf.interestEarned + perf.realisedPnL);
+    const gapLabel = income > 0 && income <= Math.abs(growth)
+      ? `${growth >= 0 ? '+' : '−'}${gbp(Math.abs(growth))} above contributions, of which ${gbp(income)} is dividends, interest and realised gains`
+      : `${growth >= 0 ? '+' : '−'}${gbp(Math.abs(growth))} ${growth >= 0 ? 'above' : 'below'} contributions`;
     const potBit = showValueToday
-      ? ` Pot is worth ${gbp(Math.round(valueToday))} today (${growth >= 0 ? '+' : '−'}${gbp(Math.abs(growth))} market ${growth >= 0 ? 'growth' : 'movement'}).`
+      ? ` Pot is worth ${gbp(Math.round(valueToday))} today (${gapLabel}).`
       : '';
     if (eta) cap.textContent = `${gbp(Math.round(lastContrib))} contributed; at current pace you hit ${gbp(goal)} in ${fmtMonthLabel(eta)}.${potBit}`;
     else cap.textContent = `${gbp(Math.round(lastContrib))} contributed across ${series.points.length} months.${potBit}`;
@@ -129,7 +138,8 @@ export async function renderISAStackedArea(finData) {
   // sums to the REAL portfolio value; using unrealised alone silently dropped
   // realised gains and understated the "balance" caption by that amount.
   const gainsEnd = Math.max(0, perf.currentValue - perf.netContributed - perf.dividendsReceived - perf.interestEarned);
-  const growth = labels.map((_, i) => Math.round((gainsEnd * (i + 1) / labels.length)));
+  // Weighted by capital-at-risk × time, not by month index — see buildGainsCurve.
+  const growth = buildGainsCurve(sorted, gainsEnd).map((v) => Math.round(v));
 
   if (_v3Charts.isaStacked) _v3Charts.isaStacked.destroy();
   _v3Charts.isaStacked = new Chart(canvas, {
@@ -140,7 +150,7 @@ export async function renderISAStackedArea(finData) {
         { label: 'Contributed', data: contrib, borderColor: cssVar('--accent'),      backgroundColor: cssVar('--accent-soft'),    fill: true, tension: 0.1, pointRadius: 0 },
         { label: 'Dividends',   data: divs,    borderColor: cssVar('--accent-ink'),  backgroundColor: cssVar('--hairline'),        fill: true, tension: 0.1, pointRadius: 0 },
         { label: 'Interest',    data: ints,    borderColor: cssVar('--ink-muted'),   backgroundColor: cssVar('--hairline'),        fill: true, tension: 0.1, pointRadius: 0 },
-        { label: 'Investment gains', data: growth, borderColor: cssVar('--ink-subtle'), backgroundColor: cssVar('--hairline-strong'), fill: true, tension: 0.1, pointRadius: 0 },
+        { label: 'Investment gains (est.)', data: growth, borderColor: cssVar('--ink-subtle'), backgroundColor: cssVar('--hairline-strong'), fill: true, tension: 0.1, pointRadius: 0 },
       ],
     },
     options: chartOpts({ yLabel: '£', stacked: true }),
@@ -149,7 +159,7 @@ export async function renderISAStackedArea(finData) {
   const total = perf.netContributed + perf.dividendsReceived + perf.interestEarned + gainsEnd;
   const pct = (n) => total > 0 ? Math.round((n / total) * 100) : 0;
   const cap = document.getElementById('isasa-caption');
-  if (cap) cap.textContent = `Of ${gbp(Math.round(total))} balance: ${pct(perf.netContributed)}% contributed, ${pct(perf.dividendsReceived + perf.interestEarned)}% dividends + interest, ${pct(gainsEnd)}% investment gains.`;
+  if (cap) cap.textContent = `Of ${gbp(Math.round(total))} balance: ${pct(perf.netContributed)}% contributed, ${pct(perf.dividendsReceived + perf.interestEarned)}% dividends + interest, ${pct(gainsEnd)}% investment gains. The gains total is exact; its month-by-month shape is estimated from capital at risk, as the import records cashflows rather than month-end valuations.`;
 }
 
 export async function renderDividendsInterest() {
@@ -322,7 +332,8 @@ export async function renderTickerTreemap() {
 
   if (cap) {
     const top = entries[0];
-    cap.textContent = `${top.ticker} is your largest holding at ${Math.round((top.value / total) * 100)}% of deployed capital.`;
+    // These are market values, not cost — "deployed capital" read as money paid in.
+    cap.textContent = `${top.ticker} is your largest holding at ${Math.round((top.value / total) * 100)}% of portfolio value.`;
   }
 }
 

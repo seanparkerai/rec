@@ -3,8 +3,13 @@
 //
 // Usage:
 //   node tools/import-trading212.mjs path/to/export1.csv [path/to/export2.csv ...]
+//     [--current-value=34472.19]   declared portfolio value, for impliedGainUnrealised
+//     [--out=<path>]               write JSON here (default: stdout only)
 //
-// Writes to: data/imports/trading212-history.json
+// PRIVACY (§18.1): the aggregate is USER-STATE — its home is Supabase, never the
+// repo. This tool therefore prints to stdout and writes nothing unless --out is
+// passed explicitly. data/imports/trading212-history.json is the one sanctioned
+// path (gitignored); anything else is the caller's responsibility.
 
 import { createReadStream, readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
@@ -13,14 +18,19 @@ import { createInterface } from 'readline';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
-const OUTPUT_PATH = resolve(REPO_ROOT, 'data/imports/trading212-history.json');
 
-// Column names exactly as T212 exports them.
-const EXPECTED_COLUMNS = [
-  'Action', 'Time', 'ISIN', 'Ticker', 'Name', 'Notes', 'ID',
+// Columns every T212 export carries, whatever the vintage. `Time` is matched
+// loosely because newer exports name it "Time (UTC)".
+const REQUIRED_COLUMNS = [
+  'Action', 'ISIN', 'Ticker', 'Name', 'ID',
   'No. of shares', 'Price / share', 'Currency (Price / share)',
-  'Exchange rate', 'Result', 'Currency (Result)',
-  'Total', 'Currency (Total)',
+  'Exchange rate', 'Total', 'Currency (Total)',
+];
+// Present on older exports only. `Result` carries realised P&L on sells, so an
+// export without it cannot contribute realised figures — surfaced as a warning
+// rather than a hard failure, since deposits/dividends/positions are still good.
+const OPTIONAL_COLUMNS = [
+  'Result', 'Currency (Result)', 'Notes',
   'Withholding tax', 'Currency (Withholding tax)',
   'Stamp duty reserve tax', 'Currency (Stamp duty reserve tax)',
 ];
@@ -85,11 +95,20 @@ function splitCsvLine(line) {
   return result;
 }
 
+// Resolves the header row against what we need, tolerating the naming drift
+// between export vintages. Returns the actual key to read the timestamp from —
+// "Time" on older exports, "Time (UTC)" on 2026-era ones.
 function validateHeaders(headers, filePath) {
-  const missing = EXPECTED_COLUMNS.filter((c) => !headers.includes(c));
+  const missing = REQUIRED_COLUMNS.filter((c) => !headers.includes(c));
   if (missing.length > 0) {
     throw new Error(`${filePath}: missing columns: ${missing.join(', ')}`);
   }
+  const timeKey = headers.find((h) => h === 'Time' || h.startsWith('Time'));
+  if (!timeKey) {
+    throw new Error(`${filePath}: no Time column (looked for "Time" / "Time (UTC)")`);
+  }
+  const absent = OPTIONAL_COLUMNS.filter((c) => !headers.includes(c));
+  return { timeKey, absent };
 }
 
 function toMonth(timeStr) {
@@ -114,13 +133,88 @@ function num(s) {
 }
 
 function round2(n) { return Math.round(n * 100) / 100; }
+function round6(n) { return Math.round(n * 1e6) / 1e6; }
+
+function ensureTicker(map, ticker, name, epoch) {
+  if (!map.has(ticker)) {
+    map.set(ticker, {
+      name, netDeployed: 0, epoch,
+      shareDelta: 0, dividendAnchors: [], trades: [],
+      lastPrice: null, lastPriceDate: null, lastPriceCurrency: null,
+    });
+  }
+  const t = map.get(ticker);
+  if (!t.name && name) t.name = name;
+  return t;
+}
+
+// Typical LSE gap between a fund's ex-dividend date and its pay date. Used only
+// to size the ambiguity window below — not as a claim about any specific fund.
+const EX_DIV_LAG_DAYS = 21;
+
+/**
+ * Turn a dividend anchor into an absolute position at the end of the export
+ * window.
+ *
+ * The subtlety: a dividend row's share count is the holding at the EX-DIVIDEND
+ * date, but the row is dated the PAY date, typically ~3 weeks later. Units bought
+ * in between earn nothing and so are missing from the count, while being older
+ * than the row that reveals it. Adding only the trades dated after the row
+ * therefore UNDERSTATES the position by whatever was bought in that window.
+ *
+ * The CSV cannot tell us where the ex-div date actually fell, so this returns
+ * both readings plus the size of the gap between them, and leaves the choice to
+ * the caller — who can settle it by checking the implied price against
+ * `lastPrice`, or against a statement. It never silently picks one.
+ */
+function positionFromAnchor(data) {
+  const anchors = [...data.dividendAnchors].sort((a, b) => a.date.localeCompare(b.date));
+  const anchor = anchors[anchors.length - 1];
+  if (!anchor) return { dividendAnchor: null, sharesAtWindowEnd: null };
+
+  const after = (cutoff) => data.trades
+    .filter((t) => t.date > cutoff)
+    .reduce((s, t) => s + t.shares, 0);
+
+  const exDivCutoff = shiftDate(anchor.date, -EX_DIV_LAG_DAYS);
+  const strict = round6(anchor.shares + after(anchor.date));
+  const exDivAdjusted = round6(anchor.shares + after(exDivCutoff));
+
+  return {
+    dividendAnchor: { date: anchor.date, shares: round6(anchor.shares) },
+    // Lower bound: assumes nothing was bought between ex-div and pay date.
+    sharesAtWindowEnd: strict,
+    // Upper bound: assumes everything in the ~3-week window post-dates ex-div.
+    sharesAtWindowEndExDivAdjusted: exDivAdjusted,
+    exDivAmbiguityShares: round6(exDivAdjusted - strict),
+  };
+}
+
+function shiftDate(isoDate, days) {
+  const d = new Date(`${isoDate}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+// Keep the most recent trade price seen for a ticker, normalised to GBP.
+// T212 quotes some LSE instruments in GBX (pence) — SGLN is the live example —
+// so a naive read overstates those positions 100x.
+function recordPrice(t, row, date) {
+  const price = num(row['Price / share']);
+  if (price <= 0) return;
+  if (t.lastPriceDate && date < t.lastPriceDate) return;
+  const currency = row['Currency (Price / share)'] || '';
+  t.lastPrice = currency === 'GBX' ? round6(price / 100) : price;
+  t.lastPriceCurrency = currency;
+  t.lastPriceDate = date;
+}
 
 // ---------------------------------------------------------------------------
 
 async function main() {
-  const args = process.argv.slice(2);
+  const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
   if (args.length === 0) {
-    console.error('Usage: node tools/import-trading212.mjs path/to/csv1.csv [csv2.csv ...]');
+    console.error('Usage: node tools/import-trading212.mjs path/to/csv1.csv [csv2.csv ...] [--current-value=N] [--out=path]');
     process.exit(1);
   }
 
@@ -138,17 +232,25 @@ async function main() {
   for (const csvPath of args) {
     console.log(`Parsing: ${csvPath}`);
     const { headers, rows } = await parseCsv(csvPath);
+    let timeKey;
     try {
-      validateHeaders(headers, csvPath);
+      const resolved = validateHeaders(headers, csvPath);
+      timeKey = resolved.timeKey;
+      if (resolved.absent.includes('Result')) {
+        console.warn('  ⚠ no "Result" column — realised P&L cannot be read from this export');
+      }
     } catch (e) {
       console.error(`Column validation failed: ${e.message}`);
       process.exit(1);
     }
-    console.log(`  ${rows.length} rows found`);
+    console.log(`  ${rows.length} rows found (timestamp column: "${timeKey}")`);
     for (const row of rows) {
       const id = row['ID'];
+      // Normalise the timestamp onto a single key so downstream code never has
+      // to know which export vintage a row came from.
+      row._time = row[timeKey] ?? '';
       // Use ID as dedup key when present; fall back to a composite key to avoid losing rows.
-      const key = id || `${row['Time']}|${row['Action']}|${row['Total']}`;
+      const key = id || `${row._time}|${row['Action']}|${row['Total']}`;
       if (!allRowsById.has(key)) {
         allRowsById.set(key, row);
       }
@@ -173,7 +275,7 @@ async function main() {
 
   for (const row of allRows) {
     const action = row['Action'];
-    const time = row['Time'];
+    const time = row._time;
     if (!time) continue;
 
     const month = toMonth(time);
@@ -204,9 +306,13 @@ async function main() {
       const name = row['Name'];
       const cost = Math.abs(total);
       if (ticker) {
-        if (!tickerMap.has(ticker)) tickerMap.set(ticker, { name, netDeployed: 0, epoch: ep });
-        const t = tickerMap.get(ticker);
+        const t = ensureTicker(tickerMap, ticker, name, ep);
         t.netDeployed = round2(t.netDeployed + cost);
+        // Share deltas + the last observed price are what let a caller value the
+        // position at the export's end date without a separate statement.
+        t.shareDelta += num(row['No. of shares']);
+        t.trades.push({ date, shares: num(row['No. of shares']) });
+        recordPrice(t, row, date);
         if (t.epoch !== ep) t.epoch = 'both';
       }
     } else if (SELL_ACTIONS.has(action)) {
@@ -215,13 +321,27 @@ async function main() {
       const pnl = result; // Result column = realised gain/loss on sells
       mo.realisedPnL = round2(mo.realisedPnL + pnl);
       totalRealisedPnL = round2(totalRealisedPnL + pnl);
-      if (ticker && tickerMap.has(ticker)) {
-        tickerMap.get(ticker).netDeployed = round2(tickerMap.get(ticker).netDeployed - proceeds);
+      if (ticker) {
+        const t = ensureTicker(tickerMap, ticker, row['Name'], ep);
+        t.netDeployed = round2(t.netDeployed - proceeds);
+        t.shareDelta -= num(row['No. of shares']);
+        t.trades.push({ date, shares: -num(row['No. of shares']) });
+        recordPrice(t, row, date);
       }
     } else if (DIVIDEND_ACTIONS.has(action)) {
       const amount = Math.abs(total);
       mo.dividends = round2(mo.dividends + amount);
       totalDividends = round2(totalDividends + amount);
+      // A dividend row states the shares that earned it — an ABSOLUTE position
+      // count at the ex-dividend date, and the only anchor in the file that does
+      // not depend on knowing the balance before the export window. Shares bought
+      // after the ex-div date are excluded from it, so treat it as a floor.
+      const ticker = row['Ticker'];
+      if (ticker) {
+        const t = ensureTicker(tickerMap, ticker, row['Name'], ep);
+        const shares = num(row['No. of shares']);
+        if (shares > 0) t.dividendAnchors.push({ date, shares });
+      }
     } else if (INTEREST_ACTIONS.has(action)) {
       const amount = Math.abs(total);
       mo.interest = round2(mo.interest + amount);
@@ -238,13 +358,21 @@ async function main() {
   // Sort monthly summary ascending.
   const monthlySummary = [...monthlyMap.values()].sort((a, b) => a.month.localeCompare(b.month));
 
-  // Build ticker exposure.
+  // Build ticker exposure. `shareDelta` is the CHANGE in units across the export
+  // window, not the holding — an export that starts mid-life knows nothing about
+  // the units already held. `sharesAtWindowEnd` is the real holding, and is only
+  // populated when a dividend anchor lets us pin the absolute count.
   const tickerExposure = {};
   for (const [ticker, data] of tickerMap.entries()) {
     tickerExposure[ticker] = {
       name: data.name,
       netDeployed: round2(data.netDeployed),
       epoch: data.epoch,
+      shareDelta: round6(data.shareDelta),
+      lastPrice: data.lastPrice,
+      lastPriceDate: data.lastPriceDate,
+      lastPriceCurrency: data.lastPriceCurrency,
+      ...positionFromAnchor(data),
     };
   }
 
@@ -329,8 +457,37 @@ async function main() {
     );
   }
 
-  writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2) + '\n', 'utf8');
-  console.log(`\nWritten to: ${OUTPUT_PATH}`);
+  console.log('\nPositions (units are a DELTA over the window unless anchored):');
+  console.log('Ticker | Δ units      | Anchored units | Last price | On         | Value @ last');
+  console.log('------ | ------------ | -------------- | ---------- | ---------- | ------------');
+  for (const [ticker, t] of Object.entries(tickerExposure)) {
+    const units = t.sharesAtWindowEndExDivAdjusted ?? t.sharesAtWindowEnd;
+    const value = units != null && t.lastPrice != null ? `£${round2(units * t.lastPrice).toFixed(2)}` : '—';
+    console.log(
+      `${ticker.padEnd(6)} | ${String(t.shareDelta.toFixed(6)).padStart(12)} | ` +
+      `${String(units != null ? units.toFixed(6) : '—').padStart(14)} | ` +
+      `${String(t.lastPrice != null ? t.lastPrice.toFixed(4) : '—').padStart(10)} | ` +
+      `${(t.lastPriceDate ?? '—').padEnd(10)} | ${value.padStart(12)}`
+    );
+    if (t.exDivAmbiguityShares) {
+      console.log(`       ↳ ex-div window is ambiguous by ${t.exDivAmbiguityShares.toFixed(6)} units — ` +
+        `check the implied price against ${t.lastPrice?.toFixed(4) ?? 'a statement'} before trusting either bound`);
+    }
+  }
+
+  // §18.1: this aggregate is user-state. Writing it into the repo is opt-in and
+  // never the default, so a routine run cannot leave financial data on disk.
+  const outArg = process.argv.find((a) => a.startsWith('--out='));
+  if (outArg) {
+    const outPath = resolve(outArg.slice('--out='.length));
+    writeFileSync(outPath, JSON.stringify(output, null, 2) + '\n', 'utf8');
+    console.log(`\nWritten to: ${outPath}`);
+    if (!outPath.includes('data/imports/')) {
+      console.warn('⚠ This file contains user-state financial data — keep it out of git.');
+    }
+  } else {
+    console.log('\n(no --out given — nothing written to disk; the destination is Supabase, see CLAUDE.md §18.1)');
+  }
 }
 
 function pad(n) {

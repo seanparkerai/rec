@@ -142,6 +142,54 @@ export function getEpochAttribution(historyJson) {
   });
 }
 
+/**
+ * Spread total investment gains across the months of the history so the stacked
+ * area chart shows growth arriving roughly when it was actually earned.
+ *
+ * The import records cash movements, not month-end valuations, so the true curve
+ * is unknowable from this data. The previous approach — dividing the total by the
+ * month count — was worse than an approximation: it drew the same growth into
+ * months when the account held a few hundred pounds as into months when it held
+ * thirty thousand, which reads as a return that was earned before the money
+ * existed. This weights each month by capital-at-risk × time instead, so a month
+ * only accrues gains in proportion to the balance that was actually exposed.
+ *
+ * Still an estimate, and callers must label it as one — it cannot capture a
+ * market crash or a rally, only the shape of the exposure underneath.
+ *
+ * @param {Array<{month:string, net?:number, dividends?:number, interest?:number, realisedPnL?:number}>} monthly
+ * @param {number} gainsEnd  total gains to distribute (the value at the final month).
+ * @returns {number[]} cumulative gains per month, ascending, ending at gainsEnd.
+ */
+export function buildGainsCurve(monthly, gainsEnd) {
+  if (!Array.isArray(monthly) || monthly.length === 0) return [];
+  const total = num(gainsEnd);
+  const sorted = [...monthly].sort((a, b) => a.month.localeCompare(b.month));
+  if (total === 0) return sorted.map(() => 0);
+
+  // Capital at risk at the end of each month: everything paid in or retained.
+  let capital = 0;
+  const exposureByMonth = sorted.map((m) => {
+    capital += num(m.net) + num(m.dividends) + num(m.interest) + num(m.realisedPnL);
+    return Math.max(0, capital);
+  });
+
+  // Cumulative capital-months — the weight each month carries in the total.
+  let cumulative = 0;
+  const weights = exposureByMonth.map((c) => (cumulative += c));
+  const totalWeight = weights[weights.length - 1];
+
+  // No positive exposure anywhere (an account only ever in deficit) — fall back
+  // to the flat spread rather than dividing by zero.
+  if (totalWeight <= 0) {
+    return sorted.map((_, i) => round2((total * (i + 1)) / sorted.length));
+  }
+  return weights.map((w, i) =>
+    // Pin the last point exactly so the stack always reconciles to the real
+    // portfolio value instead of drifting by a rounding step.
+    i === weights.length - 1 ? round2(total) : round2((total * w) / totalWeight));
+}
+
 // --- Helpers -------------------------------------------------------------------
 
 function emptyResult(historyJson, isStub) {
@@ -186,4 +234,8 @@ function buildEpochs(epochDefs, monthly) {
 function num(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
+}
+
+function round2(n) {
+  return Math.round(n * 100) / 100;
 }
