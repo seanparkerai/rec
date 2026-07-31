@@ -120,6 +120,33 @@ cross-border coverage silently. Every area resolves tight today, so this never f
 a **coarse-fallback sentinel** now names the offending outcodes and areas in the run log
 if it ever does.
 
+## Wave 3 — the actor returns silent empty datasets
+
+The owner's 14-day portal pull (2026-07-31 17:17, 100 targets, `raw 4528 · kept 2653 ·
+written 2653 · price-changes 144`) exposed a third silent-loss path, unrelated to
+radius. Two targets returned **raw 0**:
+
+| target | 1-day run (16:16) | 14-day run (17:17) |
+|---|---|---|
+| `SP4:gomeldon-sp4+1` r=3.7mi | raw 7 | **raw 0** |
+| `SP3:little-langford-sp3+2` r=4.6mi | raw 5 | **raw 0** |
+
+Same target, same identifier, same radius, same price band — only the recency window
+differed. A 14-day window is a strict **superset** of a 1-day window, so returning
+fewer results from the wider one is impossible. Those Apify calls completed
+successfully with an **empty dataset**: no HTTP error, no exception, nothing to catch.
+The fetcher only ever handled *thrown* errors, so the failure printed as a clean
+`raw 0 → in-buffer 0 → unique 0` — indistinguishable from a genuinely quiet rural
+search — and the run exited green. Exactly the silent-hole class this ADR exists for.
+
+**Decision:** a zero-result search is **retried once** before being believed
+(`ZERO_RETRY`, default on; `ZERO_RETRY_DELAY_MS` between attempts). A genuinely empty
+search stays empty, so tiny hamlets still report zero honestly; a flaky one recovers.
+It is close to free — the actor bills per *result*, so this only ever re-runs searches
+that returned none. The run summary reports how many retries ran and how many
+recovered, so the actor's flakiness rate stays visible instead of being absorbed.
+Pinned by `tests/contract/fetch-zero-retry.test.js`.
+
 ## Live confirmation
 
 The first production run on the fixed build wrote new listings into

@@ -519,8 +519,7 @@ function buildActorInput(locationIdentifier, spec = null, radiusMiles = null, ba
   };
 }
 
-async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null) {
-  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
+async function apifyCall(locationIdentifier, spec, radiusMiles, band) {
   const url =
     `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
     `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
@@ -533,6 +532,40 @@ async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles =
   if (!res.ok) throw new Error(`apify HTTP ${res.status}`);
   const items = await res.json();
   return Array.isArray(items) ? items : [];
+}
+
+// ZERO-RESULT RETRY (2026-07-31 audit, wave 3). The actor sometimes completes
+// successfully with an EMPTY dataset — no HTTP error, no exception, just nothing.
+// That is indistinguishable from a genuinely quiet search, so it lands in the log as
+// a clean `raw 0` and the run still passes. It is the same silent-hole class as the
+// off-ladder radius bug, and it is provably happening: on 2026-07-31 the 14-day pull
+// returned raw 0 for SP4:gomeldon-sp4+1 and SP3:little-langford-sp3+2, while the
+// 1-day run 60 minutes earlier returned 7 and 5 for the SAME targets at the SAME
+// radius. A 14-day window is a strict superset of a 1-day window, so fewer results
+// from a wider window is impossible — those calls silently failed.
+//
+// A retry separates the two cases: a genuine empty stays empty, a flaky call
+// recovers. It is close to free — the actor bills per RESULT, and this only ever
+// re-runs searches that returned none. Set ZERO_RETRY=0 to disable.
+const ZERO_RETRY = process.env.ZERO_RETRY !== '0' && process.env.ZERO_RETRY !== 'false';
+const ZERO_RETRY_DELAY_MS = process.env.ZERO_RETRY_DELAY_MS != null ? Number(process.env.ZERO_RETRY_DELAY_MS) : 2000;
+let zeroRetriesRun = 0, zeroRetriesRecovered = 0;
+
+/** Retry counters for the run summary + the rail. */
+function zeroRetryStats() { return { run: zeroRetriesRun, recovered: zeroRetriesRecovered }; }
+
+async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null) {
+  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
+  const items = await apifyCall(locationIdentifier, spec, radiusMiles, band);
+  if (items.length || !ZERO_RETRY) return items;
+  zeroRetriesRun += 1;
+  if (ZERO_RETRY_DELAY_MS > 0) await new Promise((r) => setTimeout(r, ZERO_RETRY_DELAY_MS)); // let a transient clear
+  const retry = await apifyCall(locationIdentifier, spec, radiusMiles, band);
+  if (retry.length) {
+    zeroRetriesRecovered += 1;
+    console.warn(`  ↻ zero-result retry RECOVERED ${retry.length} listing(s) — the first call returned an empty dataset (silent actor failure)`);
+  }
+  return retry;
 }
 
 // ── nearest-area match within the outcode ────────────────────────────────────
@@ -1105,6 +1138,13 @@ async function main() {
 
   console.log('\n=== SUMMARY ===');
   console.log(`raw ${totalRaw} · off-baseline ${totalOffBaseline} · kept(in-buffer,unique) ${totalKept} · out-of-buffer ${totalRejected} · flagged(corroborated=false) ${totalFlagged} · written ${totalWritten} · price-changes ${totalPriceChanges}`);
+  // Actor flakiness, surfaced every run. `recovered` counts searches that returned an
+  // empty dataset on the first call and real listings on the retry — i.e. coverage that
+  // WOULD have been silently lost. A persistently non-zero recovery rate means the
+  // actor is unreliable enough to warrant more than one retry.
+  if (zeroRetriesRun) {
+    console.log(`zero-result retries: ${zeroRetriesRun} target(s) re-run · ${zeroRetriesRecovered} recovered listings that would otherwise have been silently lost`);
+  }
   // A failed target means listings silently went unfetched (this hid a crash
   // for a week in 2026-06). Surface it and fail the run — the 3-day recency
   // overlap means the next green run self-heals the gap.
@@ -1119,4 +1159,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, fetchRawForOutcode, zeroRetryStats, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
