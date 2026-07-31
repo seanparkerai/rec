@@ -998,7 +998,19 @@ async function main() {
         (l) => !NEW_BUILD_RE.test(l.title ?? '') && !NEW_BUILD_RE.test(l.description ?? '')
       );
       const newBuildDropped = inBaseline.length - notNewBuild.length;
-      if (newBuildDropped > 0) console.log(`  ↳ dropped ${newBuildDropped} new-build listing(s) (text match)`);
+      if (newBuildDropped > 0) {
+        // Name every drop. This filter is a TEXT HEURISTIC over short agent copy, and
+        // "new home" is ordinary marketing prose ("the perfect new home for a growing
+        // family") as well as a new-build signal — so it can drop a legitimate resale.
+        // A dropped listing is never written anywhere, so the run log is its ONLY
+        // record; an unnamed count would make a false positive unfindable.
+        const dropped = inBaseline.filter((l) => !notNewBuild.includes(l));
+        console.log(`  ↳ dropped ${newBuildDropped} new-build listing(s) (text match): ${
+          dropped.map((l) => {
+            const hit = NEW_BUILD_RE.exec(l.title ?? '') || NEW_BUILD_RE.exec(l.description ?? '');
+            return `${l.rightmove_id}("${hit ? hit[0] : '?'}")`;
+          }).join(', ')}`);
+      }
 
       // L7: the DECISIVE gate is the coordinate geofence against the GLOBAL active
       // village set — not the 20km isInOutcode wrong-region guard (kept only as a
