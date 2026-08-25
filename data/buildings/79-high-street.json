@@ -1,0 +1,793 @@
+{
+  "id": "79-high-street",
+  "schemaVersion": 1,
+  "name": "79 High Street",
+  "address": {
+    "line1": "79 High Street",
+    "locality": "Littleton Panell",
+    "town": "Devizes",
+    "county": "Wiltshire",
+    "postcode": "SN10 4ES"
+  },
+  "site": {
+    "lat": 51.28548,
+    "lon": -2.002675,
+    "osGridRef": "ST99915403",
+    "easting": 399910,
+    "northing": 154038,
+    "frontage": "A360 High Street, to the south-west",
+    "note": "Lat/lon derived from the MAGiC grid reference via OSGB36->WGS84 Helmert transform. Accurate to ~1m; good enough for a true sun path.",
+    "planRotationDeg": 45,
+    "orientationNote": "The agent plan is drawn with 'up' pointing approximately north-east, not north. That makes the kitchen/dining wing north-west, the dining and living rooms south-west (facing the A360), the living room south-east and the garage north-east. Confirmed by the architect's elevation names (NW / SE / SW) and by the plot's alignment to the road on the title plan. All room coordinates below stay in plan space; planRotationDeg rotates the model to true north for the sun path."
+  },
+  "provenance": {
+    "floorPlan": "Estate agent plan, 'Total Area: 135.4 m2 / 1458 ft2'",
+    "titlePlan": "HM Land Registry style plot extract",
+    "siteMap": "DEFRA MAGiC map, scale 1:306",
+    "records": "Council tax band D; last sold 267500 GBP on 2007-04-19",
+    "architectDrawing": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3' — NW, SE and SW elevations plus an existing 1:50 floor plan of the attached single-storey structure",
+    "aerial": "Marketing aerial photograph, south-west aspect",
+    "interiors": "Marketing interior photographs (19 in set): living room, kitchen, dining room, bedroom"
+  },
+  "defaults": {
+    "wallExternal": 0.3,
+    "wallInternal": 0.1,
+    "wallParty": 0.3,
+    "floorThickness": 0.3,
+    "doorHeight": 1.98,
+    "doorWidth": 0.83,
+    "windowSill": 0.9,
+    "windowHead": 2.1,
+    "garageDoorHeight": 2.13
+  },
+  "assumptions": [
+    {
+      "id": "A12",
+      "severity": "medium",
+      "title": "Garage may be detached rather than attached",
+      "detail": "The aerial shows the garage as its own hipped brick block with two up-and-over doors, reading as newer than the house. Whether it truly abuts the living-room wall or is linked by a short connection changes the envelope. Modelled as abutting."
+    },
+    {
+      "id": "A9",
+      "severity": "high",
+      "title": "Attached structure has no known dimensions",
+      "detail": "The architect's 1:50 plan shows it clearly but the scan carries no legible figures or scale bar. Footprint modelled as a 7.0 x 4.8m estimate from proportions. A PDF of the same sheet, or two real dimensions, replaces this."
+    },
+    {
+      "id": "A11",
+      "severity": "medium",
+      "title": "Is the attached structure inside the title?",
+      "detail": "The title plan shows a separately outlined building to the south-west labelled 79a. Whether the attached structure is part of 79, part of 79a, or a third element determines whether it belongs in this model at all."
+    },
+    {
+      "id": "A1",
+      "severity": "high",
+      "title": "First floor is deeper than the ground floor",
+      "detail": "The plan labels the north-west bedroom 4.07m deep. Stacked on the 3.64m bedroom below it that needs 7.81m of internal depth, but the ground floor (kitchen 3.02 + dining 3.64) only gives 6.76m. Modelled here as the west wing projecting ~1.0m north of the ground floor. The stepped outline on the title plan supports this. NEEDS CONFIRMING."
+    },
+    {
+      "id": "A4",
+      "severity": "medium",
+      "title": "Which wall is the party wall?",
+      "detail": "Records describe the property as semi-detached. The attached single-storey structure at the kitchen end is the likely reason for that classification, rather than a two-storey party wall. Modelled as attached at the north-west kitchen wall."
+    },
+    {
+      "id": "A6",
+      "severity": "medium",
+      "title": "North-east ground floor layout is simplified",
+      "detail": "The plan shows a bathroom, a separate shower cubicle, a WC and the hall packed into this zone. Modelled as one bathroom plus hall pending room photos."
+    },
+    {
+      "id": "A7",
+      "severity": "low",
+      "title": "Window positions and widths are approximate",
+      "detail": "Read off the plan by proportion. Sill 0.9m, head 2.1m throughout. Elevation photos will fix these."
+    },
+    {
+      "id": "A8",
+      "severity": "low",
+      "title": "No bathroom on the first floor",
+      "detail": "Three bedrooms upstairs and all sanitary ware downstairs. Taken from the plan at face value; unusual enough to be worth confirming."
+    },
+    {
+      "id": "A13",
+      "severity": "low",
+      "title": "Ceiling heights inferred from photographs, not measured",
+      "detail": "2.65m ground, 2.35m kitchen, 2.45m first floor, read from picture-rail and coving proportions. A tape measure on any one wall corrects all of them."
+    },
+    {
+      "id": "A14",
+      "severity": "medium",
+      "title": "One bathroom cannot be placed with confidence",
+      "detail": "A shower room appears with a sloping ceiling and a small high-level window, which means it sits under a roof slope — either upstairs off the landing, or in a single-storey section. The agent plan puts all sanitary ware on the ground floor. Which is it?"
+    },
+    {
+      "id": "A15",
+      "severity": "medium",
+      "title": "A rendered/panelled structure abuts the rear flank",
+      "detail": "The rear photo shows a large white panelled wall with failing paint hard against the property. Age and material unknown — if it is asbestos cement sheeting that matters well beyond the model."
+    }
+  ],
+  "levels": [
+    {
+      "id": "ground",
+      "name": "Ground floor",
+      "elevation": 0,
+      "ceilingHeight": 2.65,
+      "note": "Living and dining rooms carry a picture rail and deep coving — reads as 2.6-2.7m."
+    },
+    {
+      "id": "first",
+      "name": "First floor",
+      "elevation": 2.95,
+      "ceilingHeight": 2.45,
+      "note": "Bedroom photo shows the ceiling sloping in from the hip on one side. The roof geometry supplies that slope.",
+      "ceilingSlope": {
+        "from": "hip",
+        "note": "Ceilings slope in at the outer corners on all three bedrooms, the landing and the shower room. Generated from the roof geometry rather than declared per room."
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "kitchen",
+      "level": "ground",
+      "name": "Kitchen",
+      "label": "3.64 x 3.02m",
+      "rect": [
+        0.3,
+        4.04,
+        3.94,
+        7.06
+      ],
+      "ceilingHeight": 2.35,
+      "note": "Lower ceiling with an angled soffit over the run of units — reads as a later addition rather than original fabric."
+    },
+    {
+      "id": "dining",
+      "level": "ground",
+      "name": "Dining Room",
+      "label": "3.64 x 3.64m",
+      "rect": [
+        0.3,
+        0.3,
+        3.94,
+        3.94
+      ]
+    },
+    {
+      "id": "hall",
+      "level": "ground",
+      "name": "Hall & stairs",
+      "label": "",
+      "rect": [
+        4.04,
+        0.3,
+        5.84,
+        7.06
+      ]
+    },
+    {
+      "id": "living",
+      "level": "ground",
+      "name": "Living Room",
+      "label": "3.62 x 3.64m",
+      "rect": [
+        5.94,
+        0.3,
+        9.56,
+        3.94
+      ]
+    },
+    {
+      "id": "bathroom",
+      "level": "ground",
+      "name": "Bathroom",
+      "label": "bath, WC, shower",
+      "rect": [
+        5.94,
+        4.04,
+        9.56,
+        7.06
+      ]
+    },
+    {
+      "id": "garage",
+      "level": "ground",
+      "name": "Double Garage",
+      "label": "6.20 x 5.58m",
+      "rect": [
+        9.86,
+        0.3,
+        16.06,
+        5.88
+      ]
+    },
+    {
+      "id": "bed-nw",
+      "level": "first",
+      "name": "Bedroom",
+      "label": "3.64 x 4.07m",
+      "rect": [
+        0.3,
+        4.04,
+        3.94,
+        8.01
+      ]
+    },
+    {
+      "id": "bed-sw",
+      "level": "first",
+      "name": "Bedroom",
+      "label": "3.64 x 3.64m",
+      "rect": [
+        0.3,
+        0.3,
+        3.94,
+        3.94
+      ]
+    },
+    {
+      "id": "landing",
+      "level": "first",
+      "name": "Landing",
+      "label": "",
+      "rect": [
+        4.04,
+        0.3,
+        5.84,
+        3.94
+      ]
+    },
+    {
+      "id": "bed-se",
+      "level": "first",
+      "name": "Bedroom",
+      "label": "3.62 x 3.64m",
+      "rect": [
+        5.94,
+        0.3,
+        9.56,
+        3.94
+      ]
+    }
+  ],
+  "walls": [
+    {
+      "id": "gf-ext-s",
+      "level": "ground",
+      "a": [
+        0.15,
+        0.15
+      ],
+      "b": [
+        9.71,
+        0.15
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "gf-ext-w",
+      "level": "ground",
+      "a": [
+        0.15,
+        0.15
+      ],
+      "b": [
+        0.15,
+        7.21
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "gf-ext-n",
+      "level": "ground",
+      "a": [
+        0.15,
+        7.21
+      ],
+      "b": [
+        9.71,
+        7.21
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "gf-ext-e",
+      "level": "ground",
+      "a": [
+        9.71,
+        0.15
+      ],
+      "b": [
+        9.71,
+        7.21
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "gar-ext-s",
+      "level": "ground",
+      "a": [
+        9.71,
+        0.15
+      ],
+      "b": [
+        16.21,
+        0.15
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "gar-ext-e",
+      "level": "ground",
+      "a": [
+        16.21,
+        0.15
+      ],
+      "b": [
+        16.21,
+        6.03
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "gar-ext-n",
+      "level": "ground",
+      "a": [
+        9.71,
+        6.03
+      ],
+      "b": [
+        16.21,
+        6.03
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "gf-spine-w",
+      "level": "ground",
+      "a": [
+        3.99,
+        0.15
+      ],
+      "b": [
+        3.99,
+        7.21
+      ],
+      "kind": "internal",
+      "removable": true,
+      "note": "Kitchen/dining to hall"
+    },
+    {
+      "id": "gf-kitchen-din",
+      "level": "ground",
+      "a": [
+        0.15,
+        3.99
+      ],
+      "b": [
+        3.99,
+        3.99
+      ],
+      "kind": "internal",
+      "removable": true,
+      "note": "Remove for a kitchen-diner"
+    },
+    {
+      "id": "gf-hall-living",
+      "level": "ground",
+      "a": [
+        5.89,
+        0.15
+      ],
+      "b": [
+        5.89,
+        3.99
+      ],
+      "kind": "internal",
+      "removable": true
+    },
+    {
+      "id": "gf-living-bath",
+      "level": "ground",
+      "a": [
+        5.89,
+        3.99
+      ],
+      "b": [
+        9.71,
+        3.99
+      ],
+      "kind": "internal",
+      "removable": true
+    },
+    {
+      "id": "gf-hall-bath",
+      "level": "ground",
+      "a": [
+        5.89,
+        3.99
+      ],
+      "b": [
+        5.89,
+        7.21
+      ],
+      "kind": "internal",
+      "removable": true
+    },
+    {
+      "id": "ff-ext-s",
+      "level": "first",
+      "a": [
+        0.15,
+        0.15
+      ],
+      "b": [
+        9.71,
+        0.15
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "ff-ext-w",
+      "level": "first",
+      "a": [
+        0.15,
+        0.15
+      ],
+      "b": [
+        0.15,
+        8.16
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "ff-ext-n",
+      "level": "first",
+      "a": [
+        0.15,
+        8.16
+      ],
+      "b": [
+        3.99,
+        8.16
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "ff-ext-step-e",
+      "level": "first",
+      "a": [
+        3.99,
+        8.16
+      ],
+      "b": [
+        3.99,
+        4.09
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "ff-ext-step-n",
+      "level": "first",
+      "a": [
+        3.99,
+        4.09
+      ],
+      "b": [
+        9.71,
+        4.09
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "ff-ext-e",
+      "level": "first",
+      "a": [
+        9.71,
+        0.15
+      ],
+      "b": [
+        9.71,
+        4.09
+      ],
+      "kind": "external",
+      "removable": false
+    },
+    {
+      "id": "ff-spine-w",
+      "level": "first",
+      "a": [
+        3.99,
+        0.15
+      ],
+      "b": [
+        3.99,
+        4.09
+      ],
+      "kind": "internal",
+      "removable": true
+    },
+    {
+      "id": "ff-bed-div",
+      "level": "first",
+      "a": [
+        0.15,
+        3.99
+      ],
+      "b": [
+        3.99,
+        3.99
+      ],
+      "kind": "internal",
+      "removable": true
+    },
+    {
+      "id": "ff-landing-se",
+      "level": "first",
+      "a": [
+        5.89,
+        0.15
+      ],
+      "b": [
+        5.89,
+        4.09
+      ],
+      "kind": "internal",
+      "removable": true
+    }
+  ],
+  "openings": [
+    {
+      "id": "win-kitchen-n",
+      "wall": "gf-ext-n",
+      "type": "window",
+      "at": 1.55,
+      "width": 1.3
+    },
+    {
+      "id": "win-dining-s",
+      "wall": "gf-ext-s",
+      "type": "window",
+      "at": 1.7,
+      "width": 1.5
+    },
+    {
+      "id": "win-living-s",
+      "wall": "gf-ext-s",
+      "type": "window",
+      "at": 7.2,
+      "width": 1.6
+    },
+    {
+      "id": "door-front",
+      "wall": "gf-ext-n",
+      "type": "door",
+      "at": 5,
+      "width": 0.9
+    },
+    {
+      "id": "door-back",
+      "wall": "gf-ext-s",
+      "type": "door",
+      "at": 4.9,
+      "width": 0.9
+    },
+    {
+      "id": "win-bath-n",
+      "wall": "gf-ext-n",
+      "type": "window",
+      "at": 7.6,
+      "width": 0.8
+    },
+    {
+      "id": "gar-door-main",
+      "wall": "gar-ext-s",
+      "type": "garage",
+      "at": 3.25,
+      "width": 4.2
+    },
+    {
+      "id": "gar-door-side",
+      "wall": "gar-ext-n",
+      "type": "door",
+      "at": 1.1,
+      "width": 0.9,
+      "note": "Plan shows a door at the garage's north-west corner into the hall"
+    },
+    {
+      "id": "win-bednw-w",
+      "wall": "ff-ext-w",
+      "type": "window",
+      "at": 6,
+      "width": 1.3
+    },
+    {
+      "id": "win-bedsw-s",
+      "wall": "ff-ext-s",
+      "type": "window",
+      "at": 1.7,
+      "width": 1.5
+    },
+    {
+      "id": "win-landing-s",
+      "wall": "ff-ext-s",
+      "type": "window",
+      "at": 4.9,
+      "width": 1
+    },
+    {
+      "id": "win-bedse-s",
+      "wall": "ff-ext-s",
+      "type": "window",
+      "at": 7.2,
+      "width": 1.6
+    },
+    {
+      "id": "win-bednw-n",
+      "wall": "ff-ext-n",
+      "type": "window",
+      "at": 2,
+      "width": 1.2
+    }
+  ],
+  "stairs": {
+    "level": "ground",
+    "rect": [
+      4.3,
+      1.2,
+      5.6,
+      4.6
+    ],
+    "direction": "north",
+    "note": "Straight flight on the ground floor, winder at the top on the first-floor plan."
+  },
+  "roof": {
+    "type": "hipped",
+    "ridgeAxis": "planX",
+    "pitchDeg": 38,
+    "eavesOverhang": 0.35,
+    "covering": "slate",
+    "chimneys": [
+      {
+        "id": "chy-nw",
+        "atFraction": 0.22,
+        "width": 0.75,
+        "depth": 1.05,
+        "heightAboveRidge": 1.3,
+        "material": "brick"
+      },
+      {
+        "id": "chy-se",
+        "atFraction": 0.78,
+        "width": 0.75,
+        "depth": 1.05,
+        "heightAboveRidge": 1.3,
+        "material": "brick"
+      }
+    ],
+    "garage": {
+      "type": "hipped",
+      "ridgeAxis": "planX",
+      "pitchDeg": 35,
+      "covering": "slate"
+    },
+    "source": "Aerial photograph — hipped roof on both house and garage, two brick chimneys on the main block."
+  },
+  "scenarios": [
+    {
+      "id": "as-built",
+      "name": "As built",
+      "remove": []
+    },
+    {
+      "id": "kitchen-diner",
+      "name": "Open kitchen-diner",
+      "remove": [
+        "gf-kitchen-din"
+      ]
+    },
+    {
+      "id": "open-plan-gf",
+      "name": "Open-plan ground floor",
+      "remove": [
+        "gf-kitchen-din",
+        "gf-spine-w",
+        "gf-hall-living"
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "annexe",
+      "name": "Attached single-storey structure",
+      "attachedTo": "kitchen",
+      "side": "north-west",
+      "storeys": 1,
+      "rect": [
+        -7,
+        3.6,
+        0,
+        8.4
+      ],
+      "ceilingHeight": 2.4,
+      "roof": {
+        "type": "gable",
+        "ridgeAxis": "nw-se",
+        "pitchDeg": 35,
+        "covering": "clay tile",
+        "gableTreatment": "half-timbered, with glazed doors below"
+      },
+      "estimated": true,
+      "note": "Aerial confirms a pitched clay-tile roof with a half-timbered gable and glazed doors — matching the architect's south-east elevation. Footprint still a proportional estimate."
+    }
+  ],
+  "features": [
+    {
+      "id": "breast-living",
+      "type": "chimneyBreast",
+      "room": "living",
+      "wall": "gf-ext-s",
+      "width": 1.65,
+      "projection": 0.42,
+      "note": "Stone-clad surround, wood-burning stove, alcove each side."
+    },
+    {
+      "id": "breast-dining",
+      "type": "chimneyBreast",
+      "room": "dining",
+      "wall": "gf-ext-s",
+      "width": 1.55,
+      "projection": 0.4,
+      "note": "Brick fireplace with timber mantel; built-in alcove shelving to one side."
+    },
+    {
+      "id": "breast-bed-nw",
+      "type": "chimneyBreast",
+      "room": "bed-nw",
+      "wall": "ff-ext-s",
+      "width": 1.2,
+      "projection": 0.35,
+      "note": "Cast-iron bedroom fireplace with painted timber surround."
+    },
+    {
+      "id": "win-landing",
+      "type": "note",
+      "room": "landing",
+      "note": "Landing is naturally lit by its own window, with a turned-newel staircase and spindle balustrade."
+    }
+  ],
+  "construction": {
+    "walls": "red brick, exposed on the flank and rear; the south-west front is largely covered by Virginia creeper",
+    "windows": "white uPVC casements, mostly 2- and 3-light",
+    "roofCovering": "slate",
+    "periodEstimate": "c. 1900-1930",
+    "periodEvidence": "Hipped roof, picture rails and deep coving, tall ground-floor ceilings, cast-iron bedroom fireplaces, brick chimney breasts to both floors.",
+    "wallThicknessNote": "Inter-war brick could be solid 9-inch (230mm) or early cavity (270-300mm). Still using 300mm. An EPC or a reveal measurement at any window settles it."
+  },
+  "outbuildings": [
+    {
+      "id": "shed",
+      "type": "timber shed",
+      "location": "rear patio, against the flank wall"
+    },
+    {
+      "id": "greenhouse",
+      "type": "lean-to greenhouse",
+      "location": "rear boundary"
+    }
+  ]
+}

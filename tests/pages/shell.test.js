@@ -67,13 +67,16 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(current[0].dataset.nav, 'pages/listings.html');
   });
 
+const byNavText = (nav, doc) => doc.querySelector(`.nav-drawer__nav a[data-nav="${nav}"]`)?.textContent;
   test('shell: the drawer leads with the daily loop (⚙ 3.1 owner decision, 2026-07-02)', async () => {
     const { doc } = await renderShell('/pages/listings.html');
     const items = [...doc.querySelectorAll('.nav-drawer__nav li a')].map((a) => a.dataset.nav);
     assertEqual(items.slice(0, 5).join(' → '),
       'index.html → pages/listings.html → pages/areas.html → pages/finances.html → pages/ask.html',
       'Home · Listings · Areas · Finances · Ask lead the drawer, in that order');
-    assertEqual(items.length, 11, 'the full 10-item nav + latent admin entry survive the reorder');
+    assertEqual(items.length, 12, 'the full 11-item nav + latent admin entry survive the reorder');
+    assertEqual(byNavText('pages/house-planner.html', doc), 'House planner',
+      'the House planner link is present and page-named');
     // Owner guarantee (2026-07-02): the property-decision links are individually
     // present and named after their pages — Saved listings + Rejected & passed.
     const byNav = (nav) => doc.querySelector(`.nav-drawer__nav a[data-nav="${nav}"]`);
