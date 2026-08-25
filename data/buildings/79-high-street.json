@@ -822,35 +822,39 @@
       "id": "roof-garage",
       "type": "hipped",
       "rect": [
-        9.5,
-        0,
-        16.15,
-        6.02
+        9.74,
+        0.34,
+        16.33,
+        6.45
       ],
       "eaves": 2.9,
       "pitchDeg": 35,
-      "overhang": 0.35
+      "overhang": 0.35,
+      "abut": "minX",
+      "note": "Hipped at the free north-east end and along both long sides, closing as a gable where it meets the house. The near-square footprint made a plain hip collapse into a pyramid, which is not what the aerial shows."
     }
   ],
   "roof": {
     "chimneys": [
       {
-        "id": "chy-w",
-        "x": 2.2,
-        "y": 1.95,
+        "id": "chy-dining",
+        "x": 2.05,
+        "y": 3.99,
         "width": 0.75,
         "depth": 1.05,
         "base": 5.4,
-        "top": 8.5
+        "top": 8.85,
+        "note": "Rises off the dining-room breast where the main roof meets the rear wing."
       },
       {
-        "id": "chy-e",
-        "x": 7.6,
+        "id": "chy-living",
+        "x": 9.35,
         "y": 1.95,
         "width": 0.75,
         "depth": 1.05,
         "base": 5.4,
-        "top": 8.5
+        "top": 8.85,
+        "note": "On the main ridge above the living-room breast, beside the garage \u2014 the taller stack in the aerial."
       }
     ]
   },
@@ -863,6 +867,15 @@
       "width": 1.2,
       "projection": 0.28,
       "note": "Detected on the plan in the living room east wall \u2014 stone surround, wood-burning stove."
+    },
+    {
+      "id": "breast-dining",
+      "type": "chimneyBreast",
+      "room": "dining",
+      "side": "maxY",
+      "width": 1.55,
+      "projection": 0.4,
+      "note": "Brick fireplace with timber mantel and alcove shelving, on the wall through to the kitchen."
     }
   ],
   "structures": [
@@ -872,12 +885,12 @@
       "storeys": 1,
       "ceilingHeight": 3.0,
       "rect": [
-        -5.1,
-        -5.0,
+        -4.6,
+        -4.45,
         0.0,
-        2.2
+        1.97
       ],
-      "estimated": true,
+      "estimated": false,
       "roof": {
         "type": "gable",
         "pitchDeg": 32,
@@ -891,12 +904,12 @@
       "storeys": 1,
       "ceilingHeight": 2.8,
       "rect": [
-        -5.1,
-        2.2,
+        -4.6,
+        1.97,
         0.0,
-        6.3
+        5.65
       ],
-      "estimated": true,
+      "estimated": false,
       "roof": {
         "type": "monopitch",
         "pitchDeg": 18,
@@ -990,22 +1003,22 @@
       "detail": "The rear photograph shows a large white panelled wall with failing paint. If that is asbestos cement it matters well beyond this model."
     },
     {
-      "id": "D10",
-      "severity": "high",
-      "title": "Plot dimensions are approximate",
-      "detail": "The boundary shape traces cleanly off the title plan, but there is no scale bar on it. Scale comes from matching the building footprint, giving about 402m2 (0.10 acres). Treat the outline as indicative: +/-15% on size and +/-15 degrees on how it sits relative to the house."
-    },
-    {
-      "id": "D2",
-      "severity": "high",
-      "title": "79a scale rests on one assumed window width",
-      "detail": "The architect's 1:50 plan gives the shape and the split between the two parts exactly, but nothing on the sheet fixes the scale. Assuming the back-wall window is 1.5m gives 11.3 x 5.1m. A 1.2m window would make it 9.0m long, an 1.8m one 13.6m. The elevations imply about twice that again, which no other source supports."
-    },
-    {
       "id": "D11",
       "severity": "medium",
       "title": "How far 79a comes forward is a judgement",
       "detail": "Modelled projecting 5.0m past the front of the house, per the owner note to move it forward and the title plan showing it reaching past the south-west corner. The exact overhang is not measurable from any sheet supplied."
+    },
+    {
+      "id": "D12",
+      "severity": "medium",
+      "title": "Chimney stack positions inferred from breasts",
+      "detail": "Placed over the dining and living-room chimney breasts \u2014 the living-room one is detected on the plan, the dining one is from the photographs. The aerial shows two stacks in roughly these places, but neither is measured."
+    },
+    {
+      "id": "D13",
+      "severity": "low",
+      "title": "Plot dimensions now +/-8%",
+      "detail": "Re-derived from the OS-based boundaryfinder extract rather than the title plan, and validated by transforming the building centre to within half a metre of where the model puts it. 342m2, about a tenth of an acre."
     }
   ],
   "spawn": {
@@ -1045,38 +1058,35 @@
   "plot": {
     "polygon": [
       [
-        4.07,
-        13.72
+        1.06,
+        11.45
       ],
       [
-        17.61,
-        3.67
+        16.22,
+        6.19
       ],
       [
-        12.74,
-        -11.49
+        16.24,
+        -8.87
       ],
       [
-        -3.77,
-        -4.14
+        -3.32,
+        -4.76
       ],
       [
-        -5.63,
-        -1.16
+        -5.16,
+        3.64
       ],
       [
-        -5.0,
-        7.5
-      ],
-      [
-        -2.07,
-        16.76
+        -5.04,
+        12.57
       ]
     ],
-    "areaM2": 402,
-    "areaAcres": 0.1,
-    "source": "HM Land Registry title plan extract. The boundary polygon was traced by colour threshold; scale was fixed by matching the building footprint to the measured 99.9m2, cross-checked against the aerial where the building covers about a quarter of the plot.",
-    "confidence": "Shape good; dimensions +/-15%; rotation relative to the house +/-15 degrees."
+    "areaM2": 342,
+    "areaAcres": 0.08,
+    "source": "boundaryfinder.co.uk (OS OGL). The parcel was recovered by flood-filling the region bounded by the red title lines, and scaled off building 79 itself \u2014 three independent estimates (long axis, short axis, ink area) agreeing at 32.6, 34.6 and 33.9 px/m.",
+    "validation": "Building 79's measured footprint has an aspect ratio of 2.09 against the model's 2.22, and its centre transforms to (7.6, 3.5) against the model centre (8.08, 3.63) \u2014 under half a metre out, which is what fixes the rotation.",
+    "confidence": "Much better than the earlier title-plan trace. Dimensions +/-8%; the north-east boundary runs true to the house, the others are as surveyed."
   },
   "commercialBuildingSurvey": {
     "source": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3'",
@@ -1093,6 +1103,11 @@
     },
     "scaleAnchor": "A 1.5m window opening in the back wall gives 87.3 px/m, so 11.3 x 5.1m overall, split 7.2m and 4.1m. That is the only reading consistent with the title plan, the aerial and the building being comparable in size to the house.",
     "unresolved": "The elevations on the same sheet imply roughly half that scale, which would make the building about 21m long. That contradicts every other source, so the plan-based reading is used. Two real dimensions would settle it in seconds.",
-    "elevationReading": "The south-west elevation shows the house behind: hip slopes rising to a ridge with a chimney above, and 79a attached to its right as a lower single-storey range with a long horizontal roofline."
+    "elevationReading": "The south-west elevation shows the house behind: hip slopes rising to a ridge with a chimney above, and 79a attached to its right as a lower single-storey range with a long horizontal roofline.",
+    "measuredOnMap": {
+      "source": "boundaryfinder.co.uk, scaled off building 79",
+      "footprint": "10.1 x 4.6m, area 36m2, long axis 89.2 degrees to the house \u2014 i.e. perpendicular, running parallel to the road exactly as described.",
+      "resolvesScale": "This supersedes the assumed 1.5m window. The real opening works out at about 1.34m, so the plan-based reading was close and the elevation-based one (21m) is wrong."
+    }
   }
 }

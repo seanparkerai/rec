@@ -270,6 +270,36 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
+  test('house-planner: the garage roof has a real ridge, not a pyramid', () => {
+    const g = data.roofs.find((r) => r.id === 'roof-garage');
+    assert(g, 'the garage roof is modelled');
+    assertEqual(g.abut, 'minX', 'it closes as a gable where it meets the house');
+    const o = g.overhang ?? 0.3;
+    const w = (g.rect[2] + o) - (g.rect[0] - o);
+    const dep = (g.rect[3] + o) - (g.rect[1] - o);
+    const ridge = w - Math.min(w, dep) / 2;
+    assert(ridge > 1.5,
+      `garage ridge is only ${ridge.toFixed(2)}m — a near-square hip collapses to a pyramid`);
+    const main = data.roofs.find((r) => r.id === 'roof-main');
+    const gTop = g.eaves + (Math.min(w, dep) / 2) * Math.tan((g.pitchDeg * Math.PI) / 180);
+    assert(gTop < main.eaves + 2.0, 'the garage roof stays below the house roof, as the aerial shows');
+  });
+
+  test('house-planner: every chimney stands over a chimney breast', () => {
+    const breasts = data.features.filter((f) => f.type === 'chimneyBreast');
+    assert(breasts.length >= 2, 'the chimney breasts are modelled');
+    for (const chy of data.roof.chimneys) {
+      const over = breasts.some((f) => {
+        const room = data.rooms.find((r) => r.id === f.room);
+        if (!room) return false;
+        const [x0, y0, x1, y1] = room.rect;
+        return chy.x > x0 - 0.6 && chy.x < x1 + 0.6 && chy.y > y0 - 0.6 && chy.y < y1 + 0.6;
+      });
+      assert(over, `${chy.id} at (${chy.x}, ${chy.y}) is not above any chimney breast`);
+      assert(chy.base >= 5.0, `${chy.id} starts at ${chy.base}m — stacks begin at the eaves`);
+    }
+  });
+
   test('house-planner: no wall is a zero-length stub', () => {
     for (const w of data.walls) {
       const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);

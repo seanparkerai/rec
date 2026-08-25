@@ -146,6 +146,23 @@ function buildRoof(spec, color) {
   const inset = Math.min(w, dpt) / 2;
   const rise = inset * tan;
   const ridge = e + rise;
+
+  // An `abut` edge meets a wall, so the ridge runs right out to it and that end
+  // closes as a vertical gable instead of a hip. Without this a near-square
+  // footprint like the garage collapses into a pyramid.
+  if (spec.abut === 'minX') {
+    const cy = (y0 + y1) / 2;
+    const pts2 = [v(x0, e, y0), v(x1, e, y0), v(x1, e, y1), v(x0, e, y1),
+      v(x0, ridge, cy), v(x1 - inset, ridge, cy)];
+    const idx2 = [
+      0, 1, 5, 0, 5, 4,   // slope towards minY
+      2, 3, 4, 2, 4, 5,   // slope towards maxY
+      1, 2, 5,            // hip at the free end
+      3, 0, 4,            // gable against the wall
+    ];
+    return { mesh: meshFrom(pts2, idx2, color), top: ridge };
+  }
+
   let pts; let idx;
   if (w >= dpt) {
     const cy = (y0 + y1) / 2;
@@ -202,7 +219,9 @@ function buildPlot(plot) {
   const geo = new THREE.BufferGeometry().setFromPoints(pts);
   g.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x3f7d4f })));
   // A translucent fill so the parcel reads as ground, not as a floating outline.
-  const shape = new THREE.Shape(plot.polygon.map(([px, py]) => new THREE.Vector2(px, -py)));
+  // Shape lies in XY; rotating -90 about X sends (x, y) to (x, 0, -y), which is
+  // exactly what v() does. Negating y here would mirror the fill off the outline.
+  const shape = new THREE.Shape(plot.polygon.map(([px, py]) => new THREE.Vector2(px, py)));
   const fill = new THREE.Mesh(
     new THREE.ShapeGeometry(shape),
     new THREE.MeshBasicMaterial({ color: 0x6f9c6f, transparent: true, opacity: 0.18 }),
