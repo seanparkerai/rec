@@ -345,6 +345,75 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
+  test('house-planner: nothing shows through the zone between floors', () => {
+    for (let i = 0; i < data.levels.length - 1; i += 1) {
+      const lo = data.levels[i];
+      const hi = data.levels[i + 1];
+      const zone = hi.elevation - (lo.elevation + lo.ceilingHeight);
+      assert(zone >= 0, `${hi.id} starts below the ${lo.id} ceiling`);
+      assert(Math.abs(zone - data.defaults.floorThickness) < 0.01,
+        `the ${zone.toFixed(2)}m structural zone does not match the ${data.defaults.floorThickness}m floor`);
+    }
+    // Walls that stop short of the storey above must say so explicitly, because
+    // everything else is raised to close the zone.
+    for (const w of data.walls) {
+      if (w.height === undefined) continue;
+      assert(w.height > 2.0 && w.height < 3.5, `${w.id} height ${w.height} is implausible`);
+    }
+  });
+
+  test('house-planner: each upstairs bedroom has exactly one way in', () => {
+    // The landing alcove serves the north-west bedroom only; without its south
+    // wall the two west bedrooms run together and one reads as having two doors.
+    const south = data.walls.find((w) => w.id === 'ff-alcove-south');
+    const side = data.walls.find((w) => w.id === 'ff-alcove');
+    assert(south && side, 'the alcove is enclosed on its south and west sides');
+    assert(Math.abs(south.a[0] - side.a[0]) < 0.02,
+      'the alcove south wall starts where its west wall stands');
+    const spine = data.walls.find((w) => w.id === 'ff-spine');
+    assert(Math.abs(south.b[0] - spine.a[0]) < 0.02,
+      'the alcove south wall runs all the way to the landing wall');
+    const doors = data.openings.filter(
+      (o) => o.type !== 'window'
+        && ['ff-spine', 'ff-beds', 'ff-landing-se', 'ff-alcove', 'ff-alcove-south'].includes(o.wall),
+    );
+    assertEqual(doors.length, 3, 'three bedrooms, three doors — no more');
+  });
+
+  test('house-planner: no chimney breast stands in front of a window', () => {
+    const byId = new Map(data.walls.map((w) => [w.id, w]));
+    for (const f of data.features.filter((x) => x.type === 'chimneyBreast')) {
+      assert(['minX', 'maxX', 'minY', 'maxY'].includes(f.side),
+        `${f.id} has no side, so it would default onto the front wall`);
+      const room = data.rooms.find((r) => r.id === f.room);
+      const [x0, y0, x1, y1] = room.rect;
+      const vertical = f.side === 'minX' || f.side === 'maxX';
+      // Footprint of the breast in plan.
+      const bx0 = vertical ? (f.side === 'maxX' ? x1 - f.projection : x0) : (x0 + x1) / 2 - f.width / 2;
+      const bx1 = vertical ? (f.side === 'maxX' ? x1 : x0 + f.projection) : (x0 + x1) / 2 + f.width / 2;
+      const by0 = vertical ? (y0 + y1) / 2 - f.width / 2 : (f.side === 'maxY' ? y1 - f.projection : y0);
+      const by1 = vertical ? (y0 + y1) / 2 + f.width / 2 : (f.side === 'maxY' ? y1 : y0 + f.projection);
+      for (const o of data.openings) {
+        if (o.type !== 'window') continue;
+        const w = byId.get(o.wall);
+        if (!w || w.level !== room.level) continue;
+        const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);
+        const ux = (w.b[0] - w.a[0]) / len;
+        const uy = (w.b[1] - w.a[1]) / len;
+        const sx = w.a[0] + ux * (o.at - o.width / 2);
+        const sy = w.a[1] + uy * (o.at - o.width / 2);
+        const ex = w.a[0] + ux * (o.at + o.width / 2);
+        const ey = w.a[1] + uy * (o.at + o.width / 2);
+        const wx0 = Math.min(sx, ex);
+        const wx1 = Math.max(sx, ex);
+        const wy0 = Math.min(sy, ey);
+        const wy1 = Math.max(sy, ey);
+        const clash = bx0 < wx1 - 0.05 && wx0 < bx1 - 0.05 && by0 < wy1 - 0.05 && wy0 < by1 - 0.05;
+        assert(!clash, `${f.id} stands in front of window ${o.id}`);
+      }
+    }
+  });
+
   test('house-planner: no wall is a zero-length stub', () => {
     for (const w of data.walls) {
       const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);

@@ -50,12 +50,12 @@ function segmentBox(a, b, thickness, base, height, color, opts) {
 const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 
 /** One wall, split around its openings. Returns meshes + a plan-space collider. */
-function buildWall(wall, openings, level, defaults) {
+function buildWall(wall, openings, level, defaults, wallHeight) {
   const meshes = [];
   const thickness = wall.kind === 'internal' ? defaults.wallInternal : defaults.wallExternal;
   const color = PALETTE[wall.kind] ?? PALETTE.internal;
   const base = level.elevation;
-  const top = level.ceilingHeight;
+  const top = wall.height ?? wallHeight ?? level.ceilingHeight;
   const len = Math.hypot(wall.b[0] - wall.a[0], wall.b[1] - wall.a[1]);
 
   const mine = openings
@@ -284,11 +284,21 @@ export function buildModel(data, { removed = new Set() } = {}) {
     levelGroups.get(room.level).add(slab);
   }
 
+  // Height a level's walls rise to: the floor of the storey above, where there
+  // is one, so nothing shows through the structural zone between floors.
+  const wallTopFor = new Map();
+  data.levels.forEach((l, i) => {
+    const next = data.levels[i + 1];
+    wallTopFor.set(l.id, next ? next.elevation - l.elevation : l.ceilingHeight);
+  });
+
   for (const wall of data.walls) {
     if (removed.has(wall.id)) continue;
     const level = byId.get(wall.level);
     if (!level) continue;
-    const { meshes, collider } = buildWall(wall, data.openings, level, data.defaults);
+    const { meshes, collider } = buildWall(
+      wall, data.openings, level, data.defaults, wallTopFor.get(wall.level),
+    );
     meshes.forEach((m) => { m.userData.wall = wall.id; levelGroups.get(wall.level).add(m); });
     colliders.push(collider);
   }
@@ -298,9 +308,17 @@ export function buildModel(data, { removed = new Set() } = {}) {
     const room = data.rooms.find((r) => r.id === f.room);
     const level = byId.get(room?.level);
     if (!room || !level) continue;
-    const [x0, y0, x1] = room.rect;
-    const b = box(f.width, level.ceilingHeight, f.projection, PALETTE.chimney);
-    b.position.copy(v((x0 + x1) / 2, level.elevation + level.ceilingHeight / 2, y0 + f.projection / 2));
+    const [x0, y0, x1, y1] = room.rect;
+    // A breast sits against the wall named by `side`. Ignoring this put every
+    // breast on the front wall, standing in front of the windows.
+    const p = f.projection;
+    let bw; let bd; let cx; let cy;
+    if (f.side === 'maxX') { bw = p; bd = f.width; cx = x1 - p / 2; cy = (y0 + y1) / 2; }
+    else if (f.side === 'minX') { bw = p; bd = f.width; cx = x0 + p / 2; cy = (y0 + y1) / 2; }
+    else if (f.side === 'maxY') { bw = f.width; bd = p; cx = (x0 + x1) / 2; cy = y1 - p / 2; }
+    else { bw = f.width; bd = p; cx = (x0 + x1) / 2; cy = y0 + p / 2; }
+    const b = box(bw, level.ceilingHeight, bd, PALETTE.chimney);
+    b.position.copy(v(cx, level.elevation + level.ceilingHeight / 2, cy));
     levelGroups.get(room.level).add(b);
   }
 
