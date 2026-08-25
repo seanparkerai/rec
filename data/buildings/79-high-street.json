@@ -1190,31 +1190,265 @@
     "height": 1.15,
     "thickness": 0.34,
     "material": "brick",
-    "note": "Owner-confirmed brick boundary walls to the road frontages, carrying the Russell Mill Lane street sign in the photographs.",
+    "note": "Brick boundary walls to the road frontages. The west run stops at 79a and picks up on the far side \u2014 the title line passes through that building, but no wall does.",
+    "cornerRadius": 2.0,
     "segments": [
       {
-        "id": "bw-front",
+        "id": "bw-front-a",
         "a": [
-          -1.05,
+          0.95,
           -9.4
+        ],
+        "b": [
+          1.65,
+          -9.32
+        ]
+      },
+      {
+        "id": "bw-front-b",
+        "a": [
+          2.64,
+          -9.2
+        ],
+        "b": [
+          6.61,
+          -8.74
+        ]
+      },
+      {
+        "id": "bw-front-c",
+        "a": [
+          10.19,
+          -8.33
         ],
         "b": [
           13.9,
           -7.9
-        ],
-        "note": "Frontage wall"
+        ]
       },
       {
-        "id": "bw-west",
+        "id": "bw-curve-0",
+        "a": [
+          -1.05,
+          -7.4
+        ],
+        "b": [
+          -1.03,
+          -7.66
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-1",
+        "a": [
+          -1.03,
+          -7.66
+        ],
+        "b": [
+          -0.98,
+          -7.92
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-2",
+        "a": [
+          -0.98,
+          -7.92
+        ],
+        "b": [
+          -0.9,
+          -8.17
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-3",
+        "a": [
+          -0.9,
+          -8.17
+        ],
+        "b": [
+          -0.78,
+          -8.4
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-4",
+        "a": [
+          -0.78,
+          -8.4
+        ],
+        "b": [
+          -0.64,
+          -8.62
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-5",
+        "a": [
+          -0.64,
+          -8.62
+        ],
+        "b": [
+          -0.46,
+          -8.81
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-6",
+        "a": [
+          -0.46,
+          -8.81
+        ],
+        "b": [
+          -0.27,
+          -8.99
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-7",
+        "a": [
+          -0.27,
+          -8.99
+        ],
+        "b": [
+          -0.05,
+          -9.13
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-8",
+        "a": [
+          -0.05,
+          -9.13
+        ],
+        "b": [
+          0.18,
+          -9.25
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-9",
+        "a": [
+          0.18,
+          -9.25
+        ],
+        "b": [
+          0.43,
+          -9.33
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-10",
+        "a": [
+          0.43,
+          -9.33
+        ],
+        "b": [
+          0.69,
+          -9.38
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-curve-11",
+        "a": [
+          0.69,
+          -9.38
+        ],
+        "b": [
+          0.95,
+          -9.4
+        ],
+        "curved": true
+      },
+      {
+        "id": "bw-west-rear",
         "a": [
           -1.01,
           7.22
         ],
         "b": [
-          -1.05,
-          -9.4
+          -1.03,
+          6.95
         ],
-        "note": "Wall down the flank past 79a"
+        "note": "Pier north of the side gate"
+      },
+      {
+        "id": "bw-west-pier",
+        "a": [
+          -1.03,
+          5.75
+        ],
+        "b": [
+          -1.03,
+          5.65
+        ],
+        "note": "Pier where the wall meets 79a"
+      },
+      {
+        "id": "bw-west-south",
+        "a": [
+          -1.03,
+          -4.45
+        ],
+        "b": [
+          -1.05,
+          -7.4
+        ],
+        "note": "Resumes south of 79a and runs into the curve"
+      }
+    ],
+    "gates": [
+      {
+        "id": "gate-drive",
+        "a": [
+          6.61,
+          -8.74
+        ],
+        "b": [
+          10.19,
+          -8.33
+        ],
+        "kind": "fivebar",
+        "height": 1.25,
+        "note": "Large green five-bar gate across the gravel drive."
+      },
+      {
+        "id": "gate-corner",
+        "a": [
+          1.65,
+          -9.32
+        ],
+        "b": [
+          2.64,
+          -9.2
+        ],
+        "kind": "pedestrian",
+        "height": 1.15,
+        "note": "Small green gate on the wall near the curved corner."
+      },
+      {
+        "id": "gate-side",
+        "a": [
+          -1.03,
+          6.95
+        ],
+        "b": [
+          -1.03,
+          5.75
+        ],
+        "kind": "pedestrian",
+        "height": 1.15,
+        "note": "Green gate down the side of the property."
       }
     ]
   }

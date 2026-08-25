@@ -19,6 +19,7 @@ const PALETTE = {
   stair: 0xbfae97,
   brick: 0xa8705a,
   frame: 0xf4f2ed,
+  gate: 0x2f5d3f,
   garageDoor: 0xefebe2,
   door: 0x8a6a4a,
 };
@@ -438,6 +439,41 @@ export function buildModel(data, { removed = new Set() } = {}) {
     for (const seg of bw.segments) {
       const mesh = segmentBox(seg.a, seg.b, bw.thickness, 0, bw.height, PALETTE.brick);
       if (mesh) g.add(mesh);
+      // Rounded coping on the straight runs, as the photographs show.
+      const cap = segmentBox(seg.a, seg.b, bw.thickness + 0.05, bw.height, 0.06, PALETTE.brick);
+      if (cap) g.add(cap);
+    }
+
+    for (const gate of bw.gates ?? []) {
+      const len = Math.hypot(gate.b[0] - gate.a[0], gate.b[1] - gate.a[1]);
+      const h = gate.height;
+      const add = (t0, t1, base, height, thick) => {
+        const m = segmentBox(lerp(gate.a, gate.b, t0), lerp(gate.a, gate.b, t1),
+          thick, base, height, PALETTE.gate);
+        if (m) g.add(m);
+      };
+      const postW = 0.1 / len;
+      add(0, postW, 0, h + 0.12, 0.1);            // hanging post
+      add(1 - postW, 1, 0, h + 0.12, 0.1);        // slamming post
+      if (gate.kind === 'fivebar') {
+        for (let i = 0; i < 5; i += 1) {
+          add(0, 1, 0.12 + i * ((h - 0.2) / 4), 0.07, 0.05);
+        }
+        // Diagonal brace, raked across the opening.
+        const brace = box(0.05, 0.06, Math.hypot(len, h - 0.3), PALETTE.gate);
+        brace.position.copy(v((gate.a[0] + gate.b[0]) / 2, h / 2, (gate.a[1] + gate.b[1]) / 2));
+        brace.rotation.y = Math.atan2(gate.b[1] - gate.a[1], gate.b[0] - gate.a[0]) + Math.PI / 2;
+        brace.rotation.x = Math.atan2(h - 0.3, len);
+        g.add(brace);
+      } else {
+        const palings = Math.max(4, Math.round(len / 0.13));
+        for (let i = 0; i < palings; i += 1) {
+          const f = (i + 0.5) / palings;
+          add(f - 0.035 / len, f + 0.035 / len, 0, h, 0.04);
+        }
+        add(0, 1, h - 0.22, 0.06, 0.05);
+        add(0, 1, 0.25, 0.06, 0.05);
+      }
     }
     root.add(g);
   }

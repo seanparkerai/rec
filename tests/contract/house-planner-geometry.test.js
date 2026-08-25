@@ -453,18 +453,60 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
-  test('house-planner: the brick boundary walls follow the parcel edge', () => {
+  test('house-planner: no boundary wall runs through 79a', () => {
     const bw = data.boundaryWalls;
-    assert(bw && bw.segments.length >= 2, 'the owner\'s boundary walls are modelled');
-    assert(bw.height > 0.8 && bw.height < 2.0, `a ${bw.height}m boundary wall is not a boundary wall`);
-    const onPlot = (pt) => data.plot.polygon.some(
-      (q) => Math.hypot(q[0] - pt[0], q[1] - pt[1]) < 0.05,
-    );
+    assert(bw && bw.segments.length > 0, 'the boundary walls are modelled');
+    const x0 = Math.min(...data.structures.map((s2) => s2.rect[0]));
+    const x1 = Math.max(...data.structures.map((s2) => s2.rect[2]));
+    const y0 = Math.min(...data.structures.map((s2) => s2.rect[1]));
+    const y1 = Math.max(...data.structures.map((s2) => s2.rect[3]));
     for (const seg of bw.segments) {
-      assert(onPlot(seg.a) && onPlot(seg.b),
-        `${seg.id} does not run between two parcel corners`);
-      assert(Math.hypot(seg.b[0] - seg.a[0], seg.b[1] - seg.a[1]) > 2,
-        `${seg.id} is too short to be a frontage wall`);
+      const sx0 = Math.min(seg.a[0], seg.b[0]);
+      const sx1 = Math.max(seg.a[0], seg.b[0]);
+      const sy0 = Math.min(seg.a[1], seg.b[1]);
+      const sy1 = Math.max(seg.a[1], seg.b[1]);
+      const through = sx0 < x1 - 0.01 && x0 < sx1 - 0.01 && sy0 < y1 - 0.01 && y0 < sy1 - 0.01;
+      assert(!through, `${seg.id} runs through the commercial building`);
+    }
+  });
+
+  test('house-planner: three green gates, in the right places', () => {
+    const gates = data.boundaryWalls.gates;
+    assertEqual(gates.length, 3, 'a drive gate, a corner gate and a side gate');
+    const byId = new Map(gates.map((g) => [g.id, g]));
+    const len = (g) => Math.hypot(g.b[0] - g.a[0], g.b[1] - g.a[1]);
+    const drive = byId.get('gate-drive');
+    assertEqual(drive.kind, 'fivebar', 'the drive gate is a five-bar');
+    assert(len(drive) > 2.8, `a ${len(drive).toFixed(2)}m drive gate is too narrow for a car`);
+    for (const id of ['gate-corner', 'gate-side']) {
+      const g = byId.get(id);
+      assert(g, `${id} is modelled`);
+      assertEqual(g.kind, 'pedestrian', `${id} is a pedestrian gate`);
+      assert(len(g) > 0.8 && len(g) < 1.6, `${id} at ${len(g).toFixed(2)}m is not a pedestrian gate`);
+    }
+    // Every gate must sit in a real break in the wall, not on top of brickwork.
+    for (const g of gates) {
+      for (const seg of data.boundaryWalls.segments) {
+        const overlap = Math.min(Math.max(g.a[0], g.b[0]), Math.max(seg.a[0], seg.b[0]))
+          - Math.max(Math.min(g.a[0], g.b[0]), Math.min(seg.a[0], seg.b[0]));
+        const overlapY = Math.min(Math.max(g.a[1], g.b[1]), Math.max(seg.a[1], seg.b[1]))
+          - Math.max(Math.min(g.a[1], g.b[1]), Math.min(seg.a[1], seg.b[1]));
+        assert(!(overlap > 0.12 && overlapY > 0.12),
+          `${g.id} overlaps wall ${seg.id} — a gate needs a gap`);
+      }
+    }
+  });
+
+  test('house-planner: the corner is rounded, not mitred', () => {
+    const bw = data.boundaryWalls;
+    const curve = bw.segments.filter((s2) => s2.curved);
+    assert(curve.length >= 6, `a ${curve.length}-chord curve is too coarse to read as rounded`);
+    assert(bw.cornerRadius > 1.0 && bw.cornerRadius < 4.0,
+      `a ${bw.cornerRadius}m radius is not the sweep in the photographs`);
+    // Chords must join end to end.
+    for (let i = 0; i < curve.length - 1; i += 1) {
+      const gap = Math.hypot(curve[i + 1].a[0] - curve[i].b[0], curve[i + 1].a[1] - curve[i].b[1]);
+      assert(gap < 0.02, `the curve breaks between chord ${i} and ${i + 1}`);
     }
   });
 
