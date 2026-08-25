@@ -632,6 +632,28 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
+  test('house-planner: the renderer actually consumes what the schema declares', () => {
+    // A silent no-op edit once left the drive and hedge in the data but absent
+    // from the builder, so they never appeared. Check the wiring exists.
+    const src = readFileSync(new URL('../../assets/js/page-house-planner/build.js', import.meta.url), 'utf8');
+    for (const [key, needle] of [
+      ['surfaces', 'data.surfaces'],
+      ['boundaryWalls.hedge', 'bw.hedge'],
+      ['boundaryWalls.gates', 'bw.gates'],
+      ['plot', 'data.plot'],
+      ['stairs', 'data.stairs'],
+      ['roofs', 'data.roofs'],
+    ]) {
+      assert(src.includes(needle),
+        `the schema declares ${key} but build.js never reads it (${needle})`);
+    }
+    // And anything the data declares as a surface must have a polygon to draw.
+    for (const surf of data.surfaces ?? []) {
+      assert(Array.isArray(surf.polygon) && surf.polygon.length >= 3,
+        `surface ${surf.id} has no drawable polygon`);
+    }
+  });
+
   test('house-planner: no wall is a zero-length stub', () => {
     for (const w of data.walls) {
       const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);

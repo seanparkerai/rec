@@ -477,7 +477,35 @@ export function buildModel(data, { removed = new Set() } = {}) {
         add(0, 1, 0.25, 0.06, 0.05);
       }
     }
+    // Tall clipped hedge standing inside the frontage wall.
+    const hedge = bw.hedge;
+    if (hedge) {
+      for (const run of hedge.runs) {
+        const dx = run.b[0] - run.a[0];
+        const dy = run.b[1] - run.a[1];
+        const rl = Math.hypot(dx, dy) || 1;
+        const nx = (-dy / rl) * hedge.offset;
+        const ny = (dx / rl) * hedge.offset;
+        const m = segmentBox([run.a[0] + nx, run.a[1] + ny], [run.b[0] + nx, run.b[1] + ny],
+          hedge.thickness, 0, hedge.height, PALETTE.hedge);
+        if (m) g.add(m);
+      }
+    }
     root.add(g);
+  }
+
+  // Ground surfaces — the gravel drive. Drawn above the plot fill but below the
+  // floor slabs, so it reads as ground the buildings stand on.
+  for (const surf of data.surfaces ?? []) {
+    const shape = new THREE.Shape(surf.polygon.map(([px, py]) => new THREE.Vector2(px, py)));
+    const mesh = new THREE.Mesh(
+      new THREE.ShapeGeometry(shape),
+      new THREE.MeshLambertMaterial({ color: PALETTE.gravel }),
+    );
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.y = -0.31;
+    mesh.name = `surface-${surf.id}`;
+    root.add(mesh);
   }
 
   const roofGroup = new THREE.Group();
