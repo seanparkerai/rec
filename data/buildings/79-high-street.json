@@ -1,6 +1,6 @@
 {
   "id": "79-high-street",
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "name": "79 High Street",
   "address": {
     "line1": "79 High Street",
@@ -26,10 +26,11 @@
     "titlePlan": "HM Land Registry style plot extract",
     "siteMap": "DEFRA MAGiC map, scale 1:306",
     "records": "Council tax band D; last sold 267500 GBP on 2007-04-19",
-    "architectDrawing": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3' — NW, SE and SW elevations plus an existing 1:50 floor plan of the attached single-storey structure",
+    "architectDrawing": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3' \u2014 NW, SE and SW elevations plus an existing 1:50 floor plan of the attached single-storey structure",
     "aerial": "Marketing aerial photograph, south-west aspect",
     "interiors": "Marketing interior photographs (19 in set): living room, kitchen, dining room, bedroom",
-    "revision": "Rebuilt 2026-08-25 (3rd pass) after owner correction from the aerial: garage attached and set slightly back, bathroom lean-to shallower than the garage, 79a wrapping round the front, mobile walkthrough."
+    "revision": "Rebuilt 2026-08-25 (4th pass). Every wall, room and opening is now measured off the estate agent plan by pixel analysis at 81.04 px/m, not estimated by eye. The building is 7.26m deep, not the 8.41m previously forced; the invented rear hall is gone.",
+    "method": "PIL threshold at luminance<100, wall bands found by column/row ink density, each band's extent recovered as contiguous runs. Scale fixed from the dining room's labelled 3.64m."
   },
   "construction": {
     "walls": "red brick, exposed on the flank and rear; the south-west front is largely covered by Virginia creeper",
@@ -40,8 +41,8 @@
     "wallThicknessNote": "Inter-war brick could be solid 9-inch (230mm) or early cavity (270-300mm). Still using 300mm. An EPC or a reveal measurement at any window settles it."
   },
   "defaults": {
-    "wallExternal": 0.3,
-    "wallInternal": 0.1,
+    "wallExternal": 0.23,
+    "wallInternal": 0.17,
     "wallParty": 0.3,
     "floorThickness": 0.3,
     "doorHeight": 1.98,
@@ -64,7 +65,7 @@
       "ceilingHeight": 2.45,
       "ceilingSlope": {
         "from": "hip",
-        "note": "Ceilings slope in at the outer corners on all three bedrooms and the landing."
+        "note": "Ceilings slope in at the outer corners."
       }
     }
   ],
@@ -75,46 +76,10 @@
       "name": "Dining Room",
       "label": "3.64 x 3.64m",
       "rect": [
-        0.3,
-        0.3,
-        3.94,
-        3.94
-      ]
-    },
-    {
-      "id": "hall",
-      "level": "ground",
-      "name": "Hall & stairs",
-      "label": "",
-      "rect": [
-        4.04,
-        0.3,
-        5.84,
-        3.94
-      ]
-    },
-    {
-      "id": "living",
-      "level": "ground",
-      "name": "Living Room",
-      "label": "3.62 x 3.64m",
-      "rect": [
-        5.94,
-        0.3,
-        9.56,
-        3.94
-      ]
-    },
-    {
-      "id": "rear-hall",
-      "level": "ground",
-      "name": "Rear hall",
-      "label": "",
-      "rect": [
-        0.3,
-        4.04,
-        3.94,
-        4.99
+        0.23,
+        0.23,
+        3.87,
+        3.86
       ]
     },
     {
@@ -123,12 +88,36 @@
       "name": "Kitchen",
       "label": "3.64 x 3.02m",
       "rect": [
-        0.3,
-        5.09,
-        3.94,
-        8.11
+        0.23,
+        4.02,
+        3.87,
+        7.03
       ],
       "ceilingHeight": 2.35
+    },
+    {
+      "id": "hall",
+      "level": "ground",
+      "name": "Hall & stairs",
+      "label": "",
+      "rect": [
+        4.1,
+        0.23,
+        5.8,
+        3.86
+      ]
+    },
+    {
+      "id": "living",
+      "level": "ground",
+      "name": "Living Room",
+      "label": "3.62 x 3.64m",
+      "rect": [
+        5.97,
+        0.23,
+        9.5,
+        3.86
+      ]
     },
     {
       "id": "bathroom",
@@ -136,10 +125,10 @@
       "name": "Bathroom",
       "label": "bath, WC, basin",
       "rect": [
-        4.09,
-        4.24,
-        6.85,
-        5.8
+        4.1,
+        4.02,
+        8.35,
+        5.34
       ],
       "underLeanTo": true,
       "ceilingHeight": 2.3
@@ -150,10 +139,10 @@
       "name": "Shower room",
       "label": "",
       "rect": [
-        6.95,
-        4.24,
-        9.56,
-        5.8
+        8.53,
+        4.02,
+        9.5,
+        5.34
       ],
       "underLeanTo": true,
       "ceilingHeight": 2.3
@@ -164,10 +153,10 @@
       "name": "Double Garage",
       "label": "6.20 x 5.58m",
       "rect": [
-        9.86,
-        0.6,
-        16.06,
-        6.18
+        9.74,
+        0.23,
+        15.92,
+        5.79
       ],
       "ceilingHeight": 2.6
     },
@@ -177,11 +166,24 @@
       "name": "Bedroom",
       "label": "3.64 x 3.64m",
       "rect": [
-        0.3,
-        0.3,
-        3.94,
-        3.94
+        0.23,
+        0.23,
+        3.87,
+        2.8
       ]
+    },
+    {
+      "id": "bed-sw-b",
+      "level": "first",
+      "name": "Bedroom",
+      "label": "",
+      "rect": [
+        0.23,
+        2.8,
+        2.81,
+        3.86
+      ],
+      "partOf": "bed-sw"
     },
     {
       "id": "landing",
@@ -189,10 +191,10 @@
       "name": "Landing",
       "label": "",
       "rect": [
-        4.04,
-        0.3,
-        5.84,
-        3.94
+        4.1,
+        0.23,
+        5.8,
+        3.86
       ]
     },
     {
@@ -201,10 +203,10 @@
       "name": "Bedroom",
       "label": "3.62 x 3.64m",
       "rect": [
-        5.94,
-        0.3,
-        9.56,
-        3.94
+        5.97,
+        0.23,
+        9.58,
+        3.86
       ]
     },
     {
@@ -213,11 +215,25 @@
       "name": "Bedroom",
       "label": "3.64 x 4.07m",
       "rect": [
-        0.3,
-        4.04,
-        3.94,
-        8.11
+        0.23,
+        4.1,
+        3.87,
+        7.02
       ]
+    },
+    {
+      "id": "bed-nw-alcove",
+      "level": "first",
+      "name": "Bedroom",
+      "label": "",
+      "rect": [
+        2.96,
+        3.05,
+        3.87,
+        4.1
+      ],
+      "partOf": "bed-nw",
+      "note": "Entry alcove off the landing. Main room plus alcove is the plan's 4.07m dimension."
     }
   ],
   "walls": [
@@ -225,12 +241,12 @@
       "id": "gf-ext-front",
       "level": "ground",
       "a": [
-        0.15,
-        0.15
+        0.12,
+        0.12
       ],
       "b": [
-        9.71,
-        0.15
+        9.62,
+        0.12
       ],
       "kind": "external",
       "removable": false
@@ -239,55 +255,56 @@
       "id": "gf-ext-west",
       "level": "ground",
       "a": [
-        0.15,
-        0.15
+        0.12,
+        0.12
       ],
       "b": [
-        0.15,
-        8.26
+        0.12,
+        7.14
       ],
       "kind": "external",
       "removable": false
     },
     {
-      "id": "gf-ext-rear-left",
+      "id": "gf-ext-north",
       "level": "ground",
       "a": [
-        0.15,
-        8.26
+        0.12,
+        7.14
       ],
       "b": [
-        3.99,
-        8.26
+        3.98,
+        7.14
       ],
       "kind": "external",
-      "removable": false
+      "removable": false,
+      "note": "Back wall of the kitchen wing"
     },
     {
       "id": "gf-ext-step",
       "level": "ground",
       "a": [
-        3.99,
-        8.26
+        3.98,
+        7.14
       ],
       "b": [
-        3.99,
-        5.95
+        3.98,
+        5.46
       ],
       "kind": "external",
       "removable": false,
-      "note": "Flank of the kitchen wing, above the lean-to roof"
+      "note": "Kitchen-wing flank, above the lean-to roof"
     },
     {
-      "id": "gf-ext-leanto-rear",
+      "id": "gf-ext-leanto",
       "level": "ground",
       "a": [
-        3.99,
-        5.95
+        3.98,
+        5.46
       ],
       "b": [
-        9.71,
-        5.95
+        9.62,
+        5.46
       ],
       "kind": "external",
       "removable": false,
@@ -297,42 +314,27 @@
       "id": "gf-ext-east",
       "level": "ground",
       "a": [
-        9.71,
-        0.15
+        9.62,
+        0.12
       ],
       "b": [
-        9.71,
-        5.95
+        9.62,
+        5.46
       ],
       "kind": "external",
       "removable": false,
       "note": "Shared with the attached garage"
     },
     {
-      "id": "gf-ext-east-stub",
-      "level": "ground",
-      "a": [
-        9.71,
-        5.95
-      ],
-      "b": [
-        9.71,
-        6.33
-      ],
-      "kind": "external",
-      "removable": false,
-      "note": "Garage flank beyond the lean-to"
-    },
-    {
       "id": "gar-front",
       "level": "ground",
       "a": [
-        9.71,
-        0.45
+        9.62,
+        0.12
       ],
       "b": [
-        16.21,
-        0.45
+        16.04,
+        0.12
       ],
       "kind": "external",
       "removable": false
@@ -341,130 +343,115 @@
       "id": "gar-east",
       "level": "ground",
       "a": [
-        16.21,
-        0.45
+        16.04,
+        0.12
       ],
       "b": [
-        16.21,
-        6.33
+        16.04,
+        5.9
       ],
       "kind": "external",
       "removable": false
     },
     {
-      "id": "gar-rear",
+      "id": "gar-north",
       "level": "ground",
       "a": [
-        9.71,
-        6.33
+        9.62,
+        5.9
       ],
       "b": [
-        16.21,
-        6.33
+        16.04,
+        5.9
       ],
       "kind": "external",
       "removable": false
+    },
+    {
+      "id": "gf-ext-east-stub",
+      "level": "ground",
+      "a": [
+        9.62,
+        5.46
+      ],
+      "b": [
+        9.62,
+        5.9
+      ],
+      "kind": "external",
+      "removable": false,
+      "note": "Garage flank beyond the lean-to"
     },
     {
       "id": "gf-spine",
       "level": "ground",
       "a": [
-        3.99,
-        0.15
+        3.98,
+        0.12
       ],
       "b": [
-        3.99,
-        5.95
+        3.98,
+        5.46
       ],
       "kind": "internal",
-      "removable": true,
-      "note": "West column to hall"
+      "note": "Dining and kitchen to the hall",
+      "removable": true
     },
     {
-      "id": "gf-dining-rear",
+      "id": "gf-mid",
       "level": "ground",
       "a": [
-        0.15,
-        3.99
+        0.12,
+        3.94
       ],
       "b": [
-        3.99,
-        3.99
+        9.62,
+        3.94
       ],
       "kind": "internal",
-      "removable": true,
-      "note": "Dining to rear hall"
-    },
-    {
-      "id": "gf-rear-kitchen",
-      "level": "ground",
-      "a": [
-        0.15,
-        5.04
-      ],
-      "b": [
-        3.99,
-        5.04
-      ],
-      "kind": "internal",
-      "removable": true,
-      "note": "Rear hall to kitchen"
+      "note": "Front rooms to the rear \u2014 carries the first floor",
+      "removable": false
     },
     {
       "id": "gf-hall-living",
       "level": "ground",
       "a": [
-        5.89,
-        0.15
+        5.88,
+        0.12
       ],
       "b": [
-        5.89,
-        4.09
+        5.88,
+        3.94
       ],
       "kind": "internal",
-      "removable": true,
-      "note": "Hall to living room"
-    },
-    {
-      "id": "gf-living-rear",
-      "level": "ground",
-      "a": [
-        3.99,
-        4.09
-      ],
-      "b": [
-        9.71,
-        4.09
-      ],
-      "kind": "internal",
-      "removable": false,
-      "note": "Back wall of the front rooms — carries the lean-to and the first floor above"
+      "note": "Hall to living room",
+      "removable": true
     },
     {
       "id": "gf-bath-shower",
       "level": "ground",
       "a": [
-        6.9,
-        4.09
+        8.44,
+        3.94
       ],
       "b": [
-        6.9,
-        5.95
+        8.44,
+        5.46
       ],
       "kind": "internal",
-      "removable": true,
-      "note": "Bathroom to shower room"
+      "note": "Bathroom to shower room",
+      "removable": true
     },
     {
       "id": "ff-ext-front",
       "level": "first",
       "a": [
-        0.15,
-        0.15
+        0.12,
+        0.11
       ],
       "b": [
-        9.71,
-        0.15
+        9.62,
+        0.11
       ],
       "kind": "external",
       "removable": false
@@ -473,26 +460,26 @@
       "id": "ff-ext-west",
       "level": "first",
       "a": [
-        0.15,
-        0.15
+        0.12,
+        0.11
       ],
       "b": [
-        0.15,
-        8.26
+        0.12,
+        7.14
       ],
       "kind": "external",
       "removable": false
     },
     {
-      "id": "ff-ext-rear-left",
+      "id": "ff-ext-north",
       "level": "first",
       "a": [
-        0.15,
-        8.26
+        0.12,
+        7.14
       ],
       "b": [
-        3.99,
-        8.26
+        3.98,
+        7.14
       ],
       "kind": "external",
       "removable": false
@@ -501,26 +488,27 @@
       "id": "ff-ext-step",
       "level": "first",
       "a": [
-        3.99,
-        8.26
+        3.98,
+        7.14
       ],
       "b": [
-        3.99,
-        4.09
+        3.98,
+        3.98
       ],
       "kind": "external",
-      "removable": false
+      "removable": false,
+      "note": "Flank above the lean-to"
     },
     {
-      "id": "ff-ext-rear-right",
+      "id": "ff-ext-north-right",
       "level": "first",
       "a": [
-        3.99,
-        4.09
+        3.98,
+        3.98
       ],
       "b": [
-        9.71,
-        4.09
+        9.62,
+        3.98
       ],
       "kind": "external",
       "removable": false
@@ -529,12 +517,12 @@
       "id": "ff-ext-east",
       "level": "first",
       "a": [
-        9.71,
-        0.15
+        9.62,
+        0.11
       ],
       "b": [
-        9.71,
-        4.09
+        9.62,
+        3.98
       ],
       "kind": "external",
       "removable": false
@@ -543,262 +531,231 @@
       "id": "ff-spine",
       "level": "first",
       "a": [
-        3.99,
-        0.15
+        3.98,
+        0.11
       ],
       "b": [
-        3.99,
-        4.09
+        3.98,
+        3.98
       ],
       "kind": "internal",
+      "note": "Landing to the west bedrooms",
       "removable": true
     },
     {
       "id": "ff-beds",
       "level": "first",
       "a": [
-        0.15,
-        3.99
+        0.12,
+        3.98
       ],
       "b": [
-        3.99,
-        3.99
+        2.88,
+        3.98
       ],
       "kind": "internal",
-      "removable": true,
-      "note": "Between the two west bedrooms"
+      "note": "Between the two west bedrooms",
+      "removable": true
+    },
+    {
+      "id": "ff-alcove",
+      "level": "first",
+      "a": [
+        2.88,
+        2.8
+      ],
+      "b": [
+        2.88,
+        4.1
+      ],
+      "kind": "internal",
+      "note": "Alcove side wall",
+      "removable": true
     },
     {
       "id": "ff-landing-se",
       "level": "first",
       "a": [
-        5.89,
-        0.15
+        5.88,
+        0.11
       ],
       "b": [
-        5.89,
-        4.09
+        5.88,
+        3.98
       ],
       "kind": "internal",
-      "removable": true,
-      "note": "Landing to south-east bedroom"
+      "note": "Landing to south-east bedroom",
+      "removable": true
     }
   ],
   "openings": [
     {
-      "id": "d-front",
-      "wall": "gf-ext-front",
-      "type": "door",
-      "at": 4.75,
-      "width": 0.95,
-      "note": "Front door under the porch canopy"
-    },
-    {
       "id": "w-dining-front",
       "wall": "gf-ext-front",
       "type": "window",
-      "at": 1.85,
-      "width": 1.6
+      "at": 1.99,
+      "width": 1.38
+    },
+    {
+      "id": "d-front",
+      "wall": "gf-ext-front",
+      "type": "door",
+      "at": 4.85,
+      "width": 0.74,
+      "note": "Front door"
     },
     {
       "id": "w-living-front",
       "wall": "gf-ext-front",
       "type": "window",
-      "at": 7.55,
-      "width": 1.7
+      "at": 7.77,
+      "width": 1.39
     },
     {
-      "id": "w-dining-west",
-      "wall": "gf-ext-west",
+      "id": "w-kitchen-north",
+      "wall": "gf-ext-north",
       "type": "window",
-      "at": 2.05,
-      "width": 1.2
-    },
-    {
-      "id": "w-kitchen-west",
-      "wall": "gf-ext-west",
-      "type": "window",
-      "at": 6.6,
-      "width": 1.6,
+      "at": 1.98,
+      "width": 1.1,
       "note": "Over the sink"
     },
     {
       "id": "d-back",
-      "wall": "gf-ext-rear-left",
+      "wall": "gf-ext-step",
       "type": "door",
-      "at": 2.6,
-      "width": 0.9,
-      "note": "Back door off the kitchen"
+      "at": 0.74,
+      "width": 0.74,
+      "note": "Back door out of the kitchen"
     },
     {
-      "id": "w-kitchen-rear",
-      "wall": "gf-ext-rear-left",
+      "id": "w-bath-a",
+      "wall": "gf-ext-leanto",
       "type": "window",
-      "at": 1.1,
-      "width": 1
+      "at": 1.48,
+      "width": 0.77
     },
     {
-      "id": "w-bath-rear",
-      "wall": "gf-ext-leanto-rear",
+      "id": "w-bath-b",
+      "wall": "gf-ext-leanto",
       "type": "window",
-      "at": 1.6,
-      "width": 0.7
+      "at": 3.24,
+      "width": 0.76
     },
     {
-      "id": "w-shower-rear",
-      "wall": "gf-ext-leanto-rear",
+      "id": "w-shower",
+      "wall": "gf-ext-leanto",
       "type": "window",
-      "at": 4.2,
-      "width": 0.6
-    },
-    {
-      "id": "w-living-east",
-      "wall": "gf-ext-east",
-      "type": "window",
-      "at": 2.1,
-      "width": 1.2
-    },
-    {
-      "id": "d-garage-link",
-      "wall": "gf-ext-east",
-      "type": "door",
-      "at": 4.8,
-      "width": 0.85,
-      "note": "Shower room through to the garage"
+      "at": 5.17,
+      "width": 0.77
     },
     {
       "id": "gar-door-l",
       "wall": "gar-front",
       "type": "garage",
-      "at": 1.85,
-      "width": 2.45
+      "at": 1.72,
+      "width": 2.41
     },
     {
       "id": "gar-door-r",
       "wall": "gar-front",
       "type": "garage",
-      "at": 4.7,
-      "width": 2.45
+      "at": 4.86,
+      "width": 2.42
+    },
+    {
+      "id": "d-garage-back",
+      "wall": "gar-north",
+      "type": "door",
+      "at": 3.26,
+      "width": 0.74,
+      "note": "Personnel door at the back of the garage"
     },
     {
       "id": "d-dining",
       "wall": "gf-spine",
       "type": "door",
-      "at": 2.3,
-      "width": 0.83
+      "at": 0.8,
+      "width": 0.74
     },
     {
-      "id": "d-rear-hall",
-      "wall": "gf-spine",
+      "id": "d-kitchen-dining",
+      "wall": "gf-mid",
       "type": "door",
-      "at": 4.55,
-      "width": 0.83
+      "at": 1.27,
+      "width": 0.75
     },
     {
-      "id": "d-dining-rear",
-      "wall": "gf-dining-rear",
+      "id": "d-hall-bath",
+      "wall": "gf-mid",
       "type": "door",
-      "at": 3.2,
-      "width": 0.83
-    },
-    {
-      "id": "d-rear-kitchen",
-      "wall": "gf-rear-kitchen",
-      "type": "door",
-      "at": 3.2,
-      "width": 0.9
+      "at": 5.43,
+      "width": 0.79
     },
     {
       "id": "d-living",
       "wall": "gf-hall-living",
       "type": "door",
-      "at": 1.1,
-      "width": 0.83
+      "at": 0.78,
+      "width": 0.74
     },
     {
-      "id": "d-hall-bath",
-      "wall": "gf-living-rear",
-      "type": "door",
-      "at": 0.9,
-      "width": 0.83,
-      "note": "Hall through to the bathroom"
-    },
-    {
-      "id": "d-bath-shower",
+      "id": "d-shower",
       "wall": "gf-bath-shower",
       "type": "door",
-      "at": 0.95,
-      "width": 0.76
+      "at": 0.55,
+      "width": 0.72,
+      "note": "Not resolvable on the plan \u2014 placed so the shower room is reachable"
     },
     {
       "id": "w-bed-sw-front",
       "wall": "ff-ext-front",
       "type": "window",
-      "at": 1.85,
-      "width": 1.6
+      "at": 2.02,
+      "width": 1.64
     },
     {
       "id": "w-landing-front",
       "wall": "ff-ext-front",
       "type": "window",
-      "at": 4.75,
-      "width": 1
+      "at": 4.9,
+      "width": 0.76
     },
     {
       "id": "w-bed-se-front",
       "wall": "ff-ext-front",
       "type": "window",
-      "at": 7.55,
-      "width": 1.7
+      "at": 7.77,
+      "width": 1.44
     },
     {
-      "id": "w-bed-nw-west",
-      "wall": "ff-ext-west",
+      "id": "w-bed-nw-east",
+      "wall": "ff-ext-step",
       "type": "window",
-      "at": 6,
-      "width": 1.4
-    },
-    {
-      "id": "w-bed-nw-rear",
-      "wall": "ff-ext-rear-left",
-      "type": "window",
-      "at": 1.9,
-      "width": 1.3
-    },
-    {
-      "id": "w-landing-rear",
-      "wall": "ff-ext-rear-right",
-      "type": "window",
-      "at": 1.6,
-      "width": 0.9
-    },
-    {
-      "id": "w-bed-se-east",
-      "wall": "ff-ext-east",
-      "type": "window",
-      "at": 2.1,
-      "width": 1.2
+      "at": 1.63,
+      "width": 1.33,
+      "note": "The NW bedroom's only window"
     },
     {
       "id": "d-bed-sw",
       "wall": "ff-spine",
       "type": "door",
-      "at": 2.4,
-      "width": 0.83
+      "at": 0.74,
+      "width": 0.74
     },
     {
       "id": "d-bed-nw",
-      "wall": "ff-beds",
+      "wall": "ff-spine",
       "type": "door",
-      "at": 3.3,
-      "width": 0.83
+      "at": 3.43,
+      "width": 0.74,
+      "note": "Into the alcove, then the NW bedroom"
     },
     {
       "id": "d-bed-se",
       "wall": "ff-landing-se",
       "type": "door",
-      "at": 1.15,
-      "width": 0.83
+      "at": 0.79,
+      "width": 0.74
     }
   ],
   "stairs": {
@@ -807,17 +764,17 @@
     "from": "hall",
     "to": "landing",
     "footprint": [
-      4.14,
-      0.8,
-      5.74,
-      4
+      4.22,
+      0.73,
+      5.7,
+      3.81
     ],
     "direction": "+y",
     "risers": 14,
-    "treadGoing": 0.23,
-    "width": 1.6,
+    "treadGoing": 0.215,
+    "width": 1.4,
     "winderAtTop": true,
-    "note": "Straight flight rising towards the rear, winding at the top onto the landing."
+    "note": "Rises towards the rear of the hall, winding at the top onto the landing."
   },
   "roofs": [
     {
@@ -826,8 +783,8 @@
       "rect": [
         0,
         0,
-        9.86,
-        4.24
+        9.74,
+        4.1
       ],
       "eaves": 5.4,
       "pitchDeg": 38,
@@ -838,9 +795,9 @@
       "type": "hipped",
       "rect": [
         0,
-        4.24,
-        3.94,
-        8.41
+        4.1,
+        4.1,
+        7.26
       ],
       "eaves": 5.4,
       "pitchDeg": 38,
@@ -850,25 +807,25 @@
       "id": "roof-bathroom",
       "type": "monopitch",
       "rect": [
-        3.94,
-        4.24,
-        9.86,
-        6.1
+        3.87,
+        3.86,
+        9.74,
+        5.59
       ],
-      "eaves": 2.95,
+      "eaves": 2.6,
       "pitchDeg": 15,
       "overhang": 0.25,
       "highSide": "minY",
-      "note": "Lean-to over the bathroom and shower room. Projects less than the garage, much less than the kitchen wing — owner-verified from the aerial."
+      "note": "Lean-to over the bathroom and shower. Measured rear extent 5.59m \u2014 forward of the garage at 6.02m and well forward of the kitchen wing at 7.26m."
     },
     {
       "id": "roof-garage",
       "type": "hipped",
       "rect": [
-        9.86,
-        0.3,
-        16.36,
-        6.48
+        9.5,
+        0,
+        16.15,
+        6.02
       ],
       "eaves": 2.9,
       "pitchDeg": 35,
@@ -878,22 +835,22 @@
   "roof": {
     "chimneys": [
       {
-        "id": "chy-sw",
+        "id": "chy-w",
         "x": 2.2,
-        "y": 2.1,
+        "y": 1.95,
         "width": 0.75,
         "depth": 1.05,
         "base": 5.4,
-        "top": 8.6
+        "top": 8.5
       },
       {
-        "id": "chy-ne",
+        "id": "chy-e",
         "x": 7.6,
-        "y": 2.1,
+        "y": 1.95,
         "width": 0.75,
         "depth": 1.05,
         "base": 5.4,
-        "top": 8.6
+        "top": 8.5
       }
     ]
   },
@@ -902,41 +859,23 @@
       "id": "breast-living",
       "type": "chimneyBreast",
       "room": "living",
-      "side": "minY",
-      "width": 1.65,
-      "projection": 0.42,
-      "note": "Stone-clad surround, wood-burning stove, alcove each side."
-    },
-    {
-      "id": "breast-dining",
-      "type": "chimneyBreast",
-      "room": "dining",
-      "side": "minY",
-      "width": 1.55,
-      "projection": 0.4,
-      "note": "Brick fireplace with timber mantel and alcove shelving."
-    },
-    {
-      "id": "breast-bed-se",
-      "type": "chimneyBreast",
-      "room": "bed-se",
-      "side": "minY",
+      "side": "maxX",
       "width": 1.2,
-      "projection": 0.35,
-      "note": "Cast-iron bedroom fireplace."
+      "projection": 0.28,
+      "note": "Detected on the plan in the living room east wall \u2014 stone surround, wood-burning stove."
     }
   ],
   "structures": [
     {
       "id": "79a-road-range",
-      "name": "79a — range along the A360",
+      "name": "79a \u2014 range along the A360",
       "storeys": 1,
-      "ceilingHeight": 3,
+      "ceilingHeight": 3.0,
       "rect": [
         -12.6,
         -1.5,
         -5.6,
-        9.2
+        8.0
       ],
       "estimated": true,
       "roof": {
@@ -947,14 +886,14 @@
     },
     {
       "id": "79a-link",
-      "name": "79a — connecting part",
+      "name": "79a \u2014 connecting part",
       "storeys": 1,
       "ceilingHeight": 2.8,
       "rect": [
         -5.6,
-        2,
-        0,
-        8.6
+        2.0,
+        0.0,
+        7.0
       ],
       "estimated": true,
       "roof": {
@@ -966,14 +905,14 @@
     },
     {
       "id": "79a-front-wrap",
-      "name": "79a — front return",
+      "name": "79a \u2014 front return",
       "storeys": 1,
       "ceilingHeight": 2.8,
       "rect": [
         -5.6,
         -3.4,
         0.8,
-        0
+        0.0
       ],
       "estimated": true,
       "roof": {
@@ -981,7 +920,7 @@
         "pitchDeg": 20,
         "highSide": "maxY"
       },
-      "note": "Owner correction: 79a wraps round the front of the house, returning past the south-west corner. Stops short of the dining-room window."
+      "note": "Wraps round the front, stopping short of the dining-room window."
     }
   ],
   "scenarios": [
@@ -994,16 +933,13 @@
       "id": "kitchen-diner",
       "name": "Open kitchen-diner",
       "remove": [
-        "gf-dining-rear",
-        "gf-rear-kitchen"
+        "gf-mid"
       ]
     },
     {
       "id": "open-plan-gf",
       "name": "Open-plan ground floor",
       "remove": [
-        "gf-dining-rear",
-        "gf-rear-kitchen",
         "gf-spine",
         "gf-hall-living"
       ]
@@ -1018,61 +954,61 @@
   ],
   "assumptions": [
     {
-      "id": "C1",
-      "severity": "high",
-      "title": "The bathroom lean-to is only 1.56m deep",
-      "detail": "Forced by the owner-verified constraint that it projects less than the garage. The bath has to run along the 5.7m width rather than front-to-back. Plausible, but it is the single most worthwhile tape measure in the model: back wall of the living room to the back wall of the bathroom."
-    },
-    {
-      "id": "C2",
-      "severity": "high",
-      "title": "The plan's 4.07m and 3.02m need a 0.95m rear hall to coexist",
-      "detail": "With the floors flush at 8.41m the west column reads dining 3.64 + rear hall 0.95 + kitchen 3.02 downstairs against 3.64 + 4.07 upstairs. It balances exactly, but the rear hall is not labelled on the plan. Measure kitchen back wall to outside back wall."
-    },
-    {
-      "id": "C3",
-      "severity": "high",
-      "title": "79a is sized by proportion, not measurement",
-      "detail": "All three parts are scaled off the boundaryfinder and MAGiC extracts against the 10m bar, then adjusted for the owner note that it wraps round the front. Good to roughly a metre. How far the front return actually comes past the corner is a guess."
-    },
-    {
-      "id": "C4",
+      "id": "D1",
       "severity": "medium",
-      "title": "Garage set back 0.30m from the house front",
-      "detail": "The aerial shows the garage attached and very close to flush. A small setback is modelled so the garage rear lands clear of the lean-to. If it is truly flush, everything shifts 0.30m."
+      "title": "The shower room door is invented",
+      "detail": "No door gap was detectable on the plan for the shower room. One is placed so the room is reachable at all. Everything else on this floor comes from a measured gap in a wall."
     },
     {
-      "id": "C5",
+      "id": "D1b",
       "severity": "medium",
-      "title": "Lean-to pitch assumed at 15 degrees",
-      "detail": "Eaves 2.95m rising to meet the house wall. Consistent with the photographs but not measured."
+      "title": "No door drawn between the house and the garage",
+      "detail": "The garage is attached and shares the house east wall, but the plan shows no internal connecting door \u2014 the only garage door besides the two up-and-over doors is a personnel door in its back wall. Unusual for an attached double garage, so worth confirming."
     },
     {
-      "id": "C6",
+      "id": "D2",
+      "severity": "medium",
+      "title": "79a is still sized by proportion",
+      "detail": "All three parts are scaled off the boundaryfinder and MAGiC extracts, then adjusted for the owner note that it wraps round the front. Good to roughly a metre \u2014 the only part of the model not measured from the plan."
+    },
+    {
+      "id": "D3",
+      "severity": "medium",
+      "title": "Ceiling heights inferred from photographs",
+      "detail": "2.65m ground, 2.35m kitchen, 2.30m under the lean-to, 2.45m first floor, read from picture-rail and coving proportions. A tape measure on any one wall corrects all of them."
+    },
+    {
+      "id": "D4",
       "severity": "medium",
       "title": "Wall construction not confirmed",
-      "detail": "Inter-war brick could be solid 9-inch or early cavity. Using 300mm external. The EPC register is blocked from this environment."
+      "detail": "The plan draws external walls at 230mm and internal at 170mm, which is now what the model uses \u2014 consistent with solid 9-inch brick. An EPC would confirm."
     },
     {
-      "id": "C7",
+      "id": "D5",
       "severity": "medium",
-      "title": "Orientation derived, not given",
-      "detail": "The building run reads SW to NE off the MAGiC and title extracts, putting plan-up at bearing 315. Everything geometric is unaffected, but a sun path would be."
+      "title": "Roof pitches and eaves are assumed",
+      "detail": "Hips at 38 degrees, garage 35, lean-to 15. Footprints are measured; the third dimension is not."
     },
     {
-      "id": "C8",
+      "id": "D6",
       "severity": "low",
-      "title": "Window positions read off the plan",
-      "detail": "Widths and positions proportional; sills 0.9m, heads 2.1m throughout."
+      "title": "Net area runs 5% under the plan total",
+      "detail": "Modelled room areas sum to 128.7m2 against the plan's stated 135.4m2. Room rectangles here are internal while the plan total is gross external, and 5% is the expected gap for a house with this much wall."
     },
     {
-      "id": "C9",
+      "id": "D7",
+      "severity": "low",
+      "title": "Orientation derived, not given",
+      "detail": "The building run reads SW to NE off the MAGiC and title extracts, putting plan-up at bearing 315. Geometry is unaffected; a sun path would not be."
+    },
+    {
+      "id": "D8",
       "severity": "low",
       "title": "Stair geometry standard, not surveyed",
-      "detail": "14 risers at 210mm with a 230mm going, fitted to the hall."
+      "detail": "14 risers at 211mm with a 215mm going, fitted to the measured hall."
     },
     {
-      "id": "C10",
+      "id": "D9",
       "severity": "low",
       "title": "A panelled structure abuts the rear flank",
       "detail": "The rear photograph shows a large white panelled wall with failing paint. If that is asbestos cement it matters well beyond this model."
@@ -1080,14 +1016,36 @@
   ],
   "spawn": {
     "ground": {
-      "x": 4.94,
-      "y": 0.75,
-      "note": "Just inside the front door, looking down the hall."
+      "x": 4.95,
+      "y": 0.6
     },
     "first": {
-      "x": 4.94,
-      "y": 1,
-      "note": "On the landing at the head of the stairs."
+      "x": 4.95,
+      "y": 0.6
+    }
+  },
+  "measurementCheck": {
+    "scalePxPerM": 81.04,
+    "dining": {
+      "plan": "3.64 x 3.64",
+      "measured": "3.64 x 3.63"
+    },
+    "kitchen": {
+      "plan": "3.64 x 3.02",
+      "measured": "3.64 x 3.01"
+    },
+    "living": {
+      "plan": "3.62 x 3.64",
+      "measured": "3.53 x 3.63"
+    },
+    "garage": {
+      "plan": "6.20 x 5.58",
+      "measured": "6.18 x 5.56"
+    },
+    "rearExtents": {
+      "kitchenWing": 7.26,
+      "garage": 6.02,
+      "bathroomStrip": 5.59
     }
   }
 }
