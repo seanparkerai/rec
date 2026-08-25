@@ -414,6 +414,31 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
+  test('house-planner: the brick boundary walls follow the parcel edge', () => {
+    const bw = data.boundaryWalls;
+    assert(bw && bw.segments.length >= 2, 'the owner\'s boundary walls are modelled');
+    assert(bw.height > 0.8 && bw.height < 2.0, `a ${bw.height}m boundary wall is not a boundary wall`);
+    const onPlot = (pt) => data.plot.polygon.some(
+      (q) => Math.hypot(q[0] - pt[0], q[1] - pt[1]) < 0.05,
+    );
+    for (const seg of bw.segments) {
+      assert(onPlot(seg.a) && onPlot(seg.b),
+        `${seg.id} does not run between two parcel corners`);
+      assert(Math.hypot(seg.b[0] - seg.a[0], seg.b[1] - seg.a[1]) > 2,
+        `${seg.id} is too short to be a frontage wall`);
+    }
+  });
+
+  test('house-planner: 79a abuts the house but lies outside the parcel', () => {
+    // Settled by the 2020 planning statement: attached to, but not part of, No. 79.
+    const parts = data.structures;
+    assert(parts.every((s2) => s2.rect[2] <= 0.01), '79a never overlaps the house footprint');
+    assert(parts.some((s2) => s2.rect[2] > -0.5), '79a touches the house');
+    const westEdge = Math.min(...data.plot.polygon.map((q) => q[0]));
+    assert(Math.min(...parts.map((s2) => s2.rect[0])) < westEdge,
+      '79a extends beyond the parcel boundary, which runs between the two buildings');
+  });
+
   test('house-planner: no wall is a zero-length stub', () => {
     for (const w of data.walls) {
       const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);

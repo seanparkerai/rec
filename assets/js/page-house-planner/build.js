@@ -17,6 +17,7 @@ const PALETTE = {
   annexe: 0xc9bcab,
   glass: 0x9fc4d8,
   stair: 0xbfae97,
+  brick: 0xa8705a,
   door: 0x8a6a4a,
 };
 
@@ -326,6 +327,19 @@ export function buildModel(data, { removed = new Set() } = {}) {
     levelGroups.get(data.stairs.level).add(buildStairs(data.stairs, data.levels));
   }
   if (data.plot) root.add(buildPlot(data.plot));
+
+  // Brick boundary walls to the road frontage — the owner's, and the clearest
+  // read of where the land actually ends.
+  if (data.boundaryWalls) {
+    const bw = data.boundaryWalls;
+    const g = new THREE.Group();
+    g.name = 'boundary-walls';
+    for (const seg of bw.segments) {
+      const mesh = segmentBox(seg.a, seg.b, bw.thickness, 0, bw.height, PALETTE.brick);
+      if (mesh) g.add(mesh);
+    }
+    root.add(g);
+  }
 
   const roofGroup = new THREE.Group();
   roofGroup.name = 'roof';

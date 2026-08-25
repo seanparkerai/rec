@@ -1065,12 +1065,6 @@
       "severity": "low",
       "title": "The landing alcove is closed off by inference",
       "detail": "The plan shows no wall along the alcove's south side, which would leave the two west bedrooms running into each other. One is added so each bedroom has a single door, which is what the owner confirms. Worth checking on site."
-    },
-    {
-      "id": "D15",
-      "severity": "medium",
-      "title": "79a straddles the western boundary as modelled",
-      "detail": "The title boundary runs straight down the west side about 1.0m from the house wall. 79a is modelled touching the house, per the owner, so it crosses that line by about a metre. Either the boundary runs between the two buildings and they abut across it, or 79a stands a metre clear of the house. Nothing supplied distinguishes them."
     }
   ],
   "spawn": {
@@ -1148,7 +1142,7 @@
       "rear": 5.4,
       "west": 1.0
     },
-    "confidence": "Both images agree to within 5%. The west boundary is a straight line about 1.0m from the house wall for the full depth \u2014 there is no plot land wrapping around 79a in either sheet."
+    "confidence": "Both title-plan images agree to within 5%. The west boundary runs about 1.0m from the house wall for the full depth; 79a abuts the house across it, which the 2020 planning statement confirms (\"attached to, but not part of\" No. 79)."
   },
   "commercialBuildingSurvey": {
     "source": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3'",
@@ -1170,6 +1164,43 @@
       "source": "boundaryfinder.co.uk, scaled off building 79",
       "footprint": "10.1 x 4.6m, area 36m2, long axis 89.2 degrees to the house \u2014 i.e. perpendicular, running parallel to the road exactly as described.",
       "resolvesScale": "This supersedes the assumed 1.5m window. The real opening works out at about 1.34m, so the plan-based reading was close and the elevation-based one (21m) is wrong."
-    }
+    },
+    "address": "79A High Street, Littleton Panell",
+    "planningRef": "Mathewson Waters Architects, MWA 19110 (2020), applicant Mrs Lynn Rooke",
+    "confirmed": "A single-storey 1930s building, attached to but NOT part of No. 79. Formerly retail and hairdressing, vacant for some years. The 2020 application sought consent to replace it with a single-storey office and archive for a farming business.",
+    "siting": "On the corner of the A360 and Russell Mill Lane. Photographs show a half-timbered gable end facing the corner and a long rendered elevation with shopfront windows to the road, under a tiled multi-pitch roof.",
+    "boundaryResolved": "The title boundary runs between the two buildings: 79a abuts No. 79 across it. That is why 79a is modelled touching the house yet lying outside the parcel."
+  },
+  "boundaryWalls": {
+    "height": 1.15,
+    "thickness": 0.34,
+    "material": "brick",
+    "note": "Owner-confirmed brick boundary walls to the road frontages, carrying the Russell Mill Lane street sign in the photographs.",
+    "segments": [
+      {
+        "id": "bw-front",
+        "a": [
+          -1.05,
+          -9.4
+        ],
+        "b": [
+          13.9,
+          -7.9
+        ],
+        "note": "Frontage wall"
+      },
+      {
+        "id": "bw-west",
+        "a": [
+          -1.01,
+          7.22
+        ],
+        "b": [
+          -1.05,
+          -9.4
+        ],
+        "note": "Wall down the flank past 79a"
+      }
+    ]
   }
 }
