@@ -88,16 +88,23 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(doors.length, 2, 'two up-and-over doors, as the aerial shows');
   });
 
-  test('house-planner: the stair rises exactly one storey', () => {
-    const s = data.stairs;
-    assert(s, 'stairs are modelled');
-    const rise = data.levels[1].elevation - data.levels[0].elevation;
-    const perRiser = rise / s.risers;
+  test('house-planner: the stair fits the footprint drawn on the plan', () => {
+    const st = data.stairs;
+    const [sx0, sy0, sx1, sy1] = st.footprint;
+    assert(Math.abs((sx1 - sx0) - 0.76) < 0.05,
+      `stair is drawn 0.76m wide, modelled ${(sx1 - sx0).toFixed(2)}m`);
+    const run = st.straightRisers * st.treadGoing;
+    assert(run <= (sy1 - sy0) + 0.02,
+      `straight run ${run.toFixed(2)}m overruns its ${(sy1 - sy0).toFixed(2)}m footprint`);
+    const total = st.straightRisers + st.winderRisers;
+    const perRiser = (data.levels[1].elevation - data.levels[0].elevation) / total;
     assert(perRiser > 0.15 && perRiser < 0.22,
       `riser of ${(perRiser * 1000).toFixed(0)}mm is outside a buildable range`);
-    const run = s.risers * s.treadGoing;
-    const [, y0, , y1] = s.footprint;
-    assert(run <= (y1 - y0) + 0.5, `stair run ${run.toFixed(2)}m does not fit its ${(y1 - y0).toFixed(2)}m footprint`);
+    assert(st.treadGoing > 0.19, `going of ${(st.treadGoing * 1000).toFixed(0)}mm is too shallow`);
+    const hall = data.rooms.find((r) => r.id === 'hall');
+    const hallArea = (hall.rect[2] - hall.rect[0]) * (hall.rect[3] - hall.rect[1]);
+    assert(((sx1 - sx0) * (sy1 - sy0)) / hallArea < 0.45,
+      'the stair swallows too much of the hall');
   });
 
   test('house-planner: the bathroom sits under the lean-to, not under the first floor', () => {
@@ -117,27 +124,35 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
-  test('house-planner: 79a is modelled in three parts and never overlaps the house', () => {
-    assertEqual(data.structures.length, 3, '79a: road range, connecting part, front return');
-    const house = { x0: 0, y0: 0, x1: 9.74, y1: 7.26 };
-    for (const s of data.structures) {
-      const [x0, y0, x1, y1] = s.rect;
-      const overlaps = x0 < house.x1 - 0.01 && house.x0 < x1 - 0.01
-        && y0 < house.y1 - 0.01 && house.y0 < y1 - 0.01;
-      assert(!overlaps, `${s.id} overlaps the house footprint`);
-    }
-    const wrap = data.structures.find((s) => s.id === '79a-front-wrap');
-    assert(wrap, '79a returns round the front (owner correction)');
-    assert(wrap.rect[2] > 0, 'the front return comes past the south-west corner');
+  test('house-planner: 79a is one elongated building touching the house', () => {
+    assertEqual(data.structures.length, 1, '79a is a single building, not several');
+    const [x0, y0, x1, y1] = data.structures[0].rect;
+    const w = x1 - x0;
+    const dep = y1 - y0;
+    assert(Math.max(w, dep) / Math.min(w, dep) > 1.8,
+      `79a should read as elongated, not ${w.toFixed(1)} x ${dep.toFixed(1)}m`);
+    assert(x1 <= 0.01, '79a sits south-west of the house, not overlapping it');
+    assert(x1 > -0.5, '79a touches the house — that is what makes this read as semi-detached');
+    assert(dep > w, '79a runs longways, parallel to the road');
   });
 
-  test('house-planner: 79a front return clears the dining-room window', () => {
-    const wrap = data.structures.find((s) => s.id === '79a-front-wrap');
-    const win = data.openings.find((o) => o.id === 'w-dining-front');
-    const wall = data.walls.find((w) => w.id === win.wall);
-    const winStartX = wall.a[0] + win.at - win.width / 2;
-    assert(wrap.rect[2] <= winStartX + 0.01,
-      `the front return reaches x=${wrap.rect[2]} but the window starts at x=${winStartX.toFixed(2)}`);
+  test('house-planner: the land parcel is outlined and contains the buildings', () => {
+    const plot = data.plot;
+    assert(plot && Array.isArray(plot.polygon), 'the plot boundary is modelled');
+    assert(plot.polygon.length >= 4, 'the parcel has a real outline');
+    const area = Math.abs(plot.polygon.reduce((sum, [px, py], i) => {
+      const [nx, ny] = plot.polygon[(i + 1) % plot.polygon.length];
+      return sum + (px * ny - nx * py);
+    }, 0)) / 2;
+    assert(Math.abs(area - plot.areaM2) / plot.areaM2 < 0.05,
+      `stated ${plot.areaM2}m2 but the polygon measures ${area.toFixed(0)}m2`);
+    const xs = plot.polygon.map((p) => p[0]);
+    const ys = plot.polygon.map((p) => p[1]);
+    assert(Math.min(...xs) < 0 && Math.max(...xs) > 9.74, 'the parcel spans the house end to end');
+    assert(Math.min(...ys) < 0 && Math.max(...ys) > 7.26, 'the parcel spans the house front to back');
+    const footprint = data.rooms.reduce(
+      (s2, r) => s2 + (r.rect[2] - r.rect[0]) * (r.rect[3] - r.rect[1]), 0);
+    assert(area > footprint * 0.5, 'the parcel is bigger than the footprint standing on it');
   });
 
   test('house-planner: rear projections are ordered kitchen > garage > bathroom lean-to', () => {

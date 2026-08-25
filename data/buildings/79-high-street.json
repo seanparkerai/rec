@@ -764,17 +764,17 @@
     "from": "hall",
     "to": "landing",
     "footprint": [
-      4.22,
-      0.73,
-      5.7,
-      3.81
+      4.95,
+      1.37,
+      5.71,
+      3.12
     ],
     "direction": "+y",
-    "risers": 14,
-    "treadGoing": 0.215,
-    "width": 1.4,
-    "winderAtTop": true,
-    "note": "Rises towards the rear of the hall, winding at the top onto the landing."
+    "width": 0.76,
+    "straightRisers": 8,
+    "treadGoing": 0.219,
+    "winderRisers": 6,
+    "note": "Measured off the plan: the flight is drawn 0.76m wide over a 1.75m run in the hall, with the remaining rise turning as a winder onto the landing."
   },
   "roofs": [
     {
@@ -867,60 +867,23 @@
   ],
   "structures": [
     {
-      "id": "79a-road-range",
-      "name": "79a \u2014 range along the A360",
+      "id": "79a",
+      "name": "79a \u2014 commercial building",
       "storeys": 1,
       "ceilingHeight": 3.0,
       "rect": [
-        -12.6,
+        -4.8,
         -1.5,
-        -5.6,
-        8.0
+        0.0,
+        9.5
       ],
       "estimated": true,
       "roof": {
         "type": "gable",
-        "pitchDeg": 30
+        "pitchDeg": 30,
+        "ridgeAxis": "ns"
       },
-      "note": "The long rectangle parallel to the road."
-    },
-    {
-      "id": "79a-link",
-      "name": "79a \u2014 connecting part",
-      "storeys": 1,
-      "ceilingHeight": 2.8,
-      "rect": [
-        -5.6,
-        2.0,
-        0.0,
-        7.0
-      ],
-      "estimated": true,
-      "roof": {
-        "type": "monopitch",
-        "pitchDeg": 20,
-        "highSide": "maxX"
-      },
-      "note": "Reaches across and abuts the west wall at the kitchen end."
-    },
-    {
-      "id": "79a-front-wrap",
-      "name": "79a \u2014 front return",
-      "storeys": 1,
-      "ceilingHeight": 2.8,
-      "rect": [
-        -5.6,
-        -3.4,
-        0.8,
-        0.0
-      ],
-      "estimated": true,
-      "roof": {
-        "type": "monopitch",
-        "pitchDeg": 20,
-        "highSide": "maxY"
-      },
-      "note": "Wraps round the front, stopping short of the dining-room window."
+      "note": "A single elongated building running longways parallel to the A360, immediately south-west of the house and abutting its west wall. 11.0 x 4.8m is proportional, not measured \u2014 the title-plan fill could not be isolated from neighbouring parcels."
     }
   ],
   "scenarios": [
@@ -966,12 +929,6 @@
       "detail": "The garage is attached and shares the house east wall, but the plan shows no internal connecting door \u2014 the only garage door besides the two up-and-over doors is a personnel door in its back wall. Unusual for an attached double garage, so worth confirming."
     },
     {
-      "id": "D2",
-      "severity": "medium",
-      "title": "79a is still sized by proportion",
-      "detail": "All three parts are scaled off the boundaryfinder and MAGiC extracts, then adjusted for the owner note that it wraps round the front. Good to roughly a metre \u2014 the only part of the model not measured from the plan."
-    },
-    {
       "id": "D3",
       "severity": "medium",
       "title": "Ceiling heights inferred from photographs",
@@ -1012,6 +969,18 @@
       "severity": "low",
       "title": "A panelled structure abuts the rear flank",
       "detail": "The rear photograph shows a large white panelled wall with failing paint. If that is asbestos cement it matters well beyond this model."
+    },
+    {
+      "id": "D2",
+      "severity": "high",
+      "title": "79a is sized by description, not measurement",
+      "detail": "Modelled as one elongated block, 11.0 x 4.8m, longways beside the road and touching the west wall. The title plan fill for it could not be separated from the neighbouring parcels, so this is the owner description turned into geometry."
+    },
+    {
+      "id": "D10",
+      "severity": "high",
+      "title": "Plot dimensions are approximate",
+      "detail": "The boundary shape traces cleanly off the title plan, but there is no scale bar on it. Scale comes from matching the building footprint, giving about 402m2 (0.10 acres). Treat the outline as indicative: +/-15% on size and +/-15 degrees on how it sits relative to the house."
     }
   ],
   "spawn": {
@@ -1047,5 +1016,41 @@
       "garage": 6.02,
       "bathroomStrip": 5.59
     }
+  },
+  "plot": {
+    "polygon": [
+      [
+        4.07,
+        13.72
+      ],
+      [
+        17.61,
+        3.67
+      ],
+      [
+        12.74,
+        -11.49
+      ],
+      [
+        -3.77,
+        -4.14
+      ],
+      [
+        -5.63,
+        -1.16
+      ],
+      [
+        -5.0,
+        7.5
+      ],
+      [
+        -2.07,
+        16.76
+      ]
+    ],
+    "areaM2": 402,
+    "areaAcres": 0.1,
+    "source": "HM Land Registry title plan extract. The boundary polygon was traced by colour threshold; scale was fixed by matching the building footprint to the measured 99.9m2, cross-checked against the aerial where the building covers about a quarter of the plot.",
+    "confidence": "Shape good; dimensions +/-15%; rotation relative to the house +/-15 degrees."
   }
 }

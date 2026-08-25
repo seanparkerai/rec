@@ -161,24 +161,55 @@ function buildRoof(spec, color) {
   return { mesh: meshFrom(pts, idx, color), top: ridge };
 }
 
-/** A run of steps, plus the landing opening they arrive at. */
+/** The straight flight as drawn, plus the winder that turns onto the landing. */
 function buildStairs(spec, levels) {
   const g = new THREE.Group();
   g.name = 'stairs';
   const from = levels[0];
   const to = levels[1];
-  const rise = (to.elevation - from.elevation) / spec.risers;
-  const [x0, y0, x1] = spec.footprint;
+  const total = spec.straightRisers + (spec.winderRisers ?? 0);
+  const rise = (to.elevation - from.elevation) / total;
+  const [x0, y0, x1, y1] = spec.footprint;
   const width = Math.min(spec.width, x1 - x0);
   const cx = (x0 + x1) / 2;
-  for (let i = 0; i < spec.risers; i += 1) {
+
+  for (let i = 0; i < spec.straightRisers; i += 1) {
     const step = box(width, rise, spec.treadGoing, PALETTE.stair);
     step.position.copy(v(cx, from.elevation + rise * (i + 0.5), y0 + spec.treadGoing * (i + 0.5)));
     g.add(step);
   }
-  const rail = box(0.06, 0.9, spec.risers * spec.treadGoing, PALETTE.door);
-  rail.position.copy(v(cx - width / 2, from.elevation + 1.5, y0 + (spec.risers * spec.treadGoing) / 2));
+  // The winder turns in the square at the head of the flight, so its treads are
+  // stacked in place rather than marching on down the hall.
+  const headY = y0 + spec.straightRisers * spec.treadGoing;
+  const quarter = Math.max(0.6, y1 - headY);
+  for (let i = 0; i < (spec.winderRisers ?? 0); i += 1) {
+    const step = box(width, rise, quarter, PALETTE.stair);
+    step.position.copy(v(cx, from.elevation + rise * (spec.straightRisers + i + 0.5), headY + quarter / 2));
+    g.add(step);
+  }
+  const rail = box(0.06, 0.9, spec.straightRisers * spec.treadGoing, PALETTE.door);
+  rail.position.copy(v(cx - width / 2, from.elevation + 1.5, y0 + (spec.straightRisers * spec.treadGoing) / 2));
   g.add(rail);
+  return g;
+}
+
+/** The land parcel, drawn as a line on the ground plane. */
+function buildPlot(plot) {
+  const g = new THREE.Group();
+  g.name = 'plot';
+  const pts = plot.polygon.map(([px, py]) => v(px, -0.14, py));
+  pts.push(pts[0]);
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  g.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x3f7d4f })));
+  // A translucent fill so the parcel reads as ground, not as a floating outline.
+  const shape = new THREE.Shape(plot.polygon.map(([px, py]) => new THREE.Vector2(px, -py)));
+  const fill = new THREE.Mesh(
+    new THREE.ShapeGeometry(shape),
+    new THREE.MeshBasicMaterial({ color: 0x6f9c6f, transparent: true, opacity: 0.18 }),
+  );
+  fill.rotation.x = -Math.PI / 2;
+  fill.position.y = -0.15;
+  g.add(fill);
   return g;
 }
 
@@ -235,6 +266,7 @@ export function buildModel(data, { removed = new Set() } = {}) {
   if (data.stairs) {
     levelGroups.get(data.stairs.level).add(buildStairs(data.stairs, data.levels));
   }
+  if (data.plot) root.add(buildPlot(data.plot));
 
   const roofGroup = new THREE.Group();
   roofGroup.name = 'roof';
