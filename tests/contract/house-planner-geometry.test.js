@@ -130,12 +130,14 @@ export async function register({ test, assert, assertEqual }) {
     const back = data.structures.find((x) => x.id === '79a-back');
     assert(front && back, 'both parts are modelled');
     // One building: the parts share a depth and meet along a common edge.
-    assertEqual(front.rect[0], back.rect[0], 'both parts share a west face');
-    assertEqual(front.rect[2], back.rect[2], 'both parts share an east face');
+    // They share the east face, where both abut the house. The west faces differ:
+    // the mono-pitch part sits back from the gable, which is the point.
+    assertEqual(front.rect[2], back.rect[2], 'both parts abut the house on the same line');
+    assert(back.rect[0] > front.rect[0], 'the back part is set back from the gabled front');
     assertEqual(front.rect[3], back.rect[1], 'the parts meet — this is one building, not two');
     // Elongated, running longways alongside the road.
     const len = back.rect[3] - front.rect[1];
-    const dep = front.rect[2] - front.rect[0];
+    const dep = Math.max(front.rect[2] - front.rect[0], back.rect[2] - back.rect[0]);
     assert(len / dep > 1.8, `79a should read as elongated, not ${len.toFixed(1)} x ${dep.toFixed(1)}m`);
     // Hard against the house, never overlapping it.
     assert(front.rect[2] <= 0.01 && back.rect[2] <= 0.01, '79a does not overlap the house');
@@ -515,9 +517,24 @@ export async function register({ test, assert, assertEqual }) {
     const parts = data.structures;
     assert(parts.every((s2) => s2.rect[2] <= 0.01), '79a never overlaps the house footprint');
     assert(parts.some((s2) => s2.rect[2] > -0.5), '79a touches the house');
-    const westEdge = Math.min(...data.plot.polygon.map((q) => q[0]));
-    assert(Math.min(...parts.map((s2) => s2.rect[0])) < westEdge,
-      '79a extends beyond the parcel boundary, which runs between the two buildings');
+    // The parcel now runs out to 79a's building line and wraps round its south
+    // side, so containment is the test, not which is further west.
+    const poly = data.plot.polygon;
+    const inside = (px, py) => {
+      let c = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i, i += 1) {
+        const [xi, yi] = poly[i];
+        const [xj, yj] = poly[j];
+        if ((yi > py) !== (yj > py)
+          && px < ((xj - xi) * (py - yi)) / ((yj - yi) || 1e-9) + xi) c = !c;
+      }
+      return c;
+    };
+    for (const s2 of parts) {
+      const mx = (s2.rect[0] + s2.rect[2]) / 2;
+      const my = (s2.rect[1] + s2.rect[3]) / 2;
+      assert(!inside(mx, my), `${s2.id} must lie outside the parcel — it is not part of No. 79`);
+    }
   });
 
   test('house-planner: the porch canopy covers the front door and toggles with the roofs', () => {
@@ -548,6 +565,70 @@ export async function register({ test, assert, assertEqual }) {
         `${chy.id} tops out at ${chy.top}m, below the ${ridge.toFixed(2)}m ridge — a flue must clear it`);
       assert(chy.top < ridge + 2.5, `${chy.id} at ${chy.top}m is an implausible stack`);
       assert(chy.width > 0.6 && chy.depth > 0.9, `${chy.id} is too slender to be brickwork`);
+    }
+  });
+
+  test('house-planner: the back part of 79a sits behind the gabled part', () => {
+    const [front, back] = data.structures;
+    const fd = front.rect[2] - front.rect[0];
+    const bd = back.rect[2] - back.rect[0];
+    assert(bd < fd - 0.5,
+      `the mono-pitch part is ${bd.toFixed(2)}m deep against the gable's ${fd.toFixed(2)}m — it should sit back`);
+    assert(back.rect[0] > front.rect[0], 'the back part does not reach as far towards the road');
+  });
+
+  test('house-planner: the frontage follows 79a\'s building line', () => {
+    const front = data.structures[0];
+    const curve = data.boundaryWalls.segments.filter((s2) => s2.curved);
+    const xs = curve.flatMap((s2) => [s2.a[0], s2.b[0]]);
+    assert(Math.abs(Math.min(...xs) - front.rect[0]) < 0.1,
+      `the curve starts at x=${Math.min(...xs)} but 79a's front is at x=${front.rect[0]}`);
+    const hs = data.boundaryWalls.segments.find((s2) => s2.id === 'bw-hs-front');
+    assert(hs && Math.abs(hs.a[0] - front.rect[0]) < 0.1,
+      'the High Street wall runs on the same line as the front of 79a');
+  });
+
+  test('house-planner: the parcel wraps round 79a and holds the drive', () => {
+    const poly = data.plot.polygon;
+    const inside = (px, py) => {
+      let c = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i, i += 1) {
+        const [xi, yi] = poly[i];
+        const [xj, yj] = poly[j];
+        if ((yi > py) !== (yj > py)
+          && px < ((xj - xi) * (py - yi)) / ((yj - yi) || 1e-9) + xi) c = !c;
+      }
+      return c;
+    };
+    // The land south of 79a belongs to the plot; 79a itself does not.
+    assert(inside(-3.0, -6.0), 'the frontage south of 79a is inside the plot');
+    assert(!inside(-3.0, 0.0), '79a itself stays outside the plot');
+    const drive = data.surfaces.find((s2) => s2.id === 'drive');
+    assert(drive, 'the gravel drive is modelled');
+    for (const [px, py] of drive.polygon) {
+      assert(inside(px, py) || px > 15.5,
+        `drive corner (${px}, ${py}) falls outside the plot`);
+    }
+    // It has to actually reach the garage doors.
+    const garage = data.rooms.find((r) => r.id === 'garage');
+    assert(Math.max(...drive.polygon.map((q) => q[0])) > garage.rect[2] - 0.5,
+      'the drive does not reach the garage');
+  });
+
+  test('house-planner: the hedge stands inside the wall, clear of the gates', () => {
+    const h = data.boundaryWalls.hedge;
+    assert(h && h.runs.length >= 1, 'the frontage hedge is modelled');
+    assert(h.height > data.boundaryWalls.height, 'the hedge stands above the wall it backs');
+    assert(h.offset > data.boundaryWalls.thickness / 2,
+      'the hedge sits inside the wall rather than through it');
+    for (const run of h.runs) {
+      for (const g of data.boundaryWalls.gates) {
+        const ox = Math.min(Math.max(run.a[0], run.b[0]), Math.max(g.a[0], g.b[0]))
+          - Math.max(Math.min(run.a[0], run.b[0]), Math.min(g.a[0], g.b[0]));
+        const oy = Math.min(Math.max(run.a[1], run.b[1]), Math.max(g.a[1], g.b[1]))
+          - Math.max(Math.min(run.a[1], run.b[1]), Math.min(g.a[1], g.b[1]));
+        assert(!(ox > 0.15 && oy > 0.15), `the hedge blocks ${g.id}`);
+      }
     }
   });
 

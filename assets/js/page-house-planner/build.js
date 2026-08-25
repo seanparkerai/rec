@@ -20,6 +20,8 @@ const PALETTE = {
   brick: 0xa8705a,
   frame: 0xf4f2ed,
   gate: 0x2f5d3f,
+  hedge: 0x4a6b41,
+  gravel: 0xd6cfbf,
   garageDoor: 0xefebe2,
   door: 0x8a6a4a,
 };
