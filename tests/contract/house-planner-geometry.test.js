@@ -117,10 +117,124 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
-  test('house-planner: 79a is modelled in two parts and clear of the house', () => {
-    assertEqual(data.structures.length, 2, '79a has a road range and a connecting part');
+  test('house-planner: 79a is modelled in three parts and never overlaps the house', () => {
+    assertEqual(data.structures.length, 3, '79a: road range, connecting part, front return');
+    const house = { x0: 0, y0: 0, x1: 9.86, y1: 8.41 };
     for (const s of data.structures) {
-      assert(s.rect[2] <= 0.01, `${s.id} should sit west of the house, not overlap it`);
+      const [x0, y0, x1, y1] = s.rect;
+      const overlaps = x0 < house.x1 - 0.01 && house.x0 < x1 - 0.01
+        && y0 < house.y1 - 0.01 && house.y0 < y1 - 0.01;
+      assert(!overlaps, `${s.id} overlaps the house footprint`);
+    }
+    const wrap = data.structures.find((s) => s.id === '79a-front-wrap');
+    assert(wrap, '79a returns round the front (owner correction)');
+    assert(wrap.rect[2] > 0, 'the front return comes past the south-west corner');
+  });
+
+  test('house-planner: 79a front return clears the dining-room window', () => {
+    const wrap = data.structures.find((s) => s.id === '79a-front-wrap');
+    const win = data.openings.find((o) => o.id === 'w-dining-front');
+    const wall = data.walls.find((w) => w.id === win.wall);
+    const winStartX = wall.a[0] + win.at - win.width / 2;
+    assert(wrap.rect[2] <= winStartX + 0.01,
+      `the front return reaches x=${wrap.rect[2]} but the window starts at x=${winStartX.toFixed(2)}`);
+  });
+
+  test('house-planner: rear projections are ordered kitchen > garage > bathroom lean-to', () => {
+    const rearOf = (id) => {
+      const r = data.roofs.find((x) => x.id === id);
+      return r.rect[3];
+    };
+    const kitchenWing = rearOf('roof-rear-wing');
+    const garage = rearOf('roof-garage');
+    const leanTo = rearOf('roof-bathroom');
+    assert(leanTo < garage,
+      `lean-to rear ${leanTo} must sit forward of the garage rear ${garage}`);
+    assert(garage < kitchenWing,
+      `garage rear ${garage} must sit forward of the kitchen wing rear ${kitchenWing}`);
+    const frontBand = 4.24;
+    assert((kitchenWing - frontBand) > 2 * (leanTo - frontBand),
+      'the kitchen wing should project much further than the lean-to, not marginally');
+  });
+
+  test('house-planner: the garage is attached to the house', () => {
+    const houseEast = 9.86;
+    const [gx0, gy0, , gy1] = data.rooms.find((r) => r.id === 'garage').rect;
+    assert(Math.abs(gx0 - houseEast) < 0.01,
+      `the garage west face is at ${gx0}, not against the house at ${houseEast}`);
+    assert(gy0 < 8.41 && gy1 > 0, 'the garage overlaps the house in depth, so the walls actually meet');
+    const link = data.openings.find((o) => o.id === 'd-garage-link');
+    assert(link, 'a connecting door runs from the house into the garage');
+  });
+
+  test('house-planner: modelled floor area reconciles with the plan total', () => {
+    const area = (r) => (r[2] - r[0]) * (r[3] - r[1]);
+    const total = data.rooms.reduce((sum, r) => sum + area(r.rect), 0);
+    const stated = 135.4;
+    const drift = Math.abs(total - stated) / stated;
+    assert(drift < 0.05,
+      `modelled ${total.toFixed(1)}m2 vs the plan's ${stated}m2 is ${(drift * 100).toFixed(1)}% out`);
+  });
+
+  test('house-planner: every room is big enough to be a room', () => {
+    for (const r of data.rooms) {
+      const w = r.rect[2] - r.rect[0];
+      const d = r.rect[3] - r.rect[1];
+      assert(w > 0.8 && d > 0.8, `${r.id} is ${w.toFixed(2)} x ${d.toFixed(2)}m — not habitable`);
+      assert(Math.max(w, d) >= 1.7 || r.id === 'rear-hall',
+        `${r.id} has no dimension long enough for anything`);
+    }
+  });
+
+  test('house-planner: ceiling heights are buildable and the kitchen is the low one', () => {
+    for (const l of data.levels) {
+      assert(l.ceilingHeight > 2.0 && l.ceilingHeight < 3.5, `${l.id} ceiling ${l.ceilingHeight}m`);
+    }
+    for (const r of data.rooms) {
+      if (r.ceilingHeight === undefined) continue;
+      assert(r.ceilingHeight > 2.0 && r.ceilingHeight < 3.5, `${r.id} ceiling ${r.ceilingHeight}m`);
+    }
+    const ground = data.levels.find((l) => l.id === 'ground');
+    const kitchen = data.rooms.find((r) => r.id === 'kitchen');
+    assert(kitchen.ceilingHeight < ground.ceilingHeight,
+      'the kitchen reads lower than the front rooms in the photographs');
+    assert(data.levels[1].elevation >= ground.ceilingHeight,
+      'the first floor cannot start below the ground-floor ceiling');
+  });
+
+  test('house-planner: every roof sits above the storey it covers', () => {
+    for (const roof of data.roofs) {
+      assert(roof.eaves > 2.5, `${roof.id} eaves at ${roof.eaves}m is below head height`);
+      assert(roof.pitchDeg > 5 && roof.pitchDeg < 55, `${roof.id} pitch ${roof.pitchDeg} is implausible`);
+    }
+    const main = data.roofs.find((r) => r.id === 'roof-main');
+    const first = data.levels.find((l) => l.id === 'first');
+    assert(Math.abs(main.eaves - (first.elevation + first.ceilingHeight)) < 0.02,
+      'the main eaves should land on the first-floor ceiling');
+    for (const chy of data.roof.chimneys) {
+      assert(chy.base >= main.eaves - 0.01, 'chimney stacks start at the eaves, not the ground');
+      assert(chy.top > chy.base, 'chimney has positive height');
+    }
+  });
+
+  test('house-planner: no wall is a zero-length stub', () => {
+    for (const w of data.walls) {
+      const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);
+      assert(len > 0.2, `${w.id} is only ${len.toFixed(2)}m long`);
+    }
+  });
+
+  test('house-planner: rooms sit inside their own level envelope', () => {
+    for (const level of data.levels) {
+      const ext = data.walls.filter((w) => w.level === level.id && w.kind === 'external');
+      const xs = ext.flatMap((w) => [w.a[0], w.b[0]]);
+      const ys = ext.flatMap((w) => [w.a[1], w.b[1]]);
+      const bb = { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) };
+      for (const r of data.rooms.filter((x) => x.level === level.id)) {
+        const [x0, y0, x1, y1] = r.rect;
+        assert(x0 >= bb.x0 - 0.35 && x1 <= bb.x1 + 0.35 && y0 >= bb.y0 - 0.35 && y1 <= bb.y1 + 0.35,
+          `${r.id} falls outside the ${level.id} envelope`);
+      }
     }
   });
 }

@@ -103,3 +103,22 @@
   .hp-canvas { height: calc(100svh - var(--header-h, 4rem) - 14rem); min-height: 460px; }
   .hp-panel { position: sticky; top: calc(var(--header-h, 4rem) + var(--space-3)); max-height: 76svh; overflow-y: auto; }
 }
+
+/* --- touch walkthrough stick -------------------------------------------- */
+/* Appears only while a finger is down in the movement zone, so it never sits
+   over the model when you are just looking. */
+.hp-stick {
+  position: absolute; left: var(--stick-x, 25%); top: var(--stick-y, 70%);
+  width: 7rem; height: 7rem; margin: -3.5rem 0 0 -3.5rem;
+  border: 1px solid var(--hairline); border-radius: 50%;
+  background: color-mix(in oklch, var(--paper) 55%, transparent);
+  opacity: 0; pointer-events: none; transition: opacity 120ms var(--ease-out, ease);
+}
+.hp-stick.is-active { opacity: 1; }
+.hp-stick__knob {
+  position: absolute; left: 50%; top: 50%; width: 3rem; height: 3rem;
+  margin: -1.5rem 0 0 -1.5rem; border-radius: 50%;
+  background: color-mix(in oklch, var(--accent) 70%, transparent);
+  transform: translate(var(--knob-x, 0), var(--knob-y, 0));
+}
+@media (prefers-reduced-motion: reduce) { .hp-stick { transition: none; } }

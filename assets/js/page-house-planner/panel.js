@@ -40,7 +40,7 @@ export function buildPanel(host, data, handlers) {
   group.setAttribute('role', 'group');
   const modes = [
     ['dollhouse', 'Dollhouse', 'Orbit the model from outside'],
-    ['walk', 'Walkthrough', 'WASD to move, click to look around'],
+    ['walk', 'Walkthrough', 'Move at eye height and look around'],
   ];
   const buttons = [];
   for (const [value, label, hint] of modes) {
@@ -56,8 +56,10 @@ export function buildPanel(host, data, handlers) {
     group.appendChild(b);
   }
   modeFs.appendChild(group);
-  modeFs.appendChild(el('p', 'hp-hint',
-    'Walkthrough needs a mouse — pointer-lock look does not work on touch.'));
+  const coarse = window.matchMedia?.('(pointer: coarse)').matches;
+  modeFs.appendChild(el('p', 'hp-hint', coarse
+    ? 'Walkthrough: drag on the left of the view to walk, drag anywhere else to look.'
+    : 'Walkthrough: click the view for mouse-look, WASD or arrow keys to move, Shift to hurry.'));
   host.appendChild(modeFs);
 
   // --- Floors ---------------------------------------------------------

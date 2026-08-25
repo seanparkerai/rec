@@ -30,6 +30,9 @@ export class Viewer {
     this.mode = 'dollhouse';
     this.colliders = [];
     this.keys = new Set();
+    this.touchMove = { fwd: 0, strafe: 0 };
+    this._movePointer = null;
+    this._lookPointer = null;
     this.yaw = 0;
     this.pitch = 0;
     this.walkLevel = 'ground';
@@ -78,7 +81,10 @@ export class Viewer {
     this.mode = mode;
     this.orbit.enabled = mode === 'dollhouse';
     if (mode === 'walk') this.spawn(this._spawnX ?? 4.94, this._spawnY ?? 0.75, this.levelElevation, this.walkLevel);
-    else if (document.pointerLockElement === this.canvas) document.exitPointerLock();
+    else {
+      this._resetTouch();
+      if (document.pointerLockElement === this.canvas) document.exitPointerLock();
+    }
   }
 
   /** Drop the walker into the middle of the named level. */
@@ -103,19 +109,80 @@ export class Viewer {
     };
     window.addEventListener('keydown', (e) => onKey(e, true));
     window.addEventListener('keyup', (e) => onKey(e, false));
-    window.addEventListener('blur', () => this.keys.clear());
+    window.addEventListener('blur', () => { this.keys.clear(); this._resetTouch(); });
 
+    // Desktop: click to take pointer lock, then raw mouse deltas drive the look.
     this.canvas.addEventListener('click', () => {
-      if (this.mode === 'walk' && document.pointerLockElement !== this.canvas) {
+      if (this.mode === 'walk' && !this._coarse() && document.pointerLockElement !== this.canvas) {
         this.canvas.requestPointerLock();
       }
     });
     document.addEventListener('mousemove', (e) => {
       if (document.pointerLockElement !== this.canvas) return;
-      this.yaw -= e.movementX * 0.0022;
-      this.pitch -= e.movementY * 0.0022;
-      this.pitch = Math.max(-1.35, Math.min(1.35, this.pitch));
+      this._look(e.movementX, e.movementY, 0.0022);
     });
+
+    // Touch: left third of the canvas is a movement stick, anywhere else looks.
+    this.canvas.addEventListener('pointerdown', (e) => {
+      if (this.mode !== 'walk' || e.pointerType === 'mouse') return;
+      const r = this.canvas.getBoundingClientRect();
+      const local = e.clientX - r.left;
+      if (local < r.width * 0.4 && this._movePointer === null) {
+        this._movePointer = { id: e.pointerId, x: e.clientX, y: e.clientY };
+        this.onStick?.({ active: true, x: local, y: e.clientY - r.top, dx: 0, dy: 0 });
+      } else if (this._lookPointer === null) {
+        this._lookPointer = { id: e.pointerId, x: e.clientX, y: e.clientY };
+      }
+      this.canvas.setPointerCapture(e.pointerId);
+    });
+    this.canvas.addEventListener('pointermove', (e) => {
+      if (this.mode !== 'walk') return;
+      const m = this._movePointer;
+      if (m && m.id === e.pointerId) {
+        const dx = e.clientX - m.x;
+        const dy = e.clientY - m.y;
+        const max = 56;
+        const len = Math.hypot(dx, dy) || 1;
+        const clamp = Math.min(len, max) / max;
+        this.touchMove.strafe = (dx / len) * clamp;
+        this.touchMove.fwd = (-dy / len) * clamp;
+        this.onStick?.({ active: true, dx: (dx / len) * Math.min(len, max), dy: (dy / len) * Math.min(len, max) });
+        return;
+      }
+      const l = this._lookPointer;
+      if (l && l.id === e.pointerId) {
+        this._look(e.clientX - l.x, e.clientY - l.y, 0.005);
+        l.x = e.clientX;
+        l.y = e.clientY;
+      }
+    });
+    const release = (e) => {
+      if (this._movePointer?.id === e.pointerId) {
+        this._movePointer = null;
+        this.touchMove.fwd = 0;
+        this.touchMove.strafe = 0;
+        this.onStick?.({ active: false });
+      }
+      if (this._lookPointer?.id === e.pointerId) this._lookPointer = null;
+    };
+    this.canvas.addEventListener('pointerup', release);
+    this.canvas.addEventListener('pointercancel', release);
+  }
+
+  _coarse() { return window.matchMedia?.('(pointer: coarse)').matches ?? false; }
+
+  _resetTouch() {
+    this._movePointer = null;
+    this._lookPointer = null;
+    this.touchMove.fwd = 0;
+    this.touchMove.strafe = 0;
+    this.onStick?.({ active: false });
+  }
+
+  _look(dx, dy, gain) {
+    this.yaw -= dx * gain;
+    this.pitch -= dy * gain;
+    this.pitch = Math.max(-1.35, Math.min(1.35, this.pitch));
   }
 
   /** Nudge a proposed plan-space position out of any wall it lands inside. */
@@ -149,8 +216,8 @@ export class Viewer {
 
   _stepWalk(dt) {
     const speed = WALK_SPEED * (this.keys.has('shift') ? 1.9 : 1) * dt;
-    let fwd = 0;
-    let strafe = 0;
+    let fwd = this.touchMove.fwd;
+    let strafe = this.touchMove.strafe;
     if (this.keys.has('w') || this.keys.has('arrowup')) fwd += 1;
     if (this.keys.has('s') || this.keys.has('arrowdown')) fwd -= 1;
     if (this.keys.has('a') || this.keys.has('arrowleft')) strafe -= 1;
@@ -160,7 +227,7 @@ export class Viewer {
     this.walkCam.rotateY(this.yaw);
     this.walkCam.rotateX(this.pitch);
 
-    if (fwd || strafe) {
+    if (Math.abs(fwd) > 0.01 || Math.abs(strafe) > 0.01) {
       const len = Math.hypot(fwd, strafe);
       const sin = Math.sin(this.yaw);
       const cos = Math.cos(this.yaw);

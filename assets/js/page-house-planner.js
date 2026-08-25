@@ -29,6 +29,19 @@ async function init() {
   });
 
   const viewer = new Viewer(canvas);
+
+  // On-screen stick, positioned purely through custom properties.
+  const stick = document.querySelector('[data-hp-stick]');
+  viewer.onStick = ({ active, x, y, dx = 0, dy = 0 }) => {
+    if (!stick) return;
+    stick.classList.toggle('is-active', Boolean(active));
+    if (x !== undefined) {
+      stick.style.setProperty('--stick-x', `${x}px`);
+      stick.style.setProperty('--stick-y', `${y}px`);
+    }
+    stick.style.setProperty('--knob-x', `${dx}px`);
+    stick.style.setProperty('--knob-y', `${dy}px`);
+  };
   const removed = new Set();
 
   const rebuild = () => {
@@ -47,7 +60,9 @@ async function init() {
       viewer.setMode(mode);
       stage.classList.toggle('hp-stage--walking', mode === 'walk');
       status.textContent = mode === 'walk'
-        ? 'Walkthrough — click the view to look around, WASD or arrow keys to move, Shift to hurry. Escape releases the cursor.'
+        ? (matchMedia('(pointer: coarse)').matches
+          ? 'Walkthrough — drag on the left to walk, drag anywhere else to look around.'
+          : 'Walkthrough — click the view to look around, WASD or arrow keys to move, Shift to hurry. Escape releases the cursor.')
         : 'Dollhouse — drag to orbit, scroll to zoom.';
     },
     onLevel: (id, on) => viewer.setLevelVisible(id, on),

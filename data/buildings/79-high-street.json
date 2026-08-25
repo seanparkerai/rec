@@ -1,6 +1,6 @@
 {
   "id": "79-high-street",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "name": "79 High Street",
   "address": {
     "line1": "79 High Street",
@@ -26,10 +26,10 @@
     "titlePlan": "HM Land Registry style plot extract",
     "siteMap": "DEFRA MAGiC map, scale 1:306",
     "records": "Council tax band D; last sold 267500 GBP on 2007-04-19",
-    "architectDrawing": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3' \u2014 NW, SE and SW elevations plus an existing 1:50 floor plan of the attached single-storey structure",
+    "architectDrawing": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3' — NW, SE and SW elevations plus an existing 1:50 floor plan of the attached single-storey structure",
     "aerial": "Marketing aerial photograph, south-west aspect",
     "interiors": "Marketing interior photographs (19 in set): living room, kitchen, dining room, bedroom",
-    "revision": "Rebuilt 2026-08-25 after owner correction: floors flush, bathroom single-storey, stairs and doors added, 79a modelled in two parts."
+    "revision": "Rebuilt 2026-08-25 (3rd pass) after owner correction from the aerial: garage attached and set slightly back, bathroom lean-to shallower than the garage, 79a wrapping round the front, mobile walkthrough."
   },
   "construction": {
     "walls": "red brick, exposed on the flank and rear; the south-west front is largely covered by Virginia creeper",
@@ -136,12 +136,13 @@
       "name": "Bathroom",
       "label": "bath, WC, basin",
       "rect": [
-        4.04,
+        4.09,
         4.24,
         6.85,
-        8.11
+        5.8
       ],
-      "underLeanTo": true
+      "underLeanTo": true,
+      "ceilingHeight": 2.3
     },
     {
       "id": "shower",
@@ -152,9 +153,10 @@
         6.95,
         4.24,
         9.56,
-        8.11
+        5.8
       ],
-      "underLeanTo": true
+      "underLeanTo": true,
+      "ceilingHeight": 2.3
     },
     {
       "id": "garage",
@@ -163,9 +165,9 @@
       "label": "6.20 x 5.58m",
       "rect": [
         9.86,
-        0.3,
+        0.6,
         16.06,
-        5.88
+        6.18
       ],
       "ceilingHeight": 2.6
     },
@@ -248,18 +250,48 @@
       "removable": false
     },
     {
-      "id": "gf-ext-rear",
+      "id": "gf-ext-rear-left",
       "level": "ground",
       "a": [
         0.15,
         8.26
       ],
       "b": [
-        9.71,
+        3.99,
         8.26
       ],
       "kind": "external",
       "removable": false
+    },
+    {
+      "id": "gf-ext-step",
+      "level": "ground",
+      "a": [
+        3.99,
+        8.26
+      ],
+      "b": [
+        3.99,
+        5.95
+      ],
+      "kind": "external",
+      "removable": false,
+      "note": "Flank of the kitchen wing, above the lean-to roof"
+    },
+    {
+      "id": "gf-ext-leanto-rear",
+      "level": "ground",
+      "a": [
+        3.99,
+        5.95
+      ],
+      "b": [
+        9.71,
+        5.95
+      ],
+      "kind": "external",
+      "removable": false,
+      "note": "Back wall of the single-storey lean-to"
     },
     {
       "id": "gf-ext-east",
@@ -270,21 +302,37 @@
       ],
       "b": [
         9.71,
-        8.26
+        5.95
       ],
       "kind": "external",
-      "removable": false
+      "removable": false,
+      "note": "Shared with the attached garage"
+    },
+    {
+      "id": "gf-ext-east-stub",
+      "level": "ground",
+      "a": [
+        9.71,
+        5.95
+      ],
+      "b": [
+        9.71,
+        6.33
+      ],
+      "kind": "external",
+      "removable": false,
+      "note": "Garage flank beyond the lean-to"
     },
     {
       "id": "gar-front",
       "level": "ground",
       "a": [
         9.71,
-        0.15
+        0.45
       ],
       "b": [
         16.21,
-        0.15
+        0.45
       ],
       "kind": "external",
       "removable": false
@@ -294,11 +342,11 @@
       "level": "ground",
       "a": [
         16.21,
-        0.15
+        0.45
       ],
       "b": [
         16.21,
-        6.03
+        6.33
       ],
       "kind": "external",
       "removable": false
@@ -308,11 +356,11 @@
       "level": "ground",
       "a": [
         9.71,
-        6.03
+        6.33
       ],
       "b": [
         16.21,
-        6.03
+        6.33
       ],
       "kind": "external",
       "removable": false
@@ -326,11 +374,11 @@
       ],
       "b": [
         3.99,
-        8.26
+        5.95
       ],
       "kind": "internal",
       "removable": true,
-      "note": "Left column to hall"
+      "note": "West column to hall"
     },
     {
       "id": "gf-dining-rear",
@@ -390,7 +438,7 @@
       ],
       "kind": "internal",
       "removable": false,
-      "note": "Living room back wall \u2014 carries the lean-to"
+      "note": "Back wall of the front rooms — carries the lean-to and the first floor above"
     },
     {
       "id": "gf-bath-shower",
@@ -401,7 +449,7 @@
       ],
       "b": [
         6.9,
-        8.26
+        5.95
       ],
       "kind": "internal",
       "removable": true,
@@ -546,71 +594,6 @@
       "note": "Front door under the porch canopy"
     },
     {
-      "id": "d-back",
-      "wall": "gf-ext-rear",
-      "type": "door",
-      "at": 2.2,
-      "width": 0.9,
-      "note": "Back door off the kitchen"
-    },
-    {
-      "id": "d-dining",
-      "wall": "gf-spine",
-      "type": "door",
-      "at": 2.3,
-      "width": 0.83
-    },
-    {
-      "id": "d-rear-hall",
-      "wall": "gf-spine",
-      "type": "door",
-      "at": 4.55,
-      "width": 0.83
-    },
-    {
-      "id": "d-bath",
-      "wall": "gf-spine",
-      "type": "door",
-      "at": 6.6,
-      "width": 0.83
-    },
-    {
-      "id": "d-dining-rear",
-      "wall": "gf-dining-rear",
-      "type": "door",
-      "at": 3.2,
-      "width": 0.83
-    },
-    {
-      "id": "d-rear-kitchen",
-      "wall": "gf-rear-kitchen",
-      "type": "door",
-      "at": 3.2,
-      "width": 0.9
-    },
-    {
-      "id": "d-living",
-      "wall": "gf-hall-living",
-      "type": "door",
-      "at": 1.1,
-      "width": 0.83
-    },
-    {
-      "id": "d-bath-shower",
-      "wall": "gf-bath-shower",
-      "type": "door",
-      "at": 1.4,
-      "width": 0.76
-    },
-    {
-      "id": "d-garage-link",
-      "wall": "gf-ext-east",
-      "type": "door",
-      "at": 6.4,
-      "width": 0.85,
-      "note": "Shower room through to the garage"
-    },
-    {
       "id": "w-dining-front",
       "wall": "gf-ext-front",
       "type": "window",
@@ -640,24 +623,32 @@
       "note": "Over the sink"
     },
     {
+      "id": "d-back",
+      "wall": "gf-ext-rear-left",
+      "type": "door",
+      "at": 2.6,
+      "width": 0.9,
+      "note": "Back door off the kitchen"
+    },
+    {
       "id": "w-kitchen-rear",
-      "wall": "gf-ext-rear",
+      "wall": "gf-ext-rear-left",
       "type": "window",
-      "at": 0.9,
+      "at": 1.1,
       "width": 1
     },
     {
       "id": "w-bath-rear",
-      "wall": "gf-ext-rear",
+      "wall": "gf-ext-leanto-rear",
       "type": "window",
-      "at": 5.2,
+      "at": 1.6,
       "width": 0.7
     },
     {
       "id": "w-shower-rear",
-      "wall": "gf-ext-rear",
+      "wall": "gf-ext-leanto-rear",
       "type": "window",
-      "at": 7.8,
+      "at": 4.2,
       "width": 0.6
     },
     {
@@ -666,6 +657,14 @@
       "type": "window",
       "at": 2.1,
       "width": 1.2
+    },
+    {
+      "id": "d-garage-link",
+      "wall": "gf-ext-east",
+      "type": "door",
+      "at": 4.8,
+      "width": 0.85,
+      "note": "Shower room through to the garage"
     },
     {
       "id": "gar-door-l",
@@ -682,25 +681,54 @@
       "width": 2.45
     },
     {
-      "id": "d-bed-sw",
-      "wall": "ff-spine",
+      "id": "d-dining",
+      "wall": "gf-spine",
       "type": "door",
-      "at": 2.4,
+      "at": 2.3,
       "width": 0.83
     },
     {
-      "id": "d-bed-nw",
-      "wall": "ff-beds",
+      "id": "d-rear-hall",
+      "wall": "gf-spine",
       "type": "door",
-      "at": 3.3,
+      "at": 4.55,
       "width": 0.83
     },
     {
-      "id": "d-bed-se",
-      "wall": "ff-landing-se",
+      "id": "d-dining-rear",
+      "wall": "gf-dining-rear",
       "type": "door",
-      "at": 1.15,
+      "at": 3.2,
       "width": 0.83
+    },
+    {
+      "id": "d-rear-kitchen",
+      "wall": "gf-rear-kitchen",
+      "type": "door",
+      "at": 3.2,
+      "width": 0.9
+    },
+    {
+      "id": "d-living",
+      "wall": "gf-hall-living",
+      "type": "door",
+      "at": 1.1,
+      "width": 0.83
+    },
+    {
+      "id": "d-hall-bath",
+      "wall": "gf-living-rear",
+      "type": "door",
+      "at": 0.9,
+      "width": 0.83,
+      "note": "Hall through to the bathroom"
+    },
+    {
+      "id": "d-bath-shower",
+      "wall": "gf-bath-shower",
+      "type": "door",
+      "at": 0.95,
+      "width": 0.76
     },
     {
       "id": "w-bed-sw-front",
@@ -738,6 +766,13 @@
       "width": 1.3
     },
     {
+      "id": "w-landing-rear",
+      "wall": "ff-ext-rear-right",
+      "type": "window",
+      "at": 1.6,
+      "width": 0.9
+    },
+    {
       "id": "w-bed-se-east",
       "wall": "ff-ext-east",
       "type": "window",
@@ -745,11 +780,25 @@
       "width": 1.2
     },
     {
-      "id": "w-landing-rear",
-      "wall": "ff-ext-rear-right",
-      "type": "window",
-      "at": 1.6,
-      "width": 0.9
+      "id": "d-bed-sw",
+      "wall": "ff-spine",
+      "type": "door",
+      "at": 2.4,
+      "width": 0.83
+    },
+    {
+      "id": "d-bed-nw",
+      "wall": "ff-beds",
+      "type": "door",
+      "at": 3.3,
+      "width": 0.83
+    },
+    {
+      "id": "d-bed-se",
+      "wall": "ff-landing-se",
+      "type": "door",
+      "at": 1.15,
+      "width": 0.83
     }
   ],
   "stairs": {
@@ -782,8 +831,7 @@
       ],
       "eaves": 5.4,
       "pitchDeg": 38,
-      "overhang": 0.35,
-      "note": "Main hip over the front two-storey band; the ridge runs SW-NE."
+      "overhang": 0.35
     },
     {
       "id": "roof-rear-wing",
@@ -796,8 +844,7 @@
       ],
       "eaves": 5.4,
       "pitchDeg": 38,
-      "overhang": 0.35,
-      "note": "Continues the hip over the full-depth west column."
+      "overhang": 0.35
     },
     {
       "id": "roof-bathroom",
@@ -806,22 +853,22 @@
         3.94,
         4.24,
         9.86,
-        8.41
+        6.1
       ],
       "eaves": 2.95,
       "pitchDeg": 15,
       "overhang": 0.25,
       "highSide": "minY",
-      "note": "Lean-to over the single-storey bathroom and shower room, sloping up against the back of the house \u2014 the owner-confirmed sloped roof."
+      "note": "Lean-to over the bathroom and shower room. Projects less than the garage, much less than the kitchen wing — owner-verified from the aerial."
     },
     {
       "id": "roof-garage",
       "type": "hipped",
       "rect": [
         9.86,
-        0,
+        0.3,
         16.36,
-        6.18
+        6.48
       ],
       "eaves": 2.9,
       "pitchDeg": 35,
@@ -836,8 +883,8 @@
         "y": 2.1,
         "width": 0.75,
         "depth": 1.05,
-        "top": 8.6,
-        "base": 5.4
+        "base": 5.4,
+        "top": 8.6
       },
       {
         "id": "chy-ne",
@@ -845,8 +892,8 @@
         "y": 2.1,
         "width": 0.75,
         "depth": 1.05,
-        "top": 8.6,
-        "base": 5.4
+        "base": 5.4,
+        "top": 8.6
       }
     ]
   },
@@ -867,7 +914,7 @@
       "side": "minY",
       "width": 1.55,
       "projection": 0.4,
-      "note": "Brick fireplace with timber mantel and built-in alcove shelving."
+      "note": "Brick fireplace with timber mantel and alcove shelving."
     },
     {
       "id": "breast-bed-se",
@@ -876,13 +923,13 @@
       "side": "minY",
       "width": 1.2,
       "projection": 0.35,
-      "note": "Cast-iron bedroom fireplace with painted surround."
+      "note": "Cast-iron bedroom fireplace."
     }
   ],
   "structures": [
     {
       "id": "79a-road-range",
-      "name": "79a \u2014 range along the A360",
+      "name": "79a — range along the A360",
       "storeys": 1,
       "ceilingHeight": 3,
       "rect": [
@@ -896,16 +943,16 @@
         "type": "gable",
         "pitchDeg": 30
       },
-      "note": "The long rectangle sitting parallel to the road. Footprint scaled off the boundaryfinder extract."
+      "note": "The long rectangle parallel to the road."
     },
     {
       "id": "79a-link",
-      "name": "79a \u2014 connecting part",
+      "name": "79a — connecting part",
       "storeys": 1,
       "ceilingHeight": 2.8,
       "rect": [
         -5.6,
-        3.2,
+        2,
         0,
         8.6
       ],
@@ -915,7 +962,26 @@
         "pitchDeg": 20,
         "highSide": "maxX"
       },
-      "note": "The portion that reaches across and abuts the west wall of the house at the kitchen end. This is what makes the property read as semi-detached."
+      "note": "Reaches across and abuts the west wall at the kitchen end."
+    },
+    {
+      "id": "79a-front-wrap",
+      "name": "79a — front return",
+      "storeys": 1,
+      "ceilingHeight": 2.8,
+      "rect": [
+        -5.6,
+        -3.4,
+        0.8,
+        0
+      ],
+      "estimated": true,
+      "roof": {
+        "type": "monopitch",
+        "pitchDeg": 20,
+        "highSide": "maxY"
+      },
+      "note": "Owner correction: 79a wraps round the front of the house, returning past the south-west corner. Stops short of the dining-room window."
     }
   ],
   "scenarios": [
@@ -952,52 +1018,64 @@
   ],
   "assumptions": [
     {
-      "id": "B1",
+      "id": "C1",
       "severity": "high",
-      "title": "The plan's 4.07m and 3.02m cannot both be right",
-      "detail": "With the floors flush at 8.41m the west column works out as dining 3.64 + rear hall 0.95 + kitchen 3.02 downstairs, and 3.64 + 4.07 upstairs. That balances exactly, but it means a 0.95m rear hall the plan does not label. Measure the kitchen wall to the back wall and this resolves."
+      "title": "The bathroom lean-to is only 1.56m deep",
+      "detail": "Forced by the owner-verified constraint that it projects less than the garage. The bath has to run along the 5.7m width rather than front-to-back. Plausible, but it is the single most worthwhile tape measure in the model: back wall of the living room to the back wall of the bathroom."
     },
     {
-      "id": "B2",
+      "id": "C2",
+      "severity": "high",
+      "title": "The plan's 4.07m and 3.02m need a 0.95m rear hall to coexist",
+      "detail": "With the floors flush at 8.41m the west column reads dining 3.64 + rear hall 0.95 + kitchen 3.02 downstairs against 3.64 + 4.07 upstairs. It balances exactly, but the rear hall is not labelled on the plan. Measure kitchen back wall to outside back wall."
+    },
+    {
+      "id": "C3",
       "severity": "high",
       "title": "79a is sized by proportion, not measurement",
-      "detail": "Both parts are scaled off the boundaryfinder and MAGiC extracts against the 10m scale bar. Good to roughly a metre. Real dimensions, or the architect PDF with its scale bar intact, would fix it."
+      "detail": "All three parts are scaled off the boundaryfinder and MAGiC extracts against the 10m bar, then adjusted for the owner note that it wraps round the front. Good to roughly a metre. How far the front return actually comes past the corner is a guess."
     },
     {
-      "id": "B3",
+      "id": "C4",
       "severity": "medium",
-      "title": "Lean-to pitch and height are assumed",
-      "detail": "The bathroom lean-to is modelled at 15 degrees, eaves 2.95m, sloping up to the house wall. The pitch is a guess consistent with the photographs."
+      "title": "Garage set back 0.30m from the house front",
+      "detail": "The aerial shows the garage attached and very close to flush. A small setback is modelled so the garage rear lands clear of the lean-to. If it is truly flush, everything shifts 0.30m."
     },
     {
-      "id": "B4",
+      "id": "C5",
       "severity": "medium",
-      "title": "Window positions read off the plan",
-      "detail": "Widths and positions are proportional, sills at 0.9m, heads at 2.1m. Elevation photographs would tighten them."
+      "title": "Lean-to pitch assumed at 15 degrees",
+      "detail": "Eaves 2.95m rising to meet the house wall. Consistent with the photographs but not measured."
     },
     {
-      "id": "B5",
-      "severity": "medium",
-      "title": "The garage may be linked rather than integral",
-      "detail": "Modelled abutting the house east wall with a connecting door from the shower room. The aerial shows it as its own brick block with two up-and-over doors, and it reads as newer than the house."
-    },
-    {
-      "id": "B6",
+      "id": "C6",
       "severity": "medium",
       "title": "Wall construction not confirmed",
-      "detail": "Inter-war brick could be solid 9-inch or early cavity. Using 300mm external. An EPC or a window-reveal measurement settles it \u2014 the EPC register is blocked from this environment."
+      "detail": "Inter-war brick could be solid 9-inch or early cavity. Using 300mm external. The EPC register is blocked from this environment."
     },
     {
-      "id": "B7",
+      "id": "C7",
+      "severity": "medium",
+      "title": "Orientation derived, not given",
+      "detail": "The building run reads SW to NE off the MAGiC and title extracts, putting plan-up at bearing 315. Everything geometric is unaffected, but a sun path would be."
+    },
+    {
+      "id": "C8",
       "severity": "low",
-      "title": "Stair geometry is standard, not surveyed",
-      "detail": "14 risers at 210mm with a 230mm going and a winder at the top, fitted to the hall. Matches the photographs but is not measured."
+      "title": "Window positions read off the plan",
+      "detail": "Widths and positions proportional; sills 0.9m, heads 2.1m throughout."
     },
     {
-      "id": "B8",
+      "id": "C9",
+      "severity": "low",
+      "title": "Stair geometry standard, not surveyed",
+      "detail": "14 risers at 210mm with a 230mm going, fitted to the hall."
+    },
+    {
+      "id": "C10",
       "severity": "low",
       "title": "A panelled structure abuts the rear flank",
-      "detail": "The rear photograph shows a large white panelled wall with failing paint hard against the property. If that is asbestos cement it matters well beyond this model."
+      "detail": "The rear photograph shows a large white panelled wall with failing paint. If that is asbestos cement it matters well beyond this model."
     }
   ],
   "spawn": {
@@ -1008,7 +1086,7 @@
     },
     "first": {
       "x": 4.94,
-      "y": 1.0,
+      "y": 1,
       "note": "On the landing at the head of the stairs."
     }
   }
