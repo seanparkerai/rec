@@ -42,6 +42,8 @@ async function init() {
 
   const panel = buildPanel(panelHost, data, {
     onMode: (mode) => {
+      const at = data.spawn?.ground ?? { x: 4.94, y: 0.75 };
+      viewer.spawn(at.x, at.y, data.levels[0].elevation, data.levels[0].id);
       viewer.setMode(mode);
       stage.classList.toggle('hp-stage--walking', mode === 'walk');
       status.textContent = mode === 'walk'
@@ -75,7 +77,8 @@ async function init() {
     if (e.key === '1' || e.key === '2') {
       const level = data.levels[Number(e.key) - 1];
       if (level) {
-        viewer.spawn(4.9, 2.0, level.elevation, level.id);
+        const at = data.spawn?.[level.id] ?? { x: 4.94, y: 0.75 };
+        viewer.spawn(at.x, at.y, level.elevation, level.id);
         status.textContent = `Walking the ${level.name.toLowerCase()}.`;
       }
     }

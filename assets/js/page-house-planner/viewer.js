@@ -77,14 +77,16 @@ export class Viewer {
   setMode(mode) {
     this.mode = mode;
     this.orbit.enabled = mode === 'dollhouse';
-    if (mode === 'walk') this.spawn(4.9, 2.0, this.levelElevation, this.walkLevel);
+    if (mode === 'walk') this.spawn(this._spawnX ?? 4.94, this._spawnY ?? 0.75, this.levelElevation, this.walkLevel);
     else if (document.pointerLockElement === this.canvas) document.exitPointerLock();
   }
 
   /** Drop the walker into the middle of the named level. */
-  spawn(x = 4.9, y = 2.0, elevation = 0, level = 'ground') {
+  spawn(x = 4.94, y = 0.75, elevation = 0, level = 'ground') {
     this.levelElevation = elevation;
     this.walkLevel = level;
+    this._spawnX = x;
+    this._spawnY = y;
     this._setPlan(x, y);
     this.walkCam.position.y = elevation + EYE_HEIGHT;
     this.yaw = Math.PI;
@@ -126,11 +128,13 @@ export class Viewer {
       const maxY = c.maxY + BODY_RADIUS;
       if (px < minX || px > maxX || py < minY || py > maxY) continue;
 
-      // A doorway in this wall lets the walker through.
-      const horizontal = (c.maxX - c.minX) > (c.maxY - c.minY);
-      const along = horizontal ? px - c.minX : py - c.minY;
+      // A doorway in this wall lets the walker through. Distance is measured
+      // from the wall's own start point, which is not always the min corner.
+      const along = c.origin
+        ? Math.hypot(px - c.origin[0], py - c.origin[1])
+        : (c.horizontal ? px - c.minX : py - c.minY);
       const through = (c.doorways ?? []).some(
-        (o) => along > o.start + 0.1 && along < o.end - 0.1,
+        (o) => along > o.start + 0.12 && along < o.end - 0.12,
       );
       if (through && !c.solid) continue;
 
