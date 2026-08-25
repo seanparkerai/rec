@@ -774,7 +774,16 @@
     "straightRisers": 8,
     "treadGoing": 0.219,
     "winderRisers": 6,
-    "note": "Measured off the plan: the flight is drawn 0.76m wide over a 1.75m run in the hall, with the remaining rise turning as a winder onto the landing."
+    "note": "Measured off the plan: the flight is drawn 0.76m wide over a 1.75m run in the hall, with the remaining rise turning as a winder onto the landing.",
+    "climb": {
+      "x0": 4.95,
+      "x1": 5.71,
+      "y0": 1.37,
+      "y1": 3.82,
+      "bottom": 0,
+      "top": 2.95,
+      "note": "Walking into this footprint carries you up; stepping off the top puts you on the landing."
+    }
   },
   "roofs": [
     {
@@ -801,7 +810,11 @@
       ],
       "eaves": 5.4,
       "pitchDeg": 38,
-      "overhang": 0.35
+      "overhang": 0.35,
+      "overhangs": {
+        "minY": 0
+      },
+      "note": "Continues the hip over the full-depth west column; its front edge runs into the main roof."
     },
     {
       "id": "roof-bathroom",
@@ -816,7 +829,10 @@
       "pitchDeg": 15,
       "overhang": 0.25,
       "highSide": "minY",
-      "note": "Lean-to over the bathroom and shower. Measured rear extent 5.59m \u2014 forward of the garage at 6.02m and well forward of the kitchen wing at 7.26m."
+      "note": "Lean-to over the bathroom and shower. Measured rear extent 5.59m \u2014 forward of the garage at 6.02m and well forward of the kitchen wing at 7.26m.",
+      "overhangs": {
+        "minY": 0
+      }
     },
     {
       "id": "roof-garage",
@@ -831,7 +847,10 @@
       "pitchDeg": 35,
       "overhang": 0.35,
       "abut": "minX",
-      "note": "Hipped at the free north-east end and along both long sides, closing as a gable where it meets the house. The near-square footprint made a plain hip collapse into a pyramid, which is not what the aerial shows."
+      "note": "Hipped at the free north-east end and along both long sides, closing as a gable where it meets the house. The near-square footprint made a plain hip collapse into a pyramid, which is not what the aerial shows.",
+      "overhangs": {
+        "minX": 0
+      }
     }
   ],
   "roof": {
@@ -1017,8 +1036,8 @@
     {
       "id": "D13",
       "severity": "low",
-      "title": "Plot dimensions now +/-8%",
-      "detail": "Re-derived from the OS-based boundaryfinder extract rather than the title plan, and validated by transforming the building centre to within half a metre of where the model puts it. 342m2, about a tenth of an acre."
+      "title": "Plot dimensions +/-8%",
+      "detail": "Traced from the title-plan crop and scaled off the building. 374m2, about a tenth of an acre, with 9.3m of front garden and 4.7m beside the garage."
     }
   ],
   "spawn": {
@@ -1058,35 +1077,45 @@
   "plot": {
     "polygon": [
       [
-        1.06,
-        11.45
+        -0.95,
+        8.1
       ],
       [
-        16.22,
-        6.19
+        -0.7,
+        -9.29
       ],
       [
-        16.24,
-        -8.87
+        13.86,
+        -7.7
       ],
       [
-        -3.32,
-        -4.76
+        18.34,
+        -5.69
       ],
       [
-        -5.16,
-        3.64
+        19.13,
+        -4.47
       ],
       [
-        -5.04,
-        12.57
+        20.82,
+        2.51
+      ],
+      [
+        20.42,
+        12.87
       ]
     ],
-    "areaM2": 342,
-    "areaAcres": 0.08,
-    "source": "boundaryfinder.co.uk (OS OGL). The parcel was recovered by flood-filling the region bounded by the red title lines, and scaled off building 79 itself \u2014 three independent estimates (long axis, short axis, ink area) agreeing at 32.6, 34.6 and 33.9 px/m.",
-    "validation": "Building 79's measured footprint has an aspect ratio of 2.09 against the model's 2.22, and its centre transforms to (7.6, 3.5) against the model centre (8.08, 3.63) \u2014 under half a metre out, which is what fixes the rotation.",
-    "confidence": "Much better than the earlier title-plan trace. Dimensions +/-8%; the north-east boundary runs true to the house, the others are as surveyed."
+    "areaM2": 374,
+    "areaAcres": 0.09,
+    "source": "Traced from the owner-supplied title-plan crop. The plot region was recovered by flood-fill, the outline by Moore boundary trace, and the scale fixed off building 79 \u2014 three estimates agreeing at 39.7, 41.0 and 40.7 px/m.",
+    "validation": "Orientation was resolved from the building's own asymmetry: its front is a straight run and its back is stepped, so the correct orientation is the one where min-y varies by 0.01m across the frontage while max-y varies by 0.37m. Measured footprint ratio 2.15 against the model 2.22.",
+    "clearances": {
+      "besideGarage": 4.7,
+      "frontGarden": 9.3,
+      "rear": 5.6,
+      "west": 0.9
+    },
+    "confidence": "Dimensions +/-8%. 79a now falls outside the boundary, as the title plan shows."
   },
   "commercialBuildingSurvey": {
     "source": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3'",

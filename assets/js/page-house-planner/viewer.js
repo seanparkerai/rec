@@ -36,6 +36,8 @@ export class Viewer {
     this.yaw = 0;
     this.pitch = 0;
     this.walkLevel = 'ground';
+    this.climb = null;
+    this._stairT = 0;
     this.levelElevation = 0;
     this._clock = new THREE.Clock();
 
@@ -69,6 +71,23 @@ export class Viewer {
   setLevelVisible(id, visible) {
     const g = this.levelGroups?.get(id);
     if (g) g.visible = visible;
+  }
+
+  /** The walkable stair ramp, so the walker can actually get upstairs. */
+  setClimb(climb, levels) {
+    this.climb = climb ? { ...climb } : null;
+    this._levels = levels;
+  }
+
+  /** Height on the stair at a plan position, or null if not on it. */
+  _onStairAt(px, py) {
+    const c = this.climb;
+    if (!c) return null;
+    const pad = 0.3;
+    if (px < c.x0 - pad || px > c.x1 + pad) return null;
+    if (py < c.y0 - pad || py > c.y1 + pad) return null;
+    const t = Math.max(0, Math.min(1, (py - c.y0) / (c.y1 - c.y0)));
+    return { t, h: c.bottom + t * (c.top - c.bottom) };
   }
 
   setRoofVisible(visible) {
@@ -241,6 +260,28 @@ export class Viewer {
       const [nx, ny] = this._resolve(px, py);
       this._setPlan(nx, ny);
     }
+
+    // Stair: while inside the flight the walker rides its slope, and which
+    // floor's walls they collide against follows their height, not a keypress.
+    const here = this._toPlan(this.walkCam.position.x, this.walkCam.position.z);
+    const stair = this._onStairAt(here[0], here[1]);
+    if (stair) {
+      this._stairT = stair.t;
+      this.walkCam.position.y = stair.h + EYE_HEIGHT;
+      const mid = (this.climb.bottom + this.climb.top) / 2;
+      this.walkLevel = stair.h > mid ? 'first' : 'ground';
+      this.levelElevation = stair.h;
+      return;
+    }
+    if (this._stairT > 0.5 && this._levels) {
+      // Stepped off the top — arrive on the landing.
+      this.walkLevel = this._levels[1].id;
+      this.levelElevation = this._levels[1].elevation;
+    } else if (this._stairT > 0 && this._levels) {
+      this.walkLevel = this._levels[0].id;
+      this.levelElevation = this._levels[0].elevation;
+    }
+    this._stairT = 0;
     this.walkCam.position.y = this.levelElevation + EYE_HEIGHT;
   }
 

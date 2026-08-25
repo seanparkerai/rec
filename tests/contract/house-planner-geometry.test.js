@@ -160,23 +160,57 @@ export async function register({ test, assert, assertEqual }) {
       `79a should project forward of the house front, but starts at y=${front.rect[1]}`);
   });
 
-  test('house-planner: the land parcel is outlined and contains the buildings', () => {
+  test('house-planner: the parcel contains the house, excludes 79a, and has real garden', () => {
     const plot = data.plot;
-    assert(plot && Array.isArray(plot.polygon), 'the plot boundary is modelled');
-    assert(plot.polygon.length >= 4, 'the parcel has a real outline');
+    assert(plot && Array.isArray(plot.polygon) && plot.polygon.length >= 4, 'the parcel is modelled');
+    const inside = (px, py) => {
+      let c = false;
+      const P = plot.polygon;
+      for (let i = 0, j = P.length - 1; i < P.length; j = i, i += 1) {
+        const [xi, yi] = P[i];
+        const [xj, yj] = P[j];
+        if ((yi > py) !== (yj > py)
+          && px < ((xj - xi) * (py - yi)) / ((yj - yi) || 1e-9) + xi) c = !c;
+      }
+      return c;
+    };
+    for (const [px, py] of [[0.5, 0.5], [15.5, 0.5], [15.5, 6.5], [8, 3.6]]) {
+      assert(inside(px, py), `the house corner (${px}, ${py}) must lie inside its own plot`);
+    }
+    // 79a belongs to the neighbour — the boundary goes round it.
+    const a79 = data.structures[0];
+    const cx = (a79.rect[0] + a79.rect[2]) / 2;
+    assert(!inside(cx, 0.6), '79a must fall outside the boundary, not intersect it');
+
+    const xs = plot.polygon.map((p) => p[0]);
+    const ys = plot.polygon.map((p) => p[1]);
+    assert(Math.max(...xs) - 16.15 > 2.5,
+      `only ${(Math.max(...xs) - 16.15).toFixed(1)}m beside the garage — the plot is too tight`);
+    assert(-Math.min(...ys) > 5.0,
+      `only ${(-Math.min(...ys)).toFixed(1)}m of front garden — the plot is too tight`);
     const area = Math.abs(plot.polygon.reduce((sum, [px, py], i) => {
       const [nx, ny] = plot.polygon[(i + 1) % plot.polygon.length];
       return sum + (px * ny - nx * py);
     }, 0)) / 2;
     assert(Math.abs(area - plot.areaM2) / plot.areaM2 < 0.05,
       `stated ${plot.areaM2}m2 but the polygon measures ${area.toFixed(0)}m2`);
-    const xs = plot.polygon.map((p) => p[0]);
-    const ys = plot.polygon.map((p) => p[1]);
-    assert(Math.min(...xs) < 0 && Math.max(...xs) > 9.74, 'the parcel spans the house end to end');
-    assert(Math.min(...ys) < 0 && Math.max(...ys) > 7.26, 'the parcel spans the house front to back');
-    const footprint = data.rooms.reduce(
-      (s2, r) => s2 + (r.rect[2] - r.rect[0]) * (r.rect[3] - r.rect[1]), 0);
-    assert(area > footprint * 0.5, 'the parcel is bigger than the footprint standing on it');
+  });
+
+  test('house-planner: the stairs can actually be climbed', () => {
+    const c = data.stairs.climb;
+    assert(c, 'the stair has a walkable ramp');
+    assertEqual(c.bottom, data.levels[0].elevation, 'it starts at the ground floor');
+    assertEqual(c.top, data.levels[1].elevation, 'it finishes at the first floor');
+    assert(c.y1 > c.y0 && c.x1 > c.x0, 'the ramp has extent to walk along');
+    // It has to start in the hall and finish on the landing.
+    const hall = data.rooms.find((r) => r.id === 'hall');
+    const landing = data.rooms.find((r) => r.id === 'landing');
+    assert(c.x0 >= hall.rect[0] - 0.3 && c.x1 <= hall.rect[2] + 0.3,
+      'the flight sits within the hall');
+    assert(c.y1 <= landing.rect[3] + 0.3,
+      'the top of the flight lands on the landing, not through its wall');
+    const slope = (c.top - c.bottom) / (c.y1 - c.y0);
+    assert(slope > 0.6 && slope < 1.6, `stair slope of ${slope.toFixed(2)} is unwalkable`);
   });
 
   test('house-planner: rear projections are ordered kitchen > garage > bathroom lean-to', () => {
@@ -297,6 +331,17 @@ export async function register({ test, assert, assertEqual }) {
       });
       assert(over, `${chy.id} at (${chy.x}, ${chy.y}) is not above any chimney breast`);
       assert(chy.base >= 5.0, `${chy.id} starts at ${chy.base}m — stacks begin at the eaves`);
+    }
+  });
+
+  test('house-planner: roofs that run into something drop their overhang there', () => {
+    const byId = new Map(data.roofs.map((r) => [r.id, r]));
+    // The rear wing meets the main roof; the lean-to and garage meet walls.
+    for (const [id, edge] of [['roof-rear-wing', 'minY'], ['roof-bathroom', 'minY'], ['roof-garage', 'minX']]) {
+      const r = byId.get(id);
+      assert(r, `${id} is modelled`);
+      assertEqual(r.overhangs?.[edge], 0,
+        `${id} must not overhang on ${edge} — it runs into something there`);
     }
   });
 

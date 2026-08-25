@@ -124,10 +124,32 @@ function meshFrom(points, indices, color, opts = {}) {
 function buildRoof(spec, color) {
   const [rx0, ry0, rx1, ry1] = spec.rect;
   const o = spec.overhang ?? 0.3;
-  const x0 = rx0 - o; const x1 = rx1 + o;
-  const y0 = ry0 - o; const y1 = ry1 + o;
+  // Per-edge overhangs: an edge that runs into another roof or a wall takes 0,
+  // otherwise two abutting roofs overlap and read as a stray flap of eaves.
+  const oh = spec.overhangs ?? {};
+  const x0 = rx0 - (oh.minX ?? o); const x1 = rx1 + (oh.maxX ?? o);
+  const y0 = ry0 - (oh.minY ?? o); const y1 = ry1 + (oh.maxY ?? o);
   const e = spec.eaves;
   const tan = Math.tan((spec.pitchDeg * Math.PI) / 180);
+
+  if (spec.type === 'gable') {
+    const alongY = (spec.ridgeAxis ?? 'ns') === 'ns';
+    const rise = ((alongY ? (x1 - x0) : (y1 - y0)) / 2) * tan;
+    const h = e + rise;
+    let pts; let idx;
+    if (alongY) {
+      const cx = (x0 + x1) / 2;
+      pts = [v(x0, e, y0), v(x1, e, y0), v(x1, e, y1), v(x0, e, y1),
+        v(cx, h, y0), v(cx, h, y1)];
+      idx = [0, 4, 5, 0, 5, 3, 1, 2, 5, 1, 5, 4, 0, 1, 4, 3, 5, 2];
+    } else {
+      const cy = (y0 + y1) / 2;
+      pts = [v(x0, e, y0), v(x1, e, y0), v(x1, e, y1), v(x0, e, y1),
+        v(x0, h, cy), v(x1, h, cy)];
+      idx = [0, 1, 5, 0, 5, 4, 3, 4, 5, 3, 5, 2, 0, 4, 3, 1, 2, 5];
+    }
+    return { mesh: meshFrom(pts, idx, color), top: h };
+  }
 
   if (spec.type === 'monopitch') {
     const span = (spec.highSide === 'minY' || spec.highSide === 'maxY') ? (y1 - y0) : (x1 - x0);

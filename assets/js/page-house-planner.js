@@ -29,6 +29,7 @@ async function init() {
   });
 
   const viewer = new Viewer(canvas);
+  viewer.setClimb(data.stairs?.climb, data.levels);
 
   // On-screen stick, positioned purely through custom properties.
   const stick = document.querySelector('[data-hp-stick]');
@@ -61,8 +62,8 @@ async function init() {
       stage.classList.toggle('hp-stage--walking', mode === 'walk');
       status.textContent = mode === 'walk'
         ? (matchMedia('(pointer: coarse)').matches
-          ? 'Walkthrough — drag on the left to walk, drag anywhere else to look around.'
-          : 'Walkthrough — click the view to look around, WASD or arrow keys to move, Shift to hurry. Escape releases the cursor.')
+          ? 'Walkthrough — drag on the left to walk, drag anywhere else to look. Walk into the stairs to go up.'
+          : 'Walkthrough — click the view to look around, WASD or arrow keys to move, Shift to hurry. Walk into the stairs to go up. Escape releases the cursor.')
         : 'Dollhouse — drag to orbit, scroll to zoom.';
     },
     onLevel: (id, on) => viewer.setLevelVisible(id, on),
