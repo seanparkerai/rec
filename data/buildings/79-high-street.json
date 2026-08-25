@@ -867,23 +867,42 @@
   ],
   "structures": [
     {
-      "id": "79a",
-      "name": "79a \u2014 commercial building",
+      "id": "79a-front",
+      "name": "79a \u2014 front part",
       "storeys": 1,
       "ceilingHeight": 3.0,
       "rect": [
-        -4.8,
-        -1.5,
+        -5.1,
+        -5.0,
         0.0,
-        9.5
+        2.2
       ],
       "estimated": true,
       "roof": {
         "type": "gable",
-        "pitchDeg": 30,
+        "pitchDeg": 32,
         "ridgeAxis": "ns"
       },
-      "note": "A single elongated building running longways parallel to the A360, immediately south-west of the house and abutting its west wall. 11.0 x 4.8m is proportional, not measured \u2014 the title-plan fill could not be isolated from neighbouring parcels."
+      "note": "The larger part, nearest the road. The architect's south-east elevation shows its gable end with vertical boarding above a window."
+    },
+    {
+      "id": "79a-back",
+      "name": "79a \u2014 back part",
+      "storeys": 1,
+      "ceilingHeight": 2.8,
+      "rect": [
+        -5.1,
+        2.2,
+        0.0,
+        6.3
+      ],
+      "estimated": true,
+      "roof": {
+        "type": "monopitch",
+        "pitchDeg": 18,
+        "highSide": "maxX"
+      },
+      "note": "The part further back, running alongside the house and abutting it at the kitchen end. Owner-confirmed mono-pitch sloping up against the house wall \u2014 this is the architect's north-west elevation."
     }
   ],
   "scenarios": [
@@ -971,16 +990,22 @@
       "detail": "The rear photograph shows a large white panelled wall with failing paint. If that is asbestos cement it matters well beyond this model."
     },
     {
-      "id": "D2",
-      "severity": "high",
-      "title": "79a is sized by description, not measurement",
-      "detail": "Modelled as one elongated block, 11.0 x 4.8m, longways beside the road and touching the west wall. The title plan fill for it could not be separated from the neighbouring parcels, so this is the owner description turned into geometry."
-    },
-    {
       "id": "D10",
       "severity": "high",
       "title": "Plot dimensions are approximate",
       "detail": "The boundary shape traces cleanly off the title plan, but there is no scale bar on it. Scale comes from matching the building footprint, giving about 402m2 (0.10 acres). Treat the outline as indicative: +/-15% on size and +/-15 degrees on how it sits relative to the house."
+    },
+    {
+      "id": "D2",
+      "severity": "high",
+      "title": "79a scale rests on one assumed window width",
+      "detail": "The architect's 1:50 plan gives the shape and the split between the two parts exactly, but nothing on the sheet fixes the scale. Assuming the back-wall window is 1.5m gives 11.3 x 5.1m. A 1.2m window would make it 9.0m long, an 1.8m one 13.6m. The elevations imply about twice that again, which no other source supports."
+    },
+    {
+      "id": "D11",
+      "severity": "medium",
+      "title": "How far 79a comes forward is a judgement",
+      "detail": "Modelled projecting 5.0m past the front of the house, per the owner note to move it forward and the title plan showing it reaching past the south-west corner. The exact overhang is not measurable from any sheet supplied."
     }
   ],
   "spawn": {
@@ -1052,5 +1077,22 @@
     "areaAcres": 0.1,
     "source": "HM Land Registry title plan extract. The boundary polygon was traced by colour threshold; scale was fixed by matching the building footprint to the measured 99.9m2, cross-checked against the aerial where the building covers about a quarter of the plot.",
     "confidence": "Shape good; dimensions +/-15%; rotation relative to the house +/-15 degrees."
+  },
+  "commercialBuildingSurvey": {
+    "source": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3'",
+    "measuredOnPlan": {
+      "totalPx": [
+        987,
+        444
+      ],
+      "ratio": 2.22,
+      "partLargerPx": 627,
+      "partSmallerPx": 360,
+      "dividingWallPx": 757,
+      "windowOpeningPx": 131
+    },
+    "scaleAnchor": "A 1.5m window opening in the back wall gives 87.3 px/m, so 11.3 x 5.1m overall, split 7.2m and 4.1m. That is the only reading consistent with the title plan, the aerial and the building being comparable in size to the house.",
+    "unresolved": "The elevations on the same sheet imply roughly half that scale, which would make the building about 21m long. That contradicts every other source, so the plan-based reading is used. Two real dimensions would settle it in seconds.",
+    "elevationReading": "The south-west elevation shows the house behind: hip slopes rising to a ridge with a chimney above, and 79a attached to its right as a lower single-storey range with a long horizontal roofline."
   }
 }

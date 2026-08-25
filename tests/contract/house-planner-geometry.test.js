@@ -124,16 +124,40 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
-  test('house-planner: 79a is one elongated building touching the house', () => {
-    assertEqual(data.structures.length, 1, '79a is a single building, not several');
-    const [x0, y0, x1, y1] = data.structures[0].rect;
-    const w = x1 - x0;
-    const dep = y1 - y0;
-    assert(Math.max(w, dep) / Math.min(w, dep) > 1.8,
-      `79a should read as elongated, not ${w.toFixed(1)} x ${dep.toFixed(1)}m`);
-    assert(x1 <= 0.01, '79a sits south-west of the house, not overlapping it');
-    assert(x1 > -0.5, '79a touches the house — that is what makes this read as semi-detached');
-    assert(dep > w, '79a runs longways, parallel to the road');
+  test('house-planner: 79a is two parts forming one elongated building', () => {
+    assertEqual(data.structures.length, 2, '79a has a front part and a back part');
+    const front = data.structures.find((x) => x.id === '79a-front');
+    const back = data.structures.find((x) => x.id === '79a-back');
+    assert(front && back, 'both parts are modelled');
+    // One building: the parts share a depth and meet along a common edge.
+    assertEqual(front.rect[0], back.rect[0], 'both parts share a west face');
+    assertEqual(front.rect[2], back.rect[2], 'both parts share an east face');
+    assertEqual(front.rect[3], back.rect[1], 'the parts meet — this is one building, not two');
+    // Elongated, running longways alongside the road.
+    const len = back.rect[3] - front.rect[1];
+    const dep = front.rect[2] - front.rect[0];
+    assert(len / dep > 1.8, `79a should read as elongated, not ${len.toFixed(1)} x ${dep.toFixed(1)}m`);
+    // Hard against the house, never overlapping it.
+    assert(front.rect[2] <= 0.01 && back.rect[2] <= 0.01, '79a does not overlap the house');
+    assert(front.rect[2] > -0.5, '79a touches the house');
+  });
+
+  test('house-planner: the back part of 79a slopes against the house', () => {
+    const back = data.structures.find((x) => x.id === '79a-back');
+    assertEqual(back.roof.type, 'monopitch', 'the back part has a sloped roof, not a gable');
+    assertEqual(back.roof.highSide, 'maxX', 'it slopes up towards the house it leans on');
+    const front = data.structures.find((x) => x.id === '79a-front');
+    assert(back.rect[1] > front.rect[1], 'the sloped part is the one further back');
+    // It has to reach the kitchen, which is what it abuts.
+    const kitchen = data.rooms.find((r) => r.id === 'kitchen');
+    assert(back.rect[3] > kitchen.rect[1],
+      'the back part reaches the kitchen end of the house');
+  });
+
+  test('house-planner: 79a comes forward past the front of the house', () => {
+    const front = data.structures.find((x) => x.id === '79a-front');
+    assert(front.rect[1] < -1.0,
+      `79a should project forward of the house front, but starts at y=${front.rect[1]}`);
   });
 
   test('house-planner: the land parcel is outlined and contains the buildings', () => {
