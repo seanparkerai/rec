@@ -55,16 +55,17 @@ export class Viewer {
       new THREE.MeshLambertMaterial({ color: 0xdfe3d6 }),
     );
     ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -0.16;
+    ground.position.y = -0.45;
     this.scene.add(ground);
   }
 
-  setModel({ root, levels, roof, colliders }) {
+  setModel({ root, levels, roof, colliders, glazing }) {
     if (this.model) this.scene.remove(this.model);
     this.model = root;
     this.levelGroups = levels;
     this.roofGroup = roof;
     this.colliders = colliders;
+    this.glazing = glazing ?? [];
     this.scene.add(root);
   }
 
@@ -83,7 +84,9 @@ export class Viewer {
   _onStairAt(px, py) {
     const c = this.climb;
     if (!c) return null;
-    const pad = 0.3;
+    // Only a hair of tolerance: a generous pad here swallowed the hall passage
+    // and the bathroom doorway, so heading for the toilet sent you upstairs.
+    const pad = 0.05;
     if (px < c.x0 - pad || px > c.x1 + pad) return null;
     if (py < c.y0 - pad || py > c.y1 + pad) return null;
     const t = Math.max(0, Math.min(1, (py - c.y0) / (c.y1 - c.y0)));
@@ -92,6 +95,10 @@ export class Viewer {
 
   setRoofVisible(visible) {
     if (this.roofGroup) this.roofGroup.visible = visible;
+  }
+
+  setGlazingVisible(visible) {
+    (this.glazing ?? []).forEach((m) => { m.visible = visible; });
   }
 
   get camera() { return this.mode === 'walk' ? this.walkCam : this.orbitCam; }

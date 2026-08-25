@@ -18,6 +18,8 @@ const PALETTE = {
   glass: 0x9fc4d8,
   stair: 0xbfae97,
   brick: 0xa8705a,
+  frame: 0xf4f2ed,
+  garageDoor: 0xefebe2,
   door: 0x8a6a4a,
 };
 
@@ -80,10 +82,36 @@ function buildWall(wall, openings, level, defaults, wallHeight) {
     if (sill > 0) meshes.push(segmentBox(pa, pb, thickness, base, sill, color));
     if (top > head) meshes.push(segmentBox(pa, pb, thickness, base + head, top - head, color));
     if (o.type === 'window') {
-      meshes.push(segmentBox(pa, pb, thickness * 0.25, base + sill, head - sill,
-        PALETTE.glass, { opacity: 0.35 }));
+      const glass = segmentBox(pa, pb, thickness * 0.25, base + sill, head - sill,
+        PALETTE.glass, { opacity: 0.3 });
+      if (glass) { glass.userData.glazing = true; meshes.push(glass); }
+
+      // Frame, mullions and transom, so a window reads as a window rather than
+      // a tinted hole. Bar positions are fractions along the opening.
+      const wlen = Math.hypot(pb[0] - pa[0], pb[1] - pa[1]);
+      const hgt = head - sill;
+      const BAR = 0.05;
+      const bt = thickness * 0.34;
+      const addBar = (t0, t1, yOff, yH) => {
+        const m = segmentBox(lerp(pa, pb, t0), lerp(pa, pb, t1), bt, base + yOff, yH, PALETTE.frame);
+        if (m) { m.userData.glazing = true; meshes.push(m); }
+      };
+      if (wlen > 0.2) {
+        const fr = BAR / wlen;
+        addBar(0, 1, sill, BAR);              // cill
+        addBar(0, 1, head - BAR, BAR);        // head
+        addBar(0, fr, sill, hgt);             // jambs
+        addBar(1 - fr, 1, sill, hgt);
+        const lights = Math.max(2, Math.round(wlen / 0.55));
+        for (let i = 1; i < lights; i += 1) {
+          const f = i / lights;
+          addBar(f - fr / 2, f + fr / 2, sill, hgt);
+        }
+        addBar(0, 1, sill + hgt * 0.68, BAR); // transom
+      }
     } else if (o.type === 'garage') {
-      meshes.push(segmentBox(pa, pb, thickness * 0.4, base, head, PALETTE.door, { opacity: 0.95 }));
+      meshes.push(segmentBox(pa, pb, thickness * 0.4, base, head,
+        PALETTE.garageDoor, { opacity: 1 }));
     }
     cursor = e / len;
   }
@@ -238,9 +266,24 @@ function buildStairs(spec, levels) {
     step.position.copy(v(cx, from.elevation + rise * (spec.straightRisers + i + 0.5), headY + quarter / 2));
     g.add(step);
   }
-  const rail = box(0.06, 0.9, spec.straightRisers * spec.treadGoing, PALETTE.door);
-  rail.position.copy(v(cx - width / 2, from.elevation + 1.5, y0 + (spec.straightRisers * spec.treadGoing) / 2));
+  // Handrail raked along the flight. The old one was a flat panel at a fixed
+  // height, which read as a plank floating beside the stairs.
+  const run = spec.straightRisers * spec.treadGoing;
+  const climbed = spec.straightRisers * rise;
+  const railLen = Math.hypot(run, climbed);
+  const rail = box(0.055, 0.075, railLen, PALETTE.stair);
+  rail.position.copy(v(cx - width / 2 + 0.03,
+    from.elevation + climbed / 2 + 0.92, y0 + run / 2));
+  rail.rotation.x = Math.atan2(climbed, run);
   g.add(rail);
+  for (let i = 0; i <= 3; i += 1) {
+    const t = i / 3;
+    const postH = 0.92 + rise * 0.5;
+    const post = box(0.05, postH, 0.05, PALETTE.stair);
+    post.position.copy(v(cx - width / 2 + 0.03,
+      from.elevation + climbed * t + postH / 2, y0 + run * t));
+    g.add(post);
+  }
   return g;
 }
 
@@ -248,7 +291,7 @@ function buildStairs(spec, levels) {
 function buildPlot(plot) {
   const g = new THREE.Group();
   g.name = 'plot';
-  const pts = plot.polygon.map(([px, py]) => v(px, -0.14, py));
+  const pts = plot.polygon.map(([px, py]) => v(px, -0.34, py));
   pts.push(pts[0]);
   const geo = new THREE.BufferGeometry().setFromPoints(pts);
   g.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x3f7d4f })));
@@ -261,7 +304,7 @@ function buildPlot(plot) {
     new THREE.MeshBasicMaterial({ color: 0x6f9c6f, transparent: true, opacity: 0.18 }),
   );
   fill.rotation.x = -Math.PI / 2;
-  fill.position.y = -0.15;
+  fill.position.y = -0.35;
   g.add(fill);
   return g;
 }
@@ -319,6 +362,7 @@ export function buildModel(data, { removed = new Set() } = {}) {
   const root = new THREE.Group();
   const levelGroups = new Map();
   const colliders = [];
+  const glazing = [];
   const byId = new Map(data.levels.map((l) => [l.id, l]));
 
   for (const level of data.levels) {
@@ -353,7 +397,11 @@ export function buildModel(data, { removed = new Set() } = {}) {
     const { meshes, collider } = buildWall(
       wall, data.openings, level, data.defaults, wallTopFor.get(wall.level),
     );
-    meshes.forEach((m) => { m.userData.wall = wall.id; levelGroups.get(wall.level).add(m); });
+    meshes.forEach((m) => {
+      m.userData.wall = wall.id;
+      if (m.userData.glazing) glazing.push(m);
+      levelGroups.get(wall.level).add(m);
+    });
     colliders.push(collider);
   }
 
@@ -437,7 +485,7 @@ export function buildModel(data, { removed = new Set() } = {}) {
   root.rotation.y = (bearing * Math.PI) / 180;
 
   return {
-    root, levels: levelGroups, roof: roofGroup, colliders,
+    root, levels: levelGroups, roof: roofGroup, colliders, glazing,
     bbox: bboxOf(data.rooms.map((r) => r.rect)),
   };
 }

@@ -209,8 +209,45 @@ export async function register({ test, assert, assertEqual }) {
       'the flight sits within the hall');
     assert(c.y1 <= landing.rect[3] + 0.3,
       'the top of the flight lands on the landing, not through its wall');
-    const slope = (c.top - c.bottom) / (c.y1 - c.y0);
-    assert(slope > 0.6 && slope < 1.6, `stair slope of ${slope.toFixed(2)} is unwalkable`);
+    // A winder turns part of the rise, so the plan run is shorter than the
+    // developed run. Judge the stair on the developed slope, not the footprint.
+    const st2 = data.stairs;
+    const developed = (st2.straightRisers + st2.winderRisers) * st2.treadGoing;
+    const slope = (c.top - c.bottom) / developed;
+    assert(slope > 0.6 && slope < 1.3,
+      `developed stair slope of ${slope.toFixed(2)} is unwalkable`);
+  });
+
+  test('house-planner: the stair ramp does not swallow a doorway', () => {
+    // Walking to the downstairs toilet used to trigger the climb, because the
+    // bathroom door sat inside the padded stair footprint.
+    const c = data.stairs.climb;
+    const PAD = 0.05;
+    const byId = new Map(data.walls.map((w) => [w.id, w]));
+    for (const o of data.openings) {
+      if (o.type === 'window') continue;
+      const w = byId.get(o.wall);
+      if (!w || w.level !== 'ground') continue;
+      const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);
+      const ux = (w.b[0] - w.a[0]) / len;
+      const uy = (w.b[1] - w.a[1]) / len;
+      for (const d2 of [o.at - o.width / 2, o.at, o.at + o.width / 2]) {
+        const px = w.a[0] + ux * d2;
+        const py = w.a[1] + uy * d2;
+        const inside = px > c.x0 - PAD && px < c.x1 + PAD
+          && py > c.y0 - PAD && py < c.y1 + PAD;
+        assert(!inside, `${o.id} falls inside the stair ramp — walking through it would teleport you`);
+      }
+    }
+  });
+
+  test('house-planner: there is a walkable passage past the stair', () => {
+    const c = data.stairs.climb;
+    const hall = data.rooms.find((r) => r.id === 'hall');
+    const BODY = 0.28;
+    const gap = (c.x0 - 0.05) - hall.rect[0];
+    assert(gap > 2 * BODY,
+      `only ${gap.toFixed(2)}m beside the stair — a ${BODY}m body cannot get past`);
   });
 
   test('house-planner: rear projections are ordered kitchen > garage > bathroom lean-to', () => {

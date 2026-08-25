@@ -800,10 +800,10 @@
       "x0": 4.95,
       "x1": 5.71,
       "y0": 1.37,
-      "y1": 3.82,
+      "y1": 3.2,
       "bottom": 0,
       "top": 2.95,
-      "note": "Walking into this footprint carries you up; stepping off the top puts you on the landing."
+      "note": "Walking into this footprint carries you up; stepping off the top puts you on the landing. It stops short of the bathroom doorway at y=3.94 so that heading for the toilet does not send you upstairs."
     }
   },
   "roofs": [

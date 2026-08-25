@@ -69,6 +69,7 @@ export function buildPanel(host, data, handlers) {
       (on) => handlers.onLevel(level.id, on)));
   }
   floorFs.appendChild(checkbox('hp-roof', 'Roof', false, handlers.onRoof));
+  floorFs.appendChild(checkbox('hp-windows', 'Windows', true, handlers.onWindows));
   host.appendChild(floorFs);
 
   // --- Scenarios ------------------------------------------------------
