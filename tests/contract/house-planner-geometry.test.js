@@ -291,7 +291,9 @@ export async function register({ test, assert, assertEqual }) {
 
   test('house-planner: every roof sits above the storey it covers', () => {
     for (const roof of data.roofs) {
-      assert(roof.eaves > 2.4, `${roof.id} eaves at ${roof.eaves}m is below head height`);
+      // A porch canopy sits over a door, not over a storey.
+      const floor = roof.id === 'roof-porch' ? 2.1 : 2.4;
+      assert(roof.eaves > floor, `${roof.id} eaves at ${roof.eaves}m is too low`);
       assert(roof.pitchDeg > 5 && roof.pitchDeg < 55, `${roof.id} pitch ${roof.pitchDeg} is implausible`);
     }
     const main = data.roofs.find((r) => r.id === 'roof-main');
@@ -437,6 +439,37 @@ export async function register({ test, assert, assertEqual }) {
     const westEdge = Math.min(...data.plot.polygon.map((q) => q[0]));
     assert(Math.min(...parts.map((s2) => s2.rect[0])) < westEdge,
       '79a extends beyond the parcel boundary, which runs between the two buildings');
+  });
+
+  test('house-planner: the porch canopy covers the front door and toggles with the roofs', () => {
+    const porch = data.roofs.find((r) => r.id === 'roof-porch');
+    assert(porch, 'the porch is a roof entry, so it toggles with the others');
+    assertEqual(porch.abut, 'maxY', 'it closes against the front wall');
+    const door = data.openings.find((o) => o.id === 'd-front');
+    const wall = data.walls.find((w) => w.id === door.wall);
+    const dx = wall.a[0] + door.at;
+    assert(porch.rect[0] < dx && porch.rect[2] > dx, 'the canopy spans the front door');
+    assert(porch.rect[2] - porch.rect[0] > door.width,
+      'the canopy is wider than the door it shelters');
+    assert(porch.rect[1] < 0, 'the canopy projects out in front of the house');
+    assert(porch.eaves > data.defaults.doorHeight,
+      'the canopy clears the door head');
+    const main = data.roofs.find((r) => r.id === 'roof-main');
+    assert(porch.eaves < main.eaves, 'the canopy sits well below the main eaves');
+  });
+
+  test('house-planner: chimneys clear the ridge they rise beside', () => {
+    const main = data.roofs.find((r) => r.id === 'roof-main');
+    const o = main.overhang ?? 0.3;
+    const w = (main.rect[2] + o) - (main.rect[0] - o);
+    const dep = (main.rect[3] + o) - (main.rect[1] - o);
+    const ridge = main.eaves + (Math.min(w, dep) / 2) * Math.tan((main.pitchDeg * Math.PI) / 180);
+    for (const chy of data.roof.chimneys) {
+      assert(chy.top > ridge + 0.4,
+        `${chy.id} tops out at ${chy.top}m, below the ${ridge.toFixed(2)}m ridge — a flue must clear it`);
+      assert(chy.top < ridge + 2.5, `${chy.id} at ${chy.top}m is an implausible stack`);
+      assert(chy.width > 0.6 && chy.depth > 0.9, `${chy.id} is too slender to be brickwork`);
+    }
   });
 
   test('house-planner: no wall is a zero-length stub', () => {

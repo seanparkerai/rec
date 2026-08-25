@@ -173,6 +173,17 @@ function buildRoof(spec, color) {
   // An `abut` edge meets a wall, so the ridge runs right out to it and that end
   // closes as a vertical gable instead of a hip. Without this a near-square
   // footprint like the garage collapses into a pyramid.
+  if (spec.abut === 'maxY') {
+    // Porch canopy: ridge runs out from the wall, hipped on its three free sides.
+    const cx = (x0 + x1) / 2;
+    const inset = Math.min(x1 - x0, y1 - y0) / 2;
+    const h = e + inset * tan;
+    const pts2 = [v(x0, e, y0), v(x1, e, y0), v(x1, e, y1), v(x0, e, y1),
+      v(cx, h, y1), v(cx, h, y0 + inset)];
+    const idx2 = [0, 5, 4, 0, 4, 3, 1, 2, 4, 1, 4, 5, 0, 1, 5, 3, 4, 2];
+    return { mesh: meshFrom(pts2, idx2, color), top: h };
+  }
+
   if (spec.abut === 'minX') {
     const cy = (y0 + y1) / 2;
     const pts2 = [v(x0, e, y0), v(x1, e, y0), v(x1, e, y1), v(x0, e, y1),
@@ -253,6 +264,48 @@ function buildPlot(plot) {
   fill.position.y = -0.15;
   g.add(fill);
   return g;
+}
+
+
+/**
+ * Height of a roof surface at a plan point, or null if the point is not under it.
+ * Used so a chimney emerges from the roof rather than from the eaves.
+ */
+function roofHeightAt(spec, px, py) {
+  const o = spec.overhang ?? 0.3;
+  const oh = spec.overhangs ?? {};
+  const x0 = spec.rect[0] - (oh.minX ?? o);
+  const x1 = spec.rect[2] + (oh.maxX ?? o);
+  const y0 = spec.rect[1] - (oh.minY ?? o);
+  const y1 = spec.rect[3] + (oh.maxY ?? o);
+  if (px < x0 || px > x1 || py < y0 || py > y1) return null;
+  const tan = Math.tan((spec.pitchDeg * Math.PI) / 180);
+  const e = spec.eaves;
+
+  if (spec.type === 'monopitch') {
+    const span = (spec.highSide === 'minY' || spec.highSide === 'maxY') ? (y1 - y0) : (x1 - x0);
+    let d;
+    if (spec.highSide === 'minY') d = y1 - py;
+    else if (spec.highSide === 'maxY') d = py - y0;
+    else if (spec.highSide === 'maxX') d = px - x0;
+    else d = x1 - px;
+    return e + (span - (span - d)) * tan * 0 + d * tan;
+  }
+  // Hip and gable: rise with distance from whichever eaves edge is nearest,
+  // capped at the ridge. An abutting edge is not an eaves, so it does not count.
+  const dists = [];
+  if (spec.abut !== 'minX') dists.push(px - x0);
+  dists.push(x1 - px);
+  dists.push(py - y0);
+  if (spec.abut !== 'maxY') dists.push(y1 - py);
+  if (spec.type === 'gable') {
+    const alongY = (spec.ridgeAxis ?? 'ns') === 'ns';
+    const d = alongY ? Math.min(px - x0, x1 - px) : Math.min(py - y0, y1 - py);
+    const cap = (alongY ? (x1 - x0) : (y1 - y0)) / 2;
+    return e + Math.min(d, cap) * tan;
+  }
+  const cap = Math.min(x1 - x0, y1 - y0) / 2;
+  return e + Math.min(Math.min(...dists), cap) * tan;
 }
 
 function bboxOf(rects) {
@@ -349,8 +402,13 @@ export function buildModel(data, { removed = new Set() } = {}) {
     roofGroup.add(mesh);
   }
   for (const chy of data.roof?.chimneys ?? []) {
-    const base = chy.base ?? 0;
-    const h = chy.top - base;
+    // Start the stack just under the roof surface it comes through, so only the
+    // part that should be visible stands proud.
+    const surfaces = (data.roofs ?? [])
+      .map((r) => roofHeightAt(r, chy.x, chy.y))
+      .filter((h) => h != null);
+    const base = surfaces.length ? Math.max(...surfaces) - 0.25 : (chy.base ?? 0);
+    const h = Math.max(0.4, chy.top - base);
     const stack = box(chy.width, h, chy.depth, PALETTE.chimney);
     stack.position.copy(v(chy.x, base + h / 2, chy.y));
     roofGroup.add(stack);

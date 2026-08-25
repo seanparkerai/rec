@@ -872,29 +872,44 @@
       "overhangs": {
         "minX": 0
       }
+    },
+    {
+      "id": "roof-porch",
+      "type": "hipped",
+      "abut": "maxY",
+      "rect": [
+        4.12,
+        -0.95,
+        5.82,
+        0.05
+      ],
+      "eaves": 2.3,
+      "pitchDeg": 42,
+      "overhang": 0.12,
+      "note": "Small pitched canopy over the front door, hipped on its three free sides and closing against the wall \u2014 as the aerial shows."
     }
   ],
   "roof": {
     "chimneys": [
       {
-        "id": "chy-dining",
-        "x": 2.05,
-        "y": 3.99,
-        "width": 0.75,
-        "depth": 1.05,
+        "id": "chy-living",
+        "x": 9.36,
+        "y": 2.04,
+        "width": 1.0,
+        "depth": 1.35,
         "base": 5.4,
-        "top": 8.85,
-        "note": "Rises off the dining-room breast where the main roof meets the rear wing."
+        "top": 8.7,
+        "note": "The tall brick stack where the house meets the garage. Height set so it clears the ridge, as a flue must."
       },
       {
-        "id": "chy-living",
-        "x": 9.35,
-        "y": 1.95,
-        "width": 0.75,
-        "depth": 1.05,
+        "id": "chy-dining",
+        "x": 2.05,
+        "y": 3.66,
+        "width": 0.85,
+        "depth": 1.15,
         "base": 5.4,
-        "top": 8.85,
-        "note": "On the main ridge above the living-room breast, beside the garage \u2014 the taller stack in the aerial."
+        "top": 8.1,
+        "note": "Rises off the dining-room breast at the back of the main roof. Height set so it clears the ridge, as a flue must."
       }
     ]
   },
