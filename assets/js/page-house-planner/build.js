@@ -417,11 +417,13 @@ export function buildModel(data, { removed = new Set() } = {}) {
     // A breast sits against the wall named by `side`. Ignoring this put every
     // breast on the front wall, standing in front of the windows.
     const p = f.projection;
+    // `centre` positions the breast along its wall. Without it a breast is
+    // centred in the room, which put one of them across a doorway.
     let bw; let bd; let cx; let cy;
-    if (f.side === 'maxX') { bw = p; bd = f.width; cx = x1 - p / 2; cy = (y0 + y1) / 2; }
-    else if (f.side === 'minX') { bw = p; bd = f.width; cx = x0 + p / 2; cy = (y0 + y1) / 2; }
-    else if (f.side === 'maxY') { bw = f.width; bd = p; cx = (x0 + x1) / 2; cy = y1 - p / 2; }
-    else { bw = f.width; bd = p; cx = (x0 + x1) / 2; cy = y0 + p / 2; }
+    if (f.side === 'maxX') { bw = p; bd = f.width; cx = x1 - p / 2; cy = f.centre ?? (y0 + y1) / 2; }
+    else if (f.side === 'minX') { bw = p; bd = f.width; cx = x0 + p / 2; cy = f.centre ?? (y0 + y1) / 2; }
+    else if (f.side === 'maxY') { bw = f.width; bd = p; cx = f.centre ?? (x0 + x1) / 2; cy = y1 - p / 2; }
+    else { bw = f.width; bd = p; cx = f.centre ?? (x0 + x1) / 2; cy = y0 + p / 2; }
     const b = box(bw, level.ceilingHeight, bd, PALETTE.chimney);
     b.position.copy(v(cx, level.elevation + level.ceilingHeight / 2, cy));
     levelGroups.get(room.level).add(b);

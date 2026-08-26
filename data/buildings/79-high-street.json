@@ -893,23 +893,23 @@
     "chimneys": [
       {
         "id": "chy-living",
-        "x": 8.85,
-        "y": 2.04,
-        "width": 0.78,
-        "depth": 1.05,
+        "x": 9.1,
+        "y": 1.86,
+        "width": 0.75,
+        "depth": 1.0,
         "base": 5.4,
-        "top": 8.3,
-        "note": "Brick stack carried up off its breast and emerging near the ridge. Plan size and height above the roof are set so it reads as domestic brickwork, not a tower."
+        "top": 8.07,
+        "note": "Carried up off its own breast and standing 1.9m proud of the roof."
       },
       {
         "id": "chy-dining",
-        "x": 2.05,
-        "y": 3.66,
-        "width": 0.72,
-        "depth": 0.98,
+        "x": 2.75,
+        "y": 3.6,
+        "width": 0.75,
+        "depth": 1.0,
         "base": 5.4,
-        "top": 7.95,
-        "note": "Brick stack carried up off its breast and emerging near the ridge. Plan size and height above the roof are set so it reads as domestic brickwork, not a tower."
+        "top": 7.96,
+        "note": "Carried up off its own breast and standing 1.9m proud of the roof."
       }
     ]
   },
@@ -921,16 +921,18 @@
       "side": "maxX",
       "width": 1.2,
       "projection": 0.28,
-      "note": "Detected on the plan in the living room east wall \u2014 stone surround, wood-burning stove."
+      "note": "Detected on the estate agent plan at 1.20m wide with a 0.28m projection, centred 1.86m along the living-room east wall.",
+      "centre": 1.86
     },
     {
       "id": "breast-dining",
       "type": "chimneyBreast",
       "room": "dining",
       "side": "maxY",
-      "width": 1.55,
-      "projection": 0.4,
-      "note": "Brick fireplace with timber mantel and alcove shelving, on the wall through to the kitchen."
+      "width": 1.35,
+      "projection": 0.35,
+      "note": "Brick fireplace with timber mantel. Set 2.75m along the wall so it stands clear of the doorway through to the rear.",
+      "centre": 2.75
     }
   ],
   "structures": [

@@ -427,37 +427,53 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(doors.length, 3, 'three bedrooms, three doors — no more');
   });
 
-  test('house-planner: no chimney breast stands in front of a window', () => {
+  test('house-planner: no chimney breast blocks an opening on its own wall', () => {
+    // The earlier version compared 2D footprints against windows only. Breasts
+    // sit against a wall, so the comparison that matters is one-dimensional —
+    // along that wall — and doors count every bit as much as windows.
     const byId = new Map(data.walls.map((w) => [w.id, w]));
     for (const f of data.features.filter((x) => x.type === 'chimneyBreast')) {
       assert(['minX', 'maxX', 'minY', 'maxY'].includes(f.side),
         `${f.id} has no side, so it would default onto the front wall`);
       const room = data.rooms.find((r) => r.id === f.room);
       const [x0, y0, x1, y1] = room.rect;
-      const vertical = f.side === 'minX' || f.side === 'maxX';
-      // Footprint of the breast in plan.
-      const bx0 = vertical ? (f.side === 'maxX' ? x1 - f.projection : x0) : (x0 + x1) / 2 - f.width / 2;
-      const bx1 = vertical ? (f.side === 'maxX' ? x1 : x0 + f.projection) : (x0 + x1) / 2 + f.width / 2;
-      const by0 = vertical ? (y0 + y1) / 2 - f.width / 2 : (f.side === 'maxY' ? y1 - f.projection : y0);
-      const by1 = vertical ? (y0 + y1) / 2 + f.width / 2 : (f.side === 'maxY' ? y1 : y0 + f.projection);
+      const vert = f.side === 'minX' || f.side === 'maxX';
+      const c = f.centre ?? (vert ? (y0 + y1) / 2 : (x0 + x1) / 2);
+      const bs = c - f.width / 2;
+      const be = c + f.width / 2;
+      assert(bs >= (vert ? y0 : x0) - 0.02 && be <= (vert ? y1 : x1) + 0.02,
+        `${f.id} runs past the end of its own wall`);
+      const face = f.side === 'maxX' ? x1 : (f.side === 'minX' ? x0 : (f.side === 'maxY' ? y1 : y0));
       for (const o of data.openings) {
-        if (o.type !== 'window') continue;
         const w = byId.get(o.wall);
         if (!w || w.level !== room.level) continue;
-        const len = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);
-        const ux = (w.b[0] - w.a[0]) / len;
-        const uy = (w.b[1] - w.a[1]) / len;
-        const sx = w.a[0] + ux * (o.at - o.width / 2);
-        const sy = w.a[1] + uy * (o.at - o.width / 2);
-        const ex = w.a[0] + ux * (o.at + o.width / 2);
-        const ey = w.a[1] + uy * (o.at + o.width / 2);
-        const wx0 = Math.min(sx, ex);
-        const wx1 = Math.max(sx, ex);
-        const wy0 = Math.min(sy, ey);
-        const wy1 = Math.max(sy, ey);
-        const clash = bx0 < wx1 - 0.05 && wx0 < bx1 - 0.05 && by0 < wy1 - 0.05 && wy0 < by1 - 0.05;
-        assert(!clash, `${f.id} stands in front of window ${o.id}`);
+        const horiz = Math.abs(w.b[0] - w.a[0]) > Math.abs(w.b[1] - w.a[1]);
+        if (vert === horiz) continue;                       // not this wall's axis
+        const wallPos = vert ? w.a[0] : w.a[1];
+        if (Math.abs(wallPos - face) > 0.3) continue;       // not the wall it leans on
+        const os = (vert ? w.a[1] : w.a[0]) + o.at - o.width / 2;
+        const oe = os + o.width;
+        assert(!(os < be - 0.02 && bs < oe - 0.02),
+          `${f.id} (${bs.toFixed(2)}-${be.toFixed(2)}) blocks ${o.id} (${os.toFixed(2)}-${oe.toFixed(2)})`);
       }
+    }
+  });
+
+  test('house-planner: chimney stacks stand over their own breast', () => {
+    for (const chy of data.roof.chimneys) {
+      const f = data.features.find(
+        (x) => x.type === 'chimneyBreast' && chy.id.endsWith(x.room),
+      );
+      assert(f, `${chy.id} has no matching breast`);
+      const room = data.rooms.find((r) => r.id === f.room);
+      const [x0, y0, x1, y1] = room.rect;
+      assert(chy.x > x0 - 0.4 && chy.x < x1 + 0.4 && chy.y > y0 - 0.4 && chy.y < y1 + 0.4,
+        `${chy.id} does not stand over the ${f.room}`);
+      const vert = f.side === 'minX' || f.side === 'maxX';
+      const c = f.centre ?? (vert ? (y0 + y1) / 2 : (x0 + x1) / 2);
+      const along = vert ? chy.y : chy.x;
+      assert(Math.abs(along - c) < 0.5,
+        `${chy.id} sits ${Math.abs(along - c).toFixed(2)}m off the centre of its breast`);
     }
   });
 
