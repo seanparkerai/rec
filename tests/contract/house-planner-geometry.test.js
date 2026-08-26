@@ -111,7 +111,7 @@ export async function register({ test, assert, assertEqual }) {
     const leanTo = data.roofs.find((r) => r.type === 'monopitch' && r.id === 'roof-bathroom');
     assert(leanTo, 'the bathroom lean-to roof is modelled');
     const [lx0, ly0, lx1, ly1] = leanTo.rect;
-    for (const id of ['bathroom', 'shower']) {
+    for (const id of ['bathroom', 'boiler']) {
       const [x0, y0, x1, y1] = data.rooms.find((r) => r.id === id).rect;
       assert(x0 >= lx0 - 0.01 && x1 <= lx1 + 0.01 && y0 >= ly0 - 0.01 && y1 <= ly1 + 0.01,
         `${id} is not inside the lean-to footprint`);
@@ -494,15 +494,15 @@ export async function register({ test, assert, assertEqual }) {
     }
   });
 
-  test('house-planner: three green gates, in the right places', () => {
+  test('house-planner: two green gates, in the right places', () => {
     const gates = data.boundaryWalls.gates;
-    assertEqual(gates.length, 3, 'a drive gate, a corner gate and a side gate');
+    assertEqual(gates.length, 2, 'a drive gate and a corner gate — the side gate does not exist');
     const byId = new Map(gates.map((g) => [g.id, g]));
     const len = (g) => Math.hypot(g.b[0] - g.a[0], g.b[1] - g.a[1]);
     const drive = byId.get('gate-drive');
     assertEqual(drive.kind, 'fivebar', 'the drive gate is a five-bar');
     assert(len(drive) > 2.8, `a ${len(drive).toFixed(2)}m drive gate is too narrow for a car`);
-    for (const id of ['gate-corner', 'gate-side']) {
+    for (const id of ['gate-corner']) {
       const g = byId.get(id);
       assert(g, `${id} is modelled`);
       assertEqual(g.kind, 'pedestrian', `${id} is a pedestrian gate`);
@@ -517,6 +517,44 @@ export async function register({ test, assert, assertEqual }) {
           - Math.max(Math.min(g.a[1], g.b[1]), Math.min(seg.a[1], seg.b[1]));
         assert(!(overlap > 0.12 && overlapY > 0.12),
           `${g.id} overlaps wall ${seg.id} — a gate needs a gap`);
+      }
+    }
+  });
+
+  test('house-planner: the High Street frontage past 79a is unbroken brick', () => {
+    // Owner-corrected: what was modelled as a side gate is plain brickwork running
+    // across the front of the commercial unit and on to the splayed corner.
+    const bw = data.boundaryWalls;
+    const chain = ['bw-hs-a', 'bw-hs-gap', 'bw-hs-b'].map((id) => {
+      const seg = bw.segments.find((x) => x.id === id);
+      assert(seg, `${id} is modelled`);
+      return seg;
+    });
+    for (let i = 1; i < chain.length; i += 1) {
+      const prev = chain[i - 1];
+      const next = chain[i];
+      assert(Math.hypot(prev.b[0] - next.a[0], prev.b[1] - next.a[1]) < 0.02,
+        `${prev.id} does not meet ${next.id} — this frontage carries no gap`);
+    }
+    // It runs in front of the commercial unit, and on into the splay.
+    const front = data.structures.find((x) => x.id === '79a-front').rect;
+    const ys = chain.flatMap((seg) => [seg.a[1], seg.b[1]]);
+    assert(Math.max(...ys) < front[1],
+      'the frontage wall should stand in front of 79a, not inside or behind it');
+    const curve = bw.segments.find((x) => x.curved);
+    const tail = chain[chain.length - 1].b;
+    assert(Math.hypot(curve.a[0] - tail[0], curve.a[1] - tail[1]) < 0.02,
+      'the straight frontage should hand over to the splayed corner with no gap');
+    // No gate may sit anywhere along that run.
+    const xs = chain.flatMap((seg) => [seg.a[0], seg.b[0]]);
+    const bx0 = Math.min(...xs) - 0.05;
+    const bx1 = Math.max(...xs) + 0.05;
+    const by0 = Math.min(...ys) - 0.05;
+    const by1 = Math.max(...ys) + 0.05;
+    for (const g of bw.gates) {
+      for (const pt of [g.a, g.b]) {
+        const inside = pt[0] > bx0 && pt[0] < bx1 && pt[1] > by0 && pt[1] < by1;
+        assert(!inside, `${g.id} sits on the unbroken frontage in front of 79a`);
       }
     }
   });
@@ -712,6 +750,70 @@ export async function register({ test, assert, assertEqual }) {
       assert(Array.isArray(surf.polygon) && surf.polygon.length >= 3,
         `surface ${surf.id} has no drawable polygon`);
     }
+  });
+
+  test('house-planner: the boiler room opens to the outside and nowhere else', () => {
+    // Owner-corrected: the compartment at the east end of the lean-to is a boiler
+    // room entered by an external door. Nothing connects it to the inside.
+    const room = data.rooms.find((r) => r.id === 'boiler');
+    assert(room, 'the boiler room is modelled');
+    const [rx0, ry0, rx1, ry1] = room.rect;
+    const area = (rx1 - rx0) * (ry1 - ry0);
+    assert(area > 0.6 && area < 3.5,
+      `${area.toFixed(2)}m2 does not read as a small boiler compartment`);
+
+    // Walls are centrelines, so an opening on this room's boundary lands within
+    // half a wall of one of its four edges. Find every one of them.
+    const half = data.defaults.wallExternal / 2 + 0.02;
+    const byWall = new Map(data.walls.map((w) => [w.id, w]));
+    const onBoundary = [];
+    for (const o of data.openings) {
+      const w = byWall.get(o.wall);
+      assert(w, `${o.id} names a wall that does not exist`);
+      if (w.level !== room.level) continue;
+      const dx = w.b[0] - w.a[0];
+      const dy = w.b[1] - w.a[1];
+      const len = Math.hypot(dx, dy);
+      const ux = dx / len;
+      const uy = dy / len;
+      const p0 = [w.a[0] + ux * (o.at - o.width / 2), w.a[1] + uy * (o.at - o.width / 2)];
+      const p1 = [w.a[0] + ux * (o.at + o.width / 2), w.a[1] + uy * (o.at + o.width / 2)];
+      const horizontal = Math.abs(uy) < 1e-6;
+      // Distance from the room edge the wall runs along, and the overlap with it.
+      let touches = false;
+      if (horizontal) {
+        const near = Math.abs(p0[1] - ry0) < half || Math.abs(p0[1] - ry1) < half;
+        const span = Math.min(Math.max(p0[0], p1[0]), rx1) - Math.max(Math.min(p0[0], p1[0]), rx0);
+        touches = near && span > 0.05;
+      } else {
+        const near = Math.abs(p0[0] - rx0) < half || Math.abs(p0[0] - rx1) < half;
+        const span = Math.min(Math.max(p0[1], p1[1]), ry1) - Math.max(Math.min(p0[1], p1[1]), ry0);
+        touches = near && span > 0.05;
+      }
+      if (touches) onBoundary.push({ o, w });
+    }
+
+    assertEqual(onBoundary.length, 1,
+      `the boiler room has ${onBoundary.length} openings: ${onBoundary.map((x) => x.o.id).join(', ')}`);
+    const only = onBoundary[0];
+    assertEqual(only.o.type, 'door', `${only.o.id} should be a door, not a window`);
+    assertEqual(only.w.kind, 'external',
+      `${only.o.id} is on ${only.w.id}, an ${only.w.kind} wall — the door must be external`);
+    assert(only.o.width > 0.6, `a ${only.o.width}m door is too narrow to get a boiler through`);
+    // And the door has to land inside the compartment, not beside it.
+    const w = only.w;
+    const ux = (w.b[0] - w.a[0]) / Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);
+    const uy = (w.b[1] - w.a[1]) / Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);
+    const c = [w.a[0] + ux * only.o.at, w.a[1] + uy * only.o.at];
+    // Only the along-wall axis: the centreline itself sits half a wall outside the room.
+    const alongX = Math.abs(ux) > Math.abs(uy);
+    const lo = (alongX ? c[0] : c[1]) - only.o.width / 2;
+    const hi = (alongX ? c[0] : c[1]) + only.o.width / 2;
+    const e0 = alongX ? rx0 : ry0;
+    const e1 = alongX ? rx1 : ry1;
+    assert(lo >= e0 - 0.01 && hi <= e1 + 0.01,
+      `the boiler room door spans ${lo.toFixed(2)}-${hi.toFixed(2)}m, outside the `
+      + `${e0.toFixed(2)}-${e1.toFixed(2)}m compartment it opens into`);
   });
 
   test('house-planner: no wall is a zero-length stub', () => {

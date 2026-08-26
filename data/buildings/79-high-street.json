@@ -134,9 +134,9 @@
       "ceilingHeight": 2.3
     },
     {
-      "id": "shower",
+      "id": "boiler",
       "level": "ground",
-      "name": "Shower room",
+      "name": "Boiler room",
       "label": "",
       "rect": [
         8.53,
@@ -145,7 +145,8 @@
         5.34
       ],
       "underLeanTo": true,
-      "ceilingHeight": 2.3
+      "ceilingHeight": 2.3,
+      "note": "Small compartment at the east end of the lean-to. Owner-confirmed as a boiler room reached by an external door only \u2014 there is no door into it from inside the house."
     },
     {
       "id": "garage",
@@ -444,7 +445,7 @@
         5.46
       ],
       "kind": "internal",
-      "note": "Bathroom to shower room",
+      "note": "Bathroom to boiler room \u2014 solid; the boiler room has no internal door.",
       "removable": true,
       "height": 2.6
     },
@@ -663,11 +664,12 @@
       "width": 0.76
     },
     {
-      "id": "w-shower",
+      "id": "d-boiler",
       "wall": "gf-ext-leanto",
-      "type": "window",
-      "at": 5.17,
-      "width": 0.77
+      "type": "door",
+      "at": 5.035,
+      "width": 0.72,
+      "note": "External door to the boiler room \u2014 owner-corrected; this reads as a window on the rear elevation but is the only way into the compartment."
     },
     {
       "id": "gar-door-l",
@@ -718,14 +720,6 @@
       "type": "door",
       "at": 0.78,
       "width": 0.74
-    },
-    {
-      "id": "d-shower",
-      "wall": "gf-bath-shower",
-      "type": "door",
-      "at": 0.55,
-      "width": 0.72,
-      "note": "Not resolvable on the plan \u2014 placed so the shower room is reachable"
     },
     {
       "id": "w-bed-sw-front",
@@ -850,7 +844,7 @@
       "pitchDeg": 15,
       "overhang": 0.25,
       "highSide": "minY",
-      "note": "Lean-to over the bathroom and shower. Measured rear extent 5.59m \u2014 forward of the garage at 6.02m and well forward of the kitchen wing at 7.26m.",
+      "note": "Lean-to over the bathroom and the boiler room. Measured rear extent 5.59m \u2014 forward of the garage at 6.02m and well forward of the kitchen wing at 7.26m.",
       "overhangs": {
         "minY": 0
       }
@@ -998,7 +992,7 @@
     },
     {
       "id": "one-big-bathroom",
-      "name": "Single large bathroom",
+      "name": "Bathroom knocked through to the boiler room",
       "remove": [
         "gf-bath-shower"
       ]
@@ -1007,9 +1001,9 @@
   "assumptions": [
     {
       "id": "D1",
-      "severity": "medium",
-      "title": "The shower room door is invented",
-      "detail": "No door gap was detectable on the plan for the shower room. One is placed so the room is reachable at all. Everything else on this floor comes from a measured gap in a wall."
+      "severity": "low",
+      "title": "The boiler room is entered from outside only",
+      "detail": "Owner-confirmed: the small compartment at the east end of the lean-to is a boiler room, reached by a door in its back wall. It has no internal door, which is why no gap for one was detectable on the plan. The door is centred on the compartment; its exact width is not dimensioned."
     },
     {
       "id": "D1b",
@@ -1238,6 +1232,18 @@
         "note": "High Street side, south of 79a"
       },
       {
+        "id": "bw-hs-gap",
+        "a": [
+          -3.45,
+          -5.41
+        ],
+        "b": [
+          -2.94,
+          -6.1
+        ],
+        "note": "Owner-corrected: no gate here. The brickwork runs unbroken across the front of the commercial unit and on to the splayed corner."
+      },
+      {
         "id": "bw-hs-b",
         "a": [
           -2.94,
@@ -1247,7 +1253,7 @@
           -2.73,
           -6.37
         ],
-        "note": "Pier between the side gate and the corner"
+        "note": "High Street side, running on to the splayed corner"
       },
       {
         "id": "bw-curve-0",
@@ -1407,20 +1413,6 @@
         "kind": "pedestrian",
         "height": 1.15,
         "note": "Small green gate just past the splayed corner."
-      },
-      {
-        "id": "gate-side",
-        "a": [
-          -3.45,
-          -5.41
-        ],
-        "b": [
-          -2.94,
-          -6.1
-        ],
-        "kind": "pedestrian",
-        "height": 1.15,
-        "note": "Green gate on the High Street side, south of 79a."
       }
     ],
     "hedge": {
