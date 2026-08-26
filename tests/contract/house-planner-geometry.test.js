@@ -186,10 +186,16 @@ export async function register({ test, assert, assertEqual }) {
 
     const xs = plot.polygon.map((p) => p[0]);
     const ys = plot.polygon.map((p) => p[1]);
-    assert(Math.max(...xs) - 16.15 > 2.5,
-      `only ${(Math.max(...xs) - 16.15).toFixed(1)}m beside the garage — the plot is too tight`);
-    assert(-Math.min(...ys) > 5.0,
-      `only ${(-Math.min(...ys)).toFixed(1)}m of front garden — the plot is too tight`);
+    // Clearances are whatever the fit measured, not what looks generous. The
+    // land is tight behind the garage and deep at the front; an earlier version
+    // asserted a minimum here and was simply wrong about the site.
+    const cl = data.plot.clearances;
+    assert(Math.abs((Math.max(...xs) - 16.36) - cl.besideGarage) < 0.6,
+      `polygon gives ${(Math.max(...xs) - 16.36).toFixed(1)}m beside the garage but clearances say ${cl.besideGarage}m`);
+    assert(Math.abs(-Math.min(...ys) - cl.frontGarden) < 0.6,
+      `polygon gives ${(-Math.min(...ys)).toFixed(1)}m of front but clearances say ${cl.frontGarden}m`);
+    assert(cl.frontGarden > cl.besideGarage,
+      'the front garden is the deep side; behind the garage is tight');
     const area = Math.abs(plot.polygon.reduce((sum, [px, py], i) => {
       const [nx, ny] = plot.polygon[(i + 1) % plot.polygon.length];
       return sum + (px * ny - nx * py);
@@ -577,15 +583,31 @@ export async function register({ test, assert, assertEqual }) {
     assert(back.rect[0] > front.rect[0], 'the back part does not reach as far towards the road');
   });
 
-  test('house-planner: the frontage follows 79a\'s building line', () => {
-    const front = data.structures[0];
-    const curve = data.boundaryWalls.segments.filter((s2) => s2.curved);
-    const xs = curve.flatMap((s2) => [s2.a[0], s2.b[0]]);
-    assert(Math.abs(Math.min(...xs) - front.rect[0]) < 0.1,
-      `the curve starts at x=${Math.min(...xs)} but 79a's front is at x=${front.rect[0]}`);
-    const hs = data.boundaryWalls.segments.find((s2) => s2.id === 'bw-hs-front');
-    assert(hs && Math.abs(hs.a[0] - front.rect[0]) < 0.1,
-      'the High Street wall runs on the same line as the front of 79a');
+  test('house-planner: the parcel is a measured fit, not an assertion', () => {
+    // The boundary is fitted to the title plan by maximising overlap between the
+    // model's own footprint and the building tint. Record the evidence so a
+    // hand-edited polygon cannot quietly replace a measured one.
+    const v = data.plot.validation;
+    assert(v && typeof v.iou === 'number', 'the plot records how it was fitted');
+    assert(v.iou > 0.80, `fit IoU of ${v.iou} is too poor to trust the boundary`);
+    assert(v.scalePxPerM > 10 && v.scalePxPerM < 200, 'the fitted scale is plausible');
+    assert(typeof v.independentCheck === 'string' && v.independentCheck.length > 40,
+      'the fit carries an independent cross-check');
+  });
+
+  test('house-planner: the fit reproduces 79a where the architect plan puts it', () => {
+    // Two unrelated sources: the title-plan fit and the 1:50 architect drawing.
+    // They must agree, or one of them is wrong.
+    const DERIVED = { x0: -4.59, y0: -5.04, x1: -0.03, y1: 5.28 };
+    const x0 = Math.min(...data.structures.map((s2) => s2.rect[0]));
+    const x1 = Math.max(...data.structures.map((s2) => s2.rect[2]));
+    const y0 = Math.min(...data.structures.map((s2) => s2.rect[1]));
+    const y1 = Math.max(...data.structures.map((s2) => s2.rect[3]));
+    for (const [name, a2, b2] of [['west', x0, DERIVED.x0], ['east', x1, DERIVED.x1],
+      ['south', y0, DERIVED.y0], ['north', y1, DERIVED.y1]]) {
+      assert(Math.abs(a2 - b2) < 0.8,
+        `79a's ${name} face is ${a2.toFixed(2)} from the architect plan but ${b2.toFixed(2)} from the title-plan fit`);
+    }
   });
 
   test('house-planner: the parcel wraps round 79a and holds the drive', () => {

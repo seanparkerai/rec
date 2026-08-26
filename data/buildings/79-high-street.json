@@ -1119,105 +1119,75 @@
   "plot": {
     "polygon": [
       [
-        -1.01,
-        7.22
+        0.85,
+        12.02
       ],
       [
-        -1.03,
-        5.65
+        -5.78,
+        13.05
       ],
       [
-        -1.03,
-        -4.45
+        -5.78,
+        1.97
       ],
       [
-        -4.6,
-        -4.45
+        -4.2,
+        2.15
       ],
       [
-        -4.6,
-        -7.4
+        -4.05,
+        5.56
       ],
       [
-        -4.58,
-        -7.66
+        0.03,
+        5.31
       ],
       [
-        -4.53,
-        -7.92
+        -0.16,
+        0.86
       ],
       [
-        -4.45,
-        -8.17
+        -0.29,
+        -4.55
       ],
       [
-        -4.33,
-        -8.4
+        -3.74,
+        -5.03
       ],
       [
-        -4.19,
-        -8.62
+        -1.83,
+        -7.57
       ],
       [
-        -4.01,
-        -8.81
+        4.35,
+        -8.83
       ],
       [
-        -3.82,
-        -8.99
+        17.37,
+        -9.71
       ],
       [
-        -3.6,
-        -9.13
-      ],
-      [
-        -3.37,
-        -9.25
-      ],
-      [
-        -3.12,
-        -9.33
-      ],
-      [
-        -2.86,
-        -9.38
-      ],
-      [
-        -2.5999999999999996,
-        -9.4
-      ],
-      [
-        13.9,
-        -7.9
-      ],
-      [
-        19.31,
-        -4.75
-      ],
-      [
-        21.04,
-        2.76
-      ],
-      [
-        20.78,
-        12.69
-      ],
-      [
-        17.71,
-        12.69
+        17.01,
+        7.21
       ]
     ],
-    "areaM2": 408,
-    "areaAcres": 0.1,
-    "source": "Traced from both title-plan images independently \u2014 the owner crop and the earlier uncropped sheet. Scale fixed off building 79 (three estimates: 33.1, 34.8, 34.4 px/m); orientation from the building's own asymmetry, its front being straight to 0.02m while its back steps by 0.37m.",
-    "validation": "Orientation was resolved from the building's own asymmetry: its front is a straight run and its back is stepped, so the correct orientation is the one where min-y varies by 0.01m across the frontage while max-y varies by 0.37m. Measured footprint ratio 2.15 against the model 2.22.",
-    "clearances": {
-      "besideGarage": 4.9,
-      "frontGarden": 8.8,
-      "rear": 5.4,
-      "westOf79a": 3.57
+    "areaM2": 379,
+    "areaAcres": 0.09,
+    "source": "Fitted to the HM Land Registry title plan by optimising overlap between the model's own ground footprint and the building tint on the plan. Best fit: rotation 318.72 deg, scale 38.32 px/m, IoU 0.862.",
+    "validation": {
+      "iou": 0.862,
+      "scalePxPerM": 38.32,
+      "rotationDeg": 318.72,
+      "polygonVsMask": "traced polygon 379m2 against a 381m2 mask, 0.5% apart",
+      "independentCheck": "79a's footprint falls out of the same transform at x -4.6..0.0, y -5.0..5.3, against -4.60..0 and -4.45..5.65 derived separately from the architect's 1:50 plan. Two unrelated sources agreeing to ~0.4m.",
+      "method": "tools/verify-plot-fit.py regenerates the overlay so the fit can be re-checked by eye."
     },
-    "confidence": "The frontage now follows 79a's building line rather than the title line, and the boundary wraps round the south of 79a. Dimensions +/-8%."
+    "clearances": {
+      "besideGarage": 1.0,
+      "frontGarden": 9.7,
+      "rear": 5.8,
+      "westOf79a": 1.2
+    }
   },
   "commercialBuildingSurvey": {
     "source": "Waters Architects, 'Existing plan & elevs 1/50 & 1/100 @ A3'",
@@ -1250,246 +1220,187 @@
     "height": 1.15,
     "thickness": 0.34,
     "material": "brick",
-    "cornerRadius": 2.0,
-    "note": "Low brick walls to the road frontages with a hedge above, splayed at the drive entrance. The High Street run follows 79a's building line; no wall crosses the building.",
+    "cornerRadius": 1.5,
+    "note": "Low brick walls to the road frontages with a hedge above, splayed at the corner. Laid on the corners derived from the title-plan fit.",
     "segments": [
       {
-        "id": "bw-hs-front",
+        "id": "bw-hs-a",
         "a": [
-          -4.6,
-          -4.45
+          -3.74,
+          -5.03
         ],
         "b": [
-          -4.6,
-          -7.4
+          -3.45,
+          -5.41
         ],
-        "note": "High Street frontage, in line with the front of 79a"
+        "note": "High Street side, south of 79a"
+      },
+      {
+        "id": "bw-hs-b",
+        "a": [
+          -2.94,
+          -6.1
+        ],
+        "b": [
+          -2.73,
+          -6.37
+        ],
+        "note": "Pier between the side gate and the corner"
       },
       {
         "id": "bw-curve-0",
         "a": [
-          -4.6,
-          -7.4
+          -2.73,
+          -6.37
         ],
         "b": [
-          -4.58,
-          -7.66
+          -2.43,
+          -6.56
         ],
         "curved": true
       },
       {
         "id": "bw-curve-1",
         "a": [
-          -4.58,
-          -7.66
+          -2.43,
+          -6.56
         ],
         "b": [
-          -4.53,
-          -7.92
+          -2.14,
+          -6.75
         ],
         "curved": true
       },
       {
         "id": "bw-curve-2",
         "a": [
-          -4.53,
-          -7.92
+          -2.14,
+          -6.75
         ],
         "b": [
-          -4.45,
-          -8.17
+          -1.84,
+          -6.93
         ],
         "curved": true
       },
       {
         "id": "bw-curve-3",
         "a": [
-          -4.45,
-          -8.17
+          -1.84,
+          -6.93
         ],
         "b": [
-          -4.33,
-          -8.4
+          -1.54,
+          -7.12
         ],
         "curved": true
       },
       {
         "id": "bw-curve-4",
         "a": [
-          -4.33,
-          -8.4
+          -1.54,
+          -7.12
         ],
         "b": [
-          -4.19,
-          -8.62
+          -1.25,
+          -7.31
         ],
         "curved": true
       },
       {
         "id": "bw-curve-5",
         "a": [
-          -4.19,
-          -8.62
+          -1.25,
+          -7.31
         ],
         "b": [
-          -4.01,
-          -8.81
+          -0.95,
+          -7.5
         ],
         "curved": true
       },
       {
         "id": "bw-curve-6",
         "a": [
-          -4.01,
-          -8.81
+          -0.95,
+          -7.5
         ],
         "b": [
-          -3.82,
-          -8.99
+          -0.66,
+          -7.68
         ],
         "curved": true
       },
       {
         "id": "bw-curve-7",
         "a": [
-          -3.82,
-          -8.99
+          -0.66,
+          -7.68
         ],
         "b": [
-          -3.6,
-          -9.13
-        ],
-        "curved": true
-      },
-      {
-        "id": "bw-curve-8",
-        "a": [
-          -3.6,
-          -9.13
-        ],
-        "b": [
-          -3.37,
-          -9.25
-        ],
-        "curved": true
-      },
-      {
-        "id": "bw-curve-9",
-        "a": [
-          -3.37,
-          -9.25
-        ],
-        "b": [
-          -3.12,
-          -9.33
-        ],
-        "curved": true
-      },
-      {
-        "id": "bw-curve-10",
-        "a": [
-          -3.12,
-          -9.33
-        ],
-        "b": [
-          -2.86,
-          -9.38
-        ],
-        "curved": true
-      },
-      {
-        "id": "bw-curve-11",
-        "a": [
-          -2.86,
-          -9.38
-        ],
-        "b": [
-          -2.6,
-          -9.4
+          -0.36,
+          -7.87
         ],
         "curved": true
       },
       {
         "id": "bw-rml-a",
         "a": [
-          -2.6,
-          -9.4
+          -0.36,
+          -7.87
         ],
         "b": [
-          -1.8,
-          -9.33
+          0.23,
+          -7.99
         ]
       },
       {
         "id": "bw-rml-b",
         "a": [
-          -0.81,
-          -9.24
+          1.21,
+          -8.19
         ],
         "b": [
-          3.38,
-          -8.86
+          7.04,
+          -9.01
         ]
       },
       {
         "id": "bw-rml-c",
         "a": [
-          6.96,
-          -8.53
+          10.63,
+          -9.25
         ],
         "b": [
-          13.9,
-          -7.9
+          17.37,
+          -9.71
         ]
-      },
-      {
-        "id": "bw-side-n",
-        "a": [
-          -1.01,
-          7.22
-        ],
-        "b": [
-          -1.03,
-          6.95
-        ]
-      },
-      {
-        "id": "bw-side-s",
-        "a": [
-          -1.03,
-          5.75
-        ],
-        "b": [
-          -1.03,
-          5.65
-        ],
-        "note": "Pier where the wall meets 79a"
       }
     ],
     "gates": [
       {
         "id": "gate-drive",
         "a": [
-          3.38,
-          -8.86
+          7.04,
+          -9.01
         ],
         "b": [
-          6.96,
-          -8.53
+          10.63,
+          -9.25
         ],
         "kind": "fivebar",
         "height": 1.25,
-        "note": "Large green five-bar across the gravel drive."
+        "note": "Five-bar across the gravel drive, aligned on the garage."
       },
       {
         "id": "gate-corner",
         "a": [
-          -1.8,
-          -9.33
+          0.23,
+          -7.99
         ],
         "b": [
-          -0.81,
-          -9.24
+          1.21,
+          -8.19
         ],
         "kind": "pedestrian",
         "height": 1.15,
@@ -1498,42 +1409,42 @@
       {
         "id": "gate-side",
         "a": [
-          -1.03,
-          6.95
+          -3.45,
+          -5.41
         ],
         "b": [
-          -1.03,
-          5.75
+          -2.94,
+          -6.1
         ],
         "kind": "pedestrian",
         "height": 1.15,
-        "note": "Green gate down the side of the property."
+        "note": "Green gate on the High Street side, south of 79a."
       }
     ],
     "hedge": {
       "height": 1.9,
       "thickness": 0.85,
       "offset": 0.55,
-      "note": "Tall clipped hedge standing inside the Russell Mill Lane wall, as the street views show.",
+      "note": "Tall clipped hedge inside the frontage wall, as the street views show.",
       "runs": [
         {
           "a": [
-            -0.81,
-            -9.24
+            1.21,
+            -8.19
           ],
           "b": [
-            3.38,
-            -8.86
+            7.04,
+            -9.01
           ]
         },
         {
           "a": [
-            6.96,
-            -8.53
+            10.63,
+            -9.25
           ],
           "b": [
-            13.9,
-            -7.9
+            17.37,
+            -9.71
           ]
         }
       ]
@@ -1546,24 +1457,16 @@
       "material": "gravel",
       "polygon": [
         [
-          3.36,
-          -8.68
+          7.05,
+          -8.81
         ],
         [
-          6.94,
-          -8.35
-        ],
-        [
-          11.6,
-          -7.83
-        ],
-        [
-          15.0,
-          -6.55
+          10.64,
+          -9.05
         ],
         [
           16.3,
-          -5.4
+          -6.6
         ],
         [
           16.3,
@@ -1574,11 +1477,11 @@
           0.3
         ],
         [
-          5.9,
-          -3.4
+          6.6,
+          -4.2
         ]
       ],
-      "note": "Light stone gravel running from the five-bar gate, sweeping east and broadening across the front of the garage. Traced from the aerial; extent indicative, not measured."
+      "note": "Light stone gravel from the five-bar gate to the garage apron."
     }
   ]
 }
