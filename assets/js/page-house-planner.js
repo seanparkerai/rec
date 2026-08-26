@@ -49,6 +49,7 @@ async function init() {
     viewer.setModel(buildModel(data, { removed }));
     viewer.setRoofVisible(document.getElementById('hp-roof')?.checked ?? false);
     viewer.setGlazingVisible(document.getElementById('hp-windows')?.checked ?? true);
+    viewer.setJoineryVisible(document.getElementById('hp-doors')?.checked ?? true);
     for (const level of data.levels) {
       const box = document.getElementById(`hp-lvl-${level.id}`);
       viewer.setLevelVisible(level.id, box ? box.checked : true);
@@ -70,6 +71,7 @@ async function init() {
     onLevel: (id, on) => viewer.setLevelVisible(id, on),
     onRoof: (on) => viewer.setRoofVisible(on),
     onWindows: (on) => viewer.setGlazingVisible(on),
+    onDoors: (on) => viewer.setJoineryVisible(on),
     onScenario: (id) => {
       const scenario = data.scenarios.find((s) => s.id === id);
       removed.clear();

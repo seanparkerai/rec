@@ -654,14 +654,20 @@
       "wall": "gf-ext-leanto",
       "type": "window",
       "at": 1.48,
-      "width": 0.77
+      "width": 0.77,
+      "sill": 1.35,
+      "head": 2.1,
+      "note": "High-level bathroom window \u2014 owner-corrected against a walkthrough view: the head sits with the others but the cill is high, leaving a 0.75m opening rather than a full-height one."
     },
     {
       "id": "w-bath-b",
       "wall": "gf-ext-leanto",
       "type": "window",
       "at": 3.24,
-      "width": 0.76
+      "width": 0.76,
+      "sill": 1.35,
+      "head": 2.1,
+      "note": "High-level bathroom window \u2014 owner-corrected against a walkthrough view: the head sits with the others but the cill is high, leaving a 0.75m opening rather than a full-height one."
     },
     {
       "id": "d-boiler",
@@ -1076,6 +1082,18 @@
       "severity": "low",
       "title": "The landing alcove is closed off by inference",
       "detail": "The plan shows no wall along the alcove's south side, which would leave the two west bedrooms running into each other. One is added so each bedroom has a single door, which is what the owner confirms. Worth checking on site."
+    },
+    {
+      "id": "D15",
+      "severity": "low",
+      "title": "Door swings are derived, not measured",
+      "detail": "The plan survey found the openings, not the swing arcs, so each leaf is hung by rule: into the nearer corner, opening into the larger adjoining room, and opening outwards from a compartment too small to take the swing \u2014 which is why the boiler-room door opens to the garden. A leaf that would stand through another wall is rehung on the other jamb or the other side. Any door can be corrected individually with a `swing` field on its opening."
+    },
+    {
+      "id": "D16",
+      "severity": "low",
+      "title": "The high-level cill height is eyeballed, not measured",
+      "detail": "The two rear bathroom windows are high-level, owner-corrected from a walkthrough view. The cill is set at 1.35m, read off the marked-up screenshot rather than measured, leaving a 0.75m opening under a 2.10m head. A tape to either cill fixes it."
     }
   ],
   "spawn": {

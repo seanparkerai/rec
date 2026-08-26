@@ -59,13 +59,14 @@ export class Viewer {
     this.scene.add(ground);
   }
 
-  setModel({ root, levels, roof, colliders, glazing }) {
+  setModel({ root, levels, roof, colliders, glazing, joinery }) {
     if (this.model) this.scene.remove(this.model);
     this.model = root;
     this.levelGroups = levels;
     this.roofGroup = roof;
     this.colliders = colliders;
     this.glazing = glazing ?? [];
+    this.joinery = joinery ?? [];
     this.scene.add(root);
   }
 
@@ -99,6 +100,10 @@ export class Viewer {
 
   setGlazingVisible(visible) {
     (this.glazing ?? []).forEach((m) => { m.visible = visible; });
+  }
+
+  setJoineryVisible(visible) {
+    (this.joinery ?? []).forEach((m) => { m.visible = visible; });
   }
 
   get camera() { return this.mode === 'walk' ? this.walkCam : this.orbitCam; }

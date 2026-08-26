@@ -6,6 +6,7 @@
 // in site.planNorthOffsetDeg. Plan (x, y) maps to world (x, height, -y).
 
 import * as THREE from 'three';
+import { resolveDoorSwings } from './swings.js';
 
 const PALETTE = {
   external: 0xb08265,
@@ -24,6 +25,9 @@ const PALETTE = {
   gravel: 0xd6cfbf,
   garageDoor: 0xefebe2,
   door: 0x8a6a4a,
+  doorLeaf: 0xc9a877,
+  doorPanel: 0xd7bb92,
+  doorHandle: 0x8b8f96,
 };
 
 const v = (x, h, y) => new THREE.Vector3(x, h, -y);
@@ -55,8 +59,41 @@ function segmentBox(a, b, thickness, base, height, color, opts) {
 
 const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 
+/** A light wooden door leaf standing open on its hinge, with stiles and a handle. */
+function doorLeaf(sw, base, head, palette) {
+  const T = 0.045;
+  const top = head - 0.02;
+  const meshes = [];
+  const leaf = segmentBox(sw.a, sw.b, T, base, top, palette.doorLeaf);
+  if (!leaf) return meshes;
+  meshes.push(leaf);
+
+  // Stiles and rails stand a little proud of both faces, so it reads as a
+  // panelled door rather than a plank.
+  const BAR = 0.07;
+  const fr = Math.min(0.35, BAR / sw.leaf);
+  const bar = (t0, t1, yOff, yH) => {
+    const m = segmentBox(lerp(sw.a, sw.b, t0), lerp(sw.a, sw.b, t1),
+      T + 0.02, base + yOff, yH, palette.doorPanel);
+    if (m) meshes.push(m);
+  };
+  bar(0, fr, 0, top);                 // hanging stile
+  bar(1 - fr, 1, 0, top);             // closing stile
+  bar(0, 1, 0, BAR);                  // bottom rail
+  bar(0, 1, top - BAR, BAR);          // top rail
+  bar(0, 1, top * 0.46, BAR);         // middle rail
+
+  const handle = box(0.11, 0.05, 0.16, palette.doorHandle);
+  const hp = lerp(sw.a, sw.b, 1 - fr - 0.06 / sw.leaf);
+  handle.position.copy(v(hp[0], base + 1.02, hp[1]));
+  handle.rotation.y = Math.atan2(sw.b[1] - sw.a[1], sw.b[0] - sw.a[0]);
+  meshes.push(handle);
+
+  return meshes;
+}
+
 /** One wall, split around its openings. Returns meshes + a plan-space collider. */
-function buildWall(wall, openings, level, defaults, wallHeight) {
+function buildWall(wall, openings, level, defaults, wallHeight, swings) {
   const meshes = [];
   const thickness = wall.kind === 'internal' ? defaults.wallInternal : defaults.wallExternal;
   const color = PALETTE[wall.kind] ?? PALETTE.internal;
@@ -77,9 +114,10 @@ function buildWall(wall, openings, level, defaults, wallHeight) {
       meshes.push(segmentBox(lerp(wall.a, wall.b, cursor), lerp(wall.a, wall.b, s / len),
         thickness, base, top, color));
     }
-    const head = o.type === 'garage' ? defaults.garageDoorHeight
-      : (o.type === 'door' ? defaults.doorHeight : defaults.windowHead);
-    const sill = o.type === 'window' ? defaults.windowSill : 0;
+    // An opening may set its own sill and head; the defaults are the common case.
+    const head = o.head ?? (o.type === 'garage' ? defaults.garageDoorHeight
+      : (o.type === 'door' ? defaults.doorHeight : defaults.windowHead));
+    const sill = o.sill ?? (o.type === 'window' ? defaults.windowSill : 0);
     const pa = lerp(wall.a, wall.b, s / len);
     const pb = lerp(wall.a, wall.b, e / len);
     if (sill > 0) meshes.push(segmentBox(pa, pb, thickness, base, sill, color));
@@ -110,7 +148,17 @@ function buildWall(wall, openings, level, defaults, wallHeight) {
           const f = i / lights;
           addBar(f - fr / 2, f + fr / 2, sill, hgt);
         }
-        addBar(0, 1, sill + hgt * 0.68, BAR); // transom
+        // A transom only where there is height for one; a high-level window
+        // divided again reads as a fanlight rather than a window.
+        if (hgt > 0.9) addBar(0, 1, sill + hgt * 0.68, BAR);
+      }
+    } else if (o.type === 'door') {
+      const sw = swings?.get(o.id);
+      if (sw) {
+        for (const m of doorLeaf(sw, base, head, PALETTE)) {
+          m.userData.joinery = true;
+          meshes.push(m);
+        }
       }
     } else if (o.type === 'garage') {
       meshes.push(segmentBox(pa, pb, thickness * 0.4, base, head,
@@ -366,6 +414,8 @@ export function buildModel(data, { removed = new Set() } = {}) {
   const levelGroups = new Map();
   const colliders = [];
   const glazing = [];
+  const joinery = [];
+  const swings = resolveDoorSwings(data);
   const byId = new Map(data.levels.map((l) => [l.id, l]));
 
   for (const level of data.levels) {
@@ -398,11 +448,12 @@ export function buildModel(data, { removed = new Set() } = {}) {
     const level = byId.get(wall.level);
     if (!level) continue;
     const { meshes, collider } = buildWall(
-      wall, data.openings, level, data.defaults, wallTopFor.get(wall.level),
+      wall, data.openings, level, data.defaults, wallTopFor.get(wall.level), swings,
     );
     meshes.forEach((m) => {
       m.userData.wall = wall.id;
       if (m.userData.glazing) glazing.push(m);
+      if (m.userData.joinery) joinery.push(m);
       levelGroups.get(wall.level).add(m);
     });
     colliders.push(collider);
@@ -553,7 +604,7 @@ export function buildModel(data, { removed = new Set() } = {}) {
   root.rotation.y = (bearing * Math.PI) / 180;
 
   return {
-    root, levels: levelGroups, roof: roofGroup, colliders, glazing,
+    root, levels: levelGroups, roof: roofGroup, colliders, glazing, joinery,
     bbox: bboxOf(data.rooms.map((r) => r.rect)),
   };
 }

@@ -6,6 +6,7 @@
 // share one envelope. No overhang, no overlap.
 
 import { readFileSync } from 'node:fs';
+import { resolveDoorSwings, segmentsCross } from '../../assets/js/page-house-planner/swings.js';
 
 const data = JSON.parse(readFileSync(new URL('../../data/buildings/79-high-street.json', import.meta.url), 'utf8'));
 
@@ -814,6 +815,108 @@ export async function register({ test, assert, assertEqual }) {
     assert(lo >= e0 - 0.01 && hi <= e1 + 0.01,
       `the boiler room door spans ${lo.toFixed(2)}-${hi.toFixed(2)}m, outside the `
       + `${e0.toFixed(2)}-${e1.toFixed(2)}m compartment it opens into`);
+  });
+
+  test('house-planner: every door is hung, and no leaf swings through a wall', () => {
+    const swings = resolveDoorSwings(data);
+    const doors = data.openings.filter((o) => o.type === 'door');
+    assert(doors.length > 6, `only ${doors.length} doors — the house has more than that`);
+    assertEqual(swings.size, doors.length, 'every door opening gets a hung leaf');
+
+    const byWall = new Map(data.walls.map((w) => [w.id, w]));
+    for (const o of doors) {
+      const c = swings.get(o.id);
+      assert(c, `${o.id} has no resolved swing`);
+      const w = byWall.get(o.wall);
+      const wlen = Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]);
+      const ux = (w.b[0] - w.a[0]) / wlen;
+      const uy = (w.b[1] - w.a[1]) / wlen;
+
+      // Hinged on one jamb of its own opening, not somewhere along the wall.
+      const jambs = [o.at - o.width / 2, o.at + o.width / 2]
+        .map((t) => [w.a[0] + ux * t, w.a[1] + uy * t]);
+      const onJamb = jambs.some((j) => Math.hypot(j[0] - c.a[0], j[1] - c.a[1]) < 0.001);
+      assert(onJamb, `${o.id} is hinged off its own opening`);
+
+      // A leaf the width of the hole it fills.
+      assert(Math.abs(c.leaf - o.width) < 0.06,
+        `${o.id} has a ${c.leaf.toFixed(2)}m leaf in a ${o.width}m opening`);
+
+      // And it must not stand through any other wall on its level. Ignore the
+      // first 12cm, which is flush against the reveal it is hung in.
+      const from = [c.a[0] + (c.b[0] - c.a[0]) * 0.12, c.a[1] + (c.b[1] - c.a[1]) * 0.12];
+      for (const other of data.walls) {
+        if (other.id === w.id || other.level !== w.level) continue;
+        assert(!segmentsCross(from, c.b, other.a, other.b),
+          `${o.id} swings through ${other.id}`);
+      }
+    }
+  });
+
+  test('house-planner: doors open the way doors open', () => {
+    const swings = resolveDoorSwings(data);
+    const inside = (roomId, pt) => {
+      const [x0, y0, x1, y1] = data.rooms.find((r) => r.id === roomId).rect;
+      return pt[0] > x0 && pt[0] < x1 && pt[1] > y0 && pt[1] < y1;
+    };
+    // The front door opens into the hall, not out over the doorstep.
+    assert(inside('hall', swings.get('d-front').b),
+      'the front door should open inwards, into the hall');
+    // The boiler room is too small to take a door swing, so it opens outwards.
+    assert(!inside('boiler', swings.get('d-boiler').b),
+      'the boiler compartment is too small for its door to open inwards');
+    // Between two rooms, the leaf lands in the larger one.
+    assert(inside('dining', swings.get('d-kitchen-dining').b),
+      'the kitchen door should swing into the dining room, the larger side');
+  });
+
+  test('house-planner: the doors are joinery the viewer can toggle', () => {
+    const build = readFileSync(new URL('../../assets/js/page-house-planner/build.js', import.meta.url), 'utf8');
+    const viewer = readFileSync(new URL('../../assets/js/page-house-planner/viewer.js', import.meta.url), 'utf8');
+    const panel = readFileSync(new URL('../../assets/js/page-house-planner/panel.js', import.meta.url), 'utf8');
+    const page = readFileSync(new URL('../../assets/js/page-house-planner.js', import.meta.url), 'utf8');
+    assert(build.includes('resolveDoorSwings'), 'build.js never hangs the doors');
+    assert(build.includes('joinery'), 'build.js never collects the door meshes');
+    assert(viewer.includes('setJoineryVisible'), 'the viewer cannot hide the doors');
+    assert(panel.includes("'hp-doors'"), 'the panel has no Doors checkbox');
+    assert(page.includes('onDoors') && page.includes('hp-doors'),
+      'the Doors checkbox is not wired to the viewer');
+  });
+
+  test('house-planner: the rear bathroom windows are high-level, not full height', () => {
+    // Owner-corrected from a walkthrough view: these two sit high in the wall.
+    const d = data.defaults;
+    for (const id of ['w-bath-a', 'w-bath-b']) {
+      const o = data.openings.find((x) => x.id === id);
+      assert(o, `${id} is modelled`);
+      assertEqual(o.type, 'window', `${id} is a window`);
+      const sill = o.sill ?? d.windowSill;
+      const head = o.head ?? d.windowHead;
+      assert(sill > 1.2, `${id} has a ${sill}m cill — too low for a high-level window`);
+      assert(head - sill > 0.4 && head - sill < 0.9,
+        `${id} is ${(head - sill).toFixed(2)}m tall, not a squat high-level opening`);
+      const wall = data.walls.find((w) => w.id === o.wall);
+      const top = wall.height ?? data.levels.find((l) => l.id === wall.level).ceilingHeight;
+      assert(head < top, `${id} heads out at ${head}m through a ${top}m wall`);
+    }
+    // Every other window keeps the ordinary cill, so this was a local change.
+    const ordinary = data.openings.filter((o) => o.type === 'window' && o.sill === undefined);
+    assert(ordinary.length > 6, 'the high-level cill should not have leaked across the house');
+    // And the renderer has to honour a per-opening cill and head at all.
+    const src = readFileSync(new URL('../../assets/js/page-house-planner/build.js', import.meta.url), 'utf8');
+    assert(src.includes('o.sill ??') && src.includes('o.head ??'),
+      'build.js ignores a per-opening cill or head');
+  });
+
+  test('house-planner: ids are unique across the schema', () => {
+    for (const key of ['rooms', 'walls', 'openings', 'levels', 'roofs', 'structures',
+      'scenarios', 'assumptions']) {
+      const seen = new Set();
+      for (const item of data[key] ?? []) {
+        assert(!seen.has(item.id), `${key} has two entries with id ${item.id}`);
+        seen.add(item.id);
+      }
+    }
   });
 
   test('house-planner: no wall is a zero-length stub', () => {
