@@ -893,23 +893,23 @@
     "chimneys": [
       {
         "id": "chy-living",
-        "x": 9.36,
+        "x": 8.85,
         "y": 2.04,
-        "width": 1.0,
-        "depth": 1.35,
+        "width": 0.78,
+        "depth": 1.05,
         "base": 5.4,
-        "top": 8.7,
-        "note": "The tall brick stack where the house meets the garage. Height set so it clears the ridge, as a flue must."
+        "top": 8.3,
+        "note": "Brick stack carried up off its breast and emerging near the ridge. Plan size and height above the roof are set so it reads as domestic brickwork, not a tower."
       },
       {
         "id": "chy-dining",
         "x": 2.05,
         "y": 3.66,
-        "width": 0.85,
-        "depth": 1.15,
+        "width": 0.72,
+        "depth": 0.98,
         "base": 5.4,
-        "top": 8.1,
-        "note": "Rises off the dining-room breast at the back of the main roof. Height set so it clears the ridge, as a flue must."
+        "top": 7.95,
+        "note": "Brick stack carried up off its breast and emerging near the ridge. Plan size and height above the roof are set so it reads as domestic brickwork, not a tower."
       }
     ]
   },

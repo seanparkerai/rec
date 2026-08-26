@@ -571,6 +571,28 @@ export async function register({ test, assert, assertEqual }) {
         `${chy.id} tops out at ${chy.top}m, below the ${ridge.toFixed(2)}m ridge — a flue must clear it`);
       assert(chy.top < ridge + 2.5, `${chy.id} at ${chy.top}m is an implausible stack`);
       assert(chy.width > 0.6 && chy.depth > 0.9, `${chy.id} is too slender to be brickwork`);
+      assert(chy.width < 0.95 && chy.depth < 1.25,
+        `${chy.id} at ${chy.width}x${chy.depth}m is bigger in plan than a domestic flue`);
+      // What actually reads as wrong is the brick standing proud of the roof.
+      const surf = Math.max(...data.roofs.map((r) => {
+        const o = r.overhang ?? 0.3;
+        const oh = r.overhangs ?? {};
+        const x0 = r.rect[0] - (oh.minX ?? o);
+        const x1 = r.rect[2] + (oh.maxX ?? o);
+        const y0 = r.rect[1] - (oh.minY ?? o);
+        const y1 = r.rect[3] + (oh.maxY ?? o);
+        if (r.type !== 'hipped') return 0;
+        if (chy.x < x0 || chy.x > x1 || chy.y < y0 || chy.y > y1) return 0;
+        const ds = [];
+        if (r.abut !== 'minX') ds.push(chy.x - x0);
+        ds.push(x1 - chy.x, chy.y - y0);
+        if (r.abut !== 'maxY') ds.push(y1 - chy.y);
+        return r.eaves + Math.min(Math.min(...ds), Math.min(x1 - x0, y1 - y0) / 2)
+          * Math.tan((r.pitchDeg * Math.PI) / 180);
+      }));
+      const proud = chy.top - surf;
+      assert(proud > 0.9 && proud < 2.3,
+        `${chy.id} stands ${proud.toFixed(2)}m proud of the roof — a domestic stack is about 1 to 2m`);
     }
   });
 
