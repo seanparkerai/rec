@@ -12,9 +12,9 @@
 #         F  ~$0.10  are two adjacent outcodes disjoint
 #
 # Keep this at H unless a paid probe is deliberately intended.
-probes=H
+probes=H,P
 outcode=SP11
 outcode2=SP4
 price=400000
 
-# run: 2026-08-27 phase-0 initial
+# run: 2026-08-27 investigating the apify 403 outage

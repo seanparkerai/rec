@@ -18,6 +18,7 @@
 //
 // Probes:
 //   H  actor input schema + recent runs' real charges       free    §0.1, §0.7
+//   P  account state + the exact 403 body the fetcher hides  free    live outage
 //   I  bill a known-empty search                            ~$0.02  §0.2
 //   J  monitoringMode: run twice, compare billed counts      ~$0.10  §0.7  ← biggest
 //   K  does fullPropertyDetails:false return gate-able text  ~$0.05  §0.8
@@ -156,6 +157,48 @@ async function probeH() {
   log(`  → last ${(runs.items || []).length} runs total: ${money(total)}`);
 }
 
+// ── Probe P — free. Why is the live fetcher getting 403 from Apify? ──────────
+// Added 2026-08-27 after probe H revealed the fetcher has written ZERO listings
+// since 2026-08-06: every target in every dispatch run fails `apify HTTP 403`.
+// Probe H's own GET calls used the SAME token and succeeded, so the token is
+// valid and has read scope — the 403 is specific to STARTING a run. That points
+// at account state (credit/plan/actor rental), not at credentials. This probe
+// pins down which, and prints the actual error body the fetcher throws away.
+async function probeP() {
+  hr('PROBE P — account state + the exact 403 body (FREE)');
+  try {
+    const me = await apiGet('/users/me');
+    log(`account: ${me.username}  plan=${me.plan?.id ?? 'n/a'}  ` +
+        `maxMonthlyUsageUsd=${me.plan?.maxMonthlyUsageUsd ?? 'n/a'}`);
+    if (me.plan?.monthlyUsage) log(`  monthlyUsage: ${JSON.stringify(me.plan.monthlyUsage)}`);
+    if (me.plan?.availableProxyGroups) log(`  proxyGroups: ${Object.keys(me.plan.availableProxyGroups).join(', ')}`);
+  } catch (e) { log(`  /users/me failed: ${e.message}`); }
+
+  try {
+    const limits = await apiGet('/users/me/limits');
+    log(`\nlimits/usage: ${JSON.stringify(limits.current ?? limits, null, 2).slice(0, 900)}`);
+  } catch (e) { log(`  /users/me/limits failed: ${e.message}`); }
+
+  // Reproduce the fetcher's exact failing call and PRINT THE BODY. The fetcher
+  // raises `apify HTTP ${res.status}` and discards the body, which is precisely
+  // why three weeks of total failure looked like an opaque 403.
+  hr('PROBE P — reproducing the fetcher call verbatim');
+  const url = searchUrl('OUTCODE^2445', { priceMin: 400000, priceMax: 400000 });
+  const endpoint = `${API}/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
+    `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ listUrls: [{ url }], maxProperties: 50, fullPropertyDetails: false }),
+  });
+  const body = await res.text();
+  log(`  HTTP ${res.status} ${res.statusText}`);
+  log(`  body: ${body.slice(0, 1200)}`);
+  log(`\n  VERDICT: ${res.ok
+    ? 'the call SUCCEEDS now — the 403 was transient or has been resolved.'
+    : 'reproduced. The body above names the real cause; fix that before any plan work.'}`);
+}
+
 // ── Paid probes ──────────────────────────────────────────────────────────────
 async function probeI(locId) {
   hr('PROBE I — does a VALID search returning ZERO results cost anything? (§0.2)');
@@ -253,6 +296,7 @@ async function probeF(locId, locId2) {
   };
 
   await run('H', probeH);
+  await run('P', probeP);
   await run('I', () => probeI(locId));
   await run('J', () => probeJ(locId));
   await run('K', () => probeK(locId));
