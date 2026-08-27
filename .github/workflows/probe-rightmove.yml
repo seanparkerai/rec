@@ -1,0 +1,62 @@
+# probe-rightmove.yml — Phase 0 gating checks for the Search Profiles plan.
+#
+# WHY: the fetcher's spend levers have never been verified against the actor's real
+# input schema, and one of them looks backwards — tests/contract/fetch-spend.test.js
+# pins `monitoringMode: false` with the comment "it re-bills", while the actor's own
+# docs describe monitoring as the mechanism that STOPS re-billing. If that is right,
+# every scheduled run has been re-paying for listings we already hold.
+#
+# This repo has been burned once by an unverified wire parameter: an off-ladder
+# `radius=6.9` silently returned ZERO results on 36 of 56 targets for months
+# (ADR 0011). So nothing in tools/fetch-listings.mjs changes until this reports.
+#
+# Manual dispatch only, never scheduled. Default probe set is H, which is FREE —
+# it only reads the actor schema and the recent runs' real charges. Paid probes
+# must be named explicitly and each prints its own observed cost.
+#
+# Runs under the shared fetch concurrency group so a probe can never overlap a
+# scheduled fetch on the same Apify account.
+
+name: probe-rightmove
+
+on:
+  workflow_dispatch:
+    inputs:
+      probes:
+        description: 'Comma-separated: H (free schema+charges), I (empty-search cost), J (monitoringMode), K (cheap-mode fields), A (exact price band), F (outcode disjointness)'
+        default: 'H'
+      outcode:
+        description: 'Outcode to probe against'
+        default: 'SP11'
+      outcode2:
+        description: 'Adjacent outcode, probe F only'
+        default: 'SP4'
+      price:
+        description: 'Exact price to probe with'
+        default: '400000'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fetch-listings-daily
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Probe Rightmove + Apify parameters
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+        run: |
+          node tools/probe-rightmove-params.mjs \
+            --only='${{ inputs.probes }}' \
+            --outcode='${{ inputs.outcode }}' \
+            --outcode2='${{ inputs.outcode2 }}' \
+            --price='${{ inputs.price }}'
