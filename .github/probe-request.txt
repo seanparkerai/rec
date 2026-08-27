@@ -1,0 +1,20 @@
+# probe-request — the push trigger for .github/workflows/probe-rightmove.yml.
+#
+# Changing THIS FILE is the only thing that fires the probe on push. It exists so
+# an agent that can push but holds no `actions: write` scope can still run a probe
+# and read the result. Edit a value, commit, push — the workflow runs.
+#
+# probes: H free (actor schema + recent runs' real charges)
+#         I  ~$0.02  does a valid zero-result search cost anything
+#         J  ~$0.10  monitoringMode — does run 2 bill only new listings
+#         K  ~$0.05  does fullPropertyDetails:false return gate-able text
+#         A  ~$0.05  does an exact minPrice==maxPrice band work
+#         F  ~$0.10  are two adjacent outcodes disjoint
+#
+# Keep this at H unless a paid probe is deliberately intended.
+probes=H
+outcode=SP11
+outcode2=SP4
+price=400000
+
+# run: 2026-08-27 phase-0 initial

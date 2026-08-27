@@ -10,9 +10,16 @@
 # `radius=6.9` silently returned ZERO results on 36 of 56 targets for months
 # (ADR 0011). So nothing in tools/fetch-listings.mjs changes until this reports.
 #
-# Manual dispatch only, never scheduled. Default probe set is H, which is FREE —
-# it only reads the actor schema and the recent runs' real charges. Paid probes
-# must be named explicitly and each prints its own observed cost.
+# TWO TRIGGERS, no schedule:
+#   1. workflow_dispatch — a human picks the probe set in the Actions UI.
+#   2. push touching .github/probe-request.txt ONLY — so an agent that can push but
+#      holds no `actions: write` scope can still run a probe and read the result.
+#      Nothing else in the repo can fire this; the path filter is the whole gate.
+#      The request file names the probe set, and defaults to H (free) when silent.
+#
+# Default probe set is H, which is FREE — it only reads the actor schema and the
+# recent runs' real charges. Paid probes must be named explicitly and each prints
+# its own observed cost.
 #
 # Runs under the shared fetch concurrency group so a probe can never overlap a
 # scheduled fetch on the same Apify account.
@@ -34,6 +41,9 @@ on:
       price:
         description: 'Exact price to probe with'
         default: '400000'
+  push:
+    paths:
+      - '.github/probe-request.txt'
 
 permissions:
   contents: read
@@ -54,9 +64,22 @@ jobs:
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          IN_PROBES: ${{ inputs.probes }}
+          IN_OUTCODE: ${{ inputs.outcode }}
+          IN_OUTCODE2: ${{ inputs.outcode2 }}
+          IN_PRICE: ${{ inputs.price }}
         run: |
+          set -euo pipefail
+          REQ=.github/probe-request.txt
+          # Read a key from the request file. Deliberately parsed, never sourced —
+          # a committed file should not be able to execute anything on the runner.
+          val() { [ -f "$REQ" ] && grep -E "^$1=" "$REQ" | tail -1 | cut -d= -f2- | tr -d '"'"'"' ' || true; }
+          PROBES="${IN_PROBES:-$(val probes)}"
+          OUTCODE="${IN_OUTCODE:-$(val outcode)}"
+          OUTCODE2="${IN_OUTCODE2:-$(val outcode2)}"
+          PRICE="${IN_PRICE:-$(val price)}"
           node tools/probe-rightmove-params.mjs \
-            --only='${{ inputs.probes }}' \
-            --outcode='${{ inputs.outcode }}' \
-            --outcode2='${{ inputs.outcode2 }}' \
-            --price='${{ inputs.price }}'
+            --only="${PROBES:-H}" \
+            --outcode="${OUTCODE:-SP11}" \
+            --outcode2="${OUTCODE2:-SP4}" \
+            --price="${PRICE:-400000}"
