@@ -11,9 +11,9 @@ the table in §1 as authoritative — every data type in the app belongs to exac
 
 ## 0. Canonical table inventory (single source of truth)
 
-**Live schema = 33 tables in `public`** (verified via `list_tables` 2026-06-15; `area_search_tuning`
+**Live schema = 35 tables in `public`** (verified via `list_tables` 2026-08-28; `area_search_tuning`
 added 2026-06-21; `household_review_stats` added 2026-06-22, **all RLS-enabled**).
-**23 are "tracked"** for the sync contract — **21 user-state + 2 content mirrors** — and appear in
+**24 are "tracked"** for the sync contract — **22 user-state + 2 content mirrors** — and appear in
 `data/snapshots/sync-state.json` (the snapshot also carries a high-water entry for the untracked
 `listings` table). The enforced list lives in `tests/supabase-sync.test.js`; any other
 doc, test, or rule that states a different count is wrong and must be reconciled to this section.
@@ -21,7 +21,7 @@ The snapshot holds **current high-water marks + one-line caveats only** (9.4/R5 
 write **history** appends to `docs/archive/sync-changelog.md`, never back into the snapshot notes.
 Underscore-prefixed snapshot keys (e.g. the top-level `_note`) are metadata, not tables.
 
-- **21 user-state** (per household_id, source of truth = Supabase): `profile`, `criteria`,
+- **22 user-state** (per household_id, source of truth = Supabase): `search_profiles`, `profile`, `criteria`,
   `finances`, `goals`, `shortlist`, `zones`, `journey_checks`, `journey_progress`, `contacts`,
   `outreach`, `readiness_checklist`, `investments_accounts`, `investments_history`,
   `debts_credit_cards`, `debts_student_loans`, `debts_other`, `listing_reactions` (**append-only**:
@@ -40,7 +40,7 @@ Underscore-prefixed snapshot keys (e.g. the top-level `_note`) are metadata, not
 - **2 content mirrors**: `areas` (**DB-canonical** since the 2026-06-04 §18.5 relaxation —
   `data/areas/<id>.json` is a materialised view) and `house_types` (repo-JSON-canonical, mirrored).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.
-- **7 untracked** (never git-synced): `listings` (live content, see below), `listing_areas`
+- **8 untracked** (never git-synced): `fetch_control` (singleton global spend gate, Phase 1a), `listings` (live content, see below), `listing_areas`
   (the listing↔area **m2m membership** junction — live content of the SAME class as `listings`:
   service-role write, public-SELECT RLS, never git-synced; one row per area whose geofence
   contains a listing, `is_primary` mirroring `listings.area_id`; written by BOTH listings writers

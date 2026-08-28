@@ -23,10 +23,10 @@ test('snapshot file exists and is valid JSON', async () => {
   assert(typeof parsed === 'object', 'snapshot must be an object');
 });
 
-test('snapshot includes all 23 tracked tables', async () => {
+test('snapshot includes all 24 tracked tables', async () => {
   const path = resolve(root, 'data/snapshots/sync-state.json');
   const snapshot = JSON.parse(await readFile(path, 'utf8'));
-  // Canonical: 21 user-state + 2 content mirrors = 23 tracked tables.
+  // Canonical: 22 user-state + 2 content mirrors = 24 tracked tables.
   // Source of truth for this list is docs/SUPABASE_SYNC.md §0. Keep in sync.
   // (Phase 2 added household_areas — the per-household area SELECTION layer.)
   // (Ask feature added ask_conversations — natural-language assistant chat threads.)
@@ -36,7 +36,7 @@ test('snapshot includes all 23 tracked tables', async () => {
     'readiness_checklist', 'investments_accounts', 'investments_history',
     'debts_credit_cards', 'debts_student_loans', 'debts_other',
     'listing_reactions', 'learned_preferences', 'area_confirmations',
-    'household_areas', 'ask_conversations',
+    'household_areas', 'ask_conversations', 'search_profiles',
     'areas', 'house_types',
   ];
   for (const table of expected) {
@@ -117,7 +117,7 @@ test('listing_areas is live-content (untracked): NOT in the tracked snapshot', a
   assert(!('listing_areas' in snapshot),
     'listing_areas must NOT be a tracked snapshot table (it is live content)');
   const doc = await readFile(resolve(root, 'docs/SUPABASE_SYNC.md'), 'utf8');
-  assert(/7 untracked/.test(doc), 'SUPABASE_SYNC.md must record 7 untracked tables');
+  assert(/8 untracked/.test(doc), 'SUPABASE_SYNC.md must record 8 untracked tables');
   assert(/listing_areas/.test(doc), 'SUPABASE_SYNC.md must document listing_areas');
 });
 

@@ -3,6 +3,11 @@
 // 2026-07-09: household_areas.is_origin removed to mirror migration
 // drop_is_origin_from_household_areas (generator unavailable this session — the
 // diff is mechanical: three dropped lines; regenerate at next schema change).
+// 2026-08-28: fetch_control + search_profiles added and households.search_paused
+// introduced, mirroring migrations search_fetch_control / search_profiles_v1
+// (generator unavailable this session — the MCP tool returns "requires approval";
+// the DDL went through execute_sql and the migration history was written by hand,
+// so the history stays canonical. Regenerate at the next schema change).
 // Regenerate after every schema migration — the §17/§18.5 schema-change ceremony
 // (docs/SUPABASE_SYNC.md) includes this as a step. Consumed type-only via JSDoc
 // `import('../types/supabase.js')` annotations (tier-0 checkJs); never shipped to the browser.
@@ -511,23 +516,100 @@ export type Database = {
           },
         ]
       }
+      fetch_control: {
+        Row: {
+          fetch_enabled: boolean
+          id: boolean
+          paused_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          fetch_enabled?: boolean
+          id?: boolean
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          fetch_enabled?: boolean
+          id?: boolean
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       households: {
         Row: {
           created_at: string
           id: string
           name: string
+          search_paused: boolean
         }
         Insert: {
           created_at?: string
           id?: string
           name?: string
+          search_paused?: boolean
         }
         Update: {
           created_at?: string
           id?: string
           name?: string
+          search_paused?: boolean
         }
         Relationships: []
+      }
+      search_profiles: {
+        Row: {
+          admin_paused: boolean
+          created_at: string
+          enabled: boolean
+          household_id: string
+          id: string
+          last_run_at: string | null
+          name: string
+          plan_cache: Json
+          sort_order: number
+          spec: Json
+          trigger_mode: string
+          updated_at: string
+        }
+        Insert: {
+          admin_paused?: boolean
+          created_at?: string
+          enabled?: boolean
+          household_id: string
+          id?: string
+          last_run_at?: string | null
+          name: string
+          plan_cache?: Json
+          sort_order?: number
+          spec?: Json
+          trigger_mode?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_paused?: boolean
+          created_at?: string
+          enabled?: boolean
+          household_id?: string
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          plan_cache?: Json
+          sort_order?: number
+          spec?: Json
+          trigger_mode?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "search_profiles_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       investments_accounts: {
         Row: {

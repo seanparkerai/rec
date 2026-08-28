@@ -109,5 +109,9 @@
     "last_synced_at": "2026-06-04T23:55:00Z",
     "_class": "live-content",
     "_note": "Fetcher-written live content — NOT git-synced, never mirrored by Claude; maintained by the fetch/purge/backfill tools."
+  },
+  "search_profiles": {
+    "last_synced_at": "2026-08-28T00:02:00Z",
+    "_note": "Phase 1b. Per-household search profiles; one disabled 'Original search (legacy)' seeded per household from criteria.budget so unpausing reproduces pre-profile behaviour."
   }
 }

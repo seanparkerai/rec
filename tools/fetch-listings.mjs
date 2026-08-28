@@ -87,9 +87,38 @@ const AREA_IDS = process.env.AREA_IDS
   ? new Set(process.env.AREA_IDS.split(',').map((s) => s.trim()).filter(Boolean))
   : null;
 
-const RESULTS_PER_OUTCODE = Number(process.env.RESULTS_PER_OUTCODE) || 50;  // cap per target (lower = cheaper on pay-per-event actors)
-// Hard USD spend cap: passed to Apify as maxBudget. PPE actors self-terminate — no overrun possible.
+// SPEND LEVERS — corrected 2026-08-27 from the live actor schema (probe H;
+// docs/PHASE0-PROBE-FINDINGS.md). Both constants keep their names and env vars,
+// but they are now wired to fields the actor and platform ACTUALLY honour:
+//
+//   was `maxItems`   → an Apify cap that applies to PAY-PER-RESULT actors only.
+//                      This actor is pay-per-event, and `maxItems` is not even in
+//                      its input schema, so it was silently ignored. Every search
+//                      ran at the actor's own `maxProperties` default of 1000.
+//   was `maxBudget`  → not in the input schema either, and not a run option. The
+//                      "$25 hard cap, no overrun possible" this file used to claim
+//                      NEVER applied. The real platform cap is `maxTotalChargeUsd`,
+//                      passed as a RUN OPTION (query param), not an input field.
+//
+// The only spend limit that has ever actually bound this system is the Apify
+// account's monthly usage cap — which appears nowhere in this repo.
+const RESULTS_PER_OUTCODE = Number(process.env.RESULTS_PER_OUTCODE) || 50;  // → maxProperties (per URL)
+// Hard USD spend cap, applied per run as maxTotalChargeUsd. Caps the total charged
+// for all pricing models, unlike maxItems which is pay-per-result only.
 const APIFY_MAX_BUDGET_USD = Number(process.env.APIFY_MAX_BUDGET_USD) || 25;
+
+/**
+ * The actor rounds `maxProperties` to the nearest 50, so round here too — an
+ * unrounded value silently becomes a different cap than the one we logged, and a
+ * cap you cannot predict is not a cap. Never returns 0: a request for "no results"
+ * is always a bug, and 0 would read as "unlimited" to the actor.
+ * Pure. @param {number} n @returns {number}
+ */
+function roundMaxProperties(n) {
+  const v = Number(n);
+  if (!Number.isFinite(v) || v <= 0) return 50;
+  return Math.max(50, Math.round(v / 50) * 50);
+}
 
 // Always-on baseline source filters — injected into EVERY Rightmove search URL.
 // Never removed, only tightened by the learned spec.
@@ -384,6 +413,57 @@ function dedupeSearchTargets(targets) {
   return out;
 }
 
+/**
+ * The global spend gate (Phase 1a). Reads the singleton `fetch_control` row.
+ *
+ * FAILS CLOSED, by design. Every other read in this file degrades toward "carry
+ * on fetching" so a Supabase blip cannot zero a run; this one degrades toward
+ * "stop", because the cost of a false stop is a missed cycle while the cost of a
+ * false start is real money against an account whose only working cap lives
+ * outside this repo (docs/PHASE0-PROBE-FINDINGS.md §3).
+ *
+ * DRY_RUN bypasses it — a dry run spends nothing and must stay usable for
+ * inspecting the plan while fetching is switched off.
+ * @returns {Promise<boolean>} true when fetching is permitted
+ */
+async function fetchEnabled() {
+  if (DRY_RUN) return true;
+  if (!SERVICE_KEY) return false;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/fetch_control?select=fetch_enabled,paused_reason&limit=1`, {
+      headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
+    });
+    if (!res.ok) {
+      // MISSING TABLE FAILS OPEN. This is the one case that does NOT fail closed,
+      // and the distinction is deliberate: an absent table is a known deployment
+      // state (the migration has not run yet), not evidence that anything is wrong.
+      // Failing closed here would take a working fetcher offline for a reason that
+      // has nothing to do with spend — and the pre-migration behaviour is exactly
+      // today's behaviour, which is no gate at all. So we are never worse off than
+      // before, and there is no window where the fetcher is silently dead.
+      // A PRESENT gate that reads false, or a read that errors for any other
+      // reason, still fails closed below.
+      if (res.status === 404) {
+        console.warn('fetch_control table not found — apply the `search_fetch_control` migration. Fetching as before (no spend gate) until then.');
+        return true;
+      }
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const rows = await res.json();
+    // No row at all is not "unconfigured, carry on" — it is a missing gate, and a
+    // missing gate is indistinguishable from a disabled one as far as spend goes.
+    if (!Array.isArray(rows) || !rows.length) {
+      console.error('fetch_control: no row found — refusing to fetch (spend gate fails closed)');
+      return false;
+    }
+    if (rows[0].paused_reason) console.log(`fetch_control: paused_reason = ${rows[0].paused_reason}`);
+    return rows[0].fetch_enabled === true;
+  } catch (e) {
+    console.error(`fetch_control read failed (${e.message}) — refusing to fetch (spend gate fails closed)`);
+    return false;
+  }
+}
+
 // ── outcode → Rightmove locationIdentifier (typeahead) ───────────────────────
 async function resolveLocationId(outcode) {
   const url = `https://los.rightmove.co.uk/typeahead?query=${encodeURIComponent(outcode)}&limit=10`;
@@ -506,30 +586,46 @@ function orderOutcodesByFocus(outcodes, spec) {
 
 // ── Apify actor ──────────────────────────────────────────────────────────────
 // Actor input for one search target. Pure — extracted (step 10.3) so the spend
-// rail (tests/contract/fetch-spend.test.js) can pin the two cost levers on every
-// run: maxItems (per-target result cap) and maxBudget (hard USD cap; PPE actors
-// self-terminate at the limit, so no overrun is possible).
+// rail (tests/contract/fetch-spend.test.js) can pin the cost levers on every run.
+// The per-target cap lives here as `maxProperties`; the hard USD cap is a RUN
+// OPTION and so lives on the request URL in apifyCall, not in this object.
 function buildActorInput(locationIdentifier, spec = null, radiusMiles = null, band = null) {
   return {
     listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max, minBeds: band?.minBeds }) }],
-    maxItems: RESULTS_PER_OUTCODE,
+    // The per-URL result cap the actor actually reads. `maxItems` did nothing.
+    maxProperties: roundMaxProperties(RESULTS_PER_OUTCODE),
+    // Pinned explicitly, never left to the default: this one carries a 5x CHARGE
+    // multiplier. It happens to default false today, which is the only reason we
+    // were not already paying 5x — that is luck, not a safeguard.
+    fullPropertyDetails: false,
     monitoringMode: false,
     includePriceHistory: false,
-    maxBudget: APIFY_MAX_BUDGET_USD,   // USD hard cap; actor self-terminates at limit
   };
 }
 
 async function apifyCall(locationIdentifier, spec, radiusMiles, band) {
+  // maxTotalChargeUsd is a RUN OPTION, not an input field — it goes on the query
+  // string. This is the real hard cap, and it caps the total charged across every
+  // pricing model (the old input-body `maxBudget` was silently ignored).
   const url =
     `https://api.apify.com/v2/acts/${encodeURIComponent(APIFY_ACTOR_ID)}` +
-    `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}`;
+    `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}` +
+    `&maxTotalChargeUsd=${encodeURIComponent(APIFY_MAX_BUDGET_USD)}` +
+    `&memory=256`;   // >256MB scales the charge; pin it rather than inherit a default
   const input = buildActorInput(locationIdentifier, spec, radiusMiles, band);
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
   });
-  if (!res.ok) throw new Error(`apify HTTP ${res.status}`);
+  if (!res.ok) {
+    // CARRY THE BODY. Discarding it is why three weeks of total failure presented
+    // as an opaque `apify HTTP 403` rather than "Monthly usage hard limit exceeded"
+    // (docs/PHASE0-PROBE-FINDINGS.md §4). The body is where the cause lives.
+    let detail = '';
+    try { detail = ` — ${(await res.text()).slice(0, 300)}`; } catch { /* body already consumed or empty */ }
+    throw new Error(`apify HTTP ${res.status}${detail}`);
+  }
   const items = await res.json();
   return Array.isArray(items) ? items : [];
 }
@@ -825,6 +921,16 @@ async function main() {
   const modeLabel = FOUNDATION_MODE ? 'FOUNDATION(all standing stock)' : `daily(${MAX_DAYS_SINCE_ADDED}d)`;
   console.log(`actor: ${APIFY_ACTOR_ID} · mode: ${SEARCH_MODE} · recency: ${modeLabel} · resultsPerTarget: ${RESULTS_PER_OUTCODE} · budget-cap: $${APIFY_MAX_BUDGET_USD} · fetchLimit: ${FETCH_LIMIT || 'all'} · dry-run: ${DRY_RUN}`);
   if (!DRY_RUN && !SERVICE_KEY) throw new Error('SUPABASE_SERVICE_ROLE_KEY required to write (or set DRY_RUN=1)');
+
+  // GLOBAL KILL SWITCH. Read before anything else costs money. Note the latch is
+  // the OPPOSITE of householdAreasOk below: a read failure here ABORTS rather than
+  // falling through. That asymmetry is deliberate — a demand-gate outage must not
+  // silently zero a run, but a spend-gate outage must not silently authorise one.
+  // Spend gates fail closed.
+  if (!(await fetchEnabled())) {
+    console.log('fetch: globally disabled (fetch_control.fetch_enabled = false) — 0 targets, no spend');
+    return;
+  }
 
   const spec = await loadSearchSpec();
   if (spec) {
@@ -1159,4 +1265,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, buildSearchUrl, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, fetchRawForOutcode, zeroRetryStats, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, roundMaxProperties, fetchEnabled, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, fetchRawForOutcode, zeroRetryStats, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };

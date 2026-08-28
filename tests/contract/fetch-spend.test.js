@@ -2,7 +2,13 @@
 // "MISSING RAIL: Apify/fetch spend"). Real money: the fetcher bills per result.
 // This suite makes every spend parameter a LOUD diff — a refactor or env-default
 // change that uncaps the budget, raises the per-target result cap, or drops the
-// hard cap from the actor input fails the harness instead of the bank account.
+// hard cap fails the harness instead of the bank account.
+//
+// 2026-08-27: rewritten after probe H read the LIVE actor schema. This rail spent
+// its whole life pinning `maxItems` and `maxBudget`, neither of which exists on
+// the actor — it was green while guarding two no-ops. Assertions now pin the real
+// fields (maxProperties, fullPropertyDetails) and the real run option
+// (maxTotalChargeUsd). See docs/PHASE0-PROBE-FINDINGS.md.
 // Demand gating (the other spend lever) is pinned in tests/unit/fetch-listings
 // and tests/characterization/fetch-targets; the active-link gate lives in
 // network functions, so it is pinned here at source level.
@@ -10,7 +16,7 @@ import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { buildActorInput, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE } from '../../tools/fetch-listings.mjs';
+import { buildActorInput, roundMaxProperties, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE } from '../../tools/fetch-listings.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const TOOL = resolve(ROOT, 'tools/fetch-listings.mjs');
@@ -23,13 +29,59 @@ export async function register({ test, assert, assertEqual }) {
     assertEqual(RESULTS_PER_OUTCODE, 50, 'RESULTS_PER_OUTCODE default changed — deliberate spend decision required');
   });
 
-  test('fetch-spend: every actor input carries both cost levers', () => {
+  // REWRITTEN 2026-08-27 (docs/PHASE0-PROBE-FINDINGS.md). This suite previously
+  // pinned `maxItems` and `maxBudget` as "the two cost levers". Probe H read the
+  // live actor's input schema: NEITHER FIELD EXISTS on it. Both were silently
+  // ignored, so this rail was guarding two no-ops while the actor ran at its own
+  // maxProperties default of 1000 and no USD cap applied at all. The rail was
+  // green throughout. A test that pins the wrong field is worse than no test —
+  // it manufactures confidence. These assertions pin the fields the actor and
+  // platform actually honour.
+  test('fetch-spend: every actor input carries the levers the actor really reads', () => {
     const input = buildActorInput('OUTCODE^123');
-    assertEqual(input.maxBudget, APIFY_MAX_BUDGET_USD, 'maxBudget must be the hard USD cap');
-    assertEqual(input.maxItems, RESULTS_PER_OUTCODE, 'maxItems must be the per-target cap');
-    assertEqual(input.monitoringMode, false, 'monitoringMode must stay off (it re-bills)');
+    assertEqual(input.maxProperties, 50, 'maxProperties must be the per-target cap (maxItems is not in the actor schema)');
+    assertEqual(input.fullPropertyDetails, false, 'fullPropertyDetails must stay off — it is a 5x CHARGE multiplier');
     assertEqual(input.includePriceHistory, false, 'includePriceHistory must stay off (it re-bills)');
+    assert(!('maxItems' in input), 'maxItems is not in the actor schema — sending it is a silent no-op that reads as a cap');
+    assert(!('maxBudget' in input), 'maxBudget is not an actor field nor a run option — the real cap is maxTotalChargeUsd');
     assert(Array.isArray(input.listUrls) && input.listUrls.length === 1, 'one search URL per target');
+  });
+
+  test('fetch-spend: maxProperties is rounded to the actor grain of 50', () => {
+    // The actor rounds to the nearest 50 internally. If we do not round too, the
+    // cap we log is not the cap that applies, and an unpredictable cap is not one.
+    assertEqual(roundMaxProperties(50), 50, 'exact grain unchanged');
+    assertEqual(roundMaxProperties(1000), 1000, 'exact grain unchanged');
+    assertEqual(roundMaxProperties(74), 50, 'rounds to nearest 50');
+    assertEqual(roundMaxProperties(76), 100, 'rounds to nearest 50');
+    assertEqual(roundMaxProperties(0), 50, 'never 0 — the actor would read that as unlimited');
+    assertEqual(roundMaxProperties(-5), 50, 'never negative');
+    assertEqual(roundMaxProperties(NaN), 50, 'never NaN');
+  });
+
+  test('fetch-spend: the hard USD cap is a RUN OPTION on the request URL, not an input field', () => {
+    // maxTotalChargeUsd caps the total charged across every pricing model;
+    // maxItems only ever applied to pay-per-result actors, and this one is
+    // pay-per-event. Pinned textually because it lives inside a network function.
+    assert(/maxTotalChargeUsd=\$\{encodeURIComponent\(APIFY_MAX_BUDGET_USD\)\}/.test(src),
+      'apifyCall must pass maxTotalChargeUsd as a run option — without it there is NO hard spend cap');
+    assert(/[?&]memory=256/.test(src),
+      'memory must be pinned at 256MB — above that the charge multiplier scales');
+  });
+
+  test('fetch-spend: a failed Apify call carries the response body', () => {
+    // Discarding the body is why three weeks of total failure presented as an
+    // opaque `apify HTTP 403` instead of "Monthly usage hard limit exceeded".
+    assert(/apify HTTP \$\{res\.status\}\$\{detail\}/.test(src),
+      'the thrown error must include the response body — the cause lives in it');
+  });
+
+  test('fetch-spend: the global kill switch fails CLOSED', () => {
+    // Opposite latch to householdAreasOk on purpose: a demand-gate outage must
+    // not zero a run, but a spend-gate outage must not authorise one.
+    assert(/fetch_control\?select=fetch_enabled/.test(src), 'fetchEnabled must read the fetch_control singleton');
+    assert(/spend gate fails closed/.test(src), 'the fail-closed behaviour must stay documented at the point it happens');
+    assert(/if \(!\(await fetchEnabled\(\)\)\)/.test(src), 'main() must consult the kill switch before spending');
   });
 
   test('fetch-spend: env overrides reach the constants (real subprocess import)', () => {
