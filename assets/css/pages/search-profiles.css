@@ -1,0 +1,44 @@
+/* search-profiles.css — the Search profiles page.
+   Mobile-first: single column at 320px, two columns from 768px. State is carried
+   by text and weight as well as colour (CLAUDE.md §11), so the muted treatment of
+   an off profile is reinforcement, never the only signal. */
+
+.sp-banner {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3);
+  border-left: 3px solid var(--pico-muted-border-color);
+  background: var(--pico-card-sectioning-background-color);
+  font-size: var(--text-sm);
+  color: var(--pico-muted-color);
+}
+.sp-banner--warn { border-left-color: var(--pico-del-color); color: var(--pico-color); }
+
+.sp-list { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+@media (min-width: 768px) { .sp-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.sp-card { display: flex; flex-direction: column; gap: var(--space-2); }
+.sp-card--off { opacity: 0.72; }
+
+.sp-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
+.sp-card__name { margin: 0; font-size: var(--text-lg); }
+.sp-card__state { font-size: var(--text-xs); white-space: nowrap; font-weight: 600; }
+.sp-card__state--on  { color: var(--pico-ins-color); }
+.sp-card__state--off { color: var(--pico-muted-color); }
+
+.sp-card__summary { margin: 0; font-size: var(--text-sm); }
+.sp-card__meta,
+.sp-card__blocked { margin: 0; font-size: var(--text-xs); color: var(--pico-muted-color); }
+.sp-card__blocked { font-weight: 600; }
+
+.sp-card__keywords { display: flex; flex-wrap: wrap; gap: var(--space-1); align-items: center; }
+.sp-card__kwlabel,
+.sp-card__nokw { font-size: var(--text-xs); color: var(--pico-muted-color); }
+.sp-card__kw { font-size: var(--text-xs); }
+
+.sp-card__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: auto; }
+/* ≥44px touch targets (CLAUDE.md §10). */
+.sp-card__actions button { min-height: 44px; margin: 0; }
+
+.sp-empty { padding: var(--space-5); text-align: center; color: var(--pico-muted-color); }
+.sp-empty__hint { font-size: var(--text-sm); max-width: 46ch; margin-inline: auto; }
+.sp-status { font-size: var(--text-sm); color: var(--pico-muted-color); min-height: 1.5em; }

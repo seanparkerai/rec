@@ -173,22 +173,54 @@ export async function refreshSearchProfilesCache() {
 }
 
 /**
+ * Trigger one profile's search now. Mirrors `requestListingsFetch` in
+ * storage/listings/feed.js: the fetcher needs the Apify token AND the service-role
+ * key, so it cannot run in the browser — this calls a SECURITY DEFINER RPC that
+ * holds the GitHub token in Vault and dispatches the workflow server-side. No token
+ * ever reaches the browser.
+ *
+ * The RPC re-checks every switch itself (membership, admin_paused, enabled, the
+ * household pause and the global gate) rather than trusting the caller, so a
+ * hand-crafted request cannot spend on a paused or someone else's search.
+ *
+ * @param {string} profileId
+ * @returns {Promise<{ok: boolean, status: string, message: string}>}
+ */
+export async function runSearchProfile(profileId) {
+  const sb = await _initSb();
+  if (!sb) return { ok: false, status: 'error', message: 'Not connected to the backend.' };
+  try {
+    const { data, error } = await sb.rpc('request_profile_fetch', { p_profile_id: profileId });
+    if (error) return { ok: false, status: 'error', message: error.message };
+    return data ?? { ok: false, status: 'error', message: 'No response from the trigger.' };
+  } catch (e) {
+    return { ok: false, status: 'error', message: e.message };
+  }
+}
+
+/**
  * The global spend gate, read-only for the portal so the UI can say "searching is
  * paused" instead of leaving a Run button that silently does nothing.
  * Absent or unreadable reads as PAUSED — the same fail-closed stance the fetcher
  * takes, so the UI can never claim searching is live when it is not.
- * @returns {Promise<{fetch_enabled: boolean, paused_reason: string|null}>}
+ * @returns {Promise<{fetch_enabled: boolean, legacy_enabled: boolean, paused_reason: string|null}>}
  */
 export async function getFetchControl() {
   const sb = await _initSb();
   if (!sb) return { fetch_enabled: false, paused_reason: 'no backend configured' };
   try {
-    const { data, error } = await sb.from('fetch_control').select('fetch_enabled,paused_reason').limit(1);
+    const { data, error } = await sb.from('fetch_control').select('fetch_enabled,legacy_enabled,paused_reason').limit(1);
     if (error) throw error;
     const row = data?.[0];
-    if (!row) return { fetch_enabled: false, paused_reason: 'no fetch_control row' };
-    return { fetch_enabled: row.fetch_enabled === true, paused_reason: row.paused_reason ?? null };
+    if (!row) return { fetch_enabled: false, legacy_enabled: false, paused_reason: 'no fetch_control row' };
+    return {
+      fetch_enabled: row.fetch_enabled === true,
+      // Lane A defaults ON when unreadable, matching legacyEnabled() in the fetcher:
+      // only an explicit false disables the legacy search.
+      legacy_enabled: row.legacy_enabled !== false,
+      paused_reason: row.paused_reason ?? null,
+    };
   } catch (e) {
-    return { fetch_enabled: false, paused_reason: `unreadable (${e.message})` };
+    return { fetch_enabled: false, legacy_enabled: true, paused_reason: `unreadable (${e.message})` };
   }
 }

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Search profiles · GR</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <meta name="description" content="Several ways of searching for a house, each switched on or off independently." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <div data-include="components/header.html"></div>
+  <div data-include="components/nav.html"></div>
+
+  <main id="main" class="container search-profiles-page">
+    <header class="page-head">
+      <p class="eyebrow">Searching</p>
+      <h1>Search profiles</h1>
+      <p class="lead">
+        Each profile is one way of looking for a house — an exact price, your areas, and
+        optionally up to three words a listing must mention. Switch each on or off on its own.
+      </p>
+    </header>
+
+    <div data-lane-banner></div>
+
+    <div class="sp-list" data-profile-list role="list" aria-label="Your search profiles"></div>
+    <div data-profile-empty hidden></div>
+
+    <p data-profile-status class="sp-status" aria-live="polite"></p>
+  </main>
+
+  <div data-include="components/footer.html"></div>
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-search-profiles.js"></script>
+</body>
+</html>

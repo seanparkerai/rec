@@ -74,7 +74,11 @@ const byNavText = (nav, doc) => doc.querySelector(`.nav-drawer__nav a[data-nav="
     assertEqual(items.slice(0, 5).join(' → '),
       'index.html → pages/listings.html → pages/areas.html → pages/finances.html → pages/ask.html',
       'Home · Listings · Areas · Finances · Ask lead the drawer, in that order');
-    assertEqual(items.length, 12, 'the full 11-item nav + latent admin entry survive the reorder');
+    assertEqual(items.length, 13, 'the full 12-item nav + latent admin entry survive the reorder');
+    // Search profiles (Phase 4) sits with the settings-ish links at the tail, so
+    // the owner-decided leading five above are unaffected by its arrival.
+    assertEqual(byNavText('pages/search-profiles.html', doc), 'Search profiles',
+      'the Search profiles link is present and page-named');
     assertEqual(byNavText('pages/house-planner.html', doc), 'House planner',
       'the House planner link is present and page-named');
     // Owner guarantee (2026-07-02): the property-decision links are individually

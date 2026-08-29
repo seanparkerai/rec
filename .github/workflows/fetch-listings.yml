@@ -60,9 +60,15 @@
 # Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
 # SUPABASE_SERVICE_ROLE_KEY.
 #
-# Cost guardrail: APIFY_MAX_BUDGET_USD (default 25) is passed to the actor as
-# maxBudget — Apify self-terminates at the cap. No overrun is possible on PPE actors.
-# results_per_target (maxItems) caps each search at 1000 listings. It is a CAP, not a
+# Cost guardrail: APIFY_MAX_BUDGET_USD (default 25) is passed as the RUN OPTION
+# maxTotalChargeUsd, which caps the total charged across every pricing model.
+# CORRECTED 2026-08-27 (probe H, docs/PHASE0-PROBE-FINDINGS.md): this file used to
+# claim the cap was the input field `maxBudget` and that "no overrun is possible".
+# Neither `maxBudget` nor `maxItems` is a field on this actor's input schema — both
+# were silently ignored, so for as long as those comments stood there was in fact NO
+# in-repo spend cap at all. The only limit that ever bound this system was the Apify
+# account's own monthly cap, which appears nowhere in this repo.
+# results_per_target now sets `maxProperties`, the per-URL cap the actor really reads. It is a CAP, not a
 # quantity: the actor bills per result actually RETURNED, so headroom costs nothing
 # unless the listings genuinely exist — and if they do, they are precisely the listings
 # a lower cap would have dropped. A target that FILLS the cap is silently truncated, so
@@ -70,7 +76,7 @@
 # tools/fetch-listings.mjs names any target that still hits it).
 # Typical daily top-up (24h, cluster): a few tens of results → ~$0.10/run. A portal
 # 14-day catch-up across all targets: low hundreds of results → well under $1. The $25
-# maxBudget bounds each actor call regardless of the cap.
+# maxTotalChargeUsd bounds each actor run regardless of the cap.
 # Scope is unaffected by the cap: the demand gate and the coordinate geofence confine
 # every result to the household's own areas and their drawn radius.
 name: fetch-listings
@@ -82,6 +88,9 @@ on:
         description: 'Fetch + normalise only, do not write'
         type: boolean
         default: false
+      profile_ids:
+        description: 'Lane B only: comma-separated search_profiles ids to run. When set, trigger_mode is ignored so a manual-only profile runs. Blank = scheduled profiles only.'
+        default: ''
       foundation_mode:
         description: 'Foundation pull (14-day backfill). ALWAYS dry-run first to review projected cost before enabling writes.'
         type: boolean
@@ -275,4 +284,6 @@ jobs:
           CLUSTER_CAP_MI: ${{ inputs.cluster_cap_mi || '5' }}
           # Optional per-area restriction (scheduled runs carry no inputs → all demand).
           AREA_IDS: ${{ inputs.area_ids || '' }}
+          # Lane B: restrict the profile lane to named profiles (a "Run now" press).
+          PROFILE_IDS: ${{ inputs.profile_ids || '' }}
         run: node tools/fetch-listings.mjs
