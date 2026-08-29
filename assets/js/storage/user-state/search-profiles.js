@@ -224,3 +224,53 @@ export async function getFetchControl() {
     return { fetch_enabled: false, legacy_enabled: true, paused_reason: `unreadable (${e.message})` };
   }
 }
+
+// ── Admin control plane (Phase 5) ────────────────────────────────────────────
+// The admin account belongs to NO household, so RLS cannot serve it. These call
+// SECURITY DEFINER RPCs that self-check auth.jwt()->>'email' — the same pattern
+// live_feed_stats() uses — but resolve households dynamically rather than
+// hardcoding UUIDs, so a new household appears in the panel on its own.
+// Every one returns a plain object rather than throwing: an admin panel that
+// blanks on error is worse than one that says what went wrong.
+
+/** Every profile in the system, grouped by household, plus the global gates. */
+export async function adminListSearchProfiles() {
+  const sb = await _initSb();
+  if (!sb) return { ok: false, message: 'Not connected.', households: [], control: null };
+  try {
+    const { data, error } = await sb.rpc('admin_list_search_profiles');
+    if (error) return { ok: false, message: error.message, households: [], control: null };
+    return { ok: true, households: data?.households ?? [], control: data?.control ?? null };
+  } catch (e) {
+    return { ok: false, message: e.message, households: [], control: null };
+  }
+}
+
+const rpc = async (name, args) => {
+  const sb = await _initSb();
+  if (!sb) return { ok: false, message: 'Not connected.' };
+  try {
+    const { data, error } = await sb.rpc(name, args);
+    if (error) return { ok: false, message: error.message };
+    return data ?? { ok: false, message: 'No response.' };
+  } catch (e) {
+    return { ok: false, message: e.message };
+  }
+};
+
+/** Pause/resume ONE search. Authoritative over the member's own switch. */
+export const adminSetProfilePaused = (id, paused) =>
+  rpc('admin_set_profile_paused', { p_profile_id: id, p_paused: paused });
+
+/** Pause/resume EVERY search for one household in a single action. */
+export const adminSetHouseholdPaused = (id, paused) =>
+  rpc('admin_set_household_paused', { p_household_id: id, p_paused: paused });
+
+/** The global master switch — stops both lanes for everyone. */
+export const adminSetFetchEnabled = (enabled, reason = null) =>
+  rpc('admin_set_fetch_enabled', { p_enabled: enabled, p_reason: reason });
+
+/** The legacy-lane switch. Independent of the profile lane: turning it off leaves
+ *  profiles running, and vice versa. */
+export const adminSetLegacyEnabled = (enabled) =>
+  rpc('admin_set_legacy_enabled', { p_enabled: enabled });

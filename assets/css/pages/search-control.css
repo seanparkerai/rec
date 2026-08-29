@@ -1,0 +1,34 @@
+/* search-control.css — the admin search panel. Standalone like live-feed.css:
+   linked directly rather than through the dashboard.css @import shell, because the
+   kiosk pages deliberately carry minimal chrome. */
+
+.sc-kiosk { max-width: 72rem; margin-inline: auto; padding: var(--space-4); }
+.sc-eyebrow { margin: 0; font-size: var(--text-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--pico-muted-color); }
+.sc-title { margin: 0 0 var(--space-2); }
+.sc-lead { margin: 0 0 var(--space-3); color: var(--pico-muted-color); font-size: var(--text-sm); }
+
+.sc-globals { display: grid; gap: var(--space-4); grid-template-columns: 1fr; margin-bottom: var(--space-5); }
+@media (min-width: 768px) { .sc-globals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.sc-global { padding: var(--space-4); border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); }
+.sc-global h2 { margin: 0 0 var(--space-1); font-size: var(--text-base); }
+.sc-global__state { margin: 0 0 var(--space-2); font-weight: 600; font-size: var(--text-sm); }
+.sc-global__state[data-state="off"] { color: var(--pico-del-color); }
+.sc-global__state[data-state="on"]  { color: var(--pico-ins-color); }
+
+.sc-summary { font-size: var(--text-sm); margin-bottom: var(--space-4); }
+.sc-household { margin-bottom: var(--space-5); }
+.sc-household__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); }
+.sc-household__head h2 { margin: 0; font-size: var(--text-lg); }
+.sc-household__meta { font-size: var(--text-xs); color: var(--pico-muted-color); margin-right: auto; }
+.sc-note { font-size: var(--text-xs); color: var(--pico-muted-color); margin: var(--space-1) 0; }
+
+/* Wide table scrolls inside its own container — the page never scrolls sideways. */
+.sc-table { width: 100%; font-size: var(--text-sm); display: block; overflow-x: auto; }
+.sc-name { font-weight: 600; }
+.sc-spec { white-space: nowrap; }
+.sc-state[data-running="no"]  { color: var(--pico-muted-color); }
+.sc-state[data-running="yes"] { color: var(--pico-ins-color); font-weight: 600; }
+.sc-row--off { opacity: .7; }
+
+.sc-btn { min-height: 44px; margin: 0; font-size: var(--text-sm); }
+.sc-status { font-size: var(--text-sm); color: var(--pico-muted-color); min-height: 1.5em; }

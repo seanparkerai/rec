@@ -11,7 +11,7 @@
 
 import { getSearchProfiles, setSearchProfileEnabled, runSearchProfile, getFetchControl } from './storage.js';
 import { buildProfileCard, buildLaneBanner, buildEmptyState } from './page-search-profiles/view.js';
-import { el } from './dom.js';
+import { confirmDialog } from './confirm-dialog.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -44,30 +44,6 @@ function render() {
   for (const p of profiles) list.appendChild(buildProfileCard(p, control));
 }
 
-/** Native <dialog> confirmation before a press that costs money. Mirrors
- *  confirmFetch() in listings/fetch.js — same pattern, same escape behaviour. */
-function confirmRun(name) {
-  return new Promise((resolve) => {
-    const cancel = el('button', { type: 'button', class: 'outline secondary' }, 'Cancel');
-    const ok = el('button', { type: 'button' }, 'Run now');
-    // el() takes ONE children argument (which may be an array) — extra positional
-    // args are silently dropped, so these must be arrays, not varargs.
-    const dlg = el('dialog', { class: 'sp-confirm' }, [
-      el('article', {}, [
-        el('h3', {}, `Run “${name}”?`),
-        el('p', {}, 'This starts a live search of Rightmove for this profile. Results appear within a few minutes.'),
-        el('footer', {}, [cancel, ok]),
-      ]),
-    ]);
-    const done = (v) => { dlg.close(); dlg.remove(); resolve(v); };
-    cancel.addEventListener('click', () => done(false));
-    ok.addEventListener('click', () => done(true));
-    dlg.addEventListener('cancel', (e) => { e.preventDefault(); done(false); });
-    document.body.appendChild(dlg);
-    dlg.showModal();
-  });
-}
-
 async function onClick(ev) {
   const btn = ev.target.closest('button[data-action]');
   if (!btn) return;
@@ -89,7 +65,12 @@ async function onClick(ev) {
   }
 
   if (btn.dataset.action === 'run') {
-    if (!(await confirmRun(profile.name))) return;
+    const go = await confirmDialog({
+      title: `Run “${profile.name}”?`,
+      body: 'This starts a live search of Rightmove for this profile. Results appear within a few minutes.',
+      confirmLabel: 'Run now',
+    });
+    if (!go) return;
     btn.disabled = true;
     say('Starting…');
     const res = await runSearchProfile(id);

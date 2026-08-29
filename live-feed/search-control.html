@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.setAttribute('data-auth-state','pending')</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Search control · GR</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <meta name="description" content="Admin kiosk — every search profile across every household, and the global switches." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/pages/search-control.css" />
+</head>
+<body>
+  <!-- No header/nav includes: minimal kiosk chrome, matching live-feed/index.html.
+       components.js still loads so auth-guard.js (the admin ⇔ /live-feed lock) and
+       the theme run. This page sits UNDER /live-feed, so the existing lock already
+       permits it — auth-guard.js needs no change. -->
+  <main id="main" class="sc-kiosk">
+    <header class="sc-head">
+      <p class="sc-eyebrow">Admin</p>
+      <h1 class="sc-title">Search control</h1>
+      <p class="sc-lead">Every search profile in the system. Five independent switches: global, legacy lane, per user, per profile, and the user's own.</p>
+      <p><a href="./">← Live feed</a></p>
+    </header>
+
+    <div data-sc-globals></div>
+    <div data-sc-summary></div>
+    <div data-sc-households></div>
+
+    <p data-sc-status class="sc-status" aria-live="polite"></p>
+  </main>
+
+  <script type="module" src="../assets/js/components.js"></script>
+  <script type="module" src="../assets/js/page-search-control.js"></script>
+</body>
+</html>
