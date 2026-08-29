@@ -63,6 +63,7 @@ import { applyRadiusTuning, loadUniverseFromRepo, ringFloorInputs } from './lib/
 import { RECENCY_DAYS } from '../assets/js/intelligence-constants.js';
 import { passesBaseline } from '../assets/js/listings/classify.js';
 import { membershipRowsFor, replaceListingAreas } from './listing-areas-writer.mjs';
+import { validateSpec, signatureKey, keywordGate, agedGate, priceGate, SORTS } from '../assets/js/search/profile-spec.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -85,6 +86,11 @@ const MAX_DAYS_SINCE_ADDED = FOUNDATION_MODE ? null : (Number(process.env.MAX_DA
 // Applied after all sources are merged and pruned — unmatched outcodes are dropped.
 const AREA_IDS = process.env.AREA_IDS
   ? new Set(process.env.AREA_IDS.split(',').map((s) => s.trim()).filter(Boolean))
+  : null;
+// PROFILE_IDS: restrict lane B to specific search_profiles rows. Set by a manual
+// "Run now" press; when set, trigger_mode is ignored so a manual-only profile runs.
+const PROFILE_IDS = process.env.PROFILE_IDS
+  ? new Set(process.env.PROFILE_IDS.split(',').map((s) => s.trim()).filter(Boolean))
   : null;
 
 // SPEND LEVERS — corrected 2026-08-27 from the live actor schema (probe H;
@@ -432,8 +438,7 @@ async function fetchEnabled() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/fetch_control?select=fetch_enabled,paused_reason&limit=1`, {
       headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
-    });
-    if (!res.ok) {
+    });    if (!res.ok) {
       // MISSING TABLE FAILS OPEN. This is the one case that does NOT fail closed,
       // and the distinction is deliberate: an absent table is a known deployment
       // state (the migration has not run yet), not evidence that anything is wrong.
@@ -462,6 +467,136 @@ async function fetchEnabled() {
     console.error(`fetch_control read failed (${e.message}) — refusing to fetch (spend gate fails closed)`);
     return false;
   }
+}
+
+// ── LANE B: profile-driven search (Phase 2a) ─────────────────────────────────
+// COEXISTENCE (owner directive 2026-08-28). Lane A — the criteria-driven search
+// above — is UNCHANGED and stays the default. Lane B runs alongside it, sourced
+// from search_profiles. Neither lane knows about the other; both write through the
+// same normalise → passesBaseline → geofence → replace_listing_areas pipeline, and
+// dedupeByRightmoveId + the rightmove_id unique constraint already collapse a
+// listing found by both into one row. Nothing here deletes or reroutes lane A.
+
+/** Is the legacy (criteria-driven) lane switched on? Defaults TRUE — including on
+ *  a read failure or a missing column — because turning lane A off must be a
+ *  deliberate act, never an accident of a Supabase blip. The global fetchEnabled()
+ *  gate has already run by this point, so this only ever narrows within an
+ *  already-permitted run. */
+async function legacyEnabled() {
+  if (DRY_RUN) return process.env.LEGACY_LANE !== '0';
+  if (!SERVICE_KEY) return true;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/fetch_control?select=legacy_enabled&limit=1`, {
+      headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
+    });
+    if (!res.ok) return true;
+    const rows = await res.json();
+    return rows?.[0]?.legacy_enabled !== false;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Profiles eligible to run right now. Four switches must all allow it: the
+ * profile's own `enabled`, `admin_paused`, the household's `search_paused`, and
+ * the global gate (already checked upstream).
+ *
+ * Selection differs by trigger: a scheduled run takes only `trigger_mode=schedule`
+ * profiles; a manual run takes exactly the PROFILE_IDS asked for and ignores
+ * trigger_mode, which is what makes a "Run now" button work on a manual profile.
+ *
+ * Returns `[]` on any failure — lane B is ADDITIVE, so a read outage must degrade
+ * to "no profile searches this run" and leave lane A completely untouched. It must
+ * never abort the run, or a profile-lane hiccup would take the legacy search down
+ * with it.
+ * @returns {Promise<Array<{id:string,household_id:string,name:string,spec:object}>>}
+ */
+async function loadActiveProfiles() {
+  if (!SERVICE_KEY) return [];
+  try {
+    const q = `${SUPABASE_URL}/rest/v1/search_profiles`
+      + '?select=id,household_id,name,spec,trigger_mode&enabled=eq.true&admin_paused=eq.false';
+    const [pRes, hRes] = await Promise.all([
+      fetch(q, { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } }),
+      fetch(`${SUPABASE_URL}/rest/v1/households?select=id&search_paused=eq.true`,
+        { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } }),
+    ]);
+    if (!pRes.ok) { console.warn(`search_profiles read failed (HTTP ${pRes.status}) — lane B skipped, lane A unaffected`); return []; }
+    const rows = await pRes.json();
+    const paused = new Set(hRes.ok ? (await hRes.json()).map((h) => h.id) : []);
+
+    const wanted = PROFILE_IDS
+      ? rows.filter((r) => PROFILE_IDS.has(r.id))
+      : rows.filter((r) => r.trigger_mode === 'schedule');
+
+    const out = [];
+    for (const r of wanted) {
+      if (paused.has(r.household_id)) { console.log(`  profile "${r.name}": household paused — skipped`); continue; }
+      // allowLegacyRange: the migrated "Original search (legacy)" profiles carry a
+      // price RANGE. They must remain runnable — refusing them would make the
+      // unpause path the plan promises a dead end.
+      const { spec, errors } = validateSpec(r.spec, { allowLegacyRange: true });
+      if (errors.length) { console.warn(`  profile "${r.name}": invalid spec — skipped (${errors.join('; ')})`); continue; }
+      out.push({ id: r.id, household_id: r.household_id, name: r.name, spec });
+    }
+    return out;
+  } catch (e) {
+    console.warn(`search_profiles read failed (${e.message}) — lane B skipped, lane A unaffected`);
+    return [];
+  }
+}
+
+/** The price band a profile searches. An exact profile pins min === max, which is
+ *  the whole point of the exact-price design. Pure. */
+function bandFromSpec(spec) {
+  if (spec?.priceMode === 'range') {
+    return { min: Number(spec.priceMin) || BASELINE_PRICE_MIN, max: Number(spec.priceMax) || BASELINE_PRICE_MAX, minBeds: spec.minBeds };
+  }
+  return { min: Number(spec.price), max: Number(spec.price), minBeds: spec.minBeds };
+}
+
+/**
+ * Turn active profiles into search targets, one set per SIGNATURE rather than per
+ * profile — profiles whose specs produce an identical Rightmove URL are served by
+ * ONE paid search, which is what stops N households multiplying the bill.
+ *
+ * Uses outcode targeting (disjoint by construction, so no listing is billed twice)
+ * rather than lane A's overlapping cluster disks. The buffered outcode cover and
+ * count history come in Phase 2b; this is the honest interim.
+ *
+ * Pure apart from the maps it is handed — unit-testable with fixtures.
+ * @param {Map<string,Array>} outcodeMap the post-prune universe
+ * @param {Array} profiles from loadActiveProfiles()
+ * @param {Map<string,Set<string>>} householdAreas household_id → area ids (active)
+ * @returns {Array} targets tagged with { profileSpec, profileIds, signature }
+ */
+function buildProfileTargets(outcodeMap, profiles, householdAreas) {
+  const groups = new Map();
+  for (const p of profiles) {
+    const scope = p.spec.areaScope;
+    const own = householdAreas.get(p.household_id) || new Set();
+    const ids = scope === 'household' ? own : new Set([...(scope.areaIds || [])].filter((id) => own.has(id)));
+    if (!ids.size) { console.log(`  profile "${p.name}": no active areas in scope — skipped`); continue; }
+    const key = signatureKey(p.spec);
+    if (!groups.has(key)) groups.set(key, { spec: p.spec, ids: new Set(), profiles: [] });
+    const g = groups.get(key);
+    for (const id of ids) g.ids.add(id);
+    g.profiles.push(p);
+  }
+
+  const targets = [];
+  for (const [signature, g] of groups) {
+    const scoped = new Map();
+    for (const [oc, arr] of outcodeMap) {
+      const kept = arr.filter((v) => g.ids.has(v.id));
+      if (kept.length) scoped.set(oc, kept);
+    }
+    for (const t of buildSearchTargets(scoped, 'outcode')) {
+      targets.push({ ...t, label: `profile:${t.outcode}`, profileSpec: g.spec, profileIds: g.profiles.map((p) => p.id), signature });
+    }
+  }
+  return targets;
 }
 
 // ── outcode → Rightmove locationIdentifier (typeahead) ───────────────────────
@@ -557,6 +692,17 @@ function buildSearchUrl(locationIdentifier, spec = null, opts = {}) {
   // value returns 0 results). The geofence still decides membership.
   const radiusMiles = wireRadiusFor(opts.radiusMiles ?? spec?.radiusMiles);
   if (radiusMiles != null) params.set('radius', String(radiusMiles));
+  // LANE B additions. All optional: absent means an identical URL to before, which
+  // is what keeps the legacy lane byte-for-byte unchanged.
+  // Property types may only ever NARROW the baseline allow-list (profile-spec.js
+  // clamps to it), so this can never re-admit flats, land or park homes.
+  if (opts.propertyTypes?.length) params.set('propertyTypes', opts.propertyTypes.join(','));
+  // sortType 10 = oldest listed, which is what surfaces long-standing stock.
+  if (opts.sortType != null) params.set('sortType', String(opts.sortType));
+  // Rightmove caps keywords at 3 and treats them as a RANKING signal, not a
+  // filter — the hard filter is keywordGate() after the fetch. Sending them
+  // anyway costs nothing and puts matches first inside the maxProperties cut-off.
+  if (opts.keywords?.length) params.set('keywords', opts.keywords.slice(0, 3).join(','));
   return `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationIdentifier}&${params}`;
 }
 
@@ -589,9 +735,9 @@ function orderOutcodesByFocus(outcodes, spec) {
 // rail (tests/contract/fetch-spend.test.js) can pin the cost levers on every run.
 // The per-target cap lives here as `maxProperties`; the hard USD cap is a RUN
 // OPTION and so lives on the request URL in apifyCall, not in this object.
-function buildActorInput(locationIdentifier, spec = null, radiusMiles = null, band = null) {
+function buildActorInput(locationIdentifier, spec = null, radiusMiles = null, band = null, searchOpts = null) {
   return {
-    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max, minBeds: band?.minBeds }) }],
+    listUrls: [{ url: buildSearchUrl(locationIdentifier, spec, { radiusMiles, priceMin: band?.min, priceMax: band?.max, minBeds: band?.minBeds, ...(searchOpts || {}) }) }],
     // The per-URL result cap the actor actually reads. `maxItems` did nothing.
     maxProperties: roundMaxProperties(RESULTS_PER_OUTCODE),
     // Pinned explicitly, never left to the default: this one carries a 5x CHARGE
@@ -603,7 +749,7 @@ function buildActorInput(locationIdentifier, spec = null, radiusMiles = null, ba
   };
 }
 
-async function apifyCall(locationIdentifier, spec, radiusMiles, band) {
+async function apifyCall(locationIdentifier, spec, radiusMiles, band, searchOpts = null) {
   // maxTotalChargeUsd is a RUN OPTION, not an input field — it goes on the query
   // string. This is the real hard cap, and it caps the total charged across every
   // pricing model (the old input-body `maxBudget` was silently ignored).
@@ -612,7 +758,7 @@ async function apifyCall(locationIdentifier, spec, radiusMiles, band) {
     `/run-sync-get-dataset-items?token=${encodeURIComponent(APIFY_TOKEN)}` +
     `&maxTotalChargeUsd=${encodeURIComponent(APIFY_MAX_BUDGET_USD)}` +
     `&memory=256`;   // >256MB scales the charge; pin it rather than inherit a default
-  const input = buildActorInput(locationIdentifier, spec, radiusMiles, band);
+  const input = buildActorInput(locationIdentifier, spec, radiusMiles, band, searchOpts);
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -650,13 +796,13 @@ let zeroRetriesRun = 0, zeroRetriesRecovered = 0;
 /** Retry counters for the run summary + the rail. */
 function zeroRetryStats() { return { run: zeroRetriesRun, recovered: zeroRetriesRecovered }; }
 
-async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null) {
+async function fetchRawForOutcode(locationIdentifier, spec = null, radiusMiles = null, band = null, searchOpts = null) {
   if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not set');
-  const items = await apifyCall(locationIdentifier, spec, radiusMiles, band);
+  const items = await apifyCall(locationIdentifier, spec, radiusMiles, band, searchOpts);
   if (items.length || !ZERO_RETRY) return items;
   zeroRetriesRun += 1;
   if (ZERO_RETRY_DELAY_MS > 0) await new Promise((r) => setTimeout(r, ZERO_RETRY_DELAY_MS)); // let a transient clear
-  const retry = await apifyCall(locationIdentifier, spec, radiusMiles, band);
+  const retry = await apifyCall(locationIdentifier, spec, radiusMiles, band, searchOpts);
   if (retry.length) {
     zeroRetriesRecovered += 1;
     console.warn(`  ↻ zero-result retry RECOVERED ${retry.length} listing(s) — the first call returned an empty dataset (silent actor failure)`);
@@ -996,6 +1142,11 @@ async function main() {
   // Per-target price bands: every household linked to a target's areas
   // contributes its budget; each search runs with the union (lowest min,
   // highest max, lowest minBeds) so one search serves all interested households.
+  const householdAreas = new Map();   // lane B: household_id -> Set(active area ids)
+  for (const l of householdLinks || []) {
+    if (!householdAreas.has(l.household_id)) householdAreas.set(l.household_id, new Set());
+    householdAreas.get(l.household_id).add(l.area_id);
+  }
   const areaHouseholds = new Map();
   for (const l of householdLinks || []) {
     if (!l?.area_id || !l?.household_id) continue;
@@ -1074,6 +1225,30 @@ async function main() {
     targets = [...targets.filter((t) => focus.has(t.outcode)), ...targets.filter((t) => !focus.has(t.outcode))];
   }
   if (FETCH_LIMIT) targets = targets.slice(0, FETCH_LIMIT);
+
+  // ── LANE GATING ────────────────────────────────────────────────────────────
+  // Lane A (everything above) is the legacy criteria-driven search, unchanged.
+  // It can be switched off independently of lane B, and defaults ON so today's
+  // behaviour is preserved until the owner deliberately turns it off.
+  const laneA = await legacyEnabled();
+  const legacyTargets = targets.length;
+  if (!laneA) {
+    targets = [];
+    console.log(`legacy lane: DISABLED (fetch_control.legacy_enabled = false) — ${legacyTargets} criteria-driven target(s) skipped`);
+  }
+
+  // Lane B: profile-driven. Additive — a failure here yields zero profile targets
+  // and leaves lane A exactly as it was.
+  const activeProfiles = await loadActiveProfiles();
+  const profileTargets = activeProfiles.length ? buildProfileTargets(outcodeMap, activeProfiles, householdAreas) : [];
+  if (activeProfiles.length) {
+    const sigs = new Set(profileTargets.map((t) => t.signature)).size;
+    console.log(`profile lane: ${activeProfiles.length} active profile(s) → ${sigs} distinct search(es) → ${profileTargets.length} outcode target(s)`);
+  } else {
+    console.log(`profile lane: 0 active profiles${PROFILE_IDS ? ' matching PROFILE_IDS' : ''} — nothing to fetch`);
+  }
+  targets = [...targets, ...profileTargets];
+
   const worstCaseResults = targets.length * RESULTS_PER_OUTCODE;
   const estimatedCostUSD = (worstCaseResults / 1000) * 2;
   console.log(`targets: ${targets.length} (${SEARCH_MODE}) · active villages: ${ALL_ACTIVE.length}`);
@@ -1107,8 +1282,14 @@ async function main() {
     const areas = target.areas || [];
     try {
       const locId = target.locationIdentifier || await resolveLocationId(oc);
-      const band = priceBandForAreas(areas.map((a) => a.id), areaHouseholds, budgets);
-      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles, band);
+      // A lane-B target carries its own band and search shape; a lane-A target
+      // still uses the per-target union of linked households' budgets, unchanged.
+      const ps = target.profileSpec || null;
+      const band = ps ? bandFromSpec(ps) : priceBandForAreas(areas.map((a) => a.id), areaHouseholds, budgets);
+      const searchOpts = ps
+        ? { days: ps.recencyDays, sortType: SORTS[ps.sort] ?? 6, keywords: ps.keywords, propertyTypes: ps.propertyTypes }
+        : null;
+      const raw = await fetchRawForOutcode(locId, spec, target.radiusMiles, band, searchOpts);
       totalRaw += raw.length;
       // Truncation sentinel: a page that fills the per-target cap almost certainly
       // has MORE results we did not pay for — a silent coverage hole. Surface it
@@ -1128,15 +1309,51 @@ async function main() {
       const offBaseline = normalised.length - inBaseline.length;
       totalOffBaseline += offBaseline;
 
+      // LANE B gates. A lane-A target has no profileSpec, so `gated === inBaseline`
+      // by identity and the legacy path is untouched.
+      //
+      // These run BEFORE the geofence so a rejected listing never reaches the
+      // upsert. The keyword gate in particular is the ONLY thing that delivers
+      // "only properties carrying one of my tags": Rightmove's own keywords=
+      // parameter re-ranks and leaves the result count unchanged, so without this
+      // untagged properties would be stored and shown.
+      let gated = inBaseline;
+      if (ps) {
+        const before = gated.length;
+        gated = gated.filter((l) => priceGate(l, ps));
+        const priceDropped = before - gated.length;
+
+        const kwBefore = gated.length;
+        const hitsById = new Map();
+        gated = gated.filter((l) => {
+          const { keep, hits } = keywordGate(l, ps);
+          if (keep && hits.length) hitsById.set(l.rightmove_id, hits);
+          return keep;
+        });
+        const kwDropped = kwBefore - gated.length;
+
+        const ageBefore = gated.length;
+        gated = gated.filter((l) => agedGate(l, ps, now).keep);
+        const ageDropped = ageBefore - gated.length;
+
+        if (priceDropped || kwDropped || ageDropped) {
+          console.log(`    profile gates: -${priceDropped} off exact price · -${kwDropped} missing keyword · -${ageDropped} too new`);
+        }
+        if (hitsById.size) {
+          const sample = [...hitsById.entries()].slice(0, 3).map(([id, h]) => `${id}[${h.join('+')}]`).join(' ');
+          console.log(`    keyword hits: ${hitsById.size} listing(s) — e.g. ${sample}`);
+        }
+      }
+
       // Text-match new-build exclusion: drop listings whose title or description
       // mention "new build", "new home", or "NHBC". Catches new-build schemes at
       // source; resale new-builds without these terms remain visible (accepted per
       // owner decision 2026-06-04).
       const NEW_BUILD_RE = /\bnew\s+(?:build|home)\b|\bnhbc\b/i;
-      const notNewBuild = inBaseline.filter(
+      const notNewBuild = gated.filter(
         (l) => !NEW_BUILD_RE.test(l.title ?? '') && !NEW_BUILD_RE.test(l.description ?? '')
       );
-      const newBuildDropped = inBaseline.length - notNewBuild.length;
+      const newBuildDropped = gated.length - notNewBuild.length;
       if (newBuildDropped > 0) {
         // Name every drop. This filter is a TEXT HEURISTIC over short agent copy, and
         // "new home" is ordinary marketing prose ("the perfect new home for a growing
@@ -1265,4 +1482,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, buildSearchUrl, roundMaxProperties, fetchEnabled, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, fetchRawForOutcode, zeroRetryStats, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, roundMaxProperties, fetchEnabled, legacyEnabled, loadActiveProfiles, buildProfileTargets, bandFromSpec, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, fetchRawForOutcode, zeroRetryStats, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
