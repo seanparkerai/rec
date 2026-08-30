@@ -30,7 +30,7 @@ on:
   workflow_dispatch:
     inputs:
       probes:
-        description: 'Comma-separated: H (free schema+charges), I (empty-search cost), J (monitoringMode), K (cheap-mode fields), A (exact price band), F (outcode disjointness)'
+        description: 'dryrun (free: prints the target plan, no Apify call) or probes H (free) / I / J / K / A / F (paid, ~$0.02-0.10 each)'
         default: 'H'
       outcode:
         description: 'Outcode to probe against'
@@ -42,11 +42,8 @@ on:
         description: 'Exact price to probe with'
         default: '400000'
       profile_ids:
-        description: 'dryrun-profiles only: comma-separated search_profiles ids. Blank falls back to the request file.'
+        description: 'dryrun only: comma-separated search_profiles ids. Blank falls back to the request file.'
         default: ''
-      task:
-        description: 'probe (default) or dryrun-profiles — a DRY RUN of the profile lane. Zero Apify spend either way; dryrun-profiles makes no actor call at all.'
-        default: 'probe'
   push:
     paths:
       - '.github/probe-request.txt'

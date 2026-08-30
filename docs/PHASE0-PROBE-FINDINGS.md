@@ -104,3 +104,44 @@ full set is well under $1.
 **What can proceed without spend:** everything in §2 is definitive, so the `buildActorInput` fix,
 the `search_profiles` schema, the query planner, the UI and the admin panel are all unblocked. Only
 the *verification* of monitoring behaviour waits.
+
+---
+
+## 6. DRY_RUN is not a free mode (discovered 2026-08-30)
+
+`DRY_RUN=1` guards only the **writes**. The check sits *after* `fetchRawForOutcode()`,
+so a dry run fetches real listings and is billed for them; it merely declines to upsert.
+
+The banner in `main()` had been printing **"DRY RUN — no Apify calls or writes will be
+made"** since long before this work. That sentence is untrue, and it is exactly the kind
+of comment that makes someone confident enough to point a dry run at production. It did:
+a run intended as a free verification attempted **155 billable Apify calls**, which cost
+nothing only because the account's monthly cap was already exhausted and refused every
+one with a 403.
+
+**Use `PLAN_ONLY=1` for a genuinely free run.** It builds the plan, prints each target
+with its lane, price band and signature, and returns before the first Apify call.
+`tests/contract/fetch-spend.test.js` pins that early return ahead of the fetch loop and
+fails if the old banner ever returns.
+
+| Mode | Fetches? | Writes? | Costs money? |
+|---|---|---|---|
+| `PLAN_ONLY=1` | no | no | **no** |
+| `DRY_RUN=1` | **yes** | no | **yes** |
+| neither | yes | yes | yes |
+
+## 7. Verified live, 2026-08-30 — the profile lane builds correctly
+
+`PLAN_ONLY` run over Luke's household:
+
+```
+plan: 155 target(s) — 50 profile, 105 legacy
+[B/profile] profile:SN9 · areas=1 · £400k–£400k ·
+  sig=exact:400000|beds:2|types:bungalow+detached+semi-detached+terraced
+      |days:any|sort:oldest|kw:cottage+georgian+period
+```
+
+50 profile targets = 2 signatures × 25 disjoint outcodes, alongside 105 untouched legacy
+targets — coexistence working as designed. The §2 error-body fix is also confirmed in
+production: every failure now reads `Monthly usage hard limit exceeded` rather than a
+bare `403`.

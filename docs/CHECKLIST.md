@@ -98,3 +98,29 @@ place-specific content + licence-safe imagery. **Do not auto-generate** this con
 ### Future organisation (optional, owner-deferred)
 - [ ] Folderize `outreach-renderer.js` / `outreach-store.js` / `learned-preferences.js` into their
       feature folders.
+
+## Search profiles + spend control (2026-08-27 → 08-30)
+
+- [x] **Phase 0** — probes H/P against the live actor. `maxItems` and `maxBudget` are not
+      fields on it and were silently ignored; `maxProperties` + the `maxTotalChargeUsd`
+      run option are the real levers. Findings: `docs/PHASE0-PROBE-FINDINGS.md`.
+- [x] **Phase 1a** — real spend caps, `fetch_control` global kill switch (fails closed on a
+      disabled/unreadable gate, open on a missing table), Apify error bodies surfaced.
+- [x] **Phase 1b** — `search_profiles` table, `assets/js/search/profile-spec.js` (exact-price
+      validation, `signatureKey`, hard `keywordGate`), storage layer.
+- [x] **Phase 2a** — profile lane runs ALONGSIDE the legacy criteria lane. Nothing deleted;
+      `fetch_control.legacy_enabled` switches lane A independently.
+- [x] **Phase 4** — `pages/search-profiles.html`: on/off, Run now, keyword control, lane banner.
+- [x] **Phase 5** — `live-feed/search-control.html`: every profile across every household,
+      all five switches. Fixed a guard trigger that could never have permitted the admin.
+- [x] **Phase 6** — Luke's two searches seeded (£375k/24h, £400k/all-time + keywords), both
+      manual-trigger. Verified live via `PLAN_ONLY`: 50 profile + 105 legacy targets.
+- [ ] **Blocked on Apify spend being re-enabled** — paid probes `J,I,K,A` (~$0.30 total):
+      does `monitoringMode` bill only new listings; does an empty search cost anything;
+      does `fullPropertyDetails:false` return enough text for the keyword gate; does an
+      exact `minPrice==maxPrice` band work.
+- [ ] **Phase 2b** — query planner: buffered outcode cover from committed polygons, and the
+      typeahead outcode-id cache (§0.12) so lane B makes no direct Rightmove calls.
+- [ ] `dispatch-sentinel.yml` asserts a dispatch RAN, not that it SUCCEEDED — the specific
+      gap that let three weeks of total fetch failure look healthy.
+- [ ] Retire the legacy lane — owner decision only, its own named phase, never a side effect.
