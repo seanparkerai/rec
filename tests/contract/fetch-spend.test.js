@@ -76,6 +76,19 @@ export async function register({ test, assert, assertEqual }) {
       'the thrown error must include the response body — the cause lives in it');
   });
 
+  test('fetch-spend: PLAN_ONLY returns BEFORE any Apify call', () => {
+    // DRY_RUN is not a free mode — it fetches for real and skips only the writes,
+    // which cost 155 attempted billable calls when a "dry run" was assumed free.
+    // PLAN_ONLY is the mode that genuinely spends nothing, so its early return
+    // must stay ahead of the fetch loop.
+    const planIdx = src.indexOf('PLAN ONLY — stopping before any Apify call');
+    const fetchIdx = src.indexOf('await fetchRawForOutcode(');
+    assert(planIdx > 0, 'PLAN_ONLY must announce itself');
+    assert(planIdx < fetchIdx, 'the PLAN_ONLY return must come before the first fetch call');
+    assert(!/DRY RUN — no Apify calls/.test(src),
+      'the old banner claimed DRY_RUN made no Apify calls; it does make them');
+  });
+
   test('fetch-spend: the global kill switch fails CLOSED', () => {
     // Opposite latch to householdAreasOk on purpose: a demand-gate outage must
     // not zero a run, but a spend-gate outage must not authorise one.

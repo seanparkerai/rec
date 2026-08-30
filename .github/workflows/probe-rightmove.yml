@@ -91,10 +91,12 @@ jobs:
           PROBES="${PROBES:-H}"
 
           if printf '%s' "$PROBES" | grep -qi dryrun; then
-            # Zero spend: DRY_RUN short-circuits before any Apify call.
-            export DRY_RUN=1 SEARCH_MODE=cluster
+            # PLAN_ONLY returns before the first Apify call, so this really is
+            # free. DRY_RUN alone is NOT: it fetches for real and skips only the
+            # writes. Using it here previously attempted 155 billable calls.
+            export PLAN_ONLY=1 DRY_RUN=1 SEARCH_MODE=cluster
             export PROFILE_IDS="${IN_PROFILE_IDS:-$(val profile_ids)}"
-            echo "== DRY RUN of the profile lane =="
+            echo "== PLAN ONLY: profile lane target plan (no fetch, no spend) =="
             echo "PROFILE_IDS=${PROFILE_IDS:-<none: scheduled profiles only>}"
             node tools/fetch-listings.mjs
           else

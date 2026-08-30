@@ -72,6 +72,12 @@ const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const APIFY_TOKEN = process.env.APIFY_TOKEN || '';
 const APIFY_ACTOR_ID = process.env.APIFY_ACTOR_ID || 'dhrumil~rightmove-scraper';
 const DRY_RUN = process.env.DRY_RUN === '1' || process.env.DRY_RUN === 'true';
+// PLAN_ONLY: build the plan and STOP. Unlike DRY_RUN — which fetches real data and
+// only skips the WRITES, so it does cost money — this returns before the first
+// Apify call, so it genuinely spends nothing. Added 2026-08-30 after a "dry run"
+// intended to be free attempted 155 billable calls; they were refused only because
+// the account cap was already exhausted.
+const PLAN_ONLY = process.env.PLAN_ONLY === '1' || process.env.PLAN_ONLY === 'true';
 const FETCH_LIMIT = Number(process.env.FETCH_LIMIT) || 0;
 const USE_LEARNED = process.env.USE_LEARNED === '1' || process.env.USE_LEARNED === 'true';
 const FOUNDATION_MODE = process.env.FOUNDATION_MODE === '1' || process.env.FOUNDATION_MODE === 'true';
@@ -1271,7 +1277,20 @@ async function main() {
       + `Fix with: node tools/resolve-areas.mjs --write`);
   }
   console.log(`cost estimate: ${targets.length} targets × ${RESULTS_PER_OUTCODE} results = ${worstCaseResults} worst-case results → ~$${estimatedCostUSD.toFixed(2)} USD (@$2/1k) · hard cap: $${APIFY_MAX_BUDGET_USD}`);
-  if (DRY_RUN) console.log('DRY RUN — no Apify calls or writes will be made');
+  // This message used to claim DRY_RUN made "no Apify calls" — it does not. DRY_RUN
+  // fetches for real and skips only the writes, which is a preview, not a free one.
+  if (DRY_RUN) console.log('DRY RUN — listings WILL be fetched (and billed); no writes will be made');
+  if (PLAN_ONLY) {
+    console.log('PLAN ONLY — stopping before any Apify call. Nothing will be fetched or billed.');
+    for (const t of targets) {
+      const band = t.profileSpec ? bandFromSpec(t.profileSpec) : null;
+      const lane = t.profileSpec ? 'B/profile' : 'A/legacy';
+      console.log(`  [${lane}] ${t.label} · areas=${(t.areas || []).length}`
+        + (band ? ` · ${fmtPrice(band.min)}–${fmtPrice(band.max)} · sig=${t.signature}` : ''));
+    }
+    console.log(`plan: ${targets.length} target(s) — ${targets.filter((t) => t.profileSpec).length} profile, ${targets.filter((t) => !t.profileSpec).length} legacy`);
+    return;
+  }
 
   const now = new Date();
   let totalRaw = 0, totalOffBaseline = 0, totalKept = 0, totalRejected = 0, totalFlagged = 0, totalWritten = 0, totalPriceChanges = 0;
@@ -1482,4 +1501,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   main().catch((e) => { console.error('FETCH CRASHED:', e); process.exit(1); });
 }
 
-export { loadOutcodeMap, buildSearchUrl, roundMaxProperties, fetchEnabled, legacyEnabled, loadActiveProfiles, buildProfileTargets, bandFromSpec, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, fetchRawForOutcode, zeroRetryStats, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
+export { loadOutcodeMap, buildSearchUrl, PLAN_ONLY, roundMaxProperties, fetchEnabled, legacyEnabled, loadActiveProfiles, buildProfileTargets, bandFromSpec, filterListingsBySpec, orderOutcodesByFocus, clusterVillages, buildSearchTargets, dedupeSearchTargets, householdRowsToVillages, demandFilterOutcodeMap, applyRadiusTuning, priceBandForAreas, buildActorInput, snapRadiusUp, wireRadiusFor, fetchRawForOutcode, zeroRetryStats, RIGHTMOVE_RADII, SEARCH_MARGIN_MI, CLUSTER_CAP_MI, APIFY_MAX_BUDGET_USD, RESULTS_PER_OUTCODE, BASELINE_PRICE_MIN, BASELINE_PRICE_MAX, BASELINE_MIN_BEDS, BASELINE_DONT_SHOW, BASELINE_PROPERTY_TYPES, FOUNDATION_MODE, MAX_DAYS_SINCE_ADDED };
