@@ -22,4 +22,4 @@ outcode2=SP4
 price=400000
 profile_ids=528095ca-3072-4542-bb7f-4b2b78f9828b,c39c038a-8068-479a-84c7-adbc3fe49a47
 
-# run: 2026-08-28 dry-run Luke's two profiles (zero spend)
+# run: 2026-08-30 dry-run Lukes two profiles (zero spend) — retry after if-gate fix

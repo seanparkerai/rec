@@ -66,47 +66,41 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      # DRY RUN of the profile lane. Proves profiles load, areas resolve, targets
-      # build and the search URLs are right — against LIVE data, with no Apify call
-      # (DRY_RUN short-circuits before fetchRawForOutcode). Zero spend by
-      # construction, which is why it is safe to fire from a push.
-      - name: Dry-run the profile lane
-        if: ${{ contains(inputs.probes, 'dryrun') || contains(inputs.task, 'dryrun') }}
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          DRY_RUN: '1'
-          SEARCH_MODE: cluster
-          PROFILE_IDS: ${{ inputs.profile_ids }}
-        run: |
-          set -euo pipefail
-          REQ=.github/probe-request.txt
-          val() { [ -f "$REQ" ] && grep -E "^$1=" "$REQ" | tail -1 | cut -d= -f2- | tr -d '"'"'"' ' || true; }
-          export PROFILE_IDS="${PROFILE_IDS:-$(val profile_ids)}"
-          echo "PROFILE_IDS=${PROFILE_IDS:-<none: scheduled profiles only>}"
-          node tools/fetch-listings.mjs
-
-      - name: Probe Rightmove + Apify parameters
-        if: ${{ !contains(inputs.probes, 'dryrun') && !contains(inputs.task, 'dryrun') }}
+      # ONE step decides what to run. An `if:` on the step cannot work here: a push
+      # event carries no `inputs`, so any condition reading inputs.* is false on
+      # exactly the trigger this workflow exists to serve. The request file is only
+      # readable inside a run block, so the branch has to live there too.
+      - name: Probe or dry-run
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           IN_PROBES: ${{ inputs.probes }}
           IN_OUTCODE: ${{ inputs.outcode }}
           IN_OUTCODE2: ${{ inputs.outcode2 }}
           IN_PRICE: ${{ inputs.price }}
+          IN_PROFILE_IDS: ${{ inputs.profile_ids }}
         run: |
           set -euo pipefail
           REQ=.github/probe-request.txt
-          # Read a key from the request file. Deliberately parsed, never sourced —
-          # a committed file should not be able to execute anything on the runner.
+          # Parsed, never sourced — a committed file must not be able to execute
+          # anything on the runner.
           val() { [ -f "$REQ" ] && grep -E "^$1=" "$REQ" | tail -1 | cut -d= -f2- | tr -d '"'"'"' ' || true; }
           PROBES="${IN_PROBES:-$(val probes)}"
-          OUTCODE="${IN_OUTCODE:-$(val outcode)}"
-          OUTCODE2="${IN_OUTCODE2:-$(val outcode2)}"
-          PRICE="${IN_PRICE:-$(val price)}"
-          node tools/probe-rightmove-params.mjs \
-            --only="${PROBES:-H}" \
-            --outcode="${OUTCODE:-SP11}" \
-            --outcode2="${OUTCODE2:-SP4}" \
-            --price="${PRICE:-400000}"
+          PROBES="${PROBES:-H}"
+
+          if printf '%s' "$PROBES" | grep -qi dryrun; then
+            # Zero spend: DRY_RUN short-circuits before any Apify call.
+            export DRY_RUN=1 SEARCH_MODE=cluster
+            export PROFILE_IDS="${IN_PROFILE_IDS:-$(val profile_ids)}"
+            echo "== DRY RUN of the profile lane =="
+            echo "PROFILE_IDS=${PROFILE_IDS:-<none: scheduled profiles only>}"
+            node tools/fetch-listings.mjs
+          else
+            node tools/probe-rightmove-params.mjs \
+              --only="$PROBES" \
+              --outcode="${IN_OUTCODE:-$(val outcode)}" \
+              --outcode2="${IN_OUTCODE2:-$(val outcode2)}" \
+              --price="${IN_PRICE:-$(val price)}"
+          fi
