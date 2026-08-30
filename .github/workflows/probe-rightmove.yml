@@ -41,6 +41,12 @@ on:
       price:
         description: 'Exact price to probe with'
         default: '400000'
+      profile_ids:
+        description: 'dryrun-profiles only: comma-separated search_profiles ids. Blank falls back to the request file.'
+        default: ''
+      task:
+        description: 'probe (default) or dryrun-profiles — a DRY RUN of the profile lane. Zero Apify spend either way; dryrun-profiles makes no actor call at all.'
+        default: 'probe'
   push:
     paths:
       - '.github/probe-request.txt'
@@ -60,7 +66,28 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
+      # DRY RUN of the profile lane. Proves profiles load, areas resolve, targets
+      # build and the search URLs are right — against LIVE data, with no Apify call
+      # (DRY_RUN short-circuits before fetchRawForOutcode). Zero spend by
+      # construction, which is why it is safe to fire from a push.
+      - name: Dry-run the profile lane
+        if: ${{ contains(inputs.probes, 'dryrun') || contains(inputs.task, 'dryrun') }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: '1'
+          SEARCH_MODE: cluster
+          PROFILE_IDS: ${{ inputs.profile_ids }}
+        run: |
+          set -euo pipefail
+          REQ=.github/probe-request.txt
+          val() { [ -f "$REQ" ] && grep -E "^$1=" "$REQ" | tail -1 | cut -d= -f2- | tr -d '"'"'"' ' || true; }
+          export PROFILE_IDS="${PROFILE_IDS:-$(val profile_ids)}"
+          echo "PROFILE_IDS=${PROFILE_IDS:-<none: scheduled profiles only>}"
+          node tools/fetch-listings.mjs
+
       - name: Probe Rightmove + Apify parameters
+        if: ${{ !contains(inputs.probes, 'dryrun') && !contains(inputs.task, 'dryrun') }}
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
