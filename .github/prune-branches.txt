@@ -28,3 +28,5 @@ claude/prompt-fable-overhaul-gflp9y
 claude/repo-cleanup-organization-86qeg9
 claude/resume-after-credits-0i915w
 claude/unified-setup-profile-edit-jsc6cg
+# 2026-09-04: manual-only Apify runs session (merged fast-forward as e1a9054).
+claude/disable-apify-auto-runs-37b8af
