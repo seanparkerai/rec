@@ -3,59 +3,25 @@
 # Claude sandbox). Writes normalised rows into the Supabase `listings` table via
 # the service role.
 #
-# Triggers:
-#   - workflow_dispatch: tap "Run workflow" in the Actions tab (phone-friendly).
-#   - schedule: six times daily — 08:00, 10:00, 12:00, 14:00, 18:00, 21:00
-#     Europe/London (England local time), DST-safe. Each run uses the 24-hour recency
-#     window (MAX_DAYS_SINCE_ADDED=1) and simply covers listings posted since the last
-#     pass. Comment out the `schedule` block to pause.
-#     (10:00 + 21:00 added 2026-07-15, owner decision: 30 days of first_seen data showed
-#     manual evening pulls were the highest-yield fetches and near-daily manual
-#     mid-morning pulls filled the 08:00→12:00 gap — the slots replace the habit.)
+# MANUAL ONLY (owner directive 2026-09-04, docs/adr/0012). No Apify run may start
+# by itself. This workflow has exactly ONE trigger — workflow_dispatch — and every
+# dispatch is a deliberate human act behind a confirmation:
+#   - Portal "Pull listings" buttons (24hr / 3d / 7d / 14d) on the Listings page and
+#     "Run now" on a search profile: native <dialog> confirmation → Supabase RPC
+#     (request_rightmove_fetch / request_profile_fetch) → private.dispatch_fetch_now
+#     → this workflow's workflow_dispatch API. The GitHub token lives only in Vault.
+#   - The Actions tab "Run workflow" button (phone-friendly), with the inputs below.
 #
-# Timing design (READ THIS before changing the schedule or the gate):
-#   Goal: fire the fetch SIX times per day, at 08:00 / 10:00 / 12:00 / 14:00 / 18:00 /
-#   21:00 Europe/London (England local time), DST-safe, never twice within a slot.
-#
-#   Two hard facts about GitHub-hosted cron force this design:
-#     1. Cron is UTC-only (no timezone field). London is UTC+1 in summer (BST) and
-#        UTC+0 in winter (GMT), so no single fixed cron hits a London hour all year.
-#     2. Scheduled runs are best-effort and routinely START HOURS LATE under platform
-#        load — measured on THIS repo at 3.5–6.5 h late every day. So we cannot trust
-#        the fire time to land in any narrow local-time window.
-#
-#   Therefore:
-#     - Each of the six slots gets TWO candidate UTC ticks bracketing it across DST
-#       (summer/BST = UTC+1 → London H = UTC H-1; winter/GMT = UTC+0 → London H = UTC H):
-#           slot 08:00 → 0 7  + 0 8       slot 14:00 → 0 13 + 0 14
-#           slot 10:00 → 0 9  + 0 10      slot 18:00 → 0 17 + 0 18
-#           slot 12:00 → 0 11 + 0 12      slot 21:00 → 0 20 + 0 21
-#       Because GitHub fires them late, every tick is funnelled through the gate below.
-#     - The "Europe/London slot gate" job step, for scheduled runs only, reads which
-#       cron line fired (github.event.schedule), maps it to its intended slot, and:
-#         (a) FLOOR — never execute before that slot's London hour (drops the
-#             off-season DST partner, which lands an hour early, and any early fire), and
-#         (b) ONCE-PER-SLOT — query this workflow's own run history via the GitHub API
-#             and skip if a real fetch already executed today INSIDE this slot's time
-#             window [slot, next-slot). This makes the delayed/duplicate ticks — and
-#             the punctual pg_cron dispatch — idempotent so Apify is never
-#             double-triggered within a slot.
-#       Net effect: at most one fetch per slot per day. Manual (workflow_dispatch) and
-#       push runs bypass the gate.
-#     - `concurrency` (below) queues simultaneous ticks behind each other so the
-#       once-per-slot check can't be raced.
-#
-#   PRIMARY TRIGGER (punctual): Supabase pg_cron jobs call this workflow's
-#   workflow_dispatch API at exactly 08:00 / 10:00 / 12:00 / 14:00 / 18:00 / 21:00 Europe/London
-#   (pg_cron runs on the database, so it is second-accurate — no GitHub queue backlog).
-#   See docs/FETCH_SCHEDULE.md. Those dispatch runs bypass the gate (event != schedule)
-#   and run immediately at the slot time.
-#
-#   The GitHub `schedule` below is the BACKSTOP: it only does real work for a slot on a
-#   day the punctual dispatch failed to fire, because the once-per-slot gate sees the
-#   dispatch already fetched in that slot's window and skips the (hours-late) schedule
-#   tick. The fetcher also self-heals — a fully missed day is recovered by the 3-day
-#   recency overlap.
+# What was REMOVED and must not come back without its own ADR:
+#   - the `schedule:` block (twelve UTC ticks bracketing six Europe/London slots) and
+#     the once-per-slot gate step that de-duplicated them;
+#   - the `push:` trigger that fired a run whenever this file changed on main.
+# The punctual Supabase pg_cron dispatch jobs (rightmove-fetch-*-london-*) still
+# exist but are INACTIVE, and their target function refuses to dispatch while
+# fetch_control.auto_fetch_enabled is false. The admin panel
+# (live-feed/search-control.html → "Automatic fetches") is the one place that
+# re-arms them, behind a confirmation. See docs/FETCH_SCHEDULE.md.
+# tests/contract/no-automatic-apify-runs.test.js pins all of this.
 #
 # Requires repo secrets: APIFY_TOKEN, APIFY_ACTOR_ID, SUPABASE_URL,
 # SUPABASE_SERVICE_ROLE_KEY.
@@ -132,35 +98,13 @@ on:
         description: 'Comma-separated area ids to restrict the fetch to (blank = all demand). Replaces the old one-off suzanne-backfill workflow: a targeted standing-stock pull is foundation_mode + this list.'
         type: string
         default: ''
-  schedule:
-    # Six daily slots — 08:00, 10:00, 12:00, 14:00, 18:00, 21:00 Europe/London. Each
-    # slot gets TWO UTC ticks bracketing it across DST; the gate step keeps only the
-    # in-season one (summer/BST = UTC+1 so London H = UTC H-1; winter/GMT = UTC+0 so
-    # London H = UTC H). Do NOT collapse a pair to one line — see the header comment.
-    - cron: '0 7 * * *'   # 08:00 London during BST (summer)
-    - cron: '0 8 * * *'   # 08:00 London during GMT (winter)
-    - cron: '0 9 * * *'   # 10:00 London during BST (summer)
-    - cron: '0 10 * * *'  # 10:00 London during GMT (winter)
-    - cron: '0 11 * * *'  # 12:00 London during BST (summer)
-    - cron: '0 12 * * *'  # 12:00 London during GMT (winter)
-    - cron: '0 13 * * *'  # 14:00 London during BST (summer)
-    - cron: '0 14 * * *'  # 14:00 London during GMT (winter)
-    - cron: '0 17 * * *'  # 18:00 London during BST (summer)
-    - cron: '0 18 * * *'  # 18:00 London during GMT (winter)
-    - cron: '0 20 * * *'  # 21:00 London during BST (summer)
-    - cron: '0 21 * * *'  # 21:00 London during GMT (winter)
-  # Pushing a change to THIS file on main kicks off one immediate run.
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/fetch-listings.yml'
 
 permissions:
   contents: read
-  actions: read   # the noon gate reads this workflow's run history to dedupe (once-per-day)
 
-# Queue a second simultaneous tick behind the first so the once-per-day gate can't be
-# raced into a double fetch. Do not cancel in-progress — let the first run finish.
+# Queue simultaneous dispatches behind each other (two people pressing "Pull" at
+# once, or a probe overlapping a pull) so Apify is never hit twice at the same time.
+# Do not cancel in-progress — let the first run finish.
 concurrency:
   group: fetch-listings-daily
   cancel-in-progress: false
@@ -169,97 +113,11 @@ jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
-      # Delay-tolerant, DST-safe, once-per-SLOT gate (see header for the full
-      # rationale). For SCHEDULED runs only: map the firing cron line to its intended
-      # London slot (08/10/12/14/18/21), never execute before that slot's hour, and skip if
-      # a real fetch already ran today inside that slot's time window. Manual/push runs
-      # bypass entirely. The punctual pg_cron dispatches (workflow_dispatch) land in
-      # each slot's window, so on a normal day every scheduled tick here de-dupes away.
-      - name: Europe/London slot gate
-        id: gate
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          if [ "${{ github.event_name }}" != "schedule" ]; then
-            echo "Trigger=${{ github.event_name }} (manual/push) — gate bypassed, proceeding."
-            echo "run=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # Which cron line fired? Map it to its intended London slot hour (SLOT) and
-          # the slot's window end (WEND = the next slot's hour, or 24 for the last).
-          CRON='${{ github.event.schedule }}'
-          case "$CRON" in
-            '0 7 * * *'|'0 8 * * *')   SLOT=8;  WEND=10 ;;
-            '0 9 * * *'|'0 10 * * *')  SLOT=10; WEND=12 ;;
-            '0 11 * * *'|'0 12 * * *') SLOT=12; WEND=14 ;;
-            '0 13 * * *'|'0 14 * * *') SLOT=14; WEND=18 ;;
-            '0 17 * * *'|'0 18 * * *') SLOT=18; WEND=21 ;;
-            '0 20 * * *'|'0 21 * * *') SLOT=21; WEND=24 ;;
-            *) echo "::warning::Unrecognised schedule '$CRON' — proceeding."; echo "run=true" >> "$GITHUB_OUTPUT"; exit 0 ;;
-          esac
-
-          NOW_LONDON=$(TZ='Europe/London' date '+%Y-%m-%d %H:%M:%S %Z (%:z)')
-          # 10# forces base-10 so "08"/"09" are not misread as invalid octal.
-          HOUR_LONDON=$((10#$(TZ='Europe/London' date '+%H')))
-          TODAY_LONDON=$(TZ='Europe/London' date '+%F')
-          echo "Europe/London now: $NOW_LONDON  (date=$TODAY_LONDON hour=$HOUR_LONDON) — cron '$CRON' → slot ${SLOT}:00, window [${SLOT},${WEND})"
-
-          # (a) FLOOR — never run before this slot's London hour. This drops the
-          # off-season DST partner (which lands an hour early) and any pre-slot fire.
-          if [ "$HOUR_LONDON" -lt "$SLOT" ]; then
-            echo "::notice::Before ${SLOT}:00 in England (hour=$HOUR_LONDON) — off-season/early tick, skipping; the in-season tick will run."
-            echo "run=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # (b) ONCE-PER-SLOT — has a real fetch already executed today INSIDE this
-          # slot's window [SLOT,WEND)? GitHub fires crons hours late and may fire both
-          # DST ticks, and pg_cron may have already dispatched this slot punctually, so
-          # we must not double-trigger Apify. A prior run "really fetched" if its job
-          # has the "Fetch listings" step with a non-skipped conclusion/status, and its
-          # execution time (created_at, London) falls in this slot's window.
-          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/fetch-listings.yml/runs?per_page=50"
-          runs=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$api" || true)
-          if [ -z "$runs" ]; then
-            echo "::warning::Could not read run history for the once-per-slot check — proceeding (a rare double-run is bounded by APIFY_MAX_BUDGET_USD)."
-            echo "run=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          already=false
-          while read -r id created; do
-            [ -n "$id" ] || continue
-            [ "$id" = "${GITHUB_RUN_ID}" ] && continue
-            d=$(TZ='Europe/London' date -d "$created" '+%F')
-            [ "$d" = "$TODAY_LONDON" ] || continue
-            h=$((10#$(TZ='Europe/London' date -d "$created" '+%H')))
-            # Only runs whose execution time lands in THIS slot's window count.
-            if [ "$h" -lt "$SLOT" ] || [ "$h" -ge "$WEND" ]; then continue; fi
-            jobs=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${id}/jobs" || true)
-            hit=$(printf '%s' "$jobs" | jq '[.jobs[]?.steps[]? | select(.name=="Fetch listings") | select(.conclusion=="success" or .conclusion=="failure" or .status=="in_progress")] | length' 2>/dev/null || echo 0)
-            if [ "${hit:-0}" -gt 0 ]; then already=true; break; fi
-          done <<EOF
-          $(printf '%s' "$runs" | jq -r '.workflow_runs[] | "\(.id) \(.created_at)"')
-          EOF
-
-          if [ "$already" = true ]; then
-            echo "::notice::A fetch already executed today in the ${SLOT}:00 window ($TODAY_LONDON London) — skipping this delayed/duplicate tick."
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "In the ${SLOT}:00 window and no fetch yet there today — proceeding with the slot fetch."
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          fi
       - uses: actions/checkout@v5
-        if: steps.gate.outputs.run == 'true'
       - uses: actions/setup-node@v5
-        if: steps.gate.outputs.run == 'true'
         with:
           node-version: '22'
       - name: Fetch listings
-        if: steps.gate.outputs.run == 'true'
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
@@ -267,12 +125,12 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
           # foundation_mode overrides the recency window to 14 days in the fetcher.
-          # Scheduled runs carry no inputs, so the `|| '1'` fallback keeps them on the
-          # 24h window; manual dispatch can pick 1/3/7/14 via max_days_since_added.
+          # Portal dispatches send max_days_since_added explicitly (1/3/7/14); the
+          # `|| '1'` fallback keeps any input-less dispatch on the 24h window.
           FOUNDATION_MODE: ${{ inputs.foundation_mode && '1' || '0' }}
           MAX_DAYS_SINCE_ADDED: ${{ inputs.max_days_since_added || '1' }}
           # Hard spend cap: actor self-terminates at this USD limit (PPE — no overrun).
-          # Dispatch can override; scheduled runs use the hardcoded default of $25.
+          # Dispatch can override; the hardcoded default is $25.
           APIFY_MAX_BUDGET_USD: ${{ inputs.apify_budget_usd || '25' }}
           SEARCH_MODE: ${{ inputs.search_mode || 'cluster' }}
           FETCH_LIMIT: ${{ inputs.fetch_limit || '0' }}
@@ -282,7 +140,7 @@ jobs:
           # truncation — see the cost note in the header before lowering it.
           RESULTS_PER_OUTCODE: ${{ inputs.results_per_target || '1000' }}
           CLUSTER_CAP_MI: ${{ inputs.cluster_cap_mi || '5' }}
-          # Optional per-area restriction (scheduled runs carry no inputs → all demand).
+          # Optional per-area restriction (blank → all demand).
           AREA_IDS: ${{ inputs.area_ids || '' }}
           # Lane B: restrict the profile lane to named profiles (a "Run now" press).
           PROFILE_IDS: ${{ inputs.profile_ids || '' }}

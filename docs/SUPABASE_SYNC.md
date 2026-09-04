@@ -40,7 +40,7 @@ Underscore-prefixed snapshot keys (e.g. the top-level `_note`) are metadata, not
 - **2 content mirrors**: `areas` (**DB-canonical** since the 2026-06-04 §18.5 relaxation —
   `data/areas/<id>.json` is a materialised view) and `house_types` (repo-JSON-canonical, mirrored).
 - **3 system** (Supabase-managed, never synced by Claude): `households`, `household_members`, `sync_log`.
-- **8 untracked** (never git-synced): `fetch_control` (singleton global spend gate, Phase 1a), `listings` (live content, see below), `listing_areas`
+- **8 untracked** (never git-synced): `fetch_control` (singleton global spend gate, Phase 1a; `auto_fetch_enabled` — the scheduled-dispatch switch, resting OFF since 2026-09-04, docs/adr/0012), `listings` (live content, see below), `listing_areas`
   (the listing↔area **m2m membership** junction — live content of the SAME class as `listings`:
   service-role write, public-SELECT RLS, never git-synced; one row per area whose geofence
   contains a listing, `is_primary` mirroring `listings.area_id`; written by BOTH listings writers

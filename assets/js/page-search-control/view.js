@@ -122,6 +122,25 @@ export function buildGlobalControls(control) {
   }, control?.legacy_enabled ? 'Stop legacy search' : 'Resume legacy search'));
   box.appendChild(legacy);
 
+  // The scheduled-dispatch switch (docs/adr/0012). OFF is the resting state: no
+  // Apify run starts unless a person presses a button and confirms. ON re-arms the
+  // six daily Supabase pg_cron dispatches. Deliberately a third, separate switch:
+  // "All searching" gates whether ANY fetch may run; this one gates only whether
+  // fetches happen BY THEMSELVES.
+  const auto = el('div', { class: 'sc-global' });
+  auto.appendChild(el('h2', {}, 'Automatic fetches'));
+  auto.appendChild(el('p', { class: 'sc-global__state', 'data-state': control?.auto_fetch_enabled ? 'on' : 'off' },
+    control?.auto_fetch_enabled
+      ? 'ON — the six daily Rightmove pulls run by themselves'
+      : 'OFF — nothing runs unless someone presses a button and confirms'));
+  auto.appendChild(el('p', { class: 'sc-note' },
+    'Manual pulls (the Listings page buttons and each profile\u2019s Run now) still work either way, subject to the switches above. Switching this on re-arms the scheduled dispatches and costs Apify credit every day.'));
+  auto.appendChild(el('button', {
+    type: 'button', class: 'sc-btn', 'data-action': 'toggle-auto',
+    'data-enabled': control?.auto_fetch_enabled ? 'true' : 'false',
+  }, control?.auto_fetch_enabled ? 'Switch off automatic fetches' : 'Switch on automatic fetches'));
+  box.appendChild(auto);
+
   return box;
 }
 

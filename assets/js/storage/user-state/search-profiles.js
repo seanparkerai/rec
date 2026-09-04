@@ -274,3 +274,9 @@ export const adminSetFetchEnabled = (enabled, reason = null) =>
  *  profiles running, and vice versa. */
 export const adminSetLegacyEnabled = (enabled) =>
   rpc('admin_set_legacy_enabled', { p_enabled: enabled });
+
+/** Arm / disarm the scheduled (pg_cron) dispatches — docs/adr/0012. The RPC flips
+ *  fetch_control.auto_fetch_enabled AND (de)activates the cron jobs together, so
+ *  the flag and the schedule can never disagree. OFF is the resting state. */
+export const adminSetAutoFetchEnabled = (enabled) =>
+  rpc('admin_set_auto_fetch_enabled', { p_enabled: enabled });

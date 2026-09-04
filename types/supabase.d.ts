@@ -1,13 +1,9 @@
 // types/supabase.d.ts — GENERATED from the live Supabase schema. DO NOT HAND-EDIT.
-// Generated: 2026-07-03 via mcp__supabase__generate_typescript_types (project qxmyrahqsopmaeokxdub).
-// 2026-07-09: household_areas.is_origin removed to mirror migration
-// drop_is_origin_from_household_areas (generator unavailable this session — the
-// diff is mechanical: three dropped lines; regenerate at next schema change).
-// 2026-08-28: fetch_control + search_profiles added and households.search_paused
-// introduced, mirroring migrations search_fetch_control / search_profiles_v1
-// (generator unavailable this session — the MCP tool returns "requires approval";
-// the DDL went through execute_sql and the migration history was written by hand,
-// so the history stays canonical. Regenerate at the next schema change).
+// Generated: 2026-09-04 via mcp__supabase__generate_typescript_types (project qxmyrahqsopmaeokxdub),
+// after migrations disable_automatic_rightmove_fetch_cron + auto_fetch_kill_switch
+// (fetch_control.auto_fetch_enabled + admin_set_auto_fetch_enabled — docs/adr/0012).
+// This regeneration also replaced the 2026-07-09 / 2026-08-28 hand-edits noted in
+// earlier headers with the generator's own output (same tables, generator ordering).
 // Regenerate after every schema migration — the §17/§18.5 schema-change ceremony
 // (docs/SUPABASE_SYNC.md) includes this as a step. Consumed type-only via JSDoc
 // `import('../types/supabase.js')` annotations (tier-0 checkJs); never shipped to the browser.
@@ -346,6 +342,33 @@ export type Database = {
           },
         ]
       }
+      fetch_control: {
+        Row: {
+          auto_fetch_enabled: boolean
+          fetch_enabled: boolean
+          id: boolean
+          legacy_enabled: boolean
+          paused_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          auto_fetch_enabled?: boolean
+          fetch_enabled?: boolean
+          id?: boolean
+          legacy_enabled?: boolean
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          auto_fetch_enabled?: boolean
+          fetch_enabled?: boolean
+          id?: boolean
+          legacy_enabled?: boolean
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       finances: {
         Row: {
           data: Json
@@ -516,27 +539,6 @@ export type Database = {
           },
         ]
       }
-      fetch_control: {
-        Row: {
-          fetch_enabled: boolean
-          id: boolean
-          paused_reason: string | null
-          updated_at: string
-        }
-        Insert: {
-          fetch_enabled?: boolean
-          id?: boolean
-          paused_reason?: string | null
-          updated_at?: string
-        }
-        Update: {
-          fetch_enabled?: boolean
-          id?: boolean
-          paused_reason?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       households: {
         Row: {
           created_at: string
@@ -557,59 +559,6 @@ export type Database = {
           search_paused?: boolean
         }
         Relationships: []
-      }
-      search_profiles: {
-        Row: {
-          admin_paused: boolean
-          created_at: string
-          enabled: boolean
-          household_id: string
-          id: string
-          last_run_at: string | null
-          name: string
-          plan_cache: Json
-          sort_order: number
-          spec: Json
-          trigger_mode: string
-          updated_at: string
-        }
-        Insert: {
-          admin_paused?: boolean
-          created_at?: string
-          enabled?: boolean
-          household_id: string
-          id?: string
-          last_run_at?: string | null
-          name: string
-          plan_cache?: Json
-          sort_order?: number
-          spec?: Json
-          trigger_mode?: string
-          updated_at?: string
-        }
-        Update: {
-          admin_paused?: boolean
-          created_at?: string
-          enabled?: boolean
-          household_id?: string
-          id?: string
-          last_run_at?: string | null
-          name?: string
-          plan_cache?: Json
-          sort_order?: number
-          spec?: Json
-          trigger_mode?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "search_profiles_household_id_fkey"
-            columns: ["household_id"]
-            isOneToOne: false
-            referencedRelation: "households"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       investments_accounts: {
         Row: {
@@ -848,6 +797,7 @@ export type Database = {
           reaction: string
           reason: string | null
           reasons: Json
+          source: string
           user_id: string | null
         }
         Insert: {
@@ -859,6 +809,7 @@ export type Database = {
           reaction: string
           reason?: string | null
           reasons?: Json
+          source?: string
           user_id?: string | null
         }
         Update: {
@@ -870,6 +821,7 @@ export type Database = {
           reaction?: string
           reason?: string | null
           reasons?: Json
+          source?: string
           user_id?: string | null
         }
         Relationships: [
@@ -886,6 +838,8 @@ export type Database = {
         Row: {
           added_date: string | null
           address: string | null
+          archive_reason: string | null
+          archived_at: string | null
           area_id: string | null
           baths: number | null
           beds: number | null
@@ -922,6 +876,8 @@ export type Database = {
         Insert: {
           added_date?: string | null
           address?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
           area_id?: string | null
           baths?: number | null
           beds?: number | null
@@ -958,6 +914,8 @@ export type Database = {
         Update: {
           added_date?: string | null
           address?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
           area_id?: string | null
           baths?: number | null
           beds?: number | null
@@ -1230,6 +1188,59 @@ export type Database = {
           },
         ]
       }
+      search_profiles: {
+        Row: {
+          admin_paused: boolean
+          created_at: string
+          enabled: boolean
+          household_id: string
+          id: string
+          last_run_at: string | null
+          name: string
+          plan_cache: Json
+          sort_order: number
+          spec: Json
+          trigger_mode: string
+          updated_at: string
+        }
+        Insert: {
+          admin_paused?: boolean
+          created_at?: string
+          enabled?: boolean
+          household_id: string
+          id?: string
+          last_run_at?: string | null
+          name: string
+          plan_cache?: Json
+          sort_order?: number
+          spec?: Json
+          trigger_mode?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_paused?: boolean
+          created_at?: string
+          enabled?: boolean
+          household_id?: string
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          plan_cache?: Json
+          sort_order?: number
+          spec?: Json
+          trigger_mode?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "search_profiles_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shortlist: {
         Row: {
           data: Json
@@ -1320,6 +1331,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_search_profiles: { Args: never; Returns: Json }
+      admin_set_auto_fetch_enabled: {
+        Args: { p_enabled: boolean }
+        Returns: Json
+      }
+      admin_set_fetch_enabled: {
+        Args: { p_enabled: boolean; p_reason?: string }
+        Returns: Json
+      }
+      admin_set_household_paused: {
+        Args: { p_household_id: string; p_paused: boolean }
+        Returns: Json
+      }
+      admin_set_legacy_enabled: { Args: { p_enabled: boolean }; Returns: Json }
+      admin_set_profile_paused: {
+        Args: { p_paused: boolean; p_profile_id: string }
+        Returns: Json
+      }
       ask_reaction_counts: {
         Args: { hh: string }
         Returns: {
@@ -1330,6 +1359,7 @@ export type Database = {
       household_feed: {
         Args: {
           p_household_id: string
+          p_include_archived?: boolean
           p_include_out_of_area?: boolean
           p_limit?: number
           p_min_beds?: number
@@ -1380,6 +1410,7 @@ export type Database = {
         Args: { p_rightmove_id: string; p_rows: Json }
         Returns: undefined
       }
+      request_profile_fetch: { Args: { p_profile_id: string }; Returns: Json }
       request_rightmove_fetch: { Args: { p_days?: number }; Returns: Json }
     }
     Enums: {
@@ -1399,12 +1430,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1428,11 +1459,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1453,11 +1484,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1478,11 +1509,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1495,11 +1526,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }

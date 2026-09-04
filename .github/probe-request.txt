@@ -1,8 +1,8 @@
-# probe-request — the push trigger for .github/workflows/probe-rightmove.yml.
+# probe-request — fallback inputs for .github/workflows/probe-rightmove.yml.
 #
-# Changing THIS FILE is the only thing that fires it on push. It exists so an agent
-# that can push but holds no `actions: write` scope can still run a check and read
-# the result. Edit a value, commit, push — the workflow runs.
+# Since 2026-09-04 (docs/adr/0012) pushing this file fires NOTHING. The probe
+# workflow runs only from the Actions tab "Run workflow" button; the values below
+# fill in any dispatch input left blank. Editing this file is never a run.
 #
 # probes=dryrun   ZERO SPEND. Dry-runs the profile lane against live data: profiles
 #                 load, areas resolve, targets build, URLs are constructed — and

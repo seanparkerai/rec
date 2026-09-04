@@ -100,6 +100,32 @@ export async function register({ test, assert, assertEqual }) {
     dom.window.close();
   });
 
+  test('search-control: the Automatic fetches switch reads OFF by default and says what OFF means', async () => {
+    // docs/adr/0012 — the resting state is "nothing runs by itself". A control
+    // object with no auto_fetch_enabled at all (an older RPC) must still read OFF.
+    const dom = pageDom();
+    const v = await loadView(dom);
+    const box = v.buildGlobalControls(ON);
+    const btn = box.querySelector('[data-action="toggle-auto"]');
+    assert(btn, 'the switch renders');
+    assertEqual(btn.dataset.enabled, 'false', 'absent flag = OFF');
+    assert(/presses a button and confirms/.test(box.textContent), 'OFF is described as a consequence');
+    assert(/Manual pulls/.test(box.textContent), 'and it says manual pulls still work');
+    const on = v.buildGlobalControls({ ...ON, auto_fetch_enabled: true });
+    assertEqual(on.querySelector('[data-action="toggle-auto"]').dataset.enabled, 'true');
+    assert(/run by themselves/.test(on.textContent), 'ON is described as a consequence too');
+    assertEqual(box.querySelectorAll('.sc-global').length, 3, 'three global switches');
+    dom.window.close();
+  });
+
+  test('search-control: switching automatic fetches ON asks first, OFF does not', () => {
+    const coord = readFileSync(join(ROOT, 'assets/js/page-search-control.js'), 'utf8');
+    const at = coord.indexOf("action === 'toggle-auto'");
+    assert(at !== -1, 'toggle-auto is handled');
+    assert(/if \(next && !\(await confirmDialog\(/.test(coord.slice(at, at + 600)),
+      'ON is the spend decision, so ON confirms (the inverse of the master switch)');
+  });
+
   test('search-control: state is text, not colour alone', async () => {
     const dom = pageDom();
     const v = await loadView(dom);

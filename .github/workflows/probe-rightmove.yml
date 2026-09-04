@@ -10,12 +10,12 @@
 # `radius=6.9` silently returned ZERO results on 36 of 56 targets for months
 # (ADR 0011). So nothing in tools/fetch-listings.mjs changes until this reports.
 #
-# TWO TRIGGERS, no schedule:
-#   1. workflow_dispatch — a human picks the probe set in the Actions UI.
-#   2. push touching .github/probe-request.txt ONLY — so an agent that can push but
-#      holds no `actions: write` scope can still run a probe and read the result.
-#      Nothing else in the repo can fire this; the path filter is the whole gate.
-#      The request file names the probe set, and defaults to H (free) when silent.
+# ONE TRIGGER, no schedule, no push (owner directive 2026-09-04, docs/adr/0012):
+#   workflow_dispatch — a human picks the probe set in the Actions UI and presses
+#   "Run workflow". The old push trigger on .github/probe-request.txt was removed:
+#   a commit is not a button press with a confirmation, and a paid probe could be
+#   fired by an edit nobody meant as a run. The request file survives only as the
+#   fallback for blank dispatch inputs.
 #
 # Default probe set is H, which is FREE — it only reads the actor schema and the
 # recent runs' real charges. Paid probes must be named explicitly and each prints
@@ -44,10 +44,6 @@ on:
       profile_ids:
         description: 'dryrun only: comma-separated search_profiles ids. Blank falls back to the request file.'
         default: ''
-  push:
-    paths:
-      - '.github/probe-request.txt'
-
 permissions:
   contents: read
 
@@ -63,10 +59,9 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      # ONE step decides what to run. An `if:` on the step cannot work here: a push
-      # event carries no `inputs`, so any condition reading inputs.* is false on
-      # exactly the trigger this workflow exists to serve. The request file is only
-      # readable inside a run block, so the branch has to live there too.
+      # ONE step decides what to run. The request file is the fallback for blank
+      # dispatch inputs and is only readable inside a run block, so the branch
+      # lives there too.
       - name: Probe or dry-run
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}

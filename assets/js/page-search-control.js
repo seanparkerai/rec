@@ -9,7 +9,7 @@
 
 import {
   adminListSearchProfiles, adminSetProfilePaused, adminSetHouseholdPaused,
-  adminSetFetchEnabled, adminSetLegacyEnabled,
+  adminSetFetchEnabled, adminSetLegacyEnabled, adminSetAutoFetchEnabled,
 } from './storage.js';
 import { buildGlobalControls, buildHouseholdBlock, buildSummary } from './page-search-control/view.js';
 import { confirmDialog } from './confirm-dialog.js';
@@ -68,6 +68,18 @@ async function onClick(ev) {
     res = await adminSetFetchEnabled(next, next ? null : 'Paused from the admin panel');
   } else if (action === 'toggle-legacy') {
     res = await adminSetLegacyEnabled(btn.dataset.enabled !== 'true');
+  } else if (action === 'toggle-auto') {
+    const next = btn.dataset.enabled !== 'true';
+    // The inverse of the master switch: here switching ON is the spend decision
+    // (docs/adr/0012 — no Apify run starts without a button press AND a
+    // confirmation), so ON asks and OFF does not.
+    if (next && !(await confirmDialog({
+      title: 'Switch on automatic fetches?',
+      body: 'The six daily Rightmove pulls (08:00, 10:00, 12:00, 14:00, 18:00, 21:00 UK time) will run by themselves and spend Apify credit every day until switched off again.',
+      confirmLabel: 'Switch on',
+      destructive: true,
+    }))) { btn.disabled = false; return; }
+    res = await adminSetAutoFetchEnabled(next);
   } else if (action === 'toggle-household') {
     const id = btn.closest('[data-household-id]')?.dataset.householdId;
     res = await adminSetHouseholdPaused(id, btn.dataset.paused !== 'true');

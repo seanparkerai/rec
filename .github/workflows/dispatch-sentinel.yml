@@ -1,26 +1,28 @@
-# dispatch-sentinel.yml — nightly guarantee that the punctual fetch trigger is alive.
+# dispatch-sentinel.yml — nightly guarantee that the punctual fetch trigger is alive
+# WHILE automatic fetches are switched on. Not an Apify run: it only reads GitHub's
+# run history and one Supabase flag.
 #
-# The six daily fetch slots are dispatched punctually by Supabase pg_cron
-# (private.trigger_rightmove_fetch → Vault token → workflow_dispatch API — see
-# docs/FETCH_SCHEDULE.md §1). That path can die SILENTLY: pg_net fires
-# asynchronously and never checks the HTTP response, so a revoked/expired GitHub
-# token, a pg_cron outage, or a Vault edit stops punctual dispatch with zero
-# signal — fetches quietly degrade to the hours-late GitHub schedule backstop.
+# When automatic fetches are ON, the six daily fetch slots are dispatched punctually
+# by Supabase pg_cron (private.trigger_rightmove_fetch → Vault token →
+# workflow_dispatch API — see docs/FETCH_SCHEDULE.md §1). That path can die
+# SILENTLY: pg_net fires asynchronously and never checks the HTTP response, so a
+# revoked/expired GitHub token, a pg_cron outage, or a Vault edit stops punctual
+# dispatch with zero signal. This sentinel closes that gap: every night it asks "did
+# at least one workflow_dispatch-triggered fetch-listings run happen in the trailing
+# 26 h?" If not, the job FAILS — and GitHub emails the owner about the red run.
 #
-# This sentinel closes that gap: every night it asks "did at least one
-# workflow_dispatch-triggered fetch-listings run happen in the trailing 26 h?"
-# If not, the job FAILS — and GitHub emails the owner about the red run. Uses
-# only the built-in github.token (no secrets, nothing to expire). Added
-# 2026-07-15 alongside the rotation to a no-expiration dispatch token.
+# When automatic fetches are OFF (fetch_control.auto_fetch_enabled = false — the
+# state since 2026-09-04, docs/adr/0012), there is nothing to guard: no dispatch is
+# expected, so the sentinel reports that and exits green. It never re-arms anything.
 #
 # A red run means the punctual trigger is dead. Diagnose in Supabase SQL Editor:
+#   select auto_fetch_enabled from public.fetch_control;
 #   select * from private.fetch_dispatch_slots order by slot_hour;   -- last per-slot dispatch
 #   select status_code, error_msg from net._http_response order by id desc limit 10;
 #   select * from cron.job_run_details where jobid in
 #     (select jobid from cron.job where jobname like 'rightmove-fetch-%-london-%')
 #     order by start_time desc limit 20;
 # 401 status codes = dead token → rotate per docs/FETCH_SCHEDULE.md §1 step 2.
-# Listings keep flowing (late) via the schedule backstop meanwhile.
 
 name: dispatch-sentinel
 
@@ -40,7 +42,29 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - name: Are automatic fetches switched on?
+        id: flag
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
+            echo "::warning::Supabase secrets missing — cannot read fetch_control.auto_fetch_enabled; assuming ON so a dead trigger is never hidden."
+            echo "auto=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          body=$(curl -fsS "${SUPABASE_URL%/}/rest/v1/fetch_control?select=auto_fetch_enabled&limit=1" \
+            -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" || true)
+          auto=$(printf '%s' "$body" | jq -r '.[0].auto_fetch_enabled // "unknown"' 2>/dev/null || echo unknown)
+          echo "fetch_control.auto_fetch_enabled = $auto"
+          if [ "$auto" = "false" ]; then
+            echo "::notice::Automatic fetches are switched OFF (owner directive 2026-09-04). No dispatch is expected — nothing to guard. Re-arm from the admin panel (Search control → Automatic fetches)."
+            echo "auto=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "auto=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Punctual dispatches ran in the last 26h?
+        if: steps.flag.outputs.auto == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -54,7 +78,7 @@ jobs:
           n=$(printf '%s' "$runs" | jq '[.workflow_runs[] | select(.conclusion=="success" or .conclusion=="failure" or .status=="queued" or .status=="in_progress")] | length')
           echo "workflow_dispatch fetch-listings runs since $since: $n"
           if [ "${n:-0}" -eq 0 ]; then
-            echo "::error::No punctual (workflow_dispatch) fetch ran in the last 26h — the Supabase pg_cron → GitHub dispatch path is dead (dead token / pg_cron outage / Vault edit). Fetches are degraded to the hours-late schedule backstop. Diagnose per the header comment of .github/workflows/dispatch-sentinel.yml and docs/FETCH_SCHEDULE.md §1."
+            echo "::error::Automatic fetches are ON but no punctual (workflow_dispatch) fetch ran in the last 26h — the Supabase pg_cron → GitHub dispatch path is dead (dead token / pg_cron outage / Vault edit). Diagnose per the header comment of .github/workflows/dispatch-sentinel.yml and docs/FETCH_SCHEDULE.md §1."
             exit 1
           fi
           echo "Punctual dispatch path is alive."

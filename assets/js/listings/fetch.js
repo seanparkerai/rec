@@ -6,8 +6,9 @@
 // call the `request_rightmove_fetch` Supabase RPC (via storage.js), which holds the
 // GitHub token in Supabase Vault and dispatches workflow_dispatch on the server. No
 // GitHub token ever touches the browser — a signed-in portal user is all that's
-// needed, from any device. (Same mechanism the noon pg_cron job uses; see
-// docs/FETCH_SCHEDULE.md.)
+// needed, from any device. Since 2026-09-04 (docs/adr/0012) these confirmed
+// presses are the ONLY way a fetch starts — nothing is scheduled; see
+// docs/FETCH_SCHEDULE.md.
 //
 // Each button pins an explicit Rightmove recency window. Rightmove only honours
 // maxDaysSinceAdded ∈ {1, 3, 7, 14}, and the row now exposes ALL FOUR:
